@@ -2,75 +2,14 @@
  * Tiếng Trung HongTai - AI Interactive Dialogue & Roleplay Practice
  */
 
-const SCENARIOS = [
-  {
-    id: 'restaurant',
-    icon: '🍜',
-    title: 'Gọi món nhà hàng',
-    userRole: 'Khách hàng',
-    aiRole: 'Nhân viên phục vụ',
-    desc: 'Tập gọi món, hỏi đồ ăn đặc sắc, yêu cầu phục vụ và thanh toán.'
-  },
-  {
-    id: 'shopping',
-    icon: '🛍️',
-    title: 'Mua sắm & Mặc cả',
-    userRole: 'Khách mua hàng',
-    aiRole: 'Chủ tiệm / Nhân viên bán hàng',
-    desc: 'Hỏi giá, kích cỡ, màu sắc và tập mặc cả giá hợp lý.'
-  },
-  {
-    id: 'directions',
-    icon: '🚕',
-    title: 'Đi taxi & Hỏi đường',
-    userRole: 'Khách đi đường',
-    aiRole: 'Tài xế / Người dân địa phương',
-    desc: 'Nói địa điểm muốn đến, hỏi khoảng cách và cách rẽ đường.'
-  },
-  {
-    id: 'hotel',
-    icon: '🏨',
-    title: 'Đặt phòng khách sạn',
-    userRole: 'Khách du lịch',
-    aiRole: 'Lễ tân khách sạn',
-    desc: 'Thủ tục nhận phòng, hỏi mật khẩu wifi, ăn sáng và trả phòng.'
-  },
-  {
-    id: 'airport',
-    icon: '✈️',
-    title: 'Sân bay & Du lịch',
-    userRole: 'Hành khách',
-    aiRole: 'Nhân viên hàng không',
-    desc: 'Làm thủ tục ký gửi hành lý, kiểm tra thẻ lên máy bay.'
-  },
-  {
-    id: 'interview',
-    icon: '💼',
-    title: 'Phỏng vấn xin việc',
-    userRole: 'Ứng viên',
-    aiRole: 'Người phỏng vấn (HR)',
-    desc: 'Giới thiệu bản thân, nói về ưu điểm và kinh nghiệm làm việc.'
-  },
-  {
-    id: 'hospital',
-    icon: '🏥',
-    title: 'Đi khám bác sĩ',
-    userRole: 'Bệnh nhân',
-    aiRole: 'Bác sĩ',
-    desc: 'Mô tả triệu chứng đau đầu, sốt, ho và nghe lời dặn dò uống thuốc.'
-  },
-  {
-    id: 'cafe',
-    icon: '☕',
-    title: 'Trò chuyện bạn bè',
-    userRole: 'Bạn thân',
-    aiRole: 'Bạn người Trung Quốc',
-    desc: 'Tán gẫu về sở thích, ẩm thực, thời tiết và kế hoạch cuối tuần.'
-  }
-];
-
-let activeScenario = SCENARIOS[0];
+let activeScenario = {
+  title: 'Gọi món ở quán ăn',
+  aiRole: 'Nhân viên phục vụ',
+  userRole: 'Khách hàng',
+  icon: '🍜'
+};
 let activeLevel = 'hsk2';
+let activeIcon = '🍜';
 let messages = [];
 let showPinyin = true;
 let showVi = true;
@@ -79,31 +18,44 @@ let speechRecognizer = null;
 
 // 1. Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  renderScenarioGrid();
   startNewDialogue();
   initSpeechRecognition();
 });
 
-// Render scenarios grid
-function renderScenarioGrid() {
-  const grid = document.getElementById('scenario-grid');
-  if (!grid) return;
+// Quick suggestions (Bấm để điền, vẫn sửa được - Chuẩn Hình 2)
+window.applyQuickScenario = function (topic, aiRole, icon, btnEl) {
+  const topicInput = document.getElementById('custom-topic-input');
+  const roleInput = document.getElementById('custom-ai-role-input');
 
-  grid.innerHTML = SCENARIOS.map(sc => `
-    <div class="scenario-card ${sc.id === activeScenario.id ? 'active' : ''}" onclick="selectScenario('${sc.id}')">
-      <div style="font-size: 1.8rem;">${sc.icon}</div>
-      <div style="font-weight: 800; font-size: 0.98rem; color: #fff;">${sc.title}</div>
-      <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.4;">${sc.desc}</div>
-    </div>
-  `).join('');
-}
+  if (topicInput) topicInput.value = topic;
+  if (roleInput) roleInput.value = aiRole;
+  activeIcon = icon || '💬';
 
-// Select scenario
-window.selectScenario = function (scId) {
-  const found = SCENARIOS.find(s => s.id === scId);
-  if (!found) return;
-  activeScenario = found;
-  renderScenarioGrid();
+  document.querySelectorAll('.quick-suggestion-btn').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+};
+
+// Select level in builder
+window.selectBuilderLevel = function (lvl, btnEl) {
+  activeLevel = lvl;
+  document.querySelectorAll('.level-select-pill').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+};
+
+// Bắt đầu trò chuyện từ Custom Builder
+window.startCustomRoleplayChat = function () {
+  const topicInput = document.getElementById('custom-topic-input');
+  const roleInput = document.getElementById('custom-ai-role-input');
+
+  const topic = (topicInput && topicInput.value.trim()) || 'Gọi món ở quán ăn';
+  const aiRole = (roleInput && roleInput.value.trim()) || 'Nhân viên phục vụ';
+
+  activeScenario = {
+    title: topic,
+    aiRole: aiRole,
+    userRole: 'Bạn / Học viên',
+    icon: activeIcon || '💬'
+  };
 
   // Update active header
   const iconEl = document.getElementById('active-scenario-icon');
@@ -113,26 +65,37 @@ window.selectScenario = function (scId) {
   if (titleEl) titleEl.textContent = activeScenario.title;
 
   const descEl = document.getElementById('active-scenario-desc');
-  if (descEl) descEl.textContent = `Bối cảnh: Bạn là ${activeScenario.userRole} • AI là ${activeScenario.aiRole}`;
+  if (descEl) descEl.textContent = `Bối cảnh: Bạn • AI là ${activeScenario.aiRole}`;
 
+  // Start dialogue
   startNewDialogue();
+
+  // Scroll to chat workspace smoothly
+  const workspace = document.getElementById('chat-workspace-panel');
+  if (workspace) {
+    workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 };
 
-// Switch Level
-window.switchDiagLevel = function (lvl, btnEl) {
-  activeLevel = lvl;
-  document.querySelectorAll('.level-pill').forEach(b => {
-    b.classList.remove('active');
-    b.style.background = 'rgba(255, 255, 255, 0.08)';
-    b.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-    b.style.color = '#94a3b8';
-  });
-  if (btnEl) {
-    btnEl.classList.add('active');
-    btnEl.style.background = 'linear-gradient(135deg, #a855f7, #7c3aed)';
-    btnEl.style.borderColor = '#c084fc';
-    btnEl.style.color = '#fff';
+// Toggle Custom Builder Visibility
+window.toggleScenarioBuilder = function () {
+  const builder = document.getElementById('custom-scenario-builder');
+  const btnText = document.getElementById('btn-toggle-builder-text');
+  if (!builder) return;
+
+  const isHidden = builder.style.display === 'none';
+  if (isHidden) {
+    builder.style.display = 'block';
+    if (btnText) btnText.textContent = 'Ẩn bối cảnh';
+    builder.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else {
+    builder.style.display = 'none';
+    if (btnText) btnText.textContent = 'Đổi tình huống';
   }
+};
+
+// Restart current dialogue
+window.restartDialogue = function () {
   startNewDialogue();
 };
 
@@ -182,7 +145,7 @@ async function startNewDialogue() {
   }
 
   // Realistic fallback
-  const fallback = getFallbackOpening(activeScenario.id);
+  const fallback = getFallbackOpening(activeScenario.title, activeScenario.aiRole);
   messages.push({
     role: 'ai',
     zh: fallback.zh,
@@ -467,41 +430,44 @@ window.handleInputKeyDown = function (e) {
 };
 
 // Fallbacks
-function getFallbackOpening(id) {
-  const map = {
-    restaurant: {
-      zh: '你好！欢迎光临，请问您一共几位？',
-      pinyin: 'Nǐ hǎo! Huānyíng guānglín, qǐngwèn nín yígòng jǐ wèi?',
-      vi: 'Xin chào! Hoan nghênh quý khách, xin hỏi quý khách đi tất cả mấy người?',
+function getFallbackOpening(topic, aiRole) {
+  const t = topic || 'Gọi món ở quán ăn';
+  const r = aiRole || 'Nhân viên phục vụ';
+
+  if (t.includes('quán ăn') || t.includes('nhà hàng') || t.includes('món')) {
+    return {
+      zh: '您好！欢迎光临，请问您一共几位？您想先看看菜单吗？',
+      pinyin: 'Nǐ hǎo! Huānyíng guānglín, qǐngwèn nín yígòng jǐ wèi? Nǐ xiǎng xiān kànkan càidān ma?',
+      vi: 'Xin chào! Hoan nghênh quý khách, xin hỏi quý khách đi mấy người? Bạn muốn xem thực đơn trước không ạ?',
       suggestions: [
         { zh: '我们有两位。', pinyin: 'Wǒmen yǒu liǎng wèi.', vi: 'Chúng tôi có hai người.' },
-        { zh: '就我一个人。', pinyin: 'Jiù wǒ yí gè rén.', vi: 'Chỉ có một mình tôi thôi.' },
-        { zh: '请给我一张靠窗的桌子。', pinyin: 'Qǐng gěi wǒ yì zhāng kào chuāng de zhuōzi.', vi: 'Cho tôi bàn cạnh cửa sổ nhé.' }
+        { zh: '请给我一份菜单。', pinyin: 'Qǐng gěi wǒ yí fèn càidān.', vi: 'Làm ơn cho tôi một cuốn thực đơn.' },
+        { zh: '有什么特色菜推荐吗？', pinyin: 'Yǒu shénme tèsè cài tuījiàn ma?', vi: 'Có món ăn đặc sắc nào gợi ý không?' }
       ]
-    },
-    shopping: {
-      zh: '您好！想看点什么？这件衣服是今年最流行的款式。',
-      pinyin: 'Nín hǎo! Xiǎng kàn diǎn shénme? Zhè jiàn yīfu shì jīnnián zuì liúxíng de kuǎnshì.',
-      vi: 'Chào bạn! Bạn muốn xem gì? Chiếc áo này là mẫu thịnh hành nhất năm nay đó.',
-      suggestions: [
-        { zh: '这件衣服多少钱？', pinyin: 'Zhè jiàn yīfu duōshao qián?', vi: 'Chiếc áo này bao nhiêu tiền?' },
-        { zh: '有大一点的尺码吗？', pinyin: 'Yǒu dà yìdiǎn de chǐmǎ ma?', vi: 'Có kích cỡ lớn hơn chút không?' },
-        { zh: '可以试一下吗？', pinyin: 'Kěyǐ shì yíxià ma?', vi: 'Tôi có thể thử một chút không?' }
-      ]
-    },
-    directions: {
-      zh: '你好，请问您要去哪里？请上车吧！',
-      pinyin: 'Nǐ hǎo, qǐngwèn nín yào qù nǎlǐ? Qǐng shàng chē ba!',
-      vi: 'Xin chào, xin hỏi bạn muốn đi đâu? Mời lên xe!',
-      suggestions: [
-        { zh: '我要去火车站，谢谢。', pinyin: 'Wǒ yào qù huǒchēzhàn, xièxie.', vi: 'Tôi muốn đến ga tàu hỏa, cảm ơn.' },
-        { zh: '去机场大概需要多长时间？', pinyin: 'Qù jīchǎng dàgài xūyào duō cháng shíjiān?', vi: 'Đi sân bay mất khoảng bao lâu?' },
-        { zh: '到了请叫我一下。', pinyin: 'Dào le qǐng jiào wǒ yíxià.', vi: 'Đến nơi xin gọi tôi một tiếng nhé.' }
-      ]
-    }
-  };
+    };
+  }
 
-  return map[id] || map.restaurant;
+  if (t.includes('phỏng vấn') || t.includes('việc') || r.includes('tuyển dụng')) {
+    return {
+      zh: '你好，请坐！请先做一个简单的自我介绍吧。',
+      pinyin: 'Nǐ hǎo, qǐng zuò! Qǐng xiān zuò yí gè jiǎndān de zìwǒ jièshào ba.',
+      vi: 'Chào bạn, mời ngồi! Bạn hãy giới thiệu sơ lược về bản thân trước nhé.',
+      suggestions: [
+        { zh: '您好，我叫小明，毕业于中文系。', pinyin: 'Nǐ hǎo, wǒ jiào Xiǎomíng, bìyè yú zhōngwén xì.', vi: 'Chào bạn, tôi tên Tiểu Minh, tốt nghiệp khoa tiếng Trung.' },
+        { zh: '非常高兴今天能来这里面试。', pinyin: 'Fēicháng gāoxìng jīntiān néng lái zhèlǐ miànshì.', vi: 'Rất vui vì hôm nay được đến đây phỏng vấn.' }
+      ]
+    };
+  }
+
+  return {
+    zh: `你好！今天关于“${t}”，很高兴能和你交流。你想先聊点什么呢？`,
+    pinyin: `Nǐ hǎo! Jīntiān guānyú "${t}", hěn gāoxìng néng hé nǐ jiāoliú. Nǐ xiǎng xiān liáo diǎn shénme ne?`,
+    vi: `Xin chào! Hôm nay về chủ đề "${t}", rất vui được trò chuyện cùng bạn. Bạn muốn bắt đầu từ đâu nào?`,
+    suggestions: [
+      { zh: '你好，很高兴和你聊天！', pinyin: 'Nǐ hǎo, hěn gāoxìng hé nǐ liáotiān!', vi: 'Xin chào, rất vui được trò chuyện cùng bạn!' },
+      { zh: '请多指教，我们开始吧。', pinyin: 'Qǐng duō zhǐjiào, wǒmen kāishǐ ba.', vi: 'Xin chỉ giáo thêm, chúng ta bắt đầu nhé.' }
+    ]
+  };
 }
 
 // Utility: Escape HTML

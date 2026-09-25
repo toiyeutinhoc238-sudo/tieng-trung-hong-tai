@@ -3868,6 +3868,239 @@ Trả về ĐÚNG 1 JSON object:
   }
 });
 
+// 4. AI Interactive Dialogue: Start Conversation (Custom Roleplay & Scenarios)
+app.post('/api/ai/dialogue/start', async (req, res) => {
+  const { topic = 'Trò chuyện tự do', userRole = 'Học viên', aiRole = 'Gia sư tiếng Trung', level = 'hsk2' } = req.body;
+  const levelText = level === 'hsk6' || level === 'cao' ? 'Cao cấp (HSK 5-6)' : level === 'hsk4' || level === 'trung' ? 'Trung cấp (HSK 3-4)' : 'Sơ cấp (HSK 1-2)';
+
+  const prompt = `Bạn là một diễn viên nhập vai AI chuyên nghiệp kiêm giáo viên tiếng Trung của "Tiếng Trung Hongtai".
+BỐI CẢNH HỘI THOẠI:
+- Chủ đề/tình huống: "${topic}"
+- Vai của AI: "${aiRole}"
+- Vai của học viên: "${userRole}"
+- Trình độ tiếng Trung của học viên: "${levelText}"
+
+NHIỆM VỤ:
+Bạn hãy nhập vai "${aiRole}" và CHỦ ĐỘNG MỞ ĐẦU CUỘC HỘI THOẠI với "${userRole}".
+Câu mở đầu phải:
+- Thể hiện đúng ngữ cảnh và tính cách của vai "${aiRole}" (Ví dụ nếu là phục vụ thì chào đón, nếu là bạn thân thì thân mật vui vẻ, nếu là nhà tuyển dụng thì lịch thiệp).
+- Từ vựng và ngữ pháp phù hợp với trình độ "${levelText}" của học viên.
+- Đặt 1 câu hỏi hoặc gợi mở tự nhiên để học viên dễ dàng đáp lại.
+- Đồng thời cung cấp 2-3 gợi ý câu trả lời mẫu ngắn gọn để học viên có thể bấm chọn ngay.
+
+Trả về ĐÚNG 1 JSON object (không markdown ngoài JSON):
+{
+  "aiMessage": {
+    "zh": "<câu chào mở đầu bằng tiếng Trung>",
+    "pinyin": "<phiên âm pinyin có dấu>",
+    "vi": "<bản dịch tiếng Việt tự nhiên>"
+  },
+  "suggestions": [
+    { "zh": "<gợi ý trả lời 1>", "pinyin": "<pinyin>", "vi": "<nghĩa tiếng Việt>" },
+    { "zh": "<gợi ý trả lời 2>", "pinyin": "<pinyin>", "vi": "<nghĩa tiếng Việt>" },
+    { "zh": "<gợi ý trả lời 3>", "pinyin": "<pinyin>", "vi": "<nghĩa tiếng Việt>" }
+  ]
+}`;
+
+  try {
+    let reply = '';
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+    if (groqClient) {
+      try {
+        const completion = await groqClient.chat.completions.create({
+          model: 'openai/gpt-oss-120b',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.6,
+          max_tokens: 1200
+        });
+        reply = completion.choices[0]?.message?.content || '';
+      } catch (eGroq) {
+        console.warn('Groq dialogue/start failed, trying Gemini...', eGroq.message);
+      }
+    }
+
+    if (!reply && GEMINI_API_KEY) {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      }
+    }
+
+    let result = null;
+    if (reply) {
+      try {
+        const cleanJson = reply.replace(/```json/gi, '').replace(/```/g, '').trim();
+        result = JSON.parse(cleanJson);
+      } catch (errParse) {
+        const match = reply.match(/\{[\s\S]*\}/);
+        if (match) result = JSON.parse(match[0]);
+      }
+    }
+
+    if (!result || !result.aiMessage) {
+      result = {
+        aiMessage: {
+          zh: `你好！关于“${topic}”，很高兴能和你交流。你想先聊点什么呢？`,
+          pinyin: `Nǐ hǎo! Guānyú "${topic}", hěn gāoxìng néng hé nǐ jiāoliú. Nǐ xiǎng xiān liáo diǎn shénme ne?`,
+          vi: `Xin chào! Về chủ đề "${topic}", rất vui được trò chuyện cùng bạn. Bạn muốn bắt đầu từ đâu nào?`
+        },
+        suggestions: [
+          { zh: '我想了解一下具体情况。', pinyin: 'Wǒ xiǎng liǎojiě yíxià jùtǐ qíngkuàng.', vi: 'Tôi muốn tìm hiểu tình hình cụ thể.' },
+          { zh: '你好，很高兴认识你！', pinyin: 'Nǐ hǎo, hěn gāoxìng rènshí nǐ!', vi: 'Xin chào, rất vui được làm quen với bạn!' }
+        ]
+      };
+    }
+
+    res.json({ success: true, ...result });
+  } catch (err) {
+    console.error('Lỗi dialogue/start:', err);
+    res.json({
+      success: true,
+      aiMessage: {
+        zh: '你好！我们开始吧，请问今天你想聊些什么？',
+        pinyin: 'Nǐ hǎo! Wǒmen kāishǐ ba, qǐngwèn jīntiān nǐ xiǎng liáo xiē shénme?',
+        vi: 'Xin chào! Chúng ta bắt đầu nhé, hôm nay bạn muốn trò chuyện điều gì?'
+      },
+      suggestions: [
+        { zh: '你好，请多指教！', pinyin: 'Nǐ hǎo, qǐng duō zhǐjiào!', vi: 'Xin chào, xin được chỉ giáo nhiều hơn!' }
+      ]
+    });
+  }
+});
+
+// 5. AI Interactive Dialogue: User Reply & Conversational Feedback
+app.post('/api/ai/dialogue/reply', async (req, res) => {
+  const { topic = 'Trò chuyện tự do', userRole = 'Học viên', aiRole = 'Gia sư tiếng Trung', level = 'hsk2', history = [], userMessage = '' } = req.body;
+  if (!userMessage || !userMessage.trim()) {
+    return res.status(400).json({ error: 'Tin nhắn không được để trống.' });
+  }
+
+  const levelText = level === 'hsk6' || level === 'cao' ? 'Cao cấp (HSK 5-6)' : level === 'hsk4' || level === 'trung' ? 'Trung cấp (HSK 3-4)' : 'Sơ cấp (HSK 1-2)';
+  const historyText = history.map(h => `${h.role === 'ai' ? aiRole : userRole}: ${h.zh}`).join('\n');
+
+  const prompt = `Bạn là diễn viên nhập vai AI chuyên nghiệp của "Tiếng Trung Hongtai".
+BỐI CẢNH HỘI THOẠI:
+- Chủ đề: "${topic}"
+- Vai của AI: "${aiRole}"
+- Vai của học viên: "${userRole}"
+- Trình độ học viên: "${levelText}"
+
+LỊCH SỬ HỘI THOẠI GẦN ĐÂY:
+${historyText || '(Bắt đầu cuộc trò chuyện)'}
+
+HỌC VIÊN (${userRole}) VỪA NÓI:
+"${userMessage.trim()}"
+
+NHIỆM VỤ:
+1. Đánh giá câu nói của học viên (feedback):
+   - score (điểm độ tự nhiên từ 70 - 100).
+   - praise (lời khen ngắn bằng tiếng Việt nếu dùng từ tốt).
+   - correction (nếu có lỗi sai ngữ pháp, pinyin hoặc dùng từ không tự nhiên thì sửa lại câu đúng hơn; nếu câu chuẩn thì để null).
+   - tip (mẹo mở rộng từ vựng hoặc cách nói bản xứ hơn, nếu không có để null).
+2. Nhập vai "${aiRole}" trả lời tiếp tục câu chuyện (aiMessage):
+   - Phản hồi trực tiếp vào ý học viên vừa nói, tự nhiên như người bản xứ.
+   - Giữ nhịp hội thoại bằng cách đặt tiếp câu hỏi hoặc mở ra diễn biến tiếp theo.
+3. Cung cấp 2-3 gợi ý (suggestions) câu trả lời tiếp theo để học viên lựa chọn.
+
+Trả về ĐÚNG 1 JSON object:
+{
+  "feedback": {
+    "score": 92,
+    "praise": "<Lời khen ngắn gọn bằng tiếng Việt>",
+    "correction": "<Câu sửa lại nếu sai, hoặc null nếu đúng>",
+    "tip": "<Mẹo dùng từ hay hơn>"
+  },
+  "aiMessage": {
+    "zh": "<câu trả lời của AI bằng tiếng Trung>",
+    "pinyin": "<phiên âm pinyin có dấu>",
+    "vi": "<bản dịch tiếng Việt>"
+  },
+  "suggestions": [
+    { "zh": "<gợi ý đáp lại 1>", "pinyin": "<pinyin>", "vi": "<nghĩa tiếng Việt>" },
+    { "zh": "<gợi ý đáp lại 2>", "pinyin": "<pinyin>", "vi": "<nghĩa tiếng Việt>" }
+  ]
+}`;
+
+  try {
+    let reply = '';
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+    if (groqClient) {
+      try {
+        const completion = await groqClient.chat.completions.create({
+          model: 'openai/gpt-oss-120b',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.6,
+          max_tokens: 1400
+        });
+        reply = completion.choices[0]?.message?.content || '';
+      } catch (eGroq) {
+        console.warn('Groq dialogue/reply failed, trying Gemini...', eGroq.message);
+      }
+    }
+
+    if (!reply && GEMINI_API_KEY) {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      }
+    }
+
+    let result = null;
+    if (reply) {
+      try {
+        const cleanJson = reply.replace(/```json/gi, '').replace(/```/g, '').trim();
+        result = JSON.parse(cleanJson);
+      } catch (errParse) {
+        const match = reply.match(/\{[\s\S]*\}/);
+        if (match) result = JSON.parse(match[0]);
+      }
+    }
+
+    if (!result || !result.aiMessage) {
+      result = {
+        feedback: {
+          score: 88,
+          praise: "Diễn đạt tốt và dễ hiểu!",
+          correction: null,
+          tip: "Có thể phát triển thêm câu dài hơn."
+        },
+        aiMessage: {
+          zh: "好的，我明白了！请问您还有什么想聊的吗？",
+          pinyin: "Hǎo de, wǒ míngbai le! Qǐngwèn nín hái yǒu shénme xiǎng liáo de ma?",
+          vi: "Được rồi, tôi hiểu rồi! Xin hỏi bạn còn điều gì muốn trò chuyện nữa không?"
+        },
+        suggestions: [
+          { zh: "暂时没有了，谢谢。", pinyin: "Zànshí méiyǒu le, xièxie.", vi: "Tạm thời không có, cảm ơn." }
+        ]
+      };
+    }
+
+    res.json({ success: true, ...result });
+  } catch (err) {
+    console.error('Lỗi dialogue/reply:', err);
+    res.json({
+      success: true,
+      feedback: { score: 85, praise: "Hoàn thành lượt giao tiếp!", correction: null, tip: null },
+      aiMessage: {
+        zh: "收到！我们继续聊吧，你觉得呢？",
+        pinyin: "Shōudào! Wǒmen jìxù liáo ba, nǐ juéde ne?",
+        vi: "Đã nhận! Chúng ta tiếp tục nhé, bạn thấy sao?"
+      },
+      suggestions: []
+    });
+  }
+});
+
 // ==========================================================================
 // SENTENCE REORDER QUESTIONS API (790 CÂU TỪ HSK 1 ĐẾN HSK 6)
 // ==========================================================================

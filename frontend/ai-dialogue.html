@@ -174,59 +174,153 @@
       color: #f59e0b !important;
     }
 
-    html.light-mode .scenario-card {
-      background: rgba(255, 255, 255, 0.92) !important;
-      border-color: #e2e8f0 !important;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
-    }
-
-    html.light-mode .scenario-card div:nth-child(2) {
-      color: #0f172a !important;
-    }
-
-    html.light-mode .chat-window {
-      background: rgba(255, 255, 255, 0.92) !important;
-      border-color: #e2e8f0 !important;
+    /* Light Mode Custom Scenario Card (Hình 2) */
+    html.light-mode .custom-scenario-card {
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06) !important;
     }
 
-    html.light-mode #chat-messages-area {
-      background: #f8fafc !important;
+    html.light-mode .builder-badge {
+      background: #f3e8ff !important;
+      color: #7e22ce !important;
+      border-color: #d8b4fe !important;
     }
 
-    html.light-mode .msg-bubble-ai {
-      background: #ffffff !important;
-      border-color: #e2e8f0 !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-    }
-
-    html.light-mode .msg-bubble-ai .bubble-text {
+    html.light-mode .builder-title {
       color: #0f172a !important;
     }
 
-    html.light-mode .msg-bubble-ai .bubble-trans {
+    html.light-mode .builder-subtitle {
       color: #475569 !important;
     }
 
-    html.light-mode .diag-input-box {
-      background: #ffffff !important;
-      border-color: #cbd5e1 !important;
+    html.light-mode .builder-label,
+    html.light-mode .builder-field-label {
+      color: #1e293b !important;
     }
 
-    html.light-mode .diag-input-box input {
+    html.light-mode .quick-suggestion-btn {
+      background: #f8fafc !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #1e293b !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    html.light-mode .quick-suggestion-btn:hover {
+      background: #f1f5f9 !important;
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
+    }
+
+    html.light-mode .quick-suggestion-btn.active {
+      background: #e0f2fe !important;
+      border-color: #0284c7 !important;
+      color: #0369a1 !important;
+    }
+
+    html.light-mode .builder-input {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
       color: #0f172a !important;
     }
 
-    html.light-mode .sugg-btn {
-      background: #ffffff !important;
-      border-color: #cbd5e1 !important;
-      color: #0f172a !important;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+    html.light-mode .builder-input:focus {
+      border-color: #0284c7 !important;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
     }
 
-    html.light-mode .sugg-btn:hover {
+    html.light-mode .level-select-pill {
+      background: #f8fafc !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #475569 !important;
+    }
+
+    html.light-mode .level-select-pill.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+      border-color: #0284c7 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3) !important;
+    }
+
+    html.light-mode .builder-note {
+      color: #64748b !important;
+    }
+
+    /* Light Mode Chat Workspace */
+    html.light-mode .chat-workspace {
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    html.light-mode .workspace-top-bar {
+      background: #f8fafc !important;
+      border-bottom: 1.5px solid #e2e8f0 !important;
+    }
+
+    html.light-mode #active-scenario-title {
+      color: #0f172a !important;
+    }
+
+    html.light-mode #active-scenario-desc {
+      color: #64748b !important;
+    }
+
+    html.light-mode .chat-messages-area {
+      background: #f1f5f9 !important;
+    }
+
+    html.light-mode .chat-bubble.ai .bubble-content {
+      background: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    html.light-mode .chat-bubble.ai .bubble-zh {
+      color: #0f172a !important;
+    }
+
+    html.light-mode .chat-bubble.ai .bubble-pinyin {
+      color: #0284c7 !important;
+    }
+
+    html.light-mode .chat-bubble.ai .bubble-vi {
+      color: #475569 !important;
+    }
+
+    html.light-mode .suggestions-strip {
+      background: #ffffff !important;
+      border-top: 1.5px solid #e2e8f0 !important;
+    }
+
+    html.light-mode .suggestion-pill {
       background: #f0fdf4 !important;
-      border-color: #10b981 !important;
+      border: 1px solid #86efac !important;
+      color: #15803d !important;
+    }
+
+    html.light-mode .chat-input-bar {
+      background: #ffffff !important;
+      border-top: 1.5px solid #e2e8f0 !important;
+    }
+
+    html.light-mode .chat-text-input {
+      background: #f8fafc !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .btn-mic {
+      background: #f1f5f9 !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #475569 !important;
+    }
+
+    html.light-mode .top-bar-btn {
+      background: #f1f5f9 !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #334155 !important;
     }
 
     .diag-header-inner {
@@ -244,37 +338,228 @@
       padding: 0 20px;
     }
 
-    /* Scenario Selection Card */
-    .scenario-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 14px;
-      margin-top: 16px;
+    /* Custom Scenario Builder Card (Matching Hình 2) */
+    .custom-scenario-card {
+      background: var(--diag-card-bg);
+      border: 1.5px solid var(--diag-card-border);
+      border-radius: 24px;
+      padding: 26px 30px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      margin-bottom: 24px;
+      transition: all 0.3s ease;
     }
 
-    .scenario-card {
-      background: rgba(30, 41, 59, 0.6);
-      border: 1.5px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 16px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      display: flex;
-      flex-direction: column;
+    .builder-header {
+      margin-bottom: 18px;
+    }
+
+    .builder-badge {
+      display: inline-flex;
+      align-items: center;
       gap: 8px;
+      padding: 4px 14px;
+      border-radius: 99px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      background: rgba(168, 85, 247, 0.18);
+      color: #d8b4fe;
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      margin-bottom: 8px;
     }
 
-    .scenario-card:hover {
-      background: rgba(40, 53, 76, 0.8);
+    .builder-title {
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0 0 6px 0;
+      line-height: 1.25;
+    }
+
+    .builder-subtitle {
+      font-size: 0.92rem;
+      color: #94a3b8;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .builder-section {
+      margin-top: 18px;
+    }
+
+    .builder-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #e2e8f0;
+      margin-bottom: 10px;
+    }
+
+    .quick-suggestions-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .quick-suggestion-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      color: #e2e8f0;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quick-suggestion-btn:hover {
+      background: rgba(168, 85, 247, 0.2);
       border-color: #a855f7;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2);
+      color: #ffffff;
+      transform: translateY(-1px);
     }
 
-    .scenario-card.active {
-      background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(124, 58, 237, 0.3));
-      border-color: #c084fc;
-      box-shadow: 0 8px 24px rgba(168, 85, 247, 0.3);
+    .quick-suggestion-btn.active {
+      background: rgba(2, 132, 199, 0.25);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    .builder-field-group {
+      margin-top: 18px;
+    }
+
+    .builder-field-label {
+      display: block;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #e2e8f0;
+      margin-bottom: 8px;
+    }
+
+    .required-star {
+      color: #ef4444;
+      font-weight: 900;
+    }
+
+    .builder-input {
+      width: 100%;
+      padding: 13px 18px;
+      border-radius: 14px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      font-size: 0.96rem;
+      font-family: inherit;
+      outline: none;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+
+    .builder-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
+
+    .level-pills-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .level-select-pill {
+      flex: 1;
+      min-width: 120px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      color: #94a3b8;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .level-select-pill .pill-zh {
+      font-size: 0.78rem;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .level-select-pill.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+    }
+
+    .builder-action-wrap {
+      margin-top: 22px;
+    }
+
+    .btn-start-chat {
+      width: 100%;
+      padding: 14px 24px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      font-size: 1.08rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-start-chat:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(2, 132, 199, 0.5);
+    }
+
+    .builder-note {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-align: center;
+    }
+
+    .top-bar-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .top-bar-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
     }
 
     /* Dialogue Chat Workspace */
@@ -289,7 +574,7 @@
       flex-direction: column;
       height: 680px;
       overflow: hidden;
-      margin-top: 20px;
+      margin-top: 10px;
     }
 
     /* Chat Messages Scroll Area */
@@ -551,67 +836,137 @@
   <!-- Main Container -->
   <main class="diag-container">
 
-    <!-- Hero / Setup Banner -->
-    <section style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.95)); border: 1px solid var(--diag-card-border); border-radius: 20px; padding: 24px 28px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
-        <div>
-          <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.35); padding: 4px 12px; border-radius: 99px; font-size: 0.8rem; font-weight: 800; color: #d8b4fe; margin-bottom: 8px;">
-            <span>💬 Phòng Luyện Phản Xạ Đàm Thoại AI</span>
-            <span>&bull;</span>
-            <span>Nhập Vai Thực Tế</span>
-          </div>
-          <h1 style="font-size: 1.8rem; font-weight: 900; margin: 0 0 6px 0; color: #ffffff;">
-            Tạo Cuộc Hội Thoại &amp; Đàm Thoại Thông Minh
-          </h1>
-          <p style="font-size: 0.92rem; color: #94a3b8; margin: 0;">
-            Chọn bối cảnh giao tiếp, trò chuyện tương tác 1:1 cùng AI, nhận ngay gợi ý câu trả lời và phản hồi sửa lỗi phát âm tức thì.
-          </p>
+    <!-- 1. BẢNG TỰ DO LỰA CHỌN & THIẾT LẬP BỐI CẢNH (CHUẨN HÌNH 2) -->
+    <section class="custom-scenario-card" id="custom-scenario-builder">
+      <!-- Header -->
+      <div class="builder-header">
+        <div class="builder-badge">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>Tự Do Lựa Chọn &amp; Tùy Biến Bối Cảnh Hội Thoại</span>
         </div>
-
-        <button onclick="toggleScenarioSelector()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 8px 16px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-sliders"></i> <span id="btn-toggle-scenario-text">Đổi tình huống</span>
-        </button>
+        <h1 class="builder-title">
+          Tạo Cuộc Hội Thoại &amp; Đàm Thoại Thông Minh
+        </h1>
+        <p class="builder-subtitle">
+          Chọn gợi ý nhanh hoặc tự gõ chủ đề &amp; vai bạn muốn giao tiếp, AI sẽ chào mở màn và phản xạ 1:1 cùng bạn!
+        </p>
       </div>
 
-      <!-- Scenarios Selector Box -->
-      <div id="scenario-selector-box" style="margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-          <label style="font-size: 0.9rem; font-weight: 800; color: #cbd5e1;">Chọn bối cảnh giao tiếp:</label>
-
-          <!-- Level pills -->
-          <div style="display: flex; gap: 6px;">
-            <button class="level-pill active" data-level="hsk2" onclick="switchDiagLevel('hsk2', this)" style="background: linear-gradient(135deg, #a855f7, #7c3aed); border: 1px solid #c084fc; color: #fff; padding: 4px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 800; cursor: pointer;">Sơ cấp (HSK 1-2)</button>
-            <button class="level-pill" data-level="hsk4" onclick="switchDiagLevel('hsk4', this)" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #94a3b8; padding: 4px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 800; cursor: pointer;">Trung cấp (HSK 3-4)</button>
-            <button class="level-pill" data-level="hsk6" onclick="switchDiagLevel('hsk6', this)" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #94a3b8; padding: 4px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 800; cursor: pointer;">Cao cấp (HSK 5-6)</button>
-          </div>
+      <!-- Section 1: Gợi ý nhanh (bấm để điền, vẫn sửa được) -->
+      <div class="builder-section">
+        <label class="builder-label">
+          <i class="fa-solid fa-bolt" style="color: #f59e0b;"></i>
+          <span>Gợi ý nhanh (bấm để điền, vẫn sửa được)</span>
+        </label>
+        <div class="quick-suggestions-grid">
+          <button type="button" class="quick-suggestion-btn active" data-topic="Gọi món ở quán ăn" onclick="applyQuickScenario('Gọi món ở quán ăn', 'Nhân viên phục vụ', '🍜', this)">
+            <span>🍜</span> <span>Gọi món ở quán ăn</span>
+          </button>
+          <button type="button" class="quick-suggestion-btn" data-topic="Phỏng vấn xin việc" onclick="applyQuickScenario('Phỏng vấn xin việc', 'Nhà tuyển dụng (HR)', '💼', this)">
+            <span>💼</span> <span>Phỏng vấn xin việc</span>
+          </button>
+          <button type="button" class="quick-suggestion-btn" data-topic="Hỏi đường đến ga tàu" onclick="applyQuickScenario('Hỏi đường đến ga tàu / địa điểm', 'Người dân địa phương', '🚆', this)">
+            <span>🚆</span> <span>Hỏi đường đến ga tàu</span>
+          </button>
+          <button type="button" class="quick-suggestion-btn" data-topic="Mua quần áo ở cửa hàng" onclick="applyQuickScenario('Mua quần áo ở cửa hàng & mặc cả', 'Chủ tiệm bán hàng', '🛍️', this)">
+            <span>🛍️</span> <span>Mua quần áo ở cửa hàng</span>
+          </button>
+          <button type="button" class="quick-suggestion-btn" data-topic="Nhận phòng khách sạn" onclick="applyQuickScenario('Nhận phòng khách sạn & hỏi dịch vụ', 'Lễ tân khách sạn', '🏨', this)">
+            <span>🏨</span> <span>Nhận phòng khách sạn</span>
+          </button>
+          <button type="button" class="quick-suggestion-btn" data-topic="Rủ bạn đi chơi cuối tuần" onclick="applyQuickScenario('Rủ bạn đi chơi cuối tuần & xem phim', 'Bạn thân', '☕', this)">
+            <span>☕</span> <span>Rủ bạn đi chơi cuối tuần</span>
+          </button>
+          <button type="button" class="quick-suggestion-btn" data-topic="Tán gẫu tự do về cuộc sống" onclick="applyQuickScenario('Tán gẫu tự do về cuộc sống, sở thích', 'Bạn người Trung Quốc', '🗣️', this)">
+            <span>🗣️</span> <span>Tán gẫu tự do không giới hạn</span>
+          </button>
+          <button type="button" class="quick-suggestion-btn" data-topic="Làm thủ tục ở sân bay" onclick="applyQuickScenario('Làm thủ tục tại sân bay & du lịch', 'Nhân viên hàng không', '✈️', this)">
+            <span>✈️</span> <span>Thủ tục sân bay &amp; du lịch</span>
+          </button>
         </div>
+      </div>
 
-        <div class="scenario-grid" id="scenario-grid">
-          <!-- Scenarios rendered dynamically -->
+      <!-- Section 2: Chủ đề / tình huống * -->
+      <div class="builder-field-group">
+        <label for="custom-topic-input" class="builder-field-label">
+          <span>Chủ đề / tình huống</span> <span class="required-star">*</span>
+        </label>
+        <div class="builder-input-wrap">
+          <input type="text" id="custom-topic-input" class="builder-input"
+            value="Gọi món ở quán ăn"
+            placeholder="VD: Gọi món ở quán ăn, Phỏng vấn xin việc, Hỏi đường, Tán gẫu tự do...">
+        </div>
+      </div>
+
+      <!-- Section 3: Bạn nói chuyện với ai? * -->
+      <div class="builder-field-group">
+        <label for="custom-ai-role-input" class="builder-field-label">
+          <span>Bạn nói chuyện với ai?</span> <span class="required-star">*</span>
+        </label>
+        <div class="builder-input-wrap">
+          <input type="text" id="custom-ai-role-input" class="builder-input"
+            value="Nhân viên phục vụ"
+            placeholder="VD: Nhân viên phục vụ, Bạn thân, Nhà tuyển dụng, Lái xe taxi...">
+        </div>
+      </div>
+
+      <!-- Section 4: Trình độ -->
+      <div class="builder-field-group">
+        <label class="builder-field-label">
+          <span>Trình độ</span>
+        </label>
+        <div class="level-pills-row">
+          <button type="button" class="level-select-pill active" data-level="hsk2" onclick="selectBuilderLevel('hsk2', this)">
+            <span class="pill-zh">初级</span>
+            <span class="pill-vi">Sơ cấp (HSK 1-2)</span>
+          </button>
+          <button type="button" class="level-select-pill" data-level="hsk4" onclick="selectBuilderLevel('hsk4', this)">
+            <span class="pill-zh">中级</span>
+            <span class="pill-vi">Trung cấp (HSK 3-4)</span>
+          </button>
+          <button type="button" class="level-select-pill" data-level="hsk6" onclick="selectBuilderLevel('hsk6', this)">
+            <span class="pill-zh">高级</span>
+            <span class="pill-vi">Cao cấp (HSK 5-6)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Section 5: Bắt đầu trò chuyện -->
+      <div class="builder-action-wrap">
+        <button type="button" class="btn-start-chat" id="btn-start-custom-chat" onclick="startCustomRoleplayChat()">
+          <i class="fa-solid fa-comments"></i>
+          <span>Bắt đầu trò chuyện</span>
+        </button>
+        <div class="builder-note">
+          <i class="fa-solid fa-wand-magic-sparkles" style="color: #f59e0b;"></i>
+          <span>Gia sư AI sẽ chào mở màn theo đúng vai bạn chọn. Phản xạ 1:1 mượt mà &amp; sửa lỗi tự động.</span>
         </div>
       </div>
     </section>
 
     <!-- Chat Workspace -->
-    <section class="chat-workspace">
+    <section class="chat-workspace" id="chat-workspace-panel">
       <!-- Active Scene Header -->
-      <div style="background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div class="workspace-top-bar" style="background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
         <div style="display: flex; align-items: center; gap: 12px;">
           <div style="font-size: 1.5rem;" id="active-scenario-icon">🍜</div>
           <div>
-            <div style="font-weight: 800; font-size: 1.05rem; color: #ffffff;" id="active-scenario-title">Gọi món tại nhà hàng</div>
-            <div style="font-size: 0.78rem; color: #94a3b8;" id="active-scenario-desc">Bối cảnh: Bạn là Khách hàng &bull; AI là Phục vụ</div>
+            <div style="font-weight: 800; font-size: 1.05rem; color: #ffffff;" id="active-scenario-title">Gọi món ở quán ăn</div>
+            <div style="font-size: 0.78rem; color: #94a3b8;" id="active-scenario-desc">Bối cảnh: Bạn &bull; AI là Nhân viên phục vụ</div>
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <button onclick="togglePinyinDisplay()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; font-size: 0.8rem; padding: 5px 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <button onclick="toggleScenarioBuilder()" class="top-bar-btn" title="Đổi bối cảnh hoặc tự tạo tình huống mới">
+            <i class="fa-solid fa-sliders"></i> <span id="btn-toggle-builder-text">Đổi tình huống</span>
+          </button>
+          <button onclick="togglePinyinDisplay()" class="top-bar-btn" id="btn-pinyin-toggle">
             <i class="fa-solid fa-font"></i> <span>Pinyin</span>
           </button>
-          <button onclick="toggleViDisplay()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; font-size: 0.8rem; padding: 5px 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+          <button onclick="toggleViDisplay()" class="top-bar-btn" id="btn-vi-toggle">
             <i class="fa-solid fa-language"></i> <span>Tiếng Việt</span>
           </button>
-          <button onclick="restartDialogue()" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; font-size: 0.8rem; padding: 5px 12px; border-radius: 8px; font-weight: 700; cursor: pointer;">
+          <button onclick="restartDialogue()" class="top-bar-btn" style="color: #f87171 !important; border-color: rgba(239, 68, 68, 0.3) !important;">
             <i class="fa-solid fa-rotate-right"></i> <span>Bắt đầu lại</span>
           </button>
         </div>
