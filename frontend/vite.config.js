@@ -34,7 +34,8 @@ export default defineConfig({
         speaking: resolve(__dirname, 'speaking-practice.html'),
         documents: resolve(__dirname, 'documents.html'),
         sentenceReorder: resolve(__dirname, 'sentence-reorder.html'),
-        aiDialogue: resolve(__dirname, 'ai-dialogue.html')
+        aiDialogue: resolve(__dirname, 'ai-dialogue.html'),
+        translation: resolve(__dirname, 'translation-practice.html')
       }
     }
   }

@@ -19,6 +19,7 @@
     if (path.includes('video-dictation')) {
       return search.includes('mode=shadowing') ? 'shadowing' : 'dictation';
     }
+    if (path.includes('translation-practice') || path.includes('paragraph-practice')) return 'translation';
     if (path.includes('writing-practice')) return 'writing';
     if (path.includes('speaking-practice')) return 'speaking';
     if (path.includes('sentence-reorder')) return 'sentence-reorder';
@@ -221,6 +222,9 @@
           </li>
           <li class="sidebar-item ${activeKey === 'writing' ? 'active' : ''}" onclick="window.location.href = '/writing-practice.html'">
             <i class="fa-solid fa-feather-pointed" style="color: #a855f7;"></i> <span>Luyện Viết & AI Chấm</span>
+          </li>
+          <li class="sidebar-item ${activeKey === 'translation' ? 'active' : ''}" onclick="window.location.href = '/translation-practice.html'">
+            <i class="fa-solid fa-language" style="color: #06b6d4;"></i> <span>Luyện Dịch &amp; Nghe Đoạn</span>
           </li>
           <li class="sidebar-item ${activeKey === 'speaking' ? 'active' : ''}" onclick="window.location.href = '/speaking-practice.html'">
             <i class="fa-solid fa-microphone-lines" style="color: #f59e0b;"></i> <span>Luyện Nói HSKK & AI</span>
