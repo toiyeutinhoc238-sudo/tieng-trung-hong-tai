@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -108,6 +108,7 @@
   <style>
     /* Responsive Defensive Layout */
     html, body {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
       display: flex !important;
       flex-direction: column !important;
       min-height: 100vh !important;
@@ -115,6 +116,10 @@
       margin: 0 !important;
       padding: 0 !important;
       overflow-x: hidden !important;
+    }
+
+    button, input, select, textarea, .btn {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
     }
 
     :root {
@@ -696,11 +701,12 @@
       font-size: 1.25rem;
       font-weight: 700;
       color: #ffffff;
-      font-family: 'Noto Sans SC', sans-serif;
+      font-family: 'Noto Sans SC', 'Be Vietnam Pro', sans-serif;
       line-height: 1.4;
     }
 
     .bubble-pinyin {
+      font-family: 'Be Vietnam Pro', sans-serif;
       font-size: 0.88rem;
       color: #38bdf8;
       font-weight: 600;
@@ -708,6 +714,7 @@
     }
 
     .bubble-vi {
+      font-family: 'Be Vietnam Pro', sans-serif;
       font-size: 0.88rem;
       color: #cbd5e1;
       margin-top: 4px;
@@ -716,6 +723,7 @@
 
     /* AI Feedback pill on user message */
     .bubble-feedback {
+      font-family: 'Be Vietnam Pro', sans-serif;
       margin-top: 8px;
       background: rgba(15, 23, 42, 0.6);
       border: 1px solid rgba(16, 185, 129, 0.3);
@@ -737,19 +745,32 @@
     }
 
     .suggestion-pill {
+      font-family: 'Be Vietnam Pro', sans-serif !important;
       background: rgba(168, 85, 247, 0.15);
       border: 1px solid rgba(168, 85, 247, 0.35);
       color: #d8b4fe;
       padding: 6px 14px;
       border-radius: 99px;
       font-size: 0.85rem;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+    }
+
+    .suggestion-pill .suggestion-zh {
+      font-family: 'Noto Sans SC', 'Be Vietnam Pro', sans-serif !important;
+      font-weight: 700;
+    }
+
+    .suggestion-pill .suggestion-vi {
+      font-family: 'Be Vietnam Pro', sans-serif !important;
+      font-weight: 500;
+      font-size: 0.8rem;
+      opacity: 0.88;
     }
 
     .suggestion-pill:hover {

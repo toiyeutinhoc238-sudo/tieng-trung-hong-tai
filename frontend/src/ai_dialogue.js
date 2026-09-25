@@ -288,8 +288,8 @@ function renderSuggestions(suggestions) {
   strip.style.display = 'flex';
   container.innerHTML = suggestions.map((s, idx) => `
     <button class="suggestion-pill" onclick="applySuggestion('${escapeHtml(s.zh)}')">
-      <span>${escapeHtml(s.zh)}</span>
-      <span style="font-size: 0.75rem; opacity: 0.7;">(${escapeHtml(s.vi || '')})</span>
+      <span class="suggestion-zh">${escapeHtml(s.zh)}</span>
+      <span class="suggestion-vi">(${escapeHtml(s.vi || '')})</span>
     </button>
   `).join('');
 }
