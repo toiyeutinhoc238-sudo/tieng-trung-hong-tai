@@ -197,12 +197,6 @@
           <li class="sidebar-item ${activeKey === 'grammar' ? 'active' : ''}" onclick="window.location.href = '/hsk-grammar.html'">
             <i class="fa-solid fa-spell-check" style="color: #34d399;"></i> <span>Sổ tay Ngữ Pháp</span>
           </li>
-          <li class="sidebar-item ${activeKey === 'texts' ? 'active' : ''}" onclick="window.location.href = '/lesson-texts.html'">
-            <i class="fa-solid fa-comments" style="color: #fb923c;"></i> <span>Bài Khóa & Hội Thoại</span>
-          </li>
-          <li class="sidebar-item ${activeKey === 'vocab-practice' ? 'active' : ''}" onclick="window.location.href = '/vocab-practice.html'">
-            <i class="fa-solid fa-graduation-cap" style="color: #a855f7;"></i> <span>Ôn Tập Từ Vựng (5 Dạng)</span>
-          </li>
         </ul>
 
         <!-- DANH MỤC: TRÒ CHƠI -->
