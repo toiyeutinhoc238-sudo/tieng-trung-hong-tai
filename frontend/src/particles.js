@@ -1,9 +1,25 @@
+/**
+ * Tiếng Trung HongTai - High-Performance Seasonal Particles Engine (Xuân - Hạ - Thu - Đông)
+ * Optimized for 60Hz/120Hz displays with delta-time normalization, zero jitter, and hardware acceleration.
+ */
+
+let canvas = null;
+let ctx = null;
+let width = 0;
+let height = 0;
+let particles = [];
+let animFrameId = null;
+let lastTime = 0;
+let isInitialized = false;
+
 export function initSeasonalParticles() {
-  let canvas = document.getElementById('seasonal-particle-canvas');
+  if (isInitialized && animFrameId) return;
+
+  canvas = document.getElementById('seasonal-particle-canvas');
   if (!canvas) {
     canvas = document.createElement('canvas');
     canvas.id = 'seasonal-particle-canvas';
-    canvas.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 50;';
+    canvas.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1; will-change: transform; transform: translateZ(0);';
     if (document.body) {
       document.body.insertBefore(canvas, document.body.firstChild);
     } else {
@@ -11,77 +27,85 @@ export function initSeasonalParticles() {
         document.body.insertBefore(canvas, document.body.firstChild);
       });
     }
+  } else {
+    // Ensure proper z-index and hardware layer
+    canvas.style.zIndex = '1';
+    canvas.style.willChange = 'transform';
+    canvas.style.transform = 'translateZ(0)';
   }
 
-  const enabled = localStorage.getItem('particles_enabled') !== 'false';
-  if (canvas) {
-    canvas.style.display = enabled ? 'block' : 'none';
-  }
+  ctx = canvas.getContext('2d', { alpha: true });
+  if (!ctx) return;
 
-  const ctx = canvas.getContext('2d');
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
-
-  window.addEventListener('resize', () => {
+  const updateDimensions = () => {
+    if (!canvas) return;
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
-  });
+  };
+  updateDimensions();
+
+  window.addEventListener('resize', updateDimensions, { passive: true });
 
   const month = new Date().getMonth() + 1; // 1 to 12
   let season = 'spring';
-  if (month >= 1 && month <= 3) season = 'spring';
-  else if (month >= 4 && month <= 6) season = 'summer';
-  else if (month >= 7 && month <= 9) season = 'autumn';
-  else season = 'winter';
+  if (month >= 1 && month <= 3) season = 'spring';       // Hoa đào xuân
+  else if (month >= 4 && month <= 6) season = 'summer';  // Lá xanh mùa hạ
+  else if (month >= 7 && month <= 9) season = 'autumn';  // Lá vàng phong mùa thu
+  else season = 'winter';                               // Bông tuyết mùa đông
 
-  // Support dedicated snowflake theme for documents & bookshelf or user preference
-  const isDocumentsPage = window.location.pathname.includes('documents');
-  if (isDocumentsPage) {
-    season = 'winter'; // Default to beautiful snowflake effect for documents page
+  if (window.location.pathname.includes('documents')) {
+    season = 'winter';
   }
 
-  const particleCount = season === 'winter' ? 45 : 28;
-  const particles = [];
+  // Smooth, subtle particle count for optimal FPS on phones & tablets
+  const isMobile = window.innerWidth < 768;
+  const particleCount = isMobile ? 12 : 20;
 
+  particles = [];
   for (let i = 0; i < particleCount; i++) {
     particles.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: season === 'winter' ? (Math.random() * 4.5 + 2.5) : (Math.random() * 7 + 5),
-      speedY: season === 'winter' ? (Math.random() * 0.9 + 0.45) : (Math.random() * 1.2 + 0.5),
-      speedX: Math.sin(Math.random() * Math.PI) * 0.7,
+      size: season === 'winter' ? (Math.random() * 3.5 + 2) : (Math.random() * 5 + 4),
+      speedY: season === 'winter' ? (Math.random() * 0.7 + 0.35) : (Math.random() * 0.8 + 0.4),
+      speedX: Math.random() * 0.6 + 0.2,
+      phase: Math.random() * Math.PI * 2,
       rotation: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * 1.5,
-      opacity: Math.random() * 0.5 + 0.45,
+      rotSpeed: (Math.random() - 0.5) * 0.8,
+      opacity: isMobile ? (Math.random() * 0.35 + 0.25) : (Math.random() * 0.4 + 0.3),
       shape: i % 3 === 0 ? 'crystal' : 'glow'
     });
   }
 
-  let animFrameId = null;
+  isInitialized = true;
 
-  function render() {
-    if (localStorage.getItem('particles_enabled') === 'false') {
-      ctx.clearRect(0, 0, width, height);
-      if (animFrameId) {
-        cancelAnimationFrame(animFrameId);
-        animFrameId = null;
-      }
+  function render(currentTime) {
+    if (localStorage.getItem('particles_enabled') === 'false' || document.hidden) {
+      if (ctx) ctx.clearRect(0, 0, width, height);
+      animFrameId = null;
       return;
     }
 
+    if (!lastTime) lastTime = currentTime;
+    // Delta-time normalization: 1.0 at 60fps, 0.5 at 120fps, clamped to prevent jumpy lag
+    const elapsed = currentTime - lastTime;
+    lastTime = currentTime;
+    const dt = Math.min(Math.max(elapsed / 16.667, 0.2), 2.0);
+
     ctx.clearRect(0, 0, width, height);
 
-    particles.forEach(p => {
-      p.y += p.speedY;
-      p.x += Math.sin(p.y * 0.01) * 0.5;
-      p.rotation += p.rotSpeed;
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.y += p.speedY * dt;
+      p.x += Math.sin(p.y * 0.012 + p.phase) * p.speedX * dt;
+      p.rotation += p.rotSpeed * dt;
 
-      if (p.y > height + 20) {
-        p.y = -20;
+      if (p.y > height + 25) {
+        p.y = -25;
         p.x = Math.random() * width;
       }
-      if (p.x > width + 20) p.x = -20;
-      if (p.x < -20) p.x = width + 20;
+      if (p.x > width + 25) p.x = -25;
+      if (p.x < -25) p.x = width + 25;
 
       ctx.save();
       ctx.translate(p.x, p.y);
@@ -90,9 +114,8 @@ export function initSeasonalParticles() {
 
       if (season === 'winter') {
         if (p.shape === 'crystal') {
-          // Delicate 6-arm crystal snowflake
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
-          ctx.lineWidth = Math.max(1, p.size * 0.22);
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+          ctx.lineWidth = Math.max(1, p.size * 0.2);
           ctx.lineCap = 'round';
           ctx.beginPath();
           for (let k = 0; k < 6; k++) {
@@ -106,10 +129,9 @@ export function initSeasonalParticles() {
           }
           ctx.stroke();
         } else {
-          // Soft glowing fluffy snowball with icy core
           const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, p.size);
-          grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-          grad.addColorStop(0.4, 'rgba(224, 242, 254, 0.85)');
+          grad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+          grad.addColorStop(0.4, 'rgba(224, 242, 254, 0.75)');
           grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
           ctx.fillStyle = grad;
           ctx.beginPath();
@@ -117,41 +139,59 @@ export function initSeasonalParticles() {
           ctx.fill();
         }
       } else if (season === 'spring') {
-        ctx.fillStyle = 'rgba(255, 183, 197, 0.85)';
+        ctx.fillStyle = 'rgba(255, 183, 197, 0.75)';
         ctx.beginPath();
         ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
         ctx.fill();
       } else if (season === 'summer') {
-        ctx.fillStyle = 'rgba(74, 222, 128, 0.8)';
+        ctx.fillStyle = 'rgba(74, 222, 128, 0.7)';
         ctx.beginPath();
         ctx.ellipse(0, 0, p.size, p.size * 0.4, 0.4, 0, Math.PI * 2);
         ctx.fill();
       } else if (season === 'autumn') {
-        ctx.fillStyle = 'rgba(245, 158, 11, 0.85)';
+        // Delicate golden maple leaf petal with smooth gradient
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.75)';
         ctx.beginPath();
         ctx.ellipse(0, 0, p.size, p.size * 0.5, 0.5, 0, Math.PI * 2);
         ctx.fill();
       }
+
       ctx.restore();
-    });
+    }
 
     animFrameId = requestAnimationFrame(render);
   }
 
-  if (localStorage.getItem('particles_enabled') !== 'false') {
-    render();
+  function startLoop() {
+    if (!animFrameId && localStorage.getItem('particles_enabled') !== 'false' && !document.hidden) {
+      lastTime = performance.now();
+      animFrameId = requestAnimationFrame(render);
+    }
   }
 
-  window.startParticleLoop = () => {
-    if (!animFrameId && localStorage.getItem('particles_enabled') !== 'false') {
-      render();
+  const enabled = localStorage.getItem('particles_enabled') !== 'false';
+  if (canvas) canvas.style.display = enabled ? 'block' : 'none';
+  if (enabled) {
+    startLoop();
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    } else {
+      startLoop();
     }
-  };
+  });
+
+  window.startParticleLoop = startLoop;
 }
 
 window.initSeasonalParticles = initSeasonalParticles;
 
-window.updateParticleToggleBtns = function(enabled) {
+window.updateParticleToggleBtns = function (enabled) {
   const btns = document.querySelectorAll('#particle-toggle-btn, .particle-toggle-btn');
   btns.forEach(btn => {
     if (enabled) {
@@ -166,7 +206,7 @@ window.updateParticleToggleBtns = function(enabled) {
   });
 };
 
-window.toggleSeasonalParticles = function() {
+window.toggleSeasonalParticles = function () {
   const current = localStorage.getItem('particles_enabled') !== 'false';
   const next = !current;
   localStorage.setItem('particles_enabled', next ? 'true' : 'false');
@@ -179,11 +219,29 @@ window.toggleSeasonalParticles = function() {
     if (typeof window.startParticleLoop === 'function') {
       window.startParticleLoop();
     }
+  } else {
+    if (animFrameId) {
+      cancelAnimationFrame(animFrameId);
+      animFrameId = null;
+    }
+    if (ctx && width && height) {
+      ctx.clearRect(0, 0, width, height);
+    }
   }
   if (typeof window.showToast === 'function') {
-    window.showToast(next ? 'Đã bật hiệu ứng bông tuyết mùa rơi ❄️' : 'Đã tắt hiệu ứng bông tuyết mùa rơi ⚡');
+    window.showToast(next ? 'Đã bật hiệu ứng mùa rơi 🍁' : 'Đã tắt hiệu ứng mùa rơi để tăng tốc độ ⚡');
   }
 };
+
+// Global click handler for any particle toggle button
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('#particle-toggle-btn, .particle-toggle-btn');
+  if (btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    window.toggleSeasonalParticles();
+  }
+});
 
 // Universal Study Time Tracker across ALL HTML pages
 (function initGlobalStudyTracker() {
@@ -201,7 +259,7 @@ window.toggleSeasonalParticles = function() {
         const u = JSON.parse(uRaw);
         if (u && u.email) userEmail = u.email;
       }
-    } catch (e) {}
+    } catch (e) { }
 
     const key = userEmail !== 'guest' ? `daily_study_history_${userEmail}` : 'daily_study_history_guest';
     try {
@@ -216,7 +274,7 @@ window.toggleSeasonalParticles = function() {
       const cachedStats = statsRaw ? JSON.parse(statsRaw) : { streak: 0, studyTime: 0 };
       cachedStats.studyTime = (cachedStats.studyTime || 0) + secs;
       localStorage.setItem(statsKey, JSON.stringify(cachedStats));
-    } catch (e) {}
+    } catch (e) { }
   }
 
   setInterval(() => {
@@ -252,12 +310,12 @@ window.toggleSeasonalParticles = function() {
                   const u = JSON.parse(uRaw);
                   if (u && u.email) userEmail = u.email;
                 }
-              } catch (e) {}
+              } catch (e) { }
               if (userEmail) {
                 try {
                   localStorage.setItem(`daily_study_history_${userEmail}`, JSON.stringify(stats.dailyHistory));
                   localStorage.setItem(`user_stats_${userEmail}`, JSON.stringify({ streak: stats.streak, studyTime: stats.studyTime }));
-                } catch (e) {}
+                } catch (e) { }
               }
             }
           })
