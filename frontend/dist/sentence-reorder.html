@@ -595,8 +595,8 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/sentenceReorder-YRMn7JSP.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-BK3p78gw.js">
+  <script type="module" crossorigin src="/assets/sentenceReorder-cSs_-7VE.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-CtGHYNg-.js">
   <link rel="stylesheet" crossorigin href="/assets/global_sidebar-Dc-RKD0I.css">
 </head>
 
@@ -714,11 +714,18 @@
         </div>
       </div>
 
-      <!-- Question Meaning / Vietnamese Prompt -->
-      <div style="background: rgba(255, 255, 255, 0.04); border-left: 4px solid #38bdf8; padding: 14px 18px; border-radius: 10px; margin-bottom: 24px;">
-        <div style="font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 4px;">Nghĩa tiếng Việt gợi ý:</div>
+      <!-- Collapsible Hint Box (Ẩn mặc định, chỉ hiện khi người học bấm nút Gợi ý) -->
+      <div id="sentence-hint-card" style="display: none; background: rgba(56, 189, 248, 0.08); border-left: 4px solid #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25); padding: 14px 18px; border-radius: 12px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <div style="font-size: 0.78rem; text-transform: uppercase; color: #38bdf8; font-weight: 800; letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-lightbulb"></i> Gợi ý nghĩa tiếng Việt:
+          </div>
+          <button onclick="toggleSentenceHint()" style="background: none; border: none; color: #94a3b8; font-size: 0.85rem; cursor: pointer;" title="Đóng gợi ý">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
         <div style="font-size: 1.15rem; font-weight: 700; color: #ffffff;" id="q-translation-text">Tôi tên là Lý Văn.</div>
-        <div style="font-size: 0.9rem; color: #38bdf8; font-weight: 600; margin-top: 6px; display: none;" id="q-pinyin-hint-text">Wǒ jiào Lǐ Wén.</div>
+        <div style="font-size: 0.92rem; color: #38bdf8; font-weight: 600; margin-top: 6px;" id="q-pinyin-hint-text">Wǒ jiào Lǐ Wén.</div>
       </div>
 
       <!-- Label 1: Answer Slot -->
@@ -753,12 +760,15 @@
 
       <!-- 3. Actions Toolbar -->
       <div class="reorder-actions">
-        <div style="display: flex; gap: 10px; align-items: center;">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
           <button class="btn-action btn-reset" onclick="resetCurrentSentence()">
             <i class="fa-solid fa-rotate-left"></i> Làm lại
           </button>
-          <button class="btn-action btn-hint" onclick="revealAnswer()">
-            <i class="fa-solid fa-lightbulb"></i> Xem đáp án
+          <button class="btn-action btn-hint" id="btn-toggle-hint" onclick="toggleSentenceHint()" style="background: rgba(245, 158, 11, 0.15); border: 1.5px solid #f59e0b; color: #fbbf24;">
+            <i class="fa-solid fa-lightbulb"></i> <span id="hint-btn-label">Gợi ý</span>
+          </button>
+          <button class="btn-action btn-reset" onclick="revealAnswer()" title="Xem đáp án chuẩn">
+            <i class="fa-solid fa-eye"></i> Đáp án
           </button>
         </div>
 

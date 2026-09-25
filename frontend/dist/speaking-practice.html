@@ -630,11 +630,31 @@
       font-weight: 800;
       cursor: pointer;
       transition: all 0.2s;
-      margin-bottom: 24px;
     }
 
     .hint-trigger-btn:hover {
       background: rgba(34, 197, 94, 0.25);
+      transform: translateY(-1px);
+    }
+
+    /* Separate Sample Speech Button */
+    .sample-speech-trigger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 2px solid #10b981;
+      color: #34d399;
+      font-size: 0.96rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sample-speech-trigger-btn:hover {
+      background: rgba(16, 185, 129, 0.25);
       transform: translateY(-1px);
     }
 
@@ -643,6 +663,7 @@
       border: 1.5px solid rgba(34, 197, 94, 0.4);
       border-radius: 18px;
       padding: 20px;
+      margin-top: 14px;
       margin-bottom: 24px;
       display: none;
       animation: fadeIn 0.3s ease;
@@ -651,6 +672,88 @@
     html.light-mode .hint-content-card {
       background: #f0fdf4;
       border-color: #86efac;
+    }
+
+    /* Separate Sample Speech Card */
+    .sample-speech-content-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 2px solid rgba(16, 185, 129, 0.5);
+      border-radius: 18px;
+      padding: 22px;
+      margin-top: 14px;
+      margin-bottom: 24px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    html.light-mode .sample-speech-content-card {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+
+    /* Scratchpad (Bảng Nháp 3p chuẩn bị & 2p nói) */
+    .scratchpad-card {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1.5px solid rgba(56, 189, 248, 0.4);
+      border-radius: 18px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .scratchpad-card:focus-within {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
+
+    html.light-mode .scratchpad-card {
+      background: #f0f9ff;
+      border-color: #bae6fd;
+    }
+
+    .scratchpad-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .scratchpad-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    html.light-mode .scratchpad-title {
+      color: #0284c7;
+    }
+
+    .scratchpad-textarea {
+      width: 100%;
+      min-height: 110px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+
+    html.light-mode .scratchpad-textarea {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      color: #0f172a;
     }
 
     /* 2 RED TIMER BUTTONS MATCHING WIREFRAME 2 */
@@ -854,8 +957,8 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/speaking-DN152Ab4.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-BK3p78gw.js">
+  <script type="module" crossorigin src="/assets/speaking-26dQId2c.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-CtGHYNg-.js">
   <link rel="stylesheet" crossorigin href="/assets/global_sidebar-Dc-RKD0I.css">
 </head>
 
@@ -983,17 +1086,26 @@
         </button>
       </div>
 
-      <!-- 3. Button Gợi ý (Green Wireframe Button -> AI Dàn bài & Từ vựng) -->
-      <div>
+      <!-- 3. HAI NÚT HỖ TRỢ: [Gợi ý Dàn bài & Từ vựng] & [Bài nói mẫu tham khảo] TÁCH RIÊNG BIỆT -->
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px;">
         <button class="hint-trigger-btn" id="hint-toggle-btn" onclick="toggleAiSuggestions()">
           <i class="fa-solid fa-lightbulb"></i>
-          <span>Gợi ý</span>
-          <span style="font-size: 0.82rem; font-weight: 600; opacity: 0.9;">&rarr; Dàn bài &bull; Từ vựng / câu có thể sử dụng (AI tự đề xuất)</span>
+          <span>Gợi ý Dàn bài &amp; Từ vựng</span>
+        </button>
+
+        <button class="sample-speech-trigger-btn" id="sample-speech-toggle-btn" onclick="toggleSampleSpeech()">
+          <i class="fa-solid fa-medal"></i>
+          <span>Bài nói mẫu tham khảo</span>
         </button>
       </div>
 
-      <!-- Expandable AI Suggestion Content -->
+      <!-- Expandable AI Suggestion Content (Chỉ Dàn bài, Từ vựng, Cấu trúc câu) -->
       <div class="hint-content-card" id="ai-suggestion-box">
+        <!-- Content dynamically rendered by JS -->
+      </div>
+
+      <!-- Expandable Separate Sample Speech Content (Bài văn mẫu DÀI chuẩn HSKK Trung/Cao) -->
+      <div class="sample-speech-content-card" id="sample-speech-box">
         <!-- Content dynamically rendered by JS -->
       </div>
 
@@ -1078,6 +1190,24 @@
             </button>
           </div>
         </div>
+      </div>
+
+      <!-- 5. BẢNG NHÁP & GHI CHÚ CHUẨN BỊ (HIỆN TRONG SUỐT 3P CHUẨN BỊ & 2P NÓI) -->
+      <div class="scratchpad-card" id="speaking-scratchpad-card">
+        <div class="scratchpad-header">
+          <div class="scratchpad-title">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span>Bảng Nháp &amp; Ghi Chú Dàn Ý (Dùng trong 3p chuẩn bị &bull; Nhìn khi 2p nói)</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span id="scratchpad-word-count" style="font-size: 0.82rem; color: #94a3b8; font-weight: 700;">0 ký tự</span>
+            <button type="button" onclick="clearSpeakingScratchpad()" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 8px; cursor: pointer;">
+              <i class="fa-solid fa-trash-can"></i> Xóa nháp
+            </button>
+          </div>
+        </div>
+        <textarea id="speaking-scratchpad-input" class="scratchpad-textarea"
+          placeholder="✍️ Nháp nhanh dàn ý, từ khóa hoặc các câu mở đầu tại đây trong 3 phút chuẩn bị...&#10;Khi chuyển sang 2 phút nói, bảng nháp này vẫn luôn hiển thị tại đây để bạn vừa nhìn vừa ghi âm nói thật tự tin và trôi chảy!"></textarea>
       </div>
 
       <!-- RECORDING COMPLETED CARD & SUBMIT TO AI -->

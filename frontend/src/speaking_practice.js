@@ -155,8 +155,18 @@ window.spinRandomQuestion = function (playAnim = true) {
   if (hintBtn) {
     hintBtn.innerHTML = `
       <i class="fa-solid fa-lightbulb"></i>
-      <span>Gợi ý</span>
-      <span style="font-size: 0.82rem; font-weight: 600; opacity: 0.9;">&rarr; Dàn bài &bull; Từ vựng / câu có thể sử dụng (AI tự đề xuất)</span>
+      <span>Gợi ý Dàn bài &amp; Từ vựng</span>
+    `;
+  }
+
+  // Đóng khối bài nói mẫu nếu đang mở
+  const sampleBox = document.getElementById('sample-speech-box');
+  if (sampleBox) sampleBox.style.display = 'none';
+  const sampleBtn = document.getElementById('sample-speech-toggle-btn');
+  if (sampleBtn) {
+    sampleBtn.innerHTML = `
+      <i class="fa-solid fa-medal"></i>
+      <span>Bài nói mẫu tham khảo</span>
     `;
   }
 
@@ -206,8 +216,7 @@ window.toggleAiSuggestions = async function () {
     if (btn) {
       btn.innerHTML = `
         <i class="fa-solid fa-lightbulb"></i>
-        <span>Gợi ý</span>
-        <span style="font-size: 0.82rem; font-weight: 600; opacity: 0.9;">&rarr; Dàn bài &bull; Từ vựng / câu có thể sử dụng (AI tự đề xuất)</span>
+        <span>Gợi ý Dàn bài &amp; Từ vựng</span>
       `;
     }
     return;
@@ -218,7 +227,6 @@ window.toggleAiSuggestions = async function () {
     btn.innerHTML = `
       <i class="fa-solid fa-eye-slash"></i>
       <span>Ẩn Gợi ý</span>
-      <span style="font-size: 0.82rem; font-weight: 600; opacity: 0.9;">(Bấm để thu gọn)</span>
     `;
   }
 
@@ -264,40 +272,7 @@ window.toggleAiSuggestions = async function () {
     }
   } catch (err) {
     console.error('Lỗi gợi ý AI:', err);
-    const fallback = {
-      outline: {
-        intro: "Mở đầu trực tiếp: Nêu rõ câu trả lời hoặc quan điểm của bạn đối với đề tài.",
-        body: [
-          "Luận điểm 1: Nêu lý do cụ thể hoặc chia sẻ trải nghiệm thực tế của bạn.",
-          "Luận điểm 2: Đưa ra ví dụ minh họa sinh động để tăng sức thuyết phục.",
-          "Luận điểm 3: Nêu cảm xúc hoặc liên hệ mở rộng đến cuộc sống."
-        ],
-        conclusion: "Kết bài: Tóm tắt lại suy nghĩ và đưa ra lời chúc hoặc hy vọng tương lai."
-      },
-      vocabulary: [
-        { hanzi: "经验", pinyin: "jīngyàn", meaning: "kinh nghiệm" },
-        { hanzi: "观点", pinyin: "guāndiǎn", meaning: "quan điểm" },
-        { hanzi: "不仅……而且……", pinyin: "bùjǐn... érqiě...", meaning: "không những... mà còn..." },
-        { hanzi: "深有体会", pinyin: "shēnyǒu tǐhuì", meaning: "thấm thía sâu sắc" }
-      ],
-      sentenceStructures: [
-        {
-          pattern: "对于这个问题，我的看法是……",
-          meaning: "Đối với câu hỏi này, quan điểm của tôi là...",
-          example: "对于这个问题，我的看法是兴趣是最好的老师。"
-        },
-        {
-          pattern: "之所以……是因为……",
-          meaning: "Sở dĩ... là bởi vì...",
-          example: "我之所以选择一个人旅行，是因为这样更自由。"
-        }
-      ],
-      sampleAnswer: {
-        hanzi: "对于这个问题，我的看法是，无论是在生活还是在工作中，积极的心态都至关重要。遇到困难时，我们应当保持冷静，多向有经验的人请教，持之以恒就一定能克服难关。",
-        pinyin: "Duìyú zhè ge wèntí, wǒ de kànfǎ shì, wúlùn shì zài shēnghuó háishì zài gōngzuò zhōng, jījí de xīntài dōu zhìguān zhòngyào. Yù dào kùnnán shí, wǒmen yīngdāng bǎochí lěngjìng, duō xiàng yǒu jīngyàn de rén qǐngjiào, chízhīyǐhéng jiù yídìng néng kèfú nánguān.",
-        meaningVi: "Đối với câu hỏi này, quan điểm của tôi là dù trong cuộc sống hay công việc, tâm thế tích cực đều vô cùng quan trọng. Khi gặp khó khăn, chúng ta nên giữ bình tĩnh, học hỏi người có kinh nghiệm, kiên trì thì nhất định sẽ vượt qua thử thách."
-      }
-    };
+    const fallback = getFallbackHskkSuggestion();
     aiSuggestionsCache.set(qKey, fallback);
     renderAiSuggestionContent(fallback);
   } finally {
@@ -312,7 +287,6 @@ function renderAiSuggestionContent(data) {
   const outline = data.outline || {};
   const vocabList = data.vocabulary || [];
   const sentenceList = data.sentenceStructures || [];
-  const sample = data.sampleAnswer || null;
 
   box.innerHTML = `
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px dashed rgba(34, 197, 94, 0.4); padding-bottom: 10px;">
@@ -360,7 +334,7 @@ function renderAiSuggestionContent(data) {
 
     <!-- 3. Mẫu câu cấu trúc nên dùng -->
     ${sentenceList.length > 0 ? `
-      <div style="margin-bottom: 16px;">
+      <div>
         <div style="font-size: 0.92rem; font-weight: 800; color: #a855f7; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
           <i class="fa-solid fa-puzzle-piece"></i> <span>3. Mẫu câu kết nối lưu loát:</span>
         </div>
@@ -375,24 +349,228 @@ function renderAiSuggestionContent(data) {
         </div>
       </div>
     ` : ''}
+  `;
+}
 
-    <!-- 4. Bài nói mẫu tham khảo -->
-    ${sample ? `
-      <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px; padding: 14px 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <strong style="font-size: 0.88rem; color: #34d399;"><i class="fa-solid fa-medal"></i> Bài nói mẫu tham khảo:</strong>
-          <button onclick="playSpeakingSampleTts()" style="background: transparent; border: none; color: #38bdf8; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
-            <i class="fa-solid fa-volume-high"></i> Nghe người bản xứ nói
-          </button>
-        </div>
-        <div id="sample-speaking-hanzi" class="hanzi-text" style="font-size: 1.05rem; line-height: 1.7; color: #ffffff; margin-bottom: 4px;">
-          ${sample.hanzi}
-        </div>
-        ${sample.pinyin ? `<div style="font-size: 0.82rem; color: #94a3b8; font-style: italic; margin-bottom: 4px;">${sample.pinyin}</div>` : ''}
-        ${sample.meaningVi ? `<div style="font-size: 0.84rem; color: #cbd5e1;">${sample.meaningVi}</div>` : ''}
+// 4B. TÁCH RIÊNG: Nút [Bài nói mẫu tham khảo] (Dài, chuyên sâu theo chuẩn HSKK)
+window.toggleSampleSpeech = async function () {
+  const box = document.getElementById('sample-speech-box');
+  const btn = document.getElementById('sample-speech-toggle-btn');
+  if (!box || !currentActiveQuestion) return;
+
+  const isVisible = box.style.display === 'block';
+
+  if (isVisible) {
+    box.style.display = 'none';
+    if (btn) {
+      btn.innerHTML = `
+        <i class="fa-solid fa-medal"></i>
+        <span>Bài nói mẫu tham khảo</span>
+      `;
+    }
+    return;
+  }
+
+  box.style.display = 'block';
+  if (btn) {
+    btn.innerHTML = `
+      <i class="fa-solid fa-eye-slash"></i>
+      <span>Ẩn Bài nói mẫu</span>
+    `;
+  }
+
+  const qKey = `${currentSpeakingLevel}_${currentActiveQuestion.question}`;
+  if (aiSuggestionsCache.has(qKey)) {
+    renderSampleSpeechContent(aiSuggestionsCache.get(qKey));
+    return;
+  }
+
+  box.innerHTML = `
+    <div style="text-align: center; padding: 24px 16px; color: #10b981;">
+      <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 12px; color: #10b981;"></i>
+      <div style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
+        Đang tạo bài nói mẫu dài chuẩn HSKK ${currentSpeakingLevel === 'so' ? 'Sơ cấp' : currentSpeakingLevel === 'cao' ? 'Cao cấp' : 'Trung cấp'}...
+      </div>
+      <div style="font-size: 0.85rem; color: #94a3b8;">
+        Bài văn mẫu dài, chi tiết, văn phong lưu loát chuẩn người bản xứ.
+      </div>
+    </div>
+  `;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/ai/hskk-suggest`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: currentActiveQuestion.question,
+        level: currentSpeakingLevel,
+        skill: 'speaking'
+      })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      aiSuggestionsCache.set(qKey, data);
+      renderSampleSpeechContent(data);
+      playAudioTone('start');
+    } else {
+      throw new Error('Server error');
+    }
+  } catch (err) {
+    console.error('Lỗi nạp bài mẫu:', err);
+    const fallback = getFallbackHskkSuggestion();
+    aiSuggestionsCache.set(qKey, fallback);
+    renderSampleSpeechContent(fallback);
+  }
+};
+
+function renderSampleSpeechContent(data) {
+  const box = document.getElementById('sample-speech-box');
+  if (!box) return;
+
+  const sample = data.sampleAnswer || {};
+  const hanziText = sample.hanzi || '';
+  const charCount = hanziText.replace(/\s+/g, '').length;
+
+  box.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px dashed rgba(16, 185, 129, 0.4); padding-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1.1rem; color: #34d399;">
+        <i class="fa-solid fa-medal"></i>
+        <span>Bài Nói Mẫu Tham Khảo (Chuẩn HSKK ${currentSpeakingLevel === 'so' ? 'Sơ cấp' : currentSpeakingLevel === 'cao' ? 'Cao cấp' : 'Trung cấp'})</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 0.78rem; background: rgba(16, 185, 129, 0.2); color: #6ee7b7; padding: 4px 10px; border-radius: 99px; font-weight: 800;">
+          ${charCount} chữ Hán
+        </span>
+        <button onclick="playSpeakingSampleTts()" style="background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; color: #38bdf8; font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-volume-high"></i> <span>Nghe bản xứ đọc</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hanzi Text -->
+    <div id="sample-speaking-hanzi" class="hanzi-text" style="font-size: 1.1rem; line-height: 1.85; color: #ffffff; white-space: pre-line; margin-bottom: 14px; font-family: var(--font-chinese), sans-serif; background: rgba(0,0,0,0.22); padding: 14px 16px; border-radius: 12px; border-left: 3px solid #10b981;">
+      ${hanziText}
+    </div>
+
+    <!-- Pinyin Text -->
+    ${sample.pinyin ? `
+      <div style="margin-bottom: 12px;">
+        <div style="font-size: 0.78rem; text-transform: uppercase; color: #38bdf8; font-weight: 800; margin-bottom: 4px;">Phiên âm Pinyin:</div>
+        <div style="font-size: 0.88rem; color: #94a3b8; font-style: italic; line-height: 1.6; white-space: pre-line; background: rgba(0,0,0,0.18); padding: 10px 14px; border-radius: 10px;">${sample.pinyin}</div>
+      </div>
+    ` : ''}
+
+    <!-- Vietnamese Translation -->
+    ${sample.meaningVi ? `
+      <div>
+        <div style="font-size: 0.78rem; text-transform: uppercase; color: #fbbf24; font-weight: 800; margin-bottom: 4px;">Dịch nghĩa tiếng Việt:</div>
+        <div style="font-size: 0.92rem; color: #cbd5e1; line-height: 1.7; white-space: pre-line; background: rgba(0,0,0,0.18); padding: 10px 14px; border-radius: 10px;">${sample.meaningVi}</div>
       </div>
     ` : ''}
   `;
+}
+
+function getFallbackHskkSuggestion() {
+  if (currentSpeakingLevel === 'cao') {
+    return {
+      outline: {
+        intro: "Mở bài: Đưa ra nhận định tổng quan, định nghĩa vấn đề và khẳng định tính tất yếu của đề tài.",
+        body: [
+          "Luận điểm 1: Phân tích nguyên nhân và thực trạng xã hội từ góc nhìn vĩ mô.",
+          "Luận điểm 2: Đưa ra dẫn chứng thực tế hoặc trải nghiệm bản thân để làm sáng tỏ lập luận.",
+          "Luận điểm 3: Đề xuất giải pháp mang tính xây dựng, lâu dài và bền vững."
+        ],
+        conclusion: "Kết bài: Đúc kết triết lý sống và kỳ vọng phát triển trong tương lai."
+      },
+      vocabulary: [
+        { hanzi: "不可否认", pinyin: "bùkě fǒurèn", meaning: "không thể phủ nhận" },
+        { hanzi: "循序渐进", pinyin: "xúnxù jiànjìn", meaning: "tuần tự từng bước" },
+        { hanzi: "核心竞争力", pinyin: "héxīn jìngzhēnglì", meaning: "năng lực cạnh tranh cốt lõi" },
+        { hanzi: "行稳致远", pinyin: "xíng wěn zhì yuǎn", meaning: "bước đi vững chắc để tiến xa" }
+      ],
+      sentenceStructures: [
+        {
+          pattern: "从宏观角度来看，……是不可或缺的基石。",
+          meaning: "Từ góc độ vĩ mô mà nói, ... là nền tảng không thể thiếu.",
+          example: "从宏观角度来看，终身学习是保持个人核心竞争力的基石。"
+        },
+        {
+          pattern: "与其……，不如……，因为……",
+          meaning: "Thay vì..., chi bằng..., bởi vì...",
+          example: "与其抱怨环境的不公，不如脚踏实地提升自我。"
+        }
+      ],
+      sampleAnswer: {
+        hanzi: "关于这一问题，我认为应当从多维度、深层次来进行客观理性的剖析。首先，从个人成长与社会发展的宏观角度来看，事物的发展往往遵循着循序渐进的客观规律。正如古人云：“学如逆水行舟，不进则退。”在瞬息万变的现代社会中，若想保持核心竞争力，我们就必须树立终身学习的理念，不断拓宽自身的认知边界。\n\n其次，不可否认的是，在追求目标的过程中，挫折与挑战在所难免。面对逆境，消极抱怨无济于事，唯有保持沉着冷静的心态，认真分析问题的症结所在，才能化被动为主动。以我个人的亲身经历为例，每当面临看似难以逾越的瓶颈时，我都会选择虚心向前辈请教，同时结合科学有效的方法反复求证，最终不仅攻克了难关，更锤炼了自己的心智与意志。\n\n综上所述，无论是求学问道还是立足职场，坚韧不拔的意志品质与求真务实的行动准则都是不可或缺的。鉴于此，我们应当在实践中不断反思总结，脚踏实地走好每一步，方能在未来的道路上行稳致远，实现自我价值与社会价值的和谐统一。",
+        pinyin: "Guānyú zhè yí wèntí, wǒ rènwéi yīngdāng cóng duō wéidù, shēncéngcì lái jìnxíng kèguān lǐxìng de pōuxī. Shǒuxiān, cóng gèrén chéngzhǎng yǔ shèhuì fāzhǎn de hóngguān jiǎodù lái kàn, shìwù de fāzhǎn wǎngwǎng zūnxún zhe xúnxùjiànjìn de kèguān guīlǜ...",
+        meaningVi: "Về vấn đề này, tôi cho rằng cần nhìn nhận khách quan, sâu sắc từ nhiều chiều kích. Thứ nhất, từ góc độ phát triển cá nhân và xã hội, vạn vật đều tuân theo quy luật phát triển từng bước. Người xưa có câu: 'Học như chèo thuyền ngược nước, không tiến ắt lùi'. Trong xã hội biến đổi nhanh chóng, muốn duy trì năng lực cạnh tranh cốt lõi thì cần không ngừng học tập suốt đời. Thứ hai, đối mặt nghịch cảnh không nên than phiền mà cần bình tĩnh phân tích nguyên nhân để biến bị động thành chủ động. Tóm lại, kiên trì và thực tế chính là chìa khóa để tiến xa trên đường đời."
+      }
+    };
+  }
+
+  if (currentSpeakingLevel === 'trung') {
+    return {
+      outline: {
+        intro: "Mở đầu trực tiếp: Nêu rõ quan điểm hoặc câu trả lời đối với đề bài.",
+        body: [
+          "Luận điểm 1: Giải thích nguyên nhân hoặc kể lại trải nghiệm thực tế.",
+          "Luận điểm 2: Đưa ra ví dụ cụ thể minh họa cho quan điểm.",
+          "Luận điểm 3: Nêu bật cảm nhận và bài học tích lũy."
+        ],
+        conclusion: "Kết luận: Tóm tắt lại suy nghĩ và hy vọng tương lai."
+      },
+      vocabulary: [
+        { hanzi: "持之以恒", pinyin: "chízhīyǐhéng", meaning: "kiên trì bền bỉ" },
+        { hanzi: "日积月累", pinyin: "rìjīyuèlěi", meaning: "tích lũy ngày qua ngày" },
+        { hanzi: "万事开头难", pinyin: "wànshì kāitóu nán", meaning: "vạn sự khởi đầu nan" },
+        { hanzi: "开阔眼界", pinyin: "kāikuò yǎnjiè", meaning: "mở rộng tầm nhìn" }
+      ],
+      sentenceStructures: [
+        {
+          pattern: "我认为在日常生活和学习中，……是走向成功的关键。",
+          meaning: "Tôi cho rằng trong cuộc sống và học tập, ... là then chốt để thành công.",
+          example: "我认为在日常生活和学习中，保持积极健康的心态是走向成功的关键。"
+        },
+        {
+          pattern: "只要我们……，就一定能……",
+          meaning: "Chỉ cần chúng ta..., thì nhất định có thể...",
+          example: "只要我们持之以恒，就一定能取得优异的成绩。"
+        }
+      ],
+      sampleAnswer: {
+        hanzi: "这个问题非常值得探讨。我认为在日常生活和学习中，保持积极健康的心态和良好的习惯是走向成功的关键基石。\n\n首先，俗话说“万事开头难”，当我们接触新事物或遇到挑战时，往往容易产生畏难情绪。然而，只要我们能够静下心来，将大目标拆解为一个一个具体可行的小步骤，每天坚持进步一点点，日积月累就一定能发生质的飞跃。比如在学习中文的过程中，一开始我也觉得汉字难写、发音难准，但通过每天坚持晨读和听力练习，现在我已经能够自信流利地进行日常交流了。\n\n其次，除了自身的勤奋努力之外，学会与他人沟通合作也同样重要。多向优秀的师长朋友请教，倾听不同的见解，不仅能让我们少走弯路，更能开阔眼界、拓宽思维格局。\n\n总的来说，成长的道路不可能一帆风顺，但只要我们目标明确、持之以恒，就一定能克服各种困难，收获属于自己的精彩。",
+        pinyin: "Zhè ge wèntí fēicháng zhídé tàntǎo. Wǒ rènwéi zài rìcháng shēnghuó hé xuéxí zhōng, bǎochí jījí jiànkāng de xīntài hé liánghǎo de xíguàn shì zǒuxiàng chénggōng de guānjiàn jīshí. Shǒuxiān, súhuà shuō 'wànshì kāitóu nán'...",
+        meaningVi: "Câu hỏi này rất đáng để thảo luận. Tôi cho rằng trong cuộc sống và học tập hằng ngày, giữ gìn một tâm thái tích cực lành mạnh và những thói quen tốt chính là nền tảng then chốt để đi tới thành công. Thứ nhất, 'vạn sự khởi đầu nan', chia nhỏ mục tiêu và kiên trì từng ngày sẽ tạo nên bước nhảy vọt. Thứ hai, học cách giao tiếp và hợp tác với người khác giúp ta học hỏi được nhiều kinh nghiệm quý báu. Tóm lại, chỉ cần kiên định mục tiêu thì nhất định sẽ gặt hái thành công."
+      }
+    };
+  }
+
+  // Sơ cấp
+  return {
+    outline: {
+      intro: "Mở đầu trực tiếp: Nêu câu trả lời ngắn gọn.",
+      body: ["Kể 1-2 lý do đơn giản", "Chia sẻ cảm xúc của bản thân"],
+      conclusion: "Kết thúc: Bày tỏ mong muốn."
+    },
+    vocabulary: [
+      { hanzi: "高兴", pinyin: "gāoxìng", meaning: "vui vẻ" },
+      { hanzi: "经常", pinyin: "jīngcháng", meaning: "thường xuyên" },
+      { hanzi: "因为……所以……", pinyin: "yīnwèi... suǒyǐ...", meaning: "bởi vì... cho nên..." }
+    ],
+    sentenceStructures: [
+      {
+        pattern: "我非常喜欢……，因为……",
+        meaning: "Tôi rất thích..., bởi vì...",
+        example: "我非常喜欢中国菜，因为味道很好。"
+      }
+    ],
+    sampleAnswer: {
+      hanzi: "这个问题很有意思。对我来说，学习和生活都需要保持积极乐观的心态。遇到困难时，不要轻言放弃，多向老师和朋友请教，慢慢积累经验，每天进步一点点，最终一定会有所收获。",
+      pinyin: "Zhè ge wèntí hěn yǒu yìsi. Duì wǒ lái shuō, xuéxí hé shēnghuó dōu xūyào bǎochí jījí lèguān de xīntài. Yù dào kùnnán shí, bú yào qīngyán fàngqì, duō xiàng lǎoshī hé péngyou qǐngjiào, mànmàn jīlěi jīngyàn, měitiān jìnbù yì diǎndiǎn, zuìzhōng yídìng huì yǒu suǒ shōuhuò.",
+      meaningVi: "Câu hỏi này rất thú vị. Đối với tôi, cả học tập lẫn cuộc sống đều cần giữ tâm thế tích cực lạc quan. Khi gặp khó khăn, không nên dễ dàng từ bỏ, hãy học hỏi từ thầy cô và bạn bè, mỗi ngày tiến bộ một chút thì nhất định sẽ gặt hái thành công."
+    }
+  };
 }
 
 window.playSpeakingSampleTts = function () {
@@ -417,6 +595,12 @@ window.startPrepTimer = function () {
   prepBox.style.display = 'block';
   btnPrep?.classList.add('active-timer');
   prepBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  // Đảm bảo bảng nháp hiển thị và tự động focus để học viên bắt đầu ghi chú
+  const scratchpadCard = document.getElementById('speaking-scratchpad-card');
+  if (scratchpadCard) scratchpadCard.style.display = 'block';
+  const scratchpadInput = document.getElementById('speaking-scratchpad-input');
+  if (scratchpadInput) scratchpadInput.focus();
 
   prepRemainingSeconds = 180;
   isPrepPaused = false;
@@ -506,6 +690,11 @@ window.startSpeakingTimerAndRecord = async function () {
   if (resBox) resBox.style.display = 'none';
   if (recorderBox) recorderBox.style.display = 'block';
   btnSpeak?.classList.add('active-timer');
+
+  // Đảm bảo bảng nháp luôn hiển thị để học viên nhìn dàn ý trong 2 phút nói
+  const scratchpadCard = document.getElementById('speaking-scratchpad-card');
+  if (scratchpadCard) scratchpadCard.style.display = 'block';
+
   recorderBox?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
   speakingRemainingSeconds = 120;
@@ -920,7 +1109,40 @@ window.playSpeakingNativeTts = function () {
   window.speechSynthesis.speak(utter);
 };
 
+// 7. BẢNG NHÁP (SCRATCHPAD) DÀNH CHO HỌC VIÊN
+window.clearSpeakingScratchpad = function () {
+  const input = document.getElementById('speaking-scratchpad-input');
+  if (!input) return;
+  if (input.value.trim() && !confirm('Bạn có chắc muốn xóa sạch bản nháp này?')) {
+    return;
+  }
+  input.value = '';
+  updateScratchpadCount();
+  sessionStorage.removeItem('hongtai_speaking_scratchpad');
+};
+
+function updateScratchpadCount() {
+  const input = document.getElementById('speaking-scratchpad-input');
+  const countEl = document.getElementById('scratchpad-word-count');
+  if (!input || !countEl) return;
+  const len = input.value.trim().length;
+  countEl.textContent = `${len} ký tự`;
+  sessionStorage.setItem('hongtai_speaking_scratchpad', input.value);
+}
+
+function initScratchpad() {
+  const input = document.getElementById('speaking-scratchpad-input');
+  if (!input) return;
+  const saved = sessionStorage.getItem('hongtai_speaking_scratchpad');
+  if (saved) {
+    input.value = saved;
+    updateScratchpadCount();
+  }
+  input.addEventListener('input', updateScratchpadCount);
+}
+
 // Khởi chạy khi DOM sẵn sàng
 document.addEventListener('DOMContentLoaded', () => {
   initSpeakingQuestions();
+  initScratchpad();
 });

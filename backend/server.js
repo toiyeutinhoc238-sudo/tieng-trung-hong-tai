@@ -3605,12 +3605,15 @@ Hãy TỰ ĐỘNG ĐỀ XUẤT dàn ý và gợi ý toàn diện giúp học vi�
 1. Dàn bài (Outline): Gợi ý mở bài, thân bài (2-3 ý chính), kết bài.
 2. Từ vựng đắt giá: 4-6 từ vựng hoặc thành ngữ phù hợp với cấp độ này (kèm pinyin và nghĩa tiếng Việt).
 3. Mẫu câu / Cấu trúc ngữ pháp nên dùng: 2-4 mẫu câu kết nối hoặc cấu trúc điểm cao liên quan trực tiếp đến đề tài.
-4. Bài mẫu tham khảo: Một bài mẫu ngắn gọn, tự nhiên, văn phong chuẩn bản xứ.
+4. BÀI NÓI MẪU THAM KHẢO (ĐẶC BIỆT CHÚ Ý ĐỘ DÀI - CÀNG CHI TIẾT DÀI CÀNG TỐT):
+   - Nếu là "HSKK Sơ cấp": Bài mẫu tự nhiên khoảng 150 - 200 chữ Hán.
+   - Nếu là "HSKK Trung cấp": BÀI NÓI PHẢI RẤT DÀI (khoảng 350 - 450 chữ Hán, đủ thời lượng nói 2 phút HSKK). Bố cục 3 phần mạch lạc: Mở đầu nêu rõ định nghĩa hoặc quan điểm cá nhân; Thân bài chia 2-3 luận điểm rõ rệt, kết hợp phân tích sâu sắc, dẫn chứng cụ thể từ đời sống hoặc trải nghiệm cá nhân; Kết bài đúc kết kinh nghiệm hoặc triết lý nhân sinh.
+   - Nếu là "HSKK Cao cấp": BÀI NÓI PHẢI CỰC KỲ DÀI VÀ HỌC THUẬT (khoảng 480 - 650 chữ Hán, đủ thời lượng thuyết trình 2.5 - 3 phút). Sử dụng văn phong nghị luận trang trọng, lập luận sắc bén đa chiều (ưu điểm, khuyết điểm, thực trạng, giải pháp dài hạn), vận dụng linh hoạt thành ngữ 4 chữ (成语), liên từ logic (由此可见、综上所述、毋庸置疑、从长远角度来看).
 
 Trả về ĐÚNG 1 JSON object (không thêm markdown ngoài JSON):
 {
   "outline": {
-    "intro": "<Gợi ý mở đầu ngắn gọn, tự nhiên>",
+    "intro": "<Gợi ý mở đầu>",
     "body": [
       "<Ý triển khai 1>",
       "<Ý triển khai 2>",
@@ -3625,9 +3628,9 @@ Trả về ĐÚNG 1 JSON object (không thêm markdown ngoài JSON):
     { "pattern": "<mẫu câu ngữ pháp>", "meaning": "<ý nghĩa/cách dùng>", "example": "<câu ví dụ áp dụng đề bài>" }
   ],
   "sampleAnswer": {
-    "hanzi": "<bài nói hoặc bài viết mẫu chuẩn>",
-    "pinyin": "<phiên âm đầy đủ>",
-    "meaningVi": "<bản dịch tiếng Việt trôi chảy>"
+    "hanzi": "<bài nói mẫu DÀI và hoàn chỉnh theo đúng số lượng chữ yêu cầu>",
+    "pinyin": "<phiên âm có dấu đầy đủ>",
+    "meaningVi": "<bản dịch tiếng Việt đầy đủ và tự nhiên>"
   }
 }`;
 
@@ -3640,7 +3643,7 @@ Trả về ĐÚNG 1 JSON object (không thêm markdown ngoài JSON):
           model: 'openai/gpt-oss-120b',
           messages: [{ role: 'user', content: prompt }],
           temperature: 0.5,
-          max_tokens: 1800
+          max_tokens: 3500
         });
         reply = completion.choices[0]?.message?.content || '';
       } catch (eGroq) {
@@ -3695,10 +3698,18 @@ Trả về ĐÚNG 1 JSON object (không thêm markdown ngoài JSON):
             example: "一方面可以开阔眼界，另一方面能结交很多朋友。"
           }
         ],
-        sampleAnswer: {
-          hanzi: "这个问题很有意思。对我来说，学习和生活都需要保持积极乐观的心态。遇到困难时，不要轻言放弃，多向前辈请教，慢慢积累经验，最终一定会有所收获。",
-          pinyin: "Zhè ge wèntí hěn yǒu yìsi. Duì wǒ lái shuō, xuéxí hé shēnghuó dōu xūyào bǎochí jījí lèguān de xīntài. Yù dào kùnnán shí, bú yào qīngyán fàngqì, duō xiàng qiánbèi qǐngjiào, mànmàn jīlěi jīngyàn, zuìzhōng yídìng huì yǒu suǒ shōuhuò.",
-          meaningVi: "Câu hỏi này rất thú vị. Đối với tôi, cả học tập lẫn cuộc sống đều cần giữ tâm thế tích cực lạc quan. Khi gặp khó khăn, không nên dễ dàng từ bỏ, hãy học hỏi kinh nghiệm từ người đi trước, dần dần tích lũy thì nhất định sẽ gặt hái thành công."
+        sampleAnswer: level === 'cao' ? {
+          hanzi: "关于这一问题，我认为应当从多维度、深层次来进行客观理性的剖析。首先，从个人成长与社会发展的宏观角度来看，事物的发展往往遵循着循序渐进的客观规律。正如古人云：“学如逆水行舟，不进则退。”在瞬息万变的现代社会中，若想保持核心竞争力，我们就必须树立终身学习的理念，不断拓宽自身的认知边界。\n\n其次，不可否认的是，在追求目标的过程中，挫折与挑战在所难免。面对逆境，消极抱怨无济于事，唯有保持沉着冷静的心态，认真分析问题的症结所在，才能化被动为主动。以我个人的亲身经历为例，每当面临看似难以逾越的瓶颈时，我都会选择虚心向前辈请教，同时结合科学有效的方法反复求证，最终不仅攻克了难关，更锤炼了自己的心智与意志。\n\n综上所述，无论是求学问道还是立足职场，坚韧不拔的意志品质与求真务实的行动准则都是不可或缺的。鉴于此，我们应当在实践中不断反思总结，脚踏实地走好每一步，方能在未来的道路上行稳致远，实现自我价值与社会价值的和谐统一。",
+          pinyin: "Guānyú zhè yí wèntí, wǒ rènwéi yīngdāng cóng duō wéidù, shēncéngcì lái jìnxíng kèguān lǐxìng de pōuxī. Shǒuxiān, cóng gèrén chéngzhǎng yǔ shèhuì fāzhǎn de hóngguān jiǎodù lái kàn, shìwù de fāzhǎn wǎngwǎng zūnxún zhe xúnxùjiànjìn de kèguān guīlǜ. Zhèngrú gǔrén yún: 'Xué rú nìshuǐ xíngzhōu, bù jìn zé tuì.' Zài shùnxīwànbiàn de xiàndài shèhuì zhōng, ruò xiǎng bǎochí héxīn jìngzhēnglì, wǒmen jiù bìxū shùlì zhōngshēn xuéxí de lǐniàn, búduàn tuòkuān zìshēn de rènzhī biānjiè. Qícì, bùkě fǒurèn de shì...",
+          meaningVi: "Về vấn đề này, tôi cho rằng cần nhìn nhận khách quan, sâu sắc từ nhiều chiều kích. Thứ nhất, từ góc độ phát triển cá nhân và xã hội, vạn vật đều tuân theo quy luật phát triển từng bước. Người xưa có câu: 'Học như chèo thuyền ngược nước, không tiến ắt lùi'. Trong xã hội biến đổi nhanh chóng, muốn duy trì năng lực cạnh tranh cốt lõi thì cần không ngừng học tập suốt đời. Thứ hai, đối mặt nghịch cảnh không nên than phiền mà cần bình tĩnh phân tích nguyên nhân để biến bị động thành chủ động. Tóm lại, kiên trì và thực tế chính là chìa khóa để tiến xa trên đường đời."
+        } : level === 'trung' ? {
+          hanzi: "这个问题非常值得探讨。我认为在日常生活和学习中，保持积极健康的心态和良好的习惯是走向成功的关键基石。\n\n首先，俗话说“万事开头难”，当我们接触新事物或遇到挑战时，往往容易产生畏难情绪。然而，只要我们能够静下心来，将大目标拆解为一个一个具体可行的小步骤，每天坚持进步一点点，日积月累就一定能发生质的飞跃。比如在学习中文的过程中，一开始我也觉得汉字难写、发音难准，但通过每天坚持晨读和听力练习，现在我已经能够自信流利地进行日常交流了。\n\n其次，除了自身的勤奋努力之外，学会与他人沟通合作也同样重要。多向优秀的师长朋友请教，倾听不同的见解，不仅能让我们少走弯路，更能开阔眼界、拓宽思维格局。\n\n总的来说，成长的道路不可能一帆风顺，但只要我们目标明确、持之以恒，就一定能克服各种困难，收获属于自己的精彩。",
+          pinyin: "Zhè ge wèntí fēicháng zhídé tàntǎo. Wǒ rènwéi zài rìcháng shēnghuó hé xuéxí zhōng, bǎochí jījí jiànkāng de xīntài hé liánghǎo de xíguàn shì zǒuxiàng chénggōng de guānjiàn jīshí. Shǒuxiān, súhuà shuō 'wànshì kāitóu nán', dāng wǒmen jiēchù xīn shìwù huò yù dào tiǎozhàn shí, wǎngwǎng róngyì chǎnshēng wèinán qíngxù. Rán'ér, zhǐyào wǒmen nénggòu jìngxxiàxīn lái, jiāng dà mùbiāo chāijiě wéi yí gè yí gè jùtǐ kěxíng de xiǎo bùzhòu...",
+          meaningVi: "Câu hỏi này rất đáng để thảo luận. Tôi cho rằng trong cuộc sống và học tập hằng ngày, giữ gìn một tâm thái tích cực lành mạnh và những thói quen tốt chính là nền tảng then chốt để đi tới thành công. Thứ nhất, 'vạn sự khởi đầu nan', chia nhỏ mục tiêu và kiên trì từng ngày sẽ tạo nên bước nhảy vọt. Thứ hai, học cách giao tiếp và hợp tác với người khác giúp ta học hỏi được nhiều kinh nghiệm quý báu. Tóm lại, chỉ cần kiên định mục tiêu thì nhất định sẽ gặt hái thành công."
+        } : {
+          hanzi: "这个问题很有意思。对我来说，学习和生活都需要保持积极乐观的心态。遇到困难时，不要轻言放弃，多向老师和朋友请教，慢慢积累经验，每天进步一点点，最终一定会有所收获。",
+          pinyin: "Zhè ge wèntí hěn yǒu yìsi. Duì wǒ lái shuō, xuéxí hé shēnghuó dōu xūyào bǎochí jījí lèguān de xīntài. Yù dào kùnnán shí, bú yào qīngyán fàngqì, duō xiàng lǎoshī hé péngyou qǐngjiào, mànmàn jīlěi jīngyàn, měitiān jìnbù yì diǎndiǎn, zuìzhōng yídìng huì yǒu suǒ shōuhuò.",
+          meaningVi: "Câu hỏi này rất thú vị. Đối với tôi, cả học tập lẫn cuộc sống đều cần giữ tâm thế tích cực lạc quan. Khi gặp khó khăn, không nên dễ dàng từ bỏ, hãy học hỏi từ thầy cô và bạn bè, mỗi ngày tiến bộ một chút thì nhất định sẽ gặt hái thành công."
         }
       };
     }

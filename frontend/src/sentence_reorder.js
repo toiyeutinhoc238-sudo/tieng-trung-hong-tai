@@ -117,6 +117,12 @@ function renderQuestionUI() {
     pinyinHintEl.style.display = showPinyinHint ? 'block' : 'none';
   }
 
+  // Hide hint box on new question (ẩn nghĩa tiếng Việt theo yêu cầu)
+  const hintCard = document.getElementById('sentence-hint-card');
+  if (hintCard) hintCard.style.display = 'none';
+  const hintBtnLabel = document.getElementById('hint-btn-label');
+  if (hintBtnLabel) hintBtnLabel.textContent = 'Gợi ý';
+
   // Hide reveal panel
   const revealCard = document.getElementById('answer-reveal-card');
   if (revealCard) revealCard.style.display = 'none';
@@ -371,6 +377,18 @@ window.toggleOrderMode = function () {
   updateQuestionList();
   loadQuestion(0);
   showToast(isRandomMode ? 'Đã bật chế độ bài tập ngẫu nhiên 🎲' : 'Đã bật chế độ bài tập theo thứ tự 🔢');
+};
+
+// Toggle Vietnamese meaning & Pinyin hint box
+window.toggleSentenceHint = function () {
+  const hintCard = document.getElementById('sentence-hint-card');
+  const hintBtnLabel = document.getElementById('hint-btn-label');
+  if (!hintCard) return;
+  const isVisible = hintCard.style.display === 'block';
+  hintCard.style.display = isVisible ? 'none' : 'block';
+  if (hintBtnLabel) {
+    hintBtnLabel.textContent = isVisible ? 'Gợi ý' : 'Ẩn gợi ý';
+  }
 };
 
 // Toggle Pinyin hint
