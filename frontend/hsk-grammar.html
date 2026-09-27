@@ -151,7 +151,7 @@
       --accent: #f59e0b;
       --text-main: #f8fafc;
       --text-sub: #94a3b8;
-      --font-hanzi: 'Noto Sans SC', sans-serif;
+      --font-hanzi: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif;
     }
 
     html.light-mode body,
@@ -1030,7 +1030,9 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="/src/style.css">
+    <!-- Kaiti WebFont for standard Chinese handwriting & textbook characters -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
+<link rel="stylesheet" href="/src/style.css">
 </head>
 
 <body>
@@ -1632,7 +1634,7 @@
                 return `
                   <div class="example-item-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px; transition: all 0.2s;">
                     <div style="flex: 1;">
-                      <div class="example-zh" style="font-size: 1.25rem; font-weight: 700; color: #38bdf8; font-family: 'Noto Sans SC', sans-serif; margin-bottom: 3px; letter-spacing: 0.5px;">${escapeHtml(ex.zh)}</div>
+                      <div class="example-zh" style="font-size: 1.25rem; font-weight: 700; color: #38bdf8; font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif; margin-bottom: 3px; letter-spacing: 0.5px;">${escapeHtml(ex.zh)}</div>
                       ${ex.pinyin ? `<div class="example-pinyin" style="font-size: 0.95rem; color: #fbbf24; font-family: var(--font-display, sans-serif); font-weight: 600; margin-bottom: 3px;">${escapeHtml(ex.pinyin)}</div>` : ''}
                       ${ex.vi ? `<div class="example-vi" style="font-size: 0.92rem; color: #cbd5e1;">${escapeHtml(ex.vi)}</div>` : ''}
                     </div>

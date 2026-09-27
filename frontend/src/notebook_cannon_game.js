@@ -188,7 +188,7 @@ html:not(.dark) #cannon-combo-val {
 .phidao-floating-input-bar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;}
 .phidao-typed-buf{min-width:220px;min-height:42px;background:rgba(15,23,42,.95);border:2px solid rgba(56,189,248,.6);border-radius:12px;padding:3px 14px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(56,189,248,.3);transition:all .2s;pointer-events:auto;cursor:text;}
 .phidao-typed-buf.has-match{border-color:#fbbf24;background:rgba(251,191,36,.2);box-shadow:0 0 28px rgba(251,191,36,.6);}
-.phidao-real-input{background:transparent !important;border:none !important;outline:none !important;color:#fde047 !important;font-family:'Noto Sans SC','PingFang SC',monospace,sans-serif !important;font-size:1.35rem !important;font-weight:900 !important;text-align:center !important;width:280px !important;letter-spacing:.05em !important;caret-color:#fbbf24 !important;}
+.phidao-real-input{background:transparent !important;border:none !important;outline:none !important;color:#fde047 !important;font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC',monospace,sans-serif !important;font-size:1.35rem !important;font-weight:900 !important;text-align:center !important;width:280px !important;letter-spacing:.05em !important;caret-color:#fbbf24 !important;}
 .phidao-real-input::placeholder{color:rgba(253,224,71,.5) !important;font-size:.92rem !important;font-weight:600 !important;font-family:'Inter',system-ui,sans-serif !important;}
 .phidao-input-tip-sub{font-size:.74rem;font-weight:700;color:#cbd5e1;background:rgba(15,23,42,.85);padding:3px 12px;border-radius:20px;backdrop-filter:blur(6px);text-shadow:0 1px 2px #000;border:1px solid rgba(255,255,255,.12);pointer-events:auto;}
 .phidao-target-hint{font-size:.82rem;color:#fef08a;font-weight:700;min-width:100px;text-align:center;pointer-events:auto;}
@@ -197,7 +197,7 @@ html:not(.dark) #cannon-combo-val {
 .phidao-word-card{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#ffffff;border:2px solid #0284c7;border-radius:16px;padding:8px 16px 8px;min-width:95px;box-shadow:0 4px 12px rgba(0,0,0,.15);will-change:transform;transition:border-color .15s,box-shadow .15s,transform .1s;}
 .phidao-word-card.is-targeted{border-color:#f59e0b !important;background:#fffbeb !important;box-shadow:0 4px 16px rgba(245,158,11,.45) !important;transform:scale(1.06);}
 .phidao-word-card.type-star{border-color:#a855f7;background:#ffffff;box-shadow:0 4px 12px rgba(168,85,247,.25);}
-.phidao-word-card .word-zh{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;font-size:2.05rem;font-weight:900;color:#0f172a !important;line-height:1.1;letter-spacing:.05em;-webkit-text-fill-color:initial !important;text-shadow:none !important;filter:none !important;-webkit-font-smoothing:antialiased;}
+.phidao-word-card .word-zh{font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC',sans-serif;font-size:2.05rem;font-weight:900;color:#0f172a !important;line-height:1.1;letter-spacing:.05em;-webkit-text-fill-color:initial !important;text-shadow:none !important;filter:none !important;-webkit-font-smoothing:antialiased;}
 .phidao-word-card .word-meaning-sub{font-size:.8rem;font-weight:700;color:#047857;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;padding:1px 8px;margin-top:3px;max-width:150px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .phidao-word-card .word-meaning-main{font-size:1.15rem;font-weight:900;color:#047857 !important;text-align:center;padding:2px 6px;max-width:160px;line-height:1.25;}
 .phidao-word-card .pinyin-prog{font-size:.9rem;font-family:'Courier New',Courier,monospace;font-weight:800;letter-spacing:.06em;background:#f1f5f9;border:1px solid #cbd5e1;padding:2px 10px;border-radius:8px;margin-top:2px;display:flex;align-items:center;gap:4px;}
@@ -219,7 +219,7 @@ html:not(.dark) #cannon-combo-val {
 @keyframes hitPopupFloat{0%{transform:translateY(0) scale(.7);opacity:0}15%{transform:translateY(-10px) scale(1.08);opacity:1}30%{transform:translateY(-18px) scale(1);opacity:1}80%{transform:translateY(-35px) scale(.98);opacity:1}100%{transform:translateY(-55px) scale(.85);opacity:0}}
 .phidao-hit-top{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.85rem;font-weight:800;}
 .phidao-hit-pts{color:#fef08a;font-weight:900;font-size:.95rem;}
-.phidao-hit-zh{font-family:'Noto Sans SC',sans-serif;font-size:1.15rem;font-weight:800;}
+.phidao-hit-zh{font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC',sans-serif;font-size:1.15rem;font-weight:800;}
 .phidao-hit-py{color:#a7f3d0;font-size:.8rem;}
 .phidao-hit-mean{font-size:.88rem;font-weight:700;color:#ffffff;margin-top:2px;text-shadow:0 1px 3px rgba(0,0,0,.6);}
 

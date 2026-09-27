@@ -278,7 +278,7 @@
       margin: 0;
       padding: 0;
       user-select: none;
-      font-family: 'Quicksand', sans-serif;
+      font-family: 'Quicksand', 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), sans-serif;
     }
 
     body {
@@ -632,7 +632,7 @@
     }
 
     .q-text {
-      font-family: 'Noto Sans SC', sans-serif;
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif;
       font-size: 3.2rem;
       font-weight: 900;
       margin-top: 10px;
@@ -1172,9 +1172,11 @@
         justify-content: center !important;
       }
     }
-  </style>
-  <script type="module" crossorigin src="/assets/global_sidebar-SArqbHJX.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-C_MnluUI.css">
+  </style>
+    <!-- Kaiti WebFont for standard Chinese handwriting & textbook characters -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
+  <script type="module" crossorigin src="/assets/global_sidebar-VubksNB9.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-DAfqXVk5.css">
 </head>
 
 <body>
@@ -2853,7 +2855,7 @@
           </div>
           <div style="flex: 1; min-width: 0;">
             <div style="display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;">
-              <span class="review-word-hz" style="font-family: 'Noto Sans SC', sans-serif; font-size: 1.3rem; font-weight: 900;">${item.word}</span>
+              <span class="review-word-hz" style="font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif; font-size: 1.3rem; font-weight: 900;">${item.word}</span>
               <span style="font-size: 0.92rem; color: #8854c0; font-weight: 800;">[ ${item.pinyin} ]</span>
             </div>
             <div class="review-word-meaning" style="font-size: 0.88rem; font-weight: 600; line-height: 1.35; margin-top: 2px;">${item.meaning}</div>

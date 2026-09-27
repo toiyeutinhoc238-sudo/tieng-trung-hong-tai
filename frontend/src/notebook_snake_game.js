@@ -1170,7 +1170,7 @@ export class SnakeGameEngine {
       // Draw Meaning/Hanzi Badge Underneath
       ctx.save();
       const text = a.displayText || (isHanziMode ? a.word : (a.meaning || ''));
-      ctx.font = isHanziMode ? 'bold 15px "Noto Sans SC", sans-serif' : 'bold 12px Inter, sans-serif';
+      ctx.font = isHanziMode ? 'bold 15px "LXGW WenKai Lite", "Kaiti", "STKaiti", "PingFang SC", sans-serif' : 'bold 12px Inter, sans-serif';
       const textMetrics = ctx.measureText(text);
       const textWidth = Math.max(textMetrics.width + 14, 46);
       const badgeH = isHanziMode ? 22 : 20;

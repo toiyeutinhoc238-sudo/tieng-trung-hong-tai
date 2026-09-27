@@ -18,10 +18,10 @@
       "name": "Phú Phan",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
       "role": "super_admin",
-      "lastSeenTime": "2026-09-27T08:58:34.795Z",
+      "lastSeenTime": "2026-09-27T13:29:29.029Z",
       "stats": {
         "streak": 4,
-        "studyTime": 34170,
+        "studyTime": 33315,
         "lastActiveDate": "2026-09-27",
         "dailyHistory": {
           "2026-08-07": 1038,
@@ -57,7 +57,7 @@
           "2026-09-24": 225,
           "2026-09-25": 3585,
           "2026-09-26": 165,
-          "2026-09-27": 2400
+          "2026-09-27": 1545
         }
       },
       "gameHistory": [
@@ -1179,47 +1179,47 @@
         {
           "sessionId": "sess_mvo3r58i_1790497197367",
           "enterTime": "2026-09-27T08:19:57.368Z",
-          "exitTime": "2026-09-27T08:37:02.195Z",
-          "durationSeconds": 1025,
-          "device": "💻 Windows PC",
-          "ip": "::1",
-          "isClosed": true
-        },
-        {
-          "sessionId": "sess_d9n5k2oh_1790498361986",
-          "enterTime": "2026-09-27T08:39:21.986Z",
-          "exitTime": "2026-09-27T08:44:20.551Z",
-          "durationSeconds": 299,
-          "device": "💻 Windows PC",
-          "ip": "::1",
-          "isClosed": true
-        },
-        {
-          "sessionId": "sess_kr9t4l9b_1790498894782",
-          "enterTime": "2026-09-27T08:48:14.782Z",
-          "exitTime": "2026-09-27T08:58:34.795Z",
-          "durationSeconds": 620,
+          "exitTime": "2026-09-27T08:19:57.412Z",
+          "durationSeconds": 0,
           "device": "💻 Windows PC",
           "ip": "::1",
           "isClosed": false
         },
         {
-          "sessionId": "sess_vf1zdzb8_1790498946804",
-          "enterTime": "2026-09-27T08:49:06.804Z",
-          "exitTime": "2026-09-27T08:53:10.070Z",
-          "durationSeconds": 243,
+          "sessionId": "sess_6vv032qe_1790499920086",
+          "enterTime": "2026-09-27T09:05:20.086Z",
+          "exitTime": "2026-09-27T09:05:52.533Z",
+          "durationSeconds": 32,
           "device": "💻 Windows PC",
-          "ip": "::1",
+          "ip": "171.232.28.172",
           "isClosed": true
         },
         {
-          "sessionId": "sess_lptfmicg_1790499207325",
-          "enterTime": "2026-09-27T08:53:27.326Z",
-          "exitTime": "2026-09-27T08:58:27.329Z",
-          "durationSeconds": 300,
+          "sessionId": "sess_gw30mtil_1790500232901",
+          "enterTime": "2026-09-27T09:10:32.901Z",
+          "exitTime": "2026-09-27T09:11:11.258Z",
+          "durationSeconds": 38,
+          "device": "💻 Windows PC",
+          "ip": "171.232.28.172",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_0jj1kdm2_1790506498174",
+          "enterTime": "2026-09-27T10:54:58.174Z",
+          "exitTime": "2026-09-27T11:30:23.639Z",
+          "durationSeconds": 2125,
+          "device": "💻 Windows PC",
+          "ip": "171.232.28.172",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_m7q4sv7a_1790515561732",
+          "enterTime": "2026-09-27T13:26:01.732Z",
+          "exitTime": "2026-09-27T13:26:14.923Z",
+          "durationSeconds": 13,
           "device": "💻 Windows PC",
           "ip": "::1",
-          "isClosed": false
+          "isClosed": true
         }
       ]
     },
@@ -1243,7 +1243,7 @@
       "name": "Tin Học Tôi Yêu",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocLWmTibkR6zSwMBMRXRt2TUj-9fF82AJJJGfOM6D7sCxXByyw=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-27T08:46:42.669Z",
+      "lastSeenTime": "2026-09-25T10:58:55.712Z",
       "stats": {
         "streak": 1,
         "studyTime": 60,
@@ -1270,10 +1270,10 @@
       "name": "Thái Hồng",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKBlWlP1i1PUXEJ-J8R-D1O16X0yTLoJHD1QrPcxm_fJZFl0VmG=s96-c",
       "role": "super_admin",
-      "lastSeenTime": "2026-09-27T07:38:08.441Z",
+      "lastSeenTime": "2026-09-27T11:33:39.668Z",
       "stats": {
         "streak": 30,
-        "studyTime": 281645,
+        "studyTime": 282365,
         "lastActiveDate": "2026-09-27",
         "dailyHistory": {
           "2026-08-10": 420,
@@ -1315,29 +1315,11 @@
           "2026-09-24": 8055,
           "2026-09-25": 14055,
           "2026-09-26": 1935,
-          "2026-09-27": 4935
+          "2026-09-27": 5655
         }
       },
       "gameHistory": [],
       "accessLogs": [
-        {
-          "sessionId": "sess_ghdftczo_1789389317484",
-          "enterTime": "2026-09-14T12:35:17.484Z",
-          "exitTime": "2026-09-14T12:35:17.675Z",
-          "durationSeconds": 0,
-          "device": "📱 iPhone",
-          "ip": "171.227.35.6",
-          "isClosed": false
-        },
-        {
-          "sessionId": "sess_0d79236g_1789413400075",
-          "enterTime": "2026-09-14T19:16:40.075Z",
-          "exitTime": "2026-09-14T19:16:40.423Z",
-          "durationSeconds": 0,
-          "device": "📱 iPhone",
-          "ip": "171.227.35.6",
-          "isClosed": false
-        },
         {
           "sessionId": "sess_hujzg0i9_1789413407545",
           "enterTime": "2026-09-14T19:16:47.546Z",
@@ -2025,11 +2007,11 @@
         {
           "sessionId": "sess_drc702rw_1789986971563",
           "enterTime": "2026-09-21T12:52:30.686Z",
-          "exitTime": "2026-09-27T07:26:40.705Z",
-          "durationSeconds": 498850,
+          "exitTime": "2026-09-27T11:14:19.219Z",
+          "durationSeconds": 512509,
           "device": "💻 Windows PC",
           "ip": "171.227.35.6",
-          "isClosed": false
+          "isClosed": true
         },
         {
           "sessionId": "sess_ngojg50h_1789997048438",
@@ -2666,6 +2648,24 @@
           "enterTime": "2026-09-27T06:32:14.079Z",
           "exitTime": "2026-09-27T07:38:08.441Z",
           "durationSeconds": 3954,
+          "device": "💻 Máy tính",
+          "ip": "171.227.35.6",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_r700h532_1790498423471",
+          "enterTime": "2026-09-27T08:40:23.471Z",
+          "exitTime": "2026-09-27T08:40:53.224Z",
+          "durationSeconds": 30,
+          "device": "📱 iPhone",
+          "ip": "171.227.35.6",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_waul7a2a_1790508811210",
+          "enterTime": "2026-09-27T11:33:31.217Z",
+          "exitTime": "2026-09-27T11:33:31.015Z",
+          "durationSeconds": 0,
           "device": "💻 Máy tính",
           "ip": "171.227.35.6",
           "isClosed": false
@@ -5170,17 +5170,17 @@
       "name": "Thư Minh",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKfi1OeJWmjXy8abs9ea0gid1zNrEgeOuCqYQ0uLSyofBQsHM5njQ=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-27T06:50:58.360Z",
+      "lastSeenTime": "2026-09-27T11:10:41.230Z",
       "stats": {
         "streak": 3,
-        "studyTime": 23355,
+        "studyTime": 23610,
         "lastActiveDate": "2026-09-27",
         "dailyHistory": {
           "2026-08-31": 1155,
           "2026-09-13": 1995,
           "2026-09-25": 1815,
           "2026-09-26": 17970,
-          "2026-09-27": 420
+          "2026-09-27": 675
         }
       },
       "gameHistory": [
@@ -5481,20 +5481,20 @@
         {
           "sessionId": "sess_b4nnz8kj_1790490369349",
           "enterTime": "2026-09-27T06:26:09.349Z",
-          "exitTime": "2026-09-27T06:26:10.891Z",
-          "durationSeconds": 0,
+          "exitTime": "2026-09-27T11:10:36.034Z",
+          "durationSeconds": 17067,
           "device": "💻 Windows PC",
           "ip": "171.240.214.58",
-          "isClosed": false
+          "isClosed": true
         },
         {
           "sessionId": "sess_ok0crd1d_1790490383004",
           "enterTime": "2026-09-27T06:26:23.005Z",
-          "exitTime": "2026-09-27T06:26:24.596Z",
-          "durationSeconds": 0,
+          "exitTime": "2026-09-27T11:10:36.181Z",
+          "durationSeconds": 17053,
           "device": "💻 Windows PC",
           "ip": "171.240.214.58",
-          "isClosed": false
+          "isClosed": true
         }
       ]
     },
@@ -5725,7 +5725,7 @@
       "name": "Sakazmix",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocJwOL-Hxw6WKsdpPZ4ewYe4MUPRI-WRsZ4j05Pk0LRu4Qw4aZff=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-27T07:14:58.567Z",
+      "lastSeenTime": "2026-09-27T10:15:20.180Z",
       "stats": {
         "streak": 4,
         "studyTime": 5460,
@@ -7822,12 +7822,6 @@
         "isWrong": false,
         "isStudied": true
       },
-      "98": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
       "103": {
         "isMemorized": false,
         "isStarred": false,
@@ -7852,25 +7846,13 @@
         "isWrong": false,
         "isStudied": true
       },
-      "135": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "138": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
       "152": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
         "isStudied": true
       },
-      "188": {
+      "153": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -8547,6 +8529,12 @@
         "isWrong": false,
         "isStudied": true
       },
+      "70008": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
       "70035": {
         "isMemorized": false,
         "isStarred": false,
@@ -8560,12 +8548,6 @@
         "isStudied": true
       },
       "70041": {
-        "isMemorized": false,
-        "isStarred": false,
-        "isWrong": false,
-        "isStudied": true
-      },
-      "70043": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -38061,6 +38043,7 @@
     "y9d1ot2713tmtoccsau": "phanphiphu04@gmail.com",
     "6tu8el0kxemmtoddx4o": "kieutrang.nguyen8783@gmail.com",
     "49899o6g99fmtedj1x4": "imghuzlz.jpg@gmail.com",
+    "vb5jqj3v4c8mtoe3z98": "phanphiphu04@gmail.com",
     "3k5po90luvjmtogep9t": "phanphiphu04@gmail.com",
     "720ttam4b3mtogezgl": "phanphiphu04@gmail.com",
     "5ybxceo67c6mtefxqox": "phanphiphu04@gmail.com",

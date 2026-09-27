@@ -798,11 +798,31 @@
       font-weight: 800;
       cursor: pointer;
       transition: all 0.2s;
-      margin-bottom: 18px;
     }
 
     .hint-trigger-btn:hover {
       background: rgba(34, 197, 94, 0.25);
+      transform: translateY(-1px);
+    }
+
+    /* Separate Sample Writing Button */
+    .sample-writing-trigger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 2px solid #10b981;
+      color: #34d399;
+      font-size: 0.96rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sample-writing-trigger-btn:hover {
+      background: rgba(16, 185, 129, 0.25);
       transform: translateY(-1px);
     }
 
@@ -817,6 +837,23 @@
     }
 
     html.light-mode .hint-content-card {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+
+    /* Separate Sample Writing Card */
+    .sample-writing-content-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 2px solid rgba(16, 185, 129, 0.5);
+      border-radius: 18px;
+      padding: 22px;
+      margin-top: 14px;
+      margin-bottom: 24px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    html.light-mode .sample-writing-content-card {
       background: #f0fdf4;
       border-color: #86efac;
     }
@@ -964,17 +1001,16 @@
         <a href="/" class="nav-brand-anchor" title="Về trang chủ Tiếng Trung Hongtai">
           <img src="./src/assets/logo.png" alt="HongTai Logo" class="nav-app-logo">
           <div class="nav-brand-text-col">
-            <span class="nav-brand-title">Luyện Viết HSKK</span>
-            <span class="nav-subtitle-text">HSKK Writing &amp; AI Grader</span>
+            <span class="nav-brand-title">Luyện Viết</span>
           </div>
         </a>
       </div>
 
       <div class="nav-right-box">
         <!-- Switch to Speaking Skill Button -->
-        <a href="/speaking-practice.html" class="nav-switch-skill-btn switch-amber" title="Chuyển sang Luyện Nói HSKK">
+        <a href="/speaking-practice.html" class="nav-switch-skill-btn switch-amber" title="Chuyển sang Luyện Nói">
           <i class="fa-solid fa-microphone-lines"></i>
-          <span class="switch-text-full">Luyện Nói HSKK (3p-2p)</span>
+          <span class="switch-text-full">Luyện Nói</span>
           <span class="switch-text-short">Luyện Nói</span>
         </a>
         <a href="/" class="header-icon-btn btn-home hide-mobile" title="Trang chủ">
@@ -992,36 +1028,6 @@
 
   <!-- Main Container -->
   <main class="writing-main-container">
-
-    <!-- Hero Banner -->
-    <section class="writing-hero-banner">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-        <div style="max-width: 780px;">
-          <div class="hero-pill-badge badge-purple">
-            <span>✍️ Luyện Viết HSKK Thực Chiến</span>
-            <span class="badge-dot">&bull;</span>
-            <span>Kho 1,045 Đề Sơ - Trung - Cao</span>
-          </div>
-          <h1 style="font-size: 1.85rem; font-weight: 900; margin: 0 0 8px 0; color: var(--text-primary, #ffffff); line-height: 1.25;">
-            Luyện Viết &amp; AI Tự Động Đề Xuất Dàn Ý Chấm Điểm
-          </h1>
-          <p style="font-size: 0.94rem; color: var(--text-secondary, #94a3b8); margin: 0; line-height: 1.6;">
-            Quay ngẫu nhiên đề thi HSKK, xem AI gợi ý dàn bài &amp; từ vựng then chốt, soạn bài và nhận ngay bản nhận xét sửa lỗi chi tiết 4 tiêu chí.
-          </p>
-        </div>
-
-        <div class="hero-stats-wrapper">
-          <div class="hero-stat-card">
-            <div class="stat-number stat-blue" id="total-questions-stat">1,045</div>
-            <div class="stat-label">Câu hỏi HSKK</div>
-          </div>
-          <div class="hero-stat-card">
-            <div class="stat-number stat-green">AI 24/7</div>
-            <div class="stat-label">Chấm tức thì</div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- 3 CARDS ROW (EXACT MATCH USER DRAWING 1) -->
     <div class="wf-cards-grid">
@@ -1105,17 +1111,26 @@
         </button>
       </div>
 
-      <!-- 3. Button Gợi ý (Green Wireframe Button -> AI Dàn bài & Từ vựng) -->
-      <div>
+      <!-- 3. HAI NÚT HỖ TRỢ: [Gợi ý Dàn bài & Từ vựng] & [Bài viết mẫu tham khảo] TÁCH RIÊNG BIỆT -->
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px;">
         <button class="hint-trigger-btn" id="hint-toggle-btn" onclick="toggleAiSuggestions()">
           <i class="fa-solid fa-lightbulb"></i>
-          <span>Gợi ý</span>
-          <span style="font-size: 0.82rem; font-weight: 600; opacity: 0.9;">&rarr; Dàn bài &bull; Từ vựng &bull; Cấu trúc câu (AI đề xuất)</span>
+          <span>Gợi ý Dàn bài &amp; Từ vựng</span>
+        </button>
+
+        <button class="sample-writing-trigger-btn" id="sample-writing-toggle-btn" onclick="toggleSampleWriting()">
+          <i class="fa-solid fa-medal"></i>
+          <span>Bài viết mẫu tham khảo</span>
         </button>
       </div>
 
-      <!-- Expandable AI Suggestion Content -->
+      <!-- Expandable AI Suggestion Content (Chỉ Dàn bài, Từ vựng, Cấu trúc câu) -->
       <div class="hint-content-card" id="ai-suggestion-box">
+        <!-- Content dynamically rendered by JS -->
+      </div>
+
+      <!-- Expandable Separate Sample Writing Content (Bài văn mẫu chuẩn điểm cao) -->
+      <div class="sample-writing-content-card" id="sample-writing-box">
         <!-- Content dynamically rendered by JS -->
       </div>
 
@@ -1186,6 +1201,8 @@
   </main>
 
   <script type="module" src="/src/global_sidebar.js"></script>
+  <script type="module" src="/src/screen_drawing.js"></script>
+  <script type="module" src="/src/chatbot_widget.js"></script>
   <script type="module" src="/src/writing_practice.js"></script>
 </body>
 

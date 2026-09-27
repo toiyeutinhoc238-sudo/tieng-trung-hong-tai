@@ -1991,7 +1991,7 @@ html.dark .comic-book-card:hover {
 .styled-vol-card .vol-emblem-char {
   font-size: 1.25rem;
   font-weight: 900;
-  font-family: "Noto Serif SC", "Songti SC", "PingFang SC", "SimSun", serif;
+  font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', "Noto Serif SC", "Songti SC", "PingFang SC", "SimSun", serif;
   line-height: 1;
   letter-spacing: 0.5px;
 }

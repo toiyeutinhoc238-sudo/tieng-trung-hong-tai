@@ -2178,6 +2178,7 @@ function getLocalCustomVideos() {
     if (saved) {
       let list = JSON.parse(saved);
       if (Array.isArray(list)) {
+        list = list.filter(item => item && item.id !== 'dict_custom_1788579634667' && !item.title?.includes('Phượng Hồng'));
         list = list.map(item => {
           if (item && Array.isArray(item.sentences)) {
             item.sentences = item.sentences.map(s => {

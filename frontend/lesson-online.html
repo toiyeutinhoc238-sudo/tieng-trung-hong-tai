@@ -466,7 +466,7 @@
     }
 
     .zh-text {
-      font-family: 'Noto Sans SC', sans-serif;
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif;
       font-size: 1.6rem;
       font-weight: 700;
       color: #fff;
@@ -510,7 +510,7 @@
     }
 
     .vocab-word {
-      font-family: 'Noto Sans SC', sans-serif;
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif;
       font-size: 2.2rem;
       font-weight: 900;
       color: #fff;
@@ -689,7 +689,9 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="/src/style.css">
+    <!-- Kaiti WebFont for standard Chinese handwriting & textbook characters -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
+<link rel="stylesheet" href="/src/style.css">
 </head>
 
 <body>
@@ -899,7 +901,7 @@
 
         let examplesHtml = (g.examples || []).map(ex => `
           <div class="example-box">
-            <div style="font-family: 'Noto Sans SC'; font-size: 1.15rem; font-weight: 700; color: #fff;">${ex.zh}</div>
+            <div style="font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif; font-size: 1.15rem; font-weight: 700; color: #fff;">${ex.zh}</div>
             <div style="color: var(--accent-gold); font-size: 0.9rem;">[ ${ex.pinyin} ]</div>
             <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 2px;">${ex.vi}</div>
           </div>

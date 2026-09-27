@@ -3,8 +3,8 @@
 
 :root {
   /* Fonts - Standardized across entire HongTai application */
-  --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-display: 'Be Vietnam Pro', sans-serif;
+  --font-sans: 'Be Vietnam Pro', 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Be Vietnam Pro', 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', sans-serif;
   --font-handwriting: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'Be Vietnam Pro', cursive, sans-serif;
   --font-kaiti: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
   --font-hanzi: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
@@ -26,8 +26,8 @@
 /* Cartoon / Gamified Playful Theme Tokens (Duolingo & Quizlet Inspired) */
 html {
   /* Fonts */
-  --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-display: 'Be Vietnam Pro', sans-serif;
+  --font-sans: 'Be Vietnam Pro', 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Be Vietnam Pro', 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', sans-serif;
   --font-kaiti: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
   --font-hanzi: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
   --font-chinese: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
@@ -1549,6 +1549,92 @@ html:not(.dark) .flashcard-complete-container {
 [class*="Pinyin"],
 [data-pinyin] {
   font-family: var(--font-pinyin), 'Be Vietnam Pro', 'Inter', 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* ─── CHINESE HANZI UNIFORM FONT STACK (Standard Kaiti Handwriting & Textbook Font) ─── */
+:lang(zh),
+[lang="zh"],
+.chinese-word,
+.hanzi-text,
+.card-zh,
+.word-zh,
+.char-zh,
+.hanzi,
+.dict-word-zh,
+.dict-popular-word,
+.q-text-zh,
+.reading-text,
+.reading-passage,
+.reading-passage-zh,
+.sentence-hanzi,
+.sentence-item-zh,
+.vocab-item-hanzi,
+.detail-hanzi,
+.flashcard-hanzi,
+.hanzi-char,
+.karaoke-char,
+.subs-row-hanzi,
+.transcript-row-hanzi,
+.yt-sub-hanzi-word,
+.dict-card-title,
+.dict-hanzi-text,
+.passage-hanzi-line,
+.passage-card-hanzi,
+.dict-sentence-item .hanzi,
+.dictation-input,
+.dictation-main-input,
+.dict-vk-btn,
+.dict-tile-box,
+.question-text,
+.sample-writing-hanzi,
+.sample-speaking-hanzi,
+.scratchpad-textarea,
+.writing-textarea,
+.quiz-char,
+.radical-char,
+.radical-item,
+.stroke-preview-char,
+.dialogue-zh,
+.dialogue-bubble .zh-text,
+.reorder-word,
+.reorder-slot,
+.trans-target-zh,
+.grammar-pattern-zh,
+.grammar-ex-zh,
+.example-zh,
+.phidao-real-input,
+.phidao-word-card .word-zh,
+.phidao-hit-zh,
+.vocab-card-hz,
+.review-word-hz,
+.rd-card-title-zh,
+.rd-art-title-zh,
+.rd-chinese-body,
+.rd-chinese-sentence,
+.rd-item-zh,
+.rd-ghost-hanzi-line,
+.rd-char-span,
+.rd-typing-input-box,
+#rd-insp-zh,
+.cloze-bank-item,
+.cloze-input,
+.cloze-wrong-hint,
+.bubble-zh,
+.suggestion-zh,
+.chat-text-input,
+.word-char-display,
+.word-active-title,
+.char-tab-btn,
+.vol-emblem-char,
+.ans-btn,
+.ans-btn span,
+.q-text:not(.vi),
+.zh,
+[class*="hanzi"],
+[class*="Hanzi"],
+[class*="chinese-char"],
+[data-hanzi] {
+  font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif !important;
 }
 
 .pinyin-text {
@@ -12378,7 +12464,7 @@ html.dark .cannon-input-hint {
   font-size: 1.15rem;
   font-weight: 800;
   color: #ffffff;
-  font-family: var(--font-hanzi, "Noto Sans SC", sans-serif);
+  font-family: var(--font-hanzi, 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', serif);
 }
 
 .sw-pinyin {
@@ -12712,7 +12798,7 @@ html.dark .target-badge-label {
   font-size: clamp(1.4rem, 2.2vw, 2.4rem);
   font-weight: 900;
   color: #fef08a !important; /* Vàng sáng rực rỡ nổi bật tuyệt đối */
-  font-family: var(--font-hanzi, "Noto Sans SC", sans-serif);
+  font-family: var(--font-hanzi, 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', serif);
   line-height: 1.15;
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
   word-break: break-word;
@@ -14534,7 +14620,7 @@ html.dark .rhythm-falling-word-block {
   font-size: 1.55rem;
   font-weight: 800;
   color: #ffffff;
-  font-family: var(--font-hanzi, "Noto Sans SC", sans-serif);
+  font-family: var(--font-hanzi, 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', serif);
   line-height: 1.1;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
 }
@@ -14555,7 +14641,7 @@ html.dark .rhythm-falling-word-block {
   font-size: 1.65rem;
   font-weight: 900;
   color: #0f172a;
-  font-family: var(--font-hanzi, "Noto Sans SC", sans-serif);
+  font-family: var(--font-hanzi, 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', serif);
   line-height: 1.1;
 }
 
@@ -14710,7 +14796,7 @@ html.dark .rhythm-tone-step-badge.step-wrong-shake {
   line-height: 1.1;
   font-weight: 900;
   color: #ffffff;
-  font-family: var(--font-hanzi, "Noto Sans SC", sans-serif);
+  font-family: var(--font-hanzi, 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', serif);
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
@@ -20640,7 +20726,7 @@ html.dark .comic-book-card:hover {
 .styled-vol-card .vol-emblem-char {
   font-size: 1.25rem;
   font-weight: 900;
-  font-family: "Noto Serif SC", "Songti SC", "PingFang SC", "SimSun", serif;
+  font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', "Noto Serif SC", "Songti SC", "PingFang SC", "SimSun", serif;
   line-height: 1;
   letter-spacing: 0.5px;
 }

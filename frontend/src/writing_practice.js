@@ -148,15 +148,24 @@ window.spinRandomQuestion = function (playAnim = true) {
   currentActiveQuestion = nextQ;
   renderCurrentQuestion();
 
-  // Đóng khối gợi ý nếu đang mở để người dùng chủ động mở khi cần
+  // Đóng khối gợi ý & khối bài mẫu nếu đang mở
   const hintBox = document.getElementById('ai-suggestion-box');
   if (hintBox) hintBox.style.display = 'none';
   const hintBtn = document.getElementById('hint-toggle-btn');
   if (hintBtn) {
     hintBtn.innerHTML = `
       <i class="fa-solid fa-lightbulb"></i>
-      <span>Gợi ý</span>
-      <span style="font-size: 0.82rem; font-weight: 600; opacity: 0.9;">&rarr; Dàn bài &bull; Từ vựng &bull; Cấu trúc câu (AI đề xuất)</span>
+      <span>Gợi ý Dàn bài &amp; Từ vựng</span>
+    `;
+  }
+
+  const sampleBox = document.getElementById('sample-writing-box');
+  if (sampleBox) sampleBox.style.display = 'none';
+  const sampleBtn = document.getElementById('sample-writing-toggle-btn');
+  if (sampleBtn) {
+    sampleBtn.innerHTML = `
+      <i class="fa-solid fa-medal"></i>
+      <span>Bài viết mẫu tham khảo</span>
     `;
   }
 };
@@ -189,7 +198,7 @@ window.playQuestionTts = function () {
   window.speechSynthesis.speak(utter);
 };
 
-// 6. Nút [Gợi ý] -> Dàn bài -> Từ vựng / Cấu trúc câu (AI tự đề xuất)
+// 6. Nút [Gợi ý Dàn bài & Từ vựng] (AI tự đề xuất)
 window.toggleAiSuggestions = async function () {
   const box = document.getElementById('ai-suggestion-box');
   const btn = document.getElementById('hint-toggle-btn');
@@ -202,8 +211,7 @@ window.toggleAiSuggestions = async function () {
     if (btn) {
       btn.innerHTML = `
         <i class="fa-solid fa-lightbulb"></i>
-        <span>Gợi ý</span>
-        <span style="font-size: 0.82rem; font-weight: 600; opacity: 0.9;">&rarr; Dàn bài &bull; Từ vựng &bull; Cấu trúc câu (AI đề xuất)</span>
+        <span>Gợi ý Dàn bài &amp; Từ vựng</span>
       `;
     }
     return;
@@ -215,7 +223,6 @@ window.toggleAiSuggestions = async function () {
     btn.innerHTML = `
       <i class="fa-solid fa-eye-slash"></i>
       <span>Ẩn Gợi ý</span>
-      <span style="font-size: 0.82rem; font-weight: 600; opacity: 0.9;">(Bấm để thu gọn)</span>
     `;
   }
 
@@ -263,41 +270,7 @@ window.toggleAiSuggestions = async function () {
     }
   } catch (err) {
     console.error('Lỗi gợi ý AI:', err);
-    // Fallback gợi ý mẫu
-    const fallback = {
-      outline: {
-        intro: "Mở bài: Giới thiệu trực tiếp quan điểm hoặc câu trả lời đối với đề thi.",
-        body: [
-          "Luận điểm 1: Nêu lý do hoặc kể về một sự việc, trải nghiệm cụ thể trong đời sống.",
-          "Luận điểm 2: Đưa ra ví dụ minh họa và cảm nhận chân thực.",
-          "Luận điểm 3: So sánh hoặc mở rộng góc nhìn của bản thân."
-        ],
-        conclusion: "Kết bài: Tóm tắt lại suy nghĩ và bài học/ấn tượng sâu sắc nhất."
-      },
-      vocabulary: [
-        { hanzi: "坚持", pinyin: "jiānchí", meaning: "kiên trì" },
-        { hanzi: "经验", pinyin: "jīngyàn", meaning: "kinh nghiệm" },
-        { hanzi: "看法", pinyin: "kànfǎ", meaning: "quan điểm, góc nhìn" },
-        { hanzi: "不仅……而且……", pinyin: "bùjǐn... érqiě...", meaning: "không những... mà còn..." }
-      ],
-      sentenceStructures: [
-        {
-          pattern: "对于我来说，……是最重要的。",
-          meaning: "Đối với tôi mà nói, ... là quan trọng nhất.",
-          example: "对于我来说，家人的健康和快乐是最重要的。"
-        },
-        {
-          pattern: "一方面……，另一方面……",
-          meaning: "Một mặt thì..., mặt khác thì...",
-          example: "一方面可以开阔眼界，另一方面能结交很多朋友。"
-        }
-      ],
-      sampleAnswer: {
-        hanzi: "这个问题很有意义。在我的生活和学习中，无论面对什么事情，只要认真对待并且持之以恒，就一定能够取得好成果。",
-        pinyin: "Zhè ge wèntí hěn yǒu yìyì. Zài wǒ de shēnghuó hé xuéxí zhōng, wúlùn miànduì shénme shìqing, zhǐyào rènzhēn duìdài bìngqiě chízhīyǐhéng, jiù yídìng nénggòu qǔdé hǎo chéngguǒ.",
-        meaningVi: "Câu hỏi này rất có ý nghĩa. Trong cuộc sống và học tập của tôi, bất luận đối mặt với chuyện gì, chỉ cần nghiêm túc đối đãi và kiên trì đến cùng thì nhất định sẽ đạt được kết quả tốt đẹp."
-      }
-    };
+    const fallback = getFallbackHskkSuggestion();
     aiSuggestionsCache.set(qKey, fallback);
     renderAiSuggestionContent(fallback);
   } finally {
@@ -312,40 +285,39 @@ function renderAiSuggestionContent(data) {
   const outline = data.outline || {};
   const vocabList = data.vocabulary || [];
   const sentenceList = data.sentenceStructures || [];
-  const sample = data.sampleAnswer || null;
 
   box.innerHTML = `
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px dashed rgba(34, 197, 94, 0.4); padding-bottom: 10px;">
       <div style="display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1.05rem; color: #4ade80;">
         <i class="fa-solid fa-wand-magic-sparkles"></i>
-        <span>AI Gợi Ý Đạt Điểm Cao Cho Đề Này</span>
+        <span>AI Gợi Ý Dàn Bài &amp; Từ Vựng (Chuẩn HSKK ${currentHskkLevel === 'so' ? 'Sơ cấp' : currentHskkLevel === 'cao' ? 'Cao cấp' : 'Trung cấp'})</span>
       </div>
       <span style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.15); color: #86efac; padding: 2px 8px; border-radius: 6px; font-weight: 700;">
-        Tự động cập nhật
+        Tự động bám sát đề
       </span>
     </div>
 
-    <!-- 1. Dàn bài -->
+    <!-- 1. Dàn bài gợi ý (Tiếng Việt) -->
     <div style="margin-bottom: 16px;">
       <div style="font-size: 0.92rem; font-weight: 800; color: #fbbf24; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-        <i class="fa-solid fa-list-ol"></i> <span>1. Dàn bài gợi ý:</span>
+        <i class="fa-solid fa-list-ol"></i> <span>1. Dàn bài gợi ý (Suy nghĩ và trả lời theo từng luận điểm):</span>
       </div>
       <div style="background: rgba(0,0,0,0.25); padding: 12px 16px; border-radius: 12px; border-left: 3px solid #fbbf24; font-size: 0.9rem; line-height: 1.65; color: #e2e8f0;">
-        <div style="margin-bottom: 6px;"><strong>Mở bài:</strong> ${outline.intro || 'Nêu trực tiếp câu trả lời cho đề bài.'}</div>
-        <div style="margin-bottom: 6px;">
+        <div style="margin-bottom: 8px;"><strong>Mở bài:</strong> ${outline.intro || 'Nêu trực tiếp câu trả lời cho đề bài.'}</div>
+        <div style="margin-bottom: 8px;">
           <strong>Thân bài:</strong>
           <ul style="margin: 4px 0 0 0; padding-left: 20px;">
-            ${(outline.body || []).map(b => `<li>${b}</li>`).join('')}
+            ${(outline.body || []).map(b => `<li style="margin-bottom: 4px;">${b}</li>`).join('')}
           </ul>
         </div>
         <div><strong>Kết bài:</strong> ${outline.conclusion || 'Tổng kết suy nghĩ và cảm xúc.'}</div>
       </div>
     </div>
 
-    <!-- 2. Từ vựng có thể sử dụng -->
+    <!-- 2. Từ vựng then chốt có thể sử dụng -->
     <div style="margin-bottom: 16px;">
       <div style="font-size: 0.92rem; font-weight: 800; color: #38bdf8; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-        <i class="fa-solid fa-key"></i> <span>2. Từ vựng then chốt có thể sử dụng:</span>
+        <i class="fa-solid fa-key"></i> <span>2. Từ vựng then chốt (Bấm để chèn nhanh vào bài):</span>
       </div>
       <div style="display: flex; gap: 8px; flex-wrap: wrap;">
         ${vocabList.map(v => `
@@ -359,11 +331,11 @@ function renderAiSuggestionContent(data) {
       </div>
     </div>
 
-    <!-- 3. Mẫu câu / Cấu trúc ngữ pháp nên dùng -->
+    <!-- 3. Cấu trúc câu đắt giá -->
     ${sentenceList.length > 0 ? `
-      <div style="margin-bottom: 16px;">
+      <div style="margin-bottom: 12px;">
         <div style="font-size: 0.92rem; font-weight: 800; color: #a855f7; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-puzzle-piece"></i> <span>3. Cấu trúc câu đắt giá:</span>
+          <i class="fa-solid fa-puzzle-piece"></i> <span>3. Cấu trúc câu đắt giá ghi điểm:</span>
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;">
           ${sentenceList.map(s => `
@@ -376,25 +348,180 @@ function renderAiSuggestionContent(data) {
         </div>
       </div>
     ` : ''}
+  `;
+}
 
-    <!-- 4. Bài viết mẫu tham khảo -->
-    ${sample ? `
-      <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px; padding: 14px 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <strong style="font-size: 0.88rem; color: #34d399;"><i class="fa-solid fa-medal"></i> Bài viết mẫu tham khảo (Chuẩn 100 điểm):</strong>
-          <button onclick="copySampleText()" style="background: transparent; border: none; color: #38bdf8; font-size: 0.78rem; font-weight: 700; cursor: pointer;">
-            <i class="fa-solid fa-copy"></i> Sao chép mẫu
-          </button>
-        </div>
-        <div id="sample-hanzi-text" class="hanzi-text" style="font-size: 1.05rem; line-height: 1.7; color: #ffffff; margin-bottom: 4px;">
-          ${sample.hanzi}
-        </div>
-        ${sample.pinyin ? `<div style="font-size: 0.82rem; color: #94a3b8; font-style: italic; margin-bottom: 4px;">${sample.pinyin}</div>` : ''}
-        ${sample.meaningVi ? `<div style="font-size: 0.84rem; color: #cbd5e1;">${sample.meaningVi}</div>` : ''}
+// 6b. Nút [Bài viết mẫu tham khảo] TÁCH RIÊNG BIỆT
+window.toggleSampleWriting = async function () {
+  const box = document.getElementById('sample-writing-box');
+  const btn = document.getElementById('sample-writing-toggle-btn');
+  if (!box || !currentActiveQuestion) return;
+
+  const isVisible = box.style.display === 'block';
+
+  if (isVisible) {
+    box.style.display = 'none';
+    if (btn) {
+      btn.innerHTML = `
+        <i class="fa-solid fa-medal"></i>
+        <span>Bài viết mẫu tham khảo</span>
+      `;
+    }
+    return;
+  }
+
+  // Mở khối bài mẫu
+  box.style.display = 'block';
+  if (btn) {
+    btn.innerHTML = `
+      <i class="fa-solid fa-eye-slash"></i>
+      <span>Ẩn Bài viết mẫu</span>
+    `;
+  }
+
+  const qKey = `${currentHskkLevel}_${currentActiveQuestion.question}`;
+  if (aiSuggestionsCache.has(qKey)) {
+    renderSampleWritingContent(aiSuggestionsCache.get(qKey));
+    return;
+  }
+
+  box.innerHTML = `
+    <div style="text-align: center; padding: 24px 16px; color: #10b981;">
+      <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 12px; color: #10b981;"></i>
+      <div style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
+        Đang tạo bài viết mẫu chuẩn HSKK ${currentHskkLevel === 'so' ? 'Sơ cấp' : currentHskkLevel === 'cao' ? 'Cao cấp' : 'Trung cấp'}...
+      </div>
+      <div style="font-size: 0.85rem; color: #94a3b8;">
+        Bài văn mẫu hoàn chỉnh 3 phần bám sát câu hỏi: "${currentActiveQuestion.question}"
+      </div>
+    </div>
+  `;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/ai/hskk-suggest`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: currentActiveQuestion.question,
+        level: currentHskkLevel,
+        skill: 'writing'
+      })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      aiSuggestionsCache.set(qKey, data);
+      renderSampleWritingContent(data);
+      playUiBeep('success');
+    } else {
+      throw new Error('Server error');
+    }
+  } catch (err) {
+    console.error('Lỗi nạp bài mẫu viết:', err);
+    const fallback = getFallbackHskkSuggestion();
+    aiSuggestionsCache.set(qKey, fallback);
+    renderSampleWritingContent(fallback);
+  }
+};
+
+function renderSampleWritingContent(data) {
+  const box = document.getElementById('sample-writing-box');
+  if (!box) return;
+
+  const sample = data.sampleAnswer || {};
+  const hanziText = sample.hanzi || '';
+  const charCount = hanziText.replace(/\s+/g, '').length;
+
+  box.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px dashed rgba(16, 185, 129, 0.4); padding-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1.1rem; color: #34d399;">
+        <i class="fa-solid fa-medal"></i>
+        <span>Bài Viết Mẫu Tham Khảo (Chuẩn HSKK ${currentHskkLevel === 'so' ? 'Sơ cấp' : currentHskkLevel === 'cao' ? 'Cao cấp' : 'Trung cấp'})</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 0.78rem; background: rgba(16, 185, 129, 0.2); color: #6ee7b7; padding: 4px 10px; border-radius: 99px; font-weight: 800;">
+          ${charCount} chữ Hán
+        </span>
+        <button onclick="playWritingSampleTts()" style="background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; color: #38bdf8; font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-volume-high"></i> <span>Nghe đọc mẫu</span>
+        </button>
+        <button onclick="copySampleText()" style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #34d399; font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-copy"></i> <span>Sao chép mẫu</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hanzi Text -->
+    <div id="sample-writing-hanzi" class="hanzi-text" style="font-size: 1.1rem; line-height: 1.85; color: #ffffff; white-space: pre-line; margin-bottom: 14px; font-family: var(--font-chinese), sans-serif; background: rgba(0,0,0,0.22); padding: 14px 16px; border-radius: 12px; border-left: 3px solid #10b981;">
+      ${hanziText}
+    </div>
+
+    <!-- Pinyin Text -->
+    ${sample.pinyin ? `
+      <div style="margin-bottom: 12px;">
+        <div style="font-size: 0.78rem; text-transform: uppercase; color: #38bdf8; font-weight: 800; margin-bottom: 4px;">Phiên âm Pinyin:</div>
+        <div style="font-size: 0.88rem; color: #94a3b8; font-style: italic; line-height: 1.6; white-space: pre-line; background: rgba(0,0,0,0.18); padding: 10px 14px; border-radius: 10px;">${sample.pinyin}</div>
+      </div>
+    ` : ''}
+
+    <!-- Vietnamese Translation -->
+    ${sample.meaningVi ? `
+      <div>
+        <div style="font-size: 0.78rem; text-transform: uppercase; color: #fbbf24; font-weight: 800; margin-bottom: 4px;">Dịch nghĩa tiếng Việt:</div>
+        <div style="font-size: 0.92rem; color: #cbd5e1; line-height: 1.7; white-space: pre-line; background: rgba(0,0,0,0.18); padding: 10px 14px; border-radius: 10px;">${sample.meaningVi}</div>
       </div>
     ` : ''}
   `;
 }
+
+function getFallbackHskkSuggestion() {
+  const qText = (currentActiveQuestion && currentActiveQuestion.question) ? currentActiveQuestion.question : 'đề bài';
+  return {
+    outline: {
+      intro: `Mở bài: Nêu câu trả lời hoặc quan điểm cá nhân trực diện cho đề bài: "${qText}". (Gợi ý: Theo bạn, câu trả lời trực tiếp cho câu hỏi này là gì?)`,
+      body: [
+        `Luận điểm 1: Phân tích nguyên nhân và lý do chính giải thích cho câu hỏi "${qText}". (Gợi ý: Tại sao bạn lại nghĩ hoặc chọn như vậy?)`,
+        `Luận điểm 2: Đưa ra ví dụ thực tế hoặc trải nghiệm bản thân gắn liền với câu hỏi. (Gợi ý: Bạn hoặc những người xung quanh đã trải qua việc này như thế nào?)`,
+        `Luận điểm 3: Đánh giá ý nghĩa, giải pháp hoặc bài học cuộc sống. (Gợi ý: Điều này mang lại giá trị hoặc bài học gì cho bạn?)`
+      ],
+      conclusion: "Kết bài: Tổng kết lại toàn bộ quan điểm, đưa ra bài học hoặc thông điệp / lời kêu gọi hành động ý nghĩa."
+    },
+    vocabulary: [
+      { hanzi: "看法", pinyin: "kànfǎ", meaning: "quan điểm, góc nhìn" },
+      { hanzi: "经验", pinyin: "jīngyàn", meaning: "kinh nghiệm thực tế" },
+      { hanzi: "坚持", pinyin: "jiānchí", meaning: "kiên trì" },
+      { hanzi: "互相帮助", pinyin: "hùxiāng bāngzhù", meaning: "giúp đỡ lẫn nhau" },
+      { hanzi: "收益匪浅", pinyin: "shòuyì fěiqiǎn", meaning: "thu hoạch được nhiều điều bổ ích" }
+    ],
+    sentenceStructures: [
+      {
+        pattern: "在我看来，……是最重要的。",
+        meaning: "Theo quan điểm của tôi, ... là quan trọng nhất.",
+        example: `在我看来，针对这个问题，保持积极态度并付诸行动最为重要。`
+      },
+      {
+        pattern: "一方面……，另一方面……",
+        meaning: "Một mặt thì..., mặt khác thì...",
+        example: "一方面要脚踏实地努力，另一方面要多向他人请教。"
+      }
+    ],
+    sampleAnswer: {
+      hanzi: `针对“${qText}”这个问题，我认为在我们的生活和学习中有着非常重要的现实意义。\n\n首先，从个人角度来看，我们应当明确自己的目标与态度，认真思考问题背后的原因。当我们遇到新事物或挑战时，不能只停留在想法上，而要主动付诸实践。\n\n其次，除了自身的勤奋努力之外，学会与他人沟通合作也同样重要。多向优秀的师长朋友请教，倾听不同的见解，不仅能让我们少走弯路，更能开阔眼界、拓宽思维格局。\n\n总的来说，只要我们能够持之以恒，并与身边的人互相支持、共同进步，就一定能克服困难，取得令人满意的成果。`,
+      pinyin: `Zhēnduì zhè ge wèntí, wǒ rènwéi zài wǒmen de shēnghuó hé xuéxí zhōng yǒuzhe fēicháng zhòngyào de xiànshí yìyì. Shǒuxiān, cóng gèrén jiǎodù lái kàn, wǒmen yīngdāng míngquè zìjǐ de mùbiāo yǔ tàidù. Qícì, zài yùdào jùtǐ qíngjìng shí, yīngdāng zhǔdòng fùzhū shíjiàn. Zuìhòu, zhǐyào wǒmen néng chízhīyǐhéng, jiù yídìng néng qǔdé lìngrén mǎnyì de chéngguǒ.`,
+      meaningVi: `Đối với đề tài "${qText}", tôi cho rằng câu hỏi này mang ý nghĩa thực tế rất quan trọng trong cuộc sống và học tập của chúng ta. Thứ nhất, từ góc độ cá nhân, chúng ta cần xác định rõ mục tiêu và thái độ của mình, suy nghĩ nghiêm túc về nguyên nhân. Thứ hai, khi đối diện với tình huống cụ thể, không nên chỉ dừng lại ở suy nghĩ mà cần chủ động bắt tay vào hành động, dũng cảm đối mặt với thử thách và tích cực tìm kiếm giải pháp. Cuối cùng, chỉ cần chúng ta kiên trì đến cùng và luôn hỗ trợ lẫn nhau, nhất định sẽ gặt hái được những thành quả tốt đẹp.`
+    }
+  };
+}
+
+window.playWritingSampleTts = function () {
+  const el = document.getElementById('sample-writing-hanzi');
+  if (!el || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(el.textContent.trim());
+  utter.lang = 'zh-CN';
+  utter.rate = 0.88;
+  window.speechSynthesis.speak(utter);
+};
 
 window.insertVocabToWriting = function (word) {
   const textarea = document.getElementById('qa-writing-input');
@@ -406,7 +533,7 @@ window.insertVocabToWriting = function (word) {
 };
 
 window.copySampleText = function () {
-  const sampleEl = document.getElementById('sample-hanzi-text');
+  const sampleEl = document.getElementById('sample-writing-hanzi') || document.getElementById('sample-hanzi-text');
   if (sampleEl) {
     navigator.clipboard.writeText(sampleEl.textContent.trim());
     alert('Đã sao chép bài văn mẫu vào clipboard!');

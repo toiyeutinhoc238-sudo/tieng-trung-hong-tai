@@ -702,7 +702,7 @@
       font-weight: 900;
       line-height: 1;
       margin-bottom: 8px;
-      font-family: 'Noto Sans SC', sans-serif;
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif;
     }
 
     .card-thanhmau .hub-number { color: #60a5fa; }
@@ -791,7 +791,7 @@
       color: #fff;
       font-size: 1.4rem;
       font-weight: 800;
-      font-family: 'Noto Sans SC', sans-serif;
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -891,7 +891,7 @@
       font-size: 3.2rem;
       font-weight: 900;
       color: #60a5fa;
-      font-family: 'Noto Sans SC', sans-serif;
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif;
     }
 
     /* Voice Control Bar (Đơn giản hóa: Cố định giọng Baidu Nữ chuẩn) */
@@ -1077,7 +1077,9 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="/src/style.css">
+    <!-- Kaiti WebFont for standard Chinese handwriting & textbook characters -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
+<link rel="stylesheet" href="/src/style.css">
 </head>
 
 <body>
@@ -1969,7 +1971,7 @@
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px;">
               ${item.options.map((opt, idx) => `
-                <button onclick="checkQuizAnswer(${idx})" style="background:rgba(30,41,59,0.9); border:1.5px solid rgba(255,255,255,0.15); color:#fff; padding:16px; border-radius:14px; font-size:1.45rem; font-weight:800; cursor:pointer; font-family:'Noto Sans SC', sans-serif; transition:all 0.2s;" onmouseover="this.style.borderColor='#a855f7'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'; this.style.transform='translateY(0)'">
+                <button onclick="checkQuizAnswer(${idx})" style="background:rgba(30,41,59,0.9); border:1.5px solid rgba(255,255,255,0.15); color:#fff; padding:16px; border-radius:14px; font-size:1.45rem; font-weight:800; cursor:pointer; font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif; transition:all 0.2s;" onmouseover="this.style.borderColor='#a855f7'; this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'; this.style.transform='translateY(0)'">
                   ${opt}
                 </button>
               `).join('')}

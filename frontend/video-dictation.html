@@ -29,6 +29,8 @@
     href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@400;700;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- Kaiti WebFont for standard Chinese handwriting & textbook characters -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
   <!-- Core Stylesheet -->
   <link rel="stylesheet" href="./src/style.css">
@@ -110,6 +112,35 @@
       -webkit-overflow-scrolling: touch !important;
       height: auto !important;
       min-height: 100% !important;
+    }
+
+    :root {
+      --font-chinese: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
+      --font-hanzi: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
+    }
+
+    /* Standard Chinese Handwriting & Textbook Font for all Hanzi elements */
+    .sentence-hanzi,
+    .karaoke-char,
+    .subs-row-hanzi,
+    .transcript-row-hanzi,
+    .passage-hanzi-line,
+    .passage-card-hanzi,
+    .vocab-item-hanzi,
+    .yt-sub-hanzi-word,
+    .dict-card-title,
+    .dict-hanzi-text,
+    .dict-sentence-item .hanzi,
+    .dictation-input,
+    .dictation-main-input,
+    .dict-vk-btn,
+    .dict-tile-box,
+    #sub-hanzi-text,
+    #video-current-subtitle,
+    .karaoke-box,
+    .hanzi-text,
+    .sentence-text-hanzi {
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'Noto Serif SC', var(--font-chinese), serif !important;
     }
 
     /* Dedicated Styling for Video Dictation Workspace */
@@ -4107,7 +4138,7 @@
         </div>
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
           <div class="dict-banner-stat-box">
-            <div id="dict-banner-video-count" style="font-size: 1.35rem; font-weight: 900; color: #0284c7;">24</div>
+            <div id="dict-banner-video-count" style="font-size: 1.35rem; font-weight: 900; color: #0284c7;">23</div>
             <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">Video Tuyển Chọn</div>
           </div>
           <div class="dict-banner-stat-box">

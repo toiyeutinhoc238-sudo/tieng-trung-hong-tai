@@ -775,14 +775,14 @@
     .scratchpad-textarea {
       width: 100%;
       min-height: 110px;
-      padding: 12px 14px;
-      border-radius: 12px;
+      padding: 14px 16px;
+      border-radius: 14px;
       background: rgba(0, 0, 0, 0.25);
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: #ffffff;
-      font-family: inherit;
-      font-size: 0.95rem;
-      line-height: 1.6;
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'Noto Serif SC', var(--font-chinese), serif;
+      font-size: 1.2rem;
+      line-height: 1.75;
       resize: vertical;
       outline: none;
       transition: border-color 0.2s;
@@ -793,6 +793,34 @@
       background: #ffffff;
       border-color: #cbd5e1;
       color: #0f172a;
+    }
+
+    /* Spoken Transcript Input & General Chinese Text */
+    .writing-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.25);
+      color: #ffffff;
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'Noto Serif SC', var(--font-chinese), serif;
+      font-size: 1.25rem;
+      line-height: 1.8;
+      resize: vertical;
+      box-sizing: border-box;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    html.light-mode .writing-textarea {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+
+    .hanzi-text {
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'Noto Serif SC', var(--font-chinese), serif !important;
     }
 
     /* 2 RED TIMER BUTTONS MATCHING WIREFRAME 2 */
@@ -1009,8 +1037,7 @@
         <a href="/" class="nav-brand-anchor" title="Về trang chủ Tiếng Trung Hongtai">
           <img src="./src/assets/logo.png" alt="HongTai Logo" class="nav-app-logo">
           <div class="nav-brand-text-col">
-            <span class="nav-brand-title">Luyện Nói HSKK</span>
-            <span class="nav-subtitle-text">HSKK Speaking (3p - 2p) &amp; AI Grader</span>
+            <span class="nav-brand-title">Luyện Nói</span>
           </div>
         </a>
       </div>
@@ -1036,37 +1063,7 @@
   </header>
 
   <!-- Main Container -->
-  <main class="speaking-main-container">
-
-    <!-- Hero Banner -->
-    <section class="speaking-hero-banner">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-        <div style="max-width: 780px;">
-          <div class="hero-pill-badge badge-amber">
-            <span>🎙️ Phòng Thi Khẩu Ngữ HSKK Thực Chiến</span>
-            <span class="badge-dot">&bull;</span>
-            <span>3 Phút Chuẩn Bị &bull; 2 Phút Trả Lời</span>
-          </div>
-          <h1 style="font-size: 1.85rem; font-weight: 900; margin: 0 0 8px 0; color: var(--text-primary, #ffffff); line-height: 1.25;">
-            Luyện Nói HSKK &amp; AI Tự Động Đề Xuất Dàn Ý Chấm Điểm
-          </h1>
-          <p style="font-size: 0.94rem; color: var(--text-secondary, #94a3b8); margin: 0; line-height: 1.6;">
-            Quay ngẫu nhiên 1,045 câu hỏi HSKK Sơ - Trung - Cao cấp, xem gợi ý dàn bài &amp; từ vựng của AI, bấm 3 phút chuẩn bị và 2 phút ghi âm bài nói để AI chấm điểm phát âm toàn diện.
-          </p>
-        </div>
-
-        <div class="hero-stats-wrapper">
-          <div class="hero-stat-card">
-            <div class="stat-number stat-amber" id="total-speaking-stat">1,045</div>
-            <div class="stat-label">Đề Khẩu Ngữ</div>
-          </div>
-          <div class="hero-stat-card">
-            <div class="stat-number stat-red">3p &amp; 2p</div>
-            <div class="stat-label">Chuẩn thi HSKK</div>
-          </div>
-        </div>
-      </div>
-    </section>
+  <main class="speaking-main-container" style="padding-top: 20px;">
 
     <!-- MAIN SPEAKING WORKSPACE (MATCHING WIREFRAME 2) -->
     <section class="speaking-card-panel">
@@ -1302,6 +1299,8 @@
   </main>
 
   <script type="module" src="/src/global_sidebar.js"></script>
+  <script type="module" src="/src/screen_drawing.js"></script>
+  <script type="module" src="/src/chatbot_widget.js"></script>
   <script type="module" src="/src/speaking_practice.js"></script>
 </body>
 

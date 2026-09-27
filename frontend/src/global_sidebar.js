@@ -1,4 +1,6 @@
 import './particles.js';
+import './screen_drawing.js';
+import './chatbot_widget.js';
 
 /**
  * Tiếng Trung HongTai - Global Navigation Sidebar & Mobile Drawer Coordinator
@@ -40,6 +42,13 @@ import './particles.js';
     if (path.includes('documents')) return 'documents';
     return '';
   }
+
+  // Global toggle for sidebar dropdowns
+  window.toggleSidebarDropdown = function (el) {
+    if (!el) return;
+    const group = el.closest('.sidebar-group');
+    if (group) group.classList.toggle('open');
+  };
 
   // Get current user info from localStorage or session
   function getCurrentUser() {
@@ -153,7 +162,7 @@ import './particles.js';
             </li>
             <li>
               <a href="/rank.html" id="game-history-btn" class="history-link" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #cbd5e1; font-size: 0.88rem; font-weight: 500; text-decoration: none; transition: all 0.2s;">
-                <i class="fa-solid fa-gamepad" style="color: #fbbf24;"></i> <span>Lịch sử chơi & Xếp hạng</span>
+                <i class="fa-solid fa-gamepad" style="color: #fbbf24;"></i> <span>Lịch sử chơi &amp; Xếp hạng</span>
               </a>
             </li>
             <li class="sidebar-auth-action-item">
@@ -179,26 +188,40 @@ import './particles.js';
           </li>
         </ul>
 
-        <!-- DANH MỤC: HỌC TẬP -->
+        <!-- DANH MỤC 1: HỌC TẬP -->
         <div class="sidebar-section-label">Học Tập</div>
         <ul class="sidebar-menu" style="margin-bottom: 8px;">
           <li class="sidebar-item ${activeKey === 'roadmap' ? 'active' : ''}" onclick="window.location.href = '/index.html#roadmap'">
             <i class="fa-solid fa-route" style="color: #60a5fa;"></i> <span>Lộ trình</span>
           </li>
-          <li class="sidebar-item ${activeKey === 'vocabulary' ? 'active' : ''}" onclick="window.location.href = '/detail-list.html'">
-            <i class="fa-solid fa-font" style="color: #38bdf8;"></i> <span>Từ vựng HSK</span>
-          </li>
-          <li class="sidebar-item ${activeKey === 'radicals' ? 'active' : ''}" onclick="window.location.href = '/chinese-radicals.html'">
-            <i class="fa-solid fa-shapes" style="color: #a855f7;"></i> <span>Bảng Bộ Thủ</span>
-          </li>
-          <li class="sidebar-item ${activeKey === 'phonetics' ? 'active' : ''}" onclick="window.location.href = '/chinese-phonetics.html'">
-            <i class="fa-solid fa-table-cells" style="color: #38bdf8;"></i> <span>Bảng Phiên Âm (Pinyin)</span>
-          </li>
-          <li class="sidebar-item ${activeKey === 'hanzi' ? 'active' : ''}" onclick="window.location.href = '/hanzi-writer.html'">
-            <i class="fa-solid fa-pen-nib" style="color: #f59e0b;"></i> <span>Tập viết chữ Hán</span>
-          </li>
+        </ul>
+
+        <!-- Từ vựng (Dropdown giống index.html) -->
+        <div class="sidebar-group ${['vocabulary', 'radicals', 'phonetics', 'flashcards', 'hanzi'].includes(activeKey) ? 'open' : ''}">
+          <div class="sidebar-item sidebar-dropdown-toggle" onclick="window.toggleSidebarDropdown(this)">
+            <i class="fa-solid fa-font"></i> <span>Từ vựng</span>
+            <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+          </div>
+          <ul class="sidebar-submenu">
+            <li class="sidebar-subitem ${activeKey === 'radicals' ? 'active' : ''}" onclick="window.location.href = '/chinese-radicals.html'">
+              <i class="fa-solid fa-shapes" style="color: #2563eb;"></i> <span>Bộ thủ</span>
+            </li>
+            <li class="sidebar-subitem ${activeKey === 'phonetics' ? 'active' : ''}" onclick="window.location.href = '/chinese-phonetics.html'">
+              <i class="fa-solid fa-table-cells"></i> <span>Bảng phiên âm (Pinyin)</span>
+            </li>
+            <li class="sidebar-subitem ${activeKey === 'flashcards' ? 'active' : ''}" onclick="window.location.href = '/index.html?tab=flashcards'">
+              <i class="fa-solid fa-book-bookmark" style="color: #38bdf8;"></i> <span>Sổ tay</span>
+            </li>
+            <li class="sidebar-subitem ${activeKey === 'hanzi' ? 'active' : ''}" onclick="window.location.href = '/hanzi-writer.html'">
+              <i class="fa-solid fa-pen-nib"></i> <span>Luyện viết &amp; In phiếu tập viết</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Sổ tay Ngữ Pháp (Single Item) -->
+        <ul class="sidebar-menu" style="margin-bottom: 12px;">
           <li class="sidebar-item ${activeKey === 'grammar' ? 'active' : ''}" onclick="window.location.href = '/hsk-grammar.html'">
-            <i class="fa-solid fa-spell-check" style="color: #34d399;"></i> <span>Sổ tay Ngữ Pháp</span>
+            <i class="fa-solid fa-spell-check" style="color: #38bdf8;"></i> <span>Sổ tay Ngữ Pháp</span>
           </li>
         </ul>
 
@@ -206,54 +229,63 @@ import './particles.js';
         <div class="sidebar-section-label">Trò Chơi</div>
         <ul class="sidebar-menu" style="margin-bottom: 12px;">
           <li class="sidebar-item ${activeKey === 'games' ? 'active' : ''}" onclick="window.location.href = '/quiz-game.html'">
-            <i class="fa-solid fa-gamepad" style="color: #f59e0b;"></i> <span>Trò Chơi Ôn Tập</span>
+            <i class="fa-solid fa-gamepad" style="color: #f59e0b;"></i> <span>Trò Chơi</span>
           </li>
         </ul>
 
-        <!-- DANH MỤC: KỸ NĂNG -->
-        <div class="sidebar-section-label">Kỹ Năng & Video</div>
-        <ul class="sidebar-menu" style="margin-bottom: 12px;">
+        <!-- DANH MỤC 2: KỸ NĂNG -->
+        <div class="sidebar-section-label">Kỹ Năng</div>
+        <ul class="sidebar-menu" style="margin-bottom: 8px;">
           <li class="sidebar-item ${activeKey === 'shadowing' ? 'active' : ''}" onclick="window.location.href = '/video-dictation.html?mode=shadowing'">
-            <i class="fa-solid fa-microphone-lines" style="color: #10b981;"></i> <span>Shadowing Video</span>
+            <i class="fa-solid fa-microphone-lines" style="color: #10b981; font-size: 1.1rem;"></i> <span>Shadowing</span>
           </li>
           <li class="sidebar-item ${activeKey === 'dictation' ? 'active' : ''}" onclick="window.location.href = '/video-dictation.html?mode=dictation'">
-            <i class="fa-solid fa-pen-to-square" style="color: #38bdf8;"></i> <span>Chép Chính Tả</span>
+            <i class="fa-solid fa-pen-to-square" style="color: #38bdf8; font-size: 1.1rem;"></i> <span>Nghe Chép</span>
           </li>
           <li class="sidebar-item ${activeKey === 'reading' ? 'active' : ''}" onclick="window.location.href = '/reading-practice.html'">
-            <i class="fa-solid fa-book-open-reader" style="color: #ec4899;"></i> <span>Luyện Đọc HSK</span>
+            <i class="fa-solid fa-book-open-reader" style="color: #38bdf8; font-size: 1.1rem;"></i> <span>Luyện Đọc</span>
           </li>
-          <li class="sidebar-item ${activeKey === 'writing' ? 'active' : ''}" onclick="window.location.href = '/writing-practice.html'">
-            <i class="fa-solid fa-feather-pointed" style="color: #a855f7;"></i> <span>Luyện Viết</span>
+          <li class="sidebar-item ${activeKey === 'writing' ? 'active' : ''}" onclick="window.location.href = '/writing-practice.html'" style="cursor: pointer;">
+            <i class="fa-solid fa-feather-pointed" style="color: #a855f7; font-size: 1.1rem;"></i> <span>Luyện Viết</span>
           </li>
-          <li class="sidebar-item ${activeKey === 'speaking' ? 'active' : ''}" onclick="window.location.href = '/speaking-practice.html'">
-            <i class="fa-solid fa-microphone-lines" style="color: #f59e0b;"></i> <span>Luyện Nói</span>
+          <li class="sidebar-item ${activeKey === 'speaking' ? 'active' : ''}" onclick="window.location.href = '/speaking-practice.html'" style="cursor: pointer;">
+            <i class="fa-solid fa-microphone-lines" style="color: #f59e0b; font-size: 1.1rem;"></i> <span>Luyện Nói</span>
           </li>
-          <li class="sidebar-item ${activeKey === 'translation' ? 'active' : ''}" onclick="window.location.href = '/translation-practice.html'">
-            <i class="fa-solid fa-language" style="color: #06b6d4;"></i> <span>Luyện Dịch</span>
+          <li class="sidebar-item ${activeKey === 'translation' ? 'active' : ''}" onclick="window.location.href = '/translation-practice.html'" style="cursor: pointer;">
+            <i class="fa-solid fa-language" style="color: #06b6d4; font-size: 1.1rem;"></i> <span>Luyện Dịch</span>
           </li>
-          <li class="sidebar-item ${activeKey === 'sentence-reorder' ? 'active' : ''}" onclick="window.location.href = '/sentence-reorder.html'">
-            <i class="fa-solid fa-arrow-down-short-wide" style="color: #38bdf8;"></i> <span>Sắp Xếp Câu</span>
+          <li class="sidebar-item ${activeKey === 'sentence-reorder' ? 'active' : ''}" onclick="window.location.href = '/sentence-reorder.html'" style="cursor: pointer;">
+            <i class="fa-solid fa-arrow-down-short-wide" style="color: #38bdf8; font-size: 1.1rem;"></i> <span>Sắp xếp câu</span>
           </li>
-          <li class="sidebar-item ${activeKey === 'ai-dialogue' ? 'active' : ''}" onclick="window.location.href = '/ai-dialogue.html'">
-            <i class="fa-solid fa-comments" style="color: #a855f7;"></i> <span>Hội Thoại AI</span>
+          <li class="sidebar-item ${activeKey === 'ai-dialogue' ? 'active' : ''}" onclick="window.location.href = '/ai-dialogue.html'" style="cursor: pointer;">
+            <i class="fa-solid fa-comments" style="color: #a855f7; font-size: 1.1rem;"></i> <span>Hội thoại AI</span>
           </li>
-          <li class="sidebar-item ${activeKey === 'rules' ? 'active' : ''}" onclick="window.location.href = '/han-viet-rules.html'">
-            <i class="fa-solid fa-book-bookmark" style="color: #8b5cf6;"></i> <span>Quy Tắc Hán Việt</span>
-          </li>
-          <li class="sidebar-item ${activeKey === 'rank' ? 'active' : ''}" onclick="window.location.href = '/rank.html'">
-            <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span>Bảng Xếp Hạng</span>
-          </li>
-          <li class="sidebar-item ${activeKey === 'documents' ? 'active' : ''}" onclick="if(window.showComingSoonNotice){ window.showComingSoonNotice('Kho Sách & Tài Liệu'); } else { alert('Tính năng Kho Sách & Tài Liệu đang tạm khóa để cập nhật bản quyền, sẽ sớm ra mắt nhé!'); }" style="cursor: pointer;">
-            <i class="fa-solid fa-book-bookmark" style="color: #64748b;"></i> <span>Kho Sách &amp; Tài Liệu</span>
+        </ul>
+
+        <!-- DANH MỤC 3: LUYỆN ĐỀ -->
+        <div class="sidebar-section-label">Luyện Đề</div>
+        <ul class="sidebar-menu" style="margin-bottom: 12px;">
+          <li class="sidebar-item" onclick="if(window.showComingSoonNotice){ window.showComingSoonNotice('Luyện Đề Thi HSK'); } else { alert('Tính năng Đề thi HSK đang được hoàn thiện và sẽ sớm ra mắt!'); }">
+            <i class="fa-solid fa-file-signature" style="color: #64748b;"></i> <span>Đề thi HSK</span>
             <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">🔒 Sắp ra mắt</span>
           </li>
         </ul>
 
-        <!-- DANH MỤC: CỘNG ĐỒNG & KHẢO SÁT -->
-        <div class="sidebar-section-label">Cộng Đồng &amp; Góp Ý</div>
+        <!-- DANH MỤC 4: CỘNG ĐỒNG -->
+        <div class="sidebar-section-label">Cộng Đồng</div>
         <ul class="sidebar-menu" style="margin-bottom: 12px;">
           <li class="sidebar-item" onclick="if(window.openSurveyModal){ window.openSurveyModal(); } else { window.open('https://forms.gle/WaqZsrYrCZfAN5xn6', '_blank'); }" style="cursor: pointer;">
             <i class="fa-solid fa-clipboard-question" style="color: #ec4899;"></i> <span>Khảo sát ý kiến</span>
+          </li>
+          <li class="sidebar-item" onclick="if(window.showComingSoonNotice){ window.showComingSoonNotice('Kho Sách & Tài Liệu'); } else { alert('Tính năng Kho Sách & Tài Liệu đang tạm khóa để cập nhật bản quyền, sẽ sớm ra mắt nhé!'); }" style="cursor: pointer;">
+            <i class="fa-solid fa-book-bookmark" style="color: #64748b;"></i> <span>Kho Sách &amp; Tài Liệu</span>
+            <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">🔒 Sắp ra mắt</span>
+          </li>
+          <li class="sidebar-item" onclick="window.location.href = '/?openDiscussion=true'" style="cursor: pointer;">
+            <i class="fa-solid fa-comments" style="color: #38bdf8;"></i> <span>Thảo luận &amp; Góp ý</span>
+          </li>
+          <li class="sidebar-item ${activeKey === 'rank' ? 'active' : ''}" onclick="window.location.href = '/rank.html'">
+            <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span>Xếp hạng</span>
           </li>
         </ul>
 

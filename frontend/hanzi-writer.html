@@ -681,7 +681,7 @@
       font-size: 1.8rem;
       font-weight: 800;
       color: #60a5fa;
-      font-family: 'Noto Sans SC', sans-serif;
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif;
     }
 
     .word-pinyin-display {
@@ -722,7 +722,7 @@
       font-size: 2rem;
       font-weight: 900;
       color: #fff;
-      font-family: 'Noto Sans SC', sans-serif;
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif;
       display: flex;
       align-items: center;
       gap: 14px;
@@ -745,7 +745,7 @@
       color: #fff;
       font-size: 1.5rem;
       font-weight: 800;
-      font-family: 'Noto Sans SC', sans-serif;
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -1650,7 +1650,7 @@
         const data = charDataMap[ch];
         if (!data || !data.strokes) return;
         html += `<div style="display:flex; flex-direction:column; gap:6px; background:rgba(15,23,42,0.8); padding:10px 14px; border-radius:12px; border:1px solid rgba(56,189,248,0.25);">`;
-        html += `<div style="font-size:1rem; font-weight:bold; color:#38bdf8; font-family:'Noto Sans SC',sans-serif;">Chữ "${ch}" (${data.strokes.length} nét):</div>`;
+        html += `<div style="font-size:1rem; font-weight:bold; color:#38bdf8; font-family:'LXGW WenKai Lite','Kaiti','STKaiti','Kai','PingFang SC','Noto Serif SC',var(--font-chinese),serif;">Chữ "${ch}" (${data.strokes.length} nét):</div>`;
         html += `<div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">`;
         data.strokes.forEach((_, idx) => {
           const stepNum = idx + 1;
