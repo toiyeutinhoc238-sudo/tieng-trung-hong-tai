@@ -1,11 +1,14 @@
 /* HSK Vocabulary Flashcards - Design Tokens & Stylesheet */
+@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css');
 
 :root {
   /* Fonts - Standardized across entire HongTai application */
   --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-display: 'Be Vietnam Pro', sans-serif;
-  --font-handwriting: 'Be Vietnam Pro', sans-serif;
-  --font-chinese: 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  --font-handwriting: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'Be Vietnam Pro', cursive, sans-serif;
+  --font-kaiti: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
+  --font-hanzi: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
+  --font-chinese: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
   --font-pinyin: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Layout */
@@ -25,7 +28,9 @@ html {
   /* Fonts */
   --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-display: 'Be Vietnam Pro', sans-serif;
-  --font-chinese: 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  --font-kaiti: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
+  --font-hanzi: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
+  --font-chinese: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
   --font-pinyin: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
   --radius-sm: 12px;
