@@ -18,10 +18,10 @@
       "name": "Phú Phan",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
       "role": "super_admin",
-      "lastSeenTime": "2026-09-25T11:08:11.416Z",
+      "lastSeenTime": "2026-09-25T11:23:30.822Z",
       "stats": {
         "streak": 2,
-        "studyTime": 30885,
+        "studyTime": 31470,
         "lastActiveDate": "2026-09-25",
         "dailyHistory": {
           "2026-08-07": 1038,
@@ -55,7 +55,7 @@
           "2026-09-18": 4740,
           "2026-09-21": 1530,
           "2026-09-24": 225,
-          "2026-09-25": 2865
+          "2026-09-25": 3450
         }
       },
       "gameHistory": [
@@ -1132,11 +1132,20 @@
         {
           "sessionId": "sess_xs7iexxf_1790334069670",
           "enterTime": "2026-09-25T11:01:09.671Z",
-          "exitTime": "2026-09-25T11:08:09.689Z",
-          "durationSeconds": 420,
+          "exitTime": "2026-09-25T11:08:26.941Z",
+          "durationSeconds": 437,
           "device": "💻 Windows PC",
           "ip": "::1",
-          "isClosed": false
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_z9pjhlcn_1790334832987",
+          "enterTime": "2026-09-25T11:13:52.987Z",
+          "exitTime": "2026-09-25T11:23:30.804Z",
+          "durationSeconds": 578,
+          "device": "💻 Windows PC",
+          "ip": "::1",
+          "isClosed": true
         }
       ]
     },
@@ -7436,6 +7445,12 @@
         "isStudied": true
       },
       "132": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "152": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,

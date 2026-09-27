@@ -223,13 +223,13 @@ import './particles.js';
             <i class="fa-solid fa-book-open-reader" style="color: #ec4899;"></i> <span>Luyện Đọc HSK</span>
           </li>
           <li class="sidebar-item ${activeKey === 'writing' ? 'active' : ''}" onclick="window.location.href = '/writing-practice.html'">
-            <i class="fa-solid fa-feather-pointed" style="color: #a855f7;"></i> <span>Luyện Viết & AI Chấm</span>
+            <i class="fa-solid fa-feather-pointed" style="color: #a855f7;"></i> <span>Luyện Viết</span>
           </li>
           <li class="sidebar-item ${activeKey === 'speaking' ? 'active' : ''}" onclick="window.location.href = '/speaking-practice.html'">
             <i class="fa-solid fa-microphone-lines" style="color: #f59e0b;"></i> <span>Luyện Nói</span>
           </li>
           <li class="sidebar-item ${activeKey === 'translation' ? 'active' : ''}" onclick="window.location.href = '/translation-practice.html'">
-            <i class="fa-solid fa-language" style="color: #06b6d4;"></i> <span>Luyện Dịch &amp; Nghe Đoạn</span>
+            <i class="fa-solid fa-language" style="color: #06b6d4;"></i> <span>Luyện Dịch</span>
           </li>
           <li class="sidebar-item ${activeKey === 'sentence-reorder' ? 'active' : ''}" onclick="window.location.href = '/sentence-reorder.html'">
             <i class="fa-solid fa-arrow-down-short-wide" style="color: #38bdf8;"></i> <span>Sắp Xếp Câu</span>
@@ -243,8 +243,9 @@ import './particles.js';
           <li class="sidebar-item ${activeKey === 'rank' ? 'active' : ''}" onclick="window.location.href = '/rank.html'">
             <i class="fa-solid fa-trophy" style="color: #fbbf24;"></i> <span>Bảng Xếp Hạng</span>
           </li>
-          <li class="sidebar-item ${activeKey === 'documents' ? 'active' : ''}" onclick="window.location.href = '/documents.html'">
-            <i class="fa-solid fa-book-bookmark" style="color: #06b6d4;"></i> <span>Kho Sách &amp; Tài Liệu</span>
+          <li class="sidebar-item ${activeKey === 'documents' ? 'active' : ''}" onclick="if(window.showComingSoonNotice){ window.showComingSoonNotice('Kho Sách & Tài Liệu'); } else { alert('Tính năng Kho Sách & Tài Liệu đang tạm khóa để cập nhật bản quyền, sẽ sớm ra mắt nhé!'); }" style="cursor: pointer;">
+            <i class="fa-solid fa-book-bookmark" style="color: #64748b;"></i> <span>Kho Sách &amp; Tài Liệu</span>
+            <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">🔒 Sắp ra mắt</span>
           </li>
         </ul>
 
