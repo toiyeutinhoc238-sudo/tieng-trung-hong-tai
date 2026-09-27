@@ -18,11 +18,11 @@
       "name": "Phú Phan",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
       "role": "super_admin",
-      "lastSeenTime": "2026-09-27T13:29:29.029Z",
+      "lastSeenTime": "2026-09-27T17:11:51.555Z",
       "stats": {
-        "streak": 4,
-        "studyTime": 33315,
-        "lastActiveDate": "2026-09-27",
+        "streak": 5,
+        "studyTime": 34215,
+        "lastActiveDate": "2026-09-28",
         "dailyHistory": {
           "2026-08-07": 1038,
           "2026-08-08": 1038,
@@ -57,7 +57,8 @@
           "2026-09-24": 225,
           "2026-09-25": 3585,
           "2026-09-26": 165,
-          "2026-09-27": 1545
+          "2026-09-27": 1740,
+          "2026-09-28": 705
         }
       },
       "gameHistory": [
@@ -1220,6 +1221,24 @@
           "device": "💻 Windows PC",
           "ip": "::1",
           "isClosed": true
+        },
+        {
+          "sessionId": "sess_0eikqf6u_1790518585551",
+          "enterTime": "2026-09-27T14:16:25.551Z",
+          "exitTime": "2026-09-27T14:17:42.317Z",
+          "durationSeconds": 77,
+          "device": "💻 Windows PC",
+          "ip": "171.232.28.172",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_mcroxpfm_1790522181798",
+          "enterTime": "2026-09-27T15:16:21.798Z",
+          "exitTime": "2026-09-27T15:23:29.376Z",
+          "durationSeconds": 428,
+          "device": "💻 Windows PC",
+          "ip": "171.232.28.172",
+          "isClosed": true
         }
       ]
     },
@@ -1270,10 +1289,10 @@
       "name": "Thái Hồng",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKBlWlP1i1PUXEJ-J8R-D1O16X0yTLoJHD1QrPcxm_fJZFl0VmG=s96-c",
       "role": "super_admin",
-      "lastSeenTime": "2026-09-27T11:33:39.668Z",
+      "lastSeenTime": "2026-09-27T16:48:12.710Z",
       "stats": {
         "streak": 30,
-        "studyTime": 282365,
+        "studyTime": 283745,
         "lastActiveDate": "2026-09-27",
         "dailyHistory": {
           "2026-08-10": 420,
@@ -1315,7 +1334,7 @@
           "2026-09-24": 8055,
           "2026-09-25": 14055,
           "2026-09-26": 1935,
-          "2026-09-27": 5655
+          "2026-09-27": 7035
         }
       },
       "gameHistory": [],
@@ -2007,11 +2026,11 @@
         {
           "sessionId": "sess_drc702rw_1789986971563",
           "enterTime": "2026-09-21T12:52:30.686Z",
-          "exitTime": "2026-09-27T11:14:19.219Z",
-          "durationSeconds": 512509,
+          "exitTime": "2026-09-27T16:48:00.434Z",
+          "durationSeconds": 532530,
           "device": "💻 Windows PC",
           "ip": "171.227.35.6",
-          "isClosed": true
+          "isClosed": false
         },
         {
           "sessionId": "sess_ngojg50h_1789997048438",
@@ -3657,11 +3676,11 @@
       "name": "Nguyen Nguyen",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKjmaNe41ieas8JEaeUcwmZ_cviUC2VkJyWefGcGFx0ojg3vJ1Z=s96-c",
       "role": "user",
-      "lastSeenTime": "2026-09-26T14:55:37.998Z",
+      "lastSeenTime": "2026-09-27T15:41:52.333Z",
       "stats": {
-        "streak": 4,
-        "studyTime": 56010,
-        "lastActiveDate": "2026-09-26",
+        "streak": 5,
+        "studyTime": 58275,
+        "lastActiveDate": "2026-09-27",
         "dailyHistory": {
           "2026-08-22": 1410,
           "2026-08-23": 1695,
@@ -3679,7 +3698,8 @@
           "2026-09-23": 4470,
           "2026-09-24": 2580,
           "2026-09-25": 3030,
-          "2026-09-26": 3165
+          "2026-09-26": 3165,
+          "2026-09-27": 2265
         }
       },
       "gameHistory": [
@@ -4025,6 +4045,15 @@
           "enterTime": "2026-09-26T13:22:16.419Z",
           "exitTime": "2026-09-26T14:55:36.234Z",
           "durationSeconds": 5600,
+          "device": "💻 Windows PC",
+          "ip": "14.191.124.74",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_1ba694q6_1790518655440",
+          "enterTime": "2026-09-27T14:17:35.441Z",
+          "exitTime": "2026-09-27T15:41:50.710Z",
+          "durationSeconds": 5055,
           "device": "💻 Windows PC",
           "ip": "14.191.124.74",
           "isClosed": true
@@ -24145,7 +24174,62 @@
         "isStarred": false,
         "isStudied": true
       },
+      "491": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "492": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "493": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
       "494": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "495": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "496": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "497": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "498": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "499": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "500": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "501": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "502": {
         "isMemorized": true,
         "isStarred": false,
         "isStudied": true
@@ -24289,6 +24373,11 @@
         "isStudied": true
       },
       "70049": {
+        "isMemorized": true,
+        "isStarred": false,
+        "isStudied": true
+      },
+      "70050": {
         "isMemorized": true,
         "isStarred": false,
         "isStudied": true
@@ -37840,11 +37929,6 @@
     "hatramanhnguyen8@gmail.com": []
   },
   "sessions": {
-    "8b1k40lrx9lmu9uwuql": "xinhlovely.0501@gmail.com",
-    "npncivaz34mu9v9y84": "cuongthinh031206@gmail.com",
-    "gd81rd9mn3mtpx6l5e": "h84706749@gmail.com",
-    "vxnv9vululimtzyjwlk": "baxuanchu5@gmail.com",
-    "001j1jeyqn8t5mtzyr3oe": "minht4426@gmail.com",
     "6wucsjo7ihmua5802o": "dolequynhmai.6525@gmail.com",
     "c3qk7ecm5flmu0iuhz5": "tathuhang1010@gmail.com",
     "64494sk1d4umtg7yl7m": "minht4426@gmail.com",
@@ -38049,7 +38133,10 @@
     "5ybxceo67c6mtefxqox": "phanphiphu04@gmail.com",
     "zzyk51rfznomtehe8we": "dtrungkien581@gmail.com",
     "c0teo4y5yijmu97wxnl": "ngannghiem88@gmail.com",
-    "mmocy0tn0omujkz8mc": "phanphiphu04@gmail.com"
+    "mmocy0tn0omujkz8mc": "phanphiphu04@gmail.com",
+    "001j1jeyqn8t5mtzyr3oe": "minht4426@gmail.com",
+    "vxnv9vululimtzyjwlk": "baxuanchu5@gmail.com",
+    "gd81rd9mn3mtpx6l5e": "h84706749@gmail.com"
   },
   "chats": {
     "thaygiaoroxie@gmail.com": [],

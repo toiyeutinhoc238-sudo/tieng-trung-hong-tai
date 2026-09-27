@@ -1,6 +1,7 @@
 import './particles.js';
 import './screen_drawing.js';
 import './chatbot_widget.js';
+import './quick_dict_widget.js';
 
 /**
  * Tiếng Trung HongTai - Global Navigation Sidebar & Mobile Drawer Coordinator

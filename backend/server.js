@@ -3740,20 +3740,40 @@ app.post('/api/ai/hskk-suggest', async (req, res) => {
   const levelText = level === 'so' ? 'HSKK Sơ cấp' : level === 'cao' ? 'HSKK Cao cấp' : 'HSKK Trung cấp';
   const skillText = skill === 'writing' ? 'Luyện Viết' : 'Khẩu ngữ nói';
 
+  let levelPedagogy = '';
+  if (level === 'so') {
+    levelPedagogy = `TRÌNH ĐỘ HSKK SƠ CẤP (HSK 1 - 2, tối đa đầu HSK 3):
+- TỪ VỰNG: BẮT BUỘC dùng từ vựng CỰC KỲ ĐƠN GIẢN, mộc mạc, gần gũi với đời thường (như: 我, 你, 常常, 喜欢, 觉得, 学习, 朋友, 比如, 因为...所以..., 虽然...但是...).
+- CẤM TUYỆT ĐỐI các từ ngữ trừu tượng, cao cấp, học thuật hoặc thành ngữ khó (CẤM dùng: 针对, 现实意义, 付诸实践, 收益匪浅, 持之以恒, 毋庸置疑, 途径, 举措, 潜移默化,...).
+- Câu văn ngắn gọn, thân mật, dễ hiểu, dễ phát âm.
+- ĐỘ DÀI BÀI MẪU: Khoảng 180 - 240 chữ Hán (chuẩn nói 1.5 phút).`;
+  } else if (level === 'cao') {
+    levelPedagogy = `TRÌNH ĐỘ HSKK CAO CẤP (HSKK Cao cấp / HSK 5 - 6):
+- BÀI NÓI / BÀI VIẾT PHẢI RẤT DÀI, TOÀN DIỆN VÀ CHUYÊN SÂU (BẮT BUỘC TỪ 550 ĐẾN 750 CHỮ HÁN, chuẩn nói liên tục 2.5 - 3 phút). PHẢI DÀI HƠN RÕ RỆT SO VỚI TRUNG CẤP!
+- Lập luận đa tầng chặt chẽ: Phân tích bối cảnh xã hội, căn nguyên sâu xa (khách quan và chủ quan), ví dụ điển hình có tính thuyết phục cao, đề xuất hệ thống giải pháp và đúc kết triết lý sống / tầm nhìn tương lai.
+- Ngôn ngữ học thuật, phong thái diễn thuyết, sử dụng nhiều thành ngữ 4 chữ 成语 (VD: 循序渐进, 潜移默化, 未雨绸缪, 标本兼治, 持之以恒, 受益匪浅, 登高望远...) và câu phức liên kết nhuần nhuyễn.`;
+  } else {
+    levelPedagogy = `TRÌNH ĐỘ HSKK TRUNG CẤP (HSK 3 - 4):
+- Từ vựng và ngữ pháp trung cấp, mạch lạc, nêu quan điểm và ví dụ đời sống, kinh nghiệm bản thân.
+- ĐỘ DÀI BÀI MẪU: Khoảng 320 - 420 chữ Hán (chuẩn nói 2 phút).`;
+  }
+
   const prompt = `Bạn là chuyên gia sư phạm và giám khảo luyện thi HSK / HSKK hàng đầu của "Tiếng Trung Hongtai".
 Học viên đang thực hành kỹ năng: ${skillText}
 Trình độ mục tiêu: ${levelText}
 ĐỀ BÀI CỤ THỂ BẮT BUỘC: "${cleanQ}"
+
+${levelPedagogy}
 
 QUY TẮC SƯ PHẠM BẮT BUỘC (TUYỆT ĐỐI KHÔNG NÓI CHUNG CHUNG LẠC ĐỀ):
 1. DÀN BÀI (outline): TOÀN BỘ VIẾT BẰNG TIẾNG VIỆT, bám sát 100% câu hỏi đề bài "${cleanQ}". Phải có các câu hỏi gợi mở cụ thể giúp học viên suy nghĩ và trả lời:
    - Mở bài (intro): Nêu câu trả lời trực tiếp hoặc quan điểm cá nhân cho đề bài. Kèm câu hỏi gợi ý cho học viên (VD: Đối với bạn, ... là gì? Quan điểm của bạn là gì?).
    - Thân bài (body): Phải có ĐÚNG 3 LUẬN ĐIỂM VÀ LUẬN CỨ CỤ THỂ giải quyết đề bài. Mỗi luận điểm phải kèm câu hỏi gợi mở thực tế (VD: Luận điểm 1: ...? Luận điểm 2: ...? Luận điểm 3: ...?).
    - Kết bài (conclusion): Tổng kết lại toàn bộ ý chính, chốt lại quan điểm, và đưa ra lời kêu gọi hành động hoặc bài học / thông điệp ý nghĩa sâu sắc.
-2. TỪ VỰNG THEN CHỐT (vocabulary): 4-8 từ vựng hoặc thành ngữ liên quan trực tiếp đến đề tài này (kèm pinyin có dấu và dịch nghĩa tiếng Việt).
+2. TỪ VỰNG THEN CHỐT (vocabulary): 4-8 từ vựng hoặc thành ngữ liên quan trực tiếp đến đề tài này (kèm pinyin có dấu và dịch nghĩa tiếng Việt). Phải đúng trình độ ${levelText}!
 3. CẤU TRÚC NGỮ PHÁP (sentenceStructures): 2-4 mẫu câu kết nối hoặc cấu trúc điểm cao bám sát nội dung đề bài.
 4. BÀI ${skill === 'writing' ? 'VIẾT' : 'NÓI'} MẪU THAM KHẢO (sampleAnswer): DỰA SÁT 100% VÀO DÀN BÀI GỢI Ý TRÊN. Cấu trúc chuẩn 3 phần rõ ràng (Mở bài nêu quan điểm, Thân bài đủ 3 luận điểm phát triển mạch lạc, Kết bài tổng kết và kêu gọi).
-   - hanzi: Tiếng Trung chuẩn bản xứ (${level === 'so' ? 'Khoảng 160-220 chữ Hán' : level === 'cao' ? 'Khoảng 480-600 chữ Hán học thuật cao cấp' : 'Khoảng 350-450 chữ Hán chuẩn 2 phút HSKK'}).
+   - hanzi: Tiếng Trung chuẩn bản xứ đúng số lượng chữ theo yêu cầu của ${levelText}.
    - pinyin: Phiên âm có dấu thanh điệu đầy đủ.
    - meaningVi: Bản dịch tiếng Việt đầy đủ, tự nhiên, diễn cảm.
 
@@ -3792,7 +3812,7 @@ Trả về DUY NHẤT 1 JSON object hợp lệ:
             messages: [{ role: 'user', content: prompt }],
             temperature: 0.5,
             response_format: { type: 'json_object' },
-            max_tokens: 3000
+            max_tokens: 3500
           });
           reply = completion.choices[0]?.message?.content || '';
           if (reply && reply.includes('{') && reply.includes('}')) break;
@@ -3825,75 +3845,219 @@ Trả về DUY NHẤT 1 JSON object hợp lệ:
     }
 
     if (!result || !result.outline || !result.sampleAnswer) {
-      result = {
-        outline: {
-          intro: `Mở bài: Nêu trực tiếp câu trả lời hoặc quan điểm cá nhân cho đề tài: "${cleanQ}". (Gợi ý: Theo bạn, đâu là trọng tâm của câu hỏi này?)`,
-          body: [
-            `Luận điểm 1: Phân tích lý do hoặc bối cảnh thực tế gắn liền với "${cleanQ}". (Gợi ý: Tại sao lại có hiện tượng/quan điểm này?)`,
-            `Luận điểm 2: Dẫn chứng hoặc trải nghiệm thực tế cụ thể. (Gợi ý: Bạn hoặc những người xung quanh đã trải qua việc này như thế nào?)`,
-            `Luận điểm 3: Đánh giá ý nghĩa, giải pháp hoặc bài học rút ra. (Gợi ý: Cần làm gì để phát huy điểm tốt hoặc giải quyết khó khăn?)`
-          ],
-          conclusion: `Kết bài: Khẳng định lại câu trả lời cho đề bài, đưa ra bài học kinh nghiệm và thông điệp hành động tích cực.`
-        },
-        vocabulary: [
-          { hanzi: "看法", pinyin: "kànfǎ", meaning: "quan điểm, góc nhìn" },
-          { hanzi: "经验", pinyin: "jīngyàn", meaning: "kinh nghiệm thực tế" },
-          { hanzi: "坚持", pinyin: "jiānchí", meaning: "kiên trì" },
-          { hanzi: "互相帮助", pinyin: "hùxiāng bāngzhù", meaning: "giúp đỡ lẫn nhau" },
-          { hanzi: "收益匪浅", pinyin: "shòuyì fěiqiǎn", meaning: "thu hoạch được nhiều bổ ích" }
-        ],
-        sentenceStructures: [
-          {
-            pattern: "在我看来，……是最重要的。",
-            meaning: "Theo quan điểm của tôi, ... là quan trọng nhất.",
-            example: `在我看来，面对这个问题，积极思考与付诸行动是最重要的。`
+      if (level === 'so') {
+        result = {
+          outline: {
+            intro: `Mở bài: Trả lời trực tiếp và ngắn gọn: "${cleanQ}". (Gợi ý: Bạn có thích điều này không? Quan điểm đơn giản của bạn là gì?)`,
+            body: [
+              `Luận điểm 1: Nêu lý do thứ nhất với các từ quen thuộc. (Gợi ý: Tại sao bạn lại nghĩ như vậy?)`,
+              `Luận điểm 2: Kể một việc hoặc trải nghiệm đơn giản hằng ngày. (Gợi ý: Bạn thường làm việc đó với ai, vào lúc nào?)`,
+              `Luận điểm 3: Nêu cảm nghĩ vui vẻ, tích cực. (Gợi ý: Bạn cảm thấy việc đó mang lại niềm vui gì?)`
+            ],
+            conclusion: `Kết bài: Tóm lại ý chính và bày tỏ hy vọng / mong muốn của bạn trong tương lai.`
           },
-          {
-            pattern: "一方面……，另一方面……",
-            meaning: "Một mặt thì..., mặt khác thì...",
-            example: "一方面要脚踏实地努力，另一方面要善于总结经验。"
+          vocabulary: [
+            { hanzi: "我觉得", pinyin: "wǒ juéde", meaning: "tôi thấy, tôi nghĩ rằng" },
+            { hanzi: "喜欢", pinyin: "xǐhuan", meaning: "thích" },
+            { hanzi: "常常", pinyin: "chángcháng", meaning: "thường xuyên" },
+            { hanzi: "一起", pinyin: "yìqǐ", meaning: "cùng nhau" },
+            { hanzi: "高兴", pinyin: "gāoxìng", meaning: "vui vẻ" }
+          ],
+          sentenceStructures: [
+            {
+              pattern: "我觉得……因为……",
+              meaning: "Tôi thấy... bởi vì...",
+              example: `我觉得这个题目很有意思，因为在日常生活中我们常常遇到。`
+            },
+            {
+              pattern: "虽然……但是……",
+              meaning: "Tuy... nhưng...",
+              example: "虽然一开始有点儿难，但是多练习就会了。"
+            }
+          ],
+          sampleAnswer: {
+            hanzi: `关于“${cleanQ}”这个问题，我觉得很有意思。在生活中，我们常常会遇到这样的事情。对我来说，保持一个好心情非常重要。首先，做事情的时候要认真，遇到不懂的问题可以多问问老师和朋友。其次，每天花一点儿时间去学习和练习，比如多听听汉语、多和大家聊聊天，这样就能慢慢进步。最后，我觉得大家互相帮助、一起努力是一件非常快乐的事情。只要我们每天坚持，就一定能把事情做好，生活也会更加开心。`,
+            pinyin: `Guānyú zhè ge wèntí, wǒ juéde hěn yǒu yìsi. Zài shēnghuó zhōng, wǒmen chángcháng huì yù dào zhèyàng de shìqing. Duì wǒ lái shuō, bǎochí yí gè hǎo xīnqíng fēicháng zhòngyào. Shǒuxiān, zuò shìqing de shíhou yào rènzhēn, yù dào bù dǒng de wèntí kěyǐ duō wènwen lǎoshī hé péngyou. Qícì, měitiān huā yìdiǎnr shíjiān qù xuéxí hé liànxí, bǐrú duō tīngting Hànyǔ, duō hé dàjiā liáoliao tiān, zhèyàng jiù néng mànmàn jìnbù. Zuìhòu, wǒ juéde dàjiā hùxiāng bāngzhù, yìqǐ nǔlì shì yí jiàn fēicháng kuàilè de shìqing. Zhǐyào wǒmen měitiān jiānchí, jiù yídìng néng bǎ shìqing zuò hǎo, shēnghuó yě huì gèngjiā kāixīn.`,
+            meaningVi: `Về câu hỏi "${cleanQ}", tôi thấy rất thú vị. Trong cuộc sống, chúng ta thường hay gặp những chuyện như thế này. Đối với tôi, giữ một tâm trạng vui vẻ là rất quan trọng. Thứ nhất, khi làm việc gì cũng cần nghiêm túc, gặp câu hỏi chưa hiểu thì có thể hỏi thầy cô và bạn bè. Thứ hai, mỗi ngày dành một chút thời gian học tập và luyện tập, ví dụ như nghe tiếng Trung nhiều hơn, nói chuyện với mọi người nhiều hơn, như vậy sẽ tiến bộ dần dần. Cuối cùng, tôi thấy mọi người cùng giúp đỡ nhau, cùng nhau nỗ lực là một điều vô cùng hạnh phúc. Chỉ cần mỗi ngày kiên trì, nhất định chúng ta sẽ làm tốt và cuộc sống sẽ vui vẻ hơn.`
           }
-        ],
-        sampleAnswer: {
-          hanzi: `针对“${cleanQ}”这个问题，我认为在我们的生活和学习中有着非常重要的现实意义。首先，从个人角度来看，我们应当明确自己的目标与态度，认真思考问题背后的原因。其次，在遇到具体情境时，不能只停留在想法上，而要主动付诸实践，勇于面对挑战并积极寻找解决办法。最后，只要我们能持之以恒，并与身边的人互相支持、共同进步，就一定能克服困难，取得令人满意的成果。`,
-          pinyin: `Zhēnduì zhè ge wèntí, wǒ rènwéi zài wǒmen de shēnghuó hé xuéxí zhōng yǒuzhe fēicháng zhòngyào de xiànshí yìyì. Shǒuxiān, cóng gèrén jiǎodù lái kàn, wǒmen yīngdāng míngquè zìjǐ de mùbiāo yǔ tàidù. Qícì, zài yùdào jùtǐ qíngjìng shí, yīngdāng zhǔdòng fùzhū shíjiàn. Zuìhòu, zhǐyào wǒmen néng chízhīyǐhéng, jiù yídìng néng qǔdé lìngrén mǎnyì de chéngguǒ.`,
-          meaningVi: `Đối với đề bài "${cleanQ}", tôi cho rằng câu hỏi này mang ý nghĩa thực tế rất quan trọng trong cuộc sống và học tập của chúng ta. Thứ nhất, từ góc độ cá nhân, chúng ta cần xác định rõ mục tiêu và thái độ của mình, suy nghĩ nghiêm túc về nguyên nhân. Thứ hai, khi đối diện với tình huống cụ thể, không nên chỉ dừng lại ở suy nghĩ mà cần chủ động bắt tay vào hành động, dũng cảm đối mặt với thử thách và tích cực tìm kiếm giải pháp. Cuối cùng, chỉ cần chúng ta kiên trì đến cùng và luôn hỗ trợ lẫn nhau, nhất định sẽ gặt hái được những thành quả tốt đẹp.`
-        }
-      };
+        };
+      } else if (level === 'cao') {
+        result = {
+          outline: {
+            intro: `Mở bài: Đặt vấn đề sâu sắc trong bối cảnh xã hội hiện đại cho chủ đề: "${cleanQ}". Khẳng định tầm quan trọng và đưa ra luận điểm cốt lõi bao quát.`,
+            body: [
+              `Luận điểm 1: Mổ xẻ bản chất và căn nguyên sâu xa của vấn đề (về mặt nhận thức cá nhân và tác động đa chiều từ môi trường sống).`,
+              `Luận điểm 2: Đưa ra dẫn chứng thực tiễn điển hình có sức nặng thuyết phục (phân tích sự tương phản giữa kiên trì vượt khó và tâm lý thoái thác).`,
+              `Luận điểm 3: Đề xuất hệ thống giải pháp chiến lược toàn diện (kết hợp kỷ luật tự thân với sự hỗ trợ từ gia đình, tổ chức và xã hội).`
+            ],
+            conclusion: `Kết bài: Nâng tầm vấn đề thành bài học triết lý sống và thông điệp hành động mạnh mẽ, truyền cảm hứng dài hạn.`
+          },
+          vocabulary: [
+            { hanzi: "立足当下", pinyin: "lìzú dāngxià", meaning: "đứng vững ở hiện tại" },
+            { hanzi: "深谋远虑", pinyin: "shēnmóu yuǎnlǜ", meaning: "lo xa nghĩ sâu, tầm nhìn chiến lược" },
+            { hanzi: "持之以恒", pinyin: "chí zhī yǐ héng", meaning: "kiên trì bền bỉ không ngừng nghỉ" },
+            { hanzi: "潜移默化", pinyin: "qián yí mò huà", meaning: "ảnh hưởng sâu sắc một cách vô hình, ngấm dần" },
+            { hanzi: "标本兼治", pinyin: "biāo běn jiān zhì", meaning: "trị cả phần ngọn lẫn gốc rễ" },
+            { hanzi: "收益匪浅", pinyin: "shòuyì fěiqiǎn", meaning: "thu hoạch được vô vàn điều bổ ích" }
+          ],
+          sentenceStructures: [
+            {
+              pattern: "不仅在于……，更关键的在于……",
+              meaning: "Không chỉ nằm ở chỗ..., mà mấu chốt hơn là nằm ở...",
+              example: `探讨这个问题的价值，不仅在于理清表象，更关键的在于寻找切实行之有效的破局之道。`
+            },
+            {
+              pattern: "固然……，然而归根结底……",
+              meaning: "Dẫu rằng..., nhưng xét đến cùng...",
+              example: "外部客观环境固然重要，然而归根结底，个人内驱力与长远格局才起决定性作用。"
+            },
+            {
+              pattern: "唯有……，方能在……中立于不败之地。",
+              meaning: "Chỉ khi..., mới có thể đứng vững trước...",
+              example: "唯有保持终身学习的心态，方能在瞬息万变的时代浪潮中立于不败之地。"
+            }
+          ],
+          sampleAnswer: {
+            hanzi: `针对“${cleanQ}”这一极具现实意义的深刻命题，我认为它不仅关乎我们每个人的个体成长，更折射出现代社会中普遍存在的价值取向与处事哲学。在纷繁复杂的生活与职场环境中，如何正确审视并妥善应对这一课题，值得我们深思熟虑。\n\n首先，从认知层面来看，古人云：“登高使人心旷，临流使人意远。”面对纷至沓来的挑战，我们首先应当厘清问题的本质所在，既不能因暂时的波折而妄自菲薄，亦不可盲目乐观而浅尝辄止。唯有树立清晰宏阔的目标导向，将长远愿景细化为扎实可行的阶段性规划，方能做到心中有数、行有方向。\n\n其次，从实践与知行合一的角度而言，纸上谈兵终究无济于事，关键在于付诸持之以恒的切实行动。以我们日常求知与奋斗为例，任何一项专业技能的精通或心智的磨砺，无不经历漫长而枯燥的积累过程，正所谓“不积跬步，无以至千里”。在此期间，保持专注与定力、勇敢突破舒适圈，敢于在试错中反思与总结，方能实现认知与能力的飞跃。\n\n再者，除了依赖个体强烈的内驱力之外，融洽的人际协作与开放包容的生态氛围亦是不可或缺的外部支撑。懂得倾听他山之石、主动构建良性互动的合作机制，往往能激发出“独行快，众行远” de bèizēng xiàoyìng。\n\n总而言之，“行百里者半九十”。面对这一课题，我们唯有立足当下、深谋远虑，将坚毅的意志品质与科学的行事方法有机结合，在时代洪流中砥砺前行，方能攻坚克难，开辟出属于自己的广阔天地。`,
+            pinyin: `Zhēnduì zhè yí jùyǒu xiànshí yìyì de shēnkè mìngtí, wǒ rènwéi tā bùjǐn guānhū wǒmen měi gè rén de gètǐ chéngzhǎng, gèng zhéshè chū xiàndài shèhuì zhōng pǔbiàn cúnzài de jiàzhí qǔxiàng yǔ chǔshì zhéxué. Zài fēnfán fùzá de shēnghuó yǔ zhíchǎng huánjìng zhōng, rúhé zhèngquè shěnshì bìng tuǒshàn yìngduì zhè yí kètí, zhídé wǒmen shēnsī shúlǜ.\n\nShǒuxiān, cóng rènzhī céngmiàn lái kàn, gǔrén yún: "Dēng gāo shǐ rén xīn kuàng, lín liú shǐ rén yì yuǎn." Miànduì fēnzhì-tàlái de tiǎozhàn, wǒmen shǒuxiān yīngdāng líqīng wèntí de běnzhì suǒzài, jì bù néng yīn zànshí de bōzhé ér wàngzì-fěibó, yì bù kě mángmù lèguān ér qiǎncháng-zhézhǐ. Wéiyǒu shùlì qīngxī hóngkuò de mùbiāo dǎoxiàng, jiāng chángyuǎn yuànjǐng xìhuà wéi zhāshi kěxíng de jiēduànxìng guīhuà, fāng néng zuò dào xīn zhōng yǒu shù, xíng yǒu fāngxiàng.\n\nQícì, cóng shíjiàn yǔ zhī-xíng-hé-yī de jiǎodù ér yán, zhǐshàng-tánbīng zhōngjiū wújìyúshì, guānjiàn zàiyú fùzhū chízhīyǐhéng de qièshí xíngdòng. Yǐ wǒmen rìcháng qiúzhī yǔ fèndòu wéilì, rènhé yí xiàng zhuānyè jìnéng de jīngtōng huò xīnzzhì de mólì, wúbù jīnglì màncháng ér kūzào de jīlěi guòchéng, zhèng suǒwèi "bù jī kuǐbù, wú yǐ zhì qiānlǐ". Zài cǐ qījiān, bǎochí zhuānzhù yǔ dìnglì, yǒnggǎn tūtò shūshìquān, gǎnyú zài shìcuò zhōng fǎnsī yǔ zǒngjié, fāng néng shíxiàn rènzhī yǔ nénglì de fēiyuè.\n\nZàizhě, chúle yīlài gètǐ qiángliè de nèiqūlì zhīwài, róngqià de rénjì xiézuò yǔ kāifàng bāoróng de shēngtài fēnwéi yì shì bùkě huòquē de wàibù zhīchēng. Dǒngdé qīngtīng tā-shān-zhī-shí, zhǔdòng gòujiàn liángxìng hùdòng de hézuò jīzhì, wǎngwǎng néng jīfā chū "dúxíng kuài, zhòngxíng yuǎn" de bèizēng xiàoyìng.\n\nZǒng'éryánzhī, "xíng bǎilǐ zhě bàn jiǔshí". Miànduì zhè yí kètí, wǒmen wéiyǒu lìzú dāngxià, shēnmóu yuǎnlǜ, jiāng jiānyì de yìzhì pǐnzhì yǔ kēxué de xíngshì fāngfǎ yǒujī jiéhé, zài shídài hóngliú zhōng dǐlì qiánxíng, fāng néng gōngjiān-kènán, kāipì chū shǔyú zìjǐ de guǎngkuò tiāndì.`,
+            meaningVi: `Đối với đề bài mang tính thời sự và sâu sắc "${cleanQ}", tôi cho rằng câu hỏi này không chỉ liên quan mật thiết đến sự trưởng thành của mỗi cá nhân, mà còn phản ánh hệ giá trị và triết lý sống phổ quát trong xã hội hiện đại. Trong một môi trường sống và làm việc đa chiều, việc nhìn nhận thấu đáo và ứng phó thỏa đáng với vấn đề này là điều rất đáng để chúng ta trăn trở.\n\nTrước hết, xét từ góc độ nhận thức, người xưa có câu: "Lên cao khiến lòng người khoáng đạt, ngắm dòng nước khiến ý chí vươn xa." Đối diện với vô vàn thử thách, chúng ta cần phân định rõ bản chất cốt lõi của vấn đề, không vì khó khăn trước mắt mà tự ti, thoái chí, cũng không vì chút thuận lợi ban đầu mà chủ quan, hời hợt. Chỉ khi xác lập một định hướng mục tiêu rành mạch, cụ thể hóa viễn cảnh dài hạn thành từng lộ trình hành động thiết thực, ta mới vững vàng tiến bước.\n\nThứ hai, xét từ nguyên lý "tri hành hợp nhất", nói suông trên giấy suy cho cùng vô ích, điều then chốt nằm ở việc bắt tay vào hành động kiên trì, bền bỉ. Lấy việc học tập và rèn luyện mỗi ngày làm ví dụ, việc tinh thông bất kỳ kỹ năng chuyên môn hay sự tôi luyện bản lĩnh nào cũng đều phải trải qua quá trình tích lũy lâu dài, đúng như câu "không tích từng bước nhỏ, không thể đi tới ngàn dặm". Trong hành trình đó, việc giữ vững sự tập trung, dũng cảm bứt phá khỏi vùng an toàn và không ngừng đúc rút kinh nghiệm sau mỗi lần vấp ngã chính là đòn bẩy tạo nên bước nhảy vọt.\n\nThêm vào đó, bên cạnh nội lực tự thân, sự tương trợ gắn kết và tinh thần hợp tác cởi mở cũng là điểm tựa ngoại lực không thể thiếu. Biết lắng nghe ý kiến đóng góp từ người khác, cùng chung sức đồng lòng sẽ luôn tạo ra sức mạnh cộng hưởng to lớn.\n\nTóm lại, "đường đi trăm dặm, đi được chín mươi dặm mới tính là nửa đường". Đứng trước bài toán này, chỉ khi chúng ta biết đứng vững ở hiện tại, nhìn xa trông rộng, kết hợp ý chí kiên định với phương pháp khoa học, không ngừng rèn giũa bản thân, ta mới có thể vượt qua mọi chông gai và kiến tạo nên chân trời rộng mở cho chính mình.`
+          }
+        };
+      } else {
+        result = {
+          outline: {
+            intro: `Mở bài: Nêu trực tiếp câu trả lời hoặc quan điểm cá nhân cho đề tài: "${cleanQ}". (Gợi ý: Theo bạn, đâu là trọng tâm của câu hỏi này?)`,
+            body: [
+              `Luận điểm 1: Phân tích lý do hoặc bối cảnh thực tế gắn liền với "${cleanQ}". (Gợi ý: Tại sao lại có hiện tượng/quan điểm này?)`,
+              `Luận điểm 2: Dẫn chứng hoặc trải nghiệm thực tế cụ thể. (Gợi ý: Bạn hoặc những người xung quanh đã trải qua việc này như thế nào?)`,
+              `Luận điểm 3: Đánh giá ý nghĩa, giải pháp hoặc bài học rút ra. (Gợi ý: Cần làm gì để phát huy điểm tốt hoặc giải quyết khó khăn?)`
+            ],
+            conclusion: `Kết bài: Khẳng định lại câu trả lời cho đề bài, đưa ra bài học kinh nghiệm và thông điệp hành động tích cực.`
+          },
+          vocabulary: [
+            { hanzi: "看法", pinyin: "kànfǎ", meaning: "quan điểm, góc nhìn" },
+            { hanzi: "经验", pinyin: "jīngyàn", meaning: "kinh nghiệm thực tế" },
+            { hanzi: "坚持", pinyin: "jiānchí", meaning: "kiên trì" },
+            { hanzi: "互相帮助", pinyin: "hùxiāng bāngzhù", meaning: "giúp đỡ lẫn nhau" },
+            { hanzi: "收益匪浅", pinyin: "shòuyì fěiqiǎn", meaning: "thu hoạch được nhiều bổ ích" }
+          ],
+          sentenceStructures: [
+            {
+              pattern: "在我看来，……是最重要的。",
+              meaning: "Theo quan điểm của tôi, ... là quan trọng nhất.",
+              example: `在我看来，针对这个问题，积极思考与付诸行动是最重要的。`
+            },
+            {
+              pattern: "一方面……，另一方面……",
+              meaning: "Một mặt thì..., mặt khác thì...",
+              example: "一方面要脚踏实地努力，另一方面要善于总结经验。"
+            }
+          ],
+          sampleAnswer: {
+            hanzi: `针对“${cleanQ}”这个问题，我认为在我们的生活和学习中有着非常重要的现实意义。首先，从个人角度来看，我们应当明确自己的目标与态度，认真思考问题背后的原因。其次，在遇到具体情境时，不能只停留在想法上， mà cần chủ động bắt tay vào hành động, dũng cảm đối mặt với thử thách và tích cực tìm kiếm giải pháp. 最后，只要我们能持之以恒，并与身边的人互相支持、共同进步，就一定能克服困难，取得令人满意的成果。`,
+            pinyin: `Zhēnduì zhè ge wèntí, wǒ rènwéi zài wǒmen de shēnghuó hé xuéxí zhōng yǒuzhe fēicháng zhòngyào de xiànshí yìyì. Shǒuxiān, cóng gèrén jiǎodù lái kàn, wǒmen yīngdāng míngquè zìjǐ de mùbiāo yǔ tàidù. Qícì, zài yùdào jùtǐ qíngjìng shí, yīngdāng zhǔdòng fùzhū shíjiàn. Zuìhòu, zhǐyào wǒmen néng chízhīyǐhéng, jiù yídìng néng qǔdé lìngrén mǎnyì de chéngguǒ.`,
+            meaningVi: `Đối với đề bài "${cleanQ}", tôi cho rằng câu hỏi này mang ý nghĩa thực tế rất quan trọng trong cuộc sống và học tập của chúng ta. Thứ nhất, từ góc độ cá nhân, chúng ta cần xác định rõ mục tiêu và thái độ của mình, suy nghĩ nghiêm túc về nguyên nhân. Thứ hai, khi đối diện với tình huống cụ thể, không nên chỉ dừng lại ở suy nghĩ mà cần chủ động bắt tay vào hành động, dũng cảm đối mặt với thử thách và tích cực tìm kiếm giải pháp. Cuối cùng, chỉ cần chúng ta kiên trì đến cùng và luôn hỗ trợ lẫn nhau, nhất định sẽ gặt hái được những thành quả tốt đẹp.`
+          }
+        };
+      }
     }
 
     res.json({ success: true, ...result });
   } catch (err) {
     console.error('HSKK suggest error:', err);
-    res.json({
-      success: true,
-      outline: {
-        intro: `Mở bài: Trả lời trực tiếp vào trọng tâm: "${cleanQ}".`,
-        body: [
-          `Luận điểm 1: Nêu lý do hoặc hoàn cảnh xảy ra.`,
-          `Luận điểm 2: Dẫn chứng trải nghiệm cá nhân cụ thể.`,
-          `Luận điểm 3: Đánh giá ý nghĩa và mở rộng góc nhìn.`
+    let fallbackResult = null;
+    if (level === 'so') {
+      fallbackResult = {
+        outline: {
+          intro: `Mở bài: Trả lời trực tiếp và ngắn gọn: "${cleanQ}".`,
+          body: [
+            `Luận điểm 1: Nêu lý do đơn giản vì sao bạn thích hoặc nghĩ như vậy.`,
+            `Luận điểm 2: Kể một trải nghiệm hoặc thói quen thường ngày.`,
+            `Luận điểm 3: Nêu cảm nghĩ vui vẻ, tích cực.`
+          ],
+          conclusion: "Kết bài: Tóm lại ý kiến và hy vọng vào tương lai."
+        },
+        vocabulary: [
+          { hanzi: "我觉得", pinyin: "wǒ juéde", meaning: "tôi thấy, tôi nghĩ rằng" },
+          { hanzi: "喜欢", pinyin: "xǐhuan", meaning: "thích" },
+          { hanzi: "常常", pinyin: "chángcháng", meaning: "thường xuyên" },
+          { hanzi: "高兴", pinyin: "gāoxìng", meaning: "vui vẻ" }
         ],
-        conclusion: "Kết bài: Tổng kết quan điểm và đưa ra bài học/lời khuyên."
-      },
-      vocabulary: [
-        { hanzi: "看法", pinyin: "kànfǎ", meaning: "quan điểm, góc nhìn" },
-        { hanzi: "经验", pinyin: "jīngyàn", meaning: "kinh nghiệm" },
-        { hanzi: "坚持", pinyin: "jiānchí", meaning: "kiên trì" }
-      ],
-      sentenceStructures: [
-        {
-          pattern: "在我看来，……",
-          meaning: "Theo quan điểm của tôi, ...",
-          example: `在我看来，保持积极乐观的心态最为重要。`
+        sentenceStructures: [
+          {
+            pattern: "我觉得……因为……",
+            meaning: "Tôi thấy... bởi vì...",
+            example: `我觉得这个题目很有意思，因为在日常生活中我们常常遇到。`
+          }
+        ],
+        sampleAnswer: {
+          hanzi: `关于“${cleanQ}”这个问题，我觉得很有意思。在日常生活中，我们常常会遇到这样的事情。对我来说，保持一个好心情非常重要。做事情的时候要认真，遇到不懂的问题可以多问问朋友。只要我们每天坚持，就一定能把事情做好，生活也会更加开心。`,
+          pinyin: `Guānyú zhè ge wèntí, wǒ juéde hěn yǒu yìsi. Zài rìcháng shēnghuó zhōng, wǒmen chángcháng huì yù dào zhèyàng de shìqing. Duì wǒ lái shuō, bǎochí yí gè hǎo xīnqíng fēicháng zhòngyào.`,
+          meaningVi: `Về câu hỏi "${cleanQ}", tôi thấy rất thú vị. Trong đời sống hằng ngày, chúng ta thường hay gặp những chuyện như vậy. Đối với tôi, giữ tâm trạng vui vẻ rất quan trọng. Khi làm việc gì cũng cần nghiêm túc, gặp câu hỏi khó có thể hỏi bạn bè. Chỉ cần kiên trì mỗi ngày, nhất định ta sẽ làm tốt và vui vẻ hơn.`
         }
-      ],
-      sampleAnswer: {
-        hanzi: `针对“${cleanQ}”这个问题，我认为我们应当保持积极的态度。在日常生活中，面对各种各样的挑战，唯有坚持不懈、不断学习，才能取得好成果。`,
-        pinyin: `Zhēnduì zhè ge wèntí, wǒ rènwéi wǒmen yīngdāng bǎochí jījí de tàidù.`,
-        meaningVi: `Đối với câu hỏi "${cleanQ}", tôi cho rằng chúng ta cần giữ thái độ tích cực, kiên trì không ngừng trong cuộc sống.`
-      }
-    });
+      };
+    } else if (level === 'cao') {
+      fallbackResult = {
+        outline: {
+          intro: `Mở bài: Đặt vấn đề sâu sắc trong bối cảnh xã hội hiện đại cho chủ đề: "${cleanQ}". Khẳng định tầm quan trọng và đưa ra luận điểm cốt lõi bao quát.`,
+          body: [
+            `Luận điểm 1: Mổ xẻ bản chất và căn nguyên sâu xa của vấn đề (về mặt nhận thức cá nhân và tác động đa chiều từ môi trường sống).`,
+            `Luận điểm 2: Đưa ra dẫn chứng thực tiễn điển hình có sức nặng thuyết phục (phân tích sự tương phản giữa kiên trì vượt khó và tâm lý thoái thác).`,
+            `Luận điểm 3: Đề xuất hệ thống giải pháp chiến lược toàn diện (kết hợp kỷ luật tự thân với sự hỗ trợ từ gia đình, tổ chức và xã hội).`
+          ],
+          conclusion: "Kết bài: Nâng tầm vấn đề thành bài học triết lý sống và thông điệp hành động mạnh mẽ, truyền cảm hứng dài hạn."
+        },
+        vocabulary: [
+          { hanzi: "立足当下", pinyin: "lìzú dāngxià", meaning: "đứng vững ở hiện tại" },
+          { hanzi: "深谋远虑", pinyin: "shēnmóu yuǎnlǜ", meaning: "lo xa nghĩ sâu, tầm nhìn chiến lược" },
+          { hanzi: "持之以恒", pinyin: "chí zhī yǐ héng", meaning: "kiên trì bền bỉ không ngừng nghỉ" },
+          { hanzi: "潜移默化", pinyin: "qián yí mò huà", meaning: "ảnh hưởng sâu sắc ngấm dần" },
+          { hanzi: "收益匪浅", pinyin: "shòuyì fěiqiǎn", meaning: "thu hoạch được vô vàn điều bổ ích" }
+        ],
+        sentenceStructures: [
+          {
+            pattern: "不仅在于……，更关键的在于……",
+            meaning: "Không chỉ nằm ở chỗ..., mà mấu chốt hơn là nằm ở...",
+            example: `探讨这个问题的价值，不仅在于理清表象，更关键的在于寻找切实行之有效的破局之道。`
+          }
+        ],
+        sampleAnswer: {
+          hanzi: `针对“${cleanQ}”这一极具现实意义的深刻命题，我认为它不仅关乎我们每个人的个体成长，更折射出现代社会中普遍存在的价值取向与处事哲学。在纷繁复杂的生活与职场环境中，如何正确审视并妥善应对这一课题，值得我们深思熟虑。\n\n首先，从认知层面来看，面对纷至沓来的挑战，我们首先应当厘清问题的本质所在，既不能因暂时的波折而妄自菲薄，亦不可盲目乐观而浅尝辄止。唯有树立清晰宏阔的目标导向，将长远愿景细化为扎实可行的阶段性规划，方能做到心中有数、行有方向。\n\n其次，从实践与知行合一的角度而言，纸上谈兵终究无济于事，关键在于付诸持之以恒的切实行动。以我们日常求知与奋斗为例，任何一项专业技能的精通或心智的磨砺，无不经历漫长而枯燥的积累过程，正所谓“不积跬步，无以至千里”。在此期间，保持专注与定力、勇敢突破舒适圈，敢于在试错中反思与总结，方能实现认知与能力的飞跃。\n\n再者，除了依赖个体强烈的内驱力之外，融洽的人际协作与开放包容的生态氛围亦是不可或缺的外部支撑。懂得倾听他山之石、主动构建良性互动的合作机制，往往能激发出“独行快，众行远”的倍增效应。\n\n总而言之，“行百里者半九十”。面对这一课题，我们唯有立足当下、深谋远虑，将坚毅的意志品质与科学的行事方法有机结合，在时代洪流中砥砺前行，方能攻坚克难，开辟出属于自己的广阔天地。`,
+          pinyin: `Zhēnduì zhè yí jùyǒu xiànshí yìyì de shēnkè mìngtí, wǒ rènwéi tā bùjǐn guānhū wǒmen měi gè rén de gètǐ chéngzhǎng...`,
+          meaningVi: `Đối với đề bài mang tính thời sự và sâu sắc "${cleanQ}", tôi cho rằng câu hỏi này không chỉ liên quan mật thiết đến sự trưởng thành của mỗi cá nhân, mà còn phản ánh hệ giá trị và triết lý sống phổ quát trong xã hội hiện đại...`
+        }
+      };
+    } else {
+      fallbackResult = {
+        outline: {
+          intro: `Mở bài: Trả lời trực tiếp vào trọng tâm: "${cleanQ}".`,
+          body: [
+            `Luận điểm 1: Nêu lý do hoặc hoàn cảnh xảy ra.`,
+            `Luận điểm 2: Dẫn chứng trải nghiệm cá nhân cụ thể.`,
+            `Luận điểm 3: Đánh giá ý nghĩa và mở rộng góc nhìn.`
+          ],
+          conclusion: "Kết bài: Tổng kết quan điểm và đưa ra bài học/lời khuyên."
+        },
+        vocabulary: [
+          { hanzi: "看法", pinyin: "kànfǎ", meaning: "quan điểm, góc nhìn" },
+          { hanzi: "经验", pinyin: "jīngyàn", meaning: "kinh nghiệm" },
+          { hanzi: "坚持", pinyin: "jiānchí", meaning: "kiên trì" }
+        ],
+        sentenceStructures: [
+          {
+            pattern: "在我看来，……",
+            meaning: "Theo quan điểm của tôi, ...",
+            example: `在我看来，保持积极乐观的心态最为重要。`
+          }
+        ],
+        sampleAnswer: {
+          hanzi: `针对“${cleanQ}”这个问题，我认为我们应当保持积极的态度。在日常生活中，面对各种各样的挑战，唯有坚持不懈、不断学习，才能取得好成果。`,
+          pinyin: `Zhēnduì zhè ge wèntí, wǒ rènwéi wǒmen yīngdāng bǎochí jījí de tàidù.`,
+          meaningVi: `Đối với câu hỏi "${cleanQ}", tôi cho rằng chúng ta cần giữ thái độ tích cực, kiên trì không ngừng trong cuộc sống.`
+        }
+      };
+    }
+    res.json({ success: true, ...fallbackResult });
   }
 });
 

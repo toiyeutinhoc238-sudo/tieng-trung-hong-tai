@@ -739,15 +739,19 @@ class ReadingPracticeApp {
     });
     if (pinyinMatch) return pinyinMatch;
 
-    // 4. Starts with Hanzi
-    const prefixMatch = Object.values(this.vocabDict).find(entry => entry.word.startsWith(cleanQ) || cleanQ.startsWith(entry.word));
-    if (prefixMatch) return prefixMatch;
+    // 4. Starts with Hanzi (only for 2+ characters to prevent single character grabbing arbitrary words)
+    if (cleanQ.length >= 2) {
+      const prefixMatch = Object.values(this.vocabDict).find(entry => entry.word && entry.word.startsWith(cleanQ));
+      if (prefixMatch) return prefixMatch;
+    }
 
-    // 5. Pinyin startsWith
-    const pinyinPrefixMatch = Object.values(this.vocabDict).find(entry => {
-      return this.normalizePinyin(entry.pinyin).startsWith(normQ);
-    });
-    if (pinyinPrefixMatch) return pinyinPrefixMatch;
+    // 5. Pinyin startsWith (at least 2 chars)
+    if (normQ.length >= 2) {
+      const pinyinPrefixMatch = Object.values(this.vocabDict).find(entry => {
+        return entry.pinyin && this.normalizePinyin(entry.pinyin).startsWith(normQ);
+      });
+      if (pinyinPrefixMatch) return pinyinPrefixMatch;
+    }
 
     return null;
   }
@@ -775,7 +779,7 @@ class ReadingPracticeApp {
         ...(this.currentArticle.idioms || []),
         ...(this.currentArticle.fixed_phrases || [])
       ];
-      const match = allNotes.find(n => n.word === cleanWord || n.word.includes(cleanWord) || cleanWord.includes(n.word));
+      const match = allNotes.find(n => n.word === cleanWord || (cleanWord.length > 1 && (n.word.includes(cleanWord) || cleanWord.includes(n.word))));
       if (match) {
         entry = {
           word: match.word,
@@ -789,12 +793,14 @@ class ReadingPracticeApp {
       }
     }
 
+    const posWords = ['Danh từ', 'Động từ', 'Tính từ', 'Phó từ', 'Đại từ', 'Lượng từ', 'Giới từ', 'Liên từ', 'Trợ từ', 'Thán từ', 'Số từ'];
     if (!entry && tokenMeta && (tokenMeta.pinyin || tokenMeta.meaning)) {
+      const isPos = posWords.includes(tokenMeta.meaning?.trim());
       entry = {
         word: cleanWord,
         pinyin: tokenMeta.pinyin,
-        meaning: tokenMeta.meaning || 'Nghĩa từ vựng trong bài đọc',
-        pos: 'Từ vựng',
+        meaning: isPos ? 'Đang tra nghĩa...' : (tokenMeta.meaning || 'Nghĩa từ vựng trong bài đọc'),
+        pos: isPos ? tokenMeta.meaning : 'Từ vựng',
         level: this.currentArticle?.level || 'HSK'
       };
     }
@@ -820,10 +826,41 @@ class ReadingPracticeApp {
       entry = {
         word: cleanWord,
         pinyin: tokenMeta?.pinyin || '',
-        meaning: 'Đang cập nhật nghĩa từ vựng...',
+        meaning: 'Đang tra cứu từ điển...',
         pos: 'Hán tự',
         level: 'Mở rộng'
       };
+    }
+
+    // Call backend dictionary lookup if meaning is incomplete or missing
+    if (!entry.meaning || entry.meaning.includes('Đang') || entry.pos === 'Từ ghép') {
+      fetch('/api/dict/lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ word: cleanWord })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.success && this.activeInspectedWord === cleanWord) {
+          if (data.meaning) {
+            const meanEl = document.getElementById('rd-insp-meaning');
+            if (meanEl) meanEl.textContent = data.meaning;
+            entry.meaning = data.meaning;
+          }
+          if (data.pinyin) {
+            const pyEl = document.getElementById('rd-insp-py');
+            if (pyEl && (!entry.pinyin || entry.pinyin === cleanWord)) {
+              pyEl.textContent = `[${data.pinyin}]`;
+              entry.pinyin = data.pinyin;
+            }
+          }
+          if (data.hskLevel) {
+            const levelEl = document.getElementById('rd-insp-level');
+            if (levelEl) levelEl.textContent = data.hskLevel;
+          }
+        }
+      })
+      .catch(() => {});
     }
 
     // 1. Update Sidebar Live Inspector Card
