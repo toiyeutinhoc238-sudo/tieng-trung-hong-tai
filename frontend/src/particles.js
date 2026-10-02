@@ -32,6 +32,7 @@ function getGlobalEngine() {
 }
 
 export function initSeasonalParticles() {
+  if (window.self !== window.top) return;
   const engine = getGlobalEngine();
 
   // If already initialized and running, do nothing

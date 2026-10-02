@@ -1763,6 +1763,14 @@ function selectSmartSubDeck(subDeckId) {
 }
 
 function startStudySession(status, level, title, desc) {
+  if (!currentUser && (!window.isUserLoggedIn || !window.isUserLoggedIn())) {
+    if (window.openLoginPrompt) {
+      window.openLoginPrompt('bắt đầu học Flashcard', () => startStudySession(status, level, title, desc));
+    } else if (window.openAuthRequiredModal) {
+      window.openAuthRequiredModal();
+    }
+    return;
+  }
   // Set filters
   activeStatus = status;
   activeLevel = level;
@@ -4816,6 +4824,14 @@ function generateExam(level, setNumber) {
 }
 
 function switchTab(tabId, skipShowTopics = false) {
+  if ((tabId === 'custom' || tabId === 'exams') && !currentUser && (!window.isUserLoggedIn || !window.isUserLoggedIn())) {
+    if (window.openLoginPrompt) {
+      window.openLoginPrompt(tabId === 'custom' ? 'mở Sổ tay từ vựng' : 'vào khu vực Đề thi thử HSK', () => switchTab(tabId, skipShowTopics));
+    } else if (window.openAuthRequiredModal) {
+      window.openAuthRequiredModal();
+    }
+    return;
+  }
   if (tabId !== 'flashcards' && typeof isFlashcardFullscreen !== 'undefined' && isFlashcardFullscreen) {
     window.exitFlashcardFullscreen(true);
   }
@@ -6475,6 +6491,14 @@ window.filterExamLibrary = function (btn, level) {
 
 
 function startExam(level, setNumber) {
+  if (!currentUser && (!window.isUserLoggedIn || !window.isUserLoggedIn())) {
+    if (window.openLoginPrompt) {
+      window.openLoginPrompt('làm bài thi thử HSK', () => startExam(level, setNumber));
+    } else if (window.openAuthRequiredModal) {
+      window.openAuthRequiredModal();
+    }
+    return;
+  }
   currentExamLevel = level;
   currentExamSet = setNumber;
   currentExamQuestions = generateExam(level, setNumber);
@@ -8074,6 +8098,14 @@ if (!window._extraVideoGlobalListenersAttached) {
 }
 
 window.openLessonDetailModal = function (lessonKey) {
+  if (!currentUser && (!window.isUserLoggedIn || !window.isUserLoggedIn())) {
+    if (window.openLoginPrompt) {
+      window.openLoginPrompt('vào bài học Lộ trình', () => window.openLessonDetailModal(lessonKey));
+    } else if (window.openAuthRequiredModal) {
+      window.openAuthRequiredModal();
+    }
+    return;
+  }
   const currentLvl = activeLessonsCurriculum === 'yct' ? activeYctLevel : activeLessonsLevel;
   const levelVocabs = vocabList.filter(w => {
     if (w.isCustom) return false;
@@ -14388,6 +14420,14 @@ function startDirectTypingSession(words) {
 
 // 7. MULTIPLE-CHOICE QUIZ GAME ENGINE
 function startQuizSession() {
+  if (!currentUser && (!window.isUserLoggedIn || !window.isUserLoggedIn())) {
+    if (window.openLoginPrompt) {
+      window.openLoginPrompt('làm Quiz trắc nghiệm', () => startQuizSession());
+    } else if (window.openAuthRequiredModal) {
+      window.openAuthRequiredModal();
+    }
+    return;
+  }
   let words = getNotebookWords(activeNotebook);
 
   // Apply HSK / YCT / Hán ngữ lesson filters if selected
@@ -14965,6 +15005,14 @@ function startGameArenaFromNotebook() {
 }
 
 window.openNotebookGamesHub = function (customWords, customTitle, customDesc) {
+  if (!currentUser && (!window.isUserLoggedIn || !window.isUserLoggedIn())) {
+    if (window.openLoginPrompt) {
+      window.openLoginPrompt('chơi Đấu trường Game', () => window.openNotebookGamesHub(customWords, customTitle, customDesc));
+    } else if (window.openAuthRequiredModal) {
+      window.openAuthRequiredModal();
+    }
+    return;
+  }
   let words = customWords;
   if (!words || words.length < 2) {
     if (activeNotebook) {

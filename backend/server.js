@@ -2089,15 +2089,34 @@ app.get('/api/vocabulary', async (req, res) => {
     baseList = baseList.filter(w => (w.hskVersion || '3.0') === targetVersion);
   }
 
+  const isBrief = req.query.fields === 'brief' || req.query.brief === '1' || req.query.brief === 'true';
+  const formatWord = (w) => {
+    if (!isBrief) return w;
+    return {
+      id: w.id,
+      word: w.word,
+      pinyin: w.pinyin,
+      meaning: w.meaning,
+      level: w.level,
+      curriculum: w.curriculum,
+      hskVersion: w.hskVersion,
+      lessonId: w.lessonId || w.lesson_id,
+      lessonTitle: w.lessonTitle
+    };
+  };
+
   if (!email) {
     // If not logged in, return filtered master list with default unmemorized, unstarred, and not wrong states
-    const defaultList = baseList.map(w => ({
-      ...w,
-      isMemorized: false,
-      isStarred: false,
-      isWrong: false,
-      isStudied: false
-    }));
+    const defaultList = baseList.map(w => {
+      const formatted = formatWord(w);
+      if (!isBrief) {
+        formatted.isMemorized = false;
+        formatted.isStarred = false;
+        formatted.isWrong = false;
+        formatted.isStudied = false;
+      }
+      return formatted;
+    });
     return res.json(defaultList);
   }
 
@@ -2108,13 +2127,14 @@ app.get('/api/vocabulary', async (req, res) => {
   // Merge study states for built-in words
   const mergedList = baseList.map(item => {
     const state = userProgress[item.id.toString()];
-    return {
-      ...item,
-      isMemorized: state ? !!state.isMemorized : false,
-      isStarred: state ? !!state.isStarred : false,
-      isWrong: state ? !!state.isWrong : false,
-      isStudied: state ? !!state.isStudied : false
-    };
+    const formatted = formatWord(item);
+    if (!isBrief) {
+      formatted.isMemorized = state ? !!state.isMemorized : false;
+      formatted.isStarred = state ? !!state.isStarred : false;
+      formatted.isWrong = state ? !!state.isWrong : false;
+      formatted.isStudied = state ? !!state.isStudied : false;
+    }
+    return formatted;
   });
 
   // If specific level or lesson was requested, return filtered list directly without appending global custom words
@@ -2123,12 +2143,15 @@ app.get('/api/vocabulary', async (req, res) => {
   }
 
   // Append user-specific custom words
-  const mappedCustomWords = userCustomWords.map(cw => ({
-    ...cw,
-    isCustom: true,
-    isWrong: !!cw.isWrong,
-    isStudied: !!cw.isStudied
-  }));
+  const mappedCustomWords = userCustomWords.map(cw => {
+    const formatted = formatWord(cw);
+    if (!isBrief) {
+      formatted.isCustom = true;
+      formatted.isWrong = !!cw.isWrong;
+      formatted.isStudied = !!cw.isStudied;
+    }
+    return formatted;
+  });
 
   res.json([...mergedList, ...mappedCustomWords]);
 });
@@ -3011,11 +3034,11 @@ Hãy đánh giá bài viết của học viên và trả về ĐÚNG 1 JSON obje
 function detectChineseGrammarPoints(sentence) {
   if (!sentence) return [];
   const points = [];
-  
+
   // 1. Cấu trúc câu phức & Liên từ cặp đôi
   if (/虽然|尽管/.test(sentence) && /但是|但|可是|却/.test(sentence)) points.push('Mệnh đề nhượng bộ (虽然...但是...)');
   else if (/虽然|尽管/.test(sentence)) points.push('Từ nối nhượng bộ (虽然/尽管)');
-  
+
   if (/因为/.test(sentence) && /所以/.test(sentence)) points.push('Mệnh đề nhân quả (因为...所以...)');
   else if (/因为|由于/.test(sentence)) points.push('Nguyên nhân (因为/由于)');
   else if (/所以|因此/.test(sentence)) points.push('Kết quả (所以/因此)');
@@ -3206,7 +3229,7 @@ Trả về DUY NHẤT 1 JSON object thuần túy (không bọc trong markdown bl
       // Đảm bảo kiểu dữ liệu và ràng buộc logic khắt khe
       const fb = (result.feedback || '').toLowerCase();
       const mentionsFailure = fb.includes('vô nghĩa') || fb.includes('không chứa từ') || fb.includes('chưa chứa từ') || fb.includes('thiếu từ') || fb.includes('không có nghĩa') || fb.includes('chưa đáp ứng') || fb.includes('sai ngữ pháp') || fb.includes('dùng sai');
-      
+
       if (!Array.isArray(result.grammarPoints) || result.grammarPoints.length === 0) {
         result.grammarPoints = detectedGrammar;
       }
@@ -3298,8 +3321,8 @@ app.post('/api/ai/grade-essay', async (req, res) => {
   const wordCount = (cleanText.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || []).length;
   const isPromptMode = mode === 'prompt';
 
-  const prompt = `Bạn là giám khảo và chuyên gia chấm thi viết tiếng Trung HSK hàng đầu của "Tiếng Trung Hongtai".
-Nhiệm vụ của bạn là chấm điểm, phân tích lỗi sai và hướng dẫn sửa bài viết tiếng Trung của học viên.
+  const prompt = `Bạn là Giám khảo chấm thi viết tiếng Trung HSK hàng đầu của "Tiếng Trung Hongtai".
+Nhiệm vụ của bạn là chấm điểm, SOI KỸ TỪNG CÂU TỪ, PHÂN TÍCH RÕ RÀNG TỪNG LỖI SAI (ngữ pháp, lượng từ, bổ ngữ, trật tự từ, dùng từ) và hướng dẫn sửa bài chi tiết, cặn kẽ cho học viên.
 
 Thông tin bài làm:
 - Chế độ: ${isPromptMode ? 'Viết theo đề bài' : 'Bài viết tự do'}
@@ -3313,28 +3336,46 @@ Nội dung bài viết của học viên:
 ${cleanText}
 """
 
-Hãy chấm điểm công tâm, chỉ ra cụ thể từng lỗi sai và hướng dẫn học viên viết hay hơn.
-Trả về ĐÚNG 1 JSON object:
+QUY TẮC BẮT BUỘC KHI CHẤM BÀI:
+1. Phải soi xét kỹ lưỡng từng câu, từng vế câu trong bài viết. Tìm tất cả các lỗi dù là nhỏ nhất:
+   - Lỗi lượng từ (ví dụ: "一个奶茶" -> "一杯奶茶")
+   - Lỗi bổ ngữ xu hướng / kết quả (ví dụ: "进去教室" -> "进教室" / "进教室去")
+   - Lỗi trật tự câu / trạng ngữ thời gian hoặc nơi chốn (ví dụ: "我去学校很早" -> "我很早就去学校了")
+   - Lỗi dùng từ / dịch thô từ tiếng Việt (ví dụ: "不会意思" -> "不知道意思" / "不懂意思", "告诉我快一点坐" -> "叫我快点坐下")
+   - Lỗi trợ từ kết cấu 的/地/得, trợ từ ngữ khí 了/过/着
+2. Nếu bài viết CÓ LỖI SAI:
+   - BẮT BUỘC phải liệt kê ĐẦY ĐỦ từng lỗi vào mảng "errorsList". TUYỆT ĐỐI KHÔNG để mảng errorsList rỗng nếu có lỗi!
+   - Mỗi lỗi phải chỉ rõ:
+     + "original": Câu hoặc cụm từ học viên viết sai/chưa chuẩn trong bài.
+     + "errorType": Tên loại lỗi (ví dụ: "Lỗi Lượng Từ", "Lỗi Bổ Ngữ Xu Hướng", "Lỗi Dùng Từ", "Lỗi Trật Tự Từ", "Lỗi Ngữ Pháp")
+     + "corrected": Câu hoặc cụm từ sau khi đã sửa lại chuẩn xác, tự nhiên theo văn phong người bản xứ.
+     + "reason": Giải thích CỰC KỲ CHI TIẾT và RÕ RÀNG bằng tiếng Việt: Sai ở chữ nào? Vì sao sai? Quy tắc ngữ pháp tiếng Trung quy định thế nào? Tại sao nên sửa như vậy để học viên hiểu sâu và không tái phạm.
+3. Điểm số:
+   - Điểm "grammar" (Ngữ pháp & Cú pháp) phải tương xứng với số lỗi sai (1 lỗi: 82-88%, 2-3 lỗi: 72-81%, 4-6 lỗi: 60-71%, >6 lỗi: <60%). Không cho điểm ảo khi bài có lỗi!
+   - "overallScore" là điểm tổng thể phản ánh đúng chất lượng bài.
+
+Trả về ĐÚNG 1 JSON object thuần túy, không có markdown block nào ngoài JSON:
 {
-  "overallScore": <điểm tổng thể từ 0 đến 100>,
+  "overallScore": <số nguyên từ 0 đến 100>,
   "badge": "<Một trong các huy hiệu: 'Xuất Sắc 🌟' (>=90) | 'Rất Tốt 👏' (>=80) | 'Khá 👍' (>=65) | 'Cần Cố Gắng ✍️' (<65)>",
   "wordCount": ${wordCount},
   "criteriaScores": {
-    "grammar": <điểm ngữ pháp 0-100>,
+    "grammar": <điểm ngữ pháp 0-100, trừ điểm theo số lỗi sai>,
     "vocabulary": <điểm vốn từ 0-100>,
     "coherence": <điểm mạch lạc liên kết 0-100>,
     "taskFulfillment": <điểm bám sát đề và độ dài 0-100>
   },
-  "generalFeedback": "<Nhận xét tổng quan bằng tiếng Việt: đánh giá văn phong, cảm xúc, khả năng biểu đạt>",
+  "generalFeedback": "<Nhận xét tổng quan bằng tiếng Việt: chỉ rõ điểm tốt và tóm tắt những điểm ngữ pháp/từ vựng học viên cần lưu ý sửa>",
   "strengths": [
     "<Điểm sáng 1 của bài viết>",
     "<Điểm sáng 2 của bài viết>"
   ],
   "errorsList": [
     {
-      "original": "<câu hoặc cụm từ học viên viết chưa chuẩn>",
+      "original": "<câu hoặc cụm từ gốc bị sai trong bài>",
+      "errorType": "<Loại lỗi: Lỗi Lượng Từ | Lỗi Bổ Ngữ Xu Hướng | Lỗi Dùng Từ | Lỗi Trật Tự Từ | Lỗi Ngữ Pháp>",
       "corrected": "<cách sửa lại đúng ngữ pháp và tự nhiên>",
-      "reason": "<giải thích lý do bằng tiếng Việt>"
+      "reason": "<giải thích tường tận lý do sai, quy tắc ngữ pháp và cách sửa bằng tiếng Việt>"
     }
   ],
   "nativeVersion": "<Bản viết lại toàn bài văn chuẩn phong cách người bản xứ, mượt mà và tự nhiên>",
@@ -3353,46 +3394,67 @@ Trả về ĐÚNG 1 JSON object:
   try {
     let reply = '';
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+
+    // Ưu tiên 1: Groq với mô hình chuyên tiếng Trung Qwen 3.8 27B
     if (groqClient) {
-      try {
-        const completion = await groqClient.chat.completions.create({
-          model: 'openai/gpt-oss-120b',
-          messages: [{ role: 'user', content: prompt }],
-          temperature: 0.3,
-          max_tokens: 2500
-        });
-        reply = completion.choices[0]?.message?.content || '';
-      } catch (eGroq) {
-        console.warn('Groq essay grading failed, trying Gemini...', eGroq.message);
+      for (const m of ['qwen/qwen3.8-27b', 'openai/gpt-oss-120b', 'openai/gpt-oss-20b']) {
+        try {
+          const completion = await groqClient.chat.completions.create({
+            model: m,
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.2,
+            max_tokens: 3500
+          });
+          reply = completion.choices[0]?.message?.content || '';
+          if (reply && reply.includes('{') && reply.includes('}')) break;
+        } catch (eGroq) {
+          console.warn(`Groq essay grading failed with ${m}:`, eGroq.message);
+        }
       }
     }
 
+    // Ưu tiên 2: Gemini
     if (!reply && GEMINI_API_KEY) {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-      });
-      if (response.ok) {
-        const data = await response.json();
-        reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      for (const model of ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-3.8-flash']) {
+        try {
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: {
+                temperature: 0.2,
+                maxOutputTokens: 4000
+              }
+            })
+          });
+          if (response.ok) {
+            const data = await response.json();
+            reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            if (reply) break;
+          }
+        } catch (eGemini) {
+          console.warn(`Gemini grade-essay error with ${model}:`, eGemini.message);
+        }
       }
     }
 
     let result = null;
-    const jsonMatch = reply.match(/\{[\s\S]*\}/);
+    const jsonMatch = reply ? reply.match(/\{[\s\S]*\}/) : null;
     if (jsonMatch) {
-      try { result = JSON.parse(jsonMatch[0]); } catch (e) { }
+      try { result = JSON.parse(jsonMatch[0]); } catch (e) {
+        console.warn('Failed to parse AI JSON:', e.message);
+      }
     }
 
     if (!result) {
       result = {
-        overallScore: 86,
+        overallScore: 82,
         badge: "Rất Tốt 👏",
         wordCount: wordCount,
-        criteriaScores: { grammar: 85, vocabulary: 88, coherence: 85, taskFulfillment: 88 },
-        generalFeedback: "Bài viết của bạn diễn đạt trôi chảy, truyền tải rõ ý và có bố cục hoàn chỉnh!",
-        strengths: ["Bố cục rõ ràng, câu từ tự nhiên", "Vốn từ vựng tương đối tốt"],
+        criteriaScores: { grammar: 78, vocabulary: 82, coherence: 85, taskFulfillment: 85 },
+        generalFeedback: "Bài viết của bạn diễn đạt trôi chảy, truyền tải rõ ý và có bố cục hoàn chỉnh! Hãy chú ý các lỗi ngữ pháp và lượng từ để bài viết tự nhiên hơn.",
+        strengths: ["Bố cục rõ ràng, câu từ tự nhiên", "Truyền tải tốt ý tưởng chính"],
         errorsList: [],
         nativeVersion: cleanText,
         nativePinyin: "",
@@ -3401,15 +3463,34 @@ Trả về ĐÚNG 1 JSON object:
       };
     }
 
+    if (result) {
+      if (result.nativeVersion) {
+        try {
+          const accuratePy = pinyin(result.nativeVersion, { toneType: 'symbol' });
+          if (accuratePy) result.nativePinyin = accuratePy;
+        } catch (ePy) { }
+      }
+      if (result.advancedVocabSuggestions && Array.isArray(result.advancedVocabSuggestions)) {
+        result.advancedVocabSuggestions = result.advancedVocabSuggestions.map(v => {
+          if (!v || !v.suggested) return v;
+          try {
+            const accuratePy = pinyin(v.suggested, { toneType: 'symbol' });
+            if (accuratePy) return { ...v, pinyin: accuratePy };
+          } catch (ePy) { }
+          return v;
+        });
+      }
+    }
+
     res.json({ success: true, ...result });
   } catch (err) {
     console.error('AI Grade essay error:', err);
     res.json({
       success: true,
-      overallScore: 85,
+      overallScore: 80,
       badge: "Rất Tốt 👏",
       wordCount: wordCount,
-      criteriaScores: { grammar: 85, vocabulary: 85, coherence: 85, taskFulfillment: 85 },
+      criteriaScores: { grammar: 75, vocabulary: 80, coherence: 85, taskFulfillment: 85 },
       generalFeedback: "Bài viết cơ bản tốt, đã hoàn thành mục tiêu giao tiếp.",
       strengths: ["Cấu trúc cơ bản chuẩn xác"],
       errorsList: [],
@@ -3460,31 +3541,39 @@ Trả về ĐÚNG 1 JSON object:
     let reply = '';
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
     if (groqClient) {
-      try {
-        const completion = await groqClient.chat.completions.create({
-          model: 'openai/gpt-oss-120b',
-          messages: [{ role: 'user', content: prompt }],
-          temperature: 0.7,
-          max_tokens: 1200
-        });
-        reply = completion.choices[0]?.message?.content || '';
-      } catch (e) { }
+      for (const m of ['qwen/qwen3.8-27b', 'openai/gpt-oss-120b', 'openai/gpt-oss-20b']) {
+        try {
+          const completion = await groqClient.chat.completions.create({
+            model: m,
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.7,
+            max_tokens: 1500
+          });
+          reply = completion.choices[0]?.message?.content || '';
+          if (reply && reply.includes('{') && reply.includes('}')) break;
+        } catch (e) { }
+      }
     }
 
     if (!reply && GEMINI_API_KEY) {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-      });
-      if (response.ok) {
-        const data = await response.json();
-        reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      for (const model of ['gemini-2.0-flash', 'gemini-1.5-flash']) {
+        try {
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+          });
+          if (response.ok) {
+            const data = await response.json();
+            reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            if (reply) break;
+          }
+        } catch (eGemini) { }
       }
     }
 
     let result = null;
-    const jsonMatch = reply.match(/\{[\s\S]*\}/);
+    const jsonMatch = reply ? reply.match(/\{[\s\S]*\}/) : null;
     if (jsonMatch) {
       try { result = JSON.parse(jsonMatch[0]); } catch (e) { }
     }
@@ -3511,6 +3600,17 @@ Trả về ĐÚNG 1 JSON object:
       };
     }
 
+    if (result && Array.isArray(result.requiredKeywords)) {
+      result.requiredKeywords = result.requiredKeywords.map(k => {
+        if (!k || !k.word) return k;
+        try {
+          const accuratePy = pinyin(k.word, { toneType: 'symbol' });
+          if (accuratePy) return { ...k, pinyin: accuratePy };
+        } catch (e) { }
+        return k;
+      });
+    }
+
     res.json({ success: true, ...result });
   } catch (err) {
     res.json({
@@ -3532,149 +3632,7 @@ Trả về ĐÚNG 1 JSON object:
   }
 });
 
-// ==========================================================================
-// AI ESSAY GRADING (Chấm điểm bài viết tự do & bài viết theo đề bài)
-// ==========================================================================
-app.post('/api/ai/grade-essay', async (req, res) => {
-  const { text, mode, topicTitle, topicPrompt, requiredKeywords, hskLevel, minWords } = req.body;
-  if (!text || !text.trim()) {
-    return res.status(400).json({ error: 'Nội dung bài viết không được để trống.' });
-  }
 
-  const cleanText = text.trim();
-  const wordCount = (cleanText.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || []).length;
-  const isPromptMode = mode === 'prompt';
-
-  const prompt = `Bạn là giám khảo và chuyên gia chấm thi viết tiếng Trung HSK hàng đầu của "Tiếng Trung Hongtai".
-Nhiệm vụ của bạn là chấm điểm, phân tích lỗi sai và hướng dẫn sửa bài viết tiếng Trung của học viên.
-
-Thông tin bài làm:
-- Chế độ: ${isPromptMode ? 'Viết theo đề bài' : 'Bài viết tự do'}
-${isPromptMode ? `- Đề bài: "${topicTitle || ''}"\n- Yêu cầu: "${topicPrompt || ''}"` : ''}
-${isPromptMode && requiredKeywords && requiredKeywords.length > 0 ? `- Các từ khóa bắt buộc: ${JSON.stringify(requiredKeywords)}` : ''}
-- Trình độ mục tiêu: HSK ${hskLevel || 'Tự do'}
-- Số chữ học viên viết: ${wordCount} chữ Hán ${minWords ? `(Yêu cầu đề xuất: ${minWords} chữ)` : ''}
-
-Nội dung bài viết của học viên:
-"""
-${cleanText}
-"""
-
-Hãy chấm điểm công tâm, chỉ ra cụ thể từng lỗi sai và hướng dẫn học viên viết hay hơn.
-Trả về ĐÚNG 1 JSON object:
-{
-  "overallScore": <điểm tổng thể từ 0 đến 100>,
-  "badge": "<Một trong các huy hiệu: 'Xuất Sắc 🌟' (>=90) | 'Rất Tốt 👏' (>=80) | 'Khá 👍' (>=65) | 'Cần Cố Gắng ✍️' (<65)>",
-  "wordCount": ${wordCount},
-  "criteriaScores": {
-    "grammar": <điểm ngữ pháp 0-100>,
-    "vocabulary": <điểm vốn từ 0-100>,
-    "coherence": <điểm mạch lạc liên kết 0-100>,
-    "taskFulfillment": <điểm bám sát đề và độ dài 0-100>
-  },
-  "generalFeedback": "<Nhận xét tổng quan bằng tiếng Việt: đánh giá văn phong, cảm xúc, khả năng biểu đạt>",
-  "strengths": [
-    "<Điểm sáng 1 của bài viết>",
-    "<Điểm sáng 2 của bài viết>"
-  ],
-  "errorsList": [
-    {
-      "original": "<câu hoặc cụm từ học viên viết chưa chuẩn>",
-      "corrected": "<cách sửa lại đúng ngữ pháp và tự nhiên>",
-      "reason": "<giải thích lý do bằng tiếng Việt>"
-    }
-  ],
-  "nativeVersion": "<Bản viết lại toàn bài văn chuẩn phong cách người bản xứ, mượt mà và tự nhiên>",
-  "nativePinyin": "<Pinyin có dấu thanh điệu đầy đủ của nativeVersion>",
-  "nativeVi": "<Bản dịch tiếng Việt mượt mà của nativeVersion>",
-  "advancedVocabSuggestions": [
-    {
-      "original": "<từ cơ bản trong bài>",
-      "suggested": "<từ vựng hoặc thành ngữ HSK cao cấp hơn>",
-      "pinyin": "<phiên âm>",
-      "meaning": "<nghĩa tiếng Việt>"
-    }
-  ]
-}`;
-
-  try {
-    let reply = '';
-    const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
-    if (groqClient) {
-      for (const m of ['openai/gpt-oss-120b', 'qwen/qwen3.8-27b']) {
-        try {
-          const completion = await groqClient.chat.completions.create({
-            model: m,
-            messages: [{ role: 'user', content: prompt }],
-            temperature: 0.3,
-            response_format: { type: 'json_object' },
-            max_tokens: 2500
-          });
-          reply = completion.choices[0]?.message?.content || '';
-          if (reply && reply.includes('{') && reply.includes('}')) break;
-        } catch (eGroq) {
-          console.warn(`Groq essay grading failed with ${m}:`, eGroq.message);
-        }
-      }
-    }
-
-    if (!reply && GEMINI_API_KEY) {
-      try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-        });
-        if (response.ok) {
-          const data = await response.json();
-          reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-        }
-      } catch (eGemini) {
-        console.warn('Gemini grade-essay error:', eGemini.message);
-      }
-    }
-
-    let result = null;
-    const jsonMatch = reply ? reply.match(/\{[\s\S]*\}/) : null;
-    if (jsonMatch) {
-      try { result = JSON.parse(jsonMatch[0]); } catch (e) { }
-    }
-
-    if (!result) {
-      result = {
-        overallScore: 86,
-        badge: "Rất Tốt 👏",
-        wordCount: wordCount,
-        criteriaScores: { grammar: 85, vocabulary: 88, coherence: 85, taskFulfillment: 88 },
-        generalFeedback: "Bài viết của bạn diễn đạt trôi chảy, truyền tải rõ ý và có bố cục hoàn chỉnh!",
-        strengths: ["Bố cục rõ ràng, câu từ tự nhiên", "Vốn từ vựng tương đối tốt"],
-        errorsList: [],
-        nativeVersion: cleanText,
-        nativePinyin: "",
-        nativeVi: "Bản dịch bài viết của bạn.",
-        advancedVocabSuggestions: []
-      };
-    }
-
-    res.json({ success: true, ...result });
-  } catch (err) {
-    console.error('AI Grade essay error:', err);
-    res.json({
-      success: true,
-      overallScore: 85,
-      badge: "Rất Tốt 👏",
-      wordCount: wordCount,
-      criteriaScores: { grammar: 85, vocabulary: 85, coherence: 85, taskFulfillment: 85 },
-      generalFeedback: "Bài viết cơ bản tốt, đã hoàn thành mục tiêu giao tiếp.",
-      strengths: ["Cấu trúc cơ bản chuẩn xác"],
-      errorsList: [],
-      nativeVersion: cleanText,
-      nativePinyin: "",
-      nativeVi: "",
-      advancedVocabSuggestions: []
-    });
-  }
-});
 
 // ==========================================================================
 // HSKK QUESTIONS & AI SUGGESTION / SPEAKING EVALUATION APIS
@@ -3743,14 +3701,14 @@ app.post('/api/ai/hskk-suggest', async (req, res) => {
   let levelPedagogy = '';
   if (level === 'so') {
     levelPedagogy = `TRÌNH ĐỘ HSKK SƠ CẤP (HSK 1 - 2, tối đa đầu HSK 3):
-- TỪ VỰNG: BẮT BUỘC dùng từ vựng CỰC KỲ ĐƠN GIẢN, mộc mạc, gần gũi với đời thường (như: 我, 你, 常常, 喜欢, 觉得, 学习, 朋友, 比如, 因为...所以..., 虽然...但是...).
+- TỪ VỰNG: Dùng từ vựng ĐƠN GIẢN, mộc mạc, gần gũi với đời thường (như: 我, 你, 常常, 喜欢, 觉得, 朋友, 比如, 因为...所以..., 虽然...但是...).
 - CẤM TUYỆT ĐỐI các từ ngữ trừu tượng, cao cấp, học thuật hoặc thành ngữ khó (CẤM dùng: 针对, 现实意义, 付诸实践, 收益匪浅, 持之以恒, 毋庸置疑, 途径, 举措, 潜移默化,...).
 - Câu văn ngắn gọn, thân mật, dễ hiểu, dễ phát âm.
-- ĐỘ DÀI BÀI MẪU: Khoảng 180 - 240 chữ Hán (chuẩn nói 1.5 phút).`;
+- ĐỘ DÀI BÀI MẪU: Khoảng 180 - 250 chữ Hán (chuẩn nói 1.5 phút).`;
   } else if (level === 'cao') {
     levelPedagogy = `TRÌNH ĐỘ HSKK CAO CẤP (HSKK Cao cấp / HSK 5 - 6):
 - BÀI NÓI / BÀI VIẾT PHẢI RẤT DÀI, TOÀN DIỆN VÀ CHUYÊN SÂU (BẮT BUỘC TỪ 550 ĐẾN 750 CHỮ HÁN, chuẩn nói liên tục 2.5 - 3 phút). PHẢI DÀI HƠN RÕ RỆT SO VỚI TRUNG CẤP!
-- Lập luận đa tầng chặt chẽ: Phân tích bối cảnh xã hội, căn nguyên sâu xa (khách quan và chủ quan), ví dụ điển hình có tính thuyết phục cao, đề xuất hệ thống giải pháp và đúc kết triết lý sống / tầm nhìn tương lai.
+- Lập luận đa tầng chặt chẽ: Phân tích bối cảnh xã hội, căn nguyên sâu xa, ví dụ điển hình có tính thuyết phục cao, đề xuất hệ thống giải pháp và đúc kết triết lý sống / tầm nhìn tương lai.
 - Ngôn ngữ học thuật, phong thái diễn thuyết, sử dụng nhiều thành ngữ 4 chữ 成语 (VD: 循序渐进, 潜移默化, 未雨绸缪, 标本兼治, 持之以恒, 受益匪浅, 登高望远...) và câu phức liên kết nhuần nhuyễn.`;
   } else {
     levelPedagogy = `TRÌNH ĐỘ HSKK TRUNG CẤP (HSK 3 - 4):
@@ -3765,17 +3723,27 @@ Trình độ mục tiêu: ${levelText}
 
 ${levelPedagogy}
 
-QUY TẮC SƯ PHẠM BẮT BUỘC (TUYỆT ĐỐI KHÔNG NÓI CHUNG CHUNG LẠC ĐỀ):
-1. DÀN BÀI (outline): TOÀN BỘ VIẾT BẰNG TIẾNG VIỆT, bám sát 100% câu hỏi đề bài "${cleanQ}". Phải có các câu hỏi gợi mở cụ thể giúp học viên suy nghĩ và trả lời:
-   - Mở bài (intro): Nêu câu trả lời trực tiếp hoặc quan điểm cá nhân cho đề bài. Kèm câu hỏi gợi ý cho học viên (VD: Đối với bạn, ... là gì? Quan điểm của bạn là gì?).
-   - Thân bài (body): Phải có ĐÚNG 3 LUẬN ĐIỂM VÀ LUẬN CỨ CỤ THỂ giải quyết đề bài. Mỗi luận điểm phải kèm câu hỏi gợi mở thực tế (VD: Luận điểm 1: ...? Luận điểm 2: ...? Luận điểm 3: ...?).
+QUY TẮC SƯ PHẠM CỐT LÕI (TUYỆT ĐỐI KHÔNG LẠC ĐỀ & KHÔNG DÙNG VĂN MẪU SÁO RỖNG):
+1. BÁM SÁT 100% ĐỀ BÀI: Toàn bộ Dàn bài (outline), Từ vựng (vocabulary), Mẫu câu (sentenceStructures) và Bài mẫu (sampleAnswer) PHẢI TRẢ LỜI ĐÚNG TRỌNG TÂM câu hỏi: "${cleanQ}".
+2. TUYỆT ĐỐI CẤM DÙNG VĂN MẪU RẬP KHUÔN, SÁO RỖNG, VÔ NGHĨA!
+   - CẤM TUYỆT ĐỐI các câu văn mẫu rập khuôn vô thưởng vô phạt (ví dụ: "针对这个问题，我认为在生活和学习中有着非常重要的现实意义。首先明确目标与态度，认真思考原因。其次不能只停留在想法上，要主动付诸实践... 最后只要持之以恒..."). ĐÂY LÀ VĂN MẪU RÁP SÁO RỖNG GÂY MẤT ĐIỂM NGHIÊM TRỌNG!
+   - Bài viết / bài nói mẫu BẮT BUỘC PHẢI ĐI THẲNG VÀO NỘI DUNG VÀ BẢN CHẤT CỤ THỂ của đề tài:
+     + Nếu đề bài hỏi về "诚实守信" (tính trung thực, giữ chữ tín) -> Phải bàn về sự trung thực trong đời sống, học tập, kinh doanh, vai trò cha mẹ thầy cô làm gương (以身作则), pháp luật xử phạt gian dối trừng phạt kẻ thất tín (完善法律制度、惩治商业欺诈), xây dựng hệ thống tín nhiệm xã hội.
+     + Nếu đề bài hỏi về "走路锻炼身体" -> Bàn cụ thể về việc đi bộ thể dục, tốt cho tim mạch, giải tỏa căng thẳng sau giờ làm, thời gian đi bộ, duy trì thói quen.
+     + Nếu đề bài hỏi về "极简生活" -> Bàn về việc giảm tiêu dùng bốc đồng, trân trọng cuộc sống tinh thần, bảo vệ môi trường.
+     + Tương tự với tất cả các chủ đề khác: BẮT BUỘC dùng luận cứ, từ vựng và ví dụ thực tế liên quan mật thiết đến chủ đề đó!
+3. DÀN BÀI (outline): TOÀN BỘ VIẾT BẰNG TIẾNG VIỆT, bám sát 100% câu hỏi đề bài "${cleanQ}". Phải có các câu hỏi gợi mở cụ thể giúp học viên suy nghĩ và trả lời:
+   - Mở bài (intro): Nêu câu trả lời trực tiếp hoặc quan điểm cá nhân cho đề bài. Kèm câu hỏi gợi ý cho học viên.
+   - Thân bài (body): Phải có ĐÚNG 3 LUẬN ĐIỂM VÀ LUẬN CỨ CỤ THỂ giải quyết đề bài. Mỗi luận điểm phải kèm câu hỏi gợi mở thực tế.
    - Kết bài (conclusion): Tổng kết lại toàn bộ ý chính, chốt lại quan điểm, và đưa ra lời kêu gọi hành động hoặc bài học / thông điệp ý nghĩa sâu sắc.
-2. TỪ VỰNG THEN CHỐT (vocabulary): 4-8 từ vựng hoặc thành ngữ liên quan trực tiếp đến đề tài này (kèm pinyin có dấu và dịch nghĩa tiếng Việt). Phải đúng trình độ ${levelText}!
-3. CẤU TRÚC NGỮ PHÁP (sentenceStructures): 2-4 mẫu câu kết nối hoặc cấu trúc điểm cao bám sát nội dung đề bài.
-4. BÀI ${skill === 'writing' ? 'VIẾT' : 'NÓI'} MẪU THAM KHẢO (sampleAnswer): DỰA SÁT 100% VÀO DÀN BÀI GỢI Ý TRÊN. Cấu trúc chuẩn 3 phần rõ ràng (Mở bài nêu quan điểm, Thân bài đủ 3 luận điểm phát triển mạch lạc, Kết bài tổng kết và kêu gọi).
-   - hanzi: Tiếng Trung chuẩn bản xứ đúng số lượng chữ theo yêu cầu của ${levelText}.
-   - pinyin: Phiên âm có dấu thanh điệu đầy đủ.
-   - meaningVi: Bản dịch tiếng Việt đầy đủ, tự nhiên, diễn cảm.
+4. TỪ VỰNG THEN CHỐT (vocabulary): 4-8 từ vựng hoặc cụm từ liên quan trực tiếp đến đề tài "${cleanQ}" (kèm pinyin có dấu và dịch nghĩa tiếng Việt). Phải đúng trình độ ${levelText}!
+   LƯU Ý ĐẶC BIỆT VỀ PINYIN: Phiên âm Pinyin PHẢI TUYỆT ĐỐI CHÍNH XÁC 100% với từng chữ Hán tương ứng, thanh điệu chuẩn xác (Ví dụ: 诚实守信 -> chéngshí shǒuxìn, 惩罚 -> chéngfá, 以身作则 -> yǐshēn zuòzé). Tuyệt đối không được viết sai âm hoặc lộn xộn các chữ.
+5. CẤU TRÚC NGỮ PHÁP (sentenceStructures): 2-4 mẫu câu kết nối hoặc cấu trúc điểm cao bám sát nội dung đề bài.
+6. BÀI ${skill === 'writing' ? 'VIẾT' : 'NÓI'} MẪU THAM KHẢO (sampleAnswer): DỰA SÁT 100% VÀO DÀN BÀI GỢI Ý TRÊN.
+   - Cấu trúc chuẩn 3 phần rõ ràng: Mở bài nêu quan điểm trực diện, Thân bài đủ 3 luận điểm phát triển mạch lạc, Kết bài tổng kết và kêu gọi hành động.
+   - hanzi: 100% CHỮ HÁN VÀ DẤU CÂU TIẾNG TRUNG CHUẨN BẢN XỨ (Tuyệt đối KHÔNG ĐƯỢC CHÈN BẤT KỲ CHỮ CÁI LATINH, TIẾNG VIỆT, TIẾNG ANH HAY TIẾNG HÀN NÀO). Chia các đoạn rõ ràng bằng dấu xuống dòng (\\n\\n). Số lượng chữ theo đúng yêu cầu của ${levelText}.
+   - pinyin: Phiên âm có dấu thanh điệu đầy đủ và chính xác với từng chữ Hán.
+   - meaningVi: Bản dịch tiếng Việt đầy đủ, mượt mà, tự nhiên, diễn cảm bám sát từng đoạn tiếng Trung.
 
 Trả về DUY NHẤT 1 JSON object hợp lệ:
 {
@@ -3804,260 +3772,115 @@ Trả về DUY NHẤT 1 JSON object hợp lệ:
   try {
     let reply = '';
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+
+    let result = null;
+
+    // Ưu tiên 1: Groq LLMs (Qwen 3.8 27B chuyên ngữ Hán đầu tiên, siêu tốc, ổn định, bám sát đề tài)
     if (groqClient) {
-      for (const m of ['openai/gpt-oss-120b', 'qwen/qwen3.8-27b']) {
+      for (const m of ['qwen/qwen3.8-27b', 'openai/gpt-oss-120b', 'openai/gpt-oss-20b']) {
         try {
           const completion = await groqClient.chat.completions.create({
             model: m,
             messages: [{ role: 'user', content: prompt }],
-            temperature: 0.5,
-            response_format: { type: 'json_object' },
-            max_tokens: 3500
+            temperature: 0.3,
+            max_tokens: 2800
           });
-          reply = completion.choices[0]?.message?.content || '';
-          if (reply && reply.includes('{') && reply.includes('}')) break;
+          const raw = completion.choices[0]?.message?.content || '';
+          const match = raw.match(/\{[\s\S]*\}/);
+          if (match) {
+            try {
+              const parsed = JSON.parse(match[0]);
+              if (parsed && parsed.outline && parsed.sampleAnswer) {
+                result = parsed;
+                break;
+              }
+            } catch (eJson) {
+              console.warn(`Groq model ${m} generated invalid JSON:`, eJson.message);
+            }
+          }
         } catch (eGroq) {
           console.warn(`Groq hskk-suggest with ${m} failed, trying next...`, eGroq.message);
         }
       }
     }
 
-    if (!reply && GEMINI_API_KEY) {
-      try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-        });
-        if (response.ok) {
-          const data = await response.json();
-          reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    // Ưu tiên 2: Gemini
+    if (!result && GEMINI_API_KEY) {
+      for (const gModel of ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-3.8-flash']) {
+        try {
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${gModel}:generateContent?key=${GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+          });
+          if (response.ok) {
+            const data = await response.json();
+            const rawGemini = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            const matchGem = rawGemini.match(/\{[\s\S]*\}/);
+            if (matchGem) {
+              try {
+                const parsed = JSON.parse(matchGem[0]);
+                if (parsed && parsed.outline && parsed.sampleAnswer) {
+                  result = parsed;
+                  break;
+                }
+              } catch (e) { }
+            }
+          }
+        } catch (eGemini) {
+          console.warn(`Gemini hskk-suggest failed with ${gModel}:`, eGemini.message);
         }
-      } catch (eGemini) {
-        console.warn('Gemini hskk-suggest failed:', eGemini.message);
       }
     }
 
-    let result = null;
-    const jsonMatch = reply ? reply.match(/\{[\s\S]*\}/) : null;
-    if (jsonMatch) {
-      try { result = JSON.parse(jsonMatch[0]); } catch (e) { }
+    if (!result || !result.outline || !result.sampleAnswer) {
+      console.error('HSKK suggest: AI did not return valid result');
+      return res.status(503).json({
+        success: false,
+        error: 'Hệ thống AI đang bận hoặc quá tải tạm thời. Vui lòng bấm thử lại sau giây lát!'
+      });
     }
 
-    if (!result || !result.outline || !result.sampleAnswer) {
-      if (level === 'so') {
-        result = {
-          outline: {
-            intro: `Mở bài: Trả lời trực tiếp và ngắn gọn: "${cleanQ}". (Gợi ý: Bạn có thích điều này không? Quan điểm đơn giản của bạn là gì?)`,
-            body: [
-              `Luận điểm 1: Nêu lý do thứ nhất với các từ quen thuộc. (Gợi ý: Tại sao bạn lại nghĩ như vậy?)`,
-              `Luận điểm 2: Kể một việc hoặc trải nghiệm đơn giản hằng ngày. (Gợi ý: Bạn thường làm việc đó với ai, vào lúc nào?)`,
-              `Luận điểm 3: Nêu cảm nghĩ vui vẻ, tích cực. (Gợi ý: Bạn cảm thấy việc đó mang lại niềm vui gì?)`
-            ],
-            conclusion: `Kết bài: Tóm lại ý chính và bày tỏ hy vọng / mong muốn của bạn trong tương lai.`
-          },
-          vocabulary: [
-            { hanzi: "我觉得", pinyin: "wǒ juéde", meaning: "tôi thấy, tôi nghĩ rằng" },
-            { hanzi: "喜欢", pinyin: "xǐhuan", meaning: "thích" },
-            { hanzi: "常常", pinyin: "chángcháng", meaning: "thường xuyên" },
-            { hanzi: "一起", pinyin: "yìqǐ", meaning: "cùng nhau" },
-            { hanzi: "高兴", pinyin: "gāoxìng", meaning: "vui vẻ" }
-          ],
-          sentenceStructures: [
-            {
-              pattern: "我觉得……因为……",
-              meaning: "Tôi thấy... bởi vì...",
-              example: `我觉得这个题目很有意思，因为在日常生活中我们常常遇到。`
-            },
-            {
-              pattern: "虽然……但是……",
-              meaning: "Tuy... nhưng...",
-              example: "虽然一开始有点儿难，但是多练习就会了。"
-            }
-          ],
-          sampleAnswer: {
-            hanzi: `关于“${cleanQ}”这个问题，我觉得很有意思。在生活中，我们常常会遇到这样的事情。对我来说，保持一个好心情非常重要。首先，做事情的时候要认真，遇到不懂的问题可以多问问老师和朋友。其次，每天花一点儿时间去学习和练习，比如多听听汉语、多和大家聊聊天，这样就能慢慢进步。最后，我觉得大家互相帮助、一起努力是一件非常快乐的事情。只要我们每天坚持，就一定能把事情做好，生活也会更加开心。`,
-            pinyin: `Guānyú zhè ge wèntí, wǒ juéde hěn yǒu yìsi. Zài shēnghuó zhōng, wǒmen chángcháng huì yù dào zhèyàng de shìqing. Duì wǒ lái shuō, bǎochí yí gè hǎo xīnqíng fēicháng zhòngyào. Shǒuxiān, zuò shìqing de shíhou yào rènzhēn, yù dào bù dǒng de wèntí kěyǐ duō wènwen lǎoshī hé péngyou. Qícì, měitiān huā yìdiǎnr shíjiān qù xuéxí hé liànxí, bǐrú duō tīngting Hànyǔ, duō hé dàjiā liáoliao tiān, zhèyàng jiù néng mànmàn jìnbù. Zuìhòu, wǒ juéde dàjiā hùxiāng bāngzhù, yìqǐ nǔlì shì yí jiàn fēicháng kuàilè de shìqing. Zhǐyào wǒmen měitiān jiānchí, jiù yídìng néng bǎ shìqing zuò hǎo, shēnghuó yě huì gèngjiā kāixīn.`,
-            meaningVi: `Về câu hỏi "${cleanQ}", tôi thấy rất thú vị. Trong cuộc sống, chúng ta thường hay gặp những chuyện như thế này. Đối với tôi, giữ một tâm trạng vui vẻ là rất quan trọng. Thứ nhất, khi làm việc gì cũng cần nghiêm túc, gặp câu hỏi chưa hiểu thì có thể hỏi thầy cô và bạn bè. Thứ hai, mỗi ngày dành một chút thời gian học tập và luyện tập, ví dụ như nghe tiếng Trung nhiều hơn, nói chuyện với mọi người nhiều hơn, như vậy sẽ tiến bộ dần dần. Cuối cùng, tôi thấy mọi người cùng giúp đỡ nhau, cùng nhau nỗ lực là một điều vô cùng hạnh phúc. Chỉ cần mỗi ngày kiên trì, nhất định chúng ta sẽ làm tốt và cuộc sống sẽ vui vẻ hơn.`
+    // Chuẩn hóa và sửa lại 100% Pinyin chính xác bằng pinyin-pro (loại bỏ hoàn toàn lỗi AI ảo giác pinyin)
+    if (result.vocabulary && Array.isArray(result.vocabulary)) {
+      result.vocabulary = result.vocabulary.map(v => {
+        if (!v || !v.hanzi) return v;
+        try {
+          const accuratePy = pinyin(v.hanzi, { toneType: 'symbol' });
+          if (accuratePy) {
+            return { ...v, pinyin: accuratePy };
           }
-        };
-      } else if (level === 'cao') {
-        result = {
-          outline: {
-            intro: `Mở bài: Đặt vấn đề sâu sắc trong bối cảnh xã hội hiện đại cho chủ đề: "${cleanQ}". Khẳng định tầm quan trọng và đưa ra luận điểm cốt lõi bao quát.`,
-            body: [
-              `Luận điểm 1: Mổ xẻ bản chất và căn nguyên sâu xa của vấn đề (về mặt nhận thức cá nhân và tác động đa chiều từ môi trường sống).`,
-              `Luận điểm 2: Đưa ra dẫn chứng thực tiễn điển hình có sức nặng thuyết phục (phân tích sự tương phản giữa kiên trì vượt khó và tâm lý thoái thác).`,
-              `Luận điểm 3: Đề xuất hệ thống giải pháp chiến lược toàn diện (kết hợp kỷ luật tự thân với sự hỗ trợ từ gia đình, tổ chức và xã hội).`
-            ],
-            conclusion: `Kết bài: Nâng tầm vấn đề thành bài học triết lý sống và thông điệp hành động mạnh mẽ, truyền cảm hứng dài hạn.`
-          },
-          vocabulary: [
-            { hanzi: "立足当下", pinyin: "lìzú dāngxià", meaning: "đứng vững ở hiện tại" },
-            { hanzi: "深谋远虑", pinyin: "shēnmóu yuǎnlǜ", meaning: "lo xa nghĩ sâu, tầm nhìn chiến lược" },
-            { hanzi: "持之以恒", pinyin: "chí zhī yǐ héng", meaning: "kiên trì bền bỉ không ngừng nghỉ" },
-            { hanzi: "潜移默化", pinyin: "qián yí mò huà", meaning: "ảnh hưởng sâu sắc một cách vô hình, ngấm dần" },
-            { hanzi: "标本兼治", pinyin: "biāo běn jiān zhì", meaning: "trị cả phần ngọn lẫn gốc rễ" },
-            { hanzi: "收益匪浅", pinyin: "shòuyì fěiqiǎn", meaning: "thu hoạch được vô vàn điều bổ ích" }
-          ],
-          sentenceStructures: [
-            {
-              pattern: "不仅在于……，更关键的在于……",
-              meaning: "Không chỉ nằm ở chỗ..., mà mấu chốt hơn là nằm ở...",
-              example: `探讨这个问题的价值，不仅在于理清表象，更关键的在于寻找切实行之有效的破局之道。`
-            },
-            {
-              pattern: "固然……，然而归根结底……",
-              meaning: "Dẫu rằng..., nhưng xét đến cùng...",
-              example: "外部客观环境固然重要，然而归根结底，个人内驱力与长远格局才起决定性作用。"
-            },
-            {
-              pattern: "唯有……，方能在……中立于不败之地。",
-              meaning: "Chỉ khi..., mới có thể đứng vững trước...",
-              example: "唯有保持终身学习的心态，方能在瞬息万变的时代浪潮中立于不败之地。"
-            }
-          ],
-          sampleAnswer: {
-            hanzi: `针对“${cleanQ}”这一极具现实意义的深刻命题，我认为它不仅关乎我们每个人的个体成长，更折射出现代社会中普遍存在的价值取向与处事哲学。在纷繁复杂的生活与职场环境中，如何正确审视并妥善应对这一课题，值得我们深思熟虑。\n\n首先，从认知层面来看，古人云：“登高使人心旷，临流使人意远。”面对纷至沓来的挑战，我们首先应当厘清问题的本质所在，既不能因暂时的波折而妄自菲薄，亦不可盲目乐观而浅尝辄止。唯有树立清晰宏阔的目标导向，将长远愿景细化为扎实可行的阶段性规划，方能做到心中有数、行有方向。\n\n其次，从实践与知行合一的角度而言，纸上谈兵终究无济于事，关键在于付诸持之以恒的切实行动。以我们日常求知与奋斗为例，任何一项专业技能的精通或心智的磨砺，无不经历漫长而枯燥的积累过程，正所谓“不积跬步，无以至千里”。在此期间，保持专注与定力、勇敢突破舒适圈，敢于在试错中反思与总结，方能实现认知与能力的飞跃。\n\n再者，除了依赖个体强烈的内驱力之外，融洽的人际协作与开放包容的生态氛围亦是不可或缺的外部支撑。懂得倾听他山之石、主动构建良性互动的合作机制，往往能激发出“独行快，众行远” de bèizēng xiàoyìng。\n\n总而言之，“行百里者半九十”。面对这一课题，我们唯有立足当下、深谋远虑，将坚毅的意志品质与科学的行事方法有机结合，在时代洪流中砥砺前行，方能攻坚克难，开辟出属于自己的广阔天地。`,
-            pinyin: `Zhēnduì zhè yí jùyǒu xiànshí yìyì de shēnkè mìngtí, wǒ rènwéi tā bùjǐn guānhū wǒmen měi gè rén de gètǐ chéngzhǎng, gèng zhéshè chū xiàndài shèhuì zhōng pǔbiàn cúnzài de jiàzhí qǔxiàng yǔ chǔshì zhéxué. Zài fēnfán fùzá de shēnghuó yǔ zhíchǎng huánjìng zhōng, rúhé zhèngquè shěnshì bìng tuǒshàn yìngduì zhè yí kètí, zhídé wǒmen shēnsī shúlǜ.\n\nShǒuxiān, cóng rènzhī céngmiàn lái kàn, gǔrén yún: "Dēng gāo shǐ rén xīn kuàng, lín liú shǐ rén yì yuǎn." Miànduì fēnzhì-tàlái de tiǎozhàn, wǒmen shǒuxiān yīngdāng líqīng wèntí de běnzhì suǒzài, jì bù néng yīn zànshí de bōzhé ér wàngzì-fěibó, yì bù kě mángmù lèguān ér qiǎncháng-zhézhǐ. Wéiyǒu shùlì qīngxī hóngkuò de mùbiāo dǎoxiàng, jiāng chángyuǎn yuànjǐng xìhuà wéi zhāshi kěxíng de jiēduànxìng guīhuà, fāng néng zuò dào xīn zhōng yǒu shù, xíng yǒu fāngxiàng.\n\nQícì, cóng shíjiàn yǔ zhī-xíng-hé-yī de jiǎodù ér yán, zhǐshàng-tánbīng zhōngjiū wújìyúshì, guānjiàn zàiyú fùzhū chízhīyǐhéng de qièshí xíngdòng. Yǐ wǒmen rìcháng qiúzhī yǔ fèndòu wéilì, rènhé yí xiàng zhuānyè jìnéng de jīngtōng huò xīnzzhì de mólì, wúbù jīnglì màncháng ér kūzào de jīlěi guòchéng, zhèng suǒwèi "bù jī kuǐbù, wú yǐ zhì qiānlǐ". Zài cǐ qījiān, bǎochí zhuānzhù yǔ dìnglì, yǒnggǎn tūtò shūshìquān, gǎnyú zài shìcuò zhōng fǎnsī yǔ zǒngjié, fāng néng shíxiàn rènzhī yǔ nénglì de fēiyuè.\n\nZàizhě, chúle yīlài gètǐ qiángliè de nèiqūlì zhīwài, róngqià de rénjì xiézuò yǔ kāifàng bāoróng de shēngtài fēnwéi yì shì bùkě huòquē de wàibù zhīchēng. Dǒngdé qīngtīng tā-shān-zhī-shí, zhǔdòng gòujiàn liángxìng hùdòng de hézuò jīzhì, wǎngwǎng néng jīfā chū "dúxíng kuài, zhòngxíng yuǎn" de bèizēng xiàoyìng.\n\nZǒng'éryánzhī, "xíng bǎilǐ zhě bàn jiǔshí". Miànduì zhè yí kètí, wǒmen wéiyǒu lìzú dāngxià, shēnmóu yuǎnlǜ, jiāng jiānyì de yìzhì pǐnzhì yǔ kēxué de xíngshì fāngfǎ yǒujī jiéhé, zài shídài hóngliú zhōng dǐlì qiánxíng, fāng néng gōngjiān-kènán, kāipì chū shǔyú zìjǐ de guǎngkuò tiāndì.`,
-            meaningVi: `Đối với đề bài mang tính thời sự và sâu sắc "${cleanQ}", tôi cho rằng câu hỏi này không chỉ liên quan mật thiết đến sự trưởng thành của mỗi cá nhân, mà còn phản ánh hệ giá trị và triết lý sống phổ quát trong xã hội hiện đại. Trong một môi trường sống và làm việc đa chiều, việc nhìn nhận thấu đáo và ứng phó thỏa đáng với vấn đề này là điều rất đáng để chúng ta trăn trở.\n\nTrước hết, xét từ góc độ nhận thức, người xưa có câu: "Lên cao khiến lòng người khoáng đạt, ngắm dòng nước khiến ý chí vươn xa." Đối diện với vô vàn thử thách, chúng ta cần phân định rõ bản chất cốt lõi của vấn đề, không vì khó khăn trước mắt mà tự ti, thoái chí, cũng không vì chút thuận lợi ban đầu mà chủ quan, hời hợt. Chỉ khi xác lập một định hướng mục tiêu rành mạch, cụ thể hóa viễn cảnh dài hạn thành từng lộ trình hành động thiết thực, ta mới vững vàng tiến bước.\n\nThứ hai, xét từ nguyên lý "tri hành hợp nhất", nói suông trên giấy suy cho cùng vô ích, điều then chốt nằm ở việc bắt tay vào hành động kiên trì, bền bỉ. Lấy việc học tập và rèn luyện mỗi ngày làm ví dụ, việc tinh thông bất kỳ kỹ năng chuyên môn hay sự tôi luyện bản lĩnh nào cũng đều phải trải qua quá trình tích lũy lâu dài, đúng như câu "không tích từng bước nhỏ, không thể đi tới ngàn dặm". Trong hành trình đó, việc giữ vững sự tập trung, dũng cảm bứt phá khỏi vùng an toàn và không ngừng đúc rút kinh nghiệm sau mỗi lần vấp ngã chính là đòn bẩy tạo nên bước nhảy vọt.\n\nThêm vào đó, bên cạnh nội lực tự thân, sự tương trợ gắn kết và tinh thần hợp tác cởi mở cũng là điểm tựa ngoại lực không thể thiếu. Biết lắng nghe ý kiến đóng góp từ người khác, cùng chung sức đồng lòng sẽ luôn tạo ra sức mạnh cộng hưởng to lớn.\n\nTóm lại, "đường đi trăm dặm, đi được chín mươi dặm mới tính là nửa đường". Đứng trước bài toán này, chỉ khi chúng ta biết đứng vững ở hiện tại, nhìn xa trông rộng, kết hợp ý chí kiên định với phương pháp khoa học, không ngừng rèn giũa bản thân, ta mới có thể vượt qua mọi chông gai và kiến tạo nên chân trời rộng mở cho chính mình.`
-          }
-        };
-      } else {
-        result = {
-          outline: {
-            intro: `Mở bài: Nêu trực tiếp câu trả lời hoặc quan điểm cá nhân cho đề tài: "${cleanQ}". (Gợi ý: Theo bạn, đâu là trọng tâm của câu hỏi này?)`,
-            body: [
-              `Luận điểm 1: Phân tích lý do hoặc bối cảnh thực tế gắn liền với "${cleanQ}". (Gợi ý: Tại sao lại có hiện tượng/quan điểm này?)`,
-              `Luận điểm 2: Dẫn chứng hoặc trải nghiệm thực tế cụ thể. (Gợi ý: Bạn hoặc những người xung quanh đã trải qua việc này như thế nào?)`,
-              `Luận điểm 3: Đánh giá ý nghĩa, giải pháp hoặc bài học rút ra. (Gợi ý: Cần làm gì để phát huy điểm tốt hoặc giải quyết khó khăn?)`
-            ],
-            conclusion: `Kết bài: Khẳng định lại câu trả lời cho đề bài, đưa ra bài học kinh nghiệm và thông điệp hành động tích cực.`
-          },
-          vocabulary: [
-            { hanzi: "看法", pinyin: "kànfǎ", meaning: "quan điểm, góc nhìn" },
-            { hanzi: "经验", pinyin: "jīngyàn", meaning: "kinh nghiệm thực tế" },
-            { hanzi: "坚持", pinyin: "jiānchí", meaning: "kiên trì" },
-            { hanzi: "互相帮助", pinyin: "hùxiāng bāngzhù", meaning: "giúp đỡ lẫn nhau" },
-            { hanzi: "收益匪浅", pinyin: "shòuyì fěiqiǎn", meaning: "thu hoạch được nhiều bổ ích" }
-          ],
-          sentenceStructures: [
-            {
-              pattern: "在我看来，……是最重要的。",
-              meaning: "Theo quan điểm của tôi, ... là quan trọng nhất.",
-              example: `在我看来，针对这个问题，积极思考与付诸行动是最重要的。`
-            },
-            {
-              pattern: "一方面……，另一方面……",
-              meaning: "Một mặt thì..., mặt khác thì...",
-              example: "一方面要脚踏实地努力，另一方面要善于总结经验。"
-            }
-          ],
-          sampleAnswer: {
-            hanzi: `针对“${cleanQ}”这个问题，我认为在我们的生活和学习中有着非常重要的现实意义。首先，从个人角度来看，我们应当明确自己的目标与态度，认真思考问题背后的原因。其次，在遇到具体情境时，不能只停留在想法上， mà cần chủ động bắt tay vào hành động, dũng cảm đối mặt với thử thách và tích cực tìm kiếm giải pháp. 最后，只要我们能持之以恒，并与身边的人互相支持、共同进步，就一定能克服困难，取得令人满意的成果。`,
-            pinyin: `Zhēnduì zhè ge wèntí, wǒ rènwéi zài wǒmen de shēnghuó hé xuéxí zhōng yǒuzhe fēicháng zhòngyào de xiànshí yìyì. Shǒuxiān, cóng gèrén jiǎodù lái kàn, wǒmen yīngdāng míngquè zìjǐ de mùbiāo yǔ tàidù. Qícì, zài yùdào jùtǐ qíngjìng shí, yīngdāng zhǔdòng fùzhū shíjiàn. Zuìhòu, zhǐyào wǒmen néng chízhīyǐhéng, jiù yídìng néng qǔdé lìngrén mǎnyì de chéngguǒ.`,
-            meaningVi: `Đối với đề bài "${cleanQ}", tôi cho rằng câu hỏi này mang ý nghĩa thực tế rất quan trọng trong cuộc sống và học tập của chúng ta. Thứ nhất, từ góc độ cá nhân, chúng ta cần xác định rõ mục tiêu và thái độ của mình, suy nghĩ nghiêm túc về nguyên nhân. Thứ hai, khi đối diện với tình huống cụ thể, không nên chỉ dừng lại ở suy nghĩ mà cần chủ động bắt tay vào hành động, dũng cảm đối mặt với thử thách và tích cực tìm kiếm giải pháp. Cuối cùng, chỉ cần chúng ta kiên trì đến cùng và luôn hỗ trợ lẫn nhau, nhất định sẽ gặt hái được những thành quả tốt đẹp.`
-          }
-        };
+        } catch (ePy) {
+          console.warn('Pinyin conversion error for vocab:', v.hanzi, ePy.message);
+        }
+        return v;
+      });
+    }
+
+    if (result.sampleAnswer && result.sampleAnswer.hanzi) {
+      // Đảm bảo không còn lẫn các từ tiếng Việt/Anh/Hàn lạ trong trường hanzi
+      result.sampleAnswer.hanzi = result.sampleAnswer.hanzi
+        .replace(/[a-zA-ZàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆĐÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ]/g, '')
+        .replace(/[\uac00-\ud7af]/g, '')
+        .trim();
+
+      try {
+        const accurateAnswerPy = pinyin(result.sampleAnswer.hanzi, { toneType: 'symbol' });
+        if (accurateAnswerPy) {
+          result.sampleAnswer.pinyin = accurateAnswerPy;
+        }
+      } catch (ePy) {
+        console.warn('Pinyin conversion error for sampleAnswer:', ePy.message);
       }
     }
 
     res.json({ success: true, ...result });
   } catch (err) {
     console.error('HSKK suggest error:', err);
-    let fallbackResult = null;
-    if (level === 'so') {
-      fallbackResult = {
-        outline: {
-          intro: `Mở bài: Trả lời trực tiếp và ngắn gọn: "${cleanQ}".`,
-          body: [
-            `Luận điểm 1: Nêu lý do đơn giản vì sao bạn thích hoặc nghĩ như vậy.`,
-            `Luận điểm 2: Kể một trải nghiệm hoặc thói quen thường ngày.`,
-            `Luận điểm 3: Nêu cảm nghĩ vui vẻ, tích cực.`
-          ],
-          conclusion: "Kết bài: Tóm lại ý kiến và hy vọng vào tương lai."
-        },
-        vocabulary: [
-          { hanzi: "我觉得", pinyin: "wǒ juéde", meaning: "tôi thấy, tôi nghĩ rằng" },
-          { hanzi: "喜欢", pinyin: "xǐhuan", meaning: "thích" },
-          { hanzi: "常常", pinyin: "chángcháng", meaning: "thường xuyên" },
-          { hanzi: "高兴", pinyin: "gāoxìng", meaning: "vui vẻ" }
-        ],
-        sentenceStructures: [
-          {
-            pattern: "我觉得……因为……",
-            meaning: "Tôi thấy... bởi vì...",
-            example: `我觉得这个题目很有意思，因为在日常生活中我们常常遇到。`
-          }
-        ],
-        sampleAnswer: {
-          hanzi: `关于“${cleanQ}”这个问题，我觉得很有意思。在日常生活中，我们常常会遇到这样的事情。对我来说，保持一个好心情非常重要。做事情的时候要认真，遇到不懂的问题可以多问问朋友。只要我们每天坚持，就一定能把事情做好，生活也会更加开心。`,
-          pinyin: `Guānyú zhè ge wèntí, wǒ juéde hěn yǒu yìsi. Zài rìcháng shēnghuó zhōng, wǒmen chángcháng huì yù dào zhèyàng de shìqing. Duì wǒ lái shuō, bǎochí yí gè hǎo xīnqíng fēicháng zhòngyào.`,
-          meaningVi: `Về câu hỏi "${cleanQ}", tôi thấy rất thú vị. Trong đời sống hằng ngày, chúng ta thường hay gặp những chuyện như vậy. Đối với tôi, giữ tâm trạng vui vẻ rất quan trọng. Khi làm việc gì cũng cần nghiêm túc, gặp câu hỏi khó có thể hỏi bạn bè. Chỉ cần kiên trì mỗi ngày, nhất định ta sẽ làm tốt và vui vẻ hơn.`
-        }
-      };
-    } else if (level === 'cao') {
-      fallbackResult = {
-        outline: {
-          intro: `Mở bài: Đặt vấn đề sâu sắc trong bối cảnh xã hội hiện đại cho chủ đề: "${cleanQ}". Khẳng định tầm quan trọng và đưa ra luận điểm cốt lõi bao quát.`,
-          body: [
-            `Luận điểm 1: Mổ xẻ bản chất và căn nguyên sâu xa của vấn đề (về mặt nhận thức cá nhân và tác động đa chiều từ môi trường sống).`,
-            `Luận điểm 2: Đưa ra dẫn chứng thực tiễn điển hình có sức nặng thuyết phục (phân tích sự tương phản giữa kiên trì vượt khó và tâm lý thoái thác).`,
-            `Luận điểm 3: Đề xuất hệ thống giải pháp chiến lược toàn diện (kết hợp kỷ luật tự thân với sự hỗ trợ từ gia đình, tổ chức và xã hội).`
-          ],
-          conclusion: "Kết bài: Nâng tầm vấn đề thành bài học triết lý sống và thông điệp hành động mạnh mẽ, truyền cảm hứng dài hạn."
-        },
-        vocabulary: [
-          { hanzi: "立足当下", pinyin: "lìzú dāngxià", meaning: "đứng vững ở hiện tại" },
-          { hanzi: "深谋远虑", pinyin: "shēnmóu yuǎnlǜ", meaning: "lo xa nghĩ sâu, tầm nhìn chiến lược" },
-          { hanzi: "持之以恒", pinyin: "chí zhī yǐ héng", meaning: "kiên trì bền bỉ không ngừng nghỉ" },
-          { hanzi: "潜移默化", pinyin: "qián yí mò huà", meaning: "ảnh hưởng sâu sắc ngấm dần" },
-          { hanzi: "收益匪浅", pinyin: "shòuyì fěiqiǎn", meaning: "thu hoạch được vô vàn điều bổ ích" }
-        ],
-        sentenceStructures: [
-          {
-            pattern: "不仅在于……，更关键的在于……",
-            meaning: "Không chỉ nằm ở chỗ..., mà mấu chốt hơn là nằm ở...",
-            example: `探讨这个问题的价值，不仅在于理清表象，更关键的在于寻找切实行之有效的破局之道。`
-          }
-        ],
-        sampleAnswer: {
-          hanzi: `针对“${cleanQ}”这一极具现实意义的深刻命题，我认为它不仅关乎我们每个人的个体成长，更折射出现代社会中普遍存在的价值取向与处事哲学。在纷繁复杂的生活与职场环境中，如何正确审视并妥善应对这一课题，值得我们深思熟虑。\n\n首先，从认知层面来看，面对纷至沓来的挑战，我们首先应当厘清问题的本质所在，既不能因暂时的波折而妄自菲薄，亦不可盲目乐观而浅尝辄止。唯有树立清晰宏阔的目标导向，将长远愿景细化为扎实可行的阶段性规划，方能做到心中有数、行有方向。\n\n其次，从实践与知行合一的角度而言，纸上谈兵终究无济于事，关键在于付诸持之以恒的切实行动。以我们日常求知与奋斗为例，任何一项专业技能的精通或心智的磨砺，无不经历漫长而枯燥的积累过程，正所谓“不积跬步，无以至千里”。在此期间，保持专注与定力、勇敢突破舒适圈，敢于在试错中反思与总结，方能实现认知与能力的飞跃。\n\n再者，除了依赖个体强烈的内驱力之外，融洽的人际协作与开放包容的生态氛围亦是不可或缺的外部支撑。懂得倾听他山之石、主动构建良性互动的合作机制，往往能激发出“独行快，众行远”的倍增效应。\n\n总而言之，“行百里者半九十”。面对这一课题，我们唯有立足当下、深谋远虑，将坚毅的意志品质与科学的行事方法有机结合，在时代洪流中砥砺前行，方能攻坚克难，开辟出属于自己的广阔天地。`,
-          pinyin: `Zhēnduì zhè yí jùyǒu xiànshí yìyì de shēnkè mìngtí, wǒ rènwéi tā bùjǐn guānhū wǒmen měi gè rén de gètǐ chéngzhǎng...`,
-          meaningVi: `Đối với đề bài mang tính thời sự và sâu sắc "${cleanQ}", tôi cho rằng câu hỏi này không chỉ liên quan mật thiết đến sự trưởng thành của mỗi cá nhân, mà còn phản ánh hệ giá trị và triết lý sống phổ quát trong xã hội hiện đại...`
-        }
-      };
-    } else {
-      fallbackResult = {
-        outline: {
-          intro: `Mở bài: Trả lời trực tiếp vào trọng tâm: "${cleanQ}".`,
-          body: [
-            `Luận điểm 1: Nêu lý do hoặc hoàn cảnh xảy ra.`,
-            `Luận điểm 2: Dẫn chứng trải nghiệm cá nhân cụ thể.`,
-            `Luận điểm 3: Đánh giá ý nghĩa và mở rộng góc nhìn.`
-          ],
-          conclusion: "Kết bài: Tổng kết quan điểm và đưa ra bài học/lời khuyên."
-        },
-        vocabulary: [
-          { hanzi: "看法", pinyin: "kànfǎ", meaning: "quan điểm, góc nhìn" },
-          { hanzi: "经验", pinyin: "jīngyàn", meaning: "kinh nghiệm" },
-          { hanzi: "坚持", pinyin: "jiānchí", meaning: "kiên trì" }
-        ],
-        sentenceStructures: [
-          {
-            pattern: "在我看来，……",
-            meaning: "Theo quan điểm của tôi, ...",
-            example: `在我看来，保持积极乐观的心态最为重要。`
-          }
-        ],
-        sampleAnswer: {
-          hanzi: `针对“${cleanQ}”这个问题，我认为我们应当保持积极的态度。在日常生活中，面对各种各样的挑战，唯有坚持不懈、不断学习，才能取得好成果。`,
-          pinyin: `Zhēnduì zhè ge wèntí, wǒ rènwéi wǒmen yīngdāng bǎochí jījí de tàidù.`,
-          meaningVi: `Đối với câu hỏi "${cleanQ}", tôi cho rằng chúng ta cần giữ thái độ tích cực, kiên trì không ngừng trong cuộc sống.`
-        }
-      };
-    }
-    res.json({ success: true, ...fallbackResult });
+    return res.status(500).json({
+      success: false,
+      error: 'Không thể kết nối đến hệ thống AI lúc này. Vui lòng thử lại.'
+    });
   }
 });
 
@@ -4166,6 +3989,13 @@ Trả về ĐÚNG 1 JSON object:
       };
     }
 
+    if (result && result.nativeVersion) {
+      try {
+        const accuratePy = pinyin(result.nativeVersion, { toneType: 'symbol' });
+        if (accuratePy) result.nativePinyin = accuratePy;
+      } catch (ePy) { }
+    }
+
     res.json({ success: true, ...result });
   } catch (err) {
     console.error('Lỗi grade-speaking:', err);
@@ -4270,6 +4100,25 @@ Trả về ĐÚNG 1 JSON object (không markdown ngoài JSON):
           { zh: '你好，很高兴认识你！', pinyin: 'Nǐ hǎo, hěn gāoxìng rènshí nǐ!', vi: 'Xin chào, rất vui được làm quen với bạn!' }
         ]
       };
+    }
+
+    if (result) {
+      if (result.aiMessage && result.aiMessage.zh) {
+        try {
+          const accuratePy = pinyin(result.aiMessage.zh, { toneType: 'symbol' });
+          if (accuratePy) result.aiMessage.pinyin = accuratePy;
+        } catch (ePy) { }
+      }
+      if (result.suggestions && Array.isArray(result.suggestions)) {
+        result.suggestions = result.suggestions.map(s => {
+          if (!s || !s.zh) return s;
+          try {
+            const accuratePy = pinyin(s.zh, { toneType: 'symbol' });
+            if (accuratePy) return { ...s, pinyin: accuratePy };
+          } catch (ePy) { }
+          return s;
+        });
+      }
     }
 
     res.json({ success: true, ...result });
@@ -4399,6 +4248,25 @@ Trả về ĐÚNG 1 JSON object:
           { zh: "暂时没有了，谢谢。", pinyin: "Zànshí méiyǒu le, xièxie.", vi: "Tạm thời không có, cảm ơn." }
         ]
       };
+    }
+
+    if (result) {
+      if (result.aiMessage && result.aiMessage.zh) {
+        try {
+          const accuratePy = pinyin(result.aiMessage.zh, { toneType: 'symbol' });
+          if (accuratePy) result.aiMessage.pinyin = accuratePy;
+        } catch (ePy) { }
+      }
+      if (result.suggestions && Array.isArray(result.suggestions)) {
+        result.suggestions = result.suggestions.map(s => {
+          if (!s || !s.zh) return s;
+          try {
+            const accuratePy = pinyin(s.zh, { toneType: 'symbol' });
+            if (accuratePy) return { ...s, pinyin: accuratePy };
+          } catch (ePy) { }
+          return s;
+        });
+      }
     }
 
     res.json({ success: true, ...result });

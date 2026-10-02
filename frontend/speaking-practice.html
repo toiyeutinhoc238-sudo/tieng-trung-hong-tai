@@ -730,6 +730,155 @@
       border-color: #86efac;
     }
 
+    /* AI Hint Card Theme Variables & High Contrast Typography */
+    :root, html.light-mode, body.light-mode, html:not(.dark) {
+      --hint-header-color: #15803d;
+      --hint-badge-bg: #dcfce7;
+      --hint-badge-color: #15803d;
+      --hint-badge-border: #86efac;
+
+      --outline-title-color: #b45309;
+      --outline-box-bg: #fffbeb;
+      --outline-box-border: #fde68a;
+      --outline-box-color: #1e293b;
+
+      --vocab-title-color: #0284c7;
+      --vocab-pill-bg: #f0f9ff;
+      --vocab-pill-border: #7dd3fc;
+      --vocab-hanzi-color: #0f172a;
+      --vocab-pinyin-color: #0284c7;
+      --vocab-meaning-color: #334155;
+
+      --grammar-title-color: #581c87;
+      --grammar-icon-color: #7c3aed;
+      --grammar-pattern-color: #4c1d95;
+      --grammar-card-bg: #ffffff;
+      --grammar-card-border: #a855f7;
+      --grammar-card-shadow: 0 4px 16px rgba(124, 58, 237, 0.12);
+      --grammar-meaning-color: #0f172a;
+      --grammar-example-bg: #f3e8ff;
+      --grammar-example-border-sub: #ddd6fe;
+      --grammar-example-color: #0f172a;
+      --grammar-example-border: #7c3aed;
+      --grammar-vd-color: #6d28d9;
+
+      --sample-title-color: #059669;
+      --sample-badge-color: #047857;
+      --sample-hanzi-bg: #ffffff;
+      --sample-hanzi-color: #0f172a;
+      --sample-hanzi-border: #a7f3d0;
+      --sample-pinyin-title: #0284c7;
+      --sample-pinyin-bg: #f0f9ff;
+      --sample-pinyin-border: #bae6fd;
+      --sample-pinyin-color: #0369a1;
+      --sample-meaning-title: #b45309;
+      --sample-meaning-bg: #fffbeb;
+      --sample-meaning-border: #fde68a;
+      --sample-meaning-color: #1e293b;
+      --btn-tts-color: #0284c7;
+      --btn-copy-color: #059669;
+    }
+
+    html.dark, body.dark {
+      --hint-header-color: #4ade80;
+      --hint-badge-bg: rgba(34, 197, 94, 0.18);
+      --hint-badge-color: #86efac;
+      --hint-badge-border: rgba(34, 197, 94, 0.35);
+
+      --outline-title-color: #fbbf24;
+      --outline-box-bg: rgba(0, 0, 0, 0.3);
+      --outline-box-border: rgba(245, 158, 11, 0.35);
+      --outline-box-color: #e2e8f0;
+
+      --vocab-title-color: #38bdf8;
+      --vocab-pill-bg: rgba(56, 189, 248, 0.12);
+      --vocab-pill-border: rgba(56, 189, 248, 0.35);
+      --vocab-hanzi-color: #ffffff;
+      --vocab-pinyin-color: #38bdf8;
+      --vocab-meaning-color: #cbd5e1;
+
+      --grammar-title-color: #d8b4fe;
+      --grammar-icon-color: #c084fc;
+      --grammar-pattern-color: #f0abfc;
+      --grammar-card-bg: rgba(30, 27, 75, 0.85);
+      --grammar-card-border: #a855f7;
+      --grammar-card-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+      --grammar-meaning-color: #f8fafc;
+      --grammar-example-bg: rgba(139, 92, 246, 0.25);
+      --grammar-example-border-sub: rgba(192, 132, 252, 0.35);
+      --grammar-example-color: #ffffff;
+      --grammar-example-border: #c084fc;
+      --grammar-vd-color: #f472b6;
+
+      --sample-title-color: #34d399;
+      --sample-badge-color: #6ee7b7;
+      --sample-hanzi-bg: rgba(0, 0, 0, 0.3);
+      --sample-hanzi-color: #ffffff;
+      --sample-hanzi-border: rgba(16, 185, 129, 0.3);
+      --sample-pinyin-title: #38bdf8;
+      --sample-pinyin-bg: rgba(0, 0, 0, 0.22);
+      --sample-pinyin-border: rgba(56, 189, 248, 0.25);
+      --sample-pinyin-color: #93c5fd;
+      --sample-meaning-title: #fbbf24;
+      --sample-meaning-bg: rgba(0, 0, 0, 0.22);
+      --sample-meaning-border: rgba(251, 191, 36, 0.25);
+      --sample-meaning-color: #e2e8f0;
+      --btn-tts-color: #38bdf8;
+      --btn-copy-color: #34d399;
+    }
+
+    .ai-grammar-card {
+      background: var(--grammar-card-bg, #ffffff);
+      border: 2px solid var(--grammar-card-border, #a855f7);
+      box-shadow: var(--grammar-card-shadow, 0 4px 16px rgba(124, 58, 237, 0.12));
+      border-radius: 16px;
+      padding: 16px 18px;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .ai-grammar-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(147, 51, 234, 0.22);
+      border-color: #7c3aed;
+    }
+    .ai-grammar-pattern {
+      font-weight: 900;
+      font-size: 1.18rem;
+      color: var(--grammar-pattern-color, #581c87);
+      margin-bottom: 6px;
+      line-height: 1.4;
+      font-family: var(--font-chinese), sans-serif;
+      letter-spacing: 0.3px;
+    }
+    .ai-grammar-meaning {
+      font-size: 0.92rem;
+      color: var(--grammar-meaning-color, #0f172a);
+      font-weight: 700;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .ai-grammar-example {
+      font-size: 0.94rem;
+      font-weight: 600;
+      color: var(--grammar-example-color, #0f172a);
+      background: var(--grammar-example-bg, #f3e8ff);
+      border: 1px solid var(--grammar-example-border-sub, #ddd6fe);
+      border-left: 4.5px solid var(--grammar-example-border, #7c3aed);
+      padding: 10px 14px;
+      border-radius: 10px;
+      line-height: 1.65;
+      font-family: var(--font-chinese), sans-serif;
+      margin-top: 6px;
+    }
+    .ai-grammar-example .example-label {
+      font-weight: 900;
+      color: var(--grammar-vd-color, #6d28d9);
+      margin-right: 6px;
+      font-family: var(--font-body), sans-serif;
+    }
+
     /* Scratchpad (Bảng Nháp 3p chuẩn bị & 2p nói) */
     .scratchpad-card {
       background: rgba(15, 23, 42, 0.75);

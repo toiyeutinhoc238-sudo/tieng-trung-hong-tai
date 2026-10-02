@@ -11,6 +11,9 @@ import './quick_dict_widget.js';
 (function () {
   'use strict';
 
+  // Do not render global sidebar or mobile navigation inside iframes
+  if (window.self !== window.top) return;
+
   // Helper to determine active link
   function getActiveRouteKey() {
     const path = window.location.pathname.toLowerCase();
@@ -51,6 +54,31 @@ import './quick_dict_widget.js';
     if (group) group.classList.toggle('open');
   };
 
+  const GOOGLE_CLIENT_ID = '316017385374-7nnvn1q2mcej8n9r2ii7ofrmbu6mdhra.apps.googleusercontent.com';
+
+  function getResolvedApiBaseUrl() {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '') {
+      return 'http://localhost:5000';
+    }
+    if (window.location.hostname.includes('tieng-trung-hong-tai-1.onrender.com')) {
+      return 'https://tiengtrunghongtai.online';
+    }
+    return window.location.origin || 'https://tiengtrunghongtai.online';
+  }
+  const API_BASE_URL = getResolvedApiBaseUrl();
+
+  function isSuperAdmin(email) {
+    if (!email) return false;
+    const em = email.toLowerCase().trim();
+    return em.includes('phanphiphu') || em.includes('thaihong162004') || em.includes('toiyeutinhoc') || em === 'super_admin';
+  }
+
+  function isUserAdmin(email) {
+    if (!email) return false;
+    const em = email.toLowerCase().trim();
+    return isSuperAdmin(em) || em.includes('hongtai') || em.includes('admin') || em.includes('teacher');
+  }
+
   // Get current user info from localStorage or session
   function getCurrentUser() {
     try {
@@ -58,6 +86,585 @@ import './quick_dict_widget.js';
       if (stored) return JSON.parse(stored);
     } catch (e) { }
     return null;
+  }
+  window.getCurrentUser = getCurrentUser;
+
+  // Check if a valid authenticated user session exists
+  function isUserLoggedIn() {
+    try {
+      const stored = localStorage.getItem('user') || localStorage.getItem('hongtai_current_user') || localStorage.getItem('currentUser') || sessionStorage.getItem('user');
+      if (!stored) return false;
+      const u = JSON.parse(stored);
+      if (!u) return false;
+      const email = (u.email || '').toLowerCase().trim();
+      if (email && email !== 'guest' && !email.startsWith('guest_')) return true;
+      if (u.id || u._id || u.sub) return true;
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+  window.isUserLoggedIn = isUserLoggedIn;
+
+  // Dynamically ensure Google Identity Services script is present in document
+  function ensureGoogleGsiScript() {
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) return;
+    if (document.querySelector('script[src*="accounts.google.com/gsi/client"]')) return;
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+  ensureGoogleGsiScript();
+
+  // Inject sleek modern styles for Global Auth Guard Modal & Toast
+  function ensureGlobalAuthStyles() {
+    if (document.getElementById('global-auth-guard-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'global-auth-guard-styles';
+    style.textContent = `
+      @keyframes globalAuthFadeIn {
+        from { opacity: 0; backdrop-filter: blur(0px); }
+        to { opacity: 1; backdrop-filter: blur(20px); }
+      }
+      @keyframes globalAuthCardPop {
+        from { opacity: 0; transform: scale(0.92) translateY(18px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      .global-auth-modal-overlay {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999999 !important;
+        background: rgba(8, 13, 25, 0.88) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 16px !important;
+        box-sizing: border-box !important;
+        animation: globalAuthFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .global-auth-card {
+        position: relative !important;
+        width: 100% !important;
+        max-width: 480px !important;
+        background: linear-gradient(150deg, #0f172a 0%, #1e293b 100%) !important;
+        border: 1.5px solid rgba(56, 189, 248, 0.38) !important;
+        border-radius: 28px !important;
+        padding: 32px 28px !important;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 45px rgba(56, 189, 248, 0.15) !important;
+        color: #ffffff !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 18px !important;
+        box-sizing: border-box !important;
+        animation: globalAuthCardPop 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .global-auth-close-btn {
+        position: absolute !important;
+        top: 18px !important;
+        right: 18px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: #cbd5e1 !important;
+        font-size: 1.25rem !important;
+        line-height: 1 !important;
+        cursor: pointer !important;
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.2s ease !important;
+      }
+      .global-auth-close-btn:hover {
+        background: rgba(239, 68, 68, 0.2) !important;
+        color: #f87171 !important;
+        border-color: rgba(239, 68, 68, 0.4) !important;
+        transform: rotate(90deg);
+      }
+      .global-auth-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 14px;
+        border-radius: 999px;
+        background: rgba(56, 189, 248, 0.12);
+        border: 1px solid rgba(56, 189, 248, 0.32);
+        color: #38bdf8;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .global-auth-icon-circle {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(139, 92, 246, 0.3));
+        border: 2px solid rgba(56, 189, 248, 0.45);
+        color: #38bdf8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.1rem;
+        box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3);
+      }
+      .global-auth-title {
+        font-size: 1.45rem !important;
+        font-weight: 800 !important;
+        color: #ffffff !important;
+        margin: 0 !important;
+        letter-spacing: -0.01em;
+      }
+      .global-auth-desc {
+        font-size: 0.92rem !important;
+        color: #94a3b8 !important;
+        margin: 0 !important;
+        line-height: 1.55 !important;
+      }
+      .global-auth-features-box {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 14px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        text-align: left;
+        box-sizing: border-box;
+      }
+      .global-auth-feature-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.88rem;
+        color: #e2e8f0;
+        font-weight: 500;
+      }
+      .global-auth-feature-item i {
+        color: #34d399;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+      }
+      .global-auth-action-box {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 4px;
+      }
+      .global-google-btn-slot {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        min-height: 48px;
+      }
+      .global-auth-home-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 0.88rem;
+        font-weight: 600;
+        padding: 8px 18px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.2s ease;
+      }
+      .global-auth-home-btn:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+      .global-auth-toast-pill {
+        position: fixed;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10000000;
+        padding: 12px 22px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.95);
+        border: 1px solid rgba(56, 189, 248, 0.4);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.2);
+        color: #ffffff;
+        font-size: 0.92rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        pointer-events: none;
+        animation: globalAuthFadeIn 0.25s ease forwards;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // Ensure modal DOM node exists
+  function ensureGlobalAuthModal() {
+    ensureGlobalAuthStyles();
+    let modal = document.getElementById('global-auth-required-modal');
+    if (modal) return modal;
+
+    modal = document.createElement('div');
+    modal.className = 'modal-overlay global-auth-modal-overlay';
+    modal.id = 'global-auth-required-modal';
+    modal.style.display = 'none';
+
+    modal.innerHTML = `
+      <div class="modal-card global-auth-card">
+        <button class="global-auth-close-btn" id="global-auth-close-btn" title="Đóng" onclick="window.hideGlobalAuthModal && window.hideGlobalAuthModal()">&times;</button>
+        <div class="global-auth-badge-wrap">
+          <span class="global-auth-badge"><i class="fa-solid fa-shield-halved"></i> Yêu Cầu Đăng Nhập</span>
+        </div>
+        <div class="global-auth-icon-circle">
+          <i class="fa-solid fa-user-lock"></i>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <h3 class="global-auth-title" id="global-auth-title">Đăng Nhập Để Trải Nghiệm</h3>
+          <p class="global-auth-desc" id="global-auth-desc">
+            Vui lòng đăng nhập với tài khoản Google để sử dụng tính năng, theo dõi tiến độ và lưu kết quả học tập của bạn.
+          </p>
+        </div>
+        <div class="global-auth-features-box">
+          <div class="global-auth-feature-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Mở khóa toàn bộ bài học &amp; tính năng luyện tập</span>
+          </div>
+          <div class="global-auth-feature-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Chấm điểm phát âm AI, luyện viết &amp; thi thử HSK</span>
+          </div>
+          <div class="global-auth-feature-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Tự động lưu từ vựng sổ tay, streak điểm danh hàng ngày</span>
+          </div>
+        </div>
+        <div class="global-auth-action-box">
+          <div id="global-google-signin-btn-container" class="global-google-btn-slot">
+            <div style="color: #94a3b8; font-size: 0.88rem; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-solid fa-circle-notch fa-spin"></i> Đang tải đăng nhập Google...
+            </div>
+          </div>
+        </div>
+        <div id="global-auth-home-btn-wrap" style="display: none; margin-top: 2px;">
+          <a href="/" class="global-auth-home-btn">
+            <i class="fa-solid fa-house"></i> Quay về Trang Chủ
+          </a>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal && !window._isMandatoryPageLockActive) {
+        window.hideGlobalAuthModal();
+      }
+    });
+
+    return modal;
+  }
+
+  // Global Google Sign-In Renderer
+  let _gsiRenderInterval = null;
+  function renderGlobalGoogleSignInButton() {
+    const container = document.getElementById('global-google-signin-btn-container');
+    if (!container) return;
+
+    if (typeof google === 'undefined' || !google.accounts || !google.accounts.id) {
+      ensureGoogleGsiScript();
+      clearInterval(_gsiRenderInterval);
+      let attempts = 0;
+      _gsiRenderInterval = setInterval(() => {
+        attempts++;
+        if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+          clearInterval(_gsiRenderInterval);
+          renderGlobalGoogleSignInButton();
+        } else if (attempts > 30) {
+          clearInterval(_gsiRenderInterval);
+          container.innerHTML = `
+            <button onclick="window.renderGlobalGoogleSignInButton && window.renderGlobalGoogleSignInButton()" style="display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px; background: #2563eb; color: #fff; border: none; font-weight: 600; cursor: pointer;">
+              <i class="fa-brands fa-google"></i> Thử lại đăng nhập Google
+            </button>
+          `;
+        }
+      }, 300);
+      return;
+    }
+
+    try {
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGlobalCredentialResponse,
+        auto_select: false,
+        cancel_on_tap_outside: !window._isMandatoryPageLockActive
+      });
+
+      container.innerHTML = '';
+      google.accounts.id.renderButton(
+        container,
+        {
+          theme: 'filled_blue',
+          size: 'large',
+          type: 'standard',
+          shape: 'pill',
+          text: 'signin_with',
+          logo_alignment: 'left',
+          width: 290
+        }
+      );
+    } catch (e) {
+      console.error('Google Sign-In initialization failed:', e);
+    }
+  }
+  window.renderGlobalGoogleSignInButton = renderGlobalGoogleSignInButton;
+
+  // Google credential response handler
+  async function handleGlobalCredentialResponse(response) {
+    if (!response || !response.credential) return;
+    try {
+      let clientDecodedUser = null;
+      try {
+        const base64Url = response.credential.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        const p = JSON.parse(jsonPayload);
+        if (p && p.email) {
+          const em = p.email.toLowerCase().trim();
+          const isSuper = isSuperAdmin(em);
+          const isTeach = em.includes('hongtai') || em.includes('teacher');
+          clientDecodedUser = {
+            name: p.name || em.split('@')[0],
+            email: em,
+            picture: p.picture || '',
+            role: isSuper ? 'super_admin' : (isTeach ? 'teacher' : 'user'),
+            isSuperAdmin: isSuper,
+            isAdmin: isSuper || isTeach
+          };
+        }
+      } catch (err) {
+        console.warn('Global Auth JWT decode fallback error:', err);
+      }
+
+      let data = null;
+      try {
+        const res = await fetch(API_BASE_URL + '/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ credential: response.credential }),
+          credentials: 'include'
+        });
+        if (res.ok) {
+          data = await res.json();
+        }
+      } catch (err) {
+        console.warn('Backend /api/auth/google error:', err);
+      }
+
+      let userObj = null;
+      if (data && data.success && data.user) {
+        userObj = data.user;
+        if (data.token) {
+          localStorage.setItem('session_token', data.token);
+        }
+      } else if (clientDecodedUser) {
+        userObj = clientDecodedUser;
+      } else {
+        throw new Error('Không nhận được dữ liệu xác thực Google');
+      }
+
+      const emailStr = (userObj.email || '').toLowerCase().trim();
+      if (isSuperAdmin(emailStr)) {
+        userObj.role = 'super_admin';
+        userObj.isSuperAdmin = true;
+        userObj.isAdmin = true;
+      } else if (isUserAdmin(emailStr)) {
+        userObj.isAdmin = true;
+      }
+
+      localStorage.setItem('user', JSON.stringify(userObj));
+      localStorage.setItem('currentUser', JSON.stringify(userObj));
+
+      updateSidebarUserProfile();
+      window.dispatchEvent(new CustomEvent('user-auth-changed', { detail: userObj }));
+      window.dispatchEvent(new CustomEvent('hongtai-auth-success', { detail: userObj }));
+
+      hideGlobalAuthModal();
+
+      const userName = userObj.name || (userObj.email ? userObj.email.split('@')[0] : 'Học viên');
+      showGlobalAuthToast(`Chào mừng ${userName} đã đăng nhập thành công! 👋`);
+
+      // If on subpage and previously locked, reload page so full user-specific data initializes
+      const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname === '';
+      if (!isIndex) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 350);
+        return;
+      }
+
+      // Execute pending guarded callback if any
+      if (typeof window._pendingGuardedAuthCallback === 'function') {
+        const cb = window._pendingGuardedAuthCallback;
+        window._pendingGuardedAuthCallback = null;
+        try { cb(); } catch (e) { console.error('Error executing pending auth callback:', e); }
+      }
+    } catch (e) {
+      console.error('Google Auth Error:', e);
+      showGlobalAuthToast('Đăng nhập Google thất bại! Vui lòng thử lại.', true);
+    }
+  }
+  window.handleGlobalCredentialResponse = handleGlobalCredentialResponse;
+
+  function showGlobalAuthModal(opts = {}) {
+    const modal = ensureGlobalAuthModal();
+    window._isMandatoryPageLockActive = !!opts.isMandatoryPageLock;
+    window._pendingGuardedAuthCallback = opts.callback || null;
+
+    const titleEl = document.getElementById('global-auth-title');
+    const descEl = document.getElementById('global-auth-desc');
+    const closeBtn = document.getElementById('global-auth-close-btn');
+    const homeBtnWrap = document.getElementById('global-auth-home-btn-wrap');
+
+    if (titleEl) {
+      titleEl.innerHTML = opts.title || (opts.actionName ? `Đăng Nhập Để ${opts.actionName}` : 'Đăng Nhập Để Trải Nghiệm');
+    }
+    if (descEl) {
+      descEl.innerHTML = opts.desc || `Vui lòng đăng nhập với tài khoản Google để sử dụng tính năng ${opts.actionName ? `<strong>${opts.actionName}</strong>` : ''}, mở khóa học tập và tự động lưu tiến độ của bạn.`;
+    }
+    if (closeBtn) {
+      closeBtn.style.display = opts.isMandatoryPageLock ? 'none' : 'flex';
+    }
+    if (homeBtnWrap) {
+      homeBtnWrap.style.display = opts.isMandatoryPageLock ? 'block' : 'none';
+    }
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    renderGlobalGoogleSignInButton();
+  }
+  window.showGlobalAuthModal = showGlobalAuthModal;
+
+  function hideGlobalAuthModal() {
+    if (window._isMandatoryPageLockActive && !isUserLoggedIn()) {
+      return; // Do not close if page is locked and still unauthenticated
+    }
+    const modal = document.getElementById('global-auth-required-modal');
+    if (modal) modal.style.display = 'none';
+    const oldModal = document.getElementById('auth-required-modal');
+    if (oldModal) oldModal.style.display = 'none';
+    document.body.style.overflow = '';
+    window._isMandatoryPageLockActive = false;
+  }
+  window.hideGlobalAuthModal = hideGlobalAuthModal;
+
+  window.openLoginPrompt = function (actionName, callback) {
+    if (isUserLoggedIn()) {
+      if (typeof callback === 'function') callback();
+      return;
+    }
+    showGlobalAuthModal({
+      isMandatoryPageLock: false,
+      actionName: typeof actionName === 'string' ? actionName : '',
+      callback: typeof callback === 'function' ? callback : (typeof actionName === 'function' ? actionName : null)
+    });
+  };
+
+  window.openAuthRequiredModal = window.openLoginPrompt;
+
+  window.requireAuth = function (callback, actionName = 'sử dụng tính năng này') {
+    if (isUserLoggedIn()) {
+      if (typeof callback === 'function') callback();
+      return true;
+    }
+    showGlobalAuthModal({
+      isMandatoryPageLock: false,
+      actionName: actionName,
+      callback: callback
+    });
+    return false;
+  };
+
+  function showGlobalAuthToast(msg, isError = false) {
+    if (typeof window.showToast === 'function') {
+      window.showToast(msg, isError);
+      return;
+    }
+    const existing = document.getElementById('global-auth-toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.id = 'global-auth-toast';
+    toast.className = 'global-auth-toast-pill';
+    if (isError) {
+      toast.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+      toast.style.boxShadow = '0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(239, 68, 68, 0.2)';
+    }
+    toast.innerHTML = `
+      <i class="fa-solid ${isError ? 'fa-circle-exclamation text-danger' : 'fa-circle-check text-success'}" style="color: ${isError ? '#f87171' : '#34d399'}; font-size: 1.1rem;"></i>
+      <span>${msg}</span>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) translateY(-10px)';
+      setTimeout(() => toast.remove(), 320);
+    }, 3200);
+  }
+
+  // Page-Level Auth Guard: locks subpages for unauthenticated users
+  function checkPageAuthGuard() {
+    const path = window.location.pathname.toLowerCase();
+    const isIndex = path === '/' || path.endsWith('/index.html') || path === '';
+    if (isIndex) return;
+
+    if (!isUserLoggedIn()) {
+      let featureName = 'tính năng này';
+      if (path.includes('speaking-practice')) featureName = 'Luyện Nói HSKK & AI';
+      else if (path.includes('writing-practice')) featureName = 'Luyện Viết Tiếng Trung';
+      else if (path.includes('reading-practice')) featureName = 'Luyện Đọc Hiểu';
+      else if (path.includes('video-dictation')) featureName = 'Chép Chính Tả & Shadowing Video';
+      else if (path.includes('quiz-game')) featureName = 'Trò Chơi Đố Vui HSK';
+      else if (path.includes('vocab-practice')) featureName = 'Luyện Từ Vựng 5 Dạng';
+      else if (path.includes('translation-practice')) featureName = 'Luyện Dịch Câu & Đoạn Văn';
+      else if (path.includes('sentence-reorder')) featureName = 'Bài Tập Sắp Xếp Câu';
+      else if (path.includes('ai-dialogue')) featureName = 'Hội Thoại Trợ Lý AI';
+      else if (path.includes('chinese-phonetics')) featureName = 'Ngữ Âm Pinyin';
+      else if (path.includes('chinese-radicals')) featureName = '214 Bộ Thủ Chữ Hán';
+      else if (path.includes('hanzi-writer')) featureName = 'Tập Viết Chữ Hán (Hanzi)';
+      else if (path.includes('hsk-grammar')) featureName = 'Cẩm Nang Ngữ Pháp HSK';
+      else if (path.includes('lesson-texts')) featureName = 'Bài Khóa Giáo Trình';
+      else if (path.includes('lesson-online')) featureName = 'Khóa Học Trực Tuyến';
+      else if (path.includes('documents')) featureName = 'Kho Tài Liệu Học Tập';
+      else if (path.includes('detail-list')) featureName = 'Tra Cứu Từ Vựng Chi Tiết';
+      else if (path.includes('chat-history')) featureName = 'Lịch Sử Hội Thoại';
+      else if (path.includes('rank')) featureName = 'Bảng Xếp Hạng Học Viên';
+
+      showGlobalAuthModal({
+        isMandatoryPageLock: true,
+        actionName: featureName,
+        title: `Đăng Nhập Để Dùng: ${featureName}`,
+        desc: `Hệ thống yêu cầu bạn đăng nhập bằng Google trước khi sử dụng <strong>${featureName}</strong> để đồng bộ tiến độ và lưu kết quả học tập.`
+      });
+    }
   }
 
   // Update user profile card in DOM if user state changes
@@ -411,20 +1018,16 @@ import './quick_dict_widget.js';
       try { google.accounts.id.disableAutoSelect(); } catch (e) {}
     }
 
+    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname === '';
+    if (!isIndex) {
+      window.location.href = '/?logged_out=true';
+      return;
+    }
+
     if (typeof window.handleLogout === 'function') {
       window.handleLogout(e);
     } else {
       window.location.reload();
-    }
-  };
-
-  window.openLoginPrompt = function () {
-    const modal = document.getElementById('app-login-modal') || document.getElementById('auth-required-modal');
-    if (modal) {
-      modal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    } else {
-      window.location.href = '/?login=true';
     }
   };
 
@@ -559,7 +1162,47 @@ import './quick_dict_widget.js';
     bindMenuButtons();
     setTimeout(bindMenuButtons, 500);
     setTimeout(bindMenuButtons, 1200);
+
+    // 9. Attach Universal Auth Guard: check if subpage requires login & guard sidebar links
+    checkPageAuthGuard();
+    setTimeout(checkPageAuthGuard, 350);
+    attachSidebarAuthProtection();
+    setTimeout(attachSidebarAuthProtection, 600);
   }
+
+  function attachSidebarAuthProtection() {
+    document.querySelectorAll('.app-sidebar a, .global-app-sidebar a, .app-sidebar .sidebar-item, .global-app-sidebar .sidebar-item, .app-sidebar .sidebar-subitem, .global-app-sidebar .sidebar-subitem').forEach(el => {
+      if (el.classList.contains('sidebar-dropdown-toggle')) return;
+      const href = el.getAttribute('href') || el.getAttribute('onclick') || '';
+      const isSubpageLink = href.includes('.html') && !href.includes('index.html');
+      if (isSubpageLink) {
+        el.addEventListener('click', (e) => {
+          if (!isUserLoggedIn()) {
+            e.preventDefault();
+            e.stopPropagation();
+            const text = el.textContent.trim().split('\n')[0] || 'tính năng này';
+            showGlobalAuthModal({
+              isMandatoryPageLock: false,
+              actionName: text,
+              title: `Đăng Nhập Để Dùng: ${text}`,
+              desc: `Vui lòng đăng nhập với tài khoản Google để sử dụng tính năng <strong>${text}</strong>.`
+            });
+          }
+        }, true);
+      }
+    });
+  }
+
+  // Intercept any click on subpage by unauthenticated guest users
+  document.addEventListener('click', function (e) {
+    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname === '';
+    if (!isIndex && !isUserLoggedIn()) {
+      if (e.target.closest('#global-auth-required-modal')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      showGlobalAuthModal({ isMandatoryPageLock: true });
+    }
+  }, true);
 
   function injectTopMenuButtonIfMissing() {
     // Check if page already has a hamburger button

@@ -3,13 +3,13 @@
 
 :root {
   /* Fonts - Standardized across entire HongTai application */
-  --font-sans: 'Be Vietnam Pro', 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-display: 'Be Vietnam Pro', 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', sans-serif;
-  --font-handwriting: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'Be Vietnam Pro', cursive, sans-serif;
+  --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-display: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-pinyin: 'Be Vietnam Pro', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --font-handwriting: 'Mali', 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', cursive, sans-serif;
   --font-kaiti: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
   --font-hanzi: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
   --font-chinese: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
-  --font-pinyin: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Layout */
   --nav-height: 70px;
@@ -26,12 +26,12 @@
 /* Cartoon / Gamified Playful Theme Tokens (Duolingo & Quizlet Inspired) */
 html {
   /* Fonts */
-  --font-sans: 'Be Vietnam Pro', 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-display: 'Be Vietnam Pro', 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', sans-serif;
+  --font-sans: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-display: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-pinyin: 'Be Vietnam Pro', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
   --font-kaiti: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
   --font-hanzi: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
   --font-chinese: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif;
-  --font-pinyin: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
   --radius-sm: 12px;
   --radius-md: 18px;
@@ -1630,15 +1630,52 @@ html:not(.dark) .flashcard-complete-container {
 .ans-btn span,
 .q-text:not(.vi),
 .zh,
-[class*="hanzi"],
-[class*="Hanzi"],
+.hanzi,
+.hanzi-text,
+.hanzi-char,
+.hanzi-word,
+.hanzi-character,
+.hanzi-display,
+.hanzi-sample,
+.hanzi-stroke,
+.hanzi-single,
+[class*="hanzi-char"],
+[class*="hanzi-text"],
+[class*="hanzi-word"],
 [class*="chinese-char"],
 [data-hanzi] {
   font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif !important;
 }
 
+/* Ensure Vietnamese titles, navigation, and UI headers NEVER inherit Chinese fonts */
+.hanzi-header,
+.hanzi-header *,
+.title-group,
+.title-group *,
+.hanzi-title,
+.hanzi-desc,
+.filter-label,
+.filter-section,
+.voice-control-bar,
+.panel-header,
+.word-meaning-display,
+#active-meaning-text {
+  font-family: var(--font-display, 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif) !important;
+}
+
+.word-pinyin-display,
+#active-pinyin-text,
+.pinyin-card,
+.table-pinyin,
+.flashcard-pinyin,
+.pinyin-text,
+[class*="pinyin"],
+[class*="Pinyin"] {
+  font-family: var(--font-pinyin, 'Be Vietnam Pro', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, Arial, sans-serif) !important;
+}
+
 .pinyin-text {
-  font-family: var(--font-pinyin), 'Be Vietnam Pro', 'Inter', 'Segoe UI', Roboto, sans-serif !important;
+  font-family: var(--font-pinyin), 'Be Vietnam Pro', 'Segoe UI', Roboto, sans-serif !important;
   font-size: 2.2rem;
   font-weight: 700;
   color: var(--accent-teal);
@@ -2883,6 +2920,27 @@ html:not(.dark) .sentence-card-container .card-action-bar {
 }
 
 /* ==========================================================================
+   EMBEDDED IFRAME PROTECTION (Hide duplicate floating widgets inside iframes)
+   ========================================================================== */
+.is-embedded-iframe .screen-pen-floating-bubble,
+.is-embedded-iframe #screen-pen-floating-bubble,
+.is-embedded-iframe .chatbot-widget,
+.is-embedded-iframe #chatbot-widget,
+.is-embedded-iframe #screen-drawing-canvas-overlay,
+.is-embedded-iframe #screen-drawing-toolbar,
+.is-embedded-iframe #quick-dict-widget,
+.is-embedded-iframe #seasonal-particle-canvas,
+.is-embedded-iframe #floating-theme-widget,
+.is-embedded-iframe .floating-theme-widget,
+.is-embedded-iframe .global-sidebar-drawer,
+.is-embedded-iframe .global-hamburger-btn {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+/* ==========================================================================
    AI CHATBOT WIDGET STYLES
    ========================================================================== */
 
@@ -3001,12 +3059,32 @@ body.light-mode .chatbot-toggle-btn {
   transform-origin: bottom left;
 }
 
-/* Khi chat đang mở: Bút vẽ tự động nâng lên cao để không bao giờ bị đè */
-body.chatbot-panel-open .screen-pen-floating-bubble {
+/* Khi chat đang mở: Bút vẽ và Từ điển tự động nâng lên cao để không bao giờ bị đè */
+body.chatbot-panel-open .screen-pen-floating-bubble,
+body.chatbot-panel-open .quick-dict-widget {
   transform: translateY(-460px) scale(0.9) !important;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s !important;
   opacity: 0.9 !important;
   z-index: 9999 !important;
+}
+
+/* Khi từ điển đang mở: Bút vẽ tự động nâng lên cao để không bị che khuất */
+body.quick-dict-panel-open .screen-pen-floating-bubble {
+  transform: translateY(-460px) scale(0.9) !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s !important;
+  opacity: 0.9 !important;
+  z-index: 9999 !important;
+}
+
+@media (max-width: 900px) {
+  body.quick-dict-panel-open .screen-pen-floating-bubble,
+  body.quick-dict-panel-open .chatbot-widget,
+  body.quick-dict-panel-open #floating-theme-widget,
+  body.quick-dict-panel-open .floating-theme-widget {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
 }
 
 @keyframes slideInUp {
@@ -3258,8 +3336,8 @@ body.light-mode .chat-bullet-dot {
   transform: translateY(0);
 }
 
-/* Responsive adjustment for Mobile & Small Tablets */
-@media (max-width: 768px) {
+/* Responsive adjustment for Mobile & Tablets (iPad, Galaxy Tab...) */
+@media (max-width: 900px) {
   .chatbot-widget {
     bottom: 20px !important;
     right: 16px !important;
@@ -3271,20 +3349,17 @@ body.light-mode .chat-bullet-dot {
     right: auto !important;
   }
 
-  /* When chat is open on mobile: hide theme switcher, floating pen bubble, and chat toggle button so they NEVER overlap */
+  .chatbot-toggle-btn {
+    width: 52px !important;
+    height: 52px !important;
+    font-size: 1.45rem !important;
+  }
+
+  /* When chat is open on mobile/tablet: hide theme switcher, floating pen bubble, quick dict, and chat toggle button so they NEVER overlap */
   body.chatbot-panel-open #floating-theme-widget,
-  body.chatbot-panel-open .floating-theme-widget {
-    display: none !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
-  body.chatbot-panel-open .screen-pen-floating-bubble {
-    display: none !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-  }
-
+  body.chatbot-panel-open .floating-theme-widget,
+  body.chatbot-panel-open .screen-pen-floating-bubble,
+  body.chatbot-panel-open .quick-dict-widget,
   body.chatbot-panel-open .chatbot-toggle-btn {
     display: none !important;
     opacity: 0 !important;
@@ -9826,7 +9901,7 @@ html.hide-pinyin [data-role="pinyin"],
 .screen-pen-floating-bubble {
   position: fixed !important;
   right: 24px !important;
-  bottom: 95px !important;
+  bottom: 160px !important;
   width: 56px !important;
   height: 56px !important;
   border-radius: 50% !important;
@@ -10118,8 +10193,8 @@ body.light-mode .dt-btn:hover {
   color: #ffffff;
 }
 
-/* Mobile responsive toolbar */
-@media (max-width: 768px) {
+/* Mobile & Tablet responsive toolbar & pen bubble */
+@media (max-width: 900px) {
   .dt-label {
     display: none;
   }
@@ -10130,7 +10205,7 @@ body.light-mode .dt-btn:hover {
   }
   .screen-pen-floating-bubble {
     right: 16px !important;
-    bottom: 85px !important;
+    bottom: 146px !important;
     width: 50px !important;
     height: 50px !important;
   }
@@ -21239,5 +21314,242 @@ html:not(.dark) .announcement-update-row:hover {
   transform: translateX(4px);
   box-shadow: 0 6px 18px rgba(2, 132, 199, 0.12) !important;
 }
+
+/* ========================================================
+   HSKK AI HINT & SUGGESTIONS CARDS (Writing & Speaking)
+   Theme Variables & High Contrast Accessibility Styles
+   ======================================================== */
+:root,
+html.light-mode,
+body.light-mode,
+html:not(.dark) {
+  --hint-header-color: #15803d;
+  --hint-badge-bg: #dcfce7;
+  --hint-badge-color: #15803d;
+  --hint-badge-border: #86efac;
+
+  --outline-title-color: #b45309;
+  --outline-box-bg: #fffbeb;
+  --outline-box-border: #fde68a;
+  --outline-box-color: #1e293b;
+
+  --vocab-title-color: #0284c7;
+  --vocab-pill-bg: #f0f9ff;
+  --vocab-pill-border: #7dd3fc;
+  --vocab-hanzi-color: #0f172a;
+  --vocab-pinyin-color: #0284c7;
+  --vocab-meaning-color: #334155;
+
+  --grammar-title-color: #581c87;
+  --grammar-icon-color: #7c3aed;
+  --grammar-pattern-color: #4c1d95;
+  --grammar-card-bg: #ffffff;
+  --grammar-card-border: #a855f7;
+  --grammar-card-shadow: 0 4px 16px rgba(124, 58, 237, 0.12);
+  --grammar-meaning-color: #0f172a;
+  --grammar-example-bg: #f3e8ff;
+  --grammar-example-border-sub: #ddd6fe;
+  --grammar-example-color: #0f172a;
+  --grammar-example-border: #7c3aed;
+  --grammar-vd-color: #6d28d9;
+
+  --sample-title-color: #059669;
+  --sample-badge-color: #047857;
+  --sample-hanzi-bg: #ffffff;
+  --sample-hanzi-color: #0f172a;
+  --sample-hanzi-border: #a7f3d0;
+  --sample-pinyin-title: #0284c7;
+  --sample-pinyin-bg: #f0f9ff;
+  --sample-pinyin-border: #bae6fd;
+  --sample-pinyin-color: #0369a1;
+  --sample-meaning-title: #b45309;
+  --sample-meaning-bg: #fffbeb;
+  --sample-meaning-border: #fde68a;
+  --sample-meaning-color: #1e293b;
+  --btn-tts-color: #0284c7;
+  --btn-copy-color: #059669;
+}
+
+html.dark,
+body.dark {
+  --hint-header-color: #4ade80;
+  --hint-badge-bg: rgba(34, 197, 94, 0.18);
+  --hint-badge-color: #86efac;
+  --hint-badge-border: rgba(34, 197, 94, 0.35);
+
+  --outline-title-color: #fbbf24;
+  --outline-box-bg: rgba(0, 0, 0, 0.3);
+  --outline-box-border: rgba(245, 158, 11, 0.35);
+  --outline-box-color: #e2e8f0;
+
+  --vocab-title-color: #38bdf8;
+  --vocab-pill-bg: rgba(56, 189, 248, 0.12);
+  --vocab-pill-border: rgba(56, 189, 248, 0.35);
+  --vocab-hanzi-color: #ffffff;
+  --vocab-pinyin-color: #38bdf8;
+  --vocab-meaning-color: #cbd5e1;
+
+  --grammar-title-color: #d8b4fe;
+  --grammar-icon-color: #c084fc;
+  --grammar-pattern-color: #f0abfc;
+  --grammar-card-bg: rgba(30, 27, 75, 0.85);
+  --grammar-card-border: #a855f7;
+  --grammar-card-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  --grammar-meaning-color: #f8fafc;
+  --grammar-example-bg: rgba(139, 92, 246, 0.25);
+  --grammar-example-border-sub: rgba(192, 132, 252, 0.35);
+  --grammar-example-color: #ffffff;
+  --grammar-example-border: #c084fc;
+  --grammar-vd-color: #f472b6;
+
+  --sample-title-color: #34d399;
+  --sample-badge-color: #6ee7b7;
+  --sample-hanzi-bg: rgba(0, 0, 0, 0.3);
+  --sample-hanzi-color: #ffffff;
+  --sample-hanzi-border: rgba(16, 185, 129, 0.3);
+  --sample-pinyin-title: #38bdf8;
+  --sample-pinyin-bg: rgba(0, 0, 0, 0.22);
+  --sample-pinyin-border: rgba(56, 189, 248, 0.25);
+  --sample-pinyin-color: #93c5fd;
+  --sample-meaning-title: #fbbf24;
+  --sample-meaning-bg: rgba(0, 0, 0, 0.22);
+  --sample-meaning-border: rgba(251, 191, 36, 0.25);
+  --sample-meaning-color: #e2e8f0;
+  --btn-tts-color: #38bdf8;
+  --btn-copy-color: #34d399;
+}
+
+/* AI Grammar Card & Micro Components */
+.ai-grammar-card {
+  background: var(--grammar-card-bg, #ffffff);
+  border: 2px solid var(--grammar-card-border, #a855f7);
+  box-shadow: var(--grammar-card-shadow, 0 4px 16px rgba(124, 58, 237, 0.12));
+  border-radius: 16px;
+  padding: 16px 18px;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ai-grammar-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(147, 51, 234, 0.22);
+  border-color: #7c3aed;
+}
+
+.ai-grammar-pattern {
+  font-weight: 900;
+  font-size: 1.18rem;
+  color: var(--grammar-pattern-color, #581c87);
+  margin-bottom: 6px;
+  line-height: 1.4;
+  font-family: var(--font-chinese), sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.ai-grammar-meaning {
+  font-size: 0.92rem;
+  color: var(--grammar-meaning-color, #0f172a);
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.ai-grammar-example {
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--grammar-example-color, #0f172a);
+  background: var(--grammar-example-bg, #f3e8ff);
+  border: 1px solid var(--grammar-example-border-sub, #ddd6fe);
+  border-left: 4.5px solid var(--grammar-example-border, #7c3aed);
+  padding: 10px 14px;
+  border-radius: 10px;
+  line-height: 1.65;
+  font-family: var(--font-chinese), sans-serif;
+  margin-top: 6px;
+}
+
+.ai-grammar-example .example-label {
+  font-weight: 900;
+  color: var(--grammar-vd-color, #6d28d9);
+  margin-right: 6px;
+  font-family: var(--font-body), sans-serif;
+}
+
+.ai-vocab-pill {
+  cursor: pointer;
+  background: var(--vocab-pill-bg, #f0f9ff);
+  border: 1.5px solid var(--vocab-pill-border, #7dd3fc);
+  padding: 6px 14px;
+  border-radius: 99px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ai-vocab-pill:hover {
+  transform: translateY(-1px);
+}
+
+.ai-vocab-hanzi {
+  font-weight: 800;
+  color: var(--vocab-hanzi-color, #0f172a);
+  font-family: var(--font-chinese), sans-serif;
+  font-size: 0.95rem;
+}
+
+.ai-vocab-pinyin {
+  font-size: 0.8rem;
+  color: var(--vocab-pinyin-color, #0284c7);
+  font-weight: 700;
+  margin: 0 3px;
+}
+
+.ai-vocab-meaning {
+  font-size: 0.82rem;
+  color: var(--vocab-meaning-color, #334155);
+  font-weight: 600;
+}
+
+.sample-hanzi-card {
+  font-size: 1.12rem;
+  line-height: 1.85;
+  color: var(--sample-hanzi-color, #0f172a);
+  white-space: pre-line;
+  margin-bottom: 14px;
+  font-family: var(--font-chinese), sans-serif;
+  background: var(--sample-hanzi-bg, #ffffff);
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1.5px solid var(--sample-hanzi-border, #a7f3d0);
+  border-left: 4px solid #10b981;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);
+}
+
+.sample-pinyin-card {
+  font-size: 0.92rem;
+  color: var(--sample-pinyin-color, #0369a1);
+  font-style: italic;
+  line-height: 1.65;
+  white-space: pre-line;
+  background: var(--sample-pinyin-bg, #f0f9ff);
+  border: 1px solid var(--sample-pinyin-border, #bae6fd);
+  padding: 12px 16px;
+  border-radius: 10px;
+}
+
+.sample-meaning-card {
+  font-size: 0.94rem;
+  color: var(--sample-meaning-color, #1e293b);
+  line-height: 1.7;
+  white-space: pre-line;
+  background: var(--sample-meaning-bg, #fffbeb);
+  border: 1px solid var(--sample-meaning-border, #fde68a);
+  padding: 12px 16px;
+  border-radius: 10px;
+}
+
 
 

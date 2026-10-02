@@ -28,6 +28,8 @@
   }
 
   function mountGlobalChatbot() {
+    // Prevent duplicate chatbot widgets inside iframes (e.g. embedded games, modals)
+    if (window.self !== window.top) return;
     if (document.getElementById('chatbot-widget')) return;
 
     const widget = document.createElement('div');
@@ -125,6 +127,14 @@
 
     function toggleChatbotPanel() {
       const isHidden = panel.style.display === 'none';
+      if (isHidden) {
+        if (typeof window.isUserLoggedIn === 'function' && !window.isUserLoggedIn()) {
+          if (typeof window.openLoginPrompt === 'function') {
+            window.openLoginPrompt('sử dụng Trợ lý AI');
+          }
+          return;
+        }
+      }
       panel.style.display = isHidden ? 'flex' : 'none';
       document.body.classList.toggle('chatbot-panel-open', isHidden);
       if (isHidden) {
@@ -237,6 +247,13 @@
       const content = input.value.trim();
       if (!content) return;
 
+      if (typeof window.isUserLoggedIn === 'function' && !window.isUserLoggedIn()) {
+        if (typeof window.openLoginPrompt === 'function') {
+          window.openLoginPrompt('trò chuyện với Trợ lý AI');
+        }
+        return;
+      }
+
       input.value = '';
       appendChatMessage('user', content);
       chatHistory.push({ role: 'user', content });
@@ -281,11 +298,13 @@
     }
   }
 
-  // Auto mount when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mountGlobalChatbot);
-  } else {
-    mountGlobalChatbot();
+  // Auto mount when DOM is ready (top window only, never duplicate in iframe)
+  if (window.self === window.top) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', mountGlobalChatbot);
+    } else {
+      mountGlobalChatbot();
+    }
   }
 
   window.mountGlobalChatbot = mountGlobalChatbot;

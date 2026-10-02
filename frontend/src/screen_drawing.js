@@ -43,6 +43,8 @@ class ScreenDrawingTool {
   }
 
   init() {
+    // Prevent duplicate screen drawing widgets inside iframes (e.g. embedded quiz-game, modals)
+    if (window.self !== window.top) return;
     if (document.getElementById('screen-drawing-canvas-overlay')) return;
 
     this.createCanvas();
@@ -412,7 +414,16 @@ class ScreenDrawingTool {
   }
 
   toggle(force) {
-    this.isActive = typeof force === 'boolean' ? force : !this.isActive;
+    const nextState = typeof force === 'boolean' ? force : !this.isActive;
+    if (nextState) {
+      if (typeof window.isUserLoggedIn === 'function' && !window.isUserLoggedIn()) {
+        if (typeof window.openLoginPrompt === 'function') {
+          window.openLoginPrompt('sử dụng Bút vẽ màn hình');
+        }
+        return;
+      }
+    }
+    this.isActive = nextState;
     this.canvas.classList.toggle('active', this.isActive);
     this.bubble.classList.toggle('active', this.isActive);
     this.toolbar.classList.toggle('active', this.isActive);
@@ -1329,11 +1340,13 @@ class ScreenDrawingTool {
   }
 }
 
-// Auto-initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => new ScreenDrawingTool());
-} else {
-  new ScreenDrawingTool();
+// Auto-initialize when DOM is ready (top window only, never duplicate in iframe)
+if (window.self === window.top) {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ScreenDrawingTool());
+  } else {
+    new ScreenDrawingTool();
+  }
 }
 
 /* ==============================================================================

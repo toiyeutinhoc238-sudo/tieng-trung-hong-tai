@@ -6,7 +6,8 @@
 (function () {
   'use strict';
 
-  // Prevent duplicate mounts
+  // Prevent duplicate mounts or mounting inside iframes
+  if (window.self !== window.top) return;
   if (document.getElementById('quick-dict-widget')) return;
 
   let localDict = null;
@@ -82,9 +83,9 @@
        ========================================================================== */
     .quick-dict-widget {
       position: fixed;
-      bottom: 96px;
+      bottom: 92px;
       right: 24px;
-      z-index: 99999;
+      z-index: 100000;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       pointer-events: auto;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -93,6 +94,22 @@
     .quick-dict-widget.dock-left {
       right: auto !important;
       left: 24px !important;
+    }
+
+    @media (max-width: 900px) {
+      .quick-dict-widget {
+        bottom: 84px !important;
+        right: 16px !important;
+      }
+      .quick-dict-widget.dock-left {
+        left: 16px !important;
+        right: auto !important;
+      }
+      .quick-dict-toggle-btn {
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 1.25rem !important;
+      }
     }
 
     /* Floating Bubble Button */
@@ -714,6 +731,15 @@
       const isVisible = panel.style.display !== 'none';
       const next = typeof forceState === 'boolean' ? forceState : !isVisible;
       if (next) {
+        if (typeof window.isUserLoggedIn === 'function' && !window.isUserLoggedIn()) {
+          if (typeof window.openLoginPrompt === 'function') {
+            window.openLoginPrompt('tra từ điển nhanh');
+          }
+          return;
+        }
+      }
+      document.body.classList.toggle('quick-dict-panel-open', next);
+      if (next) {
         panel.style.display = 'flex';
         loadLocalDict();
         renderHistoryTags();
@@ -1035,6 +1061,12 @@
           ev.preventDefault();
           ev.stopPropagation();
           removeSelectionTooltip();
+          if (typeof window.isUserLoggedIn === 'function' && !window.isUserLoggedIn()) {
+            if (typeof window.openLoginPrompt === 'function') {
+              window.openLoginPrompt('tra từ điển nhanh');
+            }
+            return;
+          }
           window.openQuickDict(text);
         });
 
