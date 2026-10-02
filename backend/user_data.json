@@ -18,10 +18,10 @@
       "name": "Phú Phan",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
       "role": "super_admin",
-      "lastSeenTime": "2026-10-02T10:25:41.061Z",
+      "lastSeenTime": "2026-10-02T11:52:45.853Z",
       "stats": {
         "streak": 1,
-        "studyTime": 34545,
+        "studyTime": 34920,
         "lastActiveDate": "2026-10-02",
         "dailyHistory": {
           "2026-08-07": 1038,
@@ -60,7 +60,7 @@
           "2026-09-27": 1740,
           "2026-09-28": 705,
           "2026-09-29": 120,
-          "2026-10-02": 210
+          "2026-10-02": 585
         }
       },
       "gameHistory": [
@@ -1268,6 +1268,15 @@
           "device": "💻 Windows PC",
           "ip": "::1",
           "isClosed": false
+        },
+        {
+          "sessionId": "sess_n68th2j0_1790941588259",
+          "enterTime": "2026-10-02T11:46:28.260Z",
+          "exitTime": "2026-10-02T11:52:45.828Z",
+          "durationSeconds": 378,
+          "device": "💻 Windows PC",
+          "ip": "::1",
+          "isClosed": true
         }
       ]
     },
@@ -41526,7 +41535,8 @@
     "c45er58w70pmug827cl": "phanphiphu04@gmail.com",
     "6kj8m4jean9mugedhye": "phanphiphu04@gmail.com",
     "higzpusz9u7mtcc7vg9": "phuongthaofut@gmail.com",
-    "37cdujw0mbvmtmbeuf0": "dieuthu1310@gmail.com"
+    "37cdujw0mbvmtmbeuf0": "dieuthu1310@gmail.com",
+    "oc86xptv3thmuqwdp7y": "phanphiphu04@gmail.com"
   },
   "chats": {
     "thaygiaoroxie@gmail.com": [],

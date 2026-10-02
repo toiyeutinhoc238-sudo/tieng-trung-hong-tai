@@ -143,6 +143,63 @@ button, a, input, select, textarea, .btn, .nb-lesson-check-card, .topic-card, .m
   touch-action: manipulation;
 }
 
+/* Explicitly preserve and guarantee FontAwesome Icon Font Family & rendering across entire application */
+i[class*="fa-"],
+i.fa-solid,
+i.fa-regular,
+i.fa-brands,
+.fa-solid,
+.fa-regular,
+.fa-brands,
+.fa,
+.fas,
+.far,
+.fab {
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "FontAwesome" !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-rendering: auto !important;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+.fa-solid,
+.fas {
+  font-weight: 900 !important;
+}
+
+.fa-regular,
+.far {
+  font-weight: 400 !important;
+}
+
+.fa-brands,
+.fab {
+  font-family: "Font Awesome 6 Brands", "FontAwesome" !important;
+  font-weight: 400 !important;
+}
+
+/* Standard Header SVG Icons (Zero-failure vector icons for header navigation) */
+.header-svg-icon {
+  width: 18px !important;
+  height: 18px !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+  pointer-events: none !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.2s ease, fill 0.2s ease !important;
+}
+
+.header-icon-btn:hover .header-svg-icon,
+.global-hamburger-btn:hover .header-svg-icon,
+.particle-toggle-btn:hover .header-svg-icon,
+.rank-theme-btn:hover .header-svg-icon,
+.rank-nav-btn:hover .header-svg-icon,
+.btn-home:hover .header-svg-icon {
+  transform: scale(1.1);
+}
+
 html, body {
   font-family: var(--font-sans);
   margin: 0;
@@ -18691,7 +18748,6 @@ body.sidebar-open #radical-top-fullscreen-btn {
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 10px !important;
   color: #ffffff !important;
-  font-family: inherit !important;
   font-weight: 800 !important;
   font-size: 0.92rem !important;
   cursor: pointer !important;
@@ -18713,6 +18769,8 @@ body.sidebar-open #radical-top-fullscreen-btn {
 .menu-toggle-btn i,
 .global-hamburger-btn i,
 .header-icon-btn.global-hamburger-btn i {
+  font-family: "Font Awesome 6 Free", "FontAwesome" !important;
+  font-weight: 900 !important;
   font-size: 1.15rem !important;
   color: #ffffff !important;
   line-height: 1 !important;

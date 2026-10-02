@@ -1163,11 +1163,86 @@ import './quick_dict_widget.js';
     setTimeout(bindMenuButtons, 500);
     setTimeout(bindMenuButtons, 1200);
 
-    // 9. Attach Universal Auth Guard: check if subpage requires login & guard sidebar links
+    // 9. Guarantee pristine, zero-failure SVG vector icons for header navigation
+    ensureHeaderButtonSVGs();
+    setTimeout(ensureHeaderButtonSVGs, 150);
+    setTimeout(ensureHeaderButtonSVGs, 600);
+    setTimeout(ensureHeaderButtonSVGs, 1500);
+    setTimeout(ensureFontAwesomeLoaded, 800);
+
+    // 10. Attach Universal Auth Guard: check if subpage requires login & guard sidebar links
     checkPageAuthGuard();
     setTimeout(checkPageAuthGuard, 350);
     attachSidebarAuthProtection();
     setTimeout(attachSidebarAuthProtection, 600);
+  }
+
+  // Zero-Failure Vector SVG Icons for Header Navigation
+  const HEADER_ICONS = {
+    bars: `<svg class="header-svg-icon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3.5" y1="6" x2="20.5" y2="6"></line><line x1="3.5" y1="12" x2="20.5" y2="12"></line><line x1="3.5" y1="18" x2="20.5" y2="18"></line></svg>`,
+    snowflake: (enabled = true) => `<svg class="header-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="${enabled ? '#38bdf8' : '#94a3b8'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="${enabled ? '' : 'opacity: 0.4;'}"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line><line x1="4.93" y1="19.07" x2="19.07" y2="4.93"></line><polyline points="9 3.5 12 6.5 15 3.5"></polyline><polyline points="9 20.5 12 17.5 15 20.5"></polyline><polyline points="3.5 9 6.5 12 3.5 15"></polyline><polyline points="20.5 9 17.5 12 20.5 15"></polyline></svg>`,
+    sun: `<svg class="header-svg-icon icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><line x1="12" y1="1.5" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22.5"></line><line x1="4.22" y1="4.22" x2="6" y2="6"></line><line x1="18" y1="18" x2="19.78" y2="19.78"></line><line x1="1.5" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22.5" y2="12"></line><line x1="4.22" y1="19.78" x2="6" y2="18"></line><line x1="18" y1="6" x2="19.78" y2="4.22"></line></svg>`,
+    moon: `<svg class="header-svg-icon icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`,
+    home: `<svg class="header-svg-icon icon-home" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H4.5A1.5 1.5 0 0 1 3 20v-9.5z"></path><polyline points="9 21 9 12 15 12 15 21"></polyline></svg>`
+  };
+
+  function ensureHeaderButtonSVGs() {
+    const isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+    const particlesEnabled = localStorage.getItem('particles_enabled') !== 'false';
+
+    // 1. Hamburger buttons
+    document.querySelectorAll('.global-hamburger-btn, #mobile-nav-toggle-btn, #top-sidebar-toggle-btn').forEach(btn => {
+      if (!btn.querySelector('svg.header-svg-icon')) {
+        btn.innerHTML = HEADER_ICONS.bars;
+      }
+    });
+
+    // 2. Home buttons
+    document.querySelectorAll('.rank-nav-btn, .btn-home, a.header-icon-btn[href="/"], a.header-icon-btn[href="/index.html"], a.header-icon-btn[title="Trang chủ"]').forEach(btn => {
+      if (!btn.querySelector('svg.header-svg-icon')) {
+        btn.innerHTML = HEADER_ICONS.home;
+      }
+    });
+
+    // 3. Particle toggle buttons
+    document.querySelectorAll('#particle-toggle-btn, .particle-toggle-btn').forEach(btn => {
+      if (!btn.querySelector('svg.header-svg-icon')) {
+        btn.innerHTML = HEADER_ICONS.snowflake(particlesEnabled);
+      }
+    });
+
+    // 4. Theme toggle buttons
+    document.querySelectorAll('.theme-toggle-btn, #theme-toggle-btn, .rank-theme-btn').forEach(btn => {
+      if (!btn.querySelector('svg.header-svg-icon')) {
+        btn.innerHTML = isLight ? HEADER_ICONS.moon : HEADER_ICONS.sun;
+        btn.setAttribute('title', isLight ? 'Chuyển sang Chế độ Tối' : 'Chuyển sang Chế độ Sáng');
+      }
+    });
+  }
+  window.ensureHeaderButtonSVGs = ensureHeaderButtonSVGs;
+
+  // Intercept/hook updateToggleBtns so any page-level theme toggle renders crisp SVGs
+  const _origUpdateToggleBtns = window.updateToggleBtns;
+  window.updateToggleBtns = function (isLight) {
+    if (typeof _origUpdateToggleBtns === 'function') {
+      try { _origUpdateToggleBtns(isLight); } catch (e) {}
+    }
+    document.querySelectorAll('.theme-toggle-btn, #theme-toggle-btn, .rank-theme-btn').forEach(btn => {
+      btn.innerHTML = isLight ? HEADER_ICONS.moon : HEADER_ICONS.sun;
+      btn.setAttribute('title', isLight ? 'Chuyển sang Chế độ Tối' : 'Chuyển sang Chế độ Sáng');
+    });
+  };
+
+  // FontAwesome fallback loader in case primary CDN is blocked or fails
+  function ensureFontAwesomeLoaded() {
+    const isLoaded = document.fonts && document.fonts.check ? document.fonts.check('16px "Font Awesome 6 Free"') : true;
+    if (!isLoaded && !document.querySelector('link[data-fa-fallback="true"]')) {
+      const fallback = document.createElement('link');
+      fallback.rel = 'stylesheet';
+      fallback.setAttribute('data-fa-fallback', 'true');
+      fallback.href = 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css';
+      document.head.appendChild(fallback);
+    }
   }
 
   function attachSidebarAuthProtection() {
@@ -1243,7 +1318,7 @@ import './quick_dict_widget.js';
         menuBtn.id = 'global-hamburger-btn';
         menuBtn.title = 'Mở Menu Danh Mục';
         menuBtn.setAttribute('aria-label', 'Mở Menu Danh Mục');
-        menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        menuBtn.innerHTML = HEADER_ICONS.bars;
         menuBtn.onclick = window.toggleGlobalSidebar;
 
         if (cfg.insertBefore === ':first-child') {

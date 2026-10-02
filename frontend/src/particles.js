@@ -347,14 +347,15 @@ window.initSeasonalParticles = initSeasonalParticles;
 
 window.updateParticleToggleBtns = function (enabled) {
   const btns = document.querySelectorAll('#particle-toggle-btn, .particle-toggle-btn');
+  const snowflakeSvg = `<svg class="header-svg-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="${enabled ? '#38bdf8' : '#94a3b8'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="${enabled ? '' : 'opacity: 0.4;'}"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line><line x1="4.93" y1="19.07" x2="19.07" y2="4.93"></line><polyline points="9 3.5 12 6.5 15 3.5"></polyline><polyline points="9 20.5 12 17.5 15 20.5"></polyline><polyline points="3.5 9 6.5 12 3.5 15"></polyline><polyline points="20.5 9 17.5 12 20.5 15"></polyline></svg>`;
   btns.forEach(btn => {
     if (enabled) {
       btn.classList.remove('particles-off');
-      btn.innerHTML = '<i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i>';
+      btn.innerHTML = snowflakeSvg;
       btn.title = 'Tắt hiệu ứng mùa rơi (Đang BẬT)';
     } else {
       btn.classList.add('particles-off');
-      btn.innerHTML = '<i class="fa-solid fa-snowflake" style="opacity: 0.35; color: #94a3b8;"></i>';
+      btn.innerHTML = snowflakeSvg;
       btn.title = 'Bật hiệu ứng mùa rơi (Đang TẮT)';
     }
   });
