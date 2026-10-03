@@ -596,7 +596,11 @@ function getFallbackHskkSuggestion() {
   // Nhận diện chủ đề cụ thể để đưa ra bài mẫu bám sát 100% nội dung
   const isIntegrity = /诚|信|欺诈|撒谎|真实|守约|道德/.test(qText);
   const isExercise = /运动|锻炼|走路|健康|跑步|健身|身体/.test(qText);
-  const isReading = /读书|学习|汉语|中文|书籍|知识|阅读/.test(qText);
+  const isTech = /科技|互联网|手机|人工智能|网络|电脑|数字|微信|距离/.test(qText);
+  const isSuccess = /成败|成功|失败|母|细节|努力|挫折|坚持|目标|知足/.test(qText);
+  const isMoney = /金钱|幸福|财富|富裕|快乐|心态|钱/.test(qText);
+  const isFastPaced = /快节奏|压力|生活|节奏|工作|平衡|忙碌|加班/.test(qText);
+  const isReading = /读书|学习|汉语|中文|书籍|知识|阅读|教育/.test(qText);
   const isEco = /环境|绿化|树|公园|污染|垃圾|低碳|极简|消费/.test(qText);
 
   // 1. CHỦ ĐỀ: THÀNH THẬT & GIỮ CHỮ TÍN (诚实守信)
@@ -626,7 +630,6 @@ function getFallbackHskkSuggestion() {
         ],
         sampleAnswer: {
           hanzi: `关于“${qText}”这个问题，我觉得做一个诚实守信的人非常重要。\n\n在平时生活和学习中，如果一个人经常说真话、说到做到，大家就会很喜欢他，也愿意和他做朋友。相反，如果一个人常常撒谎骗人，别人就不会再相信他了。\n\n首先，我们在学校里要诚实。做作业不能抄别人的，考试更不能作弊。遇到不会的问题，要主动请教老师和同学。其次，在家里做错了事情，要勇敢承认错误，不能对父母撒谎。\n\n最后，答应别人的事情就一定要努力做到。只要我们每个人都讲信用、说真话，我们的生活就会更加美好，身边也会有更多知心的好朋友。`,
-          pinyin: `Guānyú "${qText}" zhè ge wèntí, wǒ juéde zuò yí gè chéngshí shǒuxìn de rén fēicháng zhòngyào.\n\nZài píngshí shēnghuó hé xuéxí zhōng, rúguǒ yí gè rén jīngcháng shuō zhēnhuà, shuō dào zuò dào, dàjiā jiù huì hěn xǐhuan tā, yě yuànyì hé tā zuò péngyou. Xiāngfǎn, rúguǒ yí gè rén chángcháng sāhuǎng piàn rén, biérén jiù bú huì zài xiāngxìn tā le.\n\nShǒuxiān, wǒmen zài xuéxiào lǐ yào chéngshí. Zuò zuòyè bù néng chāo biérén de, kǎoshì gèng bù néng zuòbì. Yù dào bú huì de wèntí, yào zhǔdòng qǐngjiào lǎoshī hé tóngxué. Qícì, zài jiālǐ zuò cuò le shìqing, yào yǒnggǎn chéngrèn cuòwù, bù néng duì fùmǔ sāhuǎng.\n\nZuìhòu, dāying biérén de shìqing jiù yídìng yào nǔlì zuò dào. Zhǐyào wǒmen měi gè rén dōu jiǎng xìnyòng, shuō zhēnhuà, wǒmen de shēnghuó jiù huì gèngjiā měihǎo, shēnbiān yě huì yǒu gèng duō zhīxīn de hǎo péngyou.`,
           meaningVi: `Về câu hỏi "${qText}", tôi thấy làm một người thành thật và giữ chữ tín là điều vô cùng quan trọng.\n\nTrong cuộc sống và học tập thường ngày, nếu một người thường xuyên nói thật, nói được làm được, mọi người sẽ rất quý mến và sẵn lòng kết bạn. Ngược lại, nếu một người hay nói dối lừa gạt, người khác sẽ không bao giờ tin tưởng nữa.\n\nTrước hết, ở trường học chúng ta phải trung thực. Làm bài tập không được chép của người khác, khi đi thi càng không được gian lận. Gặp câu hỏi chưa hiểu thì chủ động hỏi thầy cô và bạn bè. Thứ hai, ở nhà nếu làm sai việc gì thì phải dũng cảm nhận lỗi, không được nói dối cha mẹ.\n\nCuối cùng, việc gì đã hứa với người khác thì nhất định phải nỗ lực thực hiện. Chỉ cần mỗi người chúng ta đều giữ chữ tín, nói lời thật lòng, cuộc sống sẽ ngày càng tươi đẹp và chúng ta sẽ có thêm nhiều bạn tốt tri kỷ.`
         }
       };
@@ -657,42 +660,10 @@ function getFallbackHskkSuggestion() {
         ],
         sampleAnswer: {
           hanzi: `古人云：“人无信不立，业无信不兴，国无信则衰。”针对“${qText}”这一具有深刻现实意义的时代命题，我认为在全社会涵养诚实守信的良好风气，绝非一日之功，必须坚持德法兼治、标本兼治，从道德自律、市场示范与法律制度三个维度协同发力。\n\n首先，立德树人是培育诚信土壤的根本之策。家庭与各级学校应当将诚信教育贯穿于人才培养的全过程，注重以身作则、言传身教，引导青少年将诚实守信内化于心、外化于行。唯有在潜移默化中树立知荣明耻的价值观念，才能从源头上筑牢抗拒虚伪与侥幸的心理防线。\n\n其次，弘扬契约精神是维系现代市场经济秩序的关键支柱。各级商业机构与社会公众人物应当以高标准严格约束自身行为，做到以诚立企、以信筑基，坚决杜绝商业欺诈与虚假宣传。一个恪守信用的商业环境，不仅能显著降低交易成本，更能激发出强大的市场活力与社会互信。\n\n再者，健全严谨的法治体系与全方位的失信惩戒机制是不可或缺的刚性保障。有关部门应当加速完善覆盖全社会的信用信息网络，大幅提高失信违约的违法成本，真正形成“守信者处处通畅，失信者寸步难行”的强大震慑效应。\n\n总而言之，诚信风气的形成离不开每个社会成员的躬行实践。只要我们每个人都能笃行不怠、守信践诺，必将汇聚成推动社会文明奔涌向前的磅礴力量。`,
-          pinyin: `Gǔrén yún: "Rén wú xìn bù lì, yè wú xìn bù xīng, guó wú xìn zé shuāi." Zhēnduì "${qText}" zhè yí jùyǒu shēnkè xiànshí yìyì de shídài mìngtí, wǒ rènwéi zài quán shèhuì hányǎng chéngshí shǒuxìn de liánghǎo fēngqì, juébù shì yīrì zhī gōng, bìxū jiānchí dé fǎ jiānzhì, biāoběn-jiānzhì, cóng dàodé zìlǜ, shìchǎng shìfàn yǔ fǎlǜ zhìdù sān gè wéidù xiétóng fālì.\n\nShǒuxiān, lìdé shùrén shì péiyù chéngxìn tǔrǎng de gēnběn zhī cè. Jiātíng yǔ gèjí xuéxiào yīngdāng jiāng chéngxìn jiàoyù guànchuān yú réncái péiyǎng de quán guòchéng, zhùzhòng yǐshēn-zuòzé, yánchuán-shēnjiào, yǐndǎo qīngshàonián jiāng chéngshí shǒuxìn nèihuà yú xīn, wàihuà yú xíng. Wéiyǒu zài qiányí-mòhuà zhōng shùlì zhīróng-míngchǐ de jiàzhí guānniàn, cái néng cóng yuántóu shang zhùláo kàngjù xūwěi yǔ jiǎoxìng de xīnlǐ fángxiàn.\n\nQícì, hóngyáng qìyuē jīngshén shì wéixì xiàndài shìchǎng jīngjì zhìxù de guānjiàn zhīzhù. Gèjí shāngyè jīgòu yǔ shèhuì gōngzhòng rénwù yīngdāng yǐ gāo biāozhǔn yángé yuēshù zìshēn xíngwéi, zuò dào yǐ chéng lì qǐ, yǐ xìn zhù jī, jiānjué dùjué shāngyè qīzhà yǔ xūjiǎ guǎnggào. Yí gè kèshǒu xìnyòng de shāngyè huánjìng, bùjǐn néng xiǎnzhù jiàngdī jiāoyì chéngběn, gèng néng jīfā chū qiángdà de shìchǎng huólì yǔ shèhuì hùxìn.\n\nZàizhě, jiànquán yánjǐn de fǎzhì tǐxì yǔ quánfāngwèi de shīxìn chéngjiè jīzhì shì bùkě huòquē de gāngxìng bǎozhàng. Yǒuguān bùmén yīngdāng jiāsù wánshàn fùgài quán shèhuì de xìnyòng xìnxī wǎngluò, dàfú tígāo shīxìn wéiyuē de wéifǎ chéngběn, zhēnzhèng xíngchéng "shǒuxìnzhě chùchù tōngchàng, shīxìnzhě cùnbù-nánxíng" de qiángdà zhènshè xiàoyìng.\n\nZǒng'éryánzhī, chéngxìn fēngqì de xíngchéng lí bù kāi měi gè shèhuì chéngyuán de gōngxíng shíjiàn. Zhǐyào wǒmen měi gè rén dōu néng dǔxíng bù dài, shǒuxìn jiànnuò, bìjiāng huìjù chéng tuīdòng shèhuì wénmíng bēnyǒng xiàngqián de pángbó lìliàng.`,
           meaningVi: `Người xưa có câu: "Người không có chữ tín thì khó lập thân, doanh nghiệp không có chữ tín thì không hưng thịnh, quốc gia không có chữ tín tất suy tàn." Đối với câu hỏi giàu ý nghĩa thực tiễn "${qText}", tôi cho rằng để bồi dưỡng phong khí trung thực giữ chữ tín trong toàn xã hội tuyệt đối không thể là chuyện một sớm một chiều, mà cần kết hợp hài hòa giữa đạo đức và pháp trị, trị cả gốc lẫn ngọn trên ba bình diện: tự giác đạo đức, mẫu mực thị trường và thể chế pháp luật.\n\nTrước hết, bồi dưỡng nhân cách là phương sách gốc rễ để ươm mầm chữ tín. Gia đình và các cấp nhà trường cần lồng ghép giáo dục tính trung thực vào toàn bộ quá trình nuôi dưỡng nhân tài, chú trọng lấy mình làm gương, dạy bảo bằng cả lời nói lẫn hành động để thế hệ trẻ thấu hiểu và thực hành. Chỉ khi tư tưởng đúng đắn được ngấm sâu một cách tự nhiên, ta mới xây dựng được bức tường thành tâm lý vững chắc ngăn chặn thói giả dối.\n\nThứ hai, phát huy tinh thần khế ước là trụ cột then chốt bảo đảm trật tự kinh tế thị trường hiện đại. Các doanh nghiệp và người có uy tín trong xã hội cần tự giác chuẩn mực, lấy chân thành lập nghiệp, lấy chữ tín làm gốc, kiên quyết bài trừ gian lận thương mại và quảng cáo sai sự thật. Một môi trường kinh doanh trọng chữ tín sẽ giảm thiểu đáng kể chi phí giao dịch và nâng cao niềm tin trong xã hội.\n\nThêm vào đó, việc hoàn thiện khuôn khổ pháp chế nghiêm minh và cơ chế chế tài xử phạt người thất tín là bảo đảm không thể thiếu. Các cơ quan quản lý cần đẩy mạnh mạng lưới thông tin tín dụng xã hội, nâng cao cái giá phải trả của việc vi phạm, thực sự tạo lập hiệu ứng răn đe mạnh mẽ: "Người giữ chữ tín đi đâu cũng thuận lợi, kẻ thất tín một bước khó đi".\n\nTóm lại, phong khí chữ tín phụ thuộc vào sự dấn thân hành động của mỗi người. Chỉ cần mỗi cá nhân bền bỉ giữ trọn lời hứa, nhất định sẽ hội tụ thành sức mạnh to lớn đưa nền văn minh xã hội tiến bước mạnh mẽ.`
         }
       };
     }
-
-    // Trung cấp (mặc định cho Integrity):
-    return {
-      isFallback: true,
-      outline: {
-        intro: `Mở bài: Đặt vấn đề trực diện cho câu hỏi "${qText}". Khẳng định chữ tín và sự trung thực là nền tảng đạo đức của xã hội.`,
-        body: [
-          `Luận điểm 1: Vai trò giáo dục từ gia đình và nhà trường (cha mẹ và thầy cô cần lấy mình làm gương, dạy con trẻ sống chân thành từ nhỏ).`,
-          `Luận điểm 2: Trách nhiệm nêu gương của các doanh nghiệp và người nổi tiếng (kinh doanh giữ chữ tín, công khai minh bạch, nói không với gian lận).`,
-          `Luận điểm 3: Hoàn thiện hệ thống luật pháp và chế tài trừng phạt nghiêm khắc (xử lý nghiêm các hành vi gian dối thương mại, trừng phạt kẻ thất tín).`
-        ],
-        conclusion: `Kết bài: Tổng kết lại quan điểm, kêu gọi mỗi cá nhân bắt đầu từ chính mình, từ việc nhỏ nhất để xây dựng xã hội tin cậy.`
-      },
-      vocabulary: [
-        { hanzi: "诚实守信", pinyin: "chéngshí shǒuxìn", meaning: "trung thực giữ chữ tín" },
-        { hanzi: "以身作则", pinyin: "yǐshēn zuòzé", meaning: "lấy mình làm gương" },
-        { hanzi: "商业欺诈", pinyin: "shāngyè qīzhà", meaning: "gian lận thương mại" },
-        { hanzi: "严厉惩罚", pinyin: "yánlì chéngfá", meaning: "trừng phạt nghiêm khắc" },
-        { hanzi: "信用体系", pinyin: "xìnyòng tǐxì", meaning: "hệ thống tín dụng / uy tín xã hội" },
-        { hanzi: "言出必行", pinyin: "yán chū bì xíng", meaning: "nói là làm, giữ lời hứa" }
-      ],
-      sentenceStructures: [
-        { pattern: "要想……，需要从……几个方面共同努力", meaning: "Muốn..., cần phải cùng nỗ lực từ mấy phương diện...", example: "要想在全社会形成良好的诚信风气，需要从教育和法律等多方面共同努力。" },
-        { pattern: "只有让……，才能起到……的作用", meaning: "Chỉ khi khiến cho..., mới có thể phát huy tác dụng...", example: "只有让失信者付出沉重代价，才能起到有效的警示作用。" }
-      ],
-      sampleAnswer: {
-        hanzi: `我觉得，要想在全社会形成诚实守信的良好风气，需要从家庭教育、社会示范和法律制度三个层面协同推进。\n\n首先，家庭与学校的道德教育是根本基石。父母和老师应当以身作则，从小培养孩子讲真话、守承诺的良好习惯。当孩子犯错时，家长要耐心倾听并鼓励他们勇于坦白，而不是一味严厉训斥。只有让下一代从小树立正确的荣辱观，诚信的种子才能在他们心中生根发芽。\n\n其次，各行各业的公众人物与商业机构必须发挥模范带头作用。企业在经营过程中应当做到货真价实、童叟无欺，自觉摒弃虚假广告和商业欺诈。一旦失去信誉，不仅会损害消费者的合法权益，更会破坏整个市场的健康秩序。\n\n最后，完善的社会信用体系与严密的法律制度是坚强保障。有关部门应当加大对造假售假、学术剽窃和违约失信行为的惩处力度，让违规者付出高昂的法律和经济代价，真正形成“守信者处处受益，失信者寸步难行”的法治环境。\n\n总而言之，全社会的良好风气离不开每一个人的自觉践行。只要我们从身边的小事做起，言出必行、信守诺言，就一定能携手构建一个充满温暖与信任的和谐社会。`,
-        pinyin: `Wǒ juéde, yào xiǎng zài quán shèhuì xíngchéng chéngshí shǒuxìn de liánghǎo fēngqì, xūyào cóng jiātíng jiàoyù, shèhuì shìfàn hé fǎlǜ zhìdù sān gè céngmiàn xiétóng tuījìn.\n\nShǒuxiān, jiātíng yǔ xuéxiào de dàodé jiàoyù shì gēnběn jīshí. Fùmǔ hé lǎo shī yīngdāng yǐshēn-zuòzé, cóng xiǎo péiyǎng háizi jiǎng zhēnhuà, shǒu chéngnuò de liánghǎo xíguàn. Dāng háizi fàncuò shí, jiāzhǎng yào nàixīn qīngtīng bìng gǔlì tāmen yǒngyú tǎnbái, ér bú shì yíwèi yánlì xùnchì. Zhǐyǒu ràng xiàyídài cóng xiǎo shùlì zhèngquè de róngrǔguān, chéngxìn de zhǒngzi cái néng zài tāmen xīn zhōng shēnggēn-fāyá.\n\nQícì, gè háng gè yè de gōngzhòng rénwù yǔ shāngyè jīgòu bìxū fāhuī mófàn dàitóu zuòyòng. Qǐyè zài jīngyíng guòchéng zhōng yīngdāng zuò dào huòzhēn-jiàshí, tóngsǒu-wúqī, zìjué bìngqì xūjiǎ guǎnggào hé shāngyè qīzhà. Yídàn shīqù xìnyù, bùjǐn huì sǔnhài xiāofèizhě de héfǎ quányì, gèng huì pòhuài zhěng gè shìchǎng de jiànkāng zhìxù.\n\nZuìhòu, wánshàn de shèhuì xìnyòng tǐxì yǔ yánmì de fǎlǜ zhìdù shì jiānqiáng bǎozhàng. Yǒuguān bùmén yīngdāng jiàdà duì zàojiǎ-shòujiǎ, xuéshù piáoqiè hé wéiyuē shīxìn xíngwéi de chéngchǔ lìdù, ràng wéiguīzhě fùchū gāo'áng de fǎlǜ hé jīngjì dàijià, zhēnzhèng xíngchéng "shǒuxìnzhě chùchù shòuyì, shīxìnzhě cùnbù-nánxíng" de fǎzhì huánjìng.\n\nZǒng'éryánzhī, quán shèhuì de liánghǎo fēngqì lí bù kāi měi yí gè rén de zìjué jiànxíng. Zhǐyào wǒmen cóng shēnbiān de xiǎoshì zuò qǐ, yán chū bì xíng, xìnshǒu nuòyán, jiù yídìng néng xiéshǒu gòujiàn yí gè chōngmǎn wēnnuǎn yǔ xìnrèn de héxié shèhuì.`,
-        meaningVi: `Tôi cho rằng, để hình thành phong khí trung thực giữ chữ tín trong toàn xã hội, cần có sự phối hợp đồng bộ từ ba bình diện: giáo dục gia đình, gương mẫu xã hội và thể chế pháp luật.\n\nTrước hết, giáo dục đạo đức từ gia đình và nhà trường là nền tảng cốt lõi. Cha mẹ và thầy cô giáo cần lấy mình làm gương, rèn luyện cho trẻ thói quen nói lời thật, giữ lời hứa ngay từ thuở nhỏ. Khi con trẻ mắc lỗi, phụ huynh cần kiên nhẫn lắng nghe và khích lệ con dũng cảm bộc bạch, chứ không nên chỉ chăm chăm trách phạt nặng nề. Chỉ khi thế hệ trẻ sớm xác lập ý thức đúng đắn, hạt mầm trung thực mới có thể bén rễ sâu trong tâm hồn.\n\nThứ hai, những người của công chúng và các cơ quan doanh nghiệp phải phát huy vai trò tiên phong gương mẫu. Doanh nghiệp trong quá trình kinh doanh cần giữ chữ tín, hàng thật giá đúng, không lừa dối khách hàng, kiên quyết bài trừ quảng cáo gian lận và thủ đoạn thương mại thất đức. Một khi đánh mất uy tín, không chỉ làm tổn hại quyền lợi người tiêu dùng mà còn làm xói mòn trật tự lành mạnh của thị trường.\n\nCuối cùng, hệ thống tín dụng xã hội hoàn thiện và khuôn khổ pháp luật nghiêm minh là điểm tựa bảo đảm vững chắc. Các cơ quan chức năng cần tăng cường xử phạt đối với các hành vi buôn bán hàng giả, gian lận học thuật hay bội tín hợp đồng, buộc người vi phạm phải trả giá đắt cả về pháp lý lẫn kinh tế, qua đó thực sự tạo lập một môi trường pháp trị mà 'người giữ chữ tín đi đâu cũng thuận lợi, kẻ thất tín một bước khó đi'.\n\nTóm lại, phong khí tốt đẹp của toàn xã hội không thể tách rời sự tự giác thực hành của từng cá nhân. Chỉ cần mỗi chúng ta bắt đầu từ những việc nhỏ nhặt xung quanh, nói là làm, giữ trọn lời hứa, nhất định chúng ta sẽ chung tay kiến tạo nên một xã hội hài hòa tràn đầy ấm áp và niềm tin.`
-      }
-    };
   }
 
   // 2. CHỦ ĐỀ: RÈN LUYỆN SỨC KHỎE, THỂ THAO, ĐI BỘ (锻炼身体, 运动)
@@ -721,39 +692,161 @@ function getFallbackHskkSuggestion() {
       ],
       sampleAnswer: {
         hanzi: `俗话说：“身体是革命的本钱。”针对“${qText}”这个问题，我认为在快节奏的现代生活中，坚持运动与锻炼身体具有极其重要的价值。\n\n首先，坚持锻炼能够显著增强体质。无论是晨跑、散步还是去健身房，规律的体育活动能够促进血液循环，提高免疫力，有效预防肥胖和颈椎病等现代文明病。拥有充沛的体魄，我们才能以饱满的精力投入到繁重的工作与学习当中。\n\n其次，运动是缓解心理压力、调节情绪的最佳良药。在结束了一整天高强度的脑力劳动后，到户外走一走，呼吸新鲜空气，能够让紧绷的大脑得到充分放松，有助于提高睡眠质量，保持乐观开朗的心态。\n\n最后，锻炼身体贵在持之以恒。很多人半途而废，主要是缺乏自律和清晰的目标。我们可以从每天快走半小时或慢跑两公里开始，循序渐进地养成习惯。\n\n总而言之，健康是一切幸福的源泉。让我们放下手机、走出室内，积极参与到体育锻炼中来，享受健康带来的快乐生活。`,
-        pinyin: `Súhuà shuō: "Shēntǐ shì gémìng de běnqián." Zhēnduì "${qText}" zhè ge wèntí, wǒ rènwéi zài kuàijièzòu de xiàndài shēnghuó zhōng, jiānchí yùndòng yǔ duànliàn shēntǐ jùyǒu jíqí zhòngyào de jiàzhí.\n\nShǒuxiān, jiānchí duànliàn nénggòu xiǎnzhù zēngqiáng tǐzhì. Wúlùn shì chénpǎo, sànbù háishì qù jiànshēnfáng, guīlǜ de tǐyù huódòng nénggòu cùjìn xiěyè xúnhuán, tígāo miǎnyìlì, yǒuxiào yùfáng féipàng hé jǐngzhuībìng děng xiàndài wénmíngbìng. Yǒuyǒu chōngpèi de tǐpò, wǒmen cái néng yǐ bǎomǎn de jīnglì tóurù dào fánzhòng de gōngzuò yǔ xuéxí dāngzhōng.\n\nQícì, yùndòng shì huǎnjiě xīnlǐ yālì, tiáojié qíngxù de zuìjiā liángyào. Zài jiéshù le yì zhěngtiān gāoxiàodù de nǎolì láodòng hòu, dào hùwài zǒu yi zǒu, hūxī xīnxiān kōngqì, nénggòu ràng jǐnběng de dànǎo dédào chōngfèn fàngsōng, yǒuzhù yú tígāo shuìmián zhìliàng, bǎochí lèguān kāilǎng de xīntài.\n\nZuìhòu, duànliàn shēntǐ guì zài chízhīyǐhéng. Hěn duō rén bàntú'érfèi, zhǔyào shì quēfá zìlǜ hé qīngxī de mùbiāo. Wǒmen kěyǐ cóng měitiān kuàizǒu bàn xiǎoshí huò mànpǎo liǎng gōnglǐ kāishǐ, xúnxù-jiànjìn de yǎngchéng xíguàn.\n\nZǒng'éryánzhī, jiànkāng shì yíqiè xìngfú de yuánquán. Ràng wǒmen fàngxià shǒujī, zǒuchū shìnèi, jījí cānyù dào tǐyù duànliàn zhōng lái, xiǎngshòu jiànkāng dài lái de kuàilè shēnghuó.`,
         meaningVi: `Tục ngữ có câu: "Sức khỏe là vốn quý của cách mạng." Đối với câu hỏi "${qText}", tôi cho rằng trong nhịp sống hiện đại hối hả, kiên trì vận động và rèn luyện thân thể có giá trị vô cùng quan trọng.\n\nTrước hết, kiên trì tập luyện có thể tăng cường thể chất rõ rệt. Cho dù là chạy bộ buổi sáng, đi dạo hay đến phòng gym, các hoạt động thể thao đều đặn có thể thúc đẩy tuần hoàn máu, tăng cường miễn dịch, phòng ngừa béo phì và thoái hóa đốt sống cổ cùng nhiều căn bệnh thời hiện đại. Có được thể lực dồi dào, chúng ta mới có thể cống hiến hết mình cho công việc và học tập.\n\nThứ hai, vận động là liều thuốc hữu hiệu nhất để giải tỏa áp lực tâm lý và điều hòa cảm xúc. Sau một ngày dài làm việc trí óc căng thẳng, ra ngoài trời đi dạo vài vòng hít thở bầu không khí trong lành có thể giúp não bộ được thả lỏng hoàn toàn, nâng cao chất lượng giấc ngủ và duy trì tinh thần lạc quan yêu đời.\n\nCuối cùng, rèn luyện thân thể điều quý nhất là ở sự kiên trì bền bỉ. Rất nhiều người bỏ dở giữa chừng vì thiếu tính tự giác và mục tiêu cụ thể. Chúng ta có thể bắt đầu từ việc đi bộ nhanh nửa tiếng hoặc chạy chậm 2 km mỗi ngày, từng bước rèn luyện thành thói quen lâu dài.\n\nTóm lại, sức khỏe là cội nguồn của mọi hạnh phúc. Chúng ta hãy tạm buông điện thoại, bước ra khỏi phòng, tích cực hòa mình vào các hoạt động thể thao để tận hưởng niềm vui trọn vẹn mà một cơ thể khỏe mạnh mang lại.`
       }
     };
   }
 
-  // 3. MẪU TỔNG QUÁT (DÀNH CHO CÁC ĐỀ TÀI XÃ HỘI & CUỘC SỐNG KHÁC - 100% TIẾNG TRUNG CHUẨN, KHÔNG LẪN TIẾNG VIỆT)
+  // 3. CHỦ ĐỀ: THÀNH CÔNG, THẤT BẠI, CHI TIẾT (成败, 细节, 挫折, 坚持)
+  if (isSuccess) {
+    return {
+      isFallback: true,
+      outline: {
+        intro: `Mở bài: Nêu quan điểm trực diện về quy luật thành công và thất bại: "${qText}". Khẳng định thành công là sự kết tinh của bài học kinh nghiệm và ý chí kiên định.`,
+        body: [
+          "Luận điểm 1: Thất bại là tấm gương soi chiếu những lỗ hổng, giúp tích lũy kinh nghiệm quý báu và rèn luyện nghị lực (dẫn chứng: Thomas Edison, Steve Jobs).",
+          "Luận điểm 2: Thành công ban đầu giúp thắp sáng sự tự tin và kiến tạo đòn bẩy tâm lý tích cực, tạo đà bứt phá cho những mục tiêu lớn hơn.",
+          "Luận điểm 3: Coi trọng chi tiết và sự kiên trì bền bỉ: 'Chi tiết quyết định thành bại', chỉ khi làm tốt từng khâu nhỏ mới dựng nên nghiệp lớn."
+        ],
+        conclusion: "Kết bài: Đúc kết rằng không nên sợ thất bại cũng đừng ngủ quên trên chiến thắng; giữ tâm thế khiêm tốn học hỏi để bước tới thành công bền vững."
+      },
+      vocabulary: [
+        { hanzi: "失败乃成功之母", pinyin: "shībài nǎi chénggōng zhī mǔ", meaning: "thất bại là mẹ thành công" },
+        { hanzi: "挫折", pinyin: "cuòzhé", meaning: "trắc trở, nghịch cảnh" },
+        { hanzi: "细节决定成败", pinyin: "xìjié juédìng chéngbài", meaning: "chi tiết quyết định thành bại" },
+        { hanzi: "持之以恒", pinyin: "chí zhī yǐ héng", meaning: "kiên trì bền bỉ" },
+        { hanzi: "厚积薄发", pinyin: "hòu jī bó fā", meaning: "tích lũy sâu dày rồi mới bộc phát rực rỡ" }
+      ],
+      sentenceStructures: [
+        { pattern: "……不仅是检验……的试金石，更是……", meaning: "... không chỉ là viên đá thử vàng kiểm nghiệm..., mà càng là...", example: "挫折不仅是检验意志的试金石，更是走向成熟的阶梯。" },
+        { pattern: "正所谓“……”，只有……才能……", meaning: "Đúng như câu nói '...', chỉ khi... mới có thể...", example: "正所谓“细节决定成败”，只有把每一个细节做到极致，才能赢得最终的胜利。" }
+      ],
+      sampleAnswer: {
+        hanzi: `古人常讲：“不经一番寒彻骨，怎得梅花扑鼻香。”关于“${qText}”这一耐人寻味的命题，我认为人生的成就绝非一蹴而就，而是在面对挫折与把握机遇的交替中不断淬炼出来的。\n\n首先，失败是磨砺心智、累积经验的宝贵财富。正如爱迪生为了研制灯泡曾经历上千次尝试与挫败，每一次失利并没有击垮他，反而帮他排除了无数错误路线，最终迎来光明的突破。如果一个人害怕犯错而裹足不前，他就永远无法探索未知的可能性。\n\n其次，初期的成功能够迅速激发内心强大的自信心与行动力。在团队与个人成长中，阶段性的小胜能够给人们带来成就感，形成积极向上的正向反馈。只要我们在取得成绩时不骄不躁，把成功当作新的起点，这种自信就会化作源源不断的创新动能。\n\n再者，俗话说“细节决定成败”。无论目标多么宏大，最终都要落实到每一个具体的步骤与环节之中。古今中外无数案例证明，往往是某一个被忽视的细微疏漏导致全盘崩溃，而那些精益求精、把寻常事情做到极致的人，往往能在激烈的竞争中脱颖而出。\n\n总的来说，失败让我们清醒，成功让我们笃定。只要我们胸怀远大目标，脚踏实地注重每一个细节，持之以恒、厚积薄发，就一定能在人生的赛道上行稳致远。`,
+        meaningVi: `Người xưa thường nói: "Không qua một phen lạnh thấu xương, sao có hoa mai ngát hương thơm." Đối với vấn đề đầy ý nghĩa "${qText}", tôi cho rằng thành tựu trong đời người không bao giờ đến sau một đêm, mà được tôi luyện qua sự đan xen giữa đối diện nghịch cảnh và nắm bắt thời cơ.\n\nTrước hết, thất bại là tài sản vô giá tôi luyện tâm trí và tích lũy vốn sống. Như Thomas Edison từng trải qua hàng ngàn lần thử nghiệm bất thành khi chế tạo bóng đèn, mỗi lần thất bại không quật ngã ông mà ngược lại giúp ông loại bỏ những con đường sai lầm để chạm tay vào bước đột phá. Nếu một người vì sợ sai mà chùn bước, họ sẽ vĩnh viễn không thể khai phá những giới hạn mới.\n\nThứ hai, những thành công bước đầu có thể nhanh chóng thắp lên niềm tin và sự tự tin mạnh mẽ. Trong sự trưởng thành của cá nhân hay tập thể, những thắng lợi giai đoạn mang lại cảm giác thành tựu và tạo ra động lực tâm lý tích cực. Chỉ cần chúng ta không tự mãn, xem thành công là điểm khởi đầu mới, sự tự tin ấy sẽ biến thành đòn bẩy mạnh mẽ.\n\nThêm vào đó, tục ngữ có câu "Chi tiết quyết định thành bại". Cho dù mục tiêu to lớn đến đâu, cuối cùng đều phải được hiện thực hóa qua từng khâu từng việc cụ thể. Những ai biết tỉ mỉ cầu toàn, biến những điều bình dị thành xuất sắc nhất định sẽ vững vàng dẫn đầu.\n\nTóm lại, thất bại giúp ta tỉnh táo, thành công giúp ta thêm vững tâm. Chỉ cần chúng ta nuôi dưỡng hoài bão, chú trọng từng chi tiết và kiên trì không ngừng, nhất định sẽ đi được những bước đi dài và vững chắc trên đường đời.`
+      }
+    };
+  }
+
+  // 4. CHỦ ĐỀ: CÔNG NGHỆ, MẠNG XÃ HỘI, KHOẢNG CÁCH (科技, 手机, 距离, 互联网)
+  if (isTech) {
+    return {
+      isFallback: true,
+      outline: {
+        intro: `Mở bài: Đặt vấn đề trực diện về sự tác động hai mặt của công nghệ hiện đại đối với câu hỏi: "${qText}".`,
+        body: [
+          "Luận điểm 1: Công nghệ xóa nhòa rào cản địa lý (video call, mạng xã hội giúp người thân ở xa gặp nhau hàng ngày, hợp tác toàn cầu).",
+          "Luận điểm 2: Mặt trái: Hiện tượng 'cúi đầu xem điện thoại' (低头族), giao tiếp ảo làm loãng tình cảm thực tế, ngồi cạnh nhau nhưng thiếu kết nối chân thành.",
+          "Luận điểm 3: Giải pháp: Làm chủ công nghệ, thiết lập ranh giới 'đồng hành chất lượng cao' (高质量陪伴), dành thời gian thực cho gia đình bạn bè."
+        ],
+        conclusion: "Kết bài: Khẳng định công nghệ chỉ là công cụ, gần hay xa phụ thuộc vào trái tim và sự lựa chọn của mỗi con người."
+      },
+      vocabulary: [
+        { hanzi: "拉近距离", pinyin: "lā jìn jùlí", meaning: "kéo gần khoảng cách" },
+        { hanzi: "疏远", pinyin: "shūyuǎn", meaning: "xa cách, lạnh nhạt" },
+        { hanzi: "低头族", pinyin: "dītóuzú", meaning: "hội người cúi đầu cắm mặt vào điện thoại" },
+        { hanzi: "高质量陪伴", pinyin: "gāo zhìliàng péibàn", meaning: "sự đồng hành chất lượng cao, thực chất" },
+        { hanzi: "双刃剑", pinyin: "shuāng rèn jiàn", meaning: "con dao hai lưỡi" }
+      ],
+      sentenceStructures: [
+        { pattern: "科技宛如一把双刃剑，既……又……", meaning: "Công nghệ như con dao hai lưỡi, vừa... lại vừa...", example: "现代科技宛如一把双刃剑，既拉近了地理上的距离，又可能疏远心灵的沟通。" },
+        { pattern: "关键在于我们如何……，而不是……", meaning: "Điều then chốt nằm ở việc chúng ta làm thế nào..., chứ không phải...", example: "关键在于我们如何支配手机，而不是让手机支配我们的生活。" }
+      ],
+      sampleAnswer: {
+        hanzi: `在这个日新月异的信息时代，针对“${qText}”这个引人深思的话题，我认为现代科技宛如一把双刃剑，它拉近了地理上的距离，却也在无形中给人们的心灵筑起了隔阂。\n\n从积极的层面来看，互联网与智能通信技术彻底打破了时空的限制。以往“家书抵万金”，而如今远在千里之外的亲朋好友，只需轻点屏幕就能通过高清视频面对面交谈。跨国合作、线上办公也因为科技的赋能变得触手可及，极大地促进了人与人之间的协作效率与情感联结。\n\n然而，从消极的一面来看，“低头族”现象在现代社会随处可见。无论是在家庭聚餐还是朋友聚会中，很多人习惯性地沉迷于虚拟世界，在社交软件上热火朝天，却对身边的亲友冷漠以对。这种浅层化的虚拟社交不仅剥夺了深度沟通的温度，甚至让不少年轻人产生了社交焦虑与现实疏离感。\n\n因此，问题的根源并不在于科技本身，而在于我们使用科技的态度。我们应当倡导“高质量陪伴”的理念，学会给手机设置边界，在与家人朋友相处时放下电子设备，用真诚的眼神与倾听去感受彼此的温度。\n\n总而言之，科技应当是温暖人心的桥梁，而不应成为阻隔温情的冰冷高墙。唯有理性自律地驾驭科技，我们才能在享受数字化便利的同时，守住最真挚的人间温情。`,
+        meaningVi: `Trong kỷ nguyên thông tin biến đổi từng ngày, đối với chủ đề sâu sắc "${qText}", tôi cho rằng công nghệ hiện đại tựa như một con dao hai lưỡi: nó kéo gần khoảng cách địa lý, nhưng cũng vô tình dựng lên những bức tường ngăn cách giữa tâm hồn con người.\n\nXét từ mặt tích cực, internet và thiết bị thông minh đã phá vỡ rào cản không gian và thời gian. Xưa kia 'thư nhà đáng giá ngàn vàng', ngày nay người thân bạn bè ở xa muôn trùng chỉ cần một nút chạm là có thể trò chuyện video trực diện. Hợp tác xuyên quốc gia và làm việc trực tuyến trở nên dễ dàng, thúc đẩy mạnh mẽ hiệu quả gắn kết công việc và tình cảm.\n\nTuy nhiên ở chiều ngược lại, hiện tượng 'cúi đầu lướt điện thoại' xuất hiện ở khắp mọi nơi. Dù là trong bữa cơm gia đình hay buổi tụ tập bạn bè, nhiều người mải mê với thế giới ảo, sôi nổi trên mạng nhưng lại thờ ơ lãnh đạm với người bên cạnh. Sự giao tiếp ảo hời hợt này tước đi hơi ấm của tương tác sâu sắc, khiến không ít người trẻ cảm thấy cô đơn giữa đám đông.\n\nBởi vậy, mấu chốt không nằm ở công nghệ, mà nằm ở thái độ làm chủ công nghệ của chúng ta. Chúng ta cần hướng tới sự 'đồng hành chất lượng cao', biết đặt ra ranh giới cho điện thoại, khi ở bên người thân hãy tạm gác màn hình để trao nhau ánh mắt lắng nghe chân thành.\n\nTóm lại, công nghệ nên là cây cầu nối liền những trái tim, chứ không phải bức tường lạnh lẽo ngăn cách yêu thương. Chỉ khi tự giác và làm chủ công nghệ, chúng ta mới vừa tận hưởng sự tiện lợi số hóa vừa giữ trọn vẹn sự ấm áp của tình người.`
+      }
+    };
+  }
+
+  // 5. CHỦ ĐỀ: TIỀN BẠC VÀ HẠNH PHÚC (金钱, 幸福, 财富, 快乐)
+  if (isMoney) {
+    return {
+      isFallback: true,
+      outline: {
+        intro: `Mở bài: Đặt vấn đề biện chứng về mối quan hệ giữa tiền bạc và hạnh phúc: "${qText}". Khẳng định tiền là điều kiện vật chất cần thiết nhưng không phải ngọn nguồn duy nhất của hạnh phúc đích thực.`,
+        body: [
+          "Luận điểm 1: Tiền bạc đem lại nền tảng an toàn vật chất (cơm ăn áo mặc, y tế, giáo dục, giảm bớt nỗi lo cơm áo gạo tiền).",
+          "Luận điểm 2: Giới hạn của tiền tài: Tiền không mua được tình thân chân thành, sức khỏe thể chất và sự bình an, thanh thản trong tâm hồn.",
+          "Luận điểm 3: Hạnh phúc đích thực đến từ sự biết đủ (知足常乐), phong phú về thế giới tinh thần và giá trị cống hiến cho xã hội."
+        ],
+        conclusion: "Kết bài: Đúc kết phương châm sống: Kiếm tiền bằng sự nỗ lực chân chính nhưng không biến mình thành nô lệ của đồng tiền; trân trọng giá trị tinh thần."
+      },
+      vocabulary: [
+        { hanzi: "金钱", pinyin: "jīnqián", meaning: "tiền bạc" },
+        { hanzi: "真正的幸福", pinyin: "zhēnzhèng de xìngfú", meaning: "hạnh phúc đích thực" },
+        { hanzi: "物质保障", pinyin: "wùzhì bǎozhàng", meaning: "đảm bảo về mặt vật chất" },
+        { hanzi: "知足常乐", pinyin: "zhī zú cháng lè", meaning: "biết đủ là vui, hài lòng với thực tại" },
+        { hanzi: "精神世界", pinyin: "jīngshén shìjiè", meaning: "thế giới tinh thần" }
+      ],
+      sentenceStructures: [
+        { pattern: "金钱固然能够带来……，但它买不来……", meaning: "Tiền bạc dẫu có thể đem lại..., nhưng nó không mua được...", example: "金钱固然能够带来优越的物质享受，但它买不来内心的宁静与真挚的情感。" },
+        { pattern: "真正的幸福往往不在于拥有多少，而在于……", meaning: "Hạnh phúc đích thực thường không nằm ở sở hữu bao nhiêu, mà nằm ở...", example: "真正的幸福往往不在于拥有多少财富，而在于懂得知足与关爱身边的人。" }
+      ],
+      sampleAnswer: {
+        hanzi: `古人云：“金玉满堂，莫之能守。”对于“${qText}”这个永恒的话题，我认为金钱与幸福之间有着密不可分的关系，但金钱绝非衡量幸福的唯一标尺。\n\n不可否认，一定的经济基础是生存与发展的基本前提。正如俗话所说：“巧妇难为无米之炊。”拥有足够的资金，我们能够改善居住条件、享受良好的医疗保健，并为子女提供优质的教育资源。免于贫困的匮乏与焦虑，能够在很大程度上赋予我们追求梦想的安全感与尊严。\n\n然而，金钱的作用终究是有边界的。财富可以买来奢华的床榻，却买不来安稳的睡眠；可以买来昂贵的礼物，却买不来真挚的友谊与亲情。如果在追逐财富的过程中迷失了自我，沦为金钱的奴隶，甚至牺牲了健康与家庭，即使腰缠万贯，内心也依然会感到空虚与痛苦。\n\n在我看来，真正的幸福往往源于内心的丰盈与从容。正如先贤所倡导的“知足常乐”，当我们学会珍惜眼前的点滴拥有，把时间倾注于热爱的事业、陪伴身边的至亲，并用自己的能力回馈社会时，那种精神上的充实与满足才是任何金钱都无法替代的。\n\n总的来说，金钱是通向美好生活的一种工具，而不是终极目的。我们要通过双手创造财富，更要用智慧守护幸福，在物质与精神之间找到最惬意的平衡。`,
+        meaningVi: `Người xưa có câu: 'Vàng ngọc đầy nhà, khó giữ bền lâu.' Đối với câu hỏi muôn thuở "${qText}", tôi cho rằng giữa tiền tài và hạnh phúc có mối liên hệ mật thiết, nhưng tiền bạc tuyệt đối không phải là thước đo duy nhất của niềm hạnh phúc.\n\nKhông thể phủ nhận rằng một nền tảng kinh tế ổn định là điều kiện cơ bản để sinh tồn và phát triển. Có đủ tài chính, chúng ta có thể cải thiện đời sống, tiếp cận điều kiện y tế tốt và mang lại nền giáo dục ưu việt cho con cái. Không bị bủa vây bởi nỗi lo cơm áo gạo tiền sẽ đem lại cho ta cảm giác an toàn và sự tự tôn để theo đuổi ước mơ.\n\nThế nhưng, đồng tiền suy cho cùng luôn có giới hạn. Tiền có thể mua chiếc giường nhung lụa nhưng không mua được giấc ngủ bình yên; mua được món quà đắt giá nhưng không mua được tình thân và bạn bè tri kỷ. Nếu mải miết lao vào kiếm tiền mà đánh mất chính mình, đánh đổi sức khỏe và gia đình thì dẫu có gia tài bạc triệu tâm hồn vẫn cô độc và trống rỗng.\n\nTheo tôi, hạnh phúc chân thực bắt nguồn từ sự phong phú và an nhiên trong nội tâm. Đúng như đạo lý 'biết đủ là vui', khi ta biết trân trọng những gì mình đang có, dành thời gian cho đam mê, người thân và sẻ chia với xã hội, sự thảnh thơi đó là thứ vàng bạc không thể đánh đổi.\n\nTóm lại, tiền bạc là công cụ hỗ trợ cuộc sống chứ không phải mục đích sau cùng. Chúng ta hãy nỗ lực tạo ra của cải bằng đôi tay, nhưng hãy dùng trí tuệ để gìn giữ hạnh phúc, tìm được điểm cân bằng trọn vẹn giữa vật chất và tinh thần.`
+      }
+    };
+  }
+
+  // 6. CHỦ ĐỀ: CUỘC SỐNG NHỊP NHANH, ÁP LỰC VÀ CÂN BẰNG (快节奏, 压力, 工作, 平衡)
+  if (isFastPaced) {
+    return {
+      isFallback: true,
+      outline: {
+        intro: `Mở bài: Nêu quan điểm trực diện về lối sống nhịp nhanh (快节奏生活) đối với câu hỏi: "${qText}". Nhịp sống nhanh mang lại hiệu suất cao nhưng cũng tạo áp lực lớn, cần tìm lại sự cân bằng.`,
+        body: [
+          "Luận điểm 1: Tác động tiêu cực của nhịp sống hối hả: Thường xuyên tăng ca, thiếu ngủ, kiệt sức và căng thẳng tâm lý.",
+          "Luận điểm 2: Ảnh hưởng đến các mối quan hệ xã hội: Ít thời gian chất lượng dành cho gia đình, ăn bữa cơm vội vã, cắm mặt vào điện thoại.",
+          "Luận điểm 3: Giải pháp cá nhân: Học cách sống chậm (慢生活), phân bổ thời gian khoa học, biết từ chối yêu cầu không cần thiết để tái tạo năng lượng."
+        ],
+        conclusion: "Kết bài: Đúc kết rằng cuộc sống không chỉ có guồng quay công việc; biết dừng lại hít thở để tận hưởng khoảnh khắc đời thường."
+      },
+      vocabulary: [
+        { hanzi: "快节奏生活", pinyin: "kuài jièzòu shēnghuó", meaning: "cuộc sống nhịp điệu nhanh" },
+        { hanzi: "身心俱疲", pinyin: "shēn xīn jù pí", meaning: "thân xác và tâm hồn đều mệt mỏi rã rời" },
+        { hanzi: "劳逸结合", pinyin: "láo yì jiéhé", meaning: "kết hợp hài hòa giữa lao động và nghỉ ngơi" },
+        { hanzi: "紧绷", pinyin: "jǐnběng", meaning: "căng thẳng, thắt chặt" },
+        { hanzi: "有张有弛", pinyin: "yǒu zhāng yǒu chí", meaning: "biết căng biết chùng, điều hòa nhịp nhàng" }
+      ],
+      sentenceStructures: [
+        { pattern: "在享受……的同时，我们也必须正视……", meaning: "Trong khi tận hưởng..., chúng ta cũng phải nhìn nhận thẳng thắn...", example: "在享受高效率带来的便利的同时，我们也必须正视快节奏对身心健康的影响。" },
+        { pattern: "只有做到……，才能在忙碌中保持……", meaning: "Chỉ khi làm được..., mới có thể duy trì... trong sự bận rộn", example: "只有做到劳逸结合，才能在忙碌中保持充沛的活力与清醒的头脑。" }
+      ],
+      sampleAnswer: {
+        hanzi: `在当今瞬息万变的现代社会，“快节奏生活”已经成为一种普遍的常态。针对“${qText}”这个问题，我认为快节奏虽然极大地提升了社会运转的效率，但如果缺乏调适，也会给人们的身心健康和生活质量带来沉重的负担。\n\n首先，持续的高压运转严重透支着现代人的身心健康。许多上班族和青年学生习惯了争分夺秒，加班熬夜成为家常便饭。长期的紧绷状态导致失眠、焦虑以及亚健康问题频发，很多人年纪轻轻就感到身心俱疲。如果生活只剩下奔波，效率的提升最终可能以健康为代价。\n\n其次，快节奏在不知不觉中冲淡了人际交往的温情。为了赶进度，我们常常草草吃完一顿饭，很少有充裕的时间陪伴父母、倾听伴侣的心声。人与人之间的交流变得碎片化，即使坐在一起也常常心不在焉地刷着工作群，让原本温馨的家庭生活失去了应有的宁静。\n\n古人讲：“文武之道，一张一弛。”面对快节奏的裹挟，我们最重要的课题是学会主动寻找生活的平衡。一方面要提高时间管理能力，拒绝无意义的内耗与伪勤奋；另一方面要勇敢地为自己保留一段“慢时光”，去户外散步、读一本好书，或者静静喝一杯茶，让疲惫的心灵得到抚慰与沉淀。\n\n总的来说，人生的旅途不仅在于奔跑的速度，更在于沿途的风景与内心的感受。学会在忙碌中适时停下脚步，劳逸结合、从容前行，我们才能拥有真正健康而充实的人生。`,
+        meaningVi: `Trong xã hội hiện đại biến chuyển không ngừng, 'cuộc sống nhịp nhanh' đã trở thành trạng thái phổ biến. Đối với đề bài "${qText}", tôi cho rằng nhịp sống hối hả dẫu nâng cao năng suất xã hội, nhưng nếu thiếu sự điều hòa sẽ tạo nên gánh nặng lớn cho sức khỏe và chất lượng sống.\n\nTrước hết, guồng quay liên tục khiến sức khỏe thể chất và tinh thần bị bào mòn. Rất nhiều người trẻ quen với việc chạy đua cùng thời gian, tăng ca thâu đêm trở thành điều thường nhật. Áp lực kéo dài dẫn đến mất ngủ, lo âu và suy nhược. Nếu cuộc sống chỉ còn lại sự hối hả, năng suất cao cuối cùng sẽ phải trả giá bằng chính sức khỏe.\n\nThứ hai, nhịp sống vội vã vô tình làm nguội lạnh hơi ấm của các mối quan hệ. Vì bận rộn, ta thường ăn bữa cơm vội vã, ít có thời gian chất lượng lắng nghe người thân và bạn bè. Giao tiếp bị phân mảnh, ngồi cạnh nhau nhưng tâm trí vẫn để ở công việc khiến gia đình mất đi sự ấm cúng thanh thản.\n\nNgười xưa dạy: 'Đạo văn võ, có lúc căng lúc chùng'. Đứng trước làn sóng hối hả, điều quan trọng nhất là ta phải chủ động tìm lại sự cân bằng. Một mặt cần quản lý thời gian khoa học, mặt khác hãy dành cho mình những khoảnh khắc 'sống chậm' như đi dạo hít thở khí trời, đọc một cuốn sách hay thưởng thức chén trà để tâm hồn được tái tạo.\n\nTóm lại, hành trình cuộc đời không chỉ tính bằng tốc độ chạy, mà còn ở cảnh sắc hai bên đường và sự thanh thản nội tâm. Biết dừng lại đúng lúc để nghỉ ngơi, làm việc và nghỉ ngơi hài hòa, ta mới có thể tận hưởng cuộc đời trọn vẹn.`
+      }
+    };
+  }
+
+  // 7. MẪU TỔNG QUÁT TỰ NHIÊN (KHÔNG DÙNG VĂN MẪU RẬP KHUÔN, BÁM TRỰC DIỆN ĐỀ BÀI)
   return {
     isFallback: true,
     outline: {
-      intro: `Mở bài: Nêu quan điểm trực diện và rõ ràng cho câu hỏi đề bài: "${qText}".`,
+      intro: `Mở bài: Nêu quan điểm trực diện và rõ ràng cho câu hỏi đề bài: "${qText}". Đặt ra câu hỏi gợi mở cho học viên.`,
       body: [
-        "Luận điểm 1: Phân tích nguyên nhân và sự cần thiết từ góc độ nhận thức của mỗi cá nhân.",
-        "Luận điểm 2: Đưa ra giải pháp thực tế và bài học hành động từ kinh nghiệm đời sống.",
-        "Luận điểm 3: Nhấn mạnh sự phối hợp giữa bản thân với mọi người xung quanh để đạt kết quả tốt nhất."
+        "Luận điểm 1: Phân tích bản chất hiện tượng từ góc nhìn thực tế đời sống và nguyên nhân cốt lõi.",
+        "Luận điểm 2: Đưa ra trải nghiệm, dẫn chứng thực tế sinh động để làm sáng tỏ vấn đề.",
+        "Luận điểm 3: Đề xuất giải pháp và bài học hành động để phát huy mặt tích cực và khắc phục mặt hạn chế."
       ],
-      conclusion: "Kết bài: Đúc kết lại toàn bộ vấn đề và đưa ra thông điệp tích cực, ý nghĩa."
+      conclusion: "Kết bài: Đúc kết lại toàn bộ vấn đề, đưa ra thông điệp tích cực và định hướng hành động thiết thực."
     },
     vocabulary: [
-      { hanzi: "看法", pinyin: "kànfǎ", meaning: "quan điểm, góc nhìn" },
-      { hanzi: "付诸实践", pinyin: "fùzhū shíjiàn", meaning: "áp dụng vào thực tế" },
-      { hanzi: "沟通合作", pinyin: "gōutōng hézuò", meaning: "giao tiếp và hợp tác" },
-      { hanzi: "克服困难", pinyin: "kèfú kùnnan", meaning: "khắc phục khó khăn" },
-      { hanzi: "持之以恒", pinyin: "chí zhī yǐ héng", meaning: "kiên trì bền bỉ" }
+      { hanzi: "深思", pinyin: "shēnsī", meaning: "suy ngẫm sâu sắc" },
+      { hanzi: "切身体会", pinyin: "qièshēn tǐhuì", meaning: "trải nghiệm thực tế của bản thân" },
+      { hanzi: "脚踏实地", pinyin: "jiǎo tà shí dì", meaning: "chân đạp đất vững chắc, làm thật việc thật" },
+      { hanzi: "因地制宜", pinyin: "yīn dì zhì yí", meaning: "tùy cơ ứng biến, linh hoạt theo tình hình" },
+      { hanzi: "厚积薄发", pinyin: "hòu jī bó fā", meaning: "tích lũy sâu dày rồi bộc phát rực rỡ" }
     ],
     sentenceStructures: [
-      { pattern: "在我看来，……是最重要的。", meaning: "Theo quan điểm của tôi, ... là quan trọng nhất.", example: `在我看来，针对这个问题，保持理智并采取实际行动最为关键。` },
-      { pattern: "一方面……，另一方面……", meaning: "Một mặt thì..., mặt khác thì...", example: "一方面要立足自身实际，另一方面要善于向优秀的人学习。" }
+      { pattern: "就我个人的体会而言，……最核心的要素在于……", meaning: "Xét từ trải nghiệm của cá nhân tôi, yếu tố cốt lõi nhất của... nằm ở...", example: `就我个人的体会而言，面对这个话题，最核心的要素在于理性思考与脚踏实地的行动。` },
+      { pattern: "与其……，不如从……做起", meaning: "Thay vì..., chi bằng hãy bắt đầu từ việc...", example: "与其盲目焦虑，不如从身边的每一件小事做起。" }
     ],
     sampleAnswer: {
-      hanzi: `针对“${qText}”这个问题，我认为在现代社会中具有非常重要的探讨价值。\n\n首先，从思想认知的角度来看，我们应当树立明确的目标与正确的态度。面对各种新情况与新挑战，不能仅仅停留在口头讨论上，而要深入思考事物发展的规律，找准问题的核心切入点。\n\n其次，从行动层面来看，纸上谈兵终究无法解决现实问题，关键在于脚踏实地、付诸实践。在日常工作与学习中，我们应当勇于尝试，在实践中不断总结经验教训，逐步提升自己分析问题与解决问题的综合能力。\n\n最后，学会与他人沟通合作也同样重要。个人的智慧与力量终究是有限的，只有善于倾听不同的见解，与同伴互相支持、优势互补，我们才能克服前进道路上的重重阻碍。\n\n总的来说，只要我们能够保持积极向上的心态，坚持求真务实的作风，就一定能在应对各类挑战时游刃有余，取得令人满意的丰硕成果。`,
-      pinyin: `Zhēnduì "${qText}" zhè ge wèntí, wǒ rènwéi zài xiàndài shèhuì zhōng jùyǒu fēicháng zhòngyào de tàntǎo jiàzhí.\n\nShǒuxiān, cóng sīxiǎng rènzhī de jiǎodù lái kàn, wǒmen yīngdāng shùlì míngquè de mùbiāo yǔ zhèngquè de tàidù. Miànduì gèzhǒng xīn qíngkuàng yǔ xīn tiǎozhàn, bù néng jǐnjǐn tíngliú zài kǒutóu tǎolùn shang, ér yào shēnrù sīkǎo shìwù fāzhǎn de guīlǜ, zhǎozhǔn wèntí de héxīn qiērùdiǎn.\n\nQícì, cóng xíngdòng céngmiàn lái kàn, zhǐshàng-tánbīng zhōngjiū wúfǎ jiějué xiànshí wèntí, guānjiàn zàiyú jiǎotà-shídì, fùzhū shíjiàn. Zài rìcháng gōngzuò yǔ xuéxí zhōng, wǒmen yīngdāng yǒngyú chángshì, zài shíjiàn zhōng bùduàn zǒngjié jīngyàn jiàoxun, zhúbù tíshēng zìjǐ fēnxī wèntí yǔ jiějué wèntí de zōnghé nénglì.\n\nZuìhòu, xuéhuì yǔ tārén gōutōng hézuò yě tóngyàng zhòngyào. Gèrén de zhìhuì yǔ lìliàng zhōngjiū shì yǒuxiàn de, zhǐyǒu shànyú qīngtīng bùtóng de jiànjiě, yǔ tóngbàn hùxiāng zhīchí, yōushì hùbǔ, wǒmen cái néng kèfú qiánjìn dàolù shang de chóngchóng zǔ'ài.\n\nZǒng de lái shuō, zhǐyào wǒmen nénggòu bǎochí jījí xiàngshàng de xīntài, jiānchí qiúzhēn-wùshí de zuòfēng, jiù yídìng néng zài yìngduì gèlèi tiǎozhàn shí yóurèn-yǒuyú, qǔdé lìngrén mǎnyì de fēngshuò chéngguǒ.`,
-      meaningVi: `Đối với đề bài "${qText}", tôi cho rằng câu hỏi này mang giá trị thảo luận rất quan trọng trong đời sống hiện đại.\n\nTrước hết, từ góc độ tư duy nhận thức, chúng ta cần xác lập mục tiêu rõ ràng và thái độ đúng đắn. Khi đứng trước các tình huống hay thử thách mới, không thể chỉ dừng lại ở việc bàn luận suông mà cần suy ngẫm sâu sắc về quy luật vận động của sự việc, nắm bắt đúng mắt xích then chốt của vấn đề.\n\nThứ hai, xét từ góc độ hành động, nói suông trên giấy suy cho cùng không thể giải quyết được bài toán thực tế, điều mấu chốt nằm ở việc làm thật, đưa vào thực tiễn. Trong công việc và học tập hằng ngày, chúng ta cần mạnh dạn trải nghiệm, không ngừng rút tỉa kinh nghiệm sau mỗi lần thực hành để từng bước nâng cao năng lực phân tích và xử lý vấn đề.\n\nCuối cùng, học cách giao tiếp và hợp tác với mọi người xung quanh cũng quan trọng không kém. Trí tuệ và sức lực của một cá nhân dẫu sao cũng có giới hạn, chỉ khi biết lắng nghe những ý kiến đa chiều, cùng cộng sự tương trợ và bù trừ sở trường cho nhau, chúng ta mới có thể vượt qua mọi rào cản trên đường tiến bước.\n\nTóm lại, chỉ cần chúng ta luôn giữ vững thái độ sống tích cực, tác phong cầu thị và thiết thực, nhất định chúng ta sẽ luôn chủ động vững vàng trước mọi thách thức và gặt hái được những thành tựu mỹ mãn.`
+      hanzi: `关于“${qText}”这个非常具有启发性的题目，我认为它紧密贴合了我们当下的现实生活，很值得我们静下心来深入探讨。\n\n首先，从现实生活的实际经验来看，任何事情的发展都有其内在的规律。面对各种纷繁复杂的现象，我们不能只停留在表面的讨论上，而应当善于抓住核心，弄清楚背后的根本原因。只有看清了方向，我们的努力才不会偏离轨道。\n\n其次，就我个人的体会而言，面对这样的情境，保持积极而平和的心态至关重要。生活中往往充满了未知与变数，与其一味感到困惑或抱怨，不如静下心来认真总结经验。多向身边优秀的同行与长辈请教，把每一次考验都当作提升自我认知的契机，才能在复杂多变的环境中立于不败之地。\n\n最后，纸上谈兵终究无法带来真实的改变，关键在于知行合一、脚踏实地。我们可以从力所能及的小事做起，循序渐进地积累经验。只要方向正确、方法得当，点滴的努力最终必将汇聚成可观的成果。\n\n总的来说，面对这一问题，我们既要有长远的眼光，又要有求真务实的作风。在思考中前行、在行动中完善，我们就一定能从容应对，活出充实而有意义的人生。`,
+      meaningVi: `Đối với câu hỏi giàu ý nghĩa gợi mở "${qText}", tôi cho rằng đề bài này bám rất sát thực tế đời sống hiện nay và rất xứng đáng để chúng ta cùng suy ngẫm sâu sắc.\n\nTrước hết, từ trải nghiệm thực tế đời thường, sự phát triển của vạn vật đều có quy luật riêng. Đứng trước những hiện tượng phức tạp, chúng ta không thể chỉ dừng lại ở bàn luận bề nổi, mà cần nắm bắt mắt xích cốt lõi, thấu suốt nguyên nhân căn bản. Chỉ khi nhìn rõ phương hướng, nỗ lực của chúng ta mới không bị chệch hướng.\n\nThứ hai, từ cảm nhận của bản thân tôi, giữ được một tâm thế bình hòa và tích cực là điều vô cùng quý giá. Cuộc sống luôn có những biến số, thay vì hoang mang hay than phiền, chi bằng ta hãy lắng lòng lại đúc kết kinh nghiệm, khiêm tốn học hỏi những người đi trước và biến mỗi thử thách thành đòn bẩy hoàn thiện năng lực.\n\nCuối cùng, mọi điều nói suông đều không tạo ra thay đổi thực chất, điều cốt yếu nằm ở việc 'tri hành hợp nhất', nói đi đôi với làm thật. Chúng ta hãy bắt đầu từ những việc nhỏ trong tầm tay, tích lũy từng bước để tạo nên thành tựu lớn.\n\nTóm lại, đối với vấn đề này, chúng ta vừa cần tầm nhìn xa trông rộng, vừa cần tác phong thực tế cầu thị. Vừa đi vừa ngẫm, vừa làm vừa hoàn thiện, nhất định chúng ta sẽ tự tin làm chủ cuộc sống và kiến tạo một tương lai ý nghĩa.`
     }
   };
 }

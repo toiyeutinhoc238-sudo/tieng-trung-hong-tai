@@ -3707,9 +3707,10 @@ app.post('/api/ai/hskk-suggest', async (req, res) => {
 - ĐỘ DÀI BÀI MẪU: Khoảng 180 - 250 chữ Hán (chuẩn nói 1.5 phút).`;
   } else if (level === 'cao') {
     levelPedagogy = `TRÌNH ĐỘ HSKK CAO CẤP (HSKK Cao cấp / HSK 5 - 6):
-- BÀI NÓI / BÀI VIẾT PHẢI RẤT DÀI, TOÀN DIỆN VÀ CHUYÊN SÂU (BẮT BUỘC TỪ 550 ĐẾN 750 CHỮ HÁN, chuẩn nói liên tục 2.5 - 3 phút). PHẢI DÀI HƠN RÕ RỆT SO VỚI TRUNG CẤP!
-- Lập luận đa tầng chặt chẽ: Phân tích bối cảnh xã hội, căn nguyên sâu xa, ví dụ điển hình có tính thuyết phục cao, đề xuất hệ thống giải pháp và đúc kết triết lý sống / tầm nhìn tương lai.
-- Ngôn ngữ học thuật, phong thái diễn thuyết, sử dụng nhiều thành ngữ 4 chữ 成语 (VD: 循序渐进, 潜移默化, 未雨绸缪, 标本兼治, 持之以恒, 受益匪浅, 登高望远...) và câu phức liên kết nhuần nhuyễn.`;
+- BÀI NÓI / BÀI VIẾT PHẢI BÁM SÁT 100% ĐỀ BÀI: Phân tích chuyên sâu, đa chiều, có dẫn chứng thực tế sinh động (BẮT BUỘC TỪ 450 ĐẾN 580 CHỮ HÁN, chuẩn nói liên tục 2.5 - 3 phút).
+- Lập luận đa tầng chặt chẽ: Phân tích bối cảnh xã hội, căn nguyên sâu xa, dẫn chứng điển hình có tính thuyết phục cao (nhân vật, câu chuyện thực tế hoặc hiện tượng đời sống), đề xuất hệ thống giải pháp và đúc kết triết lý sống / tầm nhìn tương lai.
+- TUYỆT ĐỐI KHÔNG NÓI CHUNG CHUNG SÁO RỖNG: Không được mở đầu bằng các câu khuôn sáo vô thưởng vô phạt. Phải đi thẳng vào phân tích đề tài!
+- Ngôn ngữ học thuật, phong thái diễn thuyết, sử dụng nhiều thành ngữ 4 chữ 成语 phù hợp ngữ cảnh và câu phức liên kết nhuần nhuyễn.`;
   } else {
     levelPedagogy = `TRÌNH ĐỘ HSKK TRUNG CẤP (HSK 3 - 4):
 - Từ vựng và ngữ pháp trung cấp, mạch lạc, nêu quan điểm và ví dụ đời sống, kinh nghiệm bản thân.
@@ -3723,27 +3724,27 @@ Trình độ mục tiêu: ${levelText}
 
 ${levelPedagogy}
 
-QUY TẮC SƯ PHẠM CỐT LÕI (TUYỆT ĐỐI KHÔNG LẠC ĐỀ & KHÔNG DÙNG VĂN MẪU SÁO RỖNG):
-1. BÁM SÁT 100% ĐỀ BÀI: Toàn bộ Dàn bài (outline), Từ vựng (vocabulary), Mẫu câu (sentenceStructures) và Bài mẫu (sampleAnswer) PHẢI TRẢ LỜI ĐÚNG TRỌNG TÂM câu hỏi: "${cleanQ}".
-2. TUYỆT ĐỐI CẤM DÙNG VĂN MẪU RẬP KHUÔN, SÁO RỖNG, VÔ NGHĨA!
-   - CẤM TUYỆT ĐỐI các câu văn mẫu rập khuôn vô thưởng vô phạt (ví dụ: "针对这个问题，我认为在生活和学习中有着非常重要的现实意义。首先明确目标与态度，认真思考原因。其次不能只停留在想法上，要主动付诸实践... 最后只要持之以恒..."). ĐÂY LÀ VĂN MẪU RÁP SÁO RỖNG GÂY MẤT ĐIỂM NGHIÊM TRỌNG!
-   - Bài viết / bài nói mẫu BẮT BUỘC PHẢI ĐI THẲNG VÀO NỘI DUNG VÀ BẢN CHẤT CỤ THỂ của đề tài:
-     + Nếu đề bài hỏi về "诚实守信" (tính trung thực, giữ chữ tín) -> Phải bàn về sự trung thực trong đời sống, học tập, kinh doanh, vai trò cha mẹ thầy cô làm gương (以身作则), pháp luật xử phạt gian dối trừng phạt kẻ thất tín (完善法律制度、惩治商业欺诈), xây dựng hệ thống tín nhiệm xã hội.
-     + Nếu đề bài hỏi về "走路锻炼身体" -> Bàn cụ thể về việc đi bộ thể dục, tốt cho tim mạch, giải tỏa căng thẳng sau giờ làm, thời gian đi bộ, duy trì thói quen.
-     + Nếu đề bài hỏi về "极简生活" -> Bàn về việc giảm tiêu dùng bốc đồng, trân trọng cuộc sống tinh thần, bảo vệ môi trường.
-     + Tương tự với tất cả các chủ đề khác: BẮT BUỘC dùng luận cứ, từ vựng và ví dụ thực tế liên quan mật thiết đến chủ đề đó!
-3. DÀN BÀI (outline): TOÀN BỘ VIẾT BẰNG TIẾNG VIỆT, bám sát 100% câu hỏi đề bài "${cleanQ}". Phải có các câu hỏi gợi mở cụ thể giúp học viên suy nghĩ và trả lời:
-   - Mở bài (intro): Nêu câu trả lời trực tiếp hoặc quan điểm cá nhân cho đề bài. Kèm câu hỏi gợi ý cho học viên.
-   - Thân bài (body): Phải có ĐÚNG 3 LUẬN ĐIỂM VÀ LUẬN CỨ CỤ THỂ giải quyết đề bài. Mỗi luận điểm phải kèm câu hỏi gợi mở thực tế.
-   - Kết bài (conclusion): Tổng kết lại toàn bộ ý chính, chốt lại quan điểm, và đưa ra lời kêu gọi hành động hoặc bài học / thông điệp ý nghĩa sâu sắc.
-4. TỪ VỰNG THEN CHỐT (vocabulary): 4-8 từ vựng hoặc cụm từ liên quan trực tiếp đến đề tài "${cleanQ}" (kèm pinyin có dấu và dịch nghĩa tiếng Việt). Phải đúng trình độ ${levelText}!
-   LƯU Ý ĐẶC BIỆT VỀ PINYIN: Phiên âm Pinyin PHẢI TUYỆT ĐỐI CHÍNH XÁC 100% với từng chữ Hán tương ứng, thanh điệu chuẩn xác (Ví dụ: 诚实守信 -> chéngshí shǒuxìn, 惩罚 -> chéngfá, 以身作则 -> yǐshēn zuòzé). Tuyệt đối không được viết sai âm hoặc lộn xộn các chữ.
+QUY TẮC SƯ PHẠM CỐT LÕI (TUYỆT ĐỐI BÁM SÁT ĐỀ BÀI & CẤM VĂN MẪU RẬP KHUÔN):
+1. BÁM SÁT 100% ĐỀ BÀI: Toàn bộ Dàn bài (outline), Từ vựng (vocabulary), Mẫu câu (sentenceStructures) và Bài mẫu (sampleAnswer) PHẢI ĐI THẲNG VÀO NỘI DUNG VÀ BẢN CHẤT CỦA ĐỀ: "${cleanQ}".
+2. CẤM TUYỆT ĐỐI VĂN MẪU RẬP KHUÔN SÁO RỖNG: CẤM các câu khuôn sáo kiểu "针对这个问题，我认为在生活和学习中有着非常重要的现实意义。首先明确目标与态度，认真思考原因。其次不能只停留在想法上，要主动付诸实践...".
+   BÀI NÓI PHẢI ĐI THẲNG VÀO CHỦ ĐỀ CỤ THỂ CỦA ĐỀ BÀI!
+   - Nếu đề bài hỏi về "诚实守信" -> Bàn về chữ tín, trung thực trong đời sống, gia đình làm gương, pháp luật trừng phạt gian dối.
+   - Nếu đề bài hỏi về "走路锻炼身体" -> Bàn cụ thể về đi bộ thể dục, tim mạch, giải tỏa áp lực sau giờ làm việc.
+   - Nếu đề bài hỏi về "科技与人际距离" (công nghệ và khoảng cách con người) -> Phân tích hai mặt: video call kết nối người ở xa vs hiện tượng cúi đầu bấm điện thoại (低头族) thờ ơ ngoài đời thực.
+   - Nếu đề bài hỏi về "成败" (thất bại là mẹ thành công vs thành công là mẹ thành công) -> Phân tích bài học từ thất bại kết hợp với đà tự tin từ thành công ban đầu.
+   - Nếu đề bài hỏi về "金钱与幸福" (tiền bạc và hạnh phúc) -> Bàn về việc tiền đáp ứng vật chất nhưng không mua được tình thân, sức khỏe và sự thanh thản nội tâm.
+   - BẮT BUỘC dùng luận cứ, từ vựng và ví dụ thực tế liên quan mật thiết đến chủ đề đề bài!
+3. DÀN BÀI (outline): TOÀN BỘ VIẾT BẰNG TIẾNG VIỆT, bám sát 100% câu hỏi đề bài "${cleanQ}":
+   - Mở bài (intro): Nêu quan điểm trực diện hoặc câu trả lời trực tiếp cho đề bài (kèm câu hỏi gợi ý cho học viên).
+   - Thân bài (body): ĐÚNG 3 LUẬN ĐIỂM VÀ DẪN CHỨNG CỤ THỂ giải quyết đề bài (mỗi luận điểm kèm câu hỏi gợi ý thực tế).
+   - Kết bài (conclusion): Tổng kết lại toàn bộ ý chính, chốt quan điểm, đúc kết bài học ý nghĩa.
+4. TỪ VỰNG THEN CHỐT (vocabulary): 5-8 từ vựng hoặc cụm từ chuyên sâu liên quan trực tiếp đến đề tài "${cleanQ}" (kèm pinyin có dấu và dịch nghĩa tiếng Việt). Phải đúng trình độ ${levelText}!
 5. CẤU TRÚC NGỮ PHÁP (sentenceStructures): 2-4 mẫu câu kết nối hoặc cấu trúc điểm cao bám sát nội dung đề bài.
 6. BÀI ${skill === 'writing' ? 'VIẾT' : 'NÓI'} MẪU THAM KHẢO (sampleAnswer): DỰA SÁT 100% VÀO DÀN BÀI GỢI Ý TRÊN.
-   - Cấu trúc chuẩn 3 phần rõ ràng: Mở bài nêu quan điểm trực diện, Thân bài đủ 3 luận điểm phát triển mạch lạc, Kết bài tổng kết và kêu gọi hành động.
+   - Cấu trúc chuẩn 3 phần rõ ràng: Mở bài nêu quan điểm trực diện, Thân bài đủ 3 luận điểm phát triển mạch lạc, Kết bài tổng kết và đúc kết thông điệp.
    - hanzi: 100% CHỮ HÁN VÀ DẤU CÂU TIẾNG TRUNG CHUẨN BẢN XỨ (Tuyệt đối KHÔNG ĐƯỢC CHÈN BẤT KỲ CHỮ CÁI LATINH, TIẾNG VIỆT, TIẾNG ANH HAY TIẾNG HÀN NÀO). Chia các đoạn rõ ràng bằng dấu xuống dòng (\\n\\n). Số lượng chữ theo đúng yêu cầu của ${levelText}.
-   - pinyin: Phiên âm có dấu thanh điệu đầy đủ và chính xác với từng chữ Hán.
    - meaningVi: Bản dịch tiếng Việt đầy đủ, mượt mà, tự nhiên, diễn cảm bám sát từng đoạn tiếng Trung.
+   (LƯU Ý: Không cần trường pinyin trong sampleAnswer vì hệ thống sẽ tự sinh bằng thuật toán pinyin-pro, giúp tối ưu tốc độ và không bao giờ bị nghẽn token).
 
 Trả về DUY NHẤT 1 JSON object hợp lệ:
 {
@@ -3764,7 +3765,6 @@ Trả về DUY NHẤT 1 JSON object hợp lệ:
   ],
   "sampleAnswer": {
     "hanzi": "...",
-    "pinyin": "...",
     "meaningVi": "..."
   }
 }`;
@@ -3775,15 +3775,15 @@ Trả về DUY NHẤT 1 JSON object hợp lệ:
 
     let result = null;
 
-    // Ưu tiên 1: Groq LLMs (Qwen 3.8 27B chuyên ngữ Hán đầu tiên, siêu tốc, ổn định, bám sát đề tài)
+    // Ưu tiên 1: Groq LLMs (gpt-oss-120b siêu tốc, chất lượng cao, không bị giới hạn 1000 OTPM)
     if (groqClient) {
-      for (const m of ['qwen/qwen3.8-27b', 'openai/gpt-oss-120b', 'openai/gpt-oss-20b']) {
+      for (const m of ['openai/gpt-oss-120b', 'openai/gpt-oss-20b']) {
         try {
           const completion = await groqClient.chat.completions.create({
             model: m,
             messages: [{ role: 'user', content: prompt }],
             temperature: 0.3,
-            max_tokens: 2800
+            max_tokens: 3600
           });
           const raw = completion.choices[0]?.message?.content || '';
           const match = raw.match(/\{[\s\S]*\}/);
@@ -3872,6 +3872,17 @@ Trả về DUY NHẤT 1 JSON object hợp lệ:
       } catch (ePy) {
         console.warn('Pinyin conversion error for sampleAnswer:', ePy.message);
       }
+    }
+
+    if (result.outline) {
+      if (result.outline.intro) result.outline.intro = result.outline.intro.normalize('NFC');
+      if (Array.isArray(result.outline.body)) {
+        result.outline.body = result.outline.body.map(b => (b || '').normalize('NFC'));
+      }
+      if (result.outline.conclusion) result.outline.conclusion = result.outline.conclusion.normalize('NFC');
+    }
+    if (result.sampleAnswer && result.sampleAnswer.meaningVi) {
+      result.sampleAnswer.meaningVi = result.sampleAnswer.meaningVi.normalize('NFC');
     }
 
     res.json({ success: true, ...result });
