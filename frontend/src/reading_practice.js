@@ -1,3 +1,4 @@
+import './global_sidebar.js';
 import './particles.js';
 import './screen_drawing.js';
 

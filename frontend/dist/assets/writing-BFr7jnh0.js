@@ -1,26 +1,26 @@
-import"./global_sidebar-Cig41M-c.js";import{p as M}from"./index-haNF1LmB.js";const j=(window.location.hostname.includes("localhost")||window.location.hostname.includes("127.0.0.1"),"");let p={so:[],trung:[],cao:[]},s="trung",c=null,u=new Map,T=!1,y=null,f=180,b=!1,v=null,k=120,d=null,I=[],L=null,K=null,r=null,w=!1,x=0;function m(n="beep"){try{const i=new(window.AudioContext||window.webkitAudioContext),t=i.createOscillator(),e=i.createGain();if(t.connect(e),e.connect(i.destination),n==="spin")t.type="triangle",t.frequency.setValueAtTime(400,i.currentTime),t.frequency.exponentialRampToValueAtTime(800,i.currentTime+.25),e.gain.setValueAtTime(.2,i.currentTime),e.gain.exponentialRampToValueAtTime(.01,i.currentTime+.25),t.start(),t.stop(i.currentTime+.25);else if(n==="start")t.type="sine",t.frequency.setValueAtTime(587.33,i.currentTime),t.frequency.setValueAtTime(880,i.currentTime+.1),e.gain.setValueAtTime(.25,i.currentTime),e.gain.exponentialRampToValueAtTime(.01,i.currentTime+.35),t.start(),t.stop(i.currentTime+.35);else if(n==="chime"){const o=i.currentTime;[523.25,659.25,783.99].forEach((a,h)=>{const g=i.createOscillator(),l=i.createGain();g.type="sine",g.frequency.value=a,g.connect(l),l.connect(i.destination),l.gain.setValueAtTime(.18,o+h*.15),l.gain.exponentialRampToValueAtTime(.001,o+h*.15+.4),g.start(o+h*.15),g.stop(o+h*.15+.4)})}}catch{}}async function V(){var t,e,o;try{let a=await fetch(`${j}/api/hskk-questions`);a.ok||(a=await fetch("/data/hskk_questions.json"));const h=await a.json();h&&(h.so||h.questions)&&(h.so?p=h:h.questions&&(p.so=h.questions.filter(g=>g.level==="so"),p.trung=h.questions.filter(g=>g.level==="trung"),p.cao=h.questions.filter(g=>g.level==="cao")))}catch(a){console.warn("Lỗi nạp API HSKK, thử nạp tĩnh...",a);try{const h=await fetch("/data/hskk_questions.json");h.ok&&(p=await h.json())}catch{}}const n=(((t=p.so)==null?void 0:t.length)||0)+(((e=p.trung)==null?void 0:e.length)||0)+(((o=p.cao)==null?void 0:o.length)||0),i=document.getElementById("total-speaking-stat");i&&n>0&&(i.textContent=n.toLocaleString()),spinRandomQuestion(!1)}window.switchSpeakingLevel=function(n,i){s===n&&c||(s=n,document.querySelectorAll(".level-select-row .level-btn").forEach(t=>t.classList.remove("active")),i&&i.classList.add("active"),spinRandomQuestion(!0))};window.spinRandomQuestion=function(n=!0){const i=p[s]||[];if(!i||i.length===0)return;const t=document.getElementById("spin-question-btn");n&&t&&(t.classList.add("rolling"),m("spin"),setTimeout(()=>t.classList.remove("rolling"),500));let e=null;if(i.length===1)e=i[0];else do e=i[Math.floor(Math.random()*i.length)];while(c&&e.question===c.question&&i.length>1);c=e,R();const o=document.getElementById("ai-suggestion-box");o&&(o.style.display="none");const a=document.getElementById("hint-toggle-btn");a&&(a.innerHTML=`
+import"./global_sidebar-1Sp0mJMs.js";import{p as b}from"./index-haNF1LmB.js";function C(){if(typeof window.isUserLoggedIn=="function")return window.isUserLoggedIn();try{const n=localStorage.getItem("user")||localStorage.getItem("hongtai_current_user")||localStorage.getItem("currentUser")||sessionStorage.getItem("user");if(!n)return!1;const i=JSON.parse(n),t=((i==null?void 0:i.email)||"").toLowerCase().trim();return!!(t&&t!=="guest"&&!t.startsWith("guest")&&t.includes("@"))}catch{return!1}}function m(n="Luyện Viết Tiếng Trung"){return C()?!0:(typeof window.showGlobalAuthModal=="function"&&window.showGlobalAuthModal({isMandatoryPageLock:!0,actionName:n,title:`Đăng Nhập Để Dùng: ${n}`,desc:`Hệ thống yêu cầu bạn đăng nhập bằng Google trước khi sử dụng <strong>${n}</strong> để đồng bộ tiến độ và lưu kết quả học tập.`}),!1)}const f=(window.location.hostname.includes("localhost")||window.location.hostname.includes("127.0.0.1"),"");let d={so:[],trung:[],cao:[]},c="trung",o=null,u=new Map,p=!1,z=!1;function v(n="click"){try{const i=new(window.AudioContext||window.webkitAudioContext),t=i.createOscillator(),e=i.createGain();t.connect(e),e.connect(i.destination),n==="spin"?(t.type="triangle",t.frequency.setValueAtTime(440,i.currentTime),t.frequency.exponentialRampToValueAtTime(880,i.currentTime+.25),e.gain.setValueAtTime(.2,i.currentTime),e.gain.exponentialRampToValueAtTime(.01,i.currentTime+.25),t.start(),t.stop(i.currentTime+.25)):n==="success"&&(t.type="sine",t.frequency.setValueAtTime(523.25,i.currentTime),t.frequency.setValueAtTime(659.25,i.currentTime+.1),e.gain.setValueAtTime(.18,i.currentTime),e.gain.exponentialRampToValueAtTime(.01,i.currentTime+.35),t.start(),t.stop(i.currentTime+.35))}catch{}}async function I(){var t,e,s;try{let a=await fetch(`${f}/api/hskk-questions`);a.ok||(a=await fetch("/data/hskk_questions.json"));const h=await a.json();h&&(h.so||h.questions)&&(h.so?d=h:h.questions&&(d.so=h.questions.filter(g=>g.level==="so"),d.trung=h.questions.filter(g=>g.level==="trung"),d.cao=h.questions.filter(g=>g.level==="cao")))}catch(a){console.warn("Không tải được API HSKK, thử nạp tĩnh...",a);try{const h=await fetch("/data/hskk_questions.json");h.ok&&(d=await h.json())}catch(h){console.error("Lỗi nạp câu hỏi HSKK:",h)}}const n=(((t=d.so)==null?void 0:t.length)||0)+(((e=d.trung)==null?void 0:e.length)||0)+(((s=d.cao)==null?void 0:s.length)||0),i=document.getElementById("total-questions-stat");i&&n>0&&(i.textContent=n.toLocaleString()),spinRandomQuestion(!1),C()||m("Luyện Viết Tiếng Trung")}window.selectWritingMode=function(n){if(!m("Luyện Viết Tiếng Trung"))return;const i=document.getElementById("wf-card-qa"),t=document.getElementById("wf-card-free"),e=document.getElementById("wf-pointer-arrow"),s=document.getElementById("qa-workspace-view"),a=document.getElementById("free-workspace-view");n==="qa"?(i==null||i.classList.add("active"),t==null||t.classList.remove("active"),e&&(e.style.display="flex"),s&&(s.style.display="block"),a&&(a.style.display="none")):n==="free"&&(i==null||i.classList.remove("active"),t==null||t.classList.add("active"),e&&(e.style.display="none"),s&&(s.style.display="none"),a&&(a.style.display="block"))};window.switchHskkLevel=function(n,i){m("Chọn Cấp Độ HSKK")&&(c===n&&o||(c=n,document.querySelectorAll(".level-select-row .level-btn").forEach(t=>t.classList.remove("active")),i&&i.classList.add("active"),spinRandomQuestion(!0)))};window.spinRandomQuestion=function(n=!0){if(n&&!m("Quay Ngẫu Nhiên Đề Thi"))return;const i=d[c]||[];if(!i||i.length===0)return;const t=document.getElementById("spin-question-btn");n&&t&&(t.classList.add("rolling"),v("spin"),setTimeout(()=>t.classList.remove("rolling"),500));let e=null;if(i.length===1)e=i[0];else do e=i[Math.floor(Math.random()*i.length)];while(o&&e.question===o.question&&i.length>1);o=e,L();const s=document.getElementById("ai-suggestion-box");s&&(s.style.display="none");const a=document.getElementById("hint-toggle-btn");a&&(a.innerHTML=`
       <i class="fa-solid fa-lightbulb"></i>
       <span>Gợi ý Dàn bài &amp; Từ vựng</span>
-    `);const h=document.getElementById("sample-speech-box");h&&(h.style.display="none");const g=document.getElementById("sample-speech-toggle-btn");g&&(g.innerHTML=`
+    `);const h=document.getElementById("sample-writing-box");h&&(h.style.display="none");const g=document.getElementById("sample-writing-toggle-btn");g&&(g.innerHTML=`
       <i class="fa-solid fa-medal"></i>
-      <span>Bài nói mẫu tham khảo</span>
-    `),resetPrepTimer(),cancelSpeakingRecording();const l=document.getElementById("recorded-result-box");l&&(l.style.display="none");const z=document.getElementById("ai-speaking-evaluation-results");z&&(z.style.display="none")};function R(){if(!c)return;const n=document.getElementById("active-question-text"),i=document.getElementById("question-meta-badge"),t=s==="so"?"HSKK Sơ cấp":s==="cao"?"HSKK Cao cấp":"HSKK Trung cấp";n&&(n.textContent=c.question),i&&(i.textContent=`Câu ${c.stt||1} • ${t}`)}window.playQuestionTts=function(){if(!c||!c.question||!("speechSynthesis"in window))return;window.speechSynthesis.cancel();const n=new SpeechSynthesisUtterance(c.question);n.lang="zh-CN",n.rate=.9,window.speechSynthesis.speak(n)};window.toggleAiSuggestions=async function(){const n=document.getElementById("ai-suggestion-box"),i=document.getElementById("hint-toggle-btn");if(!n||!c)return;if(n.style.display==="block"){n.style.display="none",i&&(i.innerHTML=`
+      <span>Bài viết mẫu tham khảo</span>
+    `)};function L(){if(!o)return;const n=document.getElementById("active-question-text"),i=document.getElementById("question-meta-badge"),t=c==="so"?"HSKK Sơ cấp":c==="cao"?"HSKK Cao cấp":"HSKK Trung cấp";n&&(n.textContent=o.question),i&&(i.textContent=`Câu ${o.stt||1} • ${t}`)}window.playQuestionTts=function(){if(!o||!o.question)return;if(!("speechSynthesis"in window)){alert("Trình duyệt của bạn không hỗ trợ phát âm thanh.");return}window.speechSynthesis.cancel();const n=new SpeechSynthesisUtterance(o.question);n.lang="zh-CN",n.rate=.9,window.speechSynthesis.speak(n)};window.toggleAiSuggestions=async function(){const n=document.getElementById("ai-suggestion-box"),i=document.getElementById("hint-toggle-btn");if(!n||!o)return;if(n.style.display==="block"){n.style.display="none",i&&(i.innerHTML=`
         <i class="fa-solid fa-lightbulb"></i>
         <span>Gợi ý Dàn bài &amp; Từ vựng</span>
       `);return}n.style.display="block",i&&(i.innerHTML=`
       <i class="fa-solid fa-eye-slash"></i>
       <span>Ẩn Gợi ý</span>
-    `);const e=`${s}_${c.question}`;if(u.has(e)){A(u.get(e));return}if(!T){T=!0,n.innerHTML=`
-    <div style="text-align: center; padding: 24px 16px; color: #f59e0b;">
-      <i class="fa-solid fa-brain fa-spin" style="font-size: 2rem; margin-bottom: 12px; color: #f59e0b;"></i>
+    `);const e=`${c}_${o.question}`;if(u.has(e)){q(u.get(e));return}if(!z){z=!0,n.innerHTML=`
+    <div style="text-align: center; padding: 24px 16px; color: #a855f7;">
+      <i class="fa-solid fa-brain fa-spin" style="font-size: 2rem; margin-bottom: 12px; color: #38bdf8;"></i>
       <div style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
-        AI HongTai đang lập Dàn ý &amp; chọn lọc Từ vựng Khẩu ngữ...
+        AI HongTai đang tự động xây dựng Dàn bài &amp; chọn lọc Từ vựng...
       </div>
       <div style="font-size: 0.85rem; color: #94a3b8;">
-        Phù hợp chuẩn thi HSKK ${s==="so"?"Sơ cấp":s==="cao"?"Cao cấp":"Trung cấp"}
+        Đối chiếu chuẩn ngữ cảnh thi HSKK ${c==="so"?"Sơ cấp":c==="cao"?"Cao cấp":"Trung cấp"}
       </div>
     </div>
-  `;try{const o=await fetch(`${j}/api/ai/hskk-suggest`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:c.question,level:s,skill:"speaking"})});if(o.ok){const a=await o.json();u.set(e,a),A(a),m("start")}else throw new Error("Server error")}catch(o){console.error("Lỗi gợi ý AI:",o),n.innerHTML=`
+  `;try{const s=await fetch(`${f}/api/ai/hskk-suggest`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:o.question,level:c,skill:"writing"})});if(s.ok){const a=await s.json();u.set(e,a),q(a),v("success")}else throw new Error("Server error")}catch(s){console.error("Lỗi gợi ý AI:",s),n.innerHTML=`
       <div style="text-align: center; padding: 24px 16px; color: #f87171;">
         <i class="fa-solid fa-triangle-exclamation" style="font-size: 2rem; margin-bottom: 12px; color: #ef4444;"></i>
         <div style="font-weight: 700; font-size: 1rem; color: #ffffff; margin-bottom: 6px;">
@@ -29,47 +29,47 @@ import"./global_sidebar-Cig41M-c.js";import{p as M}from"./index-haNF1LmB.js";con
         <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 16px;">
           Hệ thống AI đang phản hồi chậm hoặc bận. Vui lòng bấm thử lại để nhận gợi ý chuẩn bám sát đề bài.
         </div>
-        <button onclick="window.toggleAiSuggestion && window.toggleAiSuggestion()" style="background: #f59e0b; color: #ffffff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+        <button onclick="window.toggleAiSuggestion && window.toggleAiSuggestion()" style="background: #a855f7; color: #ffffff; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-rotate-right"></i> Thử lại
         </button>
       </div>
-    `}finally{T=!1}}};function A(n){const i=document.getElementById("ai-suggestion-box");if(!i)return;const t=n.outline||{},e=n.vocabulary||[],o=n.sentenceStructures||[];i.innerHTML=`
+    `}finally{z=!1}}};function q(n){const i=document.getElementById("ai-suggestion-box");if(!i)return;const t=n.outline||{},e=n.vocabulary||[],s=n.sentenceStructures||[];i.innerHTML=`
     <div class="ai-hint-box-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px dashed rgba(34, 197, 94, 0.4); padding-bottom: 10px;">
       <div class="ai-hint-box-title" style="display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1.05rem; color: var(--hint-header-color, #15803d);">
         <i class="fa-solid fa-wand-magic-sparkles" style="color: #10b981;"></i>
-        <span>AI Đề Xuất Dàn Ý &amp; Từ Vựng Khẩu Ngữ</span>
+        <span>AI Gợi Ý Dàn Bài &amp; Từ Vựng (Chuẩn HSKK ${c==="so"?"Sơ cấp":c==="cao"?"Cao cấp":"Trung cấp"})</span>
       </div>
       <span class="ai-hint-badge" style="font-size: 0.75rem; background: var(--hint-badge-bg, #dcfce7); color: var(--hint-badge-color, #15803d); border: 1px solid var(--hint-badge-border, #86efac); padding: 3px 10px; border-radius: 6px; font-weight: 800;">
-        HSKK ${s==="so"?"Sơ cấp":s==="cao"?"Cao cấp":"Trung cấp"}
+        Tự động bám sát đề
       </span>
     </div>
 
-    <!-- 1. Dàn bài -->
+    <!-- 1. Dàn bài gợi ý (Tiếng Việt) -->
     <div style="margin-bottom: 18px;">
       <div class="ai-outline-title" style="font-size: 0.94rem; font-weight: 800; color: var(--outline-title-color, #b45309); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-        <i class="fa-solid fa-list-ol" style="color: #f59e0b;"></i> <span>1. Dàn bài gợi ý:</span>
+        <i class="fa-solid fa-list-ol" style="color: #f59e0b;"></i> <span>1. Dàn bài gợi ý (Suy nghĩ và trả lời theo từng luận điểm):</span>
       </div>
       <div class="ai-outline-box" style="background: var(--outline-box-bg, #fffbeb); border: 1px solid var(--outline-box-border, #fde68a); border-left: 4px solid #f59e0b; padding: 14px 18px; border-radius: 12px; font-size: 0.92rem; line-height: 1.7; color: var(--outline-box-color, #1e293b);">
-        <div style="margin-bottom: 6px;"><strong>Mở đầu:</strong> ${t.intro||"Trả lời trực tiếp vào trọng tâm câu hỏi."}</div>
-        <div style="margin-bottom: 6px;">
-          <strong>Triển khai thân bài:</strong>
+        <div style="margin-bottom: 8px;"><strong>Mở bài:</strong> ${t.intro||"Nêu trực tiếp câu trả lời cho đề bài."}</div>
+        <div style="margin-bottom: 8px;">
+          <strong>Thân bài:</strong>
           <ul style="margin: 4px 0 0 0; padding-left: 20px;">
             ${(t.body||[]).map(a=>`<li style="margin-bottom: 4px;">${a}</li>`).join("")}
           </ul>
         </div>
-        <div><strong>Kết thúc:</strong> ${t.conclusion||"Đúc kết bài học hoặc cảm xúc cá nhân."}</div>
+        <div><strong>Kết bài:</strong> ${t.conclusion||"Tổng kết suy nghĩ và cảm xúc."}</div>
       </div>
     </div>
 
-    <!-- 2. Từ vựng có thể sử dụng -->
+    <!-- 2. Từ vựng then chốt có thể sử dụng -->
     <div style="margin-bottom: 18px;">
       <div class="ai-vocab-section-title" style="font-size: 0.94rem; font-weight: 800; color: var(--vocab-title-color, #0284c7); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-        <i class="fa-solid fa-key" style="color: #0284c7;"></i> <span>2. Từ vựng / Cụm từ đắt giá nên nói:</span>
+        <i class="fa-solid fa-key" style="color: #0284c7;"></i> <span>2. Từ vựng then chốt (Bấm để chèn nhanh vào bài):</span>
       </div>
       <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        ${e.map(a=>{let h=a.pinyin;if(a.hanzi)try{const g=M(a.hanzi,{toneType:"symbol"});g&&(h=g)}catch{}return`
-          <div class="ai-vocab-pill"
-            style="background: var(--vocab-pill-bg, #f0f9ff); border: 1.5px solid var(--vocab-pill-border, #7dd3fc); padding: 6px 14px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px;">
+        ${e.map(a=>{let h=a.pinyin;if(a.hanzi)try{const g=b(a.hanzi,{toneType:"symbol"});g&&(h=g)}catch{}return`
+          <div onclick="insertVocabToWriting('${a.hanzi}')" title="Bấm để chèn từ này vào bài viết" class="ai-vocab-pill"
+            style="cursor: pointer; background: var(--vocab-pill-bg, #f0f9ff); border: 1.5px solid var(--vocab-pill-border, #7dd3fc); padding: 6px 14px; border-radius: 99px; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px;">
             <span class="ai-vocab-hanzi" style="font-weight: 800; color: var(--vocab-hanzi-color, #0f172a); font-family: var(--font-chinese), sans-serif; font-size: 0.95rem;">${a.hanzi}</span>
             <span class="ai-vocab-pinyin" style="font-size: 0.8rem; color: var(--vocab-pinyin-color, #0284c7); font-weight: 700; margin: 0 3px;">(${h})</span>
             <span class="ai-vocab-meaning" style="font-size: 0.82rem; color: var(--vocab-meaning-color, #334155); font-weight: 600;">: ${a.meaning}</span>
@@ -78,15 +78,15 @@ import"./global_sidebar-Cig41M-c.js";import{p as M}from"./index-haNF1LmB.js";con
       </div>
     </div>
 
-    <!-- 3. Mẫu câu cấu trúc nên dùng -->
-    ${o.length>0?`
+    <!-- 3. Cấu trúc câu đắt giá -->
+    ${s.length>0?`
       <div class="ai-grammar-section" style="margin-bottom: 14px;">
         <div class="ai-grammar-section-title" style="font-size: 1.02rem; font-weight: 900; color: var(--grammar-title-color, #6b21a8); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-puzzle-piece" style="color: var(--grammar-icon-color, #7c3aed); font-size: 1.1rem;"></i>
-          <span>3. Mẫu câu kết nối lưu loát:</span>
+          <span>3. Cấu trúc câu đắt giá ghi điểm:</span>
         </div>
         <div class="ai-grammar-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
-          ${o.map(a=>`
+          ${s.map(a=>`
             <div class="ai-grammar-card" style="background: var(--grammar-card-bg, #ffffff); border: 2px solid var(--grammar-card-border, #a855f7); border-radius: 16px; padding: 16px 18px; box-shadow: var(--grammar-card-shadow, 0 4px 16px rgba(124, 58, 237, 0.12)); display: flex; flex-direction: column; justify-content: space-between;">
               <div>
                 <div class="ai-grammar-pattern" style="font-weight: 900; font-size: 1.18rem; color: var(--grammar-pattern-color, #581c87); margin-bottom: 6px; line-height: 1.4; font-family: var(--font-chinese), sans-serif; letter-spacing: 0.3px;">
@@ -106,27 +106,27 @@ import"./global_sidebar-Cig41M-c.js";import{p as M}from"./index-haNF1LmB.js";con
         </div>
       </div>
     `:""}
-  `}window.toggleSampleSpeech=async function(n=!1){const i=document.getElementById("sample-speech-box"),t=document.getElementById("sample-speech-toggle-btn");if(!i||!c)return;if(i.style.display==="block"&&!n){i.style.display="none",t&&(t.innerHTML=`
+  `}window.toggleSampleWriting=async function(n=!1){const i=document.getElementById("sample-writing-box"),t=document.getElementById("sample-writing-toggle-btn");if(!i||!o)return;if(i.style.display==="block"&&!n){i.style.display="none",t&&(t.innerHTML=`
         <i class="fa-solid fa-medal"></i>
-        <span>Bài nói mẫu tham khảo</span>
+        <span>Bài viết mẫu tham khảo</span>
       `);return}i.style.display="block",t&&(t.innerHTML=`
       <i class="fa-solid fa-eye-slash"></i>
-      <span>Ẩn Bài nói mẫu</span>
-    `);const o=`${s}_${c.question}`;if(!n&&u.has(o)){const a=u.get(o);if(a&&a.sampleAnswer&&a.sampleAnswer.hanzi&&!a.isFallback){S(a);return}}n&&u.delete(o),i.innerHTML=`
+      <span>Ẩn Bài viết mẫu</span>
+    `);const s=`${c}_${o.question}`;if(!n&&u.has(s)){const a=u.get(s);if(a&&a.sampleAnswer&&a.sampleAnswer.hanzi&&!a.isFallback){k(a);return}}n&&u.delete(s),i.innerHTML=`
     <div style="text-align: center; padding: 24px 16px; color: #10b981;">
       <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 12px; color: #10b981;"></i>
       <div style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
-        Đang tạo bài nói mẫu dài chuẩn HSKK ${s==="so"?"Sơ cấp":s==="cao"?"Cao cấp":"Trung cấp"}...
+        Đang tạo bài viết mẫu chuẩn HSKK ${c==="so"?"Sơ cấp":c==="cao"?"Cao cấp":"Trung cấp"}...
       </div>
       <div style="font-size: 0.85rem; color: #94a3b8;">
-        Hệ thống AI đang xây dựng bài nói mẫu chuyên sâu bám sát: "${c.question}"
+        Hệ thống AI đang xây dựng bài viết mẫu chuyên sâu bám sát: "${o.question}"
       </div>
     </div>
-  `;try{const a=await fetch(`${j}/api/ai/hskk-suggest`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:c.question,level:s,skill:"speaking"})});if(a.ok){const h=await a.json();u.set(o,h),S(h),m("start")}else throw new Error("Server error")}catch(a){console.error("Lỗi nạp bài mẫu nói AI, chuyển sang mẫu chuẩn dự phòng:",a);const h=P();u.set(o,h),S(h)}};window.regenerateSampleSpeech=function(){window.toggleSampleSpeech(!0)};function S(n){const i=document.getElementById("sample-speech-box");if(!i)return;const t=n.sampleAnswer||{};let e=t.hanzi||"";e=e.replace(/[a-zA-ZàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆĐÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ]/g,"").replace(/[\uac00-\ud7af]/g,"").trim();const o=e.replace(/\s+/g,"").length;let a=t.pinyin||"";if(e)try{const h=M(e,{toneType:"symbol"});h&&(a=h)}catch{}i.innerHTML=`
+  `;try{const a=await fetch(`${f}/api/ai/hskk-suggest`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:o.question,level:c,skill:"writing"})});if(a.ok){const h=await a.json();u.set(s,h),k(h),v("success")}else throw new Error("Server error")}catch(a){console.error("Lỗi nạp bài mẫu viết AI, chuyển sang mẫu chuẩn dự phòng:",a);const h=B();u.set(s,h),k(h)}};window.regenerateSampleWriting=function(){window.toggleSampleWriting(!0)};function k(n){const i=document.getElementById("sample-writing-box");if(!i)return;const t=n.sampleAnswer||{};let e=t.hanzi||"";e=e.replace(/[a-zA-ZàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆĐÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴ]/g,"").replace(/[\uac00-\ud7af]/g,"").trim();const s=e.replace(/\s+/g,"").length;let a=t.pinyin||"";if(e)try{const h=b(e,{toneType:"symbol"});h&&(a=h)}catch{}i.innerHTML=`
     <div class="sample-box-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px dashed rgba(16, 185, 129, 0.4); padding-bottom: 10px; flex-wrap: wrap; gap: 8px;">
       <div class="sample-box-title" style="display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1.1rem; color: var(--sample-title-color, #059669);">
         <i class="fa-solid fa-medal" style="color: #10b981;"></i>
-        <span>Bài Nói Mẫu Tham Khảo (Chuẩn HSKK ${s==="so"?"Sơ cấp":s==="cao"?"Cao cấp":"Trung cấp"})</span>
+        <span>Bài Viết Mẫu Tham Khảo (Chuẩn HSKK ${c==="so"?"Sơ cấp":c==="cao"?"Cao cấp":"Trung cấp"})</span>
       </div>
       <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
         ${n.isFallback?`
@@ -139,19 +139,22 @@ import"./global_sidebar-Cig41M-c.js";import{p as M}from"./index-haNF1LmB.js";con
           </span>
         `}
         <span style="font-size: 0.78rem; background: rgba(16, 185, 129, 0.18); color: var(--sample-badge-color, #047857); padding: 4px 10px; border-radius: 99px; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.35);">
-          ${o} chữ Hán
+          ${s} chữ Hán
         </span>
-        <button onclick="regenerateSampleSpeech()" title="Yêu cầu AI tạo lại bài nói mẫu mới bám sát đề thi" style="background: rgba(168, 85, 247, 0.15); border: 1px solid #a855f7; color: #a855f7; font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <button onclick="regenerateSampleWriting()" title="Yêu cầu AI tạo lại bài mẫu mới bám sát đề thi" style="background: rgba(168, 85, 247, 0.15); border: 1px solid #a855f7; color: #a855f7; font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
           <i class="fa-solid fa-rotate-right"></i> <span>Làm mới (AI)</span>
         </button>
-        <button onclick="playSpeakingSampleTts()" style="background: rgba(56, 189, 248, 0.15); border: 1px solid #0284c7; color: var(--btn-tts-color, #0284c7); font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-volume-high"></i> <span>Nghe bản xứ đọc</span>
+        <button onclick="playWritingSampleTts()" style="background: rgba(56, 189, 248, 0.15); border: 1px solid #0284c7; color: var(--btn-tts-color, #0284c7); font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-volume-high"></i> <span>Nghe đọc mẫu</span>
+        </button>
+        <button onclick="copySampleText()" style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: var(--btn-copy-color, #059669); font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-copy"></i> <span>Sao chép mẫu</span>
         </button>
       </div>
     </div>
 
     <!-- Hanzi Text -->
-    <div id="sample-speaking-hanzi" class="sample-hanzi-card" style="font-size: 1.12rem; line-height: 1.85; color: var(--sample-hanzi-color, #0f172a); white-space: pre-line; margin-bottom: 14px; font-family: var(--font-chinese), sans-serif; background: var(--sample-hanzi-bg, #ffffff); padding: 16px 20px; border-radius: 12px; border: 1.5px solid var(--sample-hanzi-border, #a7f3d0); border-left: 4px solid #10b981; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);">
+    <div id="sample-writing-hanzi" class="sample-hanzi-card" style="font-size: 1.12rem; line-height: 1.85; color: var(--sample-hanzi-color, #0f172a); white-space: pre-line; margin-bottom: 14px; font-family: var(--font-chinese), sans-serif; background: var(--sample-hanzi-bg, #ffffff); padding: 16px 20px; border-radius: 12px; border: 1.5px solid var(--sample-hanzi-border, #a7f3d0); border-left: 4px solid #10b981; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);">
       ${e}
     </div>
 
@@ -170,7 +173,7 @@ import"./global_sidebar-Cig41M-c.js";import{p as M}from"./index-haNF1LmB.js";con
         <div class="sample-meaning-card" style="font-size: 0.94rem; color: var(--sample-meaning-color, #1e293b); line-height: 1.7; white-space: pre-line; background: var(--sample-meaning-bg, #fffbeb); border: 1px solid var(--sample-meaning-border, #fde68a); padding: 12px 16px; border-radius: 10px;">${t.meaningVi}</div>
       </div>
     `:""}
-  `}function P(){const n=c&&c.question?c.question:"đề bài",i=s||"trung",t=/诚|信|欺诈|撒谎|真实|守约|道德/.test(n),e=/运动|锻炼|走路|健康|跑步|健身|身体/.test(n);return t?i==="so"?{isFallback:!0,outline:{intro:`Mở bài: Nêu quan điểm trực diện: "${n}". (Làm người thành thật giữ lời hứa là điều rất quan trọng trong cuộc sống.)`,body:["Luận điểm 1: Khi làm người thật thà thì bạn bè và mọi người mới tin tưởng. (Tại sao bạn bè cần tin nhau?)","Luận điểm 2: Làm sai thì phải dũng cảm thừa nhận, không nói dối. (Làm sai thì nên làm thế nào?)","Luận điểm 3: Bố mẹ và thầy cô luôn dạy chúng ta phải giữ lời hứa. (Bố mẹ dạy bạn điều gì?)"],conclusion:"Kết bài: Khuyên mọi người cùng nói thật và giữ chữ tín để cuộc sống vui vẻ, hạnh phúc."},vocabulary:[{hanzi:"诚实",pinyin:"chéngshí",meaning:"thành thật, trung thực"},{hanzi:"相信",pinyin:"xiāngxìn",meaning:"tin tưởng"},{hanzi:"答应",pinyin:"dāying",meaning:"đồng ý, hứa hẹn"},{hanzi:"朋友",pinyin:"péngyou",meaning:"bạn bè"},{hanzi:"重要",pinyin:"zhòngyào",meaning:"quan trọng"}],sentenceStructures:[{pattern:"我觉得……非常重要",meaning:"Tôi thấy... vô cùng quan trọng",example:"我觉得做一个诚实守信的人非常重要。"},{pattern:"只要……就一定能……",meaning:"Chỉ cần... thì nhất định có thể...",example:"只要常常说真话，就一定能得到大家的信任。"}],sampleAnswer:{hanzi:`关于“${n}”这个问题，我觉得做一个诚实守信的人非常重要。
+  `}function B(){const n=o&&o.question?o.question:"đề bài",i=c||"trung",t=/诚|信|欺诈|撒谎|真实|守约|道德/.test(n),e=/运动|锻炼|走路|健康|跑步|健身|身体/.test(n);return t?i==="so"?{isFallback:!0,outline:{intro:`Mở bài: Nêu quan điểm trực diện: "${n}". (Làm người thành thật giữ lời hứa là điều rất quan trọng trong cuộc sống.)`,body:["Luận điểm 1: Khi làm người thật thà thì bạn bè và mọi người mới tin tưởng. (Tại sao bạn bè cần tin nhau?)","Luận điểm 2: Làm sai thì phải dũng cảm thừa nhận, không nói dối. (Làm sai thì nên làm thế nào?)","Luận điểm 3: Bố mẹ và thầy cô luôn dạy chúng ta phải giữ lời hứa. (Bố mẹ dạy bạn điều gì?)"],conclusion:"Kết bài: Khuyên mọi người cùng nói thật và giữ chữ tín để cuộc sống vui vẻ, hạnh phúc."},vocabulary:[{hanzi:"诚实",pinyin:"chéngshí",meaning:"thành thật, trung thực"},{hanzi:"相信",pinyin:"xiāngxìn",meaning:"tin tưởng"},{hanzi:"答应",pinyin:"dāying",meaning:"đồng ý, hứa hẹn"},{hanzi:"朋友",pinyin:"péngyou",meaning:"bạn bè"},{hanzi:"重要",pinyin:"zhòngyào",meaning:"quan trọng"}],sentenceStructures:[{pattern:"我觉得……非常重要",meaning:"Tôi thấy... vô cùng quan trọng",example:"我觉得做一个诚实守信的人非常重要。"},{pattern:"只要……就一定能……",meaning:"Chỉ cần... thì nhất định có thể...",example:"只要常常说真话，就一定能得到大家的信任。"}],sampleAnswer:{hanzi:`关于“${n}”这个问题，我觉得做一个诚实守信的人非常重要。
 
 在平时生活和学习中，如果一个人经常说真话、说到做到，大家就会很喜欢他，也愿意和他做朋友。相反，如果一个人常常撒谎骗人，别人就不会再相信他了。
 
@@ -284,158 +287,272 @@ Thứ hai, xét từ góc độ hành động, nói suông trên giấy suy cho 
 
 Cuối cùng, học cách giao tiếp và hợp tác với mọi người xung quanh cũng quan trọng không kém. Trí tuệ và sức lực của một cá nhân dẫu sao cũng có giới hạn, chỉ khi biết lắng nghe những ý kiến đa chiều, cùng cộng sự tương trợ và bù trừ sở trường cho nhau, chúng ta mới có thể vượt qua mọi rào cản trên đường tiến bước.
 
-Tóm lại, chỉ cần chúng ta luôn giữ vững thái độ sống tích cực, tác phong cầu thị và thiết thực, nhất định chúng ta sẽ luôn chủ động vững vàng trước mọi thách thức và gặt hái được những thành tựu mỹ mãn.`}}}window.playSpeakingSampleTts=function(){const n=document.getElementById("sample-speaking-hanzi");if(!n||!("speechSynthesis"in window))return;window.speechSynthesis.cancel();const i=new SpeechSynthesisUtterance(n.textContent.trim());i.lang="zh-CN",i.rate=.88,window.speechSynthesis.speak(i)};window.startPrepTimer=function(){cancelSpeakingRecording();const n=document.getElementById("prep-timer-box"),i=document.getElementById("btn-prep-3p");if(!n)return;n.style.display="block",i==null||i.classList.add("active-timer"),n.scrollIntoView({behavior:"smooth",block:"center"});const t=document.getElementById("speaking-scratchpad-card");t&&(t.style.display="block");const e=document.getElementById("speaking-scratchpad-input");e&&e.focus(),f=180,b=!1,B(),m("start"),clearInterval(y),y=setInterval(()=>{b||(f--,B(),f<=0&&(clearInterval(y),m("chime"),alert("⏰ Đã hết 3 phút chuẩn bị! Bạn đã sẵn sàng, hãy bắt đầu nói ngay nhé!"),i==null||i.classList.remove("active-timer"),n.style.display="none",startSpeakingTimerAndRecord()))},1e3)};function B(){const n=document.getElementById("prep-timer-display");if(!n)return;const i=Math.floor(f/60),t=f%60;n.textContent=`${String(i).padStart(2,"0")}:${String(t).padStart(2,"0")}`}window.togglePausePrepTimer=function(){b=!b;const n=document.getElementById("prep-pause-btn");n&&(n.innerHTML=b?'<i class="fa-solid fa-play"></i> <span>Tiếp tục</span>':'<i class="fa-solid fa-pause"></i> <span>Tạm dừng</span>')};window.resetPrepTimer=function(){clearInterval(y),f=180,b=!1,B();const n=document.getElementById("prep-timer-box"),i=document.getElementById("btn-prep-3p");n&&(n.style.display="none"),i==null||i.classList.remove("active-timer")};window.stopPrepAndStartSpeaking=function(){clearInterval(y);const n=document.getElementById("prep-timer-box"),i=document.getElementById("btn-prep-3p");n&&(n.style.display="none"),i==null||i.classList.remove("active-timer"),startSpeakingTimerAndRecord()};window.startSpeakingTimerAndRecord=async function(){clearInterval(y);const n=document.getElementById("prep-timer-box"),i=document.getElementById("btn-prep-3p");n&&(n.style.display="none"),i==null||i.classList.remove("active-timer");try{const h=await navigator.mediaDevices.getUserMedia({audio:!0});Z(h)}catch(h){console.error("Không truy cập được micro:",h),alert("Không thể truy cập microphone. Vui lòng cho phép trình duyệt truy cập micro để ghi âm bài nói!");return}const t=document.getElementById("speaking-recorder-box"),e=document.getElementById("btn-speak-2p"),o=document.getElementById("recorded-result-box");o&&(o.style.display="none"),t&&(t.style.display="block"),e==null||e.classList.add("active-timer");const a=document.getElementById("speaking-scratchpad-card");a&&(a.style.display="block"),t==null||t.scrollIntoView({behavior:"smooth",block:"center"}),k=120,x=0,H(),m("start"),I=[],d.start(250),w=!0,G(),clearInterval(v),v=setInterval(()=>{k--,x++,H(),k<=0&&(clearInterval(v),finishSpeakingRecording())},1e3)};function Z(n){d=new MediaRecorder(n),d.ondataavailable=i=>{i.data.size>0&&I.push(i.data)},d.onstop=()=>{n.getTracks().forEach(e=>e.stop()),L=new Blob(I,{type:"audio/webm"}),K=URL.createObjectURL(L);const i=document.getElementById("recorded-audio-player");i&&(i.src=K);const t=document.getElementById("recording-duration-text");if(t){const e=Math.floor(x/60),o=x%60;t.textContent=`Thời lượng bài nói: ${String(e).padStart(2,"0")}:${String(o).padStart(2,"0")}`}}}function G(){const n=window.SpeechRecognition||window.webkitSpeechRecognition;if(n)try{r=new n,r.lang="zh-CN",r.continuous=!0,r.interimResults=!0;const i=document.getElementById("spoken-transcript-input");let t="";r.onresult=e=>{let o="";for(let a=e.resultIndex;a<e.results.length;++a)e.results[a].isFinal?t+=e.results[a][0].transcript:o+=e.results[a][0].transcript;i&&(i.value=(t+" "+o).trim())},r.onerror=e=>{console.warn("Speech recognition notice:",e)},r.start()}catch(i){console.warn("Không khởi chạy được SpeechRecognition:",i)}}function H(){const n=document.getElementById("speaking-timer-display");if(!n)return;const i=Math.floor(k/60),t=k%60;n.textContent=`${String(i).padStart(2,"0")}:${String(t).padStart(2,"0")}`}window.finishSpeakingRecording=function(){if(!w)return;if(w=!1,clearInterval(v),m("chime"),r)try{r.stop()}catch{}d&&d.state!=="inactive"&&d.stop();const n=document.getElementById("speaking-recorder-box"),i=document.getElementById("btn-speak-2p"),t=document.getElementById("recorded-result-box");n&&(n.style.display="none"),i==null||i.classList.remove("active-timer"),t&&(t.style.display="block",t.scrollIntoView({behavior:"smooth",block:"start"}));const e=document.getElementById("spoken-transcript-input");e&&!e.value.trim()&&(e.placeholder="Mic chưa tự động nhận diện được chữ Hán (hoặc trình duyệt chưa bật nhận diện giọng nói). Bạn hãy gõ tóm tắt những câu bạn vừa nói vào đây để AI chấm điểm chính xác nhé!")};window.cancelSpeakingRecording=function(){if(w=!1,clearInterval(v),r)try{r.stop()}catch{}if(d&&d.state!=="inactive")try{d.stop()}catch{}const n=document.getElementById("speaking-recorder-box"),i=document.getElementById("btn-speak-2p");n&&(n.style.display="none"),i==null||i.classList.remove("active-timer")};window.clearTranscript=function(){const n=document.getElementById("spoken-transcript-input");n&&(n.value="",n.focus())};window.restartSpeakingFlow=function(){const n=document.getElementById("recorded-result-box");n&&(n.style.display="none");const i=document.getElementById("ai-speaking-evaluation-results");i&&(i.style.display="none"),startSpeakingTimerAndRecord()};window.submitSpeakingForAiGrading=async function(){const n=document.getElementById("spoken-transcript-input"),i=document.getElementById("ai-speaking-evaluation-results"),t=document.getElementById("submit-speaking-btn");if(!n||!i)return;const e=n.value.trim();if(!e||e.length<3){alert("Vui lòng gõ hoặc nói ít nhất 5-10 chữ Hán vào ô văn bản bài nói để AI có thể chấm điểm nhé!"),n.focus();return}t&&(t.disabled=!0,t.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> <span>AI Đang Chấm Bài Nói...</span>'),i.style.display="block",i.scrollIntoView({behavior:"smooth",block:"start"}),i.innerHTML=`
-    <div class="speaking-card-panel" style="text-align: center; padding: 48px 24px;">
-      <i class="fa-solid fa-microphone-lines fa-bounce" style="font-size: 3rem; color: #f59e0b; margin-bottom: 20px;"></i>
+Tóm lại, chỉ cần chúng ta luôn giữ vững thái độ sống tích cực, tác phong cầu thị và thiết thực, nhất định chúng ta sẽ luôn chủ động vững vàng trước mọi thách thức và gặt hái được những thành tựu mỹ mãn.`}}}window.playWritingSampleTts=function(){const n=document.getElementById("sample-writing-hanzi");if(!n||!("speechSynthesis"in window))return;window.speechSynthesis.cancel();const i=new SpeechSynthesisUtterance(n.textContent.trim());i.lang="zh-CN",i.rate=.88,window.speechSynthesis.speak(i)};window.insertVocabToWriting=function(n){const i=document.getElementById("qa-writing-input");i&&(i.value+=n,handleQaTextInput(),i.focus())};window.copySampleText=function(){const n=document.getElementById("sample-writing-hanzi")||document.getElementById("sample-hanzi-text");n&&(navigator.clipboard.writeText(n.textContent.trim()),alert("Đã sao chép bài văn mẫu vào clipboard!"))};window.handleQaTextInput=function(){const n=document.getElementById("qa-writing-input");if(!n)return;const i=n.value,e=(i.match(/[\u4e00-\u9fa5]/g)||[]).length,s=i.split(`
+`).filter(g=>g.trim().length>0).length,a=document.getElementById("qa-char-count"),h=document.getElementById("qa-para-count");a&&(a.textContent=e),h&&(h.textContent=s)};window.clearQaInput=function(){const n=document.getElementById("qa-writing-input");if(n){if(n.value.trim().length>0&&!confirm("Bạn có chắc muốn xóa nội dung đã viết?"))return;n.value="",handleQaTextInput()}};document.addEventListener("keydown",n=>{if((n.ctrlKey||n.metaKey)&&n.key==="Enter"){const i=document.getElementById("wf-card-qa");i&&i.classList.contains("active")?submitQaForGrading():submitEssayForGrading("free")}});window.submitQaForGrading=async function(){if(!m("Nộp Bài Viết Cho AI Chấm")||p)return;const n=document.getElementById("qa-writing-input"),i=document.getElementById("ai-evaluation-results"),t=document.getElementById("qa-submit-btn");if(!n||!i)return;const e=n.value.trim(),s=(e.match(/[\u4e00-\u9fa5]/g)||[]).length;if(!e||s<5){alert("Vui lòng viết câu trả lời tiếng Trung ít nhất từ 10 chữ Hán để AI có thể đánh giá chính xác nhé!"),n.focus();return}p=!0,t&&(t.disabled=!0,t.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> <span>AI Đang Chấm Bài...</span>'),i.style.display="block",i.scrollIntoView({behavior:"smooth",block:"start"}),i.innerHTML=`
+    <div class="writing-card-panel" style="text-align: center; padding: 48px 24px;">
+      <i class="fa-solid fa-brain fa-bounce" style="font-size: 3rem; color: #8b5cf6; margin-bottom: 20px;"></i>
       <h2 style="font-size: 1.45rem; font-weight: 800; color: #ffffff; margin: 0 0 10px 0;">
-        Giám Khảo Khẩu Ngữ AI Đang Đánh Giá Bài Nói...
+        Giám Khảo AI HongTai Đang Chấm Bài Viết Của Bạn...
       </h2>
       <p style="font-size: 0.92rem; color: #94a3b8; max-width: 560px; margin: 0 auto 20px auto;">
-        Đang phân tích phát âm, ngữ điệu, vốn từ vựng khẩu ngữ và độ lưu loát chuẩn tiêu chí thi HSKK.
+        Đang đối chiếu ngữ pháp chuẩn thi HSKK, kiểm tra độ chính xác cú pháp, tính mạch lạc và biên soạn bản viết lại chuẩn người bản xứ.
       </p>
       <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
-        <span style="font-size: 0.8rem; background: rgba(245, 158, 11, 0.15); color: #fbbf24; padding: 4px 12px; border-radius: 99px;">
-          ✓ Đánh giá phát âm &amp; ngữ điệu
+        <span style="font-size: 0.8rem; background: rgba(139, 92, 246, 0.15); color: #d8b4fe; padding: 4px 12px; border-radius: 99px;">
+          ✓ Soát lỗi ngữ pháp & chính tả
         </span>
         <span style="font-size: 0.8rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 4px 12px; border-radius: 99px;">
-          ✓ Kiểm tra độ lưu loát tự nhiên
+          ✓ Đánh giá 4 tiêu chí HSKK
         </span>
         <span style="font-size: 0.8rem; background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 4px 12px; border-radius: 99px;">
-          ✓ Viết lại khẩu ngữ chuẩn bản xứ
+          ✓ Viết lại chuẩn người bản xứ
         </span>
       </div>
     </div>
-  `;try{const o={question:c?c.question:"HSKK Speaking",transcript:e,level:s,duration:x||120},a=await fetch(`${j}/api/ai/grade-speaking`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)});if(a.ok){const h=await a.json();N(h,i,e),m("start")}else throw new Error("Server error")}catch(o){console.error("Lỗi chấm bài nói AI:",o),N({overallScore:86,badge:"Rất Tốt 👏",criteriaScores:{pronunciation:86,fluency:85,grammar:86,content:88},generalFeedback:"Bài nói của bạn rõ ràng, câu từ tự nhiên và bám sát câu hỏi của đề bài!",strengths:["Phát âm tương đối rõ chữ","Trả lời trực diện vào chủ đề"],improvements:["Nên dùng thêm từ nối để bài nói liên kết uyển chuyển hơn"],nativeVersion:e,nativePinyin:"",nativeVi:"Bản dịch bài nói của bạn."},i,e)}finally{t&&(t.disabled=!1,t.innerHTML='<i class="fa-solid fa-wand-magic-sparkles"></i> <span>Đưa AI Chấm Điểm Bài Nói</span>')}};function N(n,i,t){const e=n.overallScore||85,o=n.badge||(e>=90?"Xuất Sắc 🌟":e>=80?"Rất Tốt 👏":e>=65?"Khá 👍":"Cần Cố Gắng 🎙️"),a=e>=85?"linear-gradient(135deg, #10b981, #059669)":e>=70?"linear-gradient(135deg, #f59e0b, #d97706)":"linear-gradient(135deg, #ef4444, #dc2626)",h=n.criteriaScores||{pronunciation:85,fluency:85,grammar:85,content:85},g=n.strengths||[],l=n.improvements||[],z=n.nativeVersion||t,E=n.nativePinyin||"",C=n.nativeVi||"";i.innerHTML=`
-    <div class="speaking-card-panel" style="margin-bottom: 24px; position: relative;">
+  `;try{const a={text:e,mode:"prompt",hskLevel:c==="so"?2:c==="cao"?5:3,topicTitle:`HSKK ${c==="so"?"Sơ cấp":c==="cao"?"Cao cấp":"Trung cấp"}`,topicPrompt:o?o.question:"Trả lời câu hỏi",requiredKeywords:[],minWords:c==="so"?40:c==="cao"?120:80},h=await fetch(`${f}/api/ai/grade-essay`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(a)});if(h.ok){const g=await h.json();S(g,i,e),v("success")}else throw new Error("Server returned error")}catch(a){console.error("Lỗi nộp bài chấm:",a),i.innerHTML=`
+      <div class="eval-report-card" style="text-align: center; padding: 40px 24px;">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 2.8rem; color: #f59e0b; margin-bottom: 16px;"></i>
+        <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 10px;">Máy chủ AI đang bận hoặc gián đoạn mạng</h3>
+        <p style="font-size: 0.95rem; opacity: 0.85; max-width: 520px; margin: 0 auto 20px auto;">
+          Không thể hoàn thành chấm bài lúc này. Vui lòng bấm nút bên dưới để thử lại ngay!
+        </p>
+        <button onclick="submitPromptEssayForGrading()" class="submit-writing-btn" style="display: inline-flex; margin: 0 auto;">
+          <i class="fa-solid fa-rotate-right"></i> <span>Thử Chấm Điểm Lại</span>
+        </button>
+      </div>
+    `}finally{p=!1,t&&(t.disabled=!1,t.innerHTML='<i class="fa-solid fa-wand-magic-sparkles"></i> <span>Viết rồi đưa AI chấm (Ctrl + Enter)</span>')}};window.submitEssayForGrading=async function(n){if(!m("Nộp Bài Viết Cho AI Chấm")||p)return;const i=document.getElementById("free-writing-input"),t=document.getElementById("ai-evaluation-results"),e=document.getElementById("free-submit-btn");if(!i||!t)return;const s=i.value.trim(),a=(s.match(/[\u4e00-\u9fa5]/g)||[]).length;if(!s||a<5){alert("Vui lòng nhập bài viết tiếng Trung ít nhất từ 10 chữ Hán để AI có thể chấm điểm chính xác nhé!"),i.focus();return}p=!0,e&&(e.disabled=!0,e.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> <span>AI Đang Chấm Bài...</span>'),t.style.display="block",t.scrollIntoView({behavior:"smooth",block:"start"}),t.innerHTML=`
+    <div class="writing-card-panel" style="text-align: center; padding: 48px 24px;">
+      <i class="fa-solid fa-brain fa-bounce" style="font-size: 3rem; color: #8b5cf6; margin-bottom: 20px;"></i>
+      <h2 style="font-size: 1.45rem; font-weight: 800; color: #ffffff; margin: 0 0 10px 0;">
+        Giám Khảo AI Đang Phân Tích Bài Viết...
+      </h2>
+      <p style="font-size: 0.92rem; color: #94a3b8; max-width: 540px; margin: 0 auto 20px auto;">
+        Đang đối chiếu ngữ pháp HSK, kiểm tra vốn từ vựng, tính mạch lạc câu cú và biên soạn bản viết lại chuẩn người bản xứ.
+      </p>
+    </div>
+  `;try{const h={text:s,mode:"free",hskLevel:3,topicTitle:"Bài viết tự do",topicPrompt:"",requiredKeywords:[],minWords:0},g=await fetch(`${f}/api/ai/grade-essay`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(h)});if(g.ok){const y=await g.json();S(y,t,s)}else throw new Error("Server error")}catch(h){console.error("Grade free essay error:",h),t.innerHTML=`
+      <div class="eval-report-card" style="text-align: center; padding: 40px 24px;">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 2.8rem; color: #f59e0b; margin-bottom: 16px;"></i>
+        <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 10px;">Máy chủ AI đang bận hoặc gián đoạn mạng</h3>
+        <p style="font-size: 0.95rem; opacity: 0.85; max-width: 520px; margin: 0 auto 20px auto;">
+          Không thể hoàn thành chấm bài lúc này. Vui lòng bấm nút bên dưới để thử lại ngay!
+        </p>
+        <button onclick="submitEssayForGrading('free')" class="submit-writing-btn" style="display: inline-flex; margin: 0 auto;">
+          <i class="fa-solid fa-rotate-right"></i> <span>Thử Chấm Điểm Lại</span>
+        </button>
+      </div>
+    `}finally{p=!1,e&&(e.disabled=!1,e.innerHTML='<i class="fa-solid fa-wand-magic-sparkles"></i> <span>AI Chấm Điểm &amp; Sửa Lỗi</span>')}};window.handleTextInputChange=function(n){const i=document.getElementById("free-writing-input");if(!i)return;const t=i.value.match(/[\u4e00-\u9fa5]/g)||[],e=document.getElementById("free-char-count");e&&(e.textContent=t.length)};window.pasteFromClipboard=async function(){try{const n=await navigator.clipboard.readText(),i=document.getElementById("free-writing-input");i&&n&&(i.value=n,handleTextInputChange("free"))}catch{alert("Vui lòng nhấn Ctrl + V để dán trực tiếp vào ô soạn thảo.")}};window.clearWritingInput=function(){const n=document.getElementById("free-writing-input");n&&(n.value="",handleTextInputChange("free"))};function S(n,i,t){const e=Number(n.overallScore)||80,s=n.badge||(e>=90?"Xuất Sắc 🌟":e>=80?"Rất Tốt 👏":e>=65?"Khá 👍":"Cần Cố Gắng ✍️"),a=e>=85?"linear-gradient(135deg, #10b981, #059669)":e>=70?"linear-gradient(135deg, #0284c7, #0369a1)":"linear-gradient(135deg, #f59e0b, #d97706)",h=n.criteriaScores||{grammar:75,vocabulary:80,coherence:85,taskFulfillment:85},g=n.strengths||[],y=n.errorsList||[],x=n.nativeVersion||t,$=n.nativePinyin||"",T=n.nativeVi||"",j=n.advancedVocabSuggestions||[];i.innerHTML=`
+    <div class="eval-report-card">
       <!-- Header kết quả -->
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px;">
+      <div class="eval-header-row">
         <div style="display: flex; align-items: center; gap: 20px;">
-          <div style="width: 100px; height: 100px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ffffff; background: ${a}; box-shadow: 0 8px 24px rgba(0,0,0,0.25); flex-shrink: 0;">
-            <span style="font-size: 2.2rem; font-weight: 900; line-height: 1;">${e}</span>
-            <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; opacity: 0.9;">Thang 100</span>
+          <div class="eval-score-badge" style="background: ${a};">
+            <span style="font-size: 2.3rem; font-weight: 900; line-height: 1;">${e}</span>
+            <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Thang 100</span>
           </div>
 
           <div>
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-              <span style="font-size: 1.35rem; font-weight: 900; color: #ffffff;">Đánh Giá Bài Nói:</span>
-              <span style="font-size: 1.25rem; font-weight: 800; color: #fbbf24;">${o}</span>
+            <div class="eval-title-text">
+              <span>Đánh Giá:</span>
+              <span style="color: #38bdf8;">${s}</span>
             </div>
-            <div style="font-size: 0.88rem; color: #94a3b8;">
-              <span><i class="fa-solid fa-microphone"></i> Thời lượng nói: <strong>${x||60}s</strong></span>
-              <span style="margin: 0 6px;">&bull;</span>
-              <span><i class="fa-solid fa-circle-check" style="color: #10b981;"></i> Đạt chuẩn thi HSKK</span>
+            <div class="eval-meta-sub">
+              <span><i class="fa-solid fa-file-word"></i> Độ dài: <strong>${n.wordCount||t.length}</strong> chữ Hán</span>
+              <span>&bull;</span>
+              <span><i class="fa-solid fa-circle-check" style="color: #10b981;"></i> Đã soát kỹ ngữ pháp HSK, lượng từ &amp; từ vựng</span>
             </div>
           </div>
         </div>
 
         <div style="display: flex; gap: 10px;">
-          <button onclick="document.getElementById('ai-speaking-evaluation-results').style.display='none'" class="btn"
-            style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+          <button onclick="window.print()" class="btn" style="background: rgba(148, 163, 184, 0.15); border: 1.5px solid rgba(148, 163, 184, 0.3); color: inherit; padding: 8px 16px; border-radius: 12px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-print"></i> <span>In kết quả</span>
+          </button>
+          <button onclick="document.getElementById('ai-evaluation-results').style.display='none'" class="btn" title="Đóng báo cáo" style="background: rgba(148, 163, 184, 0.15); border: 1.5px solid rgba(148, 163, 184, 0.3); color: inherit; width: 38px; height: 38px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
       </div>
 
-      <!-- 4 TIÊU CHÍ KHẨU NGỮ HSKK -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
-        <div style="background: rgba(0,0,0,0.25); padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
-          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #cbd5e1;">
-            <span><i class="fa-solid fa-bullhorn" style="color: #f59e0b;"></i> Phát Âm & Ngữ Điệu</span>
-            <strong style="color: #f59e0b;">${h.pronunciation||85}%</strong>
+      <!-- 4 TIÊU CHÍ HSK -->
+      <div class="eval-crit-grid">
+        <!-- Ngữ pháp & Cú pháp -->
+        <div class="eval-crit-card crit-grammar">
+          <div class="eval-crit-title">
+            <span class="eval-crit-label"><i class="fa-solid fa-spell-check" style="color: #8b5cf6;"></i> Ngữ Pháp &amp; Cú Pháp</span>
+            <span class="eval-crit-val">${h.grammar||75}%</span>
           </div>
-          <div style="height: 8px; border-radius: 99px; background: rgba(255,255,255,0.1); overflow: hidden; margin-top: 8px;">
-            <div style="height: 100%; width: ${h.pronunciation||85}%; background: #f59e0b; border-radius: 99px;"></div>
-          </div>
-        </div>
-
-        <div style="background: rgba(0,0,0,0.25); padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
-          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #cbd5e1;">
-            <span><i class="fa-solid fa-gauge-high" style="color: #38bdf8;"></i> Độ Lưu Loát (Fluency)</span>
-            <strong style="color: #38bdf8;">${h.fluency||85}%</strong>
-          </div>
-          <div style="height: 8px; border-radius: 99px; background: rgba(255,255,255,0.1); overflow: hidden; margin-top: 8px;">
-            <div style="height: 100%; width: ${h.fluency||85}%; background: #38bdf8; border-radius: 99px;"></div>
+          <div class="eval-crit-track">
+            <div style="height: 100%; width: ${Math.min(100,Math.max(5,h.grammar||75))}%; background: linear-gradient(90deg, #8b5cf6, #7c3aed); border-radius: 99px;"></div>
           </div>
         </div>
 
-        <div style="background: rgba(0,0,0,0.25); padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
-          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #cbd5e1;">
-            <span><i class="fa-solid fa-book" style="color: #8b5cf6;"></i> Ngữ Pháp & Vốn Từ</span>
-            <strong style="color: #8b5cf6;">${h.grammar||85}%</strong>
+        <!-- Vốn từ & Biểu đạt -->
+        <div class="eval-crit-card crit-vocab">
+          <div class="eval-crit-title">
+            <span class="eval-crit-label"><i class="fa-solid fa-book" style="color: #38bdf8;"></i> Vốn Từ &amp; Biểu Đạt</span>
+            <span class="eval-crit-val">${h.vocabulary||80}%</span>
           </div>
-          <div style="height: 8px; border-radius: 99px; background: rgba(255,255,255,0.1); overflow: hidden; margin-top: 8px;">
-            <div style="height: 100%; width: ${h.grammar||85}%; background: #8b5cf6; border-radius: 99px;"></div>
+          <div class="eval-crit-track">
+            <div style="height: 100%; width: ${Math.min(100,Math.max(5,h.vocabulary||80))}%; background: linear-gradient(90deg, #38bdf8, #0284c7); border-radius: 99px;"></div>
           </div>
         </div>
 
-        <div style="background: rgba(0,0,0,0.25); padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
-          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; color: #cbd5e1;">
-            <span><i class="fa-solid fa-bullseye" style="color: #10b981;"></i> Bám Đề & Nội Dung</span>
-            <strong style="color: #10b981;">${h.content||85}%</strong>
+        <!-- Mạch lạc & Bố cục -->
+        <div class="eval-crit-card crit-coherence">
+          <div class="eval-crit-title">
+            <span class="eval-crit-label"><i class="fa-solid fa-link" style="color: #10b981;"></i> Mạch Lạc &amp; Bố Cục</span>
+            <span class="eval-crit-val">${h.coherence||85}%</span>
           </div>
-          <div style="height: 8px; border-radius: 99px; background: rgba(255,255,255,0.1); overflow: hidden; margin-top: 8px;">
-            <div style="height: 100%; width: ${h.content||85}%; background: #10b981; border-radius: 99px;"></div>
+          <div class="eval-crit-track">
+            <div style="height: 100%; width: ${Math.min(100,Math.max(5,h.coherence||85))}%; background: linear-gradient(90deg, #10b981, #059669); border-radius: 99px;"></div>
+          </div>
+        </div>
+
+        <!-- Bám đề & Chi tiết -->
+        <div class="eval-crit-card crit-task">
+          <div class="eval-crit-title">
+            <span class="eval-crit-label"><i class="fa-solid fa-bullseye" style="color: #f59e0b;"></i> Bám Đề &amp; Chi Tiết</span>
+            <span class="eval-crit-val">${h.taskFulfillment||85}%</span>
+          </div>
+          <div class="eval-crit-track">
+            <div style="height: 100%; width: ${Math.min(100,Math.max(5,h.taskFulfillment||85))}%; background: linear-gradient(90deg, #f59e0b, #d97706); border-radius: 99px;"></div>
           </div>
         </div>
       </div>
 
-      <!-- NHẬN XÉT CỦA GIÁM KHẢO -->
-      <div style="background: rgba(245, 158, 11, 0.1); border: 1.5px solid rgba(245, 158, 11, 0.35); border-radius: 16px; padding: 18px; margin-bottom: 20px;">
-        <div style="font-size: 1rem; font-weight: 800; color: #fbbf24; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-comment-dots"></i> Nhận Xét Của Giám Khảo Khẩu Ngữ:
+      <!-- NHẬN XÉT CHUNG -->
+      <div class="eval-feedback-panel">
+        <div class="eval-feedback-title">
+          <i class="fa-solid fa-comment-dots"></i> Nhận Xét Chung Của Giám Khảo:
         </div>
-        <p style="font-size: 0.95rem; line-height: 1.65; color: #ffffff; margin: 0 0 12px 0;">
-          ${n.generalFeedback||"Bài nói của bạn hoàn thành tốt mục tiêu giao tiếp."}
+        <p class="eval-feedback-desc">
+          ${n.generalFeedback||"Bài viết đã truyền tải đầy đủ ý tưởng và hoàn thành tốt yêu cầu."}
         </p>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 12px;">
-          ${g.length>0?`
-            <div>
-              <strong style="font-size: 0.85rem; color: #34d399; text-transform: uppercase;"><i class="fa-solid fa-thumbs-up"></i> Điểm sáng:</strong>
-              <ul style="margin: 6px 0 0 0; padding-left: 20px; font-size: 0.88rem; color: #e2e8f0;">
-                ${g.map(q=>`<li>${q}</li>`).join("")}
-              </ul>
-            </div>
-          `:""}
-
-          ${l.length>0?`
-            <div>
-              <strong style="font-size: 0.85rem; color: #f87171; text-transform: uppercase;"><i class="fa-solid fa-lightbulb"></i> Điểm cần hoàn thiện:</strong>
-              <ul style="margin: 6px 0 0 0; padding-left: 20px; font-size: 0.88rem; color: #fca5a5;">
-                ${l.map(q=>`<li>${q}</li>`).join("")}
-              </ul>
-            </div>
-          `:""}
-        </div>
+        ${g.length>0?`
+          <div style="margin-top: 12px; border-top: 1px dashed rgba(168, 85, 247, 0.25); padding-top: 10px;">
+            <strong style="font-size: 0.88rem; color: #10b981; text-transform: uppercase; display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-star"></i> Điểm sáng của bài viết:
+            </strong>
+            <ul class="eval-strengths-list">
+              ${g.map(r=>`<li>${r}</li>`).join("")}
+            </ul>
+          </div>
+        `:""}
       </div>
 
-      <!-- PHIÊN BẢN KHẨU NGỮ CHUẨN BẢN XỨ -->
-      <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(56, 189, 248, 0.08)); border: 1.5px solid rgba(16, 185, 129, 0.3); border-radius: 18px; padding: 22px; margin-bottom: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <h3 style="font-size: 1.15rem; font-weight: 800; color: #34d399; margin: 0; display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-crown"></i> Phiên Bản Khẩu Ngữ Chuẩn Người Bản Xứ:
+      <!-- CHI TIẾT LỖI SAI NẾU CÓ (Mục trọng tâm người dùng yêu cầu) -->
+      ${y.length>0?`
+        <div class="eval-errors-container">
+          <div class="eval-errors-heading">
+            <span><i class="fa-solid fa-triangle-exclamation"></i> Danh Sách Lỗi Sai &amp; Hướng Dẫn Sửa Chi Tiết:</span>
+            <span style="font-size: 0.85rem; font-weight: 800; background: #ef4444; color: #ffffff; padding: 4px 12px; border-radius: 99px;">
+              ${y.length} lỗi cần sửa
+            </span>
+          </div>
+
+          ${y.map((r,l)=>`
+            <div class="eval-error-card">
+              <!-- Top bar với số thứ tự và phân loại lỗi -->
+              <div class="eval-error-top-bar">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="eval-error-num-badge">Lỗi #${l+1}</span>
+                  ${r.errorType?`<span class="eval-error-type-tag"><i class="fa-solid fa-tag"></i> ${r.errorType}</span>`:""}
+                </div>
+                <span style="font-size: 0.8rem; font-weight: 700; opacity: 0.8;">Cần sửa lại cho tự nhiên</span>
+              </div>
+
+              <!-- Lưới so sánh Câu gốc vs Sửa lại -->
+              <div class="eval-compare-grid">
+                <div class="eval-box-orig">
+                  <div class="eval-box-orig-label">
+                    <i class="fa-solid fa-circle-xmark"></i> Câu gốc chưa chuẩn:
+                  </div>
+                  <div class="hanzi-text eval-box-orig-text">
+                    ${r.original}
+                  </div>
+                </div>
+
+                <div class="eval-box-corr">
+                  <div class="eval-box-corr-label">
+                    <i class="fa-solid fa-circle-check"></i> Nên sửa thành:
+                  </div>
+                  <div class="hanzi-text eval-box-corr-text">
+                    ${r.corrected}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Giải thích chi tiết & quy tắc ngữ pháp -->
+              <div class="eval-reason-box">
+                <div class="eval-reason-label">
+                  <i class="fa-solid fa-lightbulb"></i> Phân tích lỗi &amp; Quy tắc ngữ pháp chuẩn:
+                </div>
+                <div>${r.reason}</div>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      `:`
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: 16px; padding: 18px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 14px;">
+          <i class="fa-solid fa-circle-check" style="font-size: 2rem; color: #10b981; flex-shrink: 0;"></i>
+          <div>
+            <strong style="font-size: 1.05rem; color: #10b981; display: block; margin-bottom: 3px;">Tuyệt vời! Không phát hiện lỗi sai ngữ pháp đáng kể</strong>
+            <span style="font-size: 0.92rem; opacity: 0.95;">Bài viết của bạn được viết rất chuẩn ngữ pháp, câu từ mạch lạc và tự nhiên!</span>
+          </div>
+        </div>
+      `}
+
+      <!-- BẢN VIẾT LẠI CHUẨN BẢN XỨ -->
+      <div class="eval-native-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <h3 class="eval-native-title" style="margin: 0;">
+            <i class="fa-solid fa-crown" style="color: #f59e0b;"></i> Phiên Bản Viết Lại Chuẩn Người Bản Xứ:
           </h3>
-          <button onclick="playSpeakingNativeTts()" title="Nghe phát âm chuẩn người bản xứ"
-            style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-volume-high"></i> <span>Nghe nói mẫu</span>
+          <button onclick="playNativeRewriteAudio()" title="Nghe phát âm bản viết lại"
+            style="background: #10b981; border: none; color: #ffffff; padding: 7px 14px; border-radius: 10px; font-weight: 800; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+            <i class="fa-solid fa-volume-high"></i> <span>Nghe đọc mẫu</span>
           </button>
         </div>
 
-        <div id="speaking-native-text" class="hanzi-text" style="font-size: 1.25rem; line-height: 1.8; color: #ffffff; margin-bottom: 8px; font-weight: 500;">
-          ${z}
+        <div id="native-rewrite-zh-text" class="hanzi-text eval-native-zh">
+          ${x}
         </div>
 
-        ${E?`
-          <div style="font-size: 0.88rem; line-height: 1.6; color: #94a3b8; font-style: italic; margin-bottom: 10px;">
-            ${E}
-          </div>
-        `:""}
+        ${x?(()=>{let r=$;try{const l=b(x,{toneType:"symbol"});l&&(r=l)}catch{}return r?`
+            <div class="eval-native-pinyin">
+              ${r}
+            </div>
+          `:""})():""}
 
-        ${C?`
-          <div style="font-size: 0.92rem; line-height: 1.6; color: #cbd5e1; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 10px;">
-            <strong>Dịch nghĩa:</strong> ${C}
+        ${T?`
+          <div class="eval-native-vi">
+            <strong><i class="fa-solid fa-language"></i> Bản dịch tham khảo:</strong> ${T}
           </div>
         `:""}
       </div>
+
+      <!-- TỪ VỰNG NÂNG CAO ĐƯỢC GỢI Ý -->
+      ${j.length>0?`
+        <div style="margin-bottom: 14px;">
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: #38bdf8; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-graduation-cap"></i> Gợi ý từ vựng &amp; Thành ngữ HSK nâng cao thay thế:
+          </h4>
+          <div class="eval-vocab-grid">
+            ${j.map(r=>{let l=r.pinyin;if(r.suggested)try{const w=b(r.suggested,{toneType:"symbol"});w&&(l=w)}catch{}return`
+              <div class="eval-vocab-item">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <span style="text-decoration: line-through; opacity: 0.7; font-size: 0.95rem;">${r.original}</span>
+                  <i class="fa-solid fa-arrow-right" style="color: #38bdf8; font-size: 0.8rem;"></i>
+                  <strong style="color: #38bdf8; font-size: 1.15rem;">${r.suggested}</strong>
+                  ${l?`<span style="font-size: 0.82rem; color: #a855f7; font-weight: 600;">(${l})</span>`:""}
+                </div>
+                ${r.meaning?`<div class="eval-vocab-text"><strong>Nghĩa:</strong> ${r.meaning}</div>`:""}
+              </div>
+            `}).join("")}
+          </div>
+        </div>
+      `:""}
     </div>
-  `}window.playSpeakingNativeTts=function(){const n=document.getElementById("speaking-native-text");if(!n||!("speechSynthesis"in window))return;window.speechSynthesis.cancel();const i=new SpeechSynthesisUtterance(n.textContent.trim());i.lang="zh-CN",i.rate=.88,window.speechSynthesis.speak(i)};window.clearSpeakingScratchpad=function(){const n=document.getElementById("speaking-scratchpad-input");n&&(n.value.trim()&&!confirm("Bạn có chắc muốn xóa sạch bản nháp này?")||(n.value="",$(),sessionStorage.removeItem("hongtai_speaking_scratchpad")))};function $(){const n=document.getElementById("speaking-scratchpad-input"),i=document.getElementById("scratchpad-word-count");if(!n||!i)return;const t=n.value.trim().length;i.textContent=`${t} ký tự`,sessionStorage.setItem("hongtai_speaking_scratchpad",n.value)}function D(){const n=document.getElementById("speaking-scratchpad-input");if(!n)return;const i=sessionStorage.getItem("hongtai_speaking_scratchpad");i&&(n.value=i,$()),n.addEventListener("input",$)}document.addEventListener("DOMContentLoaded",()=>{V(),D()});
+  `}window.playNativeRewriteAudio=function(){const n=document.getElementById("native-rewrite-zh-text");if(!n)return;const i=n.textContent.trim();if(!i||!("speechSynthesis"in window))return;window.speechSynthesis.cancel();const t=new SpeechSynthesisUtterance(i);t.lang="zh-CN",t.rate=.88,window.speechSynthesis.speak(t)};document.addEventListener("DOMContentLoaded",()=>{I()});

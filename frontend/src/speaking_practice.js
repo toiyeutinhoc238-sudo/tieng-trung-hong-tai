@@ -4,7 +4,37 @@
  * Gợi ý AI (Dàn bài, từ vựng, mẫu câu), Chuẩn bị (3p) và Bắt đầu nói (2p) có thu âm.
  */
 
+import './global_sidebar.js';
 import { pinyin } from 'pinyin-pro';
+
+// Strict Authentication Verification for Speaking Practice
+function isSpeakingUserAuthenticated() {
+  if (typeof window.isUserLoggedIn === 'function') {
+    return window.isUserLoggedIn();
+  }
+  try {
+    const stored = localStorage.getItem('user') || localStorage.getItem('hongtai_current_user') || localStorage.getItem('currentUser') || sessionStorage.getItem('user');
+    if (!stored) return false;
+    const u = JSON.parse(stored);
+    const email = (u?.email || '').toLowerCase().trim();
+    return !!(email && email !== 'guest' && !email.startsWith('guest') && email.includes('@'));
+  } catch (e) {
+    return false;
+  }
+}
+
+function requireSpeakingLoginGate(actionName = 'Luyện Nói HSKK & AI') {
+  if (isSpeakingUserAuthenticated()) return true;
+  if (typeof window.showGlobalAuthModal === 'function') {
+    window.showGlobalAuthModal({
+      isMandatoryPageLock: true,
+      actionName: actionName,
+      title: `Đăng Nhập Để Dùng: ${actionName}`,
+      desc: `Hệ thống yêu cầu bạn đăng nhập bằng Google trước khi sử dụng <strong>${actionName}</strong> để đồng bộ tiến độ và lưu kết quả học tập.`
+    });
+  }
+  return false;
+}
 
 const API_BASE_URL = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')
   ? ''
@@ -113,10 +143,14 @@ async function initSpeakingQuestions() {
   if (totalEl && total > 0) totalEl.textContent = total.toLocaleString();
 
   spinRandomQuestion(false);
+  if (!isSpeakingUserAuthenticated()) {
+    requireSpeakingLoginGate('Luyện Nói HSKK & AI');
+  }
 }
 
 // 2. Chuyển đổi Cấp độ: [Sơ] [Trung] [Cao]
 window.switchSpeakingLevel = function (level, btn) {
+  if (!requireSpeakingLoginGate('Chọn Cấp Độ HSKK')) return;
   if (currentSpeakingLevel === level && currentActiveQuestion) return;
   currentSpeakingLevel = level;
 
@@ -128,6 +162,7 @@ window.switchSpeakingLevel = function (level, btn) {
 
 // 3. Nút [Quay] (Random đề bài)
 window.spinRandomQuestion = function (playAnim = true) {
+  if (playAnim && !requireSpeakingLoginGate('Quay Ngẫu Nhiên Đề Thi')) return;
   const list = hskkQuestionsData[currentSpeakingLevel] || [];
   if (!list || list.length === 0) return;
 
@@ -207,6 +242,7 @@ window.playQuestionTts = function () {
 
 // 4. Nút [Gợi ý] (AI tự đề xuất Dàn bài + Từ vựng + Mẫu câu)
 window.toggleAiSuggestions = async function () {
+  if (!requireSpeakingLoginGate('Xem Gợi Ý Dàn Bài & Từ Vựng AI')) return;
   const box = document.getElementById('ai-suggestion-box');
   const btn = document.getElementById('hint-toggle-btn');
   if (!box || !currentActiveQuestion) return;
@@ -301,8 +337,12 @@ function renderAiSuggestionContent(data) {
   const vocabList = data.vocabulary || [];
   const sentenceList = data.sentenceStructures || [];
 
+  const introText = (outline.intro || 'Trả lời trực tiếp vào trọng tâm câu hỏi.').normalize('NFC');
+  const bodyItems = (outline.body || []).map(b => (b || '').normalize('NFC'));
+  const conclusionText = (outline.conclusion || 'Đúc kết bài học hoặc cảm xúc cá nhân.').normalize('NFC');
+
   box.innerHTML = `
-    <div class="ai-hint-box-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px dashed rgba(34, 197, 94, 0.4); padding-bottom: 10px;">
+    <div class="ai-hint-box-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px dashed rgba(34, 197, 94, 0.4); padding-bottom: 10px; font-family: 'Be Vietnam Pro', sans-serif;">
       <div class="ai-hint-box-title" style="display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1.05rem; color: var(--hint-header-color, #15803d);">
         <i class="fa-solid fa-wand-magic-sparkles" style="color: #10b981;"></i>
         <span>AI Đề Xuất Dàn Ý &amp; Từ Vựng Khẩu Ngữ</span>
@@ -313,24 +353,24 @@ function renderAiSuggestionContent(data) {
     </div>
 
     <!-- 1. Dàn bài -->
-    <div style="margin-bottom: 18px;">
+    <div style="margin-bottom: 18px; font-family: 'Be Vietnam Pro', sans-serif;">
       <div class="ai-outline-title" style="font-size: 0.94rem; font-weight: 800; color: var(--outline-title-color, #b45309); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
         <i class="fa-solid fa-list-ol" style="color: #f59e0b;"></i> <span>1. Dàn bài gợi ý:</span>
       </div>
-      <div class="ai-outline-box" style="background: var(--outline-box-bg, #fffbeb); border: 1px solid var(--outline-box-border, #fde68a); border-left: 4px solid #f59e0b; padding: 14px 18px; border-radius: 12px; font-size: 0.92rem; line-height: 1.7; color: var(--outline-box-color, #1e293b);">
-        <div style="margin-bottom: 6px;"><strong>Mở đầu:</strong> ${outline.intro || 'Trả lời trực tiếp vào trọng tâm câu hỏi.'}</div>
+      <div class="ai-outline-box" style="background: var(--outline-box-bg, #fffbeb); border: 1px solid var(--outline-box-border, #fde68a); border-left: 4px solid #f59e0b; padding: 14px 18px; border-radius: 12px; font-size: 0.92rem; line-height: 1.7; color: var(--outline-box-color, #1e293b); font-family: 'Be Vietnam Pro', sans-serif;">
+        <div style="margin-bottom: 6px;"><strong>Mở đầu:</strong> ${introText}</div>
         <div style="margin-bottom: 6px;">
           <strong>Triển khai thân bài:</strong>
           <ul style="margin: 4px 0 0 0; padding-left: 20px;">
-            ${(outline.body || []).map(b => `<li style="margin-bottom: 4px;">${b}</li>`).join('')}
+            ${bodyItems.map(b => `<li style="margin-bottom: 4px;">${b}</li>`).join('')}
           </ul>
         </div>
-        <div><strong>Kết thúc:</strong> ${outline.conclusion || 'Đúc kết bài học hoặc cảm xúc cá nhân.'}</div>
+        <div><strong>Kết thúc:</strong> ${conclusionText}</div>
       </div>
     </div>
 
     <!-- 2. Từ vựng có thể sử dụng -->
-    <div style="margin-bottom: 18px;">
+    <div style="margin-bottom: 18px; font-family: 'Be Vietnam Pro', sans-serif;">
       <div class="ai-vocab-section-title" style="font-size: 0.94rem; font-weight: 800; color: var(--vocab-title-color, #0284c7); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
         <i class="fa-solid fa-key" style="color: #0284c7;"></i> <span>2. Từ vựng / Cụm từ đắt giá nên nói:</span>
       </div>
@@ -343,12 +383,13 @@ function renderAiSuggestionContent(data) {
               if (py) accuratePy = py;
             } catch (e) {}
           }
+          const vMeaning = (v.meaning || '').normalize('NFC');
           return `
           <div class="ai-vocab-pill"
-            style="background: var(--vocab-pill-bg, #f0f9ff); border: 1.5px solid var(--vocab-pill-border, #7dd3fc); padding: 6px 14px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px;">
-            <span class="ai-vocab-hanzi" style="font-weight: 800; color: var(--vocab-hanzi-color, #0f172a); font-family: var(--font-chinese), sans-serif; font-size: 0.95rem;">${v.hanzi}</span>
+            style="background: var(--vocab-pill-bg, #f0f9ff); border: 1.5px solid var(--vocab-pill-border, #7dd3fc); padding: 6px 14px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px; font-family: 'Be Vietnam Pro', sans-serif;">
+            <span class="ai-vocab-hanzi hanzi-text" style="font-weight: 800; color: var(--vocab-hanzi-color, #0f172a); font-size: 0.95rem;">${v.hanzi}</span>
             <span class="ai-vocab-pinyin" style="font-size: 0.8rem; color: var(--vocab-pinyin-color, #0284c7); font-weight: 700; margin: 0 3px;">(${accuratePy})</span>
-            <span class="ai-vocab-meaning" style="font-size: 0.82rem; color: var(--vocab-meaning-color, #334155); font-weight: 600;">: ${v.meaning}</span>
+            <span class="ai-vocab-meaning" style="font-size: 0.82rem; color: var(--vocab-meaning-color, #334155); font-weight: 600; font-family: 'Be Vietnam Pro', sans-serif !important;">: ${vMeaning}</span>
           </div>
         `}).join('')}
       </div>
@@ -356,29 +397,33 @@ function renderAiSuggestionContent(data) {
 
     <!-- 3. Mẫu câu cấu trúc nên dùng -->
     ${sentenceList.length > 0 ? `
-      <div class="ai-grammar-section" style="margin-bottom: 14px;">
+      <div class="ai-grammar-section" style="margin-bottom: 14px; font-family: 'Be Vietnam Pro', sans-serif;">
         <div class="ai-grammar-section-title" style="font-size: 1.02rem; font-weight: 900; color: var(--grammar-title-color, #6b21a8); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
           <i class="fa-solid fa-puzzle-piece" style="color: var(--grammar-icon-color, #7c3aed); font-size: 1.1rem;"></i>
           <span>3. Mẫu câu kết nối lưu loát:</span>
         </div>
         <div class="ai-grammar-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
-          ${sentenceList.map(s => `
-            <div class="ai-grammar-card" style="background: var(--grammar-card-bg, #ffffff); border: 2px solid var(--grammar-card-border, #a855f7); border-radius: 16px; padding: 16px 18px; box-shadow: var(--grammar-card-shadow, 0 4px 16px rgba(124, 58, 237, 0.12)); display: flex; flex-direction: column; justify-content: space-between;">
+          ${sentenceList.map(s => {
+            const sPattern = (s.pattern || '').normalize('NFC');
+            const sMeaning = (s.meaning || '').normalize('NFC');
+            const sExample = (s.example || '').normalize('NFC');
+            return `
+            <div class="ai-grammar-card" style="background: var(--grammar-card-bg, #ffffff); border: 2px solid var(--grammar-card-border, #a855f7); border-radius: 16px; padding: 16px 18px; box-shadow: var(--grammar-card-shadow, 0 4px 16px rgba(124, 58, 237, 0.12)); display: flex; flex-direction: column; justify-content: space-between; font-family: 'Be Vietnam Pro', sans-serif;">
               <div>
-                <div class="ai-grammar-pattern" style="font-weight: 900; font-size: 1.18rem; color: var(--grammar-pattern-color, #581c87); margin-bottom: 6px; line-height: 1.4; font-family: var(--font-chinese), sans-serif; letter-spacing: 0.3px;">
-                  ${s.pattern}
+                <div class="ai-grammar-pattern" style="font-weight: 900; font-size: 1.18rem; color: var(--grammar-pattern-color, #581c87); margin-bottom: 6px; line-height: 1.4; font-family: 'Be Vietnam Pro', var(--font-chinese), sans-serif; letter-spacing: 0.3px;">
+                  ${sPattern}
                 </div>
-                <div class="ai-grammar-meaning" style="font-size: 0.92rem; color: var(--grammar-meaning-color, #0f172a); font-weight: 700; margin-bottom: 10px; line-height: 1.5;">
-                  ${s.meaning}
+                <div class="ai-grammar-meaning" style="font-size: 0.92rem; color: var(--grammar-meaning-color, #0f172a); font-weight: 700; margin-bottom: 10px; line-height: 1.5; font-family: 'Be Vietnam Pro', sans-serif !important;">
+                  ${sMeaning}
                 </div>
               </div>
-              ${s.example ? `
-                <div class="ai-grammar-example" style="font-size: 0.94rem; color: var(--grammar-example-color, #0f172a); font-weight: 600; background: var(--grammar-example-bg, #f3e8ff); border: 1px solid var(--grammar-example-border-sub, #ddd6fe); border-left: 4.5px solid var(--grammar-example-border, #7c3aed); padding: 10px 14px; border-radius: 10px; line-height: 1.65; font-family: var(--font-chinese), sans-serif; margin-top: 6px;">
-                  <strong class="example-label" style="color: var(--grammar-vd-color, #6d28d9); font-weight: 900; font-family: var(--font-body), sans-serif; margin-right: 6px;">VD:</strong>${s.example}
+              ${sExample ? `
+                <div class="ai-grammar-example" style="font-size: 0.94rem; color: var(--grammar-example-color, #0f172a); font-weight: 600; background: var(--grammar-example-bg, #f3e8ff); border: 1px solid var(--grammar-example-border-sub, #ddd6fe); border-left: 4.5px solid var(--grammar-example-border, #7c3aed); padding: 10px 14px; border-radius: 10px; line-height: 1.65; font-family: 'Be Vietnam Pro', var(--font-chinese), sans-serif !important; margin-top: 6px;">
+                  <strong class="example-label" style="color: var(--grammar-vd-color, #6d28d9); font-weight: 900; font-family: 'Be Vietnam Pro', sans-serif !important; margin-right: 6px;">VD:</strong>${sExample}
                 </div>
               ` : ''}
             </div>
-          `).join('')}
+          `}).join('')}
         </div>
       </div>
     ` : ''}
@@ -387,6 +432,7 @@ function renderAiSuggestionContent(data) {
 
 // 4B. TÁCH RIÊNG: Nút [Bài nói mẫu tham khảo] (Dài, chuyên sâu theo chuẩn HSKK)
 window.toggleSampleSpeech = async function (forceRefresh = false) {
+  if (!requireSpeakingLoginGate('Xem Bài Nói Mẫu Tham Khảo')) return;
   const box = document.getElementById('sample-speech-box');
   const btn = document.getElementById('sample-speech-toggle-btn');
   if (!box || !currentActiveQuestion) return;
@@ -490,8 +536,10 @@ function renderSampleSpeechContent(data) {
     } catch (e) {}
   }
 
+  const meaningVi = (sample.meaningVi || '').normalize('NFC');
+
   box.innerHTML = `
-    <div class="sample-box-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px dashed rgba(16, 185, 129, 0.4); padding-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+    <div class="sample-box-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px dashed rgba(16, 185, 129, 0.4); padding-bottom: 10px; flex-wrap: wrap; gap: 8px; font-family: 'Be Vietnam Pro', sans-serif;">
       <div class="sample-box-title" style="display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 1.1rem; color: var(--sample-title-color, #059669);">
         <i class="fa-solid fa-medal" style="color: #10b981;"></i>
         <span>Bài Nói Mẫu Tham Khảo (Chuẩn HSKK ${currentSpeakingLevel === 'so' ? 'Sơ cấp' : currentSpeakingLevel === 'cao' ? 'Cao cấp' : 'Trung cấp'})</span>
@@ -509,33 +557,33 @@ function renderSampleSpeechContent(data) {
         <span style="font-size: 0.78rem; background: rgba(16, 185, 129, 0.18); color: var(--sample-badge-color, #047857); padding: 4px 10px; border-radius: 99px; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.35);">
           ${charCount} chữ Hán
         </span>
-        <button onclick="regenerateSampleSpeech()" title="Yêu cầu AI tạo lại bài nói mẫu mới bám sát đề thi" style="background: rgba(168, 85, 247, 0.15); border: 1px solid #a855f7; color: #a855f7; font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <button onclick="regenerateSampleSpeech()" title="Yêu cầu AI tạo lại bài nói mẫu mới bám sát đề thi" style="background: rgba(168, 85, 247, 0.15); border: 1px solid #a855f7; color: #a855f7; font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: 'Be Vietnam Pro', sans-serif;">
           <i class="fa-solid fa-rotate-right"></i> <span>Làm mới (AI)</span>
         </button>
-        <button onclick="playSpeakingSampleTts()" style="background: rgba(56, 189, 248, 0.15); border: 1px solid #0284c7; color: var(--btn-tts-color, #0284c7); font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <button onclick="playSpeakingSampleTts()" style="background: rgba(56, 189, 248, 0.15); border: 1px solid #0284c7; color: var(--btn-tts-color, #0284c7); font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: 'Be Vietnam Pro', sans-serif;">
           <i class="fa-solid fa-volume-high"></i> <span>Nghe bản xứ đọc</span>
         </button>
       </div>
     </div>
 
     <!-- Hanzi Text -->
-    <div id="sample-speaking-hanzi" class="sample-hanzi-card" style="font-size: 1.12rem; line-height: 1.85; color: var(--sample-hanzi-color, #0f172a); white-space: pre-line; margin-bottom: 14px; font-family: var(--font-chinese), sans-serif; background: var(--sample-hanzi-bg, #ffffff); padding: 16px 20px; border-radius: 12px; border: 1.5px solid var(--sample-hanzi-border, #a7f3d0); border-left: 4px solid #10b981; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);">
+    <div id="sample-speaking-hanzi" class="sample-hanzi-card hanzi-text" style="font-size: 1.12rem; line-height: 1.85; color: var(--sample-hanzi-color, #0f172a); white-space: pre-line; margin-bottom: 14px; font-family: var(--font-chinese), serif; background: var(--sample-hanzi-bg, #ffffff); padding: 16px 20px; border-radius: 12px; border: 1.5px solid var(--sample-hanzi-border, #a7f3d0); border-left: 4px solid #10b981; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);">
       ${hanziText}
     </div>
 
     <!-- Pinyin Text -->
     ${samplePy ? `
-      <div style="margin-bottom: 12px;">
-        <div style="font-size: 0.78rem; text-transform: uppercase; color: var(--sample-pinyin-title, #0284c7); font-weight: 800; margin-bottom: 4px;">Phiên âm Pinyin:</div>
-        <div class="sample-pinyin-card" style="font-size: 0.92rem; color: var(--sample-pinyin-color, #0369a1); font-style: italic; line-height: 1.65; white-space: pre-line; background: var(--sample-pinyin-bg, #f0f9ff); border: 1px solid var(--sample-pinyin-border, #bae6fd); padding: 12px 16px; border-radius: 10px;">${samplePy}</div>
+      <div style="margin-bottom: 12px; font-family: 'Be Vietnam Pro', sans-serif;">
+        <div style="font-size: 0.78rem; text-transform: uppercase; color: var(--sample-pinyin-title, #0284c7); font-weight: 800; margin-bottom: 4px; font-family: 'Be Vietnam Pro', sans-serif;">Phiên âm Pinyin:</div>
+        <div class="sample-pinyin-card" style="font-size: 0.92rem; color: var(--sample-pinyin-color, #0369a1); font-style: italic; line-height: 1.65; white-space: pre-line; background: var(--sample-pinyin-bg, #f0f9ff); border: 1px solid var(--sample-pinyin-border, #bae6fd); padding: 12px 16px; border-radius: 10px; font-family: 'Be Vietnam Pro', sans-serif;">${samplePy}</div>
       </div>
     ` : ''}
 
     <!-- Vietnamese Translation -->
-    ${sample.meaningVi ? `
-      <div>
-        <div style="font-size: 0.78rem; text-transform: uppercase; color: var(--sample-meaning-title, #b45309); font-weight: 800; margin-bottom: 4px;">Dịch nghĩa tiếng Việt:</div>
-        <div class="sample-meaning-card" style="font-size: 0.94rem; color: var(--sample-meaning-color, #1e293b); line-height: 1.7; white-space: pre-line; background: var(--sample-meaning-bg, #fffbeb); border: 1px solid var(--sample-meaning-border, #fde68a); padding: 12px 16px; border-radius: 10px;">${sample.meaningVi}</div>
+    ${meaningVi ? `
+      <div style="font-family: 'Be Vietnam Pro', sans-serif;">
+        <div style="font-size: 0.78rem; text-transform: uppercase; color: var(--sample-meaning-title, #b45309); font-weight: 800; margin-bottom: 4px; font-family: 'Be Vietnam Pro', sans-serif;">Dịch nghĩa tiếng Việt:</div>
+        <div class="sample-meaning-card" style="font-size: 0.94rem; color: var(--sample-meaning-color, #1e293b); line-height: 1.7; white-space: pre-line; background: var(--sample-meaning-bg, #fffbeb); border: 1px solid var(--sample-meaning-border, #fde68a); padding: 12px 16px; border-radius: 10px; font-family: 'Be Vietnam Pro', sans-serif !important;">${meaningVi}</div>
       </div>
     ` : ''}
   `;
@@ -722,6 +770,7 @@ window.playSpeakingSampleTts = function () {
 
 // 5. THỰC HIỆN ĐẾM GIỜ [Chuẩn bị (3p)] (3 phút = 180s)
 window.startPrepTimer = function () {
+  if (!requireSpeakingLoginGate('Bắt Đầu 3 Phút Chuẩn Bị')) return;
   // Đóng bộ ghi âm nếu đang chạy
   cancelSpeakingRecording();
 
@@ -803,6 +852,7 @@ window.stopPrepAndStartSpeaking = function () {
 
 // 6. THỰC HIỆN ĐẾM GIỜ [Bắt đầu nói (2p)] (2 phút = 120s) & GHI ÂM MICRO
 window.startSpeakingTimerAndRecord = async function () {
+  if (!requireSpeakingLoginGate('Ghi Âm & Luyện Nói 2 Phút')) return;
   // Dừng chuẩn bị nếu đang chạy
   clearInterval(prepTimerInterval);
   const prepBox = document.getElementById('prep-timer-box');
@@ -1002,6 +1052,7 @@ window.restartSpeakingFlow = function () {
 
 // 7. GỬI BÀI NÓI CHO AI CHẤM ĐIỂM
 window.submitSpeakingForAiGrading = async function () {
+  if (!requireSpeakingLoginGate('Gửi Bài Cho AI Chấm Điểm')) return;
   const transcriptInput = document.getElementById('spoken-transcript-input');
   const resultsContainer = document.getElementById('ai-speaking-evaluation-results');
   const submitBtn = document.getElementById('submit-speaking-btn');
@@ -1090,18 +1141,19 @@ window.submitSpeakingForAiGrading = async function () {
 
 function renderSpeakingEvaluationResults(data, container, originalTranscript) {
   const score = data.overallScore || 85;
-  const badge = data.badge || (score >= 90 ? 'Xuất Sắc 🌟' : score >= 80 ? 'Rất Tốt 👏' : score >= 65 ? 'Khá 👍' : 'Cần Cố Gắng 🎙️');
+  const badge = (data.badge || (score >= 90 ? 'Xuất Sắc 🌟' : score >= 80 ? 'Rất Tốt 👏' : score >= 65 ? 'Khá 👍' : 'Cần Cố Gắng 🎙️')).normalize('NFC');
   const scoreBg = score >= 85 ? 'linear-gradient(135deg, #10b981, #059669)' : score >= 70 ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'linear-gradient(135deg, #ef4444, #dc2626)';
 
   const crit = data.criteriaScores || { pronunciation: 85, fluency: 85, grammar: 85, content: 85 };
-  const strengths = data.strengths || [];
-  const improvements = data.improvements || [];
-  const nativeZh = data.nativeVersion || originalTranscript;
+  const strengths = (data.strengths || []).map(s => (s || '').normalize('NFC'));
+  const improvements = (data.improvements || []).map(im => (im || '').normalize('NFC'));
+  const nativeZh = (data.nativeVersion || originalTranscript).trim();
   const nativePinyin = data.nativePinyin || '';
-  const nativeVi = data.nativeVi || '';
+  const nativeVi = (data.nativeVi || '').normalize('NFC');
+  const generalFeedback = (data.generalFeedback || 'Bài nói của bạn hoàn thành tốt mục tiêu giao tiếp.').normalize('NFC');
 
   container.innerHTML = `
-    <div class="speaking-card-panel" style="margin-bottom: 24px; position: relative;">
+    <div class="speaking-card-panel" style="margin-bottom: 24px; position: relative; font-family: 'Be Vietnam Pro', sans-serif;">
       <!-- Header kết quả -->
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px;">
         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1180,7 +1232,7 @@ function renderSpeakingEvaluationResults(data, container, originalTranscript) {
           <i class="fa-solid fa-comment-dots"></i> Nhận Xét Của Giám Khảo Khẩu Ngữ:
         </div>
         <p style="font-size: 0.95rem; line-height: 1.65; color: #ffffff; margin: 0 0 12px 0;">
-          ${data.generalFeedback || 'Bài nói của bạn hoàn thành tốt mục tiêu giao tiếp.'}
+          ${generalFeedback}
         </p>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 12px;">
@@ -1275,6 +1327,12 @@ function initScratchpad() {
     input.value = saved;
     updateScratchpadCount();
   }
+  input.addEventListener('focus', () => {
+    if (!isSpeakingUserAuthenticated()) {
+      requireSpeakingLoginGate('Sử Dụng Bảng Nháp & Ghi Chú');
+      input.blur();
+    }
+  });
   input.addEventListener('input', updateScratchpadCount);
 }
 

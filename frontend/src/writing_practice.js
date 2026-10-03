@@ -4,7 +4,37 @@
  * Gợi ý AI (Dàn bài, từ vựng, mẫu câu) và Viết rồi đưa AI chấm.
  */
 
+import './global_sidebar.js';
 import { pinyin } from 'pinyin-pro';
+
+// Strict Authentication Verification for Writing Practice
+function isWritingUserAuthenticated() {
+  if (typeof window.isUserLoggedIn === 'function') {
+    return window.isUserLoggedIn();
+  }
+  try {
+    const stored = localStorage.getItem('user') || localStorage.getItem('hongtai_current_user') || localStorage.getItem('currentUser') || sessionStorage.getItem('user');
+    if (!stored) return false;
+    const u = JSON.parse(stored);
+    const email = (u?.email || '').toLowerCase().trim();
+    return !!(email && email !== 'guest' && !email.startsWith('guest') && email.includes('@'));
+  } catch (e) {
+    return false;
+  }
+}
+
+function requireWritingLoginGate(actionName = 'Luyện Viết Tiếng Trung') {
+  if (isWritingUserAuthenticated()) return true;
+  if (typeof window.showGlobalAuthModal === 'function') {
+    window.showGlobalAuthModal({
+      isMandatoryPageLock: true,
+      actionName: actionName,
+      title: `Đăng Nhập Để Dùng: ${actionName}`,
+      desc: `Hệ thống yêu cầu bạn đăng nhập bằng Google trước khi sử dụng <strong>${actionName}</strong> để đồng bộ tiến độ và lưu kết quả học tập.`
+    });
+  }
+  return false;
+}
 
 const API_BASE_URL = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1')
   ? ''
@@ -89,10 +119,14 @@ async function initHskkQuestions() {
 
   // Chọn ngẫu nhiên 1 câu Trung cấp mở đầu
   spinRandomQuestion(false);
+  if (!isWritingUserAuthenticated()) {
+    requireWritingLoginGate('Luyện Viết Tiếng Trung');
+  }
 }
 
 // 2. Chuyển đổi giữa các Chế độ (3 Thẻ trên đầu)
 window.selectWritingMode = function (mode) {
+  if (!requireWritingLoginGate('Luyện Viết Tiếng Trung')) return;
   const cardQa = document.getElementById('wf-card-qa');
   const cardFree = document.getElementById('wf-card-free');
   const arrow = document.getElementById('wf-pointer-arrow');
@@ -116,6 +150,7 @@ window.selectWritingMode = function (mode) {
 
 // 3. Chuyển đổi Cấp độ Trình độ: [Sơ] [Trung] [Cao]
 window.switchHskkLevel = function (level, btn) {
+  if (!requireWritingLoginGate('Chọn Cấp Độ HSKK')) return;
   if (currentHskkLevel === level && currentActiveQuestion) return;
   currentHskkLevel = level;
 
@@ -127,6 +162,7 @@ window.switchHskkLevel = function (level, btn) {
 
 // 4. Nút [Quay] (Random đề bài từ cấp độ đã chọn)
 window.spinRandomQuestion = function (playAnim = true) {
+  if (playAnim && !requireWritingLoginGate('Quay Ngẫu Nhiên Đề Thi')) return;
   const list = hskkQuestionsData[currentHskkLevel] || [];
   if (!list || list.length === 0) return;
 
@@ -779,6 +815,7 @@ document.addEventListener('keydown', (e) => {
 
 // 8. Nộp bài viết câu trả lời cho AI chấm điểm (Card 2)
 window.submitQaForGrading = async function () {
+  if (!requireWritingLoginGate('Nộp Bài Viết Cho AI Chấm')) return;
   if (isSubmitting) return;
 
   const textarea = document.getElementById('qa-writing-input');
@@ -877,6 +914,7 @@ window.submitQaForGrading = async function () {
 
 // 9. Nộp bài Chế độ Viết tự do (Card 3)
 window.submitEssayForGrading = async function (mode) {
+  if (!requireWritingLoginGate('Nộp Bài Viết Cho AI Chấm')) return;
   if (isSubmitting) return;
 
   const inputEl = document.getElementById('free-writing-input');

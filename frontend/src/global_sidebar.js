@@ -178,7 +178,7 @@ import './quick_dict_widget.js';
         width: 36px !important;
         height: 36px !important;
         border-radius: 50% !important;
-        display: flex !important;
+        display: flex;
         align-items: center !important;
         justify-content: center !important;
         transition: all 0.2s ease !important;
@@ -571,10 +571,18 @@ import './quick_dict_widget.js';
       descEl.innerHTML = opts.desc || `Vui lòng đăng nhập với tài khoản Google để sử dụng tính năng ${opts.actionName ? `<strong>${opts.actionName}</strong>` : ''}, mở khóa học tập và tự động lưu tiến độ của bạn.`;
     }
     if (closeBtn) {
-      closeBtn.style.display = opts.isMandatoryPageLock ? 'none' : 'flex';
+      if (opts.isMandatoryPageLock) {
+        closeBtn.style.setProperty('display', 'none', 'important');
+        closeBtn.setAttribute('aria-hidden', 'true');
+        closeBtn.style.pointerEvents = 'none';
+      } else {
+        closeBtn.style.setProperty('display', 'flex', 'important');
+        closeBtn.setAttribute('aria-hidden', 'false');
+        closeBtn.style.pointerEvents = 'auto';
+      }
     }
     if (homeBtnWrap) {
-      homeBtnWrap.style.display = opts.isMandatoryPageLock ? 'block' : 'none';
+      homeBtnWrap.style.setProperty('display', opts.isMandatoryPageLock ? 'block' : 'none', 'important');
     }
 
     modal.style.display = 'flex';
