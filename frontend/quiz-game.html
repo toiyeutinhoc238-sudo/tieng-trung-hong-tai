@@ -26,7 +26,7 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link
-    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Quicksand:wght@500;600;700;800&family=Noto+Sans+SC:wght@700;900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=LXGW+WenKai+Lite&family=Noto+Sans+SC:wght@700;900&display=swap"
     rel="stylesheet">
 
   <script>
@@ -180,7 +180,7 @@
 
     body {
       background: url('/assets/app_bg_night_v3.png') no-repeat center center fixed / cover !important;
-      font-family: 'Be Vietnam Pro', 'Quicksand', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     .question-card, .ans-btn, .q-pinyin, .card-pinyin, .pinyin-text, [class*="pinyin"], [class*="Pinyin"] {
@@ -288,7 +288,7 @@
       margin: 0;
       padding: 0;
       user-select: none;
-      font-family: 'Quicksand', 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
 
     body {
@@ -650,7 +650,7 @@
     }
 
     .q-text.vi {
-      font-family: 'Quicksand', sans-serif;
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
       font-size: 2.2rem;
     }
 
@@ -682,13 +682,20 @@
       transition: transform 0.1s, box-shadow 0.1s, filter 0.2s;
       word-break: break-word;
       text-align: left;
-      letter-spacing: 0.5px;
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+      letter-spacing: normal !important;
     }
 
     .ans-btn span {
       flex: 1;
       font-size: 2.2rem;
       font-weight: 800;
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+      letter-spacing: normal !important;
+    }
+    .ans-btn.is-zh,
+    .ans-btn span.is-zh {
+      font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', serif !important;
     }
 
     .ans-icon {
@@ -1889,9 +1896,75 @@
       }
     }
 
+    function isQuizUserAuthenticated() {
+      try {
+        if (typeof window.isUserLoggedIn === 'function') {
+          return window.isUserLoggedIn();
+        }
+        const stored = localStorage.getItem('user') || localStorage.getItem('currentUser') || localStorage.getItem('hongtai_current_user');
+        if (!stored) return false;
+        const u = JSON.parse(stored);
+        const email = (u && u.email ? u.email : '').toLowerCase().trim();
+        return !!(email && email.includes('@') && !email.startsWith('guest'));
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function requireQuizLoginGate(actionName = 'Chơi Đấu Trường Quiz Game') {
+      if (typeof window.showGlobalAuthModal === 'function') {
+        window.showGlobalAuthModal({
+          isMandatoryPageLock: true,
+          actionName: actionName,
+          title: 'Đăng Nhập Để Chơi Quiz Game',
+          desc: 'Vui lòng đăng nhập với tài khoản Google để tham gia Đấu Trường Quiz Game, tích lũy điểm và tranh tài trên bảng xếp hạng.'
+        });
+      } else {
+        const checkInterval = setInterval(() => {
+          if (typeof window.showGlobalAuthModal === 'function') {
+            clearInterval(checkInterval);
+            window.showGlobalAuthModal({
+              isMandatoryPageLock: true,
+              actionName: actionName,
+              title: 'Đăng Nhập Để Chơi Quiz Game',
+              desc: 'Vui lòng đăng nhập với tài khoản Google để tham gia Đấu Trường Quiz Game, tích lũy điểm và tranh tài trên bảng xếp hạng.'
+            });
+          }
+        }, 120);
+        setTimeout(() => clearInterval(checkInterval), 4000);
+      }
+
+      if (window.self !== window.top) {
+        try {
+          window.parent.postMessage({
+            type: 'OPEN_AUTH_REQUIRED_MODAL',
+            actionName: actionName,
+            isMandatoryPageLock: true
+          }, '*');
+        } catch (e) {}
+      }
+    }
+
+    window.addEventListener('user-auth-changed', (e) => {
+      if (e.detail && isQuizUserAuthenticated()) {
+        updateUserHUD(e.detail);
+        if (typeof window.hideGlobalAuthModal === 'function') window.hideGlobalAuthModal();
+      }
+    });
+
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.type === 'HONGTAI_AUTH_SUCCESS' && e.data.user) {
+        updateUserHUD(e.data.user);
+        if (typeof window.hideGlobalAuthModal === 'function') window.hideGlobalAuthModal();
+      }
+    });
+
     // --- INITIALIZATION ---
     async function loadVocab() {
       loadUserInfo();
+      if (!isQuizUserAuthenticated()) {
+        requireQuizLoginGate();
+      }
       updatePlayModeUI();
       updateAutoSpeechUI();
 
@@ -1902,7 +1975,13 @@
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) {
-            vocabData = data;
+            vocabData = data.map(w => ({
+              ...w,
+              word: String(w.word || '').normalize('NFC'),
+              meaning: String(w.meaning || '').normalize('NFC'),
+              pinyin: String(w.pinyin || '').normalize('NFC'),
+              lessonTitle: String(w.lessonTitle || '').normalize('NFC')
+            }));
           }
         }
       } catch (e) {
@@ -1977,7 +2056,11 @@
       }
       
       if (autoStart === '1' || autoStart === 'true' || autoStart === true) {
-        startGame();
+        if (isQuizUserAuthenticated()) {
+          startGame();
+        } else {
+          requireQuizLoginGate();
+        }
       }
     }
 
@@ -2091,6 +2174,12 @@
 
     // Keyboard shortcuts (1, 2, 3, 4 / A, B, C, D / Space for Audio replay / P, Esc for Pause)
     window.addEventListener('keydown', (e) => {
+      if (!isQuizUserAuthenticated()) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          requireQuizLoginGate();
+        }
+        return;
+      }
       if (setupModal && setupModal.style.display !== 'none') {
         if (e.key === 'Enter') startGame();
         return;
@@ -2136,6 +2225,10 @@
 
     // --- GAME LOGIC ---
     function startGame(overrideWords = null) {
+      if (!isQuizUserAuthenticated()) {
+        requireQuizLoginGate();
+        return;
+      }
       playBeep(800, 'square', 0.15);
       playedHistory = [];
       let pool = vocabData;
@@ -2397,13 +2490,13 @@
         // Clean and unify formatting for options
         function cleanOptionFormat(str, type) {
           if (!str) return '';
-          let s = String(str).trim();
+          let s = String(str || '').normalize('NFC').trim();
           s = s.replace(/\([^)]*\)/g, '').replace(/（[^）]*）/g, '').trim();
           if (type === 'zh-pinyin' || type === 'audio-pinyin') {
             s = s.replace(/[\[\]]/g, '').trim();
             return `[ ${s} ]`;
           }
-          return s;
+          return s.normalize('NFC');
         }
 
         let pPrompt = "Tìm nghĩa của từ";
@@ -2511,10 +2604,12 @@
 
         opts.forEach((txt, i) => {
           const b = document.createElement('button');
-          b.className = `ans-btn ${colors[i] || 'c-blue'}`;
-          b.dataset.correct = (txt === pAns);
-          b.innerHTML = `<div class="ans-icon">${letters[i] || ''}</div> <span>${txt}</span>`;
-          b.onclick = () => handleAns(b, txt === pAns);
+          const cleanTxt = String(txt || '').normalize('NFC');
+          const isZh = /[\u4e00-\u9fa5]/.test(cleanTxt);
+          b.className = `ans-btn ${colors[i] || 'c-blue'} ${isZh ? 'is-zh' : 'is-vi'}`;
+          b.dataset.correct = (cleanTxt === pAns);
+          b.innerHTML = `<div class="ans-icon">${letters[i] || ''}</div> <span class="${isZh ? 'is-zh' : 'is-vi'}">${cleanTxt}</span>`;
+          b.onclick = () => handleAns(b, cleanTxt === pAns);
           ansGrid.appendChild(b);
         });
 

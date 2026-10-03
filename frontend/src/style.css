@@ -1683,8 +1683,6 @@ html:not(.dark) .flashcard-complete-container {
 .word-active-title,
 .char-tab-btn,
 .vol-emblem-char,
-.ans-btn,
-.ans-btn span,
 .q-text:not(.vi),
 .zh,
 .hanzi,
@@ -1701,6 +1699,27 @@ html:not(.dark) .flashcard-complete-container {
 [class*="hanzi-word"],
 [class*="chinese-char"],
 [data-hanzi] {
+  font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif !important;
+}
+
+/* Explicit Vietnamese typography for answer options and quiz game UI */
+.ans-btn,
+.ans-btn span,
+.ans-btn.is-vi,
+.ans-btn:not(.is-zh),
+.ans-btn span:not(.is-zh),
+.q-text.vi,
+.q-type-badge,
+.player-details h4,
+.score-box,
+.score-label,
+.score-value {
+  font-family: var(--font-display, 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif) !important;
+  letter-spacing: normal !important;
+}
+
+.ans-btn.is-zh,
+.ans-btn span.is-zh {
   font-family: 'LXGW WenKai Lite', 'Kaiti', 'STKaiti', 'Kai', 'PingFang SC', 'Noto Serif SC', var(--font-chinese), serif !important;
 }
 

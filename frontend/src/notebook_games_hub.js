@@ -216,6 +216,16 @@ export class NotebookGamesHub {
   }
 
   launchGame(gameType) {
+    const isAuthed = (typeof window.isUserLoggedIn === 'function') ? window.isUserLoggedIn() : (this.currentUser && this.currentUser.email);
+    if (!isAuthed) {
+      if (typeof window.openLoginPrompt === 'function') {
+        window.openLoginPrompt('chơi Đấu Trường Game', () => this.launchGame(gameType));
+      } else if (typeof window.openAuthRequiredModal === 'function') {
+        window.openAuthRequiredModal();
+      }
+      return;
+    }
+
     if (this.words.length < 2) {
       if (typeof window.showToast === 'function') {
         window.showToast('Cần ít nhất 2 từ vựng trong sổ tay này để chơi game!', true);

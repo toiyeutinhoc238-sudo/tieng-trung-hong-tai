@@ -5505,7 +5505,7 @@ function renderGamifiedRoadmapPath() {
         <button class="btn-node-start" style="background: ${item.color}; box-shadow: 0 4px 0 ${item.shadow || '#000000'}; border-bottom: none; color: ${item.textCol || '#ffffff'}; transition: all 0.2s; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.9rem;" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')" onmousedown="this.style.transform='translateY(3px)'; this.style.boxShadow='0 1px 0 ${item.shadow || '#000000'}';" onmouseup="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 0 ${item.shadow || '#000000'}';" onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 0 ${item.shadow || '#000000'}';">
           ${hskVer === 'hanngu' ? `Khám Phá Quyển ${item.level}` : `Khám Phá Cấp ${item.level}`} <i class="fa-solid fa-arrow-right"></i>
         </button>
-        <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="window.location.href='/quiz-game.html?level=${item.level}&version=${hskVer}'" title="Thi trắc nghiệm">
+        <button class="btn-node-start" style="background: rgba(255,255,255,0.1); width: auto;" onclick="if(!currentUser && (!window.isUserLoggedIn || !window.isUserLoggedIn())){if(window.openLoginPrompt){window.openLoginPrompt('chơi Đấu trường Game',()=>window.location.href='/quiz-game.html?level=${item.level}&version=${hskVer}');}else if(window.openAuthRequiredModal){window.openAuthRequiredModal();}}else{window.location.href='/quiz-game.html?level=${item.level}&version=${hskVer}';}" title="Thi trắc nghiệm">
           <i class="fa-solid fa-gamepad"></i>
         </button>
       `;
@@ -14934,6 +14934,14 @@ window.exitNotebookGamesHub = function () {
 };
 
 function startGameArenaFromNotebook() {
+  if (!currentUser && (!window.isUserLoggedIn || !window.isUserLoggedIn())) {
+    if (window.openLoginPrompt) {
+      window.openLoginPrompt('chơi Đấu trường Game', () => startGameArenaFromNotebook());
+    } else if (window.openAuthRequiredModal) {
+      window.openAuthRequiredModal();
+    }
+    return;
+  }
   if (!activeNotebook) return;
 
   // Get current words for active notebook

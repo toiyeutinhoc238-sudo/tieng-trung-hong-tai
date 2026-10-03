@@ -11,8 +11,8 @@ import './quick_dict_widget.js';
 (function () {
   'use strict';
 
-  // Do not render global sidebar or mobile navigation inside iframes
-  if (window.self !== window.top) return;
+  // Track if running inside an iframe (e.g. embedded games, modals)
+  const isEmbeddedInIframe = (window.self !== window.top);
 
   // Helper to determine active link
   function getActiveRouteKey() {
@@ -89,7 +89,7 @@ import './quick_dict_widget.js';
   }
   window.getCurrentUser = getCurrentUser;
 
-  // Check if a valid authenticated user session exists
+  // Check if a valid authenticated user session exists (Strict: requires verified Google email)
   function isUserLoggedIn() {
     try {
       const stored = localStorage.getItem('user') || localStorage.getItem('hongtai_current_user') || localStorage.getItem('currentUser') || sessionStorage.getItem('user');
@@ -97,8 +97,7 @@ import './quick_dict_widget.js';
       const u = JSON.parse(stored);
       if (!u) return false;
       const email = (u.email || '').toLowerCase().trim();
-      if (email && email !== 'guest' && !email.startsWith('guest_')) return true;
-      if (u.id || u._id || u.sub) return true;
+      if (email && email !== 'guest' && !email.startsWith('guest') && email.includes('@')) return true;
       return false;
     } catch (e) {
       return false;
@@ -506,6 +505,15 @@ import './quick_dict_widget.js';
       window.dispatchEvent(new CustomEvent('user-auth-changed', { detail: userObj }));
       window.dispatchEvent(new CustomEvent('hongtai-auth-success', { detail: userObj }));
 
+      // Broadcast auth success to parent (if in iframe) and all child iframes
+      if (isEmbeddedInIframe) {
+        try { window.parent.postMessage({ type: 'HONGTAI_AUTH_SUCCESS', user: userObj }, '*'); } catch (err) {}
+      } else {
+        document.querySelectorAll('iframe').forEach(ifr => {
+          try { ifr.contentWindow.postMessage({ type: 'HONGTAI_AUTH_SUCCESS', user: userObj }, '*'); } catch (err) {}
+        });
+      }
+
       hideGlobalAuthModal();
 
       const userName = userObj.name || (userObj.email ? userObj.email.split('@')[0] : 'Học viên');
@@ -513,7 +521,7 @@ import './quick_dict_widget.js';
 
       // If on subpage and previously locked, reload page so full user-specific data initializes
       const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname === '';
-      if (!isIndex) {
+      if (!isIndex && !isEmbeddedInIframe) {
         setTimeout(() => {
           window.location.reload();
         }, 350);
@@ -534,6 +542,19 @@ import './quick_dict_widget.js';
   window.handleGlobalCredentialResponse = handleGlobalCredentialResponse;
 
   function showGlobalAuthModal(opts = {}) {
+    // If inside an iframe, tell the top-level parent window to show the modal as well
+    if (isEmbeddedInIframe) {
+      try {
+        window.parent.postMessage({
+          type: 'OPEN_AUTH_REQUIRED_MODAL',
+          actionName: opts.actionName || '',
+          title: opts.title || '',
+          desc: opts.desc || '',
+          isMandatoryPageLock: !!opts.isMandatoryPageLock
+        }, '*');
+      } catch (err) {}
+    }
+
     const modal = ensureGlobalAuthModal();
     window._isMandatoryPageLockActive = !!opts.isMandatoryPageLock;
     window._pendingGuardedAuthCallback = opts.callback || null;
@@ -561,6 +582,29 @@ import './quick_dict_widget.js';
     renderGlobalGoogleSignInButton();
   }
   window.showGlobalAuthModal = showGlobalAuthModal;
+
+  // Global cross-window message listener for authentication events
+  window.addEventListener('message', (event) => {
+    if (!event.data) return;
+    if (event.data.type === 'OPEN_AUTH_REQUIRED_MODAL') {
+      showGlobalAuthModal({
+        isMandatoryPageLock: event.data.isMandatoryPageLock !== false,
+        actionName: event.data.actionName || 'tính năng này',
+        title: event.data.title,
+        desc: event.data.desc
+      });
+    } else if (event.data.type === 'HONGTAI_AUTH_SUCCESS' && event.data.user) {
+      localStorage.setItem('user', JSON.stringify(event.data.user));
+      localStorage.setItem('currentUser', JSON.stringify(event.data.user));
+      updateSidebarUserProfile();
+      window.dispatchEvent(new CustomEvent('user-auth-changed', { detail: event.data.user }));
+      window.dispatchEvent(new CustomEvent('hongtai-auth-success', { detail: event.data.user }));
+      hideGlobalAuthModal();
+      if (typeof window.initUserSessionTracking === 'function') {
+        window.initUserSessionTracking();
+      }
+    }
+  });
 
   function hideGlobalAuthModal() {
     if (window._isMandatoryPageLockActive && !isUserLoggedIn()) {
@@ -1070,6 +1114,15 @@ import './quick_dict_widget.js';
 
   // Inject or setup on DOM Ready
   function initGlobalSidebar() {
+    // If embedded inside an iframe (like quiz-game.html inside an arena or notebook modal):
+    // Do NOT inject the outer sidebar backdrop, navigation drawer or hamburger icon!
+    // But DO run the page auth guard to protect content!
+    if (isEmbeddedInIframe) {
+      checkPageAuthGuard();
+      setTimeout(checkPageAuthGuard, 350);
+      return;
+    }
+
     initAnnouncementTicker();
     const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
 
