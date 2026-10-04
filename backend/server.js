@@ -212,8 +212,11 @@ const dictationLessonSchema = new mongoose.Schema({
 }, { timestamps: true });
 const DictationLesson = mongoose.model('DictationLesson', dictationLessonSchema);
 
-// In-memory Cache for User Data
+// In-memory Cache for User Data, Sessions, and Stats
 let cachedUserData = null;
+const activeSessions = new Map();
+let cachedTotalUsersCount = 231;
+let lastTotalUsersCheckTime = 0;
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -624,9 +627,6 @@ async function writeUserData(data, targetEmail = null, targetSessionToken = null
   return true;
 }
 
-// Session store in memory: sessionToken -> userEmail
-const activeSessions = new Map();
-
 // Load persisted sessions on startup
 try {
   const userData = await readUserData();
@@ -957,9 +957,6 @@ app.post('/api/presence/heartbeat', (req, res) => {
 });
 
 // Helper to get total users count with 15s cache to ensure 100% database freshness
-let cachedTotalUsersCount = 231;
-let lastTotalUsersCheckTime = 0;
-
 async function getTotalUsersCount() {
   const now = Date.now();
   if (now - lastTotalUsersCheckTime < 15000 && cachedTotalUsersCount >= 231) {
