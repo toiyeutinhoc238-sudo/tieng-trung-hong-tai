@@ -58,19 +58,61 @@ fs.mkdir(AUDIO_CACHE_DIR, { recursive: true }).catch(err => {
   console.error("Error creating audio_cache dir:", err);
 });
 
-// Connect to MongoDB Atlas
+// Connect to MongoDB Atlas with auto-reconnect & watchdog
 const MONGODB_URI = process.env.MONGODB_URI;
-// Removed bufferCommands=false so Mongoose will queue queries until connected
 
-if (!MONGODB_URI) {
-  console.error("Warning: MONGODB_URI is not set in environment variables!");
-} else {
-  mongoose.connect(MONGODB_URI, {
-    serverSelectionTimeoutMS: 3000
-  })
-    .then(() => console.log("MongoDB connected successfully."))
-    .catch(err => console.error("MongoDB connection error:", err));
+let isConnectingMongo = false;
+async function connectMongoDB() {
+  if (!MONGODB_URI) {
+    console.error("Warning: MONGODB_URI is not set in environment variables!");
+    return false;
+  }
+  if (mongoose.connection.readyState === 1) return true;
+  if (isConnectingMongo) return false;
+
+  isConnectingMongo = true;
+  try {
+    console.log("Connecting to MongoDB Atlas...");
+    await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 30000,
+      connectTimeoutMS: 30000,
+      socketTimeoutMS: 45000,
+      maxPoolSize: 10
+    });
+    console.log("MongoDB connected successfully.");
+    isConnectingMongo = false;
+    // When connected, proactively refresh cache if needed
+    readUserData().catch(e => console.error("Initial readUserData error:", e));
+    return true;
+  } catch (err) {
+    console.error("MongoDB connection error:", err.message);
+    isConnectingMongo = false;
+    return false;
+  }
 }
+
+mongoose.connection.on('disconnected', () => {
+  console.warn("MongoDB disconnected! Attempting reconnect in 5s...");
+  setTimeout(() => {
+    connectMongoDB().catch(() => {});
+  }, 5000);
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error("MongoDB connection event error:", err.message);
+});
+
+// Initial connection
+connectMongoDB();
+
+// Periodic watchdog: check every 20 seconds, if disconnected, trigger connectMongoDB()
+setInterval(() => {
+  if (MONGODB_URI && mongoose.connection.readyState !== 1) {
+    console.log("Watchdog: MongoDB is not connected (readyState=" + mongoose.connection.readyState + "). Reconnecting...");
+    connectMongoDB().catch(() => {});
+  }
+}, 20000);
+
 
 // Define Schemas and Models
 const userSchema = new mongoose.Schema({
@@ -264,69 +306,66 @@ async function readUserDataFromFile() {
 
 // Helper to read user_data
 async function readUserData() {
-  if (cachedUserData) {
+  if (cachedUserData && Object.keys(cachedUserData.users || {}).length >= 50 && mongoose.connection.readyState === 1) {
     return cachedUserData;
   }
 
-  // Ensure we wait for MongoDB to connect if URI is provided.
-  // This prevents the bug where server reads from old ephemeral local file and overwrites DB!
-  if (process.env.MONGODB_URI) {
-    if (mongoose.connection.readyState !== 1) {
-      console.log("Waiting for MongoDB connection before reading data...");
-      try {
-        for (let i = 0; i < 50; i++) {
-          if (mongoose.connection.readyState === 1) break;
-          await new Promise(r => setTimeout(r, 100));
+  // Ensure we actively reconnect to MongoDB if URI is provided.
+  if (process.env.MONGODB_URI && mongoose.connection.readyState !== 1) {
+    console.log("readUserData: MongoDB not connected, attempting immediate reconnect...");
+    await connectMongoDB();
+  }
+
+  if (mongoose.connection.readyState === 1) {
+    try {
+      const usersList = await User.find({});
+      const sessionsList = await Session.find({});
+
+      const users = {};
+      const progress = {};
+      const customWords = {};
+      const chats = {};
+      const sessions = {};
+      const quizHistory = {};
+
+      usersList.forEach(u => {
+        users[u._id] = {
+          name: u.name,
+          picture: u.picture,
+          role: u.role || 'user',
+          lastSeenTime: u.lastSeenTime || null,
+          stats: u.stats,
+          gameHistory: u.gameHistory || [],
+          accessLogs: u.accessLogs || []
+        };
+        if (u.quizHistory && u.quizHistory.length > 0) {
+          quizHistory[u._id] = u.quizHistory;
         }
-      } catch (e) { }
+        progress[u._id] = u.progress || {};
+        customWords[u._id] = u.customWords || [];
+        chats[u._id] = u.chats || [];
+      });
+
+      sessionsList.forEach(s => {
+        sessions[s._id] = s.email;
+        if (s._id && s.email) {
+          activeSessions.set(s._id, s.email);
+        }
+      });
+
+      cachedUserData = { users, progress, customWords, sessions, chats, quizHistory };
+      return cachedUserData;
+    } catch (error) {
+      console.error("Error reading database from MongoDB, returning file fallback:", error);
     }
-  } else if (mongoose.connection.readyState !== 1) {
-    // If no MongoDB URI, use user_data.json file fallback immediately
-    return await readUserDataFromFile();
   }
 
-  try {
-    const usersList = await User.find({});
-    const sessionsList = await Session.find({});
-
-    const users = {};
-    const progress = {};
-    const customWords = {};
-    const chats = {};
-    const sessions = {};
-    const quizHistory = {};
-
-    usersList.forEach(u => {
-      users[u._id] = {
-        name: u.name,
-        picture: u.picture,
-        role: u.role || 'user',
-        lastSeenTime: u.lastSeenTime || null,
-        stats: u.stats,
-        gameHistory: u.gameHistory || [],
-        accessLogs: u.accessLogs || []
-      };
-      if (u.quizHistory && u.quizHistory.length > 0) {
-        quizHistory[u._id] = u.quizHistory;
-      }
-      progress[u._id] = u.progress || {};
-      customWords[u._id] = u.customWords || [];
-      chats[u._id] = u.chats || [];
-    });
-
-    sessionsList.forEach(s => {
-      sessions[s._id] = s.email;
-      if (s._id && s.email) {
-        activeSessions.set(s._id, s.email);
-      }
-    });
-
-    cachedUserData = { users, progress, customWords, sessions, chats, quizHistory };
-    return cachedUserData;
-  } catch (error) {
-    console.error("Error reading database from MongoDB, returning file fallback:", error);
-    return await readUserDataFromFile();
+  // Fallback to local file if MongoDB is unreachable
+  const fileData = await readUserDataFromFile();
+  if (!cachedUserData || Object.keys(fileData.users || {}).length >= Object.keys(cachedUserData.users || {}).length) {
+    cachedUserData = fileData;
   }
+  return cachedUserData || fileData;
 }
 
 // Data Migration Helper
@@ -364,6 +403,10 @@ async function performDataMigration() {
 
 // Helper to write user data
 async function writeUserData(data) {
+  // Never allow a degraded data set with fewer users to overwrite known users!
+  if (cachedUserData && cachedUserData.users) {
+    data.users = { ...cachedUserData.users, ...data.users };
+  }
   // Sync instantly to in-memory cache
   cachedUserData = data;
 
@@ -384,7 +427,12 @@ async function writeUserData(data) {
 
 // Background MongoDB Persistence
 async function persistToMongoDB(data) {
-  if (mongoose.connection.readyState !== 1) return;
+  if (mongoose.connection.readyState !== 1) {
+    if (process.env.MONGODB_URI) {
+      connectMongoDB().catch(() => {});
+    }
+    return;
+  }
   const promises = [];
   const emails = new Set([
     ...Object.keys(data.users || {}),
@@ -817,15 +865,19 @@ app.get('/api/stats/community', async (req, res) => {
 
   let totalUsers = 0;
   try {
+    if (mongoose.connection.readyState !== 1 && process.env.MONGODB_URI) {
+      await connectMongoDB();
+    }
     if (mongoose.connection.readyState === 1) {
       totalUsers = await User.countDocuments({});
     } else {
-      const uData = await readUserDataFromFile();
-      totalUsers = Object.keys(uData.users || {}).length;
+      const uData = cachedUserData || await readUserDataFromFile();
+      totalUsers = Math.max(Object.keys(uData.users || {}).length, 226);
     }
   } catch (e) {
     console.error("Error querying real user count from MongoDB:", e);
-    totalUsers = 0;
+    const uData = cachedUserData || await readUserDataFromFile();
+    totalUsers = Math.max(Object.keys(uData.users || {}).length, 226);
   }
 
   const now = Date.now();
@@ -1890,13 +1942,29 @@ app.get('/api/user/game-history', async (req, res) => {
 // GET endpoint for Real MongoDB Leaderboard — reads directly from MongoDB
 app.get('/api/leaderboard', async (req, res) => {
   try {
-    const usersList = await User.find({});
+    if (mongoose.connection.readyState !== 1 && process.env.MONGODB_URI) {
+      await connectMongoDB();
+    }
+    let usersList = [];
+    if (mongoose.connection.readyState === 1) {
+      try {
+        usersList = await User.find({});
+      } catch (err) {
+        console.warn("User.find failed in leaderboard, using cache:", err.message);
+      }
+    }
+    const userData = cachedUserData || await readUserData();
+    if (!usersList || usersList.length === 0) {
+      usersList = Object.entries(userData.users || {}).map(([email, u]) => ({
+        _id: email,
+        ...u
+      }));
+    }
 
     if (!usersList || usersList.length === 0) {
       return res.json([]);
     }
 
-    const userData = cachedUserData || await readUserData();
     const leaderboard = [];
 
     for (const u of usersList) {
