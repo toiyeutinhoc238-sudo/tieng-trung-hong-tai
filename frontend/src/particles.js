@@ -361,7 +361,15 @@ window.updateParticleToggleBtns = function (enabled) {
   });
 };
 
-window.toggleSeasonalParticles = function () {
+let lastParticleToggleTime = 0;
+
+export function toggleSeasonalParticles() {
+  const now = Date.now();
+  if (now - lastParticleToggleTime < 280) {
+    return;
+  }
+  lastParticleToggleTime = now;
+
   const current = localStorage.getItem('particles_enabled') !== 'false';
   const next = !current;
   localStorage.setItem('particles_enabled', next ? 'true' : 'false');
@@ -390,15 +398,14 @@ window.toggleSeasonalParticles = function () {
   if (typeof window.showToast === 'function') {
     window.showToast(next ? 'Đã bật hiệu ứng mùa rơi 🍁' : 'Đã tắt hiệu ứng mùa rơi để tăng tốc độ ⚡');
   }
-};
+}
+window.toggleSeasonalParticles = toggleSeasonalParticles;
 
 // Global click handler for any particle toggle button
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('#particle-toggle-btn, .particle-toggle-btn');
   if (btn) {
-    e.preventDefault();
-    e.stopPropagation();
-    window.toggleSeasonalParticles();
+    toggleSeasonalParticles();
   }
 });
 

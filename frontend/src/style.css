@@ -18919,10 +18919,11 @@ body.light-mode .global-app-sidebar {
   position: fixed !important;
   bottom: 24px !important;
   left: 284px !important;
-  z-index: 400 !important;
+  z-index: 9999 !important;
   display: flex !important;
   gap: 12px !important;
   align-items: center !important;
+  pointer-events: auto !important;
   touch-action: manipulation !important;
   transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease, opacity 0.25s ease !important;
 }

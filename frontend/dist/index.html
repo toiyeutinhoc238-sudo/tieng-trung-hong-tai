@@ -117,8 +117,18 @@
     // Safe fallback function stubs while main JS module initializes
     window.openZubiStatDetail = window.openZubiStatDetail || function (type) { console.log('Initializing dashboard stat detail:', type); };
     window.switchTab = window.switchTab || function (tab) { console.log('Initializing tab:', tab); };
-    window.toggleSidebarCollapse = window.toggleSidebarCollapse || function () { };
-    window.toggleTheme = window.toggleTheme || function () { };
+    window.toggleTheme = window.toggleTheme || function () {
+      if (typeof window.applyGlobalTheme === 'function') {
+        const isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
+        window.applyGlobalTheme(isLight);
+      }
+    };
+    window.toggleSeasonalParticles = window.toggleSeasonalParticles || function () {
+      const cur = localStorage.getItem('particles_enabled') !== 'false';
+      localStorage.setItem('particles_enabled', !cur ? 'true' : 'false');
+      const cv = document.getElementById('seasonal-particle-canvas');
+      if (cv) cv.style.display = !cur ? 'block' : 'none';
+    };
     window.openSurveyModal = window.openSurveyModal || function () { const m = document.getElementById('student-survey-modal'); if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; } else { window.open('https://forms.gle/WaqZsrYrCZfAN5xn6', '_blank'); } };
     window.closeSurveyModal = window.closeSurveyModal || function () { const m = document.getElementById('student-survey-modal'); if (m) { m.style.display = 'none'; document.body.style.overflow = ''; } };
 
@@ -157,7 +167,18 @@
       window.switchVipModalTab('payment');
       const memoEl = document.getElementById('vip-suggested-memo');
       if (memoEl) {
-        memoEl.textContent = '[Email/SĐT] ' + packageName;
+        let code = '3T';
+        if (typeof packageName === 'string') {
+          const lower = packageName.toLowerCase();
+          if (lower.includes('1 năm') || lower.includes('1 nam') || lower === '1n' || lower.includes('1y')) {
+            code = '1N';
+          } else if (lower.includes('6 tháng') || lower.includes('6 thang') || lower === '6t' || lower.includes('6m')) {
+            code = '6T';
+          } else {
+            code = '3T';
+          }
+        }
+        memoEl.textContent = '[SĐT] ' + code;
       }
     };
     window.copyVipMemo = function () {
@@ -176,11 +197,11 @@
       }
     };
   </script>
-  <script type="module" crossorigin src="/assets/global_sidebar-B5P4di9k.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-2BasIO4n.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk3_v2-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/index-haNF1LmB.js"></script>
-  <script type="module" crossorigin src="/assets/main-IrAhiUe3.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-B8kS3qsr.css">
+  <script type="module" crossorigin src="/assets/main-Ctx09JJN.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-DmZ_Egv_.css">
 </head>
 
 <body>
@@ -449,11 +470,10 @@
           style="cursor: pointer;">
           <i class="fa-solid fa-clipboard-question" style="color: #ec4899;"></i> <span>Khảo sát ý kiến</span>
         </li>
-        <li class="sidebar-item" onclick="window.showComingSoonNotice('Kho Sách & Tài Liệu')" style="cursor: pointer;">
-          <i class="fa-solid fa-book-bookmark" style="color: #64748b;"></i> <span>Kho Sách &amp; Tài Liệu</span>
+        <li class="sidebar-item" onclick="window.location.href = '/documents.html'" style="cursor: pointer;">
+          <i class="fa-solid fa-book-bookmark" style="color: #f59e0b;"></i> <span>Kho Sách &amp; Tài Liệu</span>
           <span
-            style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">🔒
-            Sắp ra mắt</span>
+            style="font-size:0.68rem; background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(236, 72, 153, 0.25)); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 2px 7px; border-radius: 6px; font-weight: 800; margin-left: auto; white-space: nowrap;"><i class="fa-solid fa-crown" style="font-size:0.62rem; margin-right:2px;"></i> VIP</span>
         </li>
         <li class="sidebar-item" id="sidebar-discussion-btn" onclick="window.openDiscussionModal()"
           style="cursor: pointer;">
@@ -475,9 +495,16 @@
             <i class="fa-solid fa-users-gear" style="color: #f43f5e;"></i> <span>Quản lý Học viên</span>
             <span
               style="font-size:0.68rem; background:linear-gradient(135deg, #f43f5e, #e11d48); color:white; padding:2px 6px; border-radius:6px; font-weight:800; margin-left:auto; white-space:nowrap;">Admin</span>
-          </li>
-        </ul>
-      </div>
+      <!-- DANH MỤC 6: GIAO DIỆN -->
+      <div class="sidebar-section-label">Giao Diện</div>
+      <ul class="sidebar-menu" style="margin-bottom: 24px;">
+        <li class="sidebar-item" onclick="window.toggleTheme && window.toggleTheme()" style="cursor: pointer;">
+          <i class="fa-solid fa-moon" style="color: #60a5fa;"></i> <span>Chế độ Sáng / Tối</span>
+        </li>
+        <li class="sidebar-item" onclick="window.toggleSeasonalParticles && window.toggleSeasonalParticles()" style="cursor: pointer;">
+          <i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i> <span>Hiệu ứng Mùa rơi</span>
+        </li>
+      </ul>
 
     </div>
 
@@ -4411,7 +4438,7 @@
                 <li><i class="fa-solid fa-check"></i> AI chấm điểm &amp; sửa câu</li>
                 <li><i class="fa-solid fa-check"></i> Xuất PDF phiếu viết chữ Hán</li>
               </ul>
-              <button type="button" class="vip-price-btn btn-pkg-3m" onclick="window.selectVipPackage('Gói 3 Tháng - 199.000 VNĐ')">
+              <button type="button" class="vip-price-btn btn-pkg-3m" onclick="window.selectVipPackage('3T')">
                 <i class="fa-solid fa-bolt"></i>
                 <span>Đăng Ký Gói 3 Tháng</span>
                 <i class="fa-solid fa-arrow-right"></i>
@@ -4433,7 +4460,7 @@
                 <li><i class="fa-solid fa-check"></i> Không giới hạn video shadowing</li>
                 <li><i class="fa-solid fa-check"></i> Mở khóa toàn bộ 5 trò chơi</li>
               </ul>
-              <button type="button" class="vip-price-btn btn-pkg-6m" onclick="window.selectVipPackage('Gói 6 Tháng - 349.000 VNĐ')">
+              <button type="button" class="vip-price-btn btn-pkg-6m" onclick="window.selectVipPackage('6T')">
                 <i class="fa-solid fa-rocket"></i>
                 <span>Đăng Ký Gói 6 Tháng</span>
                 <i class="fa-solid fa-arrow-right"></i>
@@ -4456,7 +4483,7 @@
                 <li><i class="fa-solid fa-check"></i> Tự động cập nhật mọi tính năng mới</li>
                 <li><i class="fa-solid fa-check"></i> Ưu tiên hỗ trợ từ đội ngũ giáo viên</li>
               </ul>
-              <button type="button" class="vip-price-btn btn-pkg-1y" onclick="window.selectVipPackage('Gói 1 Năm - 599.000 VNĐ')">
+              <button type="button" class="vip-price-btn btn-pkg-1y" onclick="window.selectVipPackage('1N')">
                 <i class="fa-solid fa-crown"></i>
                 <span>Đăng Ký Gói 1 Năm</span>
                 <i class="fa-solid fa-sparkles"></i>
@@ -4529,7 +4556,7 @@
                     <i class="fa-solid fa-copy"></i> <span>Sao chép</span>
                   </button>
                 </div>
-                <div id="vip-suggested-memo" class="vip-memo-text">[Email/SĐT] NANG CAP VIP</div>
+                <div id="vip-suggested-memo" class="vip-memo-text">[SĐT] 3T</div>
               </div>
             </div>
           </div>

@@ -937,9 +937,9 @@ import './quick_dict_widget.js';
           <li class="sidebar-item" onclick="if(window.openSurveyModal){ window.openSurveyModal(); } else { window.open('https://forms.gle/WaqZsrYrCZfAN5xn6', '_blank'); }" style="cursor: pointer;">
             <i class="fa-solid fa-clipboard-question" style="color: #ec4899;"></i> <span>Khảo sát ý kiến</span>
           </li>
-          <li class="sidebar-item" onclick="if(window.showComingSoonNotice){ window.showComingSoonNotice('Kho Sách & Tài Liệu'); } else { alert('Tính năng Kho Sách & Tài Liệu đang tạm khóa để cập nhật bản quyền, sẽ sớm ra mắt nhé!'); }" style="cursor: pointer;">
-            <i class="fa-solid fa-book-bookmark" style="color: #64748b;"></i> <span>Kho Sách &amp; Tài Liệu</span>
-            <span style="font-size:0.68rem; background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:6px; font-weight:700; margin-left:auto; white-space:nowrap;">🔒 Sắp ra mắt</span>
+          <li class="sidebar-item ${activeKey === 'documents' ? 'active' : ''}" onclick="window.location.href = '/documents.html'" style="cursor: pointer;">
+            <i class="fa-solid fa-book-bookmark" style="color: #f59e0b;"></i> <span>Kho Sách &amp; Tài Liệu</span>
+            <span style="font-size:0.68rem; background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(236, 72, 153, 0.25)); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 2px 7px; border-radius: 6px; font-weight: 800; margin-left: auto; white-space: nowrap;"><i class="fa-solid fa-crown" style="font-size:0.62rem; margin-right:2px;"></i> VIP</span>
           </li>
           <li class="sidebar-item" onclick="window.location.href = '/?openDiscussion=true'" style="cursor: pointer;">
             <i class="fa-solid fa-comments" style="color: #38bdf8;"></i> <span>Thảo luận &amp; Góp ý</span>
@@ -1273,7 +1273,7 @@ import './quick_dict_widget.js';
     });
 
     // 4. Theme toggle buttons
-    document.querySelectorAll('.theme-toggle-btn, #theme-toggle-btn, .rank-theme-btn').forEach(btn => {
+    document.querySelectorAll('.theme-toggle-btn, #theme-toggle-btn, .rank-theme-btn, #floating-theme-toggle-btn').forEach(btn => {
       if (!btn.querySelector('svg.header-svg-icon')) {
         btn.innerHTML = isLight ? HEADER_ICONS.moon : HEADER_ICONS.sun;
         btn.setAttribute('title', isLight ? 'Chuyển sang Chế độ Tối' : 'Chuyển sang Chế độ Sáng');
@@ -1282,17 +1282,99 @@ import './quick_dict_widget.js';
   }
   window.ensureHeaderButtonSVGs = ensureHeaderButtonSVGs;
 
+  // Universal Theme Management across all pages
+  let lastGlobalThemeToggleTime = 0;
+
+  function applyGlobalTheme(isDark) {
+    const bgUrl = isDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
+    document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+    document.documentElement.style.setProperty('background-size', 'cover', 'important');
+    document.documentElement.style.setProperty('background-position', 'center center', 'important');
+    document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+    document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light', 'light-mode');
+      if (document.body) {
+        document.body.classList.remove('light', 'light-mode');
+        document.body.classList.add('dark');
+        document.body.style.setProperty('background-image', bgUrl, 'important');
+        document.body.style.setProperty('background-size', 'cover', 'important');
+        document.body.style.setProperty('background-position', 'center center', 'important');
+        document.body.style.setProperty('background-attachment', 'fixed', 'important');
+        document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+      }
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light', 'light-mode');
+      if (document.body) {
+        document.body.classList.remove('dark');
+        document.body.classList.add('light-mode');
+        document.body.style.setProperty('background-image', bgUrl, 'important');
+        document.body.style.setProperty('background-size', 'cover', 'important');
+        document.body.style.setProperty('background-position', 'center center', 'important');
+        document.body.style.setProperty('background-attachment', 'fixed', 'important');
+        document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+      }
+    }
+
+    const isLight = !isDark;
+    document.querySelectorAll('.theme-toggle-btn, #theme-toggle-btn, #floating-theme-toggle-btn, .rank-theme-btn, #theme-toggle, .theme-toggle-btn-top, .rd-theme-btn').forEach(btn => {
+      btn.innerHTML = isLight ? HEADER_ICONS.moon : HEADER_ICONS.sun;
+      btn.setAttribute('title', isLight ? 'Chuyển sang Chế độ Tối' : 'Chuyển sang Chế độ Sáng');
+    });
+  }
+  window.applyGlobalTheme = applyGlobalTheme;
+
+  function globalToggleTheme() {
+    const now = Date.now();
+    if (now - lastGlobalThemeToggleTime < 280) {
+      return;
+    }
+    lastGlobalThemeToggleTime = now;
+
+    const isCurrentlyDark = document.documentElement.classList.contains('dark') || !document.documentElement.classList.contains('light-mode');
+    const nextDark = !isCurrentlyDark;
+    localStorage.setItem('theme', nextDark ? 'dark' : 'light');
+    applyGlobalTheme(nextDark);
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(nextDark ? 'Đã chuyển sang Chế độ Tối 🌙' : 'Đã chuyển sang Chế độ Sáng ☀️');
+    }
+  }
+  window.toggleTheme = globalToggleTheme;
+
+  window.initTheme = function () {
+    const saved = localStorage.getItem('theme') || 'dark';
+    applyGlobalTheme(saved !== 'light');
+  };
+
+  // Run initial theme application
+  window.initTheme();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', window.initTheme);
+  }
+
   // Intercept/hook updateToggleBtns so any page-level theme toggle renders crisp SVGs
   const _origUpdateToggleBtns = window.updateToggleBtns;
   window.updateToggleBtns = function (isLight) {
     if (typeof _origUpdateToggleBtns === 'function') {
       try { _origUpdateToggleBtns(isLight); } catch (e) {}
     }
-    document.querySelectorAll('.theme-toggle-btn, #theme-toggle-btn, .rank-theme-btn').forEach(btn => {
+    document.querySelectorAll('.theme-toggle-btn, #theme-toggle-btn, #floating-theme-toggle-btn, .rank-theme-btn, #theme-toggle, .theme-toggle-btn-top, .rd-theme-btn').forEach(btn => {
       btn.innerHTML = isLight ? HEADER_ICONS.moon : HEADER_ICONS.sun;
       btn.setAttribute('title', isLight ? 'Chuyển sang Chế độ Tối' : 'Chuyển sang Chế độ Sáng');
     });
   };
+
+  // Global click listener for theme toggle buttons
+  document.addEventListener('click', (e) => {
+    const toggleBtn = e.target.closest('#theme-toggle-btn, #floating-theme-toggle-btn, .theme-toggle-btn, .rank-theme-btn, #theme-toggle, .theme-toggle-btn-top, .rd-theme-btn');
+    if (toggleBtn) {
+      globalToggleTheme();
+    }
+  });
 
   // FontAwesome fallback loader in case primary CDN is blocked or fails
   function ensureFontAwesomeLoaded() {

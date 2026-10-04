@@ -529,8 +529,16 @@ function initTheme() {
   if (themeToggleBtn) themeToggleBtn.innerHTML = icon;
 }
 
+let lastMainThemeToggle = 0;
+
 function toggleTheme() {
-  const isCurrentlyDark = document.documentElement.classList.contains('dark');
+  const now = Date.now();
+  if (now - lastMainThemeToggle < 280) {
+    return;
+  }
+  lastMainThemeToggle = now;
+
+  const isCurrentlyDark = document.documentElement.classList.contains('dark') || !document.documentElement.classList.contains('light-mode');
   const nextDark = !isCurrentlyDark;
   applyThemeClass(nextDark);
   localStorage.setItem('theme', nextDark ? 'dark' : 'light');
@@ -542,6 +550,10 @@ function toggleTheme() {
   if (headerToggle) headerToggle.innerHTML = icon;
   if (themeToggleBtn) themeToggleBtn.innerHTML = icon;
 
+  if (typeof window.ensureHeaderButtonSVGs === 'function') {
+    window.ensureHeaderButtonSVGs();
+  }
+
   showToast(nextDark ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng');
   if (!currentUser && typeof initGoogleSignIn === 'function') {
     initGoogleSignIn();
@@ -551,7 +563,7 @@ window.toggleTheme = toggleTheme;
 
 // Global listener for theme toggle button across all pages
 document.addEventListener('click', (e) => {
-  const toggleBtn = e.target.closest('#theme-toggle-btn, .rank-theme-btn');
+  const toggleBtn = e.target.closest('#theme-toggle-btn, #floating-theme-toggle-btn, .rank-theme-btn, .theme-toggle-btn');
   if (toggleBtn) {
     toggleTheme();
   }
@@ -15793,7 +15805,18 @@ window.selectVipPackage = function (packageName) {
   window.switchVipModalTab('payment');
   const memoEl = document.getElementById('vip-suggested-memo');
   if (memoEl) {
-    memoEl.textContent = '[Email/SĐT] ' + packageName;
+    let code = '3T';
+    if (typeof packageName === 'string') {
+      const lower = packageName.toLowerCase();
+      if (lower.includes('1 năm') || lower.includes('1 nam') || lower === '1n' || lower.includes('1y')) {
+        code = '1N';
+      } else if (lower.includes('6 tháng') || lower.includes('6 thang') || lower === '6t' || lower.includes('6m')) {
+        code = '6T';
+      } else {
+        code = '3T';
+      }
+    }
+    memoEl.textContent = '[SĐT] ' + code;
   }
 };
 
