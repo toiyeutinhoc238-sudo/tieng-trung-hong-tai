@@ -864,26 +864,36 @@ app.post('/api/presence/heartbeat', (req, res) => {
   res.json({ ok: true, timestamp: Date.now() });
 });
 
+// Helper to get total users count with 60s cache to prevent MongoDB connection stalls
+let cachedTotalUsersCount = 226;
+let lastTotalUsersCheckTime = 0;
+
+async function getTotalUsersCount() {
+  const now = Date.now();
+  if (now - lastTotalUsersCheckTime < 60000 && cachedTotalUsersCount > 0) {
+    return cachedTotalUsersCount;
+  }
+  if (mongoose.connection.readyState === 1) {
+    try {
+      const count = await User.countDocuments({});
+      if (count > 0) {
+        cachedTotalUsersCount = count;
+        lastTotalUsersCheckTime = now;
+      }
+    } catch (e) {
+      console.warn("countDocuments error:", e.message);
+    }
+  } else if (cachedUserData && cachedUserData.users) {
+    cachedTotalUsersCount = Math.max(Object.keys(cachedUserData.users).length, 226);
+  }
+  return cachedTotalUsersCount;
+}
+
 // GET: 100% Real Database Stats & Real-Time Online Count
 app.get('/api/stats/community', async (req, res) => {
   trackPresence(req);
 
-  let totalUsers = 0;
-  try {
-    if (mongoose.connection.readyState !== 1 && process.env.MONGODB_URI) {
-      await connectMongoDB();
-    }
-    if (mongoose.connection.readyState === 1) {
-      totalUsers = await User.countDocuments({});
-    } else {
-      const uData = cachedUserData || await readUserDataFromFile();
-      totalUsers = Math.max(Object.keys(uData.users || {}).length, 226);
-    }
-  } catch (e) {
-    console.error("Error querying real user count from MongoDB:", e);
-    const uData = cachedUserData || await readUserDataFromFile();
-    totalUsers = Math.max(Object.keys(uData.users || {}).length, 226);
-  }
+  const totalUsers = await getTotalUsersCount();
 
   const now = Date.now();
   let registeredOnlineCount = 0;
