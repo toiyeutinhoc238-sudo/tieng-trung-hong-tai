@@ -6764,7 +6764,8 @@ export async function extractYouTubeDictation(youtubeId, extractRawOnly = false)
 app.get('/api/dictation/debug-status', (req, res) => {
   res.json({
     status: 'online',
-    commit: 'fix-502-render-v2',
+    commit: 'fix-mongodb-reconnect-v3',
+    mongoReadyState: mongoose.connection.readyState,
     hasGroqKey: !!process.env.GROQ_API_KEY,
     hasGeminiKey: !!process.env.GEMINI_API_KEY,
     hasYoutubeKey: !!process.env.YOUTUBE_API_KEY,
