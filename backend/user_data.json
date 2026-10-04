@@ -18,11 +18,11 @@
       "name": "Phú Phan",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocIebQJ8CFxQDSOgwYPsfuN9FJvtBWARLqdYN9fCo-3UBytEPmI=s96-c",
       "role": "super_admin",
-      "lastSeenTime": "2026-10-04T06:00:41.991Z",
+      "lastSeenTime": "2026-10-04T11:11:58.202Z",
       "stats": {
-        "streak": 2,
-        "studyTime": 35085,
-        "lastActiveDate": "2026-10-03",
+        "streak": 3,
+        "studyTime": 35100,
+        "lastActiveDate": "2026-10-04",
         "dailyHistory": {
           "2026-08-07": 1038,
           "2026-08-08": 1038,
@@ -61,7 +61,8 @@
           "2026-09-28": 705,
           "2026-09-29": 120,
           "2026-10-02": 585,
-          "2026-10-03": 165
+          "2026-10-03": 165,
+          "2026-10-04": 15
         }
       },
       "gameHistory": [
@@ -1314,6 +1315,24 @@
           "device": "📱 iPhone",
           "ip": "27.75.103.97",
           "isClosed": true
+        },
+        {
+          "sessionId": "sess_0c8jrlwp_1791112239555",
+          "enterTime": "2026-10-04T11:10:39.555Z",
+          "exitTime": "2026-10-04T11:11:28.783Z",
+          "durationSeconds": 49,
+          "device": "💻 Windows PC",
+          "ip": "116.108.33.5",
+          "isClosed": true
+        },
+        {
+          "sessionId": "sess_gastzkuu_1791112308488",
+          "enterTime": "2026-10-04T11:11:48.488Z",
+          "exitTime": "2026-10-04T11:11:56.838Z",
+          "durationSeconds": 8,
+          "device": "💻 Windows PC",
+          "ip": "116.108.33.5",
+          "isClosed": true
         }
       ]
     },
@@ -1364,10 +1383,10 @@
       "name": "Thái Hồng",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocKBlWlP1i1PUXEJ-J8R-D1O16X0yTLoJHD1QrPcxm_fJZFl0VmG=s96-c",
       "role": "super_admin",
-      "lastSeenTime": "2026-10-04T07:40:33.988Z",
+      "lastSeenTime": "2026-10-04T11:15:03.458Z",
       "stats": {
         "streak": 37,
-        "studyTime": 356690,
+        "studyTime": 356930,
         "lastActiveDate": "2026-10-04",
         "dailyHistory": {
           "2026-08-10": 420,
@@ -1416,20 +1435,11 @@
           "2026-10-01": 16305,
           "2026-10-02": 12405,
           "2026-10-03": 7320,
-          "2026-10-04": 225
+          "2026-10-04": 465
         }
       },
       "gameHistory": [],
       "accessLogs": [
-        {
-          "sessionId": "sess_qkjogvd1_1789918234597",
-          "enterTime": "2026-09-20T15:30:34.598Z",
-          "exitTime": "2026-09-20T16:41:47.306Z",
-          "durationSeconds": 4273,
-          "device": "💻 Máy tính",
-          "ip": "171.227.35.6",
-          "isClosed": false
-        },
         {
           "sessionId": "sess_eta6rxsf_1789921348126",
           "enterTime": "2026-09-20T16:22:28.126Z",
@@ -2769,6 +2779,15 @@
           "durationSeconds": 1706,
           "device": "📱 iPhone",
           "ip": "171.253.139.119",
+          "isClosed": false
+        },
+        {
+          "sessionId": "sess_2zggjbjf_1791100207294",
+          "enterTime": "2026-10-04T11:10:58.693Z",
+          "exitTime": "2026-10-04T11:14:59.347Z",
+          "durationSeconds": 241,
+          "device": "💻 Windows PC",
+          "ip": "171.227.205.103",
           "isClosed": false
         }
       ]
@@ -11513,6 +11532,87 @@
       },
       "gameHistory": [],
       "accessLogs": []
+    },
+    "dotrinh200711@gmail.com": {
+      "name": "Trinh Phương",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocJsf-eEScERI_VQA89IPZH2bx4pBUL5icoDmQQ40G0t3scuPA=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-10-04T09:29:31.825Z",
+      "stats": {
+        "streak": 0,
+        "studyTime": 0,
+        "lastActiveDate": ""
+      },
+      "gameHistory": [],
+      "accessLogs": []
+    },
+    "nguyenhoangyen2008nhy@gmail.com": {
+      "name": "Yến Nguyễn Hoàng",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocJf1_8lAm3E9-g5ym3M0hNz1Lzv1gkSBIuXfSnGmvbPuMk4mtxR=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-10-04T09:42:30.538Z",
+      "stats": {
+        "streak": 0,
+        "studyTime": 0,
+        "lastActiveDate": ""
+      },
+      "gameHistory": [],
+      "accessLogs": []
+    },
+    "vajkir@gmail.com": {
+      "name": "Kim Thoa Trương Thị",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocKa12wV8-CcjmHzZIAp9ij-_u3_S--k283aKL89d4Tf6xuBZ6A=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-10-04T10:32:19.607Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 15,
+        "lastActiveDate": "2026-10-04",
+        "dailyHistory": {
+          "2026-10-04": 15
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": []
+    },
+    "ilbp7799@gmail.com": {
+      "name": "Giang Trần",
+      "picture": "https://lh3.googleusercontent.com/a/ACg8ocIS3NgCuH67ysGFBX7IzSflXlPuwwu1MQG1lXXYMCXmww8VEzQv=s96-c",
+      "role": "user",
+      "lastSeenTime": "2026-10-04T10:52:10.153Z",
+      "stats": {
+        "streak": 0,
+        "studyTime": 0,
+        "lastActiveDate": ""
+      },
+      "gameHistory": [],
+      "accessLogs": []
+    },
+    "thanhhuyenlethi2411@gmail.com": {
+      "name": "thanhhuyenlethi2411",
+      "picture": "",
+      "role": "user",
+      "lastSeenTime": "2026-10-04T11:14:34.378Z",
+      "stats": {
+        "streak": 1,
+        "studyTime": 30,
+        "lastActiveDate": "2026-10-04",
+        "dailyHistory": {
+          "2026-10-04": 30
+        }
+      },
+      "gameHistory": [],
+      "accessLogs": [
+        {
+          "sessionId": "sess_ajke1buh_1791111610236",
+          "enterTime": "2026-10-04T11:13:21.224Z",
+          "exitTime": "2026-10-04T11:14:34.756Z",
+          "durationSeconds": 74,
+          "device": "💻 Windows PC",
+          "ip": "104.28.205.71",
+          "isClosed": true
+        }
+      ]
     }
   },
   "progress": {
@@ -11869,6 +11969,12 @@
         "isStudied": true
       },
       "334": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "338": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -12295,6 +12401,12 @@
         "isStudied": true
       },
       "70039": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "70040": {
         "isMemorized": false,
         "isStarred": false,
         "isWrong": false,
@@ -45618,7 +45730,21 @@
     },
     "hiennguyen2222000@gmail.com": {},
     "chautnq369@gmail.com": {},
-    "phuonglinht21@gmail.com": {}
+    "phuonglinht21@gmail.com": {},
+    "thanhhuyenlethi2411@gmail.com": {
+      "235": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      },
+      "396": {
+        "isMemorized": false,
+        "isStarred": false,
+        "isWrong": false,
+        "isStudied": true
+      }
+    }
   },
   "customWords": {
     "thaygiaoroxie@gmail.com": [],
@@ -46977,7 +47103,13 @@
     "w8cxanvyyfmuthzkpc": "tranhuyentrang0019@gmail.com",
     "3jhvc8jchbcmuti0xsn": "21042006nhunnhun@gmail.com",
     "1rq8qq44lssmuti52xh": "nguyenthuynhung21042006@gmail.com",
-    "6uk515ax90gmutieg3x": "hiennguyen2222000@gmail.com"
+    "6uk515ax90gmutieg3x": "hiennguyen2222000@gmail.com",
+    "w8l17mhnd48mutmccbb": "dotrinh200711@gmail.com",
+    "hdrq33y622imutmd2gm": "dotrinh200711@gmail.com",
+    "rnkhbldpkemutmdb5d": "dotrinh200711@gmail.com",
+    "mgo3oi0tlemutmdhvl": "nguyenhoangyen2008nhy@gmail.com",
+    "q7j8ecgoy6bmutolpa8": "vajkir@gmail.com",
+    "hzfb2btnikomutpbev4": "ilbp7799@gmail.com"
   },
   "chats": {
     "thaygiaoroxie@gmail.com": [],

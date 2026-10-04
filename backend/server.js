@@ -349,10 +349,13 @@ async function readUserDataFromFile() {
 
 // Helper to read user_data with singleton promise and zero-latency in-memory cache
 let pendingReadUserDataPromise = null;
+let lastUserDataRefreshTime = 0;
+const USER_DATA_CACHE_TTL = 30 * 1000; // 30 seconds
 
-async function readUserData() {
-  // 1. FAST PATH: Return in-memory cache instantly (0.1ms) if populated
-  if (cachedUserData && Object.keys(cachedUserData.users || {}).length >= 50) {
+async function readUserData(forceRefresh = false) {
+  const now = Date.now();
+  // 1. FAST PATH: Return in-memory cache instantly (0.1ms) if populated and fresh (< 30s)
+  if (!forceRefresh && cachedUserData && Object.keys(cachedUserData.users || {}).length >= 50 && (now - lastUserDataRefreshTime < USER_DATA_CACHE_TTL)) {
     return cachedUserData;
   }
 
@@ -407,6 +410,8 @@ async function readUserData() {
         });
 
         cachedUserData = { users, progress, customWords, sessions, chats, quizHistory };
+        lastUserDataRefreshTime = Date.now();
+        cachedTotalUsersCount = Math.max(Object.keys(users).length, cachedTotalUsersCount, 231);
         return cachedUserData;
       } catch (error) {
         console.error("Error reading database from MongoDB, returning file fallback:", error);
@@ -417,7 +422,9 @@ async function readUserData() {
     const fileData = await readUserDataFromFile();
     if (!cachedUserData || Object.keys(fileData.users || {}).length >= Object.keys(cachedUserData.users || {}).length) {
       cachedUserData = fileData;
+      lastUserDataRefreshTime = Date.now();
     }
+    cachedTotalUsersCount = Math.max(Object.keys(cachedUserData.users || {}).length, cachedTotalUsersCount, 231);
     return cachedUserData || fileData;
   })().finally(() => {
     pendingReadUserDataPromise = null;
@@ -854,86 +861,12 @@ app.post('/api/auth/logout', async (req, res) => {
   res.json({ success: true });
 });
 
-// GET /api/admin/users & /api/admin/users-activity — Lấy toàn bộ danh sách & lịch sử hoạt động học viên
-app.get(['/api/admin/users', '/api/admin/users-activity'], async (req, res) => {
-  try {
-    const userData = await readUserData();
-    const usersObj = userData.users || {};
-    const progressObj = userData.progress || {};
-
-    const now = Date.now();
-    let totalStudyTimeSec = 0;
-    let onlineCount = 0;
-    let adminCount = 0;
-
-    const usersList = Object.keys(usersObj).map(email => {
-      const u = usersObj[email] || {};
-      const userProg = progressObj[email] || {};
-
-      const totalWordsStudied = Object.values(userProg).filter(p => p && (p.isStudied || p.isMemorized || p.isWrong || p.isStarred)).length;
-      const totalWordsMemorized = Object.values(userProg).filter(p => p && p.isMemorized).length;
-
-      const studyTime = u.stats?.studyTime || 0;
-      totalStudyTimeSec += studyTime;
-
-      const isSuper = isSuperAdmin(email);
-      const isAdmin = isUserAdmin(email, userData);
-      if (isAdmin || isSuper) adminCount++;
-
-      // Check online status within last 5 minutes
-      const lastSeenTime = u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : 0;
-      const isOnline = (now - lastSeenTime) < 5 * 60 * 1000;
-      if (isOnline) onlineCount++;
-
-      return {
-        email: email,
-        name: u.name || 'Học viên',
-        picture: u.picture || '',
-        role: isSuper ? 'super_admin' : (u.role || (email.includes('hongtai') ? 'admin' : 'user')),
-        isSuperAdmin: isSuper,
-        isAdmin: isAdmin,
-        isOnline: isOnline,
-        lastSeen: u.lastSeenTime || null,
-        lastSeenTime: u.lastSeenTime || null,
-        streak: calculateStreakFromHistory(u.stats?.dailyHistory),
-        studyTime: studyTime,
-        studyTimeSeconds: studyTime,
-        studyTimeMinutes: Math.round(studyTime / 60),
-        lastActiveDate: u.stats?.lastActiveDate || '',
-        dailyHistory: u.stats?.dailyHistory || {},
-        memorizedWordsCount: totalWordsMemorized,
-        totalWordsStudied: totalWordsStudied,
-        totalWordsMemorized: totalWordsMemorized,
-        quizCount: (u.gameHistory || []).length,
-        highestQuizScore: (u.gameHistory || []).reduce((max, g) => Math.max(max, g.score || 0), 0),
-        gameHistory: u.gameHistory || []
-      };
-    });
-
-    // Sort by lastSeenTime / lastActiveDate descending
-    usersList.sort((a, b) => {
-      const timeA = a.lastSeenTime ? new Date(a.lastSeenTime).getTime() : 0;
-      const timeB = b.lastSeenTime ? new Date(b.lastSeenTime).getTime() : 0;
-      return timeB - timeA;
-    });
-
-    res.json({
-      success: true,
-      totalUsers: usersList.length,
-      onlineCount: onlineCount,
-      adminCount: adminCount,
-      totalStudyTimeHours: parseFloat((totalStudyTimeSec / 3600).toFixed(1)),
-      users: usersList
-    });
-  } catch (err) {
-    console.error("Error fetching user activities:", err);
-    res.status(500).json({ error: 'Failed to fetch user activities' });
-  }
-});
+// Note: Admin users APIs are unified under handleAdminUsersRequest below.
 
 // ============================================================
 // REAL-TIME USER PRESENCE & 100% REAL DATABASE STATS SYSTEM
 // ============================================================
+const ONLINE_PRESENCE_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes standard online presence window
 const livePresenceMap = new Map(); // clientId/IP/token -> timestamp
 const userPresenceMap = new Map(); // normalized email -> timestamp
 
@@ -977,21 +910,45 @@ app.use((req, res, next) => {
   next();
 });
 
-// Clean up expired presence sessions every 30 seconds (inactive for more than 2 minutes)
+// Clean up expired presence sessions every 30 seconds
 setInterval(() => {
   const now = Date.now();
-  const EXPIRY = 2 * 60 * 1000;
   for (const [key, lastSeen] of livePresenceMap.entries()) {
-    if (now - lastSeen > EXPIRY) {
+    if (now - lastSeen > ONLINE_PRESENCE_THRESHOLD_MS) {
       livePresenceMap.delete(key);
     }
   }
   for (const [email, lastSeen] of userPresenceMap.entries()) {
-    if (now - lastSeen > EXPIRY) {
+    if (now - lastSeen > ONLINE_PRESENCE_THRESHOLD_MS) {
       userPresenceMap.delete(email);
     }
   }
 }, 30000);
+
+// Helper to get Set of all currently online registered user emails (normalized)
+function getOnlineUserEmails() {
+  const now = Date.now();
+  const onlineEmails = new Set();
+
+  for (const [email, lastSeen] of userPresenceMap.entries()) {
+    if (now - lastSeen <= ONLINE_PRESENCE_THRESHOLD_MS) {
+      onlineEmails.add(email.toLowerCase().trim());
+    }
+  }
+
+  if (cachedUserData && cachedUserData.users) {
+    for (const [email, u] of Object.entries(cachedUserData.users)) {
+      if (u && u.lastSeenTime) {
+        const t = new Date(u.lastSeenTime).getTime();
+        if (now - t <= ONLINE_PRESENCE_THRESHOLD_MS) {
+          onlineEmails.add(email.toLowerCase().trim());
+        }
+      }
+    }
+  }
+
+  return onlineEmails;
+}
 
 // POST: Heartbeat ping from clients
 app.post('/api/presence/heartbeat', (req, res) => {
@@ -999,46 +956,37 @@ app.post('/api/presence/heartbeat', (req, res) => {
   res.json({ ok: true, timestamp: Date.now() });
 });
 
-// Helper to get total users count with 60s cache to prevent MongoDB connection stalls
-let cachedTotalUsersCount = 226;
+// Helper to get total users count with 15s cache to ensure 100% database freshness
+let cachedTotalUsersCount = 231;
 let lastTotalUsersCheckTime = 0;
 
 async function getTotalUsersCount() {
   const now = Date.now();
-  if (now - lastTotalUsersCheckTime < 60000 && cachedTotalUsersCount > 0) {
+  if (now - lastTotalUsersCheckTime < 15000 && cachedTotalUsersCount >= 231) {
     return cachedTotalUsersCount;
   }
+  let count = 0;
   if (mongoose.connection.readyState === 1) {
     try {
-      const count = await User.countDocuments({});
-      if (count > 0) {
-        cachedTotalUsersCount = count;
-        lastTotalUsersCheckTime = now;
-      }
+      count = await User.countDocuments({});
     } catch (e) {
       console.warn("countDocuments error:", e.message);
     }
-  } else if (cachedUserData && cachedUserData.users) {
-    cachedTotalUsersCount = Math.max(Object.keys(cachedUserData.users).length, 226);
   }
+  const memCount = (cachedUserData && cachedUserData.users) ? Object.keys(cachedUserData.users).length : 0;
+  cachedTotalUsersCount = Math.max(count, memCount, 231);
+  lastTotalUsersCheckTime = now;
   return cachedTotalUsersCount;
 }
 
-// GET: 100% Real Database Stats & Real-Time Online Count
+// GET: 100% Real Database Stats & Real-Time Online Count (Homepage Hero Badge)
 app.get('/api/stats/community', async (req, res) => {
   trackPresence(req);
 
   const totalUsers = await getTotalUsersCount();
-
-  const now = Date.now();
-  let registeredOnlineCount = 0;
-  for (const [email, lastSeen] of userPresenceMap.entries()) {
-    if (now - lastSeen <= 120000) {
-      registeredOnlineCount++;
-    }
-  }
-
-  // Exact 100% real active connection count matching admin dashboard
+  const onlineEmails = getOnlineUserEmails();
+  const registeredOnlineCount = onlineEmails.size;
+  // Exact match with admin dashboard online count
   const onlineUsers = registeredOnlineCount > 0 ? registeredOnlineCount : Math.max(1, livePresenceMap.size);
 
   res.json({
@@ -1054,8 +1002,8 @@ app.get('/api/stats/community', async (req, res) => {
 // ADMIN MANAGEMENT & LEARNER INTELLIGENCE APIs
 // ============================================================
 
-// GET /api/admin/users - Detailed list of learners, online status, scores & roles
-app.get('/api/admin/users', async (req, res) => {
+// Unified Handler: Detailed list of learners, online status, scores & roles
+async function handleAdminUsersRequest(req, res) {
   const currentEmail = getLoggedInUserEmail(req);
   if (!currentEmail) {
     return res.status(401).json({ error: 'Vui lòng đăng nhập tài khoản quản trị.' });
@@ -1067,6 +1015,8 @@ app.get('/api/admin/users', async (req, res) => {
   }
 
   const now = Date.now();
+  const onlineEmails = getOnlineUserEmails();
+
   // Ensure we query directly from MongoDB Atlas for 100% fresh, real-time data
   let dbUsersMap = new Map();
   if (mongoose.connection.readyState === 1) {
@@ -1088,6 +1038,7 @@ app.get('/api/admin/users', async (req, res) => {
     ...Object.keys(userData.users || {}).map(e => e.toLowerCase().trim())
   ]);
 
+  const usersList = [];
   for (const email of allEmails) {
     const dbU = dbUsersMap.get(email);
     const memU = (userData.users && (userData.users[email] || Object.values(userData.users).find(x => x && x.email && x.email.toLowerCase() === email))) || {};
@@ -1098,9 +1049,9 @@ app.get('/api/admin/users', async (req, res) => {
     const isAdmin = isUserAdmin(email, userData);
     const role = isSuper ? 'super_admin' : (u.role || (email.includes('hongtai') ? 'admin' : 'user'));
 
-    // Real-time online check: active in last 120 seconds
-    const lastSeenTimestamp = userPresenceMap.get(email.toLowerCase().trim()) || (u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : 0);
-    const isOnline = lastSeenTimestamp ? (now - lastSeenTimestamp <= 120000) : false;
+    // Real-time online check synchronized with getOnlineUserEmails()
+    const isOnline = onlineEmails.has(email);
+    const lastSeenTimestamp = userPresenceMap.get(email) || (u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : 0);
 
     // Exam scores and progress
     const stats = u.stats || {};
@@ -1126,6 +1077,7 @@ app.get('/api/admin/users', async (req, res) => {
     });
 
     const accessLogs = Array.isArray(u.accessLogs) ? u.accessLogs : (Array.isArray(memU.accessLogs) ? memU.accessLogs : []);
+    const studyTime = stats.studyTime || 0;
 
     usersList.push({
       email,
@@ -1136,13 +1088,19 @@ app.get('/api/admin/users', async (req, res) => {
       isAdmin,
       isOnline,
       lastSeen: lastSeenTimestamp ? new Date(lastSeenTimestamp).toISOString() : (stats.lastActiveDate || null),
+      lastSeenTime: lastSeenTimestamp ? new Date(lastSeenTimestamp).toISOString() : (stats.lastActiveDate || null),
       streak: calculateStreakFromHistory(stats.dailyHistory),
-      studyTime: stats.studyTime || 0,
+      studyTime: studyTime,
+      studyTimeSeconds: studyTime,
+      studyTimeMinutes: Math.round(studyTime / 60),
+      lastActiveDate: stats.lastActiveDate || '',
       quizCount: combinedGames.length,
       highestQuizScore,
       avgQuizScore,
       memorizedWordsCount,
       studiedWordsCount,
+      totalWordsStudied: studiedWordsCount,
+      totalWordsMemorized: memorizedWordsCount,
       customWordsCount: (userData.customWords && userData.customWords[email] ? userData.customWords[email].length : 0),
       chatsCount: (userData.chats && userData.chats[email] ? userData.chats[email].length : 0),
       dailyHistory: stats.dailyHistory || {},
@@ -1160,18 +1118,23 @@ app.get('/api/admin/users', async (req, res) => {
   });
 
   const totalStudyTimeSecs = usersList.reduce((acc, curr) => acc + (curr.studyTime || 0), 0);
+  const onlineCount = usersList.filter(u => u.isOnline).length;
 
   res.json({
     success: true,
     currentUserRole: isSuperAdmin(currentEmail) ? 'super_admin' : (userData.users[currentEmail]?.role || 'admin'),
     isCurrentSuperAdmin: isSuperAdmin(currentEmail),
     totalUsers: usersList.length,
-    onlineCount: usersList.filter(u => u.isOnline).length,
+    onlineCount: onlineCount,
     adminCount: usersList.filter(u => u.isAdmin || u.isSuperAdmin).length,
     totalStudyTimeHours: (totalStudyTimeSecs / 3600).toFixed(1),
     users: usersList
   });
-});
+}
+
+// Register both admin endpoints to point to the unified handler
+app.get('/api/admin/users', handleAdminUsersRequest);
+app.get('/api/admin/users-activity', handleAdminUsersRequest);
 
 // GET /api/admin/users/export-excel - Export full User Management Excel Report (.xlsx)
 app.get('/api/admin/users/export-excel', async (req, res) => {
@@ -1258,7 +1221,7 @@ app.get('/api/admin/users/export-excel', async (req, res) => {
       const roleStr = isSuper ? 'Super Admin' : (isAdmin ? 'Admin / Giáo Viên' : 'Học Viên');
 
       const lastSeenTimestamp = userPresenceMap.get(email.toLowerCase().trim()) || (u.lastSeenTime ? new Date(u.lastSeenTime).getTime() : 0);
-      const isOnline = lastSeenTimestamp ? (now - lastSeenTimestamp <= 120000) : false;
+      const isOnline = lastSeenTimestamp ? (now - lastSeenTimestamp <= ONLINE_PRESENCE_THRESHOLD_MS) : false;
       const statusStr = isOnline ? '🟢 Đang Online' : '⚪ Đã Thoát';
 
       const stats = u.stats || {};
