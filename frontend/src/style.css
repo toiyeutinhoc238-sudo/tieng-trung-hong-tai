@@ -21831,6 +21831,7 @@ html.light-mode .home-vip-free-feature-card {
   color: #ffffff;
   background: linear-gradient(135deg, #ffffff 30%, #fde047 80%, #fb923c 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -21838,6 +21839,7 @@ html:not(.dark) .vip-feature-title,
 html.light-mode .vip-feature-title {
   background: linear-gradient(135deg, #1e293b 20%, #b45309 70%, #db2777 100%) !important;
   -webkit-background-clip: text !important;
+  background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
 }
 
