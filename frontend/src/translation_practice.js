@@ -675,6 +675,16 @@ window.randomLesson = function () {
 function setupGlobalControls() {
   // Theme toggle helper
   window.toggleTheme = function () {
+    const now = Date.now();
+    if (window.__lastThemeToggleTime && (now - window.__lastThemeToggleTime < 320)) return;
+    window.__lastThemeToggleTime = now;
+
+    if (typeof window.applyGlobalTheme === 'function') {
+      const isCurrentlyDark = document.documentElement.classList.contains('dark') || !document.documentElement.classList.contains('light-mode');
+      window.applyGlobalTheme(!isCurrentlyDark);
+      return;
+    }
+
     const isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
     const nextDark = isLight;
     const bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";

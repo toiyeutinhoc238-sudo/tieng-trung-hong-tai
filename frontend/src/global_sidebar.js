@@ -1283,8 +1283,6 @@ import './quick_dict_widget.js';
   window.ensureHeaderButtonSVGs = ensureHeaderButtonSVGs;
 
   // Universal Theme Management across all pages
-  let lastGlobalThemeToggleTime = 0;
-
   function applyGlobalTheme(isDark) {
     const bgUrl = isDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
     document.documentElement.style.setProperty('background-image', bgUrl, 'important');
@@ -1320,19 +1318,24 @@ import './quick_dict_widget.js';
     }
 
     const isLight = !isDark;
-    document.querySelectorAll('.theme-toggle-btn, #theme-toggle-btn, #floating-theme-toggle-btn, .rank-theme-btn, #theme-toggle, .theme-toggle-btn-top, .rd-theme-btn').forEach(btn => {
-      btn.innerHTML = isLight ? HEADER_ICONS.moon : HEADER_ICONS.sun;
-      btn.setAttribute('title', isLight ? 'Chuyển sang Chế độ Tối' : 'Chuyển sang Chế độ Sáng');
+    const fontAwesomeIcon = isDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun" style="color: #f59e0b;"></i>';
+    document.querySelectorAll('.theme-toggle-btn, #theme-toggle-btn, #floating-theme-toggle-btn, .rank-theme-btn, #theme-toggle, .theme-toggle-btn-top, .rd-theme-btn, .btn-theme-toggle').forEach(btn => {
+      if (typeof HEADER_ICONS !== 'undefined' && HEADER_ICONS && HEADER_ICONS.moon && (btn.querySelector('svg') || btn.classList.contains('header-icon-btn') || btn.classList.contains('theme-toggle-btn-top') || btn.classList.contains('rd-theme-btn'))) {
+        btn.innerHTML = isLight ? HEADER_ICONS.moon : HEADER_ICONS.sun;
+      } else {
+        btn.innerHTML = fontAwesomeIcon;
+      }
+      btn.setAttribute('title', isDark ? 'Chuyển sang Chế độ Sáng' : 'Chuyển sang Chế độ Tối');
     });
   }
   window.applyGlobalTheme = applyGlobalTheme;
 
   function globalToggleTheme() {
     const now = Date.now();
-    if (now - lastGlobalThemeToggleTime < 280) {
+    if (window.__lastThemeToggleTime && (now - window.__lastThemeToggleTime < 320)) {
       return;
     }
-    lastGlobalThemeToggleTime = now;
+    window.__lastThemeToggleTime = now;
 
     const isCurrentlyDark = document.documentElement.classList.contains('dark') || !document.documentElement.classList.contains('light-mode');
     const nextDark = !isCurrentlyDark;
@@ -1362,9 +1365,15 @@ import './quick_dict_widget.js';
     if (typeof _origUpdateToggleBtns === 'function') {
       try { _origUpdateToggleBtns(isLight); } catch (e) {}
     }
-    document.querySelectorAll('.theme-toggle-btn, #theme-toggle-btn, #floating-theme-toggle-btn, .rank-theme-btn, #theme-toggle, .theme-toggle-btn-top, .rd-theme-btn').forEach(btn => {
-      btn.innerHTML = isLight ? HEADER_ICONS.moon : HEADER_ICONS.sun;
-      btn.setAttribute('title', isLight ? 'Chuyển sang Chế độ Tối' : 'Chuyển sang Chế độ Sáng');
+    const isDark = !isLight;
+    const fontAwesomeIcon = isDark ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun" style="color: #f59e0b;"></i>';
+    document.querySelectorAll('.theme-toggle-btn, #theme-toggle-btn, #floating-theme-toggle-btn, .rank-theme-btn, #theme-toggle, .theme-toggle-btn-top, .rd-theme-btn, .btn-theme-toggle').forEach(btn => {
+      if (typeof HEADER_ICONS !== 'undefined' && HEADER_ICONS && HEADER_ICONS.moon && (btn.querySelector('svg') || btn.classList.contains('header-icon-btn') || btn.classList.contains('theme-toggle-btn-top') || btn.classList.contains('rd-theme-btn'))) {
+        btn.innerHTML = isLight ? HEADER_ICONS.moon : HEADER_ICONS.sun;
+      } else {
+        btn.innerHTML = fontAwesomeIcon;
+      }
+      btn.setAttribute('title', isDark ? 'Chuyển sang Chế độ Sáng' : 'Chuyển sang Chế độ Tối');
     });
   };
 

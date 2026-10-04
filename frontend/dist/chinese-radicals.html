@@ -43,7 +43,15 @@
       }
     })();
 
-    window.toggleTheme = function() {
+    window.toggleTheme = function () {
+      var now = Date.now();
+      if (window.__lastThemeToggleTime && (now - window.__lastThemeToggleTime < 320)) return;
+      window.__lastThemeToggleTime = now;
+      if (typeof window.applyGlobalTheme === 'function') {
+        var isDark = document.documentElement.classList.contains('dark') || !document.documentElement.classList.contains('light-mode');
+        window.applyGlobalTheme(!isDark);
+        return;
+      }
       var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
       var nextDark = isLight;
       var bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
@@ -607,9 +615,9 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/radicals-D5pke-vJ.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-2BasIO4n.js">
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-DmZ_Egv_.css">
+  <script type="module" crossorigin src="/assets/radicals-Ct7ZAlJF.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/global_sidebar-D7DTM-2U.js">
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-WgXJLgk2.css">
 </head>
 
 <body>

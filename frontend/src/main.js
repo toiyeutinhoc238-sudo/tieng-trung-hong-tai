@@ -529,14 +529,12 @@ function initTheme() {
   if (themeToggleBtn) themeToggleBtn.innerHTML = icon;
 }
 
-let lastMainThemeToggle = 0;
-
 function toggleTheme() {
   const now = Date.now();
-  if (now - lastMainThemeToggle < 280) {
+  if (window.__lastThemeToggleTime && (now - window.__lastThemeToggleTime < 320)) {
     return;
   }
-  lastMainThemeToggle = now;
+  window.__lastThemeToggleTime = now;
 
   const isCurrentlyDark = document.documentElement.classList.contains('dark') || !document.documentElement.classList.contains('light-mode');
   const nextDark = !isCurrentlyDark;
@@ -554,7 +552,7 @@ function toggleTheme() {
     window.ensureHeaderButtonSVGs();
   }
 
-  showToast(nextDark ? 'Đã chuyển sang chế độ tối' : 'Đã chuyển sang chế độ sáng');
+  showToast(nextDark ? 'Đã chuyển sang chế độ tối 🌙' : 'Đã chuyển sang chế độ sáng ☀️');
   if (!currentUser && typeof initGoogleSignIn === 'function') {
     initGoogleSignIn();
   }

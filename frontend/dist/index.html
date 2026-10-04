@@ -116,18 +116,46 @@
   <script>
     // Safe fallback function stubs while main JS module initializes
     window.openZubiStatDetail = window.openZubiStatDetail || function (type) { console.log('Initializing dashboard stat detail:', type); };
-    window.switchTab = window.switchTab || function (tab) { console.log('Initializing tab:', tab); };
-    window.toggleTheme = window.toggleTheme || function () {
+    window.toggleTheme = function () {
+      const now = Date.now();
+      if (window.__lastThemeToggleTime && (now - window.__lastThemeToggleTime < 320)) return;
+      window.__lastThemeToggleTime = now;
+      const isCurrentlyDark = document.documentElement.classList.contains('dark') || !document.documentElement.classList.contains('light-mode');
+      const nextDark = !isCurrentlyDark;
+      localStorage.setItem('theme', nextDark ? 'dark' : 'light');
       if (typeof window.applyGlobalTheme === 'function') {
-        const isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
-        window.applyGlobalTheme(isLight);
+        window.applyGlobalTheme(nextDark);
+      } else {
+        const bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
+        document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+        if (nextDark) {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light', 'light-mode');
+          if (document.body) {
+            document.body.classList.remove('light', 'light-mode');
+            document.body.classList.add('dark');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          }
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light', 'light-mode');
+          if (document.body) {
+            document.body.classList.remove('dark');
+            document.body.classList.add('light-mode');
+            document.body.style.setProperty('background-image', bgUrl, 'important');
+          }
+        }
       }
     };
-    window.toggleSeasonalParticles = window.toggleSeasonalParticles || function () {
+    window.toggleSeasonalParticles = function () {
+      const now = Date.now();
+      if (window.__lastParticleToggleTime && (now - window.__lastParticleToggleTime < 320)) return;
+      window.__lastParticleToggleTime = now;
       const cur = localStorage.getItem('particles_enabled') !== 'false';
       localStorage.setItem('particles_enabled', !cur ? 'true' : 'false');
       const cv = document.getElementById('seasonal-particle-canvas');
       if (cv) cv.style.display = !cur ? 'block' : 'none';
+      if (typeof window.initSeasonalParticles === 'function') window.initSeasonalParticles();
     };
     window.openSurveyModal = window.openSurveyModal || function () { const m = document.getElementById('student-survey-modal'); if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; } else { window.open('https://forms.gle/WaqZsrYrCZfAN5xn6', '_blank'); } };
     window.closeSurveyModal = window.closeSurveyModal || function () { const m = document.getElementById('student-survey-modal'); if (m) { m.style.display = 'none'; document.body.style.overflow = ''; } };
@@ -197,11 +225,11 @@
       }
     };
   </script>
-  <script type="module" crossorigin src="/assets/global_sidebar-2BasIO4n.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-D7DTM-2U.js"></script>
   <script type="module" crossorigin src="/assets/grammar_hsk3_v2-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/index-haNF1LmB.js"></script>
-  <script type="module" crossorigin src="/assets/main-Ctx09JJN.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-DmZ_Egv_.css">
+  <script type="module" crossorigin src="/assets/main-DLOhJ6Lu.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-WgXJLgk2.css">
 </head>
 
 <body>
@@ -495,6 +523,10 @@
             <i class="fa-solid fa-users-gear" style="color: #f43f5e;"></i> <span>Quản lý Học viên</span>
             <span
               style="font-size:0.68rem; background:linear-gradient(135deg, #f43f5e, #e11d48); color:white; padding:2px 6px; border-radius:6px; font-weight:800; margin-left:auto; white-space:nowrap;">Admin</span>
+          </li>
+        </ul>
+      </div>
+
       <!-- DANH MỤC 6: GIAO DIỆN -->
       <div class="sidebar-section-label">Giao Diện</div>
       <ul class="sidebar-menu" style="margin-bottom: 24px;">

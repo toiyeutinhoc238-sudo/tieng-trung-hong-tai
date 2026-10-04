@@ -212,7 +212,7 @@ html, body {
 
 body {
   font-family: var(--font-sans);
-  background: url('/assets/app_bg_night_v3.png') no-repeat center center fixed / cover !important;
+  background: url('/assets/app_bg_night_v3.png') no-repeat center center fixed / cover;
   color: var(--text-primary);
   line-height: 1.6;
   transition: background 0.5s ease-in-out, color var(--transition-normal);
@@ -8432,7 +8432,8 @@ html.dark {
   color: #f8fafc !important;
 }
 
-html.dark body {
+html.dark body,
+body.dark {
   background: url('/assets/app_bg_night_v3.png') no-repeat center center fixed / cover !important;
   color: #f8fafc !important;
   transition: background 0.5s ease-in-out;
@@ -8474,7 +8475,8 @@ html.dark .text-secondary {
 }
 
 /* ─── GLOBAL ABSOLUTE LIGHT MODE TEXT & ROADMAP OVERRIDES ─── */
-html.light-mode {
+html.light-mode,
+html.light {
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
   --bg-glass: #ffffff;
@@ -8488,7 +8490,10 @@ html.light-mode {
   color: #0f172a !important;
 }
 
-html.light-mode body {
+html.light-mode body,
+html.light body,
+body.light-mode,
+body.light {
   background: url('/assets/app_bg_day_v3.png') no-repeat center center fixed / cover !important;
   color: #0f172a !important;
   transition: background 0.5s ease-in-out;

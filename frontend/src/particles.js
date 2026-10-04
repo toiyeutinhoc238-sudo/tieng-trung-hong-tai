@@ -361,14 +361,12 @@ window.updateParticleToggleBtns = function (enabled) {
   });
 };
 
-let lastParticleToggleTime = 0;
-
 export function toggleSeasonalParticles() {
   const now = Date.now();
-  if (now - lastParticleToggleTime < 280) {
+  if (window.__lastParticleToggleTime && (now - window.__lastParticleToggleTime < 320)) {
     return;
   }
-  lastParticleToggleTime = now;
+  window.__lastParticleToggleTime = now;
 
   const current = localStorage.getItem('particles_enabled') !== 'false';
   const next = !current;
@@ -396,7 +394,7 @@ export function toggleSeasonalParticles() {
     }
   }
   if (typeof window.showToast === 'function') {
-    window.showToast(next ? 'Đã bật hiệu ứng mùa rơi 🍁' : 'Đã tắt hiệu ứng mùa rơi để tăng tốc độ ⚡');
+    window.showToast(next ? 'Đã bật hiệu ứng mùa rơi ❄️' : 'Đã tắt hiệu ứng mùa rơi để tăng tốc độ ⚡');
   }
 }
 window.toggleSeasonalParticles = toggleSeasonalParticles;

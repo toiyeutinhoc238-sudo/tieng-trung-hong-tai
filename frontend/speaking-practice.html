@@ -65,6 +65,14 @@
     })();
 
     window.toggleTheme = function () {
+      var now = Date.now();
+      if (window.__lastThemeToggleTime && (now - window.__lastThemeToggleTime < 320)) return;
+      window.__lastThemeToggleTime = now;
+      if (typeof window.applyGlobalTheme === 'function') {
+        var isDark = document.documentElement.classList.contains('dark') || !document.documentElement.classList.contains('light-mode');
+        window.applyGlobalTheme(!isDark);
+        return;
+      }
       var isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
       var nextDark = isLight;
       var bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";

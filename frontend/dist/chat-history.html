@@ -593,8 +593,8 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/global_sidebar-2BasIO4n.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-DmZ_Egv_.css">
+  <script type="module" crossorigin src="/assets/global_sidebar-D7DTM-2U.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-WgXJLgk2.css">
 </head>
 <body>
   <!-- Navbar -->
@@ -732,6 +732,16 @@
     }
 
     function toggleTheme() {
+      const now = Date.now();
+      if (window.__lastThemeToggleTime && (now - window.__lastThemeToggleTime < 320)) return;
+      window.__lastThemeToggleTime = now;
+
+      if (typeof window.applyGlobalTheme === 'function') {
+        const isCurrentlyDark = document.documentElement.classList.contains('dark') || !document.documentElement.classList.contains('light-mode');
+        window.applyGlobalTheme(!isCurrentlyDark);
+        return;
+      }
+
       const isLight = document.documentElement.classList.contains('light-mode') || document.documentElement.classList.contains('light');
       const nextDark = isLight;
       const bgUrl = nextDark ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
@@ -774,6 +784,9 @@
     window.toggleTheme = toggleTheme;
 
     window.toggleSeasonalParticles = function() {
+      const now = Date.now();
+      if (window.__lastParticleToggleTime && (now - window.__lastParticleToggleTime < 320)) return;
+      window.__lastParticleToggleTime = now;
       var current = localStorage.getItem('particles_enabled') !== 'false';
       var next = !current;
       localStorage.setItem('particles_enabled', next ? 'true' : 'false');
