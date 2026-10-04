@@ -59,6 +59,26 @@ const DICTATION_DB_PATH = path.join(__dirname, 'video_dictation_lessons.json');
 const USER_DB_PATH = path.join(__dirname, 'user_data.json');
 const AUDIO_CACHE_DIR = path.join(__dirname, 'audio_cache');
 
+// Graceful shutdown handler: guarantees in-memory data is instantly flushed to disk on Render redeploy/restart
+function flushOnExit() {
+  try {
+    if (cachedUserData && Object.keys(cachedUserData.users || {}).length >= 50) {
+      console.log("[Shutdown] Flushing cachedUserData to user_data.json before process termination...");
+      fsSync.writeFileSync(USER_DB_PATH, JSON.stringify(cachedUserData), 'utf-8');
+    }
+  } catch (err) {
+    console.error("[Shutdown] Flush error:", err.message);
+  }
+}
+process.on('SIGTERM', () => {
+  flushOnExit();
+  process.exit(0);
+});
+process.on('SIGINT', () => {
+  flushOnExit();
+  process.exit(0);
+});
+
 // AI Clients initialization
 const groqApiKey = process.env.GROQ_API_KEY;
 const groqClient = groqApiKey ? new Groq({ apiKey: groqApiKey }) : null;
