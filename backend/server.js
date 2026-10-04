@@ -283,11 +283,16 @@ app.use('/api', (req, res, next) => {
   next();
 });
 
-// Helper to read built-in database
+// Helper to read built-in database with singleton in-memory cache to prevent OOM
+let cachedMasterDatabase = null;
 async function readDatabase() {
+  if (cachedMasterDatabase) {
+    return cachedMasterDatabase;
+  }
   try {
     const data = await fs.readFile(DB_PATH, 'utf-8');
-    return JSON.parse(data);
+    cachedMasterDatabase = JSON.parse(data);
+    return cachedMasterDatabase;
   } catch (error) {
     console.error('Error reading database, returning empty list:', error);
     return [];
@@ -4963,10 +4968,13 @@ app.delete('/api/discussions/:id', async (req, res) => {
 const BOOKS_CATALOG_PATH = path.join(__dirname, 'books_catalog.json');
 const BOOK_INTERACTIONS_PATH = path.join(__dirname, 'book_interactions.json');
 
+let cachedBooksCatalog = null;
 async function readBooksCatalog() {
+  if (cachedBooksCatalog) return cachedBooksCatalog;
   try {
     const data = await fs.readFile(BOOKS_CATALOG_PATH, 'utf-8');
-    return JSON.parse(data);
+    cachedBooksCatalog = JSON.parse(data);
+    return cachedBooksCatalog;
   } catch (e) {
     console.error('Error reading books_catalog.json:', e);
     return [];
@@ -5749,12 +5757,16 @@ app.post('/api/dictation/record-completion', async (req, res) => {
 });
 
 const HSK_PASSAGES_PATH = path.join(__dirname, 'hsk_listening_passages.json');
+let cachedHskPassages = null;
 
 // GET /api/dictation/hsk-passages — Lấy danh sách đoạn văn nghe chép HSK 1, 2, 3
 app.get('/api/dictation/hsk-passages', async (req, res) => {
   try {
-    const data = await fs.readFile(HSK_PASSAGES_PATH, 'utf-8');
-    const passages = JSON.parse(data);
+    if (!cachedHskPassages) {
+      const data = await fs.readFile(HSK_PASSAGES_PATH, 'utf-8');
+      cachedHskPassages = JSON.parse(data);
+    }
+    const passages = cachedHskPassages;
     const { level } = req.query;
     if (level) {
       const lvlNum = parseInt(level, 10);

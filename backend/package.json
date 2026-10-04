@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch server.js",
-    "start": "node server.js",
+    "start": "node --max-old-space-size=460 server.js",
     "preload-tts": "node scripts/preload_tts_cache.js"
   },
   "dependencies": {
