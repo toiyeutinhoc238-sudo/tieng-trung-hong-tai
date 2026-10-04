@@ -122,6 +122,45 @@
     window.toggleTheme = window.toggleTheme || function () { };
     window.openSurveyModal = window.openSurveyModal || function () { const m = document.getElementById('student-survey-modal'); if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; } else { window.open('https://forms.gle/WaqZsrYrCZfAN5xn6', '_blank'); } };
     window.closeSurveyModal = window.closeSurveyModal || function () { const m = document.getElementById('student-survey-modal'); if (m) { m.style.display = 'none'; document.body.style.overflow = ''; } };
+
+    window.openVipUpgradeModal = function (tabName) {
+      const modal = document.getElementById('vip-upgrade-modal');
+      if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        if (tabName) window.switchVipModalTab(tabName);
+      } else {
+        window.open('https://forms.gle/3Cvu1Sm2doLcB6qP8', '_blank');
+      }
+    };
+    window.closeVipUpgradeModal = function () {
+      const modal = document.getElementById('vip-upgrade-modal');
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    };
+    window.switchVipModalTab = function (tabKey) {
+      const tabs = ['trial', 'comparison', 'pricing', 'payment'];
+      tabs.forEach(function (t) {
+        const btn = document.getElementById('vip-tab-btn-' + t);
+        const pane = document.getElementById('vip-tab-pane-' + t);
+        if (btn) {
+          if (t === tabKey) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+        if (pane) {
+          pane.style.display = (t === tabKey) ? 'flex' : 'none';
+        }
+      });
+    };
+    window.selectVipPackage = function (packageName) {
+      window.switchVipModalTab('payment');
+      const memoEl = document.getElementById('vip-suggested-memo');
+      if (memoEl) {
+        memoEl.textContent = '[Email/SĐT] ' + packageName;
+      }
+    };
   </script>
 </head>
 
@@ -283,9 +322,17 @@
     <div class="sidebar-menu-wrapper" style="width: 100%; box-sizing: border-box;">
 
       <!-- TRANG CHỦ -->
-      <ul class="sidebar-menu" style="margin-bottom: 12px;">
+      <ul class="sidebar-menu" style="margin-bottom: 8px;">
         <li class="sidebar-item active" data-tab="home" id="sidebar-nav-home" onclick="window.switchTab('home')">
           <i class="fa-solid fa-house"></i> <span>Trang chủ</span>
+        </li>
+      </ul>
+
+      <!-- NÂNG CẤP VIP (30 NGÀY MIỄN PHÍ) -->
+      <ul class="sidebar-menu" style="margin-bottom: 12px;">
+        <li class="sidebar-item sidebar-vip-item" id="sidebar-nav-vip" onclick="window.openVipUpgradeModal('trial')">
+          <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> <span>Nâng Cấp VIP</span>
+          <span class="sidebar-vip-badge">30N FREE</span>
         </li>
       </ul>
 
@@ -783,13 +830,23 @@
           </div>
         </div>
 
-        <!-- NÚT KHẢO SÁT HỌC VIÊN TRÊN HERO BANNER -->
-        <div class="home-survey-hero-wrap" style="margin-top: 14px;">
+        <!-- NÚT KHẢO SÁT & NÂNG CẤP VIP TRÊN HERO BANNER -->
+        <div class="home-survey-hero-wrap" style="margin-top: 14px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <!-- Nút Tặng 30 Ngày VIP Miễn Phí -->
+          <a href="javascript:void(0)" class="vip-hero-pill-btn" onclick="window.openVipUpgradeModal('trial')"
+            title="Nhận ngay 30 ngày trải nghiệm tài khoản VIP miễn phí">
+            <span class="vip-pill-icon"><i class="fa-solid fa-crown"></i></span>
+            <span>Tặng 30 Ngày VIP Miễn Phí</span>
+            <span class="vip-pill-tag">HOT 🔥</span>
+            <span class="vip-pill-sparkle"><i class="fa-solid fa-sparkles"></i></span>
+          </a>
+
+          <!-- Nút Khảo sát ý kiến học viên -->
           <a href="https://forms.gle/WaqZsrYrCZfAN5xn6" target="_blank" rel="noopener noreferrer" class="survey-hero-pill-btn"
             onclick="if(window.openSurveyModal){ event.preventDefault(); window.openSurveyModal(); }"
             title="Đóng góp ý kiến trải nghiệm để nhận quà tặng và giúp Hongtai ngày một tốt hơn">
             <span class="survey-pill-icon"><i class="fa-solid fa-clipboard-question"></i></span>
-            <span class="survey-pill-text">Khảo Sát Ý Kiến &amp; Trải Nghiệm Học Viên</span>
+            <span class="survey-pill-text">Khảo Sát Ý Kiến &amp; Trải Nghiệm</span>
             <span class="survey-pill-tag">Đóng góp 🎁</span>
             <i class="fa-solid fa-arrow-up-right-from-square survey-pill-arrow"></i>
           </a>
@@ -838,9 +895,99 @@
         </div>
       </div>
 
-      <!-- ROW 3: LEARNING PROGRESS BAR CHART PANEL (Ẩn trên Dashboard trang chủ theo yêu cầu người dùng, hiển thị khi bấm vào biểu tượng mắt trên chuỗi Streak) -->
-      <div id="home-weekly-chart-panel" style="display: none !important;">
-        <div id="home-weekly-chart-bars"></div>
+      <!-- ROW 3: ĐẶC QUYỀN VIP - TẶNG MIỄN PHÍ 30 NGÀY VIP (HONGTAI CHINESE) -->
+      <div class="home-vip-free-feature-card">
+        <div class="vip-card-glow-bg"></div>
+        
+        <!-- Header -->
+        <div class="vip-feature-header">
+          <div class="vip-feature-badge-row">
+            <span class="vip-badge-highlight"><i class="fa-solid fa-crown"></i> ĐẶC QUYỀN HỌC VIÊN</span>
+            <span class="vip-badge-free"><i class="fa-solid fa-gift"></i> MIỄN PHÍ 100%</span>
+            <span class="vip-badge-pill"><i class="fa-solid fa-calendar-check"></i> TRẢI NGHIỆM 30 NGÀY VIP</span>
+          </div>
+          <h2 class="vip-feature-title">
+            🎁 Nhận Ngay 30 Ngày Trải Nghiệm VIP Toàn Bộ Tính Năng Nền Tảng
+          </h2>
+          <p class="vip-feature-desc">
+            Nhằm tạo điều kiện cho tất cả học viên và giáo viên trải nghiệm trọn vẹn, Tiếng Trung Hongtai trân trọng dành tặng <strong>30 NGÀY VIP HOÀN TOÀN MIỄN PHÍ</strong>. Mở khóa toàn bộ từ vựng HSK 1 - 6/9, kho giáo trình điện tử, AI sửa bài và video shadowing không giới hạn!
+          </p>
+        </div>
+
+        <!-- 3 Steps Grid -->
+        <div class="vip-steps-grid">
+          <!-- Step 1 -->
+          <div class="vip-step-card">
+            <div class="vip-step-header">
+              <span class="vip-step-num">BƯỚC 1</span>
+              <div class="vip-step-icon tiktok">
+                <i class="fa-brands fa-tiktok"></i>
+              </div>
+            </div>
+            <div class="vip-step-content">
+              <div class="vip-step-title">Theo Dõi TikTok</div>
+              <div class="vip-step-sub">Nhấn Follow kênh TikTok chính thức <strong>@tieng.trung.hongtai</strong> để cập nhật mẹo học mỗi ngày.</div>
+            </div>
+            <a href="https://www.tiktok.com/@tieng.trung.hongtai?_r=1&_t=ZS-9AFZPcFKZTV" target="_blank" rel="noopener noreferrer" class="vip-step-action-btn tiktok">
+              <i class="fa-brands fa-tiktok"></i>
+              <span>Follow Kênh TikTok ↗</span>
+            </a>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="vip-step-card">
+            <div class="vip-step-header">
+              <span class="vip-step-num">BƯỚC 2</span>
+              <div class="vip-step-icon facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+              </div>
+            </div>
+            <div class="vip-step-content">
+              <div class="vip-step-title">Follow Fanpage</div>
+              <div class="vip-step-sub">Nhấn Thích &amp; Theo dõi (Like &amp; Follow) Fanpage Facebook <strong>Tiếng Trung Hongtai</strong>.</div>
+            </div>
+            <a href="https://www.facebook.com/share/17fZtn5f9v/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="vip-step-action-btn facebook">
+              <i class="fa-brands fa-facebook"></i>
+              <span>Follow Fanpage Facebook ↗</span>
+            </a>
+          </div>
+
+          <!-- Step 3 (Highlighted) -->
+          <div class="vip-step-card highlighted">
+            <div class="vip-step-header">
+              <span class="vip-step-num gold">BƯỚC 3 • QUAN TRỌNG</span>
+              <div class="vip-step-icon gift">
+                <i class="fa-solid fa-gift"></i>
+              </div>
+            </div>
+            <div class="vip-step-content">
+              <div class="vip-step-title">Gửi Ảnh Xác Nhận VIP</div>
+              <div class="vip-step-sub">Chụp ảnh màn hình đã follow 2 kênh trên và điền biểu mẫu để được kích hoạt tài khoản VIP 30 ngày.</div>
+            </div>
+            <a href="https://forms.gle/3Cvu1Sm2doLcB6qP8" target="_blank" rel="noopener noreferrer" class="vip-step-action-btn gift">
+              <i class="fa-solid fa-paper-plane"></i>
+              <span>Điền Form Nhận VIP 30N 🚀</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="vip-feature-footer">
+          <div class="vip-footer-notice">
+            <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 1.1rem;"></i>
+            <span>Tài khoản VIP sẽ được admin đối soát và kích hoạt trong vòng 1-24h làm việc.</span>
+          </div>
+          <div class="vip-footer-btns">
+            <button type="button" class="btn-vip-details-secondary" onclick="window.openVipUpgradeModal('comparison')">
+              <i class="fa-solid fa-table-list"></i>
+              <span>Xem So Sánh Quyền Lợi &amp; Bảng Giá</span>
+            </button>
+            <a href="https://forms.gle/3Cvu1Sm2doLcB6qP8" target="_blank" rel="noopener noreferrer" class="btn-vip-claim-main">
+              <i class="fa-solid fa-crown"></i>
+              <span>Nhận 30 Ngày VIP Miễn Phí Ngay</span>
+            </a>
+          </div>
+        </div>
       </div>
 
       <!-- ROW 3.5: FEATURED SURVEY CARD (Khảo sát ý kiến học viên) -->
@@ -4019,6 +4166,370 @@
   <script src="/assets/hanzi-writer.min.js"></script>
   <script type="module" src="/src/main.js"></script>
   <script type="module" src="/src/global_sidebar.js"></script>
+
+  <!-- Modal Nâng Cấp VIP & Nhận 30 Ngày Miễn Phí (Hongtai VIP Upgrade Modal) -->
+  <div class="modal-overlay" id="vip-upgrade-modal" onclick="if(event.target === this) window.closeVipUpgradeModal();"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(14px); z-index: 99999; align-items: center; justify-content: center; padding: 14px;">
+    <div class="modal-card glass-panel"
+      style="background: #0f172a; border: 1.5px solid rgba(245, 158, 11, 0.45); border-radius: 26px; width: 100%; max-width: 860px; height: 92vh; max-height: 860px; box-shadow: 0 25px 65px rgba(0,0,0,0.7), 0 0 35px rgba(245, 158, 11, 0.2); color: #ffffff; position: relative; display: flex; flex-direction: column; overflow: hidden;">
+      
+      <!-- Modal Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(15, 23, 42, 0.95); flex-shrink: 0;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #ec4899); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #fff; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0; font-family: var(--font-display, sans-serif);">
+              Nâng Cấp Tài Khoản VIP Tiếng Trung Hongtai
+            </h3>
+            <p style="font-size: 0.8rem; color: #cbd5e1; margin: 0;">Mở khóa trọn bộ đặc quyền • Trải nghiệm học tập vượt trội</p>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button onclick="window.closeVipUpgradeModal()"
+            style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #cbd5e1; font-size: 1.25rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+            &times;
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div style="display: flex; align-items: center; gap: 8px; padding: 12px 22px; background: rgba(15, 23, 42, 0.7); border-bottom: 1px solid rgba(255, 255, 255, 0.08); overflow-x: auto; flex-shrink: 0;">
+        <button type="button" class="vip-modal-tab-btn active" id="vip-tab-btn-trial" onclick="window.switchVipModalTab('trial')">
+          <i class="fa-solid fa-gift"></i>
+          <span>🎁 Tặng 30 Ngày VIP Miễn Phí</span>
+        </button>
+        <button type="button" class="vip-modal-tab-btn" id="vip-tab-btn-comparison" onclick="window.switchVipModalTab('comparison')">
+          <i class="fa-solid fa-table-list"></i>
+          <span>⭐ Bảng So Sánh Quyền Lợi</span>
+        </button>
+        <button type="button" class="vip-modal-tab-btn" id="vip-tab-btn-pricing" onclick="window.switchVipModalTab('pricing')">
+          <i class="fa-solid fa-tags"></i>
+          <span>💰 Bảng Giá Các Gói</span>
+        </button>
+        <button type="button" class="vip-modal-tab-btn" id="vip-tab-btn-payment" onclick="window.switchVipModalTab('payment')">
+          <i class="fa-solid fa-credit-card"></i>
+          <span>💳 Hướng Dẫn Kích Hoạt</span>
+        </button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div style="flex: 1; overflow-y: auto; padding: 22px; display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- TAB 1: 30 DAYS FREE TRIAL -->
+        <div id="vip-tab-pane-trial" class="vip-tab-pane" style="display: flex; flex-direction: column; gap: 18px;">
+          <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(236, 72, 153, 0.12) 100%); border: 1.5px solid rgba(245, 158, 11, 0.35); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; font-size: 0.75rem; font-weight: 900; padding: 3px 10px; border-radius: 99px;">KHUYẾN MÃI ĐẶC BIỆT</span>
+              <span style="font-size: 0.85rem; color: #fde047; font-weight: 700;">Áp dụng cho mọi học viên &amp; giáo viên</span>
+            </div>
+            <h4 style="font-size: 1.35rem; font-weight: 900; color: #fff; margin: 0; line-height: 1.3;">
+              Chương Trình Trải Nghiệm Miễn Phí 30 Ngày VIP
+            </h4>
+            <p style="font-size: 0.92rem; color: #cbd5e1; margin: 0; line-height: 1.6;">
+              Nhằm tạo điều kiện cho tất cả học viên và giáo viên trải nghiệm trọn vẹn nền tảng học tiếng Trung hiện đại, Tiếng Trung Hongtai trân trọng triển khai chương trình tặng <strong>30 NGÀY VIP HOÀN TOÀN MIỄN PHÍ</strong>.
+            </p>
+          </div>
+
+          <!-- Steps -->
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <!-- Step 1 Item -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 16px; flex: 1; min-width: 250px;">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: #000; color: #22d3ee; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(34, 211, 238, 0.4); flex-shrink: 0;">
+                  <i class="fa-brands fa-tiktok"></i>
+                </div>
+                <div>
+                  <div style="font-size: 0.78rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Bước 1</div>
+                  <div style="font-size: 0.98rem; font-weight: 800; color: #fff;">Nhấn Theo dõi (Follow) kênh TikTok chính thức</div>
+                  <div style="font-size: 0.85rem; color: #cbd5e1;">Kênh chia sẻ phát âm, từ vựng và mẹo giao tiếp hàng ngày @tieng.trung.hongtai</div>
+                </div>
+              </div>
+              <a href="https://www.tiktok.com/@tieng.trung.hongtai?_r=1&_t=ZS-9AFZPcFKZTV" target="_blank" rel="noopener noreferrer"
+                style="padding: 10px 18px; border-radius: 12px; background: #000; color: #38bdf8; border: 1px solid #22d3ee; font-size: 0.88rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                <i class="fa-brands fa-tiktok"></i> <span>Mở TikTok ↗</span>
+              </a>
+            </div>
+
+            <!-- Step 2 Item -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 16px; flex: 1; min-width: 250px;">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(59, 130, 246, 0.4); flex-shrink: 0;">
+                  <i class="fa-brands fa-facebook-f"></i>
+                </div>
+                <div>
+                  <div style="font-size: 0.78rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Bước 2</div>
+                  <div style="font-size: 0.98rem; font-weight: 800; color: #fff;">Nhấn Thích &amp; Theo dõi (Like &amp; Follow) Fanpage Facebook</div>
+                  <div style="font-size: 0.85rem; color: #cbd5e1;">Cộng đồng học viên, thông báo học tập &amp; tài liệu PDF Tiếng Trung Hongtai</div>
+                </div>
+              </div>
+              <a href="https://www.facebook.com/share/17fZtn5f9v/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"
+                style="padding: 10px 18px; border-radius: 12px; background: #2563eb; color: #fff; border: none; font-size: 0.88rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                <i class="fa-brands fa-facebook-f"></i> <span>Mở Facebook ↗</span>
+              </a>
+            </div>
+
+            <!-- Step 3 Item -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(49, 10, 52, 0.9)); border: 1.5px solid rgba(245, 158, 11, 0.5); border-radius: 16px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 16px; flex: 1; min-width: 250px;">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);">
+                  <i class="fa-solid fa-gift"></i>
+                </div>
+                <div>
+                  <div style="font-size: 0.78rem; font-weight: 900; color: #fde047; text-transform: uppercase;">Bước 3 • Hoàn thành &amp; Nhận VIP</div>
+                  <div style="font-size: 1rem; font-weight: 800; color: #fff;">Chụp ảnh màn hình &amp; điền vào biểu mẫu xác nhận</div>
+                  <div style="font-size: 0.85rem; color: #cbd5e1;">Điền tài khoản bạn đã đăng ký để admin tiến hành kích hoạt ngay</div>
+                </div>
+              </div>
+              <a href="https://forms.gle/3Cvu1Sm2doLcB6qP8" target="_blank" rel="noopener noreferrer"
+                style="padding: 12px 22px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; border: none; font-size: 0.92rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);">
+                <i class="fa-solid fa-paper-plane"></i> <span>Gửi Biểu Mẫu Nhận VIP 🚀</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Bottom Notice -->
+          <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; gap: 12px;">
+            <i class="fa-solid fa-circle-check" style="color: #34d399; font-size: 1.3rem; flex-shrink: 0;"></i>
+            <div style="font-size: 0.86rem; color: #cbd5e1; line-height: 1.5;">
+              <strong>Thời gian xử lý:</strong> Sau khi bạn gửi form, hệ thống sẽ đối soát và kích hoạt VIP trong vòng <strong>1 - 24 giờ</strong> làm việc. Chúc bạn có thời gian học tập hiệu quả và tiến bộ vượt bậc!
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: COMPARISON TABLE -->
+        <div id="vip-tab-pane-comparison" class="vip-tab-pane" style="display: none; flex-direction: column; gap: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <h4 style="font-size: 1.25rem; font-weight: 800; margin: 0; color: #fff;">Bảng So Sánh Quyền Lợi Học Viên</h4>
+              <p style="font-size: 0.85rem; color: #94a3b8; margin: 4px 0 0 0;">So sánh tính năng giữa Tài khoản Miễn Phí và Tài khoản VIP (PRO)</p>
+            </div>
+            <button onclick="window.switchVipModalTab('trial')" style="background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); color: #fde047; font-size: 0.82rem; font-weight: 800; padding: 6px 14px; border-radius: 99px; cursor: pointer;">
+              🎁 Nhận 30N miễn phí trước
+            </button>
+          </div>
+
+          <table class="vip-comparison-table">
+            <thead>
+              <tr>
+                <th style="width: 34%;">TÍNH NĂNG / PHẠM VI HỌC TẬP</th>
+                <th style="width: 33%;">TÀI KHOẢN THƯỜNG (MIỄN PHÍ)</th>
+                <th class="vip-col-header" style="width: 33%;">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-crown" style="color: #fbbf24;"></i>
+                    <span>TÀI KHOẢN VIP (PRO)</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Phạm vi cấp độ HSK</strong></td>
+                <td>Miễn phí 100% toàn bộ HSK 1</td>
+                <td class="vip-cell"><i class="fa-solid fa-check"></i> Mở khóa toàn bộ từ HSK 1 đến HSK 6/9</td>
+              </tr>
+              <tr>
+                <td><strong>Kho Sách &amp; Giáo Trình Điện Tử</strong></td>
+                <td>Không hỗ trợ</td>
+                <td class="vip-cell"><i class="fa-solid fa-check"></i> MỞ KHÓA TOÀN BỘ KHO SÁCH (HSK Tiêu chuẩn, Boya, 301 câu...)</td>
+              </tr>
+              <tr>
+                <td><strong>AI Chấm câu tự đặt &amp; Sửa ngữ pháp</strong></td>
+                <td>Áp dụng đầy đủ cho toàn bộ từ vựng HSK 1</td>
+                <td class="vip-cell"><i class="fa-solid fa-check"></i> Không giới hạn cho mọi cấp độ</td>
+              </tr>
+              <tr>
+                <td><strong>Xuất file PDF phiếu tập viết chữ Hán</strong></td>
+                <td>Xuất không giới hạn tất cả các bài thuộc HSK 1</td>
+                <td class="vip-cell"><i class="fa-solid fa-check"></i> Tự do xuất toàn bộ các bài học</td>
+              </tr>
+              <tr>
+                <td><strong>Luyện nghe chép video</strong></td>
+                <td>Mở toàn bộ video cấp độ HSK 1</td>
+                <td class="vip-cell"><i class="fa-solid fa-check"></i> Mở full kho video thực tế mọi cấp độ</td>
+              </tr>
+              <tr>
+                <td><strong>Minigame &amp; Flashcard ôn tập</strong></td>
+                <td>Đầy đủ 5 game cho kho từ HSK 1</td>
+                <td class="vip-cell"><i class="fa-solid fa-check"></i> Tự do chọn bài, ghép bài ôn tập theo ý muốn</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="display: flex; justify-content: center; gap: 14px; margin-top: 10px; flex-wrap: wrap;">
+            <button onclick="window.switchVipModalTab('pricing')" class="btn-vip-claim-main" style="padding: 11px 24px;">
+              <i class="fa-solid fa-tags"></i>
+              <span>Xem Bảng Giá Gói Dài Hạn</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 3: PRICING -->
+        <div id="vip-tab-pane-pricing" class="vip-tab-pane" style="display: none; flex-direction: column; gap: 18px;">
+          <div style="text-align: center;">
+            <h4 style="font-size: 1.35rem; font-weight: 900; margin: 0; color: #fff;">Bảng Giá Các Gói Nâng Cấp Dài Hạn</h4>
+            <p style="font-size: 0.88rem; color: #cbd5e1; margin: 6px 0 0 0;">Mức giá ưu đãi áp dụng có hạn trong giai đoạn ra mắt hệ thống</p>
+          </div>
+
+          <div class="vip-pricing-grid">
+            <!-- 3 Months -->
+            <div class="vip-price-card">
+              <div class="vip-price-name">GÓI 3 THÁNG</div>
+              <div style="font-size: 0.82rem; color: #94a3b8; font-weight: 700;">(Cấp tốc)</div>
+              <div>
+                <div class="vip-original-price">299.000 VNĐ</div>
+                <div class="vip-discount-price">199.000<span style="font-size: 1.1rem;">đ</span></div>
+                <div class="vip-per-month">~66.000 VNĐ / tháng</div>
+              </div>
+              <ul class="vip-price-features">
+                <li><i class="fa-solid fa-check"></i> Mở khóa toàn bộ HSK 1 - 6/9</li>
+                <li><i class="fa-solid fa-check"></i> Mở toàn bộ kho sách giáo trình</li>
+                <li><i class="fa-solid fa-check"></i> AI chấm điểm &amp; sửa câu</li>
+                <li><i class="fa-solid fa-check"></i> Xuất PDF phiếu viết chữ Hán</li>
+              </ul>
+              <button type="button" class="vip-price-btn" onclick="window.selectVipPackage('Gói 3 Tháng - 199.000 VNĐ')">
+                <span>Chọn Gói 3 Tháng</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+
+            <!-- 6 Months -->
+            <div class="vip-price-card">
+              <div class="vip-price-name">GÓI 6 THÁNG</div>
+              <div style="font-size: 0.82rem; color: #94a3b8; font-weight: 700;">(Bứt phá)</div>
+              <div>
+                <div class="vip-original-price">549.000 VNĐ</div>
+                <div class="vip-discount-price">349.000<span style="font-size: 1.1rem;">đ</span></div>
+                <div class="vip-per-month">~58.000 VNĐ / tháng</div>
+              </div>
+              <ul class="vip-price-features">
+                <li><i class="fa-solid fa-check"></i> Toàn bộ quyền lợi gói 3 tháng</li>
+                <li><i class="fa-solid fa-check"></i> Tiết kiệm 36% chi phí học</li>
+                <li><i class="fa-solid fa-check"></i> Không giới hạn video shadowing</li>
+                <li><i class="fa-solid fa-check"></i> Mở khóa toàn bộ 5 trò chơi</li>
+              </ul>
+              <button type="button" class="vip-price-btn" onclick="window.selectVipPackage('Gói 6 Tháng - 349.000 VNĐ')">
+                <span>Chọn Gói 6 Tháng</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+
+            <!-- 1 Year (Recommended) -->
+            <div class="vip-price-card recommended">
+              <div class="vip-ribbon">⭐ TIẾT KIỆM NHẤT • KHUYÊN DÙNG</div>
+              <div class="vip-price-name">GÓI 1 NĂM</div>
+              <div style="font-size: 0.82rem; color: #fde047; font-weight: 800;">(Toàn diện &amp; Chuyên sâu)</div>
+              <div>
+                <div class="vip-original-price">999.000 VNĐ</div>
+                <div class="vip-discount-price" style="color: #fbbf24;">599.000<span style="font-size: 1.1rem;">đ</span></div>
+                <div class="vip-per-month" style="color: #34d399; font-weight: 800;">~49.000 VNĐ / tháng</div>
+              </div>
+              <ul class="vip-price-features">
+                <li><i class="fa-solid fa-check"></i> 365 ngày VIP không giới hạn</li>
+                <li><i class="fa-solid fa-check"></i> Tiết kiệm tới 40% chi phí</li>
+                <li><i class="fa-solid fa-check"></i> Tự động cập nhật mọi tính năng mới</li>
+                <li><i class="fa-solid fa-check"></i> Ưu tiên hỗ trợ từ đội ngũ giáo viên</li>
+              </ul>
+              <button type="button" class="vip-price-btn" onclick="window.selectVipPackage('Gói 1 Năm - 599.000 VNĐ')">
+                <span>Đăng Ký Gói 1 Năm</span>
+                <i class="fa-solid fa-crown"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: PAYMENT / ACTIVATION -->
+        <div id="vip-tab-pane-payment" class="vip-tab-pane" style="display: none; flex-direction: column; gap: 18px;">
+          <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 0.8rem; font-weight: 800; color: #fbbf24; text-transform: uppercase;">
+              Quy Trình Kích Hoạt Tự Động Qua Chuyển Khoản:
+            </div>
+            <div style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.6;">
+              <strong>Bước 1:</strong> Chọn gói thời hạn phù hợp (3 tháng, 6 tháng hoặc 1 năm).<br>
+              <strong>Bước 2:</strong> Thực hiện chuyển khoản qua mã QR hoặc STK ACB bên dưới.<br>
+              <strong>Bước 3:</strong> Chụp lại biên lai giao dịch thành công và gửi vào biểu mẫu xác nhận.
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; align-items: start;">
+            <!-- QR Box -->
+            <div style="background: rgba(255, 255, 255, 0.03); border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+              <span style="font-size: 0.9rem; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-qrcode"></i> Quét Mã QR Thanh Toán Nhanh
+              </span>
+              <div style="background: #ffffff; padding: 12px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); max-width: 240px; width: 100%;">
+                <img src="/assets/ma_qr.jpg" alt="Mã QR Chuyển Khoản Ngân Hàng Tiếng Trung HongTai"
+                  style="width: 100%; height: auto; border-radius: 10px; display: block;" />
+              </div>
+              <span style="font-size: 0.78rem; color: #94a3b8;">Hỗ trợ tất cả ứng dụng Ngân hàng &amp; Ví Momo</span>
+            </div>
+
+            <!-- Transfer Info Box -->
+            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Ngân hàng / Ví</span>
+                <span style="font-size: 0.95rem; color: #fbbf24; font-weight: 800;"><i class="fa-solid fa-building-columns"></i> ACB / MOMO</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Chủ tài khoản</span>
+                <span style="font-size: 0.95rem; color: #ffffff; font-weight: 800;">LE THI HONG THAI</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Số điện thoại / Momo</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 1.05rem; color: #34d399; font-weight: 800; font-family: monospace;">0387550186</span>
+                  <button type="button" onclick="navigator.clipboard.writeText('0387550186'); alert('Đã sao chép số điện thoại!');"
+                    style="background: rgba(52, 211, 153, 0.2); border: 1px solid rgba(52, 211, 153, 0.4); color: #34d399; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">
+                    <i class="fa-solid fa-copy"></i>
+                  </button>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">Mã tài khoản ACB</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 0.95rem; color: #38bdf8; font-weight: 800; font-family: monospace;">PHATLOC316046</span>
+                  <button type="button" onclick="navigator.clipboard.writeText('PHATLOC316046'); alert('Đã sao chép mã tài khoản ACB!');"
+                    style="background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">
+                    <i class="fa-solid fa-copy"></i>
+                  </button>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px; background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 600;">Nội dung chuyển khoản gợi ý:</span>
+                <span id="vip-suggested-memo" style="font-size: 0.92rem; color: #fbbf24; font-weight: 800; font-family: monospace;">[Email/SĐT] NANG CAP VIP</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 Action: Submit Receipt -->
+          <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(49, 10, 52, 0.85)); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 18px; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+            <div>
+              <div style="font-size: 0.78rem; font-weight: 800; color: #fde047; text-transform: uppercase;">Bước 3: Gửi biên lai kích hoạt</div>
+              <div style="font-size: 1rem; font-weight: 800; color: #fff;">Đã chuyển khoản thành công?</div>
+              <div style="font-size: 0.85rem; color: #cbd5e1;">Gửi ảnh biên lai vào biểu mẫu bên cạnh để hệ thống kích hoạt tài khoản ngay.</div>
+            </div>
+            <a href="https://forms.gle/xvM5Nz1xmPuY6JVm7" target="_blank" rel="noopener noreferrer" class="btn-vip-claim-main" style="padding: 12px 24px;">
+              <i class="fa-solid fa-receipt"></i>
+              <span>Gửi Biên Lai Kích Hoạt 🚀</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 22px; border-top: 1px solid rgba(255, 255, 255, 0.1); background: rgba(15, 23, 42, 0.95); flex-shrink: 0; flex-wrap: wrap; gap: 10px;">
+        <span style="font-size: 0.82rem; color: #94a3b8;">
+          <i class="fa-solid fa-phone" style="color: #38bdf8;"></i> Hỗ trợ / Zalo: <strong>0387550186</strong>
+        </span>
+        <button type="button" onclick="window.closeVipUpgradeModal()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; padding: 8px 18px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer;">
+          Đóng cửa sổ
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal Yêu Cầu Đăng Nhập (Auth Required Modal) -->
   <div class="modal-overlay" id="auth-required-modal" onclick="if(event.target === this) this.style.display='none';"
