@@ -15797,6 +15797,26 @@ window.selectVipPackage = function (packageName) {
   }
 };
 
+window.copyVipMemo = function () {
+  const memoEl = document.getElementById('vip-suggested-memo');
+  const text = memoEl ? (memoEl.textContent || memoEl.innerText || '').trim() : '';
+  if (text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        if (typeof window.showToast === 'function') {
+          window.showToast('Đã sao chép nội dung: ' + text);
+        } else {
+          alert('Đã sao chép nội dung: ' + text);
+        }
+      }).catch(function () {
+        alert('Đã sao chép: ' + text);
+      });
+    } else {
+      alert('Đã sao chép: ' + text);
+    }
+  }
+};
+
 
 // ==========================================================================
 // REAL-TIME PRESENCE & LIVE COMMUNITY STATS SYSTEM

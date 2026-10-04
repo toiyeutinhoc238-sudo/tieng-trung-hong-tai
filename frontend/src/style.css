@@ -21709,6 +21709,51 @@ body.dark {
   transition: all 0.22s ease !important;
 }
 
+/* Light Mode Overrides for Hero Pill & Sidebar VIP Item */
+html:not(.dark) .vip-hero-pill-btn,
+html.light-mode .vip-hero-pill-btn {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fef3c7 100%) !important;
+  border: 1.5px solid #d97706 !important;
+  color: #92400e !important;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.22) !important;
+}
+
+html:not(.dark) .vip-hero-pill-btn .vip-pill-icon,
+html.light-mode .vip-hero-pill-btn .vip-pill-icon,
+html:not(.dark) .vip-hero-pill-btn .vip-pill-sparkle,
+html.light-mode .vip-hero-pill-btn .vip-pill-sparkle {
+  color: #d97706 !important;
+}
+
+html:not(.dark) .vip-hero-pill-btn .vip-pill-tag,
+html.light-mode .vip-hero-pill-btn .vip-pill-tag {
+  background: linear-gradient(135deg, #ea580c, #dc2626) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35) !important;
+}
+
+html:not(.dark) .vip-hero-pill-btn:hover,
+html.light-mode .vip-hero-pill-btn:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4) !important;
+}
+
+html:not(.dark) .vip-hero-pill-btn:hover .vip-pill-icon,
+html.light-mode .vip-hero-pill-btn:hover .vip-pill-icon,
+html:not(.dark) .vip-hero-pill-btn:hover .vip-pill-sparkle,
+html.light-mode .vip-hero-pill-btn:hover .vip-pill-sparkle {
+  color: #ffffff !important;
+}
+
+html:not(.dark) .sidebar-vip-item,
+html.light-mode .sidebar-vip-item {
+  background: linear-gradient(135deg, #fffbeb, #ffedd5) !important;
+  border: 1px solid #f59e0b !important;
+  color: #92400e !important;
+}
+
 .sidebar-vip-item:hover {
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.28), rgba(236, 72, 153, 0.25)) !important;
   border-color: #fbbf24 !important;
@@ -22144,6 +22189,203 @@ html.light-mode .btn-vip-details-secondary {
   box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
 }
 
+/* VIP Modal Container & Header & Navigation in Light Mode */
+html:not(.dark) .vip-modal-card,
+html.light-mode .vip-modal-card {
+  background: #ffffff !important;
+  border-color: #f59e0b !important;
+  color: #0f172a !important;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.25), 0 0 30px rgba(245, 158, 11, 0.15) !important;
+}
+
+html:not(.dark) .vip-modal-header,
+html.light-mode .vip-modal-header {
+  background: #ffffff !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .vip-modal-header h3,
+html.light-mode .vip-modal-header h3 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .vip-modal-header p,
+html.light-mode .vip-modal-header p {
+  color: #64748b !important;
+}
+
+html:not(.dark) .vip-modal-header button,
+html.light-mode .vip-modal-header button {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+html:not(.dark) .vip-modal-header button:hover,
+html.light-mode .vip-modal-header button:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) .vip-modal-tab-nav,
+html.light-mode .vip-modal-tab-nav {
+  background: #f8fafc !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .vip-modal-tab-btn:not(.active),
+html.light-mode .vip-modal-tab-btn:not(.active) {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+html:not(.dark) .vip-modal-tab-btn:not(.active):hover,
+html.light-mode .vip-modal-tab-btn:not(.active):hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) .vip-modal-footer,
+html.light-mode .vip-modal-footer {
+  background: #ffffff !important;
+  border-top-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .vip-modal-footer span,
+html.light-mode .vip-modal-footer span {
+  color: #475569 !important;
+}
+
+html:not(.dark) .vip-modal-footer button,
+html.light-mode .vip-modal-footer button {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+}
+
+html:not(.dark) .vip-modal-footer button:hover,
+html.light-mode .vip-modal-footer button:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Tab 1 Step Cards in Modal */
+.vip-modal-step-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  flex-wrap: wrap;
+  transition: all 0.2s ease;
+}
+
+html:not(.dark) .vip-modal-step-card,
+html.light-mode .vip-modal-step-card {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+.vip-modal-step-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+.vip-step-num {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+html:not(.dark) .vip-step-num,
+html.light-mode .vip-step-num {
+  color: #64748b !important;
+}
+
+.vip-step-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+html:not(.dark) .vip-step-title,
+html.light-mode .vip-step-title {
+  color: #0f172a !important;
+}
+
+.vip-step-sub {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+html:not(.dark) .vip-step-sub,
+html.light-mode .vip-step-sub {
+  color: #475569 !important;
+}
+
+/* Step 3 Highlight Card (Photo 2 Fix) */
+.vip-modal-step-card.vip-modal-step-highlight {
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(49, 10, 52, 0.9));
+  border: 1.5px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.vip-modal-step-card.vip-modal-step-highlight .vip-step-badge {
+  font-size: 0.78rem;
+  font-weight: 900;
+  color: #fde047;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+html:not(.dark) .vip-modal-step-card.vip-modal-step-highlight,
+html.light-mode .vip-modal-step-card.vip-modal-step-highlight {
+  background: linear-gradient(135deg, #fffbeb 0%, #fdf2f8 60%, #eff6ff 100%) !important;
+  border: 1.5px solid #f59e0b !important;
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.16) !important;
+}
+
+html:not(.dark) .vip-modal-step-card.vip-modal-step-highlight .vip-step-badge,
+html.light-mode .vip-modal-step-card.vip-modal-step-highlight .vip-step-badge {
+  color: #b45309 !important;
+}
+
+html:not(.dark) .vip-modal-step-card.vip-modal-step-highlight .vip-step-title,
+html.light-mode .vip-modal-step-card.vip-modal-step-highlight .vip-step-title {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .vip-modal-step-card.vip-modal-step-highlight .vip-step-sub,
+html.light-mode .vip-modal-step-card.vip-modal-step-highlight .vip-step-sub {
+  color: #475569 !important;
+}
+
+/* Tab Hero Banner Box */
+html:not(.dark) .vip-tab-hero-box,
+html.light-mode .vip-tab-hero-box {
+  background: linear-gradient(135deg, #fffbeb 0%, #fdf2f8 100%) !important;
+  border-color: #f59e0b !important;
+}
+
+html:not(.dark) .vip-tab-hero-box h4,
+html.light-mode .vip-tab-hero-box h4 {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .vip-tab-hero-box p,
+html.light-mode .vip-tab-hero-box p {
+  color: #334155 !important;
+}
+
 /* Table Comparison */
 .vip-comparison-table {
   width: 100%;
@@ -22333,6 +22575,7 @@ html.light-mode .vip-price-features {
   flex-shrink: 0;
 }
 
+/* Pricing Action Buttons (Photo 3 Fix: Distinct Vibrant Buttons for ALL packages) */
 .vip-price-btn {
   margin-top: auto;
   padding: 12px 18px;
@@ -22341,9 +22584,7 @@ html.light-mode .vip-price-features {
   font-weight: 800;
   cursor: pointer;
   border: none;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  transition: all 0.2s ease;
+  transition: all 0.22s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -22351,17 +22592,199 @@ html.light-mode .vip-price-features {
   text-decoration: none;
 }
 
-.vip-price-card.recommended .vip-price-btn {
-  background: linear-gradient(135deg, #f59e0b, #ec4899);
-  color: #ffffff;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+/* Gói 3 Tháng: Blue Energetic Theme */
+.vip-price-btn.btn-pkg-3m {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
 }
 
-.vip-price-btn:hover {
+.vip-price-btn.btn-pkg-3m:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af) !important;
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #f59e0b, #ec4899);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5) !important;
+}
+
+/* Gói 6 Tháng: Purple Pro Theme */
+.vip-price-btn.btn-pkg-6m {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35) !important;
+}
+
+.vip-price-btn.btn-pkg-6m:hover {
+  background: linear-gradient(135deg, #6d28d9, #5b21b6) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.5) !important;
+}
+
+/* Gói 1 Năm: Gold/Pink Ultimate Theme */
+.vip-price-btn.btn-pkg-1y,
+.vip-price-card.recommended .vip-price-btn {
+  background: linear-gradient(135deg, #f59e0b, #ec4899) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.45) !important;
+}
+
+.vip-price-btn.btn-pkg-1y:hover,
+.vip-price-card.recommended .vip-price-btn:hover {
+  background: linear-gradient(135deg, #d97706, #db2777) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(245, 158, 11, 0.55) !important;
+}
+
+/* Payment Tab & Bank Info Styling */
+html:not(.dark) .vip-qr-card,
+html.light-mode .vip-qr-card {
+  background: #f8fafc !important;
+  border-color: #f59e0b !important;
+}
+
+html:not(.dark) .vip-bank-info-card,
+html.light-mode .vip-bank-info-card {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .vip-bank-info-row,
+html.light-mode .vip-bank-info-row {
+  border-bottom-color: #e2e8f0 !important;
+}
+
+/* Suggested Memo Box (Photo 4 Fix) */
+.vip-memo-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 4px;
+  transition: all 0.2s ease;
+}
+
+html:not(.dark) .vip-memo-box,
+html.light-mode .vip-memo-box {
+  background: #f8fafc !important;
+  border: 1.5px solid #cbd5e1 !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+.vip-memo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.vip-memo-label {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+html:not(.dark) .vip-memo-label,
+html.light-mode .vip-memo-label {
+  color: #475569 !important;
+}
+
+.vip-memo-text {
+  font-size: 0.98rem;
+  color: #fbbf24;
+  font-weight: 800;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  word-break: break-all;
+  letter-spacing: 0.02em;
+}
+
+html:not(.dark) .vip-memo-text,
+html.light-mode .vip-memo-text {
+  color: #b45309 !important;
+}
+
+.vip-memo-copy-btn {
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+html:not(.dark) .vip-memo-copy-btn,
+html.light-mode .vip-memo-copy-btn {
+  background: #fffbeb !important;
+  border-color: #f59e0b !important;
+  color: #b45309 !important;
+}
+
+.vip-memo-copy-btn:hover {
+  transform: translateY(-1px);
+  background: #f59e0b !important;
+  color: #ffffff !important;
+}
+
+/* Tab 4 Receipt Action Card */
+.vip-receipt-action-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(49, 10, 52, 0.85));
+  border: 1.5px solid rgba(245, 158, 11, 0.4);
+  border-radius: 18px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.vip-receipt-badge {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #fde047;
+  text-transform: uppercase;
+}
+
+.vip-receipt-title {
+  font-size: 1rem;
+  font-weight: 800;
   color: #ffffff;
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+.vip-receipt-sub {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+html:not(.dark) .vip-receipt-action-card,
+html.light-mode .vip-receipt-action-card {
+  background: linear-gradient(135deg, #fffbeb 0%, #fdf2f8 100%) !important;
+  border: 1.5px solid #f59e0b !important;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.12) !important;
+}
+
+html:not(.dark) .vip-receipt-badge,
+html.light-mode .vip-receipt-badge {
+  color: #b45309 !important;
+}
+
+html:not(.dark) .vip-receipt-title,
+html.light-mode .vip-receipt-title {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .vip-receipt-sub,
+html.light-mode .vip-receipt-sub {
+  color: #475569 !important;
 }
 
 /* Table Responsive Wrapper & Swipe Hint for All Screens */

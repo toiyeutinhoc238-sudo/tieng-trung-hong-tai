@@ -161,6 +161,21 @@
         memoEl.textContent = '[Email/SĐT] ' + packageName;
       }
     };
+    window.copyVipMemo = function () {
+      const memoEl = document.getElementById('vip-suggested-memo');
+      const text = memoEl ? (memoEl.textContent || memoEl.innerText || '').trim() : '';
+      if (text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            alert('Đã sao chép nội dung: ' + text);
+          }).catch(function () {
+            alert('Đã sao chép: ' + text);
+          });
+        } else {
+          alert('Đã sao chép: ' + text);
+        }
+      }
+    };
   </script>
 </head>
 
@@ -4236,15 +4251,15 @@
           <!-- Steps -->
           <div style="display: flex; flex-direction: column; gap: 14px;">
             <!-- Step 1 Item -->
-            <div class="vip-modal-step-card" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 18px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; flex-wrap: wrap;">
-              <div class="vip-modal-step-info" style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
+            <div class="vip-modal-step-card">
+              <div class="vip-modal-step-info">
                 <div style="width: 44px; height: 44px; border-radius: 12px; background: #000; color: #22d3ee; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(34, 211, 238, 0.4); flex-shrink: 0;">
                   <i class="fa-brands fa-tiktok"></i>
                 </div>
                 <div>
-                  <div style="font-size: 0.78rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Bước 1</div>
-                  <div style="font-size: 0.98rem; font-weight: 800; color: #fff;">Nhấn Theo dõi (Follow) kênh TikTok chính thức</div>
-                  <div style="font-size: 0.85rem; color: #cbd5e1;">Kênh chia sẻ phát âm, từ vựng và mẹo giao tiếp hàng ngày @tieng.trung.hongtai</div>
+                  <div class="vip-step-num">Bước 1</div>
+                  <div class="vip-step-title">Nhấn Theo dõi (Follow) kênh TikTok chính thức</div>
+                  <div class="vip-step-sub">Kênh chia sẻ phát âm, từ vựng và mẹo giao tiếp hàng ngày @tieng.trung.hongtai</div>
                 </div>
               </div>
               <a href="https://www.tiktok.com/@tieng.trung.hongtai?_r=1&_t=ZS-9AFZPcFKZTV" target="_blank" rel="noopener noreferrer" class="vip-modal-step-btn"
@@ -4254,15 +4269,15 @@
             </div>
 
             <!-- Step 2 Item -->
-            <div class="vip-modal-step-card" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 18px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; flex-wrap: wrap;">
-              <div class="vip-modal-step-info" style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
+            <div class="vip-modal-step-card">
+              <div class="vip-modal-step-info">
                 <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(59, 130, 246, 0.4); flex-shrink: 0;">
                   <i class="fa-brands fa-facebook-f"></i>
                 </div>
                 <div>
-                  <div style="font-size: 0.78rem; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Bước 2</div>
-                  <div style="font-size: 0.98rem; font-weight: 800; color: #fff;">Nhấn Thích &amp; Theo dõi (Like &amp; Follow) Fanpage Facebook</div>
-                  <div style="font-size: 0.85rem; color: #cbd5e1;">Cộng đồng học viên, thông báo học tập &amp; tài liệu PDF Tiếng Trung Hongtai</div>
+                  <div class="vip-step-num">Bước 2</div>
+                  <div class="vip-step-title">Nhấn Thích &amp; Theo dõi (Like &amp; Follow) Fanpage Facebook</div>
+                  <div class="vip-step-sub">Cộng đồng học viên, thông báo học tập &amp; tài liệu PDF Tiếng Trung Hongtai</div>
                 </div>
               </div>
               <a href="https://www.facebook.com/share/17fZtn5f9v/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="vip-modal-step-btn"
@@ -4271,16 +4286,16 @@
               </a>
             </div>
 
-            <!-- Step 3 Item -->
-            <div class="vip-modal-step-card" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 18px 20px; background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(49, 10, 52, 0.9)); border: 1.5px solid rgba(245, 158, 11, 0.5); border-radius: 16px; flex-wrap: wrap;">
-              <div class="vip-modal-step-info" style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;">
+            <!-- Step 3 Item (Photo 2 Fix: Highlighted with beautiful warm colors in light mode) -->
+            <div class="vip-modal-step-card vip-modal-step-highlight">
+              <div class="vip-modal-step-info">
                 <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);">
                   <i class="fa-solid fa-gift"></i>
                 </div>
                 <div>
-                  <div style="font-size: 0.78rem; font-weight: 900; color: #fde047; text-transform: uppercase;">Bước 3 • Hoàn thành &amp; Nhận VIP</div>
-                  <div style="font-size: 1rem; font-weight: 800; color: #fff;">Chụp ảnh màn hình &amp; điền vào biểu mẫu xác nhận</div>
-                  <div style="font-size: 0.85rem; color: #cbd5e1;">Điền tài khoản bạn đã đăng ký để admin tiến hành kích hoạt ngay</div>
+                  <div class="vip-step-badge">Bước 3 • Hoàn thành &amp; Nhận VIP</div>
+                  <div class="vip-step-title">Chụp ảnh màn hình &amp; điền vào biểu mẫu xác nhận</div>
+                  <div class="vip-step-sub">Điền tài khoản bạn đã đăng ký để admin tiến hành kích hoạt ngay</div>
                 </div>
               </div>
               <a href="https://forms.gle/3Cvu1Sm2doLcB6qP8" target="_blank" rel="noopener noreferrer" class="vip-modal-step-btn"
@@ -4394,8 +4409,9 @@
                 <li><i class="fa-solid fa-check"></i> AI chấm điểm &amp; sửa câu</li>
                 <li><i class="fa-solid fa-check"></i> Xuất PDF phiếu viết chữ Hán</li>
               </ul>
-              <button type="button" class="vip-price-btn" onclick="window.selectVipPackage('Gói 3 Tháng - 199.000 VNĐ')">
-                <span>Chọn Gói 3 Tháng</span>
+              <button type="button" class="vip-price-btn btn-pkg-3m" onclick="window.selectVipPackage('Gói 3 Tháng - 199.000 VNĐ')">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Đăng Ký Gói 3 Tháng</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
@@ -4415,8 +4431,9 @@
                 <li><i class="fa-solid fa-check"></i> Không giới hạn video shadowing</li>
                 <li><i class="fa-solid fa-check"></i> Mở khóa toàn bộ 5 trò chơi</li>
               </ul>
-              <button type="button" class="vip-price-btn" onclick="window.selectVipPackage('Gói 6 Tháng - 349.000 VNĐ')">
-                <span>Chọn Gói 6 Tháng</span>
+              <button type="button" class="vip-price-btn btn-pkg-6m" onclick="window.selectVipPackage('Gói 6 Tháng - 349.000 VNĐ')">
+                <i class="fa-solid fa-rocket"></i>
+                <span>Đăng Ký Gói 6 Tháng</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
@@ -4437,9 +4454,10 @@
                 <li><i class="fa-solid fa-check"></i> Tự động cập nhật mọi tính năng mới</li>
                 <li><i class="fa-solid fa-check"></i> Ưu tiên hỗ trợ từ đội ngũ giáo viên</li>
               </ul>
-              <button type="button" class="vip-price-btn" onclick="window.selectVipPackage('Gói 1 Năm - 599.000 VNĐ')">
-                <span>Đăng Ký Gói 1 Năm</span>
+              <button type="button" class="vip-price-btn btn-pkg-1y" onclick="window.selectVipPackage('Gói 1 Năm - 599.000 VNĐ')">
                 <i class="fa-solid fa-crown"></i>
+                <span>Đăng Ký Gói 1 Năm</span>
+                <i class="fa-solid fa-sparkles"></i>
               </button>
             </div>
           </div>
@@ -4501,19 +4519,25 @@
                   </button>
                 </div>
               </div>
-              <div style="display: flex; flex-direction: column; gap: 6px; background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
-                <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 600;">Nội dung chuyển khoản gợi ý:</span>
-                <span id="vip-suggested-memo" style="font-size: 0.92rem; color: #fbbf24; font-weight: 800; font-family: monospace;">[Email/SĐT] NANG CAP VIP</span>
+              <!-- Photo 4 Fix: Light Mode-adapted suggested memo box with 1-click copy button -->
+              <div class="vip-memo-box">
+                <div class="vip-memo-header">
+                  <span class="vip-memo-label"><i class="fa-solid fa-comment-dots" style="color: #f59e0b;"></i> Nội dung chuyển khoản gợi ý:</span>
+                  <button type="button" class="vip-memo-copy-btn" onclick="window.copyVipMemo()" title="Sao chép nội dung chuyển khoản">
+                    <i class="fa-solid fa-copy"></i> <span>Sao chép</span>
+                  </button>
+                </div>
+                <div id="vip-suggested-memo" class="vip-memo-text">[Email/SĐT] NANG CAP VIP</div>
               </div>
             </div>
           </div>
 
           <!-- Step 3 Action: Submit Receipt -->
-          <div class="vip-receipt-action-card" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(49, 10, 52, 0.85)); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 18px; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+          <div class="vip-receipt-action-card">
             <div>
-              <div style="font-size: 0.78rem; font-weight: 800; color: #fde047; text-transform: uppercase;">Bước 3: Gửi biên lai kích hoạt</div>
-              <div style="font-size: 1rem; font-weight: 800; color: #fff;">Đã chuyển khoản thành công?</div>
-              <div style="font-size: 0.85rem; color: #cbd5e1;">Gửi ảnh biên lai vào biểu mẫu bên cạnh để hệ thống kích hoạt tài khoản ngay.</div>
+              <div class="vip-receipt-badge">Bước 3: Gửi biên lai kích hoạt</div>
+              <div class="vip-receipt-title">Đã chuyển khoản thành công?</div>
+              <div class="vip-receipt-sub">Gửi ảnh biên lai vào biểu mẫu bên cạnh để hệ thống kích hoạt tài khoản ngay.</div>
             </div>
             <a href="https://forms.gle/xvM5Nz1xmPuY6JVm7" target="_blank" rel="noopener noreferrer" class="btn-vip-claim-main" style="padding: 12px 24px;">
               <i class="fa-solid fa-receipt"></i>
