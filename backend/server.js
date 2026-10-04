@@ -1,3 +1,21 @@
+import v8 from 'v8';
+import { spawn } from 'child_process';
+
+// Auto Memory Guard for Render (512MB RAM free-tier container):
+// If Node was launched with default low heap limit (< 320MB), automatically respawn with --max-old-space-size=384
+const _initialHeapMB = v8.getHeapStatistics().heap_size_limit / 1024 / 1024;
+if (_initialHeapMB < 320 && !process.env.HT_MAX_MEM_GUARD) {
+  console.log(`[Memory Guard] Default heap limit is low (${_initialHeapMB.toFixed(1)}MB). Auto-relaunching with --max-old-space-size=384...`);
+  const child = spawn(process.execPath, ['--max-old-space-size=384', ...process.argv.slice(1)], {
+    stdio: 'inherit',
+    env: { ...process.env, HT_MAX_MEM_GUARD: '1' }
+  });
+  child.on('exit', (code, signal) => {
+    process.exit(code !== null ? code : (signal ? 128 + signal : 0));
+  });
+  await new Promise(() => {});
+}
+
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
@@ -74,10 +92,10 @@ async function connectMongoDB() {
   try {
     console.log("Connecting to MongoDB Atlas...");
     await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 30000,
-      connectTimeoutMS: 30000,
-      socketTimeoutMS: 45000,
-      maxPoolSize: 10
+      serverSelectionTimeoutMS: 15000,
+      connectTimeoutMS: 15000,
+      socketTimeoutMS: 30000,
+      maxPoolSize: 4
     });
     console.log("MongoDB connected successfully.");
     isConnectingMongo = false;
@@ -309,71 +327,86 @@ async function readUserDataFromFile() {
   }
 }
 
-// Helper to read user_data
+// Helper to read user_data with singleton promise and zero-latency in-memory cache
+let pendingReadUserDataPromise = null;
+
 async function readUserData() {
-  if (cachedUserData && Object.keys(cachedUserData.users || {}).length >= 50 && mongoose.connection.readyState === 1) {
+  // 1. FAST PATH: Return in-memory cache instantly (0.1ms) if populated
+  if (cachedUserData && Object.keys(cachedUserData.users || {}).length >= 50) {
     return cachedUserData;
   }
 
-  // Ensure we actively reconnect to MongoDB if URI is provided.
-  if (process.env.MONGODB_URI && mongoose.connection.readyState !== 1) {
-    console.log("readUserData: MongoDB not connected, attempting immediate reconnect...");
-    await connectMongoDB();
+  // 2. Prevent stampede: If a read is already in progress, await the SAME promise
+  if (pendingReadUserDataPromise) {
+    return pendingReadUserDataPromise;
   }
 
-  if (mongoose.connection.readyState === 1) {
-    try {
-      const usersList = await User.find({});
-      const sessionsList = await Session.find({});
-
-      const users = {};
-      const progress = {};
-      const customWords = {};
-      const chats = {};
-      const sessions = {};
-      const quizHistory = {};
-
-      usersList.forEach(u => {
-        users[u._id] = {
-          name: u.name,
-          picture: u.picture,
-          role: u.role || 'user',
-          lastSeenTime: u.lastSeenTime || null,
-          stats: u.stats,
-          gameHistory: u.gameHistory || [],
-          accessLogs: u.accessLogs || []
-        };
-        if (u.quizHistory && u.quizHistory.length > 0) {
-          quizHistory[u._id] = u.quizHistory;
-        }
-        progress[u._id] = u.progress || {};
-        customWords[u._id] = u.customWords || [];
-        chats[u._id] = u.chats || [];
-      });
-
-      sessionsList.forEach(s => {
-        sessions[s._id] = s.email;
-        if (s._id && s.email) {
-          activeSessions.set(s._id, s.email);
-        }
-      });
-
-      cachedUserData = { users, progress, customWords, sessions, chats, quizHistory };
-      return cachedUserData;
-    } catch (error) {
-      console.error("Error reading database from MongoDB, returning file fallback:", error);
+  pendingReadUserDataPromise = (async () => {
+    // Ensure we actively reconnect to MongoDB if URI is provided.
+    if (process.env.MONGODB_URI && mongoose.connection.readyState !== 1) {
+      console.log("readUserData: MongoDB not connected, attempting reconnect...");
+      await connectMongoDB();
     }
-  }
 
-  // Fallback to local file if MongoDB is unreachable
-  const fileData = await readUserDataFromFile();
-  if (!cachedUserData || Object.keys(fileData.users || {}).length >= Object.keys(cachedUserData.users || {}).length) {
-    cachedUserData = fileData;
-  }
-  return cachedUserData || fileData;
+    if (mongoose.connection.readyState === 1) {
+      try {
+        // Use .lean() to return plain JavaScript objects (uses ~90% less heap than Mongoose documents!)
+        const usersList = await User.find({}).lean();
+        const sessionsList = await Session.find({}).lean();
+
+        const users = {};
+        const progress = {};
+        const customWords = {};
+        const chats = {};
+        const sessions = {};
+        const quizHistory = {};
+
+        usersList.forEach(u => {
+          users[u._id] = {
+            name: u.name,
+            picture: u.picture,
+            role: u.role || 'user',
+            lastSeenTime: u.lastSeenTime || null,
+            stats: u.stats,
+            gameHistory: u.gameHistory || [],
+            accessLogs: u.accessLogs || []
+          };
+          if (u.quizHistory && u.quizHistory.length > 0) {
+            quizHistory[u._id] = u.quizHistory;
+          }
+          progress[u._id] = u.progress || {};
+          customWords[u._id] = u.customWords || [];
+          chats[u._id] = u.chats || [];
+        });
+
+        sessionsList.forEach(s => {
+          sessions[s._id] = s.email;
+          if (s._id && s.email) {
+            activeSessions.set(s._id, s.email);
+          }
+        });
+
+        cachedUserData = { users, progress, customWords, sessions, chats, quizHistory };
+        return cachedUserData;
+      } catch (error) {
+        console.error("Error reading database from MongoDB, returning file fallback:", error);
+      }
+    }
+
+    // Fallback to local file if MongoDB is unreachable
+    const fileData = await readUserDataFromFile();
+    if (!cachedUserData || Object.keys(fileData.users || {}).length >= Object.keys(cachedUserData.users || {}).length) {
+      cachedUserData = fileData;
+    }
+    return cachedUserData || fileData;
+  })().finally(() => {
+    pendingReadUserDataPromise = null;
+  });
+
+  return pendingReadUserDataPromise;
 }
 
-// Data Migration Helper
+// Data Migration Helper (Run only once if MongoDB is empty)
 async function performDataMigration() {
   try {
     const fileExists = await fs.access(USER_DB_PATH).then(() => true).catch(() => false);
@@ -399,87 +432,169 @@ async function performDataMigration() {
       chats: fileData.chats || {}
     };
 
-    await persistToMongoDB(cachedUserData);
+    await persistAllToMongoDB(cachedUserData);
     console.log("Data migration to MongoDB Atlas completed successfully!");
   } catch (err) {
     console.error("Data migration failed:", err);
   }
 }
 
-// Helper to write user data
-async function writeUserData(data) {
-  // Never allow a degraded data set with fewer users to overwrite known users!
-  if (cachedUserData && cachedUserData.users) {
-    data.users = { ...cachedUserData.users, ...data.users };
-  }
-  // Sync instantly to in-memory cache
-  cachedUserData = data;
+// Dirty tracking for changed users and sessions to avoid full-database rewrites
+const dirtyUserEmails = new Set();
+const dirtySessionTokens = new Set();
+let isPersistingToMongo = false;
+let isDiskWriteScheduled = false;
 
-  // Dual persistence: Write to local JSON file & MongoDB Atlas
-  try {
-    await fs.writeFile(USER_DB_PATH, JSON.stringify(data, null, 2), 'utf-8');
-  } catch (fileErr) {
-    console.error("Failed writing to user_data.json:", fileErr);
-  }
-
-  // Persist asynchronously in the background to MongoDB
-  persistToMongoDB(data).catch(err => {
-    console.error("Background persistence to MongoDB failed:", err);
-  });
-
-  return true;
+// Debounced Disk Persistence: write at most once every 10s to prevent disk I/O & heap churn
+function scheduleDiskWrite() {
+  if (isDiskWriteScheduled) return;
+  isDiskWriteScheduled = true;
+  setTimeout(async () => {
+    isDiskWriteScheduled = false;
+    try {
+      if (cachedUserData) {
+        // Compact JSON (without indentation) saves 50% memory & CPU
+        await fs.writeFile(USER_DB_PATH, JSON.stringify(cachedUserData), 'utf-8');
+      }
+    } catch (fileErr) {
+      console.warn("[writeUserData] Throttled disk write warning:", fileErr.message);
+    }
+  }, 10000);
 }
 
-// Background MongoDB Persistence
-async function persistToMongoDB(data) {
-  if (mongoose.connection.readyState !== 1) {
-    if (process.env.MONGODB_URI) {
+// Background queue to persist ONLY dirty users & sessions to MongoDB
+async function processMongoPersistenceQueue() {
+  if (isPersistingToMongo || mongoose.connection.readyState !== 1) {
+    if (mongoose.connection.readyState !== 1 && process.env.MONGODB_URI) {
       connectMongoDB().catch(() => {});
     }
     return;
   }
-  const promises = [];
-  const emails = new Set([
-    ...Object.keys(data.users || {}),
-    ...Object.keys(data.progress || {}),
-    ...Object.keys(data.customWords || {}),
-    ...Object.keys(data.chats || {})
-  ]);
 
-  for (const email of emails) {
-    const u = data.users[email] || { name: "", picture: "", role: "user", stats: { streak: 0, studyTime: 0, lastActiveDate: "" } };
-    const updateDoc = {
-      name: u.name || "",
-      picture: u.picture || "",
-      role: u.role || 'user',
-      lastSeenTime: u.lastSeenTime || new Date(),
-      stats: u.stats || { streak: 0, studyTime: 0, lastActiveDate: "" },
-      gameHistory: u.gameHistory || [],
-      quizHistory: (data.quizHistory && data.quizHistory[email]) || [],
-      progress: data.progress[email] || {},
-      customWords: data.customWords[email] || [],
-      chats: data.chats[email] || [],
-      accessLogs: (data.users[email] && data.users[email].accessLogs) || (u.accessLogs || [])
-    };
-
-    promises.push(User.updateOne(
-      { _id: email },
-      { $set: updateDoc },
-      { upsert: true }
-    ));
+  if (dirtyUserEmails.size === 0 && dirtySessionTokens.size === 0) {
+    return;
   }
 
-  for (const token of Object.keys(data.sessions || {})) {
-    if (token && data.sessions[token]) {
-      promises.push(Session.updateOne(
-        { _id: token },
-        { $set: { email: data.sessions[token] } },
-        { upsert: true }
-      ));
+  isPersistingToMongo = true;
+  try {
+    const emailsToProcess = Array.from(dirtyUserEmails);
+    dirtyUserEmails.clear();
+
+    const tokensToProcess = Array.from(dirtySessionTokens);
+    dirtySessionTokens.clear();
+
+    const data = cachedUserData || {};
+
+    // Process user updates in small batches of 5 to avoid overwhelming connection pool
+    for (let i = 0; i < emailsToProcess.length; i += 5) {
+      const batch = emailsToProcess.slice(i, i + 5);
+      await Promise.all(batch.map(async (email) => {
+        try {
+          const u = (data.users && data.users[email]) || { name: "", picture: "", role: "user", stats: { streak: 0, studyTime: 0, lastActiveDate: "" } };
+          const updateDoc = {
+            name: u.name || "",
+            picture: u.picture || "",
+            role: u.role || 'user',
+            lastSeenTime: u.lastSeenTime || new Date(),
+            stats: u.stats || { streak: 0, studyTime: 0, lastActiveDate: "" },
+            gameHistory: u.gameHistory || [],
+            quizHistory: (data.quizHistory && data.quizHistory[email]) || [],
+            progress: (data.progress && data.progress[email]) || {},
+            customWords: (data.customWords && data.customWords[email]) || [],
+            chats: (data.chats && data.chats[email]) || [],
+            accessLogs: (data.users && data.users[email] && data.users[email].accessLogs) || (u.accessLogs || [])
+          };
+          await User.updateOne({ _id: email }, { $set: updateDoc }, { upsert: true });
+        } catch (err) {
+          console.warn(`[MongoPersistence] Failed updating user ${email}:`, err.message);
+          dirtyUserEmails.add(email); // Re-queue on failure
+        }
+      }));
+    }
+
+    // Process session updates in small batches of 10
+    for (let i = 0; i < tokensToProcess.length; i += 10) {
+      const batch = tokensToProcess.slice(i, i + 10);
+      await Promise.all(batch.map(async (token) => {
+        try {
+          const email = data.sessions && data.sessions[token];
+          if (email) {
+            await Session.updateOne({ _id: token }, { $set: { email } }, { upsert: true });
+          } else {
+            await Session.deleteOne({ _id: token });
+          }
+        } catch (err) {
+          console.warn(`[MongoPersistence] Failed updating session ${token}:`, err.message);
+        }
+      }));
+    }
+  } catch (err) {
+    console.error("[MongoPersistence] Queue processing error:", err);
+  } finally {
+    isPersistingToMongo = false;
+    // If more items accumulated, process again after a short breather
+    if (dirtyUserEmails.size > 0 || dirtySessionTokens.size > 0) {
+      setTimeout(processMongoPersistenceQueue, 2000);
     }
   }
+}
 
-  await Promise.all(promises);
+// Full database persistence (only used during initial migration)
+async function persistAllToMongoDB(data) {
+  if (mongoose.connection.readyState !== 1) return;
+  const emails = Object.keys(data.users || {});
+  for (let i = 0; i < emails.length; i += 10) {
+    const batch = emails.slice(i, i + 10);
+    await Promise.all(batch.map(async (email) => {
+      const u = data.users[email] || {};
+      const updateDoc = {
+        name: u.name || "",
+        picture: u.picture || "",
+        role: u.role || 'user',
+        lastSeenTime: u.lastSeenTime || new Date(),
+        stats: u.stats || { streak: 0, studyTime: 0, lastActiveDate: "" },
+        gameHistory: u.gameHistory || [],
+        quizHistory: (data.quizHistory && data.quizHistory[email]) || [],
+        progress: (data.progress && data.progress[email]) || {},
+        customWords: (data.customWords && data.customWords[email]) || [],
+        chats: (data.chats && data.chats[email]) || [],
+        accessLogs: (u && u.accessLogs) || []
+      };
+      await User.updateOne({ _id: email }, { $set: updateDoc }, { upsert: true }).catch(() => {});
+    }));
+  }
+}
+
+// Helper to write user data with dirty-tracking and non-blocking background persistence
+async function writeUserData(data, targetEmail = null, targetSessionToken = null) {
+  // Never allow a degraded data set with fewer users to overwrite known users!
+  if (cachedUserData && cachedUserData.users) {
+    data.users = { ...cachedUserData.users, ...data.users };
+  }
+  // Sync instantly to in-memory cache (zero latency for users!)
+  cachedUserData = data;
+
+  // Track which user/session changed
+  if (targetEmail) {
+    dirtyUserEmails.add(targetEmail);
+  } else {
+    // If not specified, mark any recently modified users or all
+    Object.keys(data.users || {}).forEach(e => dirtyUserEmails.add(e));
+  }
+
+  if (targetSessionToken) {
+    dirtySessionTokens.add(targetSessionToken);
+  }
+
+  // Schedule debounced disk backup (non-blocking)
+  scheduleDiskWrite();
+
+  // Trigger background MongoDB sync queue (non-blocking)
+  processMongoPersistenceQueue().catch(err => {
+    console.warn("[writeUserData] Queue trigger warn:", err.message);
+  });
+
+  return true;
 }
 
 // Session store in memory: sessionToken -> userEmail
