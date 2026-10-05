@@ -6894,12 +6894,24 @@ body.sidebar-open #global-sidebar-mount .app-sidebar {
     max-width: 130px;
   }
 
-  .app-sidebar .user-role-badge {
-    display: inline-block;
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--accent-blue, #3b82f6);
-    margin-top: 1px;
+  .app-sidebar .user-role-badge,
+  .user-role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    white-space: nowrap !important;
+    width: fit-content;
+    max-width: 100%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.25;
+    background: rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    margin-top: 2px;
+    box-sizing: border-box;
   }
 
   .app-sidebar .profile-chevron {

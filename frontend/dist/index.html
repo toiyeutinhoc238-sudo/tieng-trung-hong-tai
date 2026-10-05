@@ -221,12 +221,12 @@
     };
   </script>
   <script type="module" crossorigin src="/assets/vendor-BfYXEYrK.js"></script>
-  <script type="module" crossorigin src="/assets/global_sidebar-9tGx_ncr.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-CmAoIgQS.js"></script>
   <script type="module" crossorigin src="/assets/hsk-grammar-data-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/games-data-CBh3wN3X.js"></script>
   <script type="module" crossorigin src="/assets/vendor-pinyin-haNF1LmB.js"></script>
-  <script type="module" crossorigin src="/assets/main-ByW5eoZ2.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-B9mUNyKh.css">
+  <script type="module" crossorigin src="/assets/main-CwCcrMYL.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-D63jLJBM.css">
 </head>
 
 <body>
@@ -299,7 +299,7 @@
           <div class="user-info">
             <span class="user-name" id="user-display-name">Phú Phan</span>
             <span class="user-sub" id="user-display-email">phanphiphu04@gmail.com</span>
-            <span class="user-role-badge" id="user-display-role">Super Admin</span>
+            <span class="user-role-badge" id="user-display-role"><i class="fa-solid fa-crown"></i> Super Admin</span>
           </div>
           <i class="fa-solid fa-chevron-down profile-chevron"></i>
         </div>
@@ -636,11 +636,22 @@
       }
 
       .app-sidebar .user-role-badge {
-        display: inline-block;
-        font-size: 0.75rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        border-radius: 99px;
+        white-space: nowrap;
+        width: fit-content;
+        max-width: 100%;
+        font-size: 0.7rem;
         font-weight: 700;
-        color: var(--accent-blue);
-        margin-top: 1px;
+        line-height: 1.25;
+        background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(225, 29, 72, 0.12));
+        color: #fb7185;
+        border: 1px solid rgba(244, 63, 94, 0.4);
+        box-shadow: 0 2px 8px rgba(244, 63, 94, 0.2);
+        margin-top: 2px;
       }
 
       .app-sidebar .profile-chevron {

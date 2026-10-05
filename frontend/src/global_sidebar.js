@@ -733,26 +733,54 @@ import './quick_dict_widget.js';
       if (user && (user.name || user.email)) {
         const displayName = user.name || user.displayName || (user.email ? user.email.split('@')[0] : 'Học viên');
         const displayEmail = user.email || '';
-        const displayAvatar = user.picture || user.avatar || '';
-        let displayRole = user.role === 'super_admin' ? 'Super Admin' : (user.role === 'admin' ? 'Admin' : (user.role === 'teacher' ? 'Giáo viên' : 'Học viên'));
-        if (user.isVip) {
-          displayRole = `👑 VIP • ${displayRole}`;
+        let displayRole = 'Học viên';
+        if (user.role === 'super_admin') {
+          displayRole = '👑 Super Admin';
+        } else if (user.role === 'admin') {
+          displayRole = user.isVip ? '👑 Admin VIP' : '👑 Quản trị viên';
+        } else if (user.role === 'teacher') {
+          displayRole = user.isVip ? '🛡️ Giáo viên VIP' : '🛡️ Giáo viên';
+        } else if (user.isVip) {
+          displayRole = '👑 Hội Viên VIP';
+        } else {
+          displayRole = '🎓 Học viên';
         }
 
         if (nameEl) nameEl.textContent = displayName;
         if (emailEl) emailEl.textContent = displayEmail;
         if (roleEl) {
           roleEl.textContent = displayRole;
-          if (user.isVip) {
-            roleEl.style.background = 'linear-gradient(135deg, #eab308, #ca8a04)';
-            roleEl.style.color = '#000000';
-            roleEl.style.fontWeight = '800';
-            roleEl.style.border = '1px solid #fde047';
+          roleEl.style.display = 'inline-flex';
+          roleEl.style.alignItems = 'center';
+          roleEl.style.gap = '4px';
+          roleEl.style.padding = '2px 8px';
+          roleEl.style.borderRadius = '99px';
+          roleEl.style.whiteSpace = 'nowrap';
+          roleEl.style.width = 'fit-content';
+          roleEl.style.fontSize = '0.7rem';
+          roleEl.style.fontWeight = '700';
+          roleEl.style.lineHeight = '1.25';
+
+          if (user.role === 'super_admin') {
+            roleEl.style.background = 'linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(225, 29, 72, 0.12))';
+            roleEl.style.color = '#fb7185';
+            roleEl.style.border = '1px solid rgba(244, 63, 94, 0.4)';
+            roleEl.style.boxShadow = '0 2px 8px rgba(244, 63, 94, 0.2)';
+          } else if (user.isVip) {
+            roleEl.style.background = 'linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(202, 138, 4, 0.12))';
+            roleEl.style.color = '#facc15';
+            roleEl.style.border = '1px solid rgba(234, 179, 8, 0.45)';
+            roleEl.style.boxShadow = '0 2px 8px rgba(234, 179, 8, 0.2)';
+          } else if (user.role === 'admin' || user.role === 'teacher') {
+            roleEl.style.background = 'rgba(56, 189, 248, 0.15)';
+            roleEl.style.color = '#38bdf8';
+            roleEl.style.border = '1px solid rgba(56, 189, 248, 0.35)';
+            roleEl.style.boxShadow = 'none';
           } else {
-            roleEl.style.background = '';
-            roleEl.style.color = '';
-            roleEl.style.fontWeight = '';
-            roleEl.style.border = '';
+            roleEl.style.background = 'rgba(255, 255, 255, 0.08)';
+            roleEl.style.color = '#94a3b8';
+            roleEl.style.border = '1px solid rgba(255, 255, 255, 0.15)';
+            roleEl.style.boxShadow = 'none';
           }
         }
         if (avatarWrap) {
@@ -794,7 +822,27 @@ import './quick_dict_widget.js';
 
     const userName = user ? (user.name || user.displayName || (user.email ? user.email.split('@')[0] : 'Học viên')) : 'Khách (Chưa đăng nhập)';
     const userEmail = user ? (user.email || '') : 'Đăng nhập để lưu tiến độ học';
-    const userRole = user ? (user.role === 'super_admin' ? 'Super Admin' : (user.role === 'admin' ? 'Admin' : (user.role === 'teacher' ? 'Giáo viên' : 'Học viên'))) : 'Khách';
+    let userRole = 'Khách';
+    let roleBadgeStyle = 'font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; width: fit-content; background: rgba(255, 255, 255, 0.06); color: #64748b; border: 1px solid rgba(255, 255, 255, 0.1); margin-top: 2px; line-height: 1.25;';
+
+    if (user && (user.name || user.email)) {
+      if (user.role === 'super_admin') {
+        userRole = '👑 Super Admin';
+        roleBadgeStyle = 'font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; width: fit-content; background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(225, 29, 72, 0.12)); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); box-shadow: 0 2px 8px rgba(244, 63, 94, 0.2); margin-top: 2px; line-height: 1.25;';
+      } else if (user.isVip) {
+        userRole = '👑 Hội Viên VIP';
+        roleBadgeStyle = 'font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; width: fit-content; background: linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(202, 138, 4, 0.12)); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.45); box-shadow: 0 2px 8px rgba(234, 179, 8, 0.2); margin-top: 2px; line-height: 1.25;';
+      } else if (user.role === 'admin') {
+        userRole = '👑 Quản trị viên';
+        roleBadgeStyle = 'font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; width: fit-content; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); margin-top: 2px; line-height: 1.25;';
+      } else if (user.role === 'teacher') {
+        userRole = '🛡️ Giáo viên';
+        roleBadgeStyle = 'font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; width: fit-content; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); margin-top: 2px; line-height: 1.25;';
+      } else {
+        userRole = '🎓 Học viên';
+        roleBadgeStyle = 'font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; width: fit-content; background: rgba(255, 255, 255, 0.08); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.15); margin-top: 2px; line-height: 1.25;';
+      }
+    }
     const userAvatar = user && (user.picture || user.avatar) ? (user.picture || user.avatar) : '';
 
     return `
@@ -823,7 +871,7 @@ import './quick_dict_widget.js';
               <div class="user-info" style="min-width: 0; flex: 1; display: flex; flex-direction: column; overflow: hidden;">
                 <span class="user-name" style="font-weight: 700; font-size: 0.92rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${userName}</span>
                 <span class="user-sub" style="font-size: 0.72rem; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${userEmail}</span>
-                <span class="user-role-badge" style="font-size: 0.68rem; margin-top: 2px; align-self: flex-start;">${userRole}</span>
+                <span class="user-role-badge" id="user-display-role" style="${roleBadgeStyle}">${userRole}</span>
               </div>
             </div>
             <i class="fa-solid fa-chevron-down profile-chevron" style="color: #94a3b8; font-size: 0.8rem; margin-left: 8px; transition: transform 0.2s ease;"></i>

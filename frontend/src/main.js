@@ -4599,22 +4599,47 @@ function renderUserProfile() {
     // Dynamically update profile role badge
     const displayRole = document.getElementById('user-display-role') || document.querySelector('.app-sidebar .user-role-badge');
     if (displayRole) {
+      displayRole.style.display = 'inline-flex';
+      displayRole.style.alignItems = 'center';
+      displayRole.style.gap = '4px';
+      displayRole.style.padding = '2px 8px';
+      displayRole.style.borderRadius = '99px';
+      displayRole.style.whiteSpace = 'nowrap';
+      displayRole.style.width = 'fit-content';
+      displayRole.style.fontSize = '0.7rem';
+      displayRole.style.fontWeight = '700';
+      displayRole.style.lineHeight = '1.25';
+
       if (isSuper) {
         displayRole.innerHTML = '<i class="fa-solid fa-crown"></i> Super Admin';
-        displayRole.style.color = '#f43f5e';
-        displayRole.style.fontWeight = '800';
+        displayRole.style.background = 'linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(225, 29, 72, 0.12))';
+        displayRole.style.color = '#fb7185';
+        displayRole.style.border = '1px solid rgba(244, 63, 94, 0.4)';
+        displayRole.style.boxShadow = '0 2px 8px rgba(244, 63, 94, 0.2)';
+      } else if (currentUser.isVip) {
+        displayRole.innerHTML = '<i class="fa-solid fa-crown"></i> Hội Viên VIP';
+        displayRole.style.background = 'linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(202, 138, 4, 0.12))';
+        displayRole.style.color = '#facc15';
+        displayRole.style.border = '1px solid rgba(234, 179, 8, 0.45)';
+        displayRole.style.boxShadow = '0 2px 8px rgba(234, 179, 8, 0.2)';
       } else if (isTeacher) {
         displayRole.innerHTML = '<i class="fa-solid fa-chalkboard-user"></i> Giáo viên';
+        displayRole.style.background = 'rgba(56, 189, 248, 0.15)';
         displayRole.style.color = '#38bdf8';
-        displayRole.style.fontWeight = '800';
+        displayRole.style.border = '1px solid rgba(56, 189, 248, 0.35)';
+        displayRole.style.boxShadow = 'none';
       } else if (isAdmin) {
         displayRole.innerHTML = '<i class="fa-solid fa-shield-halved"></i> Quản trị viên';
-        displayRole.style.color = '#a855f7';
-        displayRole.style.fontWeight = '800';
+        displayRole.style.background = 'rgba(168, 85, 247, 0.15)';
+        displayRole.style.color = '#c084fc';
+        displayRole.style.border = '1px solid rgba(168, 85, 247, 0.35)';
+        displayRole.style.boxShadow = 'none';
       } else {
         displayRole.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> Học viên';
-        displayRole.style.color = 'var(--accent-blue)';
-        displayRole.style.fontWeight = '700';
+        displayRole.style.background = 'rgba(255, 255, 255, 0.08)';
+        displayRole.style.color = '#94a3b8';
+        displayRole.style.border = '1px solid rgba(255, 255, 255, 0.15)';
+        displayRole.style.boxShadow = 'none';
       }
     }
 
@@ -4634,6 +4659,25 @@ function renderUserProfile() {
 
     if (navChatHistoryLi) navChatHistoryLi.style.display = 'none';
     if (adminSection) adminSection.style.display = 'none';
+
+    const displayRole = document.getElementById('user-display-role') || document.querySelector('.app-sidebar .user-role-badge');
+    if (displayRole) {
+      displayRole.textContent = 'Khách';
+      displayRole.style.display = 'inline-flex';
+      displayRole.style.alignItems = 'center';
+      displayRole.style.gap = '4px';
+      displayRole.style.padding = '2px 8px';
+      displayRole.style.borderRadius = '99px';
+      displayRole.style.whiteSpace = 'nowrap';
+      displayRole.style.width = 'fit-content';
+      displayRole.style.fontSize = '0.7rem';
+      displayRole.style.fontWeight = '700';
+      displayRole.style.lineHeight = '1.25';
+      displayRole.style.background = 'rgba(255, 255, 255, 0.06)';
+      displayRole.style.color = '#64748b';
+      displayRole.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+      displayRole.style.boxShadow = 'none';
+    }
   }
 
   // Refresh exam grid with current user's scores if papers screen is open
