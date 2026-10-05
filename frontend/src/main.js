@@ -17824,11 +17824,11 @@ window.updateBroadcastPreview = function() {
   const btnTextInput = document.getElementById('admin-email-action-text');
   const btnUrlInput = document.getElementById('admin-email-action-url');
 
-  const subject = (subjInput && subjInput.value.trim()) || 'Thông báo học tập quan trọng';
-  const headline = (headInput && headInput.value.trim()) || subject;
+  const subject = (subjInput && subjInput.value.trim()) || '🎉 Chào mừng các bạn đến với Tiếng Trung Hồng Thái';
+  const headline = (headInput && headInput.value.trim()) || 'Chào mừng các bạn đến với Tiếng Trung Hồng Thái';
   const message = (msgInput && msgInput.value.trim()) || 'Nội dung thông báo chi tiết từ ban quản trị sẽ hiển thị rõ ràng tại đây...';
   const btnText = (btnTextInput && btnTextInput.value.trim()) || 'Vào Học Ngay';
-  const btnUrl = (btnUrlInput && btnUrlInput.value.trim()) || '#';
+  const btnUrl = (btnUrlInput && btnUrlInput.value.trim()) || 'https://tiengtrunghongtai.online/';
 
   const previewSubject = document.getElementById('preview-email-subject');
   const previewHeadline = document.getElementById('preview-email-headline');

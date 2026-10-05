@@ -5576,7 +5576,9 @@
               onclick="window.filterAdminUsers('users')">
               🎓 Học viên (<span id="admin-tab-count-users">0</span>)
             </button>
-            <span style="font-size: 0.78rem; font-weight: 700; color: #f59e0b; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 5px 12px; border-radius: 99px; display: inline-flex; align-items: center; gap: 6px;" title="Tổng thời gian học tập của toàn bộ học viên">
+            <span
+              style="font-size: 0.78rem; font-weight: 700; color: #f59e0b; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 5px 12px; border-radius: 99px; display: inline-flex; align-items: center; gap: 6px;"
+              title="Tổng thời gian học tập của toàn bộ học viên">
               <i class="fa-solid fa-clock"></i> <span id="admin-kpi-total-hours">0h</span>
             </span>
           </div>
@@ -5664,8 +5666,8 @@
                 Tiêu đề Email (Subject) <span style="color: #f43f5e;">*</span>
               </label>
               <input type="text" id="admin-email-subject"
-                placeholder="vd: 🎉 Thông báo khai giảng &amp; cập nhật bài học mới"
-                value="🎉 Thông báo từ Tiếng Trung Hồng Thái" oninput="window.updateBroadcastPreview()"
+                placeholder="vd: 🎉 Chào mừng các bạn đến với Tiếng Trung Hồng Thái"
+                value="🎉 Chào mừng các bạn đến với Tiếng Trung Hồng Thái" oninput="window.updateBroadcastPreview()"
                 style="width: 100%; padding: 9px 12px; font-size: 0.85rem; border-radius: 8px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; outline: none; box-sizing: border-box;">
             </div>
 
@@ -5675,8 +5677,8 @@
                 Tiêu đề nổi bật trong thư (Headline)
               </label>
               <input type="text" id="admin-email-headline"
-                placeholder="vd: Khóa học Luyện Thi HSK 3 - 4 đã được cập nhật!"
-                value="Chào mừng bạn đến với khóa học mới!" oninput="window.updateBroadcastPreview()"
+                placeholder="vd: Chào mừng các bạn đến với Tiếng Trung Hồng Thái"
+                value="Chào mừng các bạn đến với Tiếng Trung Hồng Thái" oninput="window.updateBroadcastPreview()"
                 style="width: 100%; padding: 9px 12px; font-size: 0.85rem; border-radius: 8px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; outline: none; box-sizing: border-box;">
             </div>
 
@@ -5685,13 +5687,33 @@
               <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 6px;">
                 Nội dung chi tiết (Hỗ trợ cách dòng / đoạn văn) <span style="color: #f43f5e;">*</span>
               </label>
-              <textarea id="admin-email-message" rows="5" placeholder="Nhập nội dung thông báo gửi đến học viên..."
+              <textarea id="admin-email-message" rows="8" placeholder="Nhập nội dung thông báo gửi đến học viên..."
                 oninput="window.updateBroadcastPreview()"
                 style="width: 100%; padding: 10px 12px; font-size: 0.85rem; border-radius: 8px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; outline: none; resize: vertical; box-sizing: border-box; line-height: 1.5;">Xin chào các bạn học viên,
 
-Hệ thống vừa cập nhật thêm 117 đề thi thử HSK và video khẩu ngữ thực tế.
+Chào mừng bạn đến với Tiếng Trung Hồng Thái - Hệ thống tự học &amp; luyện thi tiếng Trung thông minh toàn diện!
 
-Chúc các bạn có những giờ học tập hiệu quả và chinh phục mục tiêu tiếng Trung!</textarea>
+Để giúp bạn học tập đạt hiệu quả cao nhất, hệ thống mang đến các tính năng học tập chuyên sâu:
+
+1. 📚 Lộ Trình HSK 1 - HSK 6 Đầy Đủ:
+Trọn bộ từ vựng, ngữ pháp trọng điểm, bài khóa hội thoại và kho đề thi thử chuẩn cấu trúc HSK có tính giờ &amp; chấm điểm chi tiết.
+
+2. 🗣️ Luyện Phát Âm &amp; Đàm Thoại AI Thông Minh:
+Công nghệ AI nhận diện giọng nói, chấm điểm độ chuẩn xác, phát hiện lỗi thanh điệu và hỗ trợ đàm thoại tương tác 1:1 theo tình huống thực tế.
+
+3. ✍️ Luyện Viết Chữ Hán Động (Hanzi Writer):
+Mô phỏng thứ tự từng nét bút theo chuẩn bút thuận, kết hợp quy tắc chuyển đổi âm Hán - Việt giúp bạn ghi nhớ mặt chữ Hán sâu sắc và dễ dàng.
+
+4. 🎧 Luyện Nghe &amp; Chép Chính Tả Video:
+Luyện phản xạ nghe qua các video khẩu ngữ đời sống thực tế, kết hợp phụ đề song ngữ và tính năng chép chính tả thông minh.
+
+5. 🎮 Trò Chơi Ôn Tập &amp; Flashcard Lặp Lại Ngắt Quãng:
+Nhiều trò chơi tương tác thú vị (ghép câu, trắc nghiệm phản xạ, luyện nhớ từ) giúp việc học không nhàm chán và ghi nhớ từ vựng lâu dài.
+
+6. 📊 Quản Lý Tiến Độ &amp; Chuỗi Ngày Học (Streak):
+Tự động ghi nhận thành tích, lưu trữ lịch sử thi và thời gian học tập tích lũy giúp bạn duy trì thói quen học tập bền bỉ mỗi ngày.
+
+Chúc các bạn có những giờ học tập thật hào hứng và nhanh chóng chinh phục mục tiêu tiếng Trung của mình!</textarea>
             </div>
 
             <!-- CTA Button Options -->
@@ -5711,7 +5733,7 @@ Chúc các bạn có những giờ học tập hiệu quả và chinh phục m�
                   Đường dẫn liên kết (Link)
                 </label>
                 <input type="url" id="admin-email-action-url"
-                  value="https://toiyeutinhoc238-sudo.github.io/tieng-trung-hong-tai/"
+                  value="https://tiengtrunghongtai.online/"
                   oninput="window.updateBroadcastPreview()"
                   style="width: 100%; padding: 8px 10px; font-size: 0.82rem; border-radius: 8px; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; outline: none; box-sizing: border-box;">
               </div>
@@ -5766,7 +5788,7 @@ Chúc các bạn có những giờ học tập hiệu quả và chinh phục m�
                     &lt;thongbao@tiengtrunghongtai.online&gt;</span></div>
                 <div><strong>Tới:</strong> hocvien@gmail.com</div>
                 <div><strong>Tiêu đề:</strong> <span id="preview-email-subject"
-                    style="color: #0f172a; font-weight: 700;">🎉 Thông báo từ Tiếng Trung Hồng Thái</span></div>
+                    style="color: #0f172a; font-weight: 700;">🎉 Chào mừng các bạn đến với Tiếng Trung Hồng Thái</span></div>
               </div>
 
               <!-- Inner Card -->
@@ -5791,16 +5813,23 @@ Chúc các bạn có những giờ học tập hiệu quả và chinh phục m�
                   <div
                     style="border-left: 3px solid #e11d48; background: #fff1f2; padding: 10px 12px; border-radius: 0 6px 6px 0; margin-bottom: 14px;">
                     <div id="preview-email-headline" style="font-weight: 700; color: #9f1239; font-size: 14px;">
-                      Chào mừng bạn đến với khóa học mới!
+                      Chào mừng các bạn đến với Tiếng Trung Hồng Thái
                     </div>
                   </div>
                   <div id="preview-email-body" style="font-size: 13px; line-height: 1.6; color: #334155;">
                     <p style="margin: 0 0 10px 0;">Xin chào các bạn học viên,</p>
-                    <p style="margin: 0 0 10px 0;">Hệ thống vừa cập nhật thêm 117 đề thi thử HSK và video khẩu ngữ thực
-                      tế.</p>
+                    <p style="margin: 0 0 10px 0;">Chào mừng bạn đến với Tiếng Trung Hồng Thái - Hệ thống tự học &amp; luyện thi tiếng Trung thông minh toàn diện!</p>
+                    <p style="margin: 0 0 8px 0; font-weight: 700; color: #be123c;">✨ CÁC TÍNH NĂNG NỔI BẬT DÀNH CHO BẠN:</p>
+                    <p style="margin: 0 0 8px 0;"><strong>1. 📚 Lộ Trình HSK 1 - HSK 6 Đầy Đủ:</strong><br/>Trọn bộ từ vựng, ngữ pháp trọng điểm, bài khóa hội thoại và kho đề thi thử chuẩn cấu trúc HSK có tính giờ &amp; chấm điểm chi tiết.</p>
+                    <p style="margin: 0 0 8px 0;"><strong>2. 🗣️ Luyện Phát Âm &amp; Đàm Thoại AI Thông Minh:</strong><br/>Công nghệ AI nhận diện giọng nói, chấm điểm độ chuẩn xác, phát hiện lỗi thanh điệu và hỗ trợ đàm thoại tương tác 1:1 theo tình huống thực tế.</p>
+                    <p style="margin: 0 0 8px 0;"><strong>3. ✍️ Luyện Viết Chữ Hán Động (Hanzi Writer):</strong><br/>Mô phỏng thứ tự từng nét bút theo chuẩn bút thuận, kết hợp quy tắc chuyển đổi âm Hán - Việt giúp bạn ghi nhớ mặt chữ Hán sâu sắc và dễ dàng.</p>
+                    <p style="margin: 0 0 8px 0;"><strong>4. 🎧 Luyện Nghe &amp; Chép Chính Tả Video:</strong><br/>Luyện phản xạ nghe qua các video khẩu ngữ đời sống thực tế, kết hợp phụ đề song ngữ và tính năng chép chính tả thông minh.</p>
+                    <p style="margin: 0 0 8px 0;"><strong>5. 🎮 Trò Chơi Ôn Tập &amp; Flashcard Lặp Lại Ngắt Quãng:</strong><br/>Nhiều trò chơi tương tác thú vị (ghép câu, trắc nghiệm phản xạ, luyện nhớ từ) giúp việc học không nhàm chán và ghi nhớ từ vựng lâu dài.</p>
+                    <p style="margin: 0 0 10px 0;"><strong>6. 📊 Quản Lý Tiến Độ &amp; Chuỗi Ngày Học (Streak):</strong><br/>Tự động ghi nhận thành tích, lưu trữ lịch sử thi và thời gian học tập tích lũy giúp bạn duy trì thói quen học tập bền bỉ mỗi ngày.</p>
+                    <p style="margin: 0 0 10px 0;">Chúc các bạn có những giờ học tập thật hào hứng và nhanh chóng chinh phục mục tiêu tiếng Trung của mình!</p>
                   </div>
                   <div style="text-align: center; margin: 20px 0 8px 0;">
-                    <a id="preview-email-btn" href="#" target="_blank"
+                    <a id="preview-email-btn" href="https://tiengtrunghongtai.online/" target="_blank"
                       style="display: inline-block; padding: 10px 24px; background: linear-gradient(135deg, #e11d48, #be123c); color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: 700;">
                       Vào Học Ngay &rarr;
                     </a>

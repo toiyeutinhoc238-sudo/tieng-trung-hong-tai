@@ -26,7 +26,7 @@ async function test() {
           </p>
         </div>
         <div style="text-align: center; margin-bottom: 24px;">
-          <a href="https://toiyeutinhoc238-sudo.github.io/tieng-trung-hong-tai/" style="display: inline-block; background: #dc2626; color: #ffffff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 15px;">
+          <a href="https://tiengtrunghongtai.online/" style="display: inline-block; background: #dc2626; color: #ffffff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 15px;">
             Vào Học Ngay
           </a>
         </div>

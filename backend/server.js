@@ -1752,18 +1752,20 @@ function generateAnnouncementEmailHtml({
   actionUrl,
   recipientEmail = ''
 }) {
-  const safeHeadline = headline || subject || 'Thông Báo Học Tập';
+  const safeHeadline = headline || subject || 'Chào mừng các bạn đến với Tiếng Trung Hồng Thái';
+  const targetUrl = actionUrl || 'https://tiengtrunghongtai.online/';
+  const targetText = actionText || 'Vào Học Ngay';
   const formattedMessage = (message || '')
     .split('\n\n')
     .map(para => `<p style="margin: 0 0 16px 0; line-height: 1.7; color: #334155; font-size: 15px;">${para.replace(/\n/g, '<br/>')}</p>`)
     .join('');
 
-  const ctaBtn = (actionUrl && actionText) ? `
+  const ctaBtn = targetUrl ? `
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 28px auto 12px auto;">
       <tr>
         <td align="center" style="border-radius: 8px; background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);">
-          <a href="${actionUrl}" target="_blank" style="display: inline-block; padding: 14px 34px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; border-radius: 8px; letter-spacing: 0.3px;">
-            ${actionText} &rarr;
+          <a href="${targetUrl}" target="_blank" style="display: inline-block; padding: 14px 34px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; border-radius: 8px; letter-spacing: 0.3px;">
+            ${targetText} &rarr;
           </a>
         </td>
       </tr>
