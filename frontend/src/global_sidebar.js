@@ -721,98 +721,103 @@ import './quick_dict_widget.js';
 
   // Update user profile card in DOM if user state changes
   function updateSidebarUserProfile() {
-    const user = getCurrentUser();
-    const sidebars = document.querySelectorAll('.app-sidebar, .global-app-sidebar');
-    sidebars.forEach(sidebar => {
-      const nameEl = sidebar.querySelector('.user-name, #user-display-name');
-      const emailEl = sidebar.querySelector('.user-sub, #user-display-email');
-      const roleEl = sidebar.querySelector('.user-role-badge, #user-display-role');
-      const avatarWrap = sidebar.querySelector('.sidebar-avatar-wrap');
-      const logoutLi = sidebar.querySelector('.sidebar-auth-action-item');
+    try {
+      const user = getCurrentUser();
+      const sidebars = document.querySelectorAll('.app-sidebar, .global-app-sidebar');
+      sidebars.forEach(sidebar => {
+        const nameEl = sidebar.querySelector('.user-name, #user-display-name');
+        const emailEl = sidebar.querySelector('.user-sub, #user-display-email');
+        const roleEl = sidebar.querySelector('.user-role-badge, #user-display-role');
+        const avatarWrap = sidebar.querySelector('.sidebar-avatar-wrap');
+        const logoutLi = sidebar.querySelector('.sidebar-auth-action-item');
 
-      if (user && (user.name || user.email)) {
-        const displayName = user.name || user.displayName || (user.email ? user.email.split('@')[0] : 'Học viên');
-        const displayEmail = user.email || '';
-        let displayRole = 'Học viên';
-        if (user.role === 'super_admin') {
-          displayRole = '👑 Super Admin';
-        } else if (user.role === 'admin') {
-          displayRole = user.isVip ? '👑 Admin VIP' : '👑 Quản trị viên';
-        } else if (user.role === 'teacher') {
-          displayRole = user.isVip ? '🛡️ Giáo viên VIP' : '🛡️ Giáo viên';
-        } else if (user.isVip) {
-          displayRole = '👑 Hội Viên VIP';
-        } else {
-          displayRole = '🎓 Học viên';
-        }
-
-        if (nameEl) nameEl.textContent = displayName;
-        if (emailEl) emailEl.textContent = displayEmail;
-        if (roleEl) {
-          roleEl.textContent = displayRole;
-          roleEl.style.display = 'inline-flex';
-          roleEl.style.alignItems = 'center';
-          roleEl.style.gap = '4px';
-          roleEl.style.padding = '2px 8px';
-          roleEl.style.borderRadius = '99px';
-          roleEl.style.whiteSpace = 'nowrap';
-          roleEl.style.width = 'fit-content';
-          roleEl.style.fontSize = '0.7rem';
-          roleEl.style.fontWeight = '700';
-          roleEl.style.lineHeight = '1.25';
-
+        if (user && (user.name || user.email)) {
+          const displayName = user.name || user.displayName || (user.email ? user.email.split('@')[0] : 'Học viên');
+          const displayEmail = user.email || '';
+          const displayAvatar = user.avatar || user.picture || user.photoURL || '';
+          let displayRole = 'Học viên';
           if (user.role === 'super_admin') {
-            roleEl.style.background = 'linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(225, 29, 72, 0.12))';
-            roleEl.style.color = '#fb7185';
-            roleEl.style.border = '1px solid rgba(244, 63, 94, 0.4)';
-            roleEl.style.boxShadow = '0 2px 8px rgba(244, 63, 94, 0.2)';
+            displayRole = '👑 Super Admin';
+          } else if (user.role === 'admin') {
+            displayRole = user.isVip ? '👑 Admin VIP' : '👑 Quản trị viên';
+          } else if (user.role === 'teacher') {
+            displayRole = user.isVip ? '🛡️ Giáo viên VIP' : '🛡️ Giáo viên';
           } else if (user.isVip) {
-            roleEl.style.background = 'linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(202, 138, 4, 0.12))';
-            roleEl.style.color = '#facc15';
-            roleEl.style.border = '1px solid rgba(234, 179, 8, 0.45)';
-            roleEl.style.boxShadow = '0 2px 8px rgba(234, 179, 8, 0.2)';
-          } else if (user.role === 'admin' || user.role === 'teacher') {
-            roleEl.style.background = 'rgba(56, 189, 248, 0.15)';
-            roleEl.style.color = '#38bdf8';
-            roleEl.style.border = '1px solid rgba(56, 189, 248, 0.35)';
-            roleEl.style.boxShadow = 'none';
+            displayRole = '👑 Hội Viên VIP';
           } else {
-            roleEl.style.background = 'rgba(255, 255, 255, 0.08)';
-            roleEl.style.color = '#94a3b8';
-            roleEl.style.border = '1px solid rgba(255, 255, 255, 0.15)';
-            roleEl.style.boxShadow = 'none';
+            displayRole = '🎓 Học viên';
           }
-        }
-        if (avatarWrap) {
-          if (displayAvatar) {
-            avatarWrap.innerHTML = `<img class="user-avatar-img" src="${displayAvatar}" alt="Avatar" style="display: block; width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">`;
-          } else {
+
+          if (nameEl) nameEl.textContent = displayName;
+          if (emailEl) emailEl.textContent = displayEmail;
+          if (roleEl) {
+            roleEl.textContent = displayRole;
+            roleEl.style.display = 'inline-flex';
+            roleEl.style.alignItems = 'center';
+            roleEl.style.gap = '4px';
+            roleEl.style.padding = '2px 8px';
+            roleEl.style.borderRadius = '99px';
+            roleEl.style.whiteSpace = 'nowrap';
+            roleEl.style.width = 'fit-content';
+            roleEl.style.fontSize = '0.7rem';
+            roleEl.style.fontWeight = '700';
+            roleEl.style.lineHeight = '1.25';
+
+            if (user.role === 'super_admin') {
+              roleEl.style.background = 'linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(225, 29, 72, 0.12))';
+              roleEl.style.color = '#fb7185';
+              roleEl.style.border = '1px solid rgba(244, 63, 94, 0.4)';
+              roleEl.style.boxShadow = '0 2px 8px rgba(244, 63, 94, 0.2)';
+            } else if (user.isVip) {
+              roleEl.style.background = 'linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(202, 138, 4, 0.12))';
+              roleEl.style.color = '#facc15';
+              roleEl.style.border = '1px solid rgba(234, 179, 8, 0.45)';
+              roleEl.style.boxShadow = '0 2px 8px rgba(234, 179, 8, 0.2)';
+            } else if (user.role === 'admin' || user.role === 'teacher') {
+              roleEl.style.background = 'rgba(56, 189, 248, 0.15)';
+              roleEl.style.color = '#38bdf8';
+              roleEl.style.border = '1px solid rgba(56, 189, 248, 0.35)';
+              roleEl.style.boxShadow = 'none';
+            } else {
+              roleEl.style.background = 'rgba(255, 255, 255, 0.08)';
+              roleEl.style.color = '#94a3b8';
+              roleEl.style.border = '1px solid rgba(255, 255, 255, 0.15)';
+              roleEl.style.boxShadow = 'none';
+            }
+          }
+          if (avatarWrap) {
+            if (displayAvatar) {
+              avatarWrap.innerHTML = `<img class="user-avatar-img" src="${displayAvatar}" alt="Avatar" style="display: block; width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">`;
+            } else {
+              avatarWrap.innerHTML = `<div class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>`;
+            }
+          }
+          if (logoutLi) {
+            logoutLi.innerHTML = `
+              <a href="javascript:void(0)" class="logout-link" onclick="window.handleGlobalLogout && window.handleGlobalLogout(event)" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #f87171; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.2s;">
+                <i class="fa-solid fa-right-from-bracket" style="color: #f87171;"></i> <span>Đăng xuất</span>
+              </a>
+            `;
+          }
+        } else {
+          if (nameEl) nameEl.textContent = 'Khách (Chưa đăng nhập)';
+          if (emailEl) emailEl.textContent = 'Đăng nhập để lưu tiến độ học';
+          if (roleEl) roleEl.textContent = 'Khách';
+          if (avatarWrap) {
             avatarWrap.innerHTML = `<div class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>`;
           }
+          if (logoutLi) {
+            logoutLi.innerHTML = `
+              <a href="javascript:void(0)" onclick="window.openLoginPrompt && window.openLoginPrompt()" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #4ade80; font-size: 0.88rem; font-weight: 700; text-decoration: none; transition: all 0.2s;">
+                <i class="fa-brands fa-google" style="color: #4ade80;"></i> <span>Đăng nhập Google</span>
+              </a>
+            `;
+          }
         }
-        if (logoutLi) {
-          logoutLi.innerHTML = `
-            <a href="javascript:void(0)" class="logout-link" onclick="window.handleGlobalLogout && window.handleGlobalLogout(event)" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #f87171; font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.2s;">
-              <i class="fa-solid fa-right-from-bracket" style="color: #f87171;"></i> <span>Đăng xuất</span>
-            </a>
-          `;
-        }
-      } else {
-        if (nameEl) nameEl.textContent = 'Khách (Chưa đăng nhập)';
-        if (emailEl) emailEl.textContent = 'Đăng nhập để lưu tiến độ học';
-        if (roleEl) roleEl.textContent = 'Khách';
-        if (avatarWrap) {
-          avatarWrap.innerHTML = `<div class="user-avatar sidebar-avatar-placeholder"><i class="fa-solid fa-user"></i></div>`;
-        }
-        if (logoutLi) {
-          logoutLi.innerHTML = `
-            <a href="javascript:void(0)" onclick="window.openLoginPrompt && window.openLoginPrompt()" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 8px; color: #4ade80; font-size: 0.88rem; font-weight: 700; text-decoration: none; transition: all 0.2s;">
-              <i class="fa-brands fa-google" style="color: #4ade80;"></i> <span>Đăng nhập Google</span>
-            </a>
-          `;
-        }
-      }
-    });
+      });
+    } catch (err) {
+      console.warn('Error in updateSidebarUserProfile:', err);
+    }
   }
 
   // Generate Sidebar Drawer HTML
@@ -1044,10 +1049,17 @@ import './quick_dict_widget.js';
 
   // Toggle & Control Functions
   window.openGlobalSidebar = function () {
-    updateSidebarUserProfile();
-    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+    try {
+      updateSidebarUserProfile();
+    } catch (e) {
+      console.warn('Sidebar profile sync error:', e);
+    }
+    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname === '';
+    
+    // Always clear sidebar-collapsed when opening sidebar drawer
+    document.body.classList.remove('sidebar-collapsed');
+
     if (isIndex && window.innerWidth > 900) {
-      document.body.classList.remove('sidebar-collapsed');
       localStorage.setItem('sidebar_collapsed', 'false');
       return;
     }
@@ -1058,7 +1070,7 @@ import './quick_dict_widget.js';
       sidebar.classList.add('open', 'active');
       sidebar.style.pointerEvents = 'auto';
     }
-    if (backdrop && (!isIndex || window.innerWidth <= 900)) {
+    if (backdrop) {
       backdrop.classList.add('active');
     }
     document.body.classList.add('sidebar-open');
@@ -1077,7 +1089,7 @@ import './quick_dict_widget.js';
   };
 
   window.toggleGlobalSidebar = function () {
-    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+    const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname === '';
     if (isIndex && window.innerWidth > 900) {
       if (window.toggleSidebarCollapse) {
         window.toggleSidebarCollapse();
@@ -1694,8 +1706,30 @@ import './quick_dict_widget.js';
 
     // 8. Connect all existing and new hamburger / menu toggle buttons
     const bindMenuButtons = () => {
-      document.querySelectorAll('.menu-toggle-btn, .global-hamburger-btn, .sidebar-open-btn, .top-menu-btn, #top-sidebar-toggle-btn, #sidebar-expand-float-btn, .sidebar-expand-float-btn, #mobile-nav-toggle-btn, .header-icon-btn, .sidebar-toggle-btn, .topbar-comic-menu-btn, #mobile-sidebar-toggle-btn').forEach(btn => {
-        btn.onclick = window.toggleGlobalSidebar;
+      document.querySelectorAll('.menu-toggle-btn, .global-hamburger-btn, .sidebar-open-btn, .top-menu-btn, #top-sidebar-toggle-btn, #sidebar-expand-float-btn, .sidebar-expand-float-btn, #mobile-nav-toggle-btn, .topbar-comic-menu-btn, #mobile-sidebar-toggle-btn, .setup-menu-toggle-btn').forEach(btn => {
+        btn.onclick = function (e) {
+          if (e) {
+            e.stopPropagation();
+            if (typeof e.preventDefault === 'function') e.preventDefault();
+          }
+          window.toggleGlobalSidebar();
+        };
+      });
+
+      document.querySelectorAll('.sidebar-toggle-btn').forEach(btn => {
+        btn.onclick = function (e) {
+          if (e) {
+            e.stopPropagation();
+            if (typeof e.preventDefault === 'function') e.preventDefault();
+          }
+          if (window.innerWidth <= 900) {
+            window.closeGlobalSidebar();
+          } else if (window.toggleSidebarCollapse) {
+            window.toggleSidebarCollapse();
+          } else {
+            window.closeGlobalSidebar();
+          }
+        };
       });
     };
     bindMenuButtons();
@@ -1902,7 +1936,7 @@ import './quick_dict_widget.js';
   document.addEventListener('click', function (e) {
     const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname === '';
     if (!isIndex && !isUserLoggedIn()) {
-      if (e.target.closest('#global-auth-required-modal')) return;
+      if (e.target.closest('#global-auth-required-modal, .global-hamburger-btn, .menu-toggle-btn, #mobile-nav-toggle-btn, .app-sidebar, .global-sidebar-drawer, #global-sidebar-mount, .sidebar-backdrop, #sidebar-expand-float-btn')) return;
       e.preventDefault();
       e.stopPropagation();
       showGlobalAuthModal({ isMandatoryPageLock: true });
@@ -1913,7 +1947,13 @@ import './quick_dict_widget.js';
     // Check if page already has a hamburger button
     const alreadyHasBtn = document.querySelector('.global-hamburger-btn, #mobile-nav-toggle-btn, #top-sidebar-toggle-btn, #mobile-sidebar-toggle-btn');
     if (alreadyHasBtn) {
-      alreadyHasBtn.onclick = window.toggleGlobalSidebar;
+      alreadyHasBtn.onclick = function (e) {
+        if (e) {
+          e.stopPropagation();
+          if (typeof e.preventDefault === 'function') e.preventDefault();
+        }
+        window.toggleGlobalSidebar();
+      };
       return;
     }
 
@@ -1949,7 +1989,13 @@ import './quick_dict_widget.js';
         menuBtn.title = 'Mở Menu Danh Mục';
         menuBtn.setAttribute('aria-label', 'Mở Menu Danh Mục');
         menuBtn.innerHTML = HEADER_ICONS.bars;
-        menuBtn.onclick = window.toggleGlobalSidebar;
+        menuBtn.onclick = function (e) {
+          if (e) {
+            e.stopPropagation();
+            if (typeof e.preventDefault === 'function') e.preventDefault();
+          }
+          window.toggleGlobalSidebar();
+        };
 
         if (cfg.insertBefore === ':first-child') {
           parent.insertBefore(menuBtn, parent.firstChild);

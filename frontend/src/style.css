@@ -8813,17 +8813,17 @@ html.light-mode .google-acc-card {
   border-color: #2563eb;
 }
 
-body.sidebar-collapsed .app-sidebar {
+body.sidebar-collapsed:not(.sidebar-open) .app-sidebar {
   transform: translateX(-105%) !important;
   opacity: 0;
   pointer-events: none;
 }
-body.sidebar-collapsed .main-layout {
+body.sidebar-collapsed:not(.sidebar-open) .main-layout {
   margin-left: 0 !important;
   width: 100% !important;
   max-width: 100% !important;
 }
-body.sidebar-collapsed .sidebar-expand-float-btn {
+body.sidebar-collapsed:not(.sidebar-open) .sidebar-expand-float-btn {
   display: flex !important;
 }
 
@@ -8835,8 +8835,8 @@ body.sidebar-collapsed .sidebar-expand-float-btn {
     top: 14px !important;
     left: 14px !important;
     z-index: 99995 !important;
-    background: rgba(15, 23, 42, 0.92) !important;
-    border: 1.5px solid rgba(56, 189, 248, 0.55) !important;
+    background: rgba(15, 23, 42, 0.94) !important;
+    border: 1.5px solid rgba(56, 189, 248, 0.6) !important;
     color: #38bdf8 !important;
     padding: 8px 16px !important;
     border-radius: 999px !important;
@@ -8863,6 +8863,16 @@ body.sidebar-collapsed .sidebar-expand-float-btn {
     transform: scale(0.95) !important;
     background: #1d4ed8 !important;
     color: #ffffff !important;
+  }
+
+  html.light-mode #sidebar-expand-float-btn,
+  html.light-mode .sidebar-expand-float-btn,
+  body.light-mode #sidebar-expand-float-btn,
+  body.light-mode .sidebar-expand-float-btn {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border: 1.5px solid #0284c7 !important;
+    color: #0284c7 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
   }
 }
 
@@ -18933,9 +18943,37 @@ button,
   }
 }
 
-/* Master Backdrop: Only active on mobile when drawer is opened (Never blur desktop/tablets) */
+/* Master Backdrop: Active when sidebar drawer is opened (mobile OR subpages) */
 .sidebar-backdrop {
-  display: none !important;
+  display: none;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  z-index: 99990 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.28s ease !important;
+}
+
+body.sidebar-open .sidebar-backdrop,
+.sidebar-backdrop.active {
+  display: block !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* On Desktop index page, sidebar is docked, so backdrop is hidden */
+@media (min-width: 901px) {
+  body:not(.sidebar-open) .sidebar-backdrop,
+  .sidebar-backdrop.on-index {
+    display: none !important;
+    pointer-events: none !important;
+  }
 }
 
 .app-sidebar.open,
@@ -18948,31 +18986,14 @@ body.sidebar-open .app-sidebar,
 body.sidebar-open .global-app-sidebar,
 body.sidebar-open .global-sidebar-drawer {
   z-index: 100000 !important;
+  transform: translateX(0) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+  display: flex !important;
 }
 
 @media (max-width: 900px) {
-  .sidebar-backdrop {
-    display: block !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    background: rgba(0, 0, 0, 0.55) !important;
-    backdrop-filter: blur(2px) !important;
-    -webkit-backdrop-filter: blur(2px) !important;
-    z-index: 99990 !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    transition: opacity 0.28s ease !important;
-  }
-
-  body.sidebar-open .sidebar-backdrop,
-  .sidebar-backdrop.active {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-
   /* Lock background page scrolling when mobile drawer is open */
   body.sidebar-open {
     overflow: hidden !important;
