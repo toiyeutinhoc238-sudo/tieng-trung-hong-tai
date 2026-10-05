@@ -18,6 +18,7 @@ if (_initialHeapMB < 320 && !process.env.HT_MAX_MEM_GUARD) {
 
 import dotenv from 'dotenv';
 import express from 'express';
+import compression from 'compression';
 import cors from 'cors';
 import fs from 'fs/promises';
 import * as fsSync from 'fs';
@@ -221,6 +222,15 @@ let lastTotalUsersCheckTime = 0;
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Enable gzip/deflate compression for all text and JSON responses (reduces transfer sizes by 75-85%)
+app.use(compression({
+  threshold: 1024,
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) return false;
+    return compression.filter(req, res);
+  }
+}));
+
 // Canonical Domain & Path 301 Permanent Redirect for Googlebot & SEO (Must be before all middleware)
 app.use((req, res, next) => {
   const rawHost = req.headers['x-forwarded-host'] || req.headers.host || req.hostname || '';
@@ -274,26 +284,66 @@ app.use((req, res, next) => {
   next();
 });
 
-// Force no-cache on HTML and SW files so browsers always pull latest builds
+// Cache-Control strategy:
+// 1. HTML files and Service Worker must NOT be cached so users always get fresh releases
 app.use((req, res, next) => {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
+  const p = (req.path || '').toLowerCase();
+  if (p === '/' || p.endsWith('.html') || p === '/service-worker.js' || p === '/manifest.json') {
+    res.setHeader('Cache-Control', 'no-cache, must-revalidate, max-age=0');
+    res.setHeader('Pragma', 'no-cache');
+  }
   next();
 });
 
-// Explicit static asset routes for production & dev builds
-app.use('/assets', express.static(path.join(DIST_DIR, 'assets')));
-app.use('/assets', express.static(path.join(PUBLIC_DIR, 'assets')));
-app.use('/assets', express.static(path.join(FRONTEND_DIR, 'public', 'assets')));
-app.use('/src/assets', express.static(path.join(FRONTEND_DIR, 'src', 'assets')));
-app.use('/src', express.static(path.join(FRONTEND_DIR, 'src')));
-app.use('/vendor', express.static(path.join(DIST_DIR, 'vendor')));
-app.use('/vendor', express.static(path.join(PUBLIC_DIR, 'vendor')));
+// 2. Vite compiled bundles (/assets/*) are immutable with content hashes -> Cache for 1 year!
+app.use('/assets', express.static(path.join(DIST_DIR, 'assets'), {
+  maxAge: '1y',
+  immutable: true
+}));
+app.use('/assets', express.static(path.join(PUBLIC_DIR, 'assets'), {
+  maxAge: '7d'
+}));
+app.use('/assets', express.static(path.join(FRONTEND_DIR, 'public', 'assets'), {
+  maxAge: '7d'
+}));
+app.use('/src/assets', express.static(path.join(FRONTEND_DIR, 'src', 'assets'), {
+  maxAge: '7d'
+}));
+app.use('/vendor', express.static(path.join(DIST_DIR, 'vendor'), {
+  maxAge: '30d'
+}));
+app.use('/vendor', express.static(path.join(PUBLIC_DIR, 'vendor'), {
+  maxAge: '30d'
+}));
 
-app.use(express.static(DIST_DIR));
-app.use(express.static(PUBLIC_DIR));
-app.use(express.static(FRONTEND_DIR));
+// 3. General static files
+app.use(express.static(DIST_DIR, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, must-revalidate, max-age=0');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+    }
+  }
+}));
+app.use(express.static(PUBLIC_DIR, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, must-revalidate, max-age=0');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+    }
+  }
+}));
+app.use(express.static(FRONTEND_DIR, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, must-revalidate, max-age=0');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+    }
+  }
+}));
 
 app.get('/favicon.ico', (req, res) => {
   const icoPath = path.join(PUBLIC_DIR, 'favicon.ico');
@@ -2319,6 +2369,8 @@ app.post('/api/quiz/save', async (req, res) => {
 // GET all vocabulary (merges built-in list with user-specific states and custom words)
 app.get('/api/vocabulary', async (req, res) => {
   try {
+    // Enable browser caching for 60s + stale-while-revalidate for 10m to drastically speed up page loads
+    res.setHeader('Cache-Control', 'private, max-age=60, stale-while-revalidate=600');
     const masterList = await readDatabase();
     const email = getLoggedInUserEmail(req);
 

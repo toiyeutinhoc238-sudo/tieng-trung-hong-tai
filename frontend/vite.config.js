@@ -36,7 +36,22 @@ export default defineConfig({
         sentenceReorder: resolve(__dirname, 'sentence-reorder.html'),
         aiDialogue: resolve(__dirname, 'ai-dialogue.html'),
         translation: resolve(__dirname, 'translation-practice.html')
+      },
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('pinyin-pro')) return 'vendor-pinyin';
+            return 'vendor';
+          }
+          if (id.includes('grammar_hsk')) {
+            return 'hsk-grammar-data';
+          }
+          if (id.includes('notebook_games_hub') || id.includes('notebook_cannon_game')) {
+            return 'games-data';
+          }
+        }
       }
-    }
+    },
+    chunkSizeWarningLimit: 1200
   }
 });

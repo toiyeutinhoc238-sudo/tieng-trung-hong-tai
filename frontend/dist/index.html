@@ -54,11 +54,6 @@
           registration.unregister();
         }
       });
-      if ('caches' in window) {
-        caches.keys().then(names => {
-          for (let name of names) caches.delete(name);
-        });
-      }
     }
     (function () {
       var t = localStorage.getItem('theme') || 'dark';
@@ -225,11 +220,13 @@
       }
     };
   </script>
-  <script type="module" crossorigin src="/assets/global_sidebar-CravjNDa.js"></script>
-  <script type="module" crossorigin src="/assets/grammar_hsk3_v2-DLPb-ska.js"></script>
-  <script type="module" crossorigin src="/assets/index-haNF1LmB.js"></script>
-  <script type="module" crossorigin src="/assets/main-KEciamQK.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-DftGJRi9.css">
+  <script type="module" crossorigin src="/assets/vendor-BfYXEYrK.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-BSst2jI0.js"></script>
+  <script type="module" crossorigin src="/assets/hsk-grammar-data-DLPb-ska.js"></script>
+  <script type="module" crossorigin src="/assets/games-data-CBh3wN3X.js"></script>
+  <script type="module" crossorigin src="/assets/vendor-pinyin-haNF1LmB.js"></script>
+  <script type="module" crossorigin src="/assets/main-CABrYAeX.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-B9mUNyKh.css">
 </head>
 
 <body>
@@ -999,6 +996,69 @@
           <p class="vip-feature-desc">
             Nhằm tạo điều kiện cho tất cả học viên và giáo viên trải nghiệm trọn vẹn, Tiếng Trung Hongtai trân trọng dành tặng <strong>30 NGÀY VIP HOÀN TOÀN MIỄN PHÍ</strong>. Mở khóa toàn bộ từ vựng HSK 1 - 6/9, kho giáo trình điện tử, AI sửa bài và video shadowing không giới hạn!
           </p>
+        </div>
+
+        <!-- LỘ TRÌNH & THỜI GIAN ÁP DỤNG TÍNH PHÍ VIP -->
+        <div class="vip-timeline-schedule-box">
+          <div class="vip-timeline-header">
+            <div class="vip-timeline-title-wrap">
+              <span class="vip-timeline-badge"><i class="fa-solid fa-clock-rotate-left"></i> LỘ TRÌNH TRIỂN KHAI VIP</span>
+              <h3 class="vip-timeline-title">Thời Gian Bắt Đầu Áp Dụng Tính Phí &amp; Đợt Trải Nghiệm VIP</h3>
+            </div>
+            <div class="vip-campaign-dates">
+              <i class="fa-solid fa-calendar-check"></i>
+              <span>Chiến dịch đăng ký: <strong>05/10/2026 – 05/11/2026</strong></span>
+            </div>
+          </div>
+
+          <div class="vip-timeline-stepper">
+            <!-- Step 1 -->
+            <div class="vip-timeline-step-item active">
+              <div class="vip-step-marker">
+                <span class="vip-step-marker-number">1</span>
+              </div>
+              <div class="vip-step-info">
+                <div class="vip-step-info-tag green"><i class="fa-solid fa-gift"></i> 05/10/2026 – 05/11/2026</div>
+                <div class="vip-step-info-title">Đăng Ký Nhận 30 Ngày VIP Miễn Phí</div>
+                <div class="vip-step-info-desc">Học viên thực hiện 3 bước đơn giản bên dưới để gửi yêu cầu kích hoạt 30 ngày VIP không tốn phí.</div>
+              </div>
+            </div>
+
+            <div class="vip-timeline-line"></div>
+
+            <!-- Step 2 -->
+            <div class="vip-timeline-step-item current">
+              <div class="vip-step-marker">
+                <span class="vip-step-marker-number">2</span>
+              </div>
+              <div class="vip-step-info">
+                <div class="vip-step-info-tag gold"><i class="fa-solid fa-stopwatch"></i> TÍNH TỪ NGÀY KÍCH HOẠT</div>
+                <div class="vip-step-info-title">Trọn Vẹn 30 Ngày Riêng Biệt</div>
+                <div class="vip-step-info-desc">Tài khoản được hưởng đầy đủ 30 ngày VIP tính từ thời điểm admin duyệt kích hoạt (dù đăng ký ngày nào trong đợt).</div>
+              </div>
+            </div>
+
+            <div class="vip-timeline-line"></div>
+
+            <!-- Step 3 -->
+            <div class="vip-timeline-step-item">
+              <div class="vip-step-marker">
+                <span class="vip-step-marker-number">3</span>
+              </div>
+              <div class="vip-step-info">
+                <div class="vip-step-info-tag blue"><i class="fa-solid fa-credit-card"></i> KHI HẾT 30 NGÀY TRẢI NGHIỆM</div>
+                <div class="vip-step-info-title">Bắt Đầu Áp Dụng Biểu Phí VIP</div>
+                <div class="vip-step-info-desc">Sau 30 ngày, hệ thống bắt đầu tính phí theo các gói VIP (3T, 6T, 1N) nếu gia hạn, hoặc giữ tài khoản Thường trọn đời.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="vip-timeline-policy-notice">
+            <i class="fa-solid fa-shield-halved" style="color: #10b981; font-size: 1.15rem; flex-shrink: 0;"></i>
+            <div>
+              <strong>Chính sách minh bạch &amp; an tâm học tập:</strong> Bạn được trải nghiệm 100% tính năng cao cấp trong suốt 30 ngày hoàn toàn miễn phí. Sau khi hết 30 ngày dùng thử, bạn có quyền chủ động đăng ký nâng cấp gói trả phí hoặc tiếp tục sử dụng miễn phí toàn bộ kho từ vựng HSK 1 mãi mãi.
+            </div>
+          </div>
         </div>
 
         <!-- 3 Steps Grid -->
@@ -4318,6 +4378,37 @@
             </p>
           </div>
 
+          <!-- Banner Thông Báo Lộ Trình Áp Dụng Phí & 30 Ngày VIP -->
+          <div class="vip-modal-timeline-banner">
+            <div class="vip-modal-timeline-header">
+              <span class="vip-modal-timeline-tag"><i class="fa-solid fa-clock-rotate-left"></i> LỘ TRÌNH &amp; THỜI GIAN ÁP DỤNG TÍNH PHÍ</span>
+              <span class="vip-modal-timeline-window"><i class="fa-solid fa-calendar-check"></i> Đợt ưu đãi: <strong>05/10/2026 – 05/11/2026</strong></span>
+            </div>
+            <div class="vip-modal-timeline-grid">
+              <div class="vip-modal-timeline-card">
+                <div class="vip-mtc-num">01</div>
+                <div>
+                  <div class="vip-mtc-title">Giai Đoạn Đăng Ký (05/10 – 05/11)</div>
+                  <div class="vip-mtc-desc">Học viên thực hiện 3 bước gửi biểu mẫu để nhận vé kích hoạt 30 ngày VIP không phát sinh chi phí.</div>
+                </div>
+              </div>
+              <div class="vip-modal-timeline-card highlight">
+                <div class="vip-mtc-num gold">02</div>
+                <div>
+                  <div class="vip-mtc-title">Tính Đủ 30 Ngày Kể Từ Lúc Kích Hoạt</div>
+                  <div class="vip-mtc-desc">Thời hạn VIP được cấp riêng cho từng tài khoản, tính đủ 30 ngày từ thời điểm admin xác nhận duyệt form.</div>
+                </div>
+              </div>
+              <div class="vip-modal-timeline-card">
+                <div class="vip-mtc-num">03</div>
+                <div>
+                  <div class="vip-mtc-title">Bắt Đầu Áp Dụng Biểu Phí Khi Hết Hạn</div>
+                  <div class="vip-mtc-desc">Sau 30 ngày trải nghiệm, hệ thống áp dụng tính phí các gói gia hạn (hoặc giữ bản miễn phí HSK 1 vĩnh viễn).</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Steps -->
           <div style="display: flex; flex-direction: column; gap: 14px;">
             <!-- Step 1 Item -->
@@ -4458,6 +4549,14 @@
 
         <!-- TAB 3: PRICING -->
         <div id="vip-tab-pane-pricing" class="vip-tab-pane" style="display: none; flex-direction: column; gap: 18px;">
+          <!-- Note banner on when pricing begins -->
+          <div class="vip-pricing-schedule-note">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <div>
+              <strong>Thời Điểm Bắt Đầu Áp Dụng Biểu Phí:</strong> Biểu phí này bắt đầu áp dụng khi tài khoản của bạn hết 30 ngày trải nghiệm miễn phí (thuộc đợt ưu đãi 05/10/2026 – 05/11/2026). Bạn cũng có thể nâng cấp sớm bất kỳ lúc nào để được cộng dồn thời hạn sử dụng!
+            </div>
+          </div>
+
           <div style="text-align: center;">
             <h4 style="font-size: 1.35rem; font-weight: 900; margin: 0; color: #fff;">Bảng Giá Các Gói Nâng Cấp Dài Hạn</h4>
             <p style="font-size: 0.88rem; color: #cbd5e1; margin: 6px 0 0 0;">Mức giá ưu đãi áp dụng có hạn trong giai đoạn ra mắt hệ thống</p>

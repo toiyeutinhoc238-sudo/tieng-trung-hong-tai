@@ -1283,12 +1283,21 @@ import './quick_dict_widget.js';
     },
     {
       id: 'vip-upgrade-trial',
-      tag: '🎁 ƯU ĐÃI VIP',
+      tag: '🎁 ĐỢT TRẢI NGHIỆM',
       tagClass: 'vip',
-      title: 'Trải Nghiệm VIP 30 Ngày:',
-      desc: 'Mở khóa toàn bộ tài liệu độc quyền, tính năng AI nâng cao hoàn toàn miễn phí!',
+      title: 'Đợt Nhận 30 Ngày VIP (05/10 - 05/11/2026):',
+      desc: 'Mở cổng tặng 30 ngày VIP miễn phí 100%! Kích hoạt lúc nào tính đủ 30 ngày từ lúc đó.',
       action: 'vip',
       linkText: 'Nhận 30N VIP →'
+    },
+    {
+      id: 'vip-schedule-fee',
+      tag: '⏳ LỘ TRÌNH PHÍ',
+      tagClass: 'hot',
+      title: 'Thời Gian Bắt Đầu Tính Phí VIP:',
+      desc: 'Tài khoản bắt đầu tính phí sau khi kết thúc 30 ngày trải nghiệm. Bảng giá ưu đãi các gói 3T, 6T, 1N!',
+      action: 'vip',
+      linkText: 'Xem lộ trình & phí →'
     },
     {
       id: 'discussion-forum',

@@ -766,100 +766,142 @@ function cleanPinyinText(str) {
 }
 
 // --- API ACTIONS ---
+function processVocabData(rawList) {
+  if (!Array.isArray(rawList)) return false;
+
+  // Filter out empty/incomplete database entries
+  let filtered = rawList.filter(w =>
+    w &&
+    w.word && w.word.trim() !== '' &&
+    w.meaning && w.meaning.trim() !== '' &&
+    w.pinyin && w.pinyin.trim() !== ''
+  );
+
+  // Clean up pinyin formatting anomalies
+  filtered.forEach(w => {
+    if (w.pinyin) {
+      w.pinyin = cleanPinyinText(w.pinyin);
+    }
+  });
+
+  // Merge user/guest progress from localStorage to ensure progress is never lost across login/logout
+  const userKey = currentUser ? (currentUser._id || currentUser.id || currentUser.email || 'user') : 'guest';
+  const userProg = JSON.parse(localStorage.getItem(`user_progress_${userKey}`) || '{}');
+  const guestProg = JSON.parse(localStorage.getItem('guest_progress') || '{}');
+  const mergedProg = { ...guestProg, ...userProg };
+
+  vocabList = filtered.map(w => {
+    // Dual lookup: check w.id, String(w.id), or w.word to ensure user progress is never lost
+    const state = mergedProg[w.id] || mergedProg[String(w.id)] || (w.word ? mergedProg[w.word] : null);
+    const isMem = state ? !!state.isMemorized : !!w.isMemorized;
+    const isStar = state ? !!state.isStarred : !!w.isStarred;
+    const isWr = state ? !!state.isWrong : !!w.isWrong;
+    const isStd = state ? !!state.isStudied : !!w.isStudied;
+    return {
+      ...w,
+      isMemorized: isMem,
+      isStarred: isStar,
+      isWrong: isWr,
+      isStudied: isStd || isMem || isStar || isWr
+    };
+  });
+
+  initCustomLists();
+  renderCustomLists();
+  updateStats();
+  applyFilters();
+  renderCustomWordsTable();
+  return true;
+}
+
+const VOCAB_CACHE_NAME = 'tiengtrung_vocab_cache_v2';
+const VOCAB_CACHE_URL = '/api/vocabulary_cached_v2';
+
 async function fetchVocabulary() {
+  let hasRenderedFromCache = false;
+
+  // Stale-While-Revalidate: Instant render from Cache API if available (~20ms)
+  if (typeof window !== 'undefined' && 'caches' in window) {
+    try {
+      const cache = await caches.open(VOCAB_CACHE_NAME);
+      const cachedResponse = await cache.match(VOCAB_CACHE_URL);
+      if (cachedResponse) {
+        const cachedData = await cachedResponse.json();
+        if (Array.isArray(cachedData) && cachedData.length > 0) {
+          processVocabData(cachedData);
+          hasRenderedFromCache = true;
+          loadInitialStats();
+          startStudyTimer();
+        }
+      }
+    } catch (e) {
+      console.warn('Vocab cache read skipped:', e);
+    }
+  }
+
   try {
     const response = await fetch(API_BASE_URL + '/api/vocabulary', {
       headers: getAuthHeaders(),
-      credentials: 'include',
-      cache: 'no-store'
+      credentials: 'include'
     });
     if (!response.ok) throw new Error('Không thể tải từ vựng từ API');
-    vocabList = await response.json();
+    const freshData = await response.json();
 
-    // Filter out empty/incomplete database entries
-    if (Array.isArray(vocabList)) {
-      vocabList = vocabList.filter(w =>
-        w &&
-        w.word && w.word.trim() !== '' &&
-        w.meaning && w.meaning.trim() !== '' &&
-        w.pinyin && w.pinyin.trim() !== ''
-      );
-    }
+    processVocabData(freshData);
 
-    // Clean up pinyin formatting anomalies
-    vocabList.forEach(w => {
-      if (w.pinyin) {
-        w.pinyin = cleanPinyinText(w.pinyin);
+    // Save to Cache API for next instant load
+    if (typeof window !== 'undefined' && 'caches' in window && Array.isArray(freshData) && freshData.length > 0) {
+      try {
+        const cache = await caches.open(VOCAB_CACHE_NAME);
+        await cache.put(VOCAB_CACHE_URL, new Response(JSON.stringify(freshData), {
+          headers: { 'Content-Type': 'application/json' }
+        }));
+      } catch (cacheErr) {
+        console.warn('Vocab cache write skipped:', cacheErr);
       }
-    });
-
-    // Merge user/guest progress from localStorage to ensure progress is never lost across login/logout
-    const userKey = currentUser ? (currentUser._id || currentUser.id || currentUser.email || 'user') : 'guest';
-    const userProg = JSON.parse(localStorage.getItem(`user_progress_${userKey}`) || '{}');
-    const guestProg = JSON.parse(localStorage.getItem('guest_progress') || '{}');
-    const mergedProg = { ...guestProg, ...userProg };
-
-    vocabList = vocabList.map(w => {
-      // Dual lookup: check w.id, String(w.id), or w.word to ensure user progress is never lost
-      const state = mergedProg[w.id] || mergedProg[String(w.id)] || (w.word ? mergedProg[w.word] : null);
-      const isMem = state ? !!state.isMemorized : !!w.isMemorized;
-      const isStar = state ? !!state.isStarred : !!w.isStarred;
-      const isWr = state ? !!state.isWrong : !!w.isWrong;
-      const isStd = state ? !!state.isStudied : !!w.isStudied;
-      return {
-        ...w,
-        isMemorized: isMem,
-        isStarred: isStar,
-        isWrong: isWr,
-        isStudied: isStd || isMem || isStar || isWr
-      };
-    });
-
-    initCustomLists();
-    renderCustomLists();
-    updateStats();
-    applyFilters();
-    renderCustomWordsTable();
+    }
 
     // Fetch initial stats and start timer
     loadInitialStats();
     startStudyTimer();
   } catch (error) {
     console.error('API Error:', error);
-    showToast('Lỗi kết nối máy chủ backend!', true);
+    if (!hasRenderedFromCache) {
+      showToast('Lỗi kết nối máy chủ backend!', true);
 
-    // Merge premium topics mock data
-    vocabList = [...vocabList, ...premiumMockData];
+      // Merge premium topics mock data
+      vocabList = [...vocabList, ...premiumMockData];
 
-    vocabList.forEach(w => {
-      if (w.pinyin) {
-        w.pinyin = cleanPinyinText(w.pinyin);
-      }
-    });
-
-    // Merge guest progress on fallback empty seed list if offline
-    if (!currentUser) {
-      const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
-      vocabList = vocabList.map(w => {
-        const state = guestProgress[w.id];
-        return {
-          ...w,
-          isMemorized: state ? !!state.isMemorized : !!w.isMemorized,
-          isStarred: state ? !!state.isStarred : !!w.isStarred,
-          isWrong: state ? !!state.isWrong : !!w.isWrong,
-          isStudied: state ? !!state.isStudied : !!w.isStudied
-        };
+      vocabList.forEach(w => {
+        if (w.pinyin) {
+          w.pinyin = cleanPinyinText(w.pinyin);
+        }
       });
+
+      // Merge guest progress on fallback empty seed list if offline
+      if (!currentUser) {
+        const guestProgress = JSON.parse(localStorage.getItem('guest_progress') || '{}');
+        vocabList = vocabList.map(w => {
+          const state = guestProgress[w.id];
+          return {
+            ...w,
+            isMemorized: state ? !!state.isMemorized : !!w.isMemorized,
+            isStarred: state ? !!state.isStarred : !!w.isStarred,
+            isWrong: state ? !!state.isWrong : !!w.isWrong,
+            isStudied: state ? !!state.isStudied : !!w.isStudied
+          };
+        });
+      }
+
+      initCustomLists();
+      renderCustomLists();
+      updateStats();
+      applyFilters();
+
+      // Fetch initial stats and start timer
+      loadInitialStats();
+      startStudyTimer();
     }
-
-    initCustomLists();
-    renderCustomLists();
-    updateStats();
-    applyFilters();
-
-    // Fetch initial stats and start timer
-    loadInitialStats();
-    startStudyTimer();
   }
 }
 
