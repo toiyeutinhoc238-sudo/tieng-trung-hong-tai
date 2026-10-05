@@ -733,12 +733,28 @@ import './quick_dict_widget.js';
       if (user && (user.name || user.email)) {
         const displayName = user.name || user.displayName || (user.email ? user.email.split('@')[0] : 'Học viên');
         const displayEmail = user.email || '';
-        const displayRole = user.role === 'super_admin' ? 'Super Admin' : (user.role === 'admin' ? 'Admin' : (user.role === 'teacher' ? 'Giáo viên' : 'Học viên'));
         const displayAvatar = user.picture || user.avatar || '';
+        let displayRole = user.role === 'super_admin' ? 'Super Admin' : (user.role === 'admin' ? 'Admin' : (user.role === 'teacher' ? 'Giáo viên' : 'Học viên'));
+        if (user.isVip) {
+          displayRole = `👑 VIP • ${displayRole}`;
+        }
 
         if (nameEl) nameEl.textContent = displayName;
         if (emailEl) emailEl.textContent = displayEmail;
-        if (roleEl) roleEl.textContent = displayRole;
+        if (roleEl) {
+          roleEl.textContent = displayRole;
+          if (user.isVip) {
+            roleEl.style.background = 'linear-gradient(135deg, #eab308, #ca8a04)';
+            roleEl.style.color = '#000000';
+            roleEl.style.fontWeight = '800';
+            roleEl.style.border = '1px solid #fde047';
+          } else {
+            roleEl.style.background = '';
+            roleEl.style.color = '';
+            roleEl.style.fontWeight = '';
+            roleEl.style.border = '';
+          }
+        }
         if (avatarWrap) {
           if (displayAvatar) {
             avatarWrap.innerHTML = `<img class="user-avatar-img" src="${displayAvatar}" alt="Avatar" style="display: block; width: 44px; height: 44px; border-radius: 50%; object-fit: cover;">`;

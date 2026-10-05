@@ -171,7 +171,13 @@ const userSchema = new mongoose.Schema({
   progress: { type: Object, default: {} },
   customWords: { type: Array, default: [] },
   chats: { type: Array, default: [] },
-  accessLogs: { type: Array, default: [] }
+  accessLogs: { type: Array, default: [] },
+  // VIP Membership Fields
+  isVip: { type: Boolean, default: false },
+  vipStatus: { type: String, default: 'normal' }, // 'normal', 'vip', 'expired'
+  vipActivatedAt: { type: Date, default: null },
+  vipExpiresAt: { type: Date, default: null },
+  vipPackage: { type: String, default: null } // 'trial_30d', '3_months', '6_months', '1_year', 'lifetime', 'custom'
 }, { minimize: false });
 const User = mongoose.model('User', userSchema);
 
@@ -447,7 +453,12 @@ async function readUserData(forceRefresh = false) {
             lastSeenTime: u.lastSeenTime || null,
             stats: u.stats || { streak: 0, studyTime: 0, lastActiveDate: "" },
             gameHistory: u.gameHistory || [],
-            accessLogs: u.accessLogs || []
+            accessLogs: u.accessLogs || [],
+            isVip: !!u.isVip,
+            vipStatus: u.vipStatus || (u.isVip ? 'vip' : 'normal'),
+            vipActivatedAt: u.vipActivatedAt || null,
+            vipExpiresAt: u.vipExpiresAt || null,
+            vipPackage: u.vipPackage || null
           };
           if (u.quizHistory && u.quizHistory.length > 0) {
             quizHistory[u._id] = u.quizHistory;
@@ -593,7 +604,12 @@ async function processMongoPersistenceQueue() {
             progress: (data.progress && data.progress[email]) || {},
             customWords: (data.customWords && data.customWords[email]) || [],
             chats: (data.chats && data.chats[email]) || [],
-            accessLogs: (data.users && data.users[email] && data.users[email].accessLogs) || (u.accessLogs || [])
+            accessLogs: (data.users && data.users[email] && data.users[email].accessLogs) || (u.accessLogs || []),
+            isVip: !!u.isVip,
+            vipStatus: u.vipStatus || (u.isVip ? 'vip' : 'normal'),
+            vipActivatedAt: u.vipActivatedAt || null,
+            vipExpiresAt: u.vipExpiresAt || null,
+            vipPackage: u.vipPackage || null
           };
           await User.updateOne({ _id: email }, { $set: updateDoc }, { upsert: true });
           failedEmailRetries.delete(email);
@@ -813,6 +829,83 @@ function isUserAdmin(email, userData = null) {
   return false;
 }
 
+// Helper to evaluate and refresh VIP status (auto-expire if passed deadline)
+function checkAndComputeUserVip(userRecord, email = null) {
+  if (!userRecord) {
+    return {
+      isVip: false,
+      vipStatus: 'normal',
+      vipExpiresAt: null,
+      vipActivatedAt: null,
+      vipPackage: null,
+      vipDaysRemaining: 0
+    };
+  }
+
+  // Super admins or teachers with hongtai are always considered VIP with unlimited access
+  if (email && (isSuperAdmin(email) || email.toLowerCase().includes('hongtai'))) {
+    return {
+      isVip: true,
+      vipStatus: 'vip',
+      vipExpiresAt: null,
+      vipActivatedAt: userRecord.vipActivatedAt || new Date('2026-01-01'),
+      vipPackage: 'super_admin_vip',
+      vipDaysRemaining: 9999
+    };
+  }
+
+  const rawIsVip = !!userRecord.isVip || userRecord.vipStatus === 'vip';
+  if (!rawIsVip) {
+    return {
+      isVip: false,
+      vipStatus: userRecord.vipStatus === 'expired' ? 'expired' : 'normal',
+      vipExpiresAt: userRecord.vipExpiresAt || null,
+      vipActivatedAt: userRecord.vipActivatedAt || null,
+      vipPackage: userRecord.vipPackage || null,
+      vipDaysRemaining: 0
+    };
+  }
+
+  // If VIP has an expiration date, check if expired
+  if (userRecord.vipExpiresAt) {
+    const expTime = new Date(userRecord.vipExpiresAt).getTime();
+    if (!isNaN(expTime)) {
+      const now = Date.now();
+      if (expTime <= now) {
+        userRecord.isVip = false;
+        userRecord.vipStatus = 'expired';
+        return {
+          isVip: false,
+          vipStatus: 'expired',
+          vipExpiresAt: userRecord.vipExpiresAt,
+          vipActivatedAt: userRecord.vipActivatedAt || null,
+          vipPackage: userRecord.vipPackage || null,
+          vipDaysRemaining: 0
+        };
+      }
+      const daysLeft = Math.max(1, Math.ceil((expTime - now) / (1000 * 60 * 60 * 24)));
+      return {
+        isVip: true,
+        vipStatus: 'vip',
+        vipExpiresAt: userRecord.vipExpiresAt,
+        vipActivatedAt: userRecord.vipActivatedAt || null,
+        vipPackage: userRecord.vipPackage || 'trial_30d',
+        vipDaysRemaining: daysLeft
+      };
+    }
+  }
+
+  // Lifetime VIP (no expiration date)
+  return {
+    isVip: true,
+    vipStatus: 'vip',
+    vipExpiresAt: null,
+    vipActivatedAt: userRecord.vipActivatedAt || null,
+    vipPackage: userRecord.vipPackage || 'lifetime',
+    vipDaysRemaining: 9999
+  };
+}
+
 // POST endpoint for Google Login
 app.post('/api/auth/google', async (req, res) => {
   try {
@@ -867,6 +960,8 @@ app.post('/api/auth/google', async (req, res) => {
     // Set persistent session cookie (10 years)
     res.setHeader('Set-Cookie', `session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${60 * 60 * 24 * 365 * 10}`);
 
+    const vipInfo = checkAndComputeUserVip(userData.users[email], email);
+
     return res.json({
       success: true,
       token: sessionToken,
@@ -876,7 +971,13 @@ app.post('/api/auth/google', async (req, res) => {
         picture,
         role: userRole,
         isSuperAdmin: isSuper,
-        isAdmin
+        isAdmin,
+        isVip: vipInfo.isVip,
+        vipStatus: vipInfo.vipStatus,
+        vipExpiresAt: vipInfo.vipExpiresAt,
+        vipActivatedAt: vipInfo.vipActivatedAt,
+        vipPackage: vipInfo.vipPackage,
+        vipDaysRemaining: vipInfo.vipDaysRemaining
       }
     });
   } catch (err) {
@@ -903,6 +1004,7 @@ app.get('/api/auth/me', async (req, res) => {
     const isSuper = isSuperAdmin(email);
     const isAdmin = isUserAdmin(email, userData);
     const userRole = isSuper ? 'super_admin' : (userRecord.role || (email.includes('hongtai') ? 'admin' : 'user'));
+    const vipInfo = checkAndComputeUserVip(userRecord, email);
 
     return res.json({
       user: {
@@ -912,7 +1014,13 @@ app.get('/api/auth/me', async (req, res) => {
         role: userRole,
         isSuperAdmin: isSuper,
         isAdmin,
-        stats: userRecord.stats
+        stats: userRecord.stats,
+        isVip: vipInfo.isVip,
+        vipStatus: vipInfo.vipStatus,
+        vipExpiresAt: vipInfo.vipExpiresAt,
+        vipActivatedAt: vipInfo.vipActivatedAt,
+        vipPackage: vipInfo.vipPackage,
+        vipDaysRemaining: vipInfo.vipDaysRemaining
       }
     });
   } catch (err) {
@@ -1157,6 +1265,7 @@ async function handleAdminUsersRequest(req, res) {
 
     const accessLogs = Array.isArray(u.accessLogs) ? u.accessLogs : (Array.isArray(memU.accessLogs) ? memU.accessLogs : []);
     const studyTime = stats.studyTime || 0;
+    const vipInfo = checkAndComputeUserVip(u, email);
 
     usersList.push({
       email,
@@ -1165,6 +1274,12 @@ async function handleAdminUsersRequest(req, res) {
       role,
       isSuperAdmin: isSuper,
       isAdmin,
+      isVip: isSuper || vipInfo.isVip,
+      vipStatus: isSuper ? 'vip' : vipInfo.vipStatus,
+      vipExpiresAt: vipInfo.vipExpiresAt,
+      vipActivatedAt: vipInfo.vipActivatedAt,
+      vipPackage: isSuper ? 'super_admin_vip' : vipInfo.vipPackage,
+      vipDaysRemaining: isSuper ? 9999 : vipInfo.vipDaysRemaining,
       isOnline,
       lastSeen: lastSeenTimestamp ? new Date(lastSeenTimestamp).toISOString() : (stats.lastActiveDate || null),
       lastSeenTime: lastSeenTimestamp ? new Date(lastSeenTimestamp).toISOString() : (stats.lastActiveDate || null),
@@ -1198,6 +1313,7 @@ async function handleAdminUsersRequest(req, res) {
 
   const totalStudyTimeSecs = usersList.reduce((acc, curr) => acc + (curr.studyTime || 0), 0);
   const onlineCount = usersList.filter(u => u.isOnline).length;
+  const vipCount = usersList.filter(u => u.isVip).length;
 
   res.json({
     success: true,
@@ -1206,6 +1322,7 @@ async function handleAdminUsersRequest(req, res) {
     totalUsers: usersList.length,
     onlineCount: onlineCount,
     adminCount: usersList.filter(u => u.isAdmin || u.isSuperAdmin).length,
+    vipCount: vipCount,
     totalStudyTimeHours: (totalStudyTimeSecs / 3600).toFixed(1),
     users: usersList
   });
@@ -1472,6 +1589,154 @@ app.post('/api/admin/users/role', async (req, res) => {
       ? `Đã thu hồi quyền quản trị của ${normalizedTarget} (Trở về Học viên).`
       : `Đã cấp quyền ${roleLabel} cho ${normalizedTarget} thành công!`
   });
+});
+
+// POST /api/admin/users/vip - Activate or Deactivate VIP membership for any user
+app.post('/api/admin/users/vip', async (req, res) => {
+  try {
+    const currentEmail = getLoggedInUserEmail(req);
+    const userData = await readUserData();
+    if (!currentEmail || !isUserAdmin(currentEmail, userData)) {
+      return res.status(403).json({ error: 'Chỉ Quản trị viên / Giáo viên mới có quyền kích hoạt hoặc hủy VIP.' });
+    }
+
+    const { targetEmail, action, packageType = 'trial_30d', durationDays = 30, customExpiresAt = null } = req.body;
+    if (!targetEmail || typeof targetEmail !== 'string') {
+      return res.status(400).json({ error: 'Địa chỉ email người dùng không hợp lệ.' });
+    }
+
+    const normalizedTarget = targetEmail.toLowerCase().trim();
+    if (!userData.users) userData.users = {};
+
+    if (!userData.users[normalizedTarget]) {
+      userData.users[normalizedTarget] = {
+        name: normalizedTarget.split('@')[0],
+        picture: '',
+        role: 'user',
+        stats: { streak: 0, studyTime: 0, lastActiveDate: '' },
+        gameHistory: [],
+        accessLogs: [],
+        isVip: false,
+        vipStatus: 'normal',
+        vipActivatedAt: null,
+        vipExpiresAt: null,
+        vipPackage: null
+      };
+    }
+
+    const user = userData.users[normalizedTarget];
+    const now = new Date();
+
+    if (action === 'activate') {
+      let expiresAt = null;
+      let pkg = packageType || 'trial_30d';
+
+      if (pkg === 'lifetime') {
+        expiresAt = null;
+      } else if (pkg === '3_months') {
+        expiresAt = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
+      } else if (pkg === '6_months') {
+        expiresAt = new Date(now.getTime() + 180 * 24 * 60 * 60 * 1000);
+      } else if (pkg === '1_year') {
+        expiresAt = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000);
+      } else if (pkg === 'custom') {
+        if (customExpiresAt) {
+          expiresAt = new Date(customExpiresAt);
+        } else {
+          const days = Math.max(1, parseInt(durationDays, 10) || 30);
+          expiresAt = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+        }
+      } else {
+        // default: trial_30d (30 days from now)
+        pkg = 'trial_30d';
+        const days = Math.max(1, parseInt(durationDays, 10) || 30);
+        expiresAt = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+      }
+
+      user.isVip = true;
+      user.vipStatus = 'vip';
+      user.vipActivatedAt = now;
+      user.vipExpiresAt = expiresAt;
+      user.vipPackage = pkg;
+
+      await writeUserData(userData, normalizedTarget);
+
+      if (mongoose.connection.readyState === 1) {
+        await User.updateOne(
+          { _id: normalizedTarget },
+          {
+            $set: {
+              isVip: true,
+              vipStatus: 'vip',
+              vipActivatedAt: now,
+              vipExpiresAt: expiresAt,
+              vipPackage: pkg
+            }
+          },
+          { upsert: true }
+        ).catch(console.error);
+      }
+
+      const pkgNameMap = {
+        'trial_30d': 'Trải nghiệm 30 ngày VIP (Miễn phí)',
+        '3_months': 'Gói 3 Tháng',
+        '6_months': 'Gói 6 Tháng',
+        '1_year': 'Gói 1 Năm',
+        'lifetime': 'VIP Vĩnh Viễn (Trọn Đời)',
+        'custom': `Tùy chỉnh (${durationDays} ngày)`
+      };
+
+      const daysLeft = expiresAt ? Math.max(1, Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))) : 9999;
+
+      return res.json({
+        success: true,
+        action: 'activate',
+        targetEmail: normalizedTarget,
+        isVip: true,
+        vipStatus: 'vip',
+        vipPackage: pkg,
+        vipExpiresAt: expiresAt,
+        vipDaysRemaining: daysLeft,
+        message: `Đã kích hoạt thành công ${pkgNameMap[pkg] || pkg} cho tài khoản ${normalizedTarget}!`
+      });
+    } else if (action === 'deactivate') {
+      user.isVip = false;
+      user.vipStatus = 'normal';
+      user.vipExpiresAt = null;
+      user.vipPackage = null;
+
+      await writeUserData(userData, normalizedTarget);
+
+      if (mongoose.connection.readyState === 1) {
+        await User.updateOne(
+          { _id: normalizedTarget },
+          {
+            $set: {
+              isVip: false,
+              vipStatus: 'normal',
+              vipExpiresAt: null,
+              vipPackage: null
+            }
+          },
+          { upsert: true }
+        ).catch(console.error);
+      }
+
+      return res.json({
+        success: true,
+        action: 'deactivate',
+        targetEmail: normalizedTarget,
+        isVip: false,
+        vipStatus: 'normal',
+        message: `Đã hủy kích hoạt VIP của tài khoản ${normalizedTarget} (trở về Học viên thông thường).`
+      });
+    } else {
+      return res.status(400).json({ error: 'Hành động không hợp lệ. Chỉ chấp nhận activate hoặc deactivate.' });
+    }
+  } catch (err) {
+    console.error('POST /api/admin/users/vip error:', err);
+    return res.status(500).json({ error: 'Lỗi máy chủ khi cập nhật trạng thái VIP', detail: err.message });
+  }
 });
 
 // ============================================================

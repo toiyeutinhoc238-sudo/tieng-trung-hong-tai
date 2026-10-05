@@ -16640,20 +16640,24 @@ window.fetchAdminUsersList = async function (showLoading, isManualRefresh = fals
       const onlineKpi = document.getElementById('admin-kpi-online-users');
       const adminKpi = document.getElementById('admin-kpi-admin-count');
       const hoursKpi = document.getElementById('admin-kpi-total-hours');
+      const vipKpi = document.getElementById('admin-kpi-vip-count');
 
       if (totalKpi) totalKpi.textContent = data.totalUsers || adminCachedUsersList.length;
       if (onlineKpi) onlineKpi.textContent = data.onlineCount || 0;
       if (adminKpi) adminKpi.textContent = data.adminCount || 0;
       if (hoursKpi) hoursKpi.textContent = `${data.totalStudyTimeHours || 0}h`;
+      if (vipKpi) vipKpi.textContent = data.vipCount !== undefined ? data.vipCount : adminCachedUsersList.filter(u => u.isVip).length;
 
       // Update tab counts
       const countAll = document.getElementById('admin-tab-count-all');
       const countOnline = document.getElementById('admin-tab-count-online');
+      const countVip = document.getElementById('admin-tab-count-vip');
       const countAdmins = document.getElementById('admin-tab-count-admins');
       const countUsers = document.getElementById('admin-tab-count-users');
 
       if (countAll) countAll.textContent = adminCachedUsersList.length;
       if (countOnline) countOnline.textContent = adminCachedUsersList.filter(u => u.isOnline).length;
+      if (countVip) countVip.textContent = adminCachedUsersList.filter(u => u.isVip).length;
       if (countAdmins) countAdmins.textContent = adminCachedUsersList.filter(u => u.isAdmin || u.isSuperAdmin).length;
       if (countUsers) countUsers.textContent = adminCachedUsersList.filter(u => !u.isAdmin && !u.isSuperAdmin).length;
 
@@ -16714,6 +16718,8 @@ window.renderAdminUsersTable = function () {
 
   if (currentAdminFilter === 'online') {
     filtered = filtered.filter(u => u.isOnline);
+  } else if (currentAdminFilter === 'vip') {
+    filtered = filtered.filter(u => u.isVip);
   } else if (currentAdminFilter === 'admins') {
     filtered = filtered.filter(u => u.isAdmin || u.isSuperAdmin);
   } else if (currentAdminFilter === 'users') {
@@ -16738,6 +16744,7 @@ window.renderAdminUsersTable = function () {
   }
 
   const isCurrentSuper = currentUser && (!!currentUser.isSuperAdmin || isSuperAdmin(currentUser.email));
+  const isCurrentAdmin = currentUser && (!!currentUser.isAdmin || !!currentUser.isSuperAdmin || isUserAdmin(currentUser.email));
 
   let html = `
     <table class="admin-users-table">
@@ -16745,11 +16752,12 @@ window.renderAdminUsersTable = function () {
         <tr>
           <th style="min-width: 220px;">Học Viên</th>
           <th>Trạng Thái</th>
-          <th>Vai Trò &amp; Quyền Hạn</th>
+          <th>Vai Trò</th>
+          <th>Hội Viên VIP ⭐</th>
           <th>Điểm Thi &amp; Lộ Trình</th>
           <th>Chuỗi Học 🔥</th>
           <th>Thời Gian ⏱️</th>
-          ${isCurrentSuper ? '<th style="text-align: right; min-width: 140px;">Thao Tác Quyền</th>' : ''}
+          <th style="text-align: right; min-width: 170px;">Thao Tác</th>
         </tr>
       </thead>
       <tbody>
@@ -16781,6 +16789,21 @@ window.renderAdminUsersTable = function () {
       roleBadge = `<span class="admin-role-badge admin-role-user"><i class="fa-solid fa-graduation-cap"></i> Học viên</span>`;
     }
 
+    // VIP Badge HTML
+    let vipBadge = '';
+    if (u.isVip) {
+      if (u.vipPackage === 'lifetime' || u.isSuperAdmin || (u.vipDaysRemaining && u.vipDaysRemaining > 3650)) {
+        vipBadge = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; background: rgba(234, 179, 8, 0.2); color: #facc15; font-size: 0.74rem; font-weight: 800; border: 1px solid rgba(234, 179, 8, 0.4);"><i class="fa-solid fa-crown"></i> VIP Vĩnh Viễn</span>`;
+      } else {
+        const daysText = (u.vipDaysRemaining !== null && u.vipDaysRemaining !== undefined) ? `Còn ${u.vipDaysRemaining} ngày` : 'Đang hoạt động';
+        vipBadge = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; background: rgba(234, 179, 8, 0.2); color: #facc15; font-size: 0.74rem; font-weight: 800; border: 1px solid rgba(234, 179, 8, 0.4);"><i class="fa-solid fa-crown"></i> VIP (${daysText})</span>`;
+      }
+    } else if (u.vipStatus === 'expired') {
+      vipBadge = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; background: rgba(239, 68, 68, 0.15); color: #f87171; font-size: 0.74rem; font-weight: 700; border: 1px solid rgba(239, 68, 68, 0.3);"><i class="fa-solid fa-hourglass-end"></i> Hết hạn VIP</span>`;
+    } else {
+      vipBadge = `<span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">⚪ Thường</span>`;
+    }
+
     // Scores & progress
     const highestScoreHtml = u.quizCount > 0
       ? `<span onclick="window.openStudentHistoryDetail('${safeEmail}', 'games')" style="cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Nhấp để xem chi tiết lịch sử chơi trò chơi"><strong style="color: #22c55e; font-weight: 800;">${u.highestQuizScore}đ</strong> <span style="font-size: 0.72rem; color: #a855f7; text-decoration: underline;">(${u.quizCount} lượt)</span></span>`
@@ -16792,29 +16815,36 @@ window.renderAdminUsersTable = function () {
     const timeFormatted = u.studyTime > 3600 ? `${studyHours}h` : `${studyMins} phút`;
 
     // Actions
-    let actionBtnHtml = '';
     const historyBtnHtml = `
-      <button type="button" onclick="window.openStudentHistoryDetail('${safeEmail}')" style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; border-radius: 8px; background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;" title="Xem lịch sử học theo từng ngày">
+      <button type="button" onclick="window.openStudentHistoryDetail('${safeEmail}')" style="padding: 5px 9px; font-size: 0.76rem; font-weight: 700; border-radius: 8px; background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;" title="Xem lịch sử học theo từng ngày">
         <i class="fa-solid fa-chart-line"></i> Nhật ký
       </button>
     `;
 
+    const vipBtnHtml = isCurrentAdmin ? `
+      <button type="button" onclick="window.openAdminVipModal('${safeEmail}')" style="padding: 5px 10px; font-size: 0.76rem; font-weight: 800; border-radius: 8px; background: ${u.isVip ? 'rgba(234, 179, 8, 0.2)' : 'rgba(255, 255, 255, 0.08)'}; color: ${u.isVip ? '#facc15' : '#cbd5e1'}; border: 1px solid ${u.isVip ? 'rgba(234, 179, 8, 0.45)' : 'rgba(255, 255, 255, 0.15)'}; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;" title="Kích hoạt hoặc Hủy kích hoạt gói VIP cho học viên này">
+        <i class="fa-solid fa-crown" style="color: ${u.isVip ? '#facc15' : '#94a3b8'};"></i> ${u.isVip ? 'QL VIP' : 'Cấp VIP'}
+      </button>
+    ` : '';
+
+    let actionBtnHtml = '';
     if (isCurrentSuper) {
       if (u.isSuperAdmin) {
-        actionBtnHtml = `<div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center;">${historyBtnHtml} <span style="font-size: 0.75rem; color: #f43f5e; font-weight: 700;"><i class="fa-solid fa-lock"></i> Super</span></div>`;
+        actionBtnHtml = `<div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">${historyBtnHtml} ${vipBtnHtml} <span style="font-size: 0.75rem; color: #f43f5e; font-weight: 700;"><i class="fa-solid fa-lock"></i> Super</span></div>`;
       } else {
         const currentRoleText = u.role === 'teacher' ? ' (GV)' : (u.role === 'admin' ? ' (Admin)' : '');
         actionBtnHtml = `
-          <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center;">
+          <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
             ${historyBtnHtml}
-            <button type="button" onclick="window.openRolePickerModal('${safeEmail}', '${u.role || 'user'}', '${safeName}')" style="padding: 5px 12px; font-size: 0.76rem; font-weight: 800; border-radius: 8px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+            ${vipBtnHtml}
+            <button type="button" onclick="window.openRolePickerModal('${safeEmail}', '${u.role || 'user'}', '${safeName}')" style="padding: 5px 11px; font-size: 0.76rem; font-weight: 800; border-radius: 8px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;">
               <i class="fa-solid fa-shield-halved"></i> Cấp quyền${currentRoleText}
             </button>
           </div>
         `;
       }
     } else {
-      actionBtnHtml = historyBtnHtml;
+      actionBtnHtml = `<div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">${historyBtnHtml} ${vipBtnHtml}</div>`;
     }
 
     html += `
@@ -16830,6 +16860,7 @@ window.renderAdminUsersTable = function () {
         </td>
         <td>${statusHtml}</td>
         <td>${roleBadge}</td>
+        <td>${vipBadge}</td>
         <td>
           <div>${highestScoreHtml}</div>
         </td>
@@ -17457,6 +17488,258 @@ window.handleChangeUserRole = async function (targetEmail, newRole) {
   } catch (err) {
     console.error('Change role error:', err);
     showToast(err.message || 'Lỗi cập nhật quyền!', true);
+  }
+};
+
+// ============================================================
+// ADMIN VIP MEMBERSHIP MANAGEMENT MODAL & HANDLERS
+// ============================================================
+
+window.openAdminVipModal = function (targetEmail) {
+  const user = adminCachedUsersList.find(u => u.email === targetEmail) || {
+    email: targetEmail,
+    name: targetEmail.split('@')[0],
+    isVip: false,
+    vipStatus: 'normal',
+    vipPackage: null,
+    vipExpiresAt: null,
+    vipDaysRemaining: 0
+  };
+
+  let modal = document.getElementById('admin-vip-picker-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'admin-vip-picker-modal';
+    modal.style.cssText = 'position: fixed; inset: 0; z-index: 999999; background: rgba(10, 15, 29, 0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); display: flex; align-items: center; justify-content: center; padding: 16px;';
+    document.body.appendChild(modal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) window.closeAdminVipModal();
+    });
+  }
+
+  const safeName = escapeHtml(user.name || 'Học viên');
+  const safeEmail = escapeHtml(user.email);
+  const isVip = !!user.isVip;
+  const pkg = user.vipPackage || '';
+  const expiresText = user.vipExpiresAt ? new Date(user.vipExpiresAt).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Vĩnh viễn (Trọn đời)';
+  const activatedText = user.vipActivatedAt ? new Date(user.vipActivatedAt).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Chưa rõ';
+  const daysRemaining = (user.vipDaysRemaining !== null && user.vipDaysRemaining !== undefined) ? user.vipDaysRemaining : (pkg === 'lifetime' ? 'Vô hạn' : '0');
+
+  const pkgNameMap = {
+    'trial_30d': '🎁 Trải nghiệm 30 ngày VIP (Miễn phí)',
+    '3_months': '⚡ Gói 3 Tháng',
+    '6_months': '🚀 Gói 6 Tháng',
+    '1_year': '👑 Gói 1 Năm',
+    'lifetime': '♾️ VIP Vĩnh Viễn (Trọn Đời)',
+    'super_admin_vip': '👑 Toàn quyền Super Admin',
+    'custom': '🗓️ Tùy chỉnh số ngày'
+  };
+
+  modal.innerHTML = `
+    <div style="background: linear-gradient(180deg, #131d35 0%, #0d1527 100%); border: 1.5px solid rgba(234, 179, 8, 0.4); border-radius: 24px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; padding: 24px 26px; box-shadow: 0 25px 60px rgba(0,0,0,0.85), 0 0 35px rgba(234,179,8,0.2); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 16px; animation: zoomIn 0.2s ease-out;">
+      <button type="button" onclick="window.closeAdminVipModal()" style="position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.2rem; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Header -->
+      <div style="display: flex; align-items: center; gap: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, rgba(234,179,8,0.3), rgba(202,138,4,0.15)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #facc15; border: 1px solid rgba(234,179,8,0.45); flex-shrink: 0;">
+          <i class="fa-solid fa-crown"></i>
+        </div>
+        <div>
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0;">Quản Lý Trạng Thái VIP</h3>
+          <p style="font-size: 0.8rem; color: #94a3b8; margin: 2px 0 0 0;">${safeName} &bull; <span style="color: #38bdf8;">${safeEmail}</span></p>
+        </div>
+      </div>
+
+      <!-- Current Status Card -->
+      <div style="padding: 14px 16px; border-radius: 14px; background: ${isVip ? 'rgba(234, 179, 8, 0.12)' : 'rgba(30, 41, 59, 0.5)'}; border: 1px solid ${isVip ? 'rgba(234, 179, 8, 0.35)' : 'rgba(255,255,255,0.08)'};">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-size: 0.82rem; font-weight: 700; color: ${isVip ? '#facc15' : '#cbd5e1'};">
+            ${isVip ? '👑 Tài Khoản Đang Kích Hoạt VIP' : '⚪ Tài Khoản Học Viên Thường'}
+          </span>
+          <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; background: ${isVip ? 'rgba(234,179,8,0.25)' : 'rgba(255,255,255,0.08)'}; color: ${isVip ? '#fef08a' : '#94a3b8'}; font-weight: 800;">
+            ${isVip ? (pkg === 'lifetime' ? 'Vĩnh viễn' : `Còn ${daysRemaining} ngày`) : 'Miễn phí'}
+          </span>
+        </div>
+        ${isVip ? `
+          <div style="font-size: 0.78rem; color: #cbd5e1; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 8px;">
+            <div><strong>Gói hiện tại:</strong> <span style="color: #facc15;">${pkgNameMap[pkg] || pkg || 'VIP'}</span></div>
+            <div><strong>Hạn dùng:</strong> <span style="color: #ffffff;">${expiresText}</span></div>
+            <div><strong>Kích hoạt ngày:</strong> <span>${activatedText}</span></div>
+            <div><strong>Số ngày còn:</strong> <strong style="color: #4ade80;">${daysRemaining} ngày</strong></div>
+          </div>
+        ` : `
+          <div style="font-size: 0.78rem; color: #94a3b8;">
+            Học viên chưa được kích hoạt VIP hoặc quyền lợi đã hết hạn. Chọn một trong các gói bên dưới để kích hoạt ngay.
+          </div>
+        `}
+      </div>
+
+      <!-- Action Form -->
+      <div>
+        <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #e2e8f0; margin-bottom: 10px;">
+          Chọn Gói Kích Hoạt / Gia Hạn:
+        </label>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Option 1: 30 days trial -->
+          <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="radio" name="admin-vip-pkg" value="trial_30d" checked style="accent-color: #facc15; cursor: pointer;">
+              <div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #facc15;">🎁 Trải Nghiệm 30 Ngày VIP (Miễn phí)</div>
+                <div style="font-size: 0.72rem; color: #94a3b8;">Chương trình đăng ký trải nghiệm đến 31/12/2026</div>
+              </div>
+            </div>
+            <span style="font-size: 0.75rem; color: #38bdf8; font-weight: 700;">+30 Ngày</span>
+          </label>
+
+          <!-- Option 2: 3 months -->
+          <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="radio" name="admin-vip-pkg" value="3_months" style="accent-color: #facc15; cursor: pointer;">
+              <div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">⚡ Gói 3 Tháng</div>
+                <div style="font-size: 0.72rem; color: #94a3b8;">Khóa học cấp tốc & Luyện đề thi HSK</div>
+              </div>
+            </div>
+            <span style="font-size: 0.75rem; color: #38bdf8; font-weight: 700;">+90 Ngày</span>
+          </label>
+
+          <!-- Option 3: 6 months -->
+          <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="radio" name="admin-vip-pkg" value="6_months" style="accent-color: #facc15; cursor: pointer;">
+              <div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">🚀 Gói 6 Tháng</div>
+                <div style="font-size: 0.72rem; color: #94a3b8;">Khóa học tiêu chuẩn và giao tiếp nâng cao</div>
+              </div>
+            </div>
+            <span style="font-size: 0.75rem; color: #38bdf8; font-weight: 700;">+180 Ngày</span>
+          </label>
+
+          <!-- Option 4: 1 year -->
+          <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="radio" name="admin-vip-pkg" value="1_year" style="accent-color: #facc15; cursor: pointer;">
+              <div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">👑 Gói 1 Năm</div>
+                <div style="font-size: 0.72rem; color: #94a3b8;">Toàn diện HSK 1 đến HSK 6 & Khẩu ngữ</div>
+              </div>
+            </div>
+            <span style="font-size: 0.75rem; color: #38bdf8; font-weight: 700;">+365 Ngày</span>
+          </label>
+
+          <!-- Option 5: Lifetime -->
+          <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="radio" name="admin-vip-pkg" value="lifetime" style="accent-color: #facc15; cursor: pointer;">
+              <div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #facc15;">♾️ VIP Vĩnh Viễn (Trọn Đời)</div>
+                <div style="font-size: 0.72rem; color: #94a3b8;">Dành cho tài khoản nội bộ hoặc học viên trọn đời</div>
+              </div>
+            </div>
+            <span style="font-size: 0.75rem; color: #facc15; font-weight: 800;">Vĩnh Viễn</span>
+          </label>
+
+          <!-- Option 6: Custom days -->
+          <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="radio" name="admin-vip-pkg" value="custom" style="accent-color: #facc15; cursor: pointer;">
+              <div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #ffffff;">🗓️ Tùy Chọn Số Ngày</div>
+                <div style="font-size: 0.72rem; color: #94a3b8;">Nhập số ngày muốn cấp cụ thể</div>
+              </div>
+            </div>
+            <input type="number" id="admin-vip-custom-days" min="1" max="3650" value="30" onclick="document.querySelector('input[name=admin-vip-pkg][value=custom]').checked = true;" style="width: 70px; padding: 4px 8px; font-size: 0.82rem; border-radius: 6px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: #ffffff; text-align: center; outline: none;">
+          </label>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+        <button type="button" onclick="window.submitAdminVipAction('${safeEmail}', 'activate')" style="width: 100%; padding: 11px 16px; border-radius: 12px; background: linear-gradient(135deg, #eab308, #ca8a04); border: 1px solid #fde047; color: #000000; font-size: 0.9rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.35); transition: all 0.2s;">
+          <i class="fa-solid fa-crown"></i> ${isVip ? 'Gia Hạn / Cập Nhật VIP Ngay' : 'Kích Hoạt VIP Ngay'}
+        </button>
+
+        ${isVip ? `
+          <button type="button" onclick="window.submitAdminVipAction('${safeEmail}', 'deactivate')" style="width: 100%; padding: 9px 16px; border-radius: 12px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.35); color: #f87171; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+            <i class="fa-solid fa-ban"></i> Hủy Kích Hoạt VIP (Chuyển về Học viên thường)
+          </button>
+        ` : ''}
+      </div>
+    </div>
+  `;
+
+  modal.style.display = 'flex';
+};
+
+window.closeAdminVipModal = function () {
+  const modal = document.getElementById('admin-vip-picker-modal');
+  if (modal) modal.style.display = 'none';
+};
+
+window.submitAdminVipAction = async function (targetEmail, action) {
+  if (action === 'deactivate') {
+    if (!confirm(`Bạn có chắc chắn muốn HỦY KÍCH HOẠT VIP của tài khoản: ${targetEmail}?\nTài khoản sẽ trở về học viên thông thường.`)) {
+      return;
+    }
+  }
+
+  let packageType = 'trial_30d';
+  let customDays = 30;
+
+  if (action === 'activate') {
+    const selectedRadio = document.querySelector('input[name="admin-vip-pkg"]:checked');
+    if (selectedRadio) {
+      packageType = selectedRadio.value;
+    }
+    if (packageType === 'custom') {
+      const customInput = document.getElementById('admin-vip-custom-days');
+      if (customInput) {
+        customDays = parseInt(customInput.value, 10) || 30;
+      }
+    }
+  }
+
+  showToast('Đang xử lý cập nhật trạng thái VIP...', false);
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/admin/users/vip`, {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      credentials: 'include',
+      body: JSON.stringify({
+        targetEmail,
+        action,
+        packageType,
+        durationDays: customDays
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Cập nhật VIP thất bại');
+
+    showToast(data.message || 'Cập nhật trạng thái VIP thành công!');
+    window.closeAdminVipModal();
+
+    // If current user was updated, refresh their state
+    if (currentUser && currentUser.email && currentUser.email.toLowerCase() === targetEmail.toLowerCase()) {
+      currentUser.isVip = data.isVip;
+      currentUser.vipStatus = data.vipStatus;
+      currentUser.vipPackage = data.vipPackage;
+      currentUser.vipExpiresAt = data.vipExpiresAt;
+      currentUser.vipDaysRemaining = data.vipDaysRemaining;
+      if (typeof window.updateSidebarUserProfile === 'function') {
+        window.updateSidebarUserProfile();
+      }
+    }
+
+    // Refresh users list table
+    window.fetchAdminUsersList(false);
+  } catch (err) {
+    console.error('Submit VIP error:', err);
+    showToast(err.message || 'Lỗi khi cập nhật trạng thái VIP!', true);
   }
 };
 
