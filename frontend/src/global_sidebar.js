@@ -1285,7 +1285,7 @@ import './quick_dict_widget.js';
       id: 'vip-upgrade-trial',
       tag: '🎁 ĐỢT TRẢI NGHIỆM',
       tagClass: 'vip',
-      title: 'Đợt Nhận 30 Ngày VIP (05/10 - 05/11/2026):',
+      title: 'Đợt Nhận 30 Ngày VIP (Đến Hết 31/12/2026):',
       desc: 'Mở cổng tặng 30 ngày VIP miễn phí 100%! Kích hoạt lúc nào tính đủ 30 ngày từ lúc đó.',
       action: 'vip',
       linkText: 'Nhận 30N VIP →'
