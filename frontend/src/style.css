@@ -21194,6 +21194,30 @@ html.dark .comic-book-card:hover {
   border: 1px solid rgba(245, 158, 11, 0.45);
 }
 
+.announcement-ticker-bar .ticker-tag.ai {
+  background: rgba(99, 102, 241, 0.22);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.45);
+}
+
+.announcement-ticker-bar .ticker-tag.game {
+  background: rgba(236, 72, 153, 0.22);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.45);
+}
+
+.announcement-ticker-bar .ticker-tag.vip {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28), rgba(234, 88, 12, 0.28));
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.55);
+}
+
+.announcement-ticker-bar .ticker-tag.audio {
+  background: rgba(16, 185, 129, 0.22);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.45);
+}
+
 .announcement-ticker-bar .ticker-action-link {
   display: inline-flex;
   align-items: center;
@@ -21218,20 +21242,68 @@ html.dark .comic-book-card:hover {
   transform: translateX(2px);
 }
 
-/* Close button on the right */
-.announcement-ticker-bar .ticker-close-btn {
+/* Controls on the right (Shuffle + Close) */
+.announcement-ticker-bar .ticker-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.announcement-ticker-bar .ticker-control-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.16);
   color: #94a3b8;
   border-radius: 50%;
   cursor: pointer;
   flex-shrink: 0;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.announcement-ticker-bar .ticker-control-btn:hover {
+  background: rgba(56, 189, 248, 0.22);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.5);
+  transform: scale(1.08);
+}
+
+.announcement-ticker-bar .ticker-shuffle-btn:hover {
+  background: rgba(168, 85, 247, 0.22);
+  color: #c084fc;
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+.announcement-ticker-bar .ticker-shuffle-btn.spinning i {
+  animation: tickerDiceSpin 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes tickerDiceSpin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.25); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.announcement-ticker-bar .ticker-close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #94a3b8;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 0.8rem;
   transition: all 0.2s ease;
 }
 
@@ -21239,7 +21311,11 @@ html.dark .comic-book-card:hover {
   background: rgba(239, 68, 68, 0.25);
   color: #f87171;
   border-color: rgba(239, 68, 68, 0.5);
-  transform: scale(1.1);
+  transform: scale(1.08);
+}
+
+.announcement-ticker-bar .ticker-item {
+  cursor: pointer;
 }
 
 @keyframes marqueeContinuous {
@@ -21294,6 +21370,31 @@ html:not(.dark) .announcement-ticker-bar .ticker-action-link:hover {
   background: #0284c7 !important;
   color: #ffffff !important;
   border-color: #0284c7 !important;
+}
+
+html.light-mode .announcement-ticker-bar .ticker-control-btn,
+body.light-mode .announcement-ticker-bar .ticker-control-btn,
+html:not(.dark) .announcement-ticker-bar .ticker-control-btn {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #64748b !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-mode .announcement-ticker-bar .ticker-control-btn:hover,
+body.light-mode .announcement-ticker-bar .ticker-control-btn:hover,
+html:not(.dark) .announcement-ticker-bar .ticker-control-btn:hover {
+  background: #f0f9ff !important;
+  color: #0284c7 !important;
+  border-color: #38bdf8 !important;
+}
+
+html.light-mode .announcement-ticker-bar .ticker-shuffle-btn:hover,
+body.light-mode .announcement-ticker-bar .ticker-shuffle-btn:hover,
+html:not(.dark) .announcement-ticker-bar .ticker-shuffle-btn:hover {
+  background: #faf5ff !important;
+  color: #9333ea !important;
+  border-color: #c084fc !important;
 }
 
 html.light-mode .announcement-ticker-bar .ticker-close-btn,

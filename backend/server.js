@@ -368,17 +368,19 @@ async function readUserData(forceRefresh = false) {
   }
 
   pendingReadUserDataPromise = (async () => {
-    // Ensure we actively reconnect to MongoDB if URI is provided.
+    // If MongoDB is disconnected, trigger reconnect in background without blocking current request
     if (process.env.MONGODB_URI && mongoose.connection.readyState !== 1) {
-      console.log("readUserData: MongoDB not connected, attempting reconnect...");
-      await connectMongoDB();
+      connectMongoDB().catch(() => {});
     }
 
     if (mongoose.connection.readyState === 1) {
       try {
-        // Use .lean() to return plain JavaScript objects (uses ~90% less heap than Mongoose documents!)
-        const usersList = await User.find({}).lean();
-        const sessionsList = await Session.find({}).lean();
+        // Enforce strict 2.5s timeout on Mongo reads so requests never stall
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Mongo read timeout')), 2500));
+        const [usersList, sessionsList] = await Promise.race([
+          Promise.all([User.find({}).lean(), Session.find({}).lean()]),
+          timeoutPromise
+        ]);
 
         const users = {};
         const progress = {};
@@ -393,7 +395,7 @@ async function readUserData(forceRefresh = false) {
             picture: u.picture,
             role: u.role || 'user',
             lastSeenTime: u.lastSeenTime || null,
-            stats: u.stats,
+            stats: u.stats || { streak: 0, studyTime: 0, lastActiveDate: "" },
             gameHistory: u.gameHistory || [],
             accessLogs: u.accessLogs || []
           };
@@ -417,12 +419,19 @@ async function readUserData(forceRefresh = false) {
         cachedTotalUsersCount = Math.max(Object.keys(users).length, cachedTotalUsersCount, 231);
         return cachedUserData;
       } catch (error) {
-        console.error("Error reading database from MongoDB, returning file fallback:", error);
+        console.warn("[readUserData] MongoDB read failed or timed out, returning fast file fallback:", error.message);
       }
     }
 
     // Fallback to local file if MongoDB is unreachable
     const fileData = await readUserDataFromFile();
+    if (!fileData.users) fileData.users = {};
+    if (!fileData.progress) fileData.progress = {};
+    if (!fileData.customWords) fileData.customWords = {};
+    if (!fileData.sessions) fileData.sessions = {};
+    if (!fileData.chats) fileData.chats = {};
+    if (!fileData.quizHistory) fileData.quizHistory = {};
+
     if (!cachedUserData || Object.keys(fileData.users || {}).length >= Object.keys(cachedUserData.users || {}).length) {
       cachedUserData = fileData;
       lastUserDataRefreshTime = Date.now();
@@ -492,6 +501,8 @@ function scheduleDiskWrite() {
   }, 10000);
 }
 
+const failedEmailRetries = new Map();
+
 // Background queue to persist ONLY dirty users & sessions to MongoDB
 async function processMongoPersistenceQueue() {
   if (isPersistingToMongo || mongoose.connection.readyState !== 1) {
@@ -535,9 +546,17 @@ async function processMongoPersistenceQueue() {
             accessLogs: (data.users && data.users[email] && data.users[email].accessLogs) || (u.accessLogs || [])
           };
           await User.updateOne({ _id: email }, { $set: updateDoc }, { upsert: true });
+          failedEmailRetries.delete(email);
         } catch (err) {
           console.warn(`[MongoPersistence] Failed updating user ${email}:`, err.message);
-          dirtyUserEmails.add(email); // Re-queue on failure
+          const retries = (failedEmailRetries.get(email) || 0) + 1;
+          if (retries <= 3) {
+            failedEmailRetries.set(email, retries);
+            dirtyUserEmails.add(email); // Re-queue on temporary failure
+          } else {
+            console.warn(`[MongoPersistence] Max retries reached for ${email}, keeping in local JSON only.`);
+            failedEmailRetries.delete(email);
+          }
         }
       }));
     }
@@ -562,9 +581,9 @@ async function processMongoPersistenceQueue() {
     console.error("[MongoPersistence] Queue processing error:", err);
   } finally {
     isPersistingToMongo = false;
-    // If more items accumulated, process again after a short breather
+    // If more items accumulated, process again after a short breather (5s)
     if (dirtyUserEmails.size > 0 || dirtySessionTokens.size > 0) {
-      setTimeout(processMongoPersistenceQueue, 2000);
+      setTimeout(processMongoPersistenceQueue, 5000);
     }
   }
 }
@@ -607,9 +626,6 @@ async function writeUserData(data, targetEmail = null, targetSessionToken = null
   // Track which user/session changed
   if (targetEmail) {
     dirtyUserEmails.add(targetEmail);
-  } else {
-    // If not specified, mark any recently modified users or all
-    Object.keys(data.users || {}).forEach(e => dirtyUserEmails.add(e));
   }
 
   if (targetSessionToken) {
@@ -619,10 +635,12 @@ async function writeUserData(data, targetEmail = null, targetSessionToken = null
   // Schedule debounced disk backup (non-blocking)
   scheduleDiskWrite();
 
-  // Trigger background MongoDB sync queue (non-blocking)
-  processMongoPersistenceQueue().catch(err => {
-    console.warn("[writeUserData] Queue trigger warn:", err.message);
-  });
+  // Trigger background MongoDB sync queue only if there are specific dirty items
+  if (dirtyUserEmails.size > 0 || dirtySessionTokens.size > 0) {
+    processMongoPersistenceQueue().catch(err => {
+      console.warn("[writeUserData] Queue trigger warn:", err.message);
+    });
+  }
 
   return true;
 }
@@ -671,7 +689,7 @@ function getLoggedInUserEmail(req) {
     token = getSessionCookie(req);
   }
 
-  if (token) {
+  if (token && token !== 'null' && token !== 'undefined' && token !== 'guest') {
     if (activeSessions.has(token)) {
       return activeSessions.get(token);
     }
@@ -747,96 +765,110 @@ function isUserAdmin(email, userData = null) {
 
 // POST endpoint for Google Login
 app.post('/api/auth/google', async (req, res) => {
-  const { credential } = req.body;
+  try {
+    const { credential } = req.body;
 
-  if (!credential) {
-    return res.status(400).json({ error: 'Missing credential token' });
-  }
-
-  const payload = decodeJwt(credential);
-  if (!payload || !payload.email) {
-    return res.status(400).json({ error: 'Invalid token format' });
-  }
-
-  const email = payload.email.toLowerCase().trim();
-  const name = payload.name;
-  const picture = payload.picture;
-
-  // Generate a random session token
-  const sessionToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
-  activeSessions.set(sessionToken, email);
-
-  // Persist user record and session in user_data.json
-  const userData = await readUserData();
-  const existingUser = userData.users[email] || {};
-
-  const isSuper = isSuperAdmin(email);
-  const isAdmin = isUserAdmin(email, userData);
-  const userRole = isSuper ? 'super_admin' : (existingUser.role || (email.includes('hongtai') ? 'admin' : 'user'));
-
-  userData.users[email] = {
-    ...existingUser,
-    name,
-    picture,
-    role: userRole,
-    lastSeenTime: new Date(),
-    stats: existingUser.stats || {
-      streak: 0,
-      studyTime: 0,
-      lastActiveDate: ''
+    if (!credential) {
+      return res.status(400).json({ error: 'Missing credential token' });
     }
-  };
-  if (!userData.sessions) {
-    userData.sessions = {};
-  }
-  userData.sessions[sessionToken] = email;
-  await writeUserData(userData);
 
-  // Set persistent session cookie (10 years)
-  res.setHeader('Set-Cookie', `session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${60 * 60 * 24 * 365 * 10}`);
+    const payload = decodeJwt(credential);
+    if (!payload || !payload.email) {
+      return res.status(400).json({ error: 'Invalid token format' });
+    }
 
-  res.json({
-    success: true,
-    token: sessionToken,
-    user: {
+    const email = payload.email.toLowerCase().trim();
+    const name = payload.name || email.split('@')[0];
+    const picture = payload.picture || '';
+
+    // Generate a random session token
+    const sessionToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+    activeSessions.set(sessionToken, email);
+
+    // Persist user record and session in user_data.json
+    const userData = (await readUserData()) || {};
+    if (!userData.users) userData.users = {};
+    if (!userData.sessions) userData.sessions = {};
+    if (!userData.progress) userData.progress = {};
+    if (!userData.customWords) userData.customWords = {};
+
+    const existingUser = userData.users[email] || {};
+
+    const isSuper = isSuperAdmin(email);
+    const isAdmin = isUserAdmin(email, userData);
+    const userRole = isSuper ? 'super_admin' : (existingUser.role || (email.includes('hongtai') ? 'admin' : 'user'));
+
+    userData.users[email] = {
+      ...existingUser,
       name,
-      email,
       picture,
       role: userRole,
-      isSuperAdmin: isSuper,
-      isAdmin
-    }
-  });
+      lastSeenTime: new Date(),
+      stats: existingUser.stats || {
+        streak: 0,
+        studyTime: 0,
+        lastActiveDate: '',
+        dailyHistory: {}
+      }
+    };
+    userData.sessions[sessionToken] = email;
+    await writeUserData(userData, email, sessionToken);
+
+    // Set persistent session cookie (10 years)
+    res.setHeader('Set-Cookie', `session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${60 * 60 * 24 * 365 * 10}`);
+
+    return res.json({
+      success: true,
+      token: sessionToken,
+      user: {
+        name,
+        email,
+        picture,
+        role: userRole,
+        isSuperAdmin: isSuper,
+        isAdmin
+      }
+    });
+  } catch (err) {
+    console.error("Google Auth error:", err);
+    return res.status(500).json({ error: "Lỗi xử lý xác thực Google", detail: err.message });
+  }
 });
 
 // GET endpoint to fetch current user session
 app.get('/api/auth/me', async (req, res) => {
-  const email = getLoggedInUserEmail(req);
-  if (!email) {
-    return res.json({ user: null });
-  }
-
-  const userData = await readUserData();
-  const userRecord = userData.users[email];
-  if (!userRecord) {
-    return res.json({ user: null });
-  }
-
-  const isSuper = isSuperAdmin(email);
-  const isAdmin = isUserAdmin(email, userData);
-  const userRole = isSuper ? 'super_admin' : (userRecord.role || (email.includes('hongtai') ? 'admin' : 'user'));
-
-  res.json({
-    user: {
-      name: userRecord.name,
-      email: email,
-      picture: userRecord.picture,
-      role: userRole,
-      isSuperAdmin: isSuper,
-      isAdmin,
-      stats: userRecord.stats
+  try {
+    const email = getLoggedInUserEmail(req);
+    if (!email) {
+      return res.json({ user: null });
     }
-  });
+
+    const userData = (await readUserData()) || {};
+    const users = userData.users || {};
+    const userRecord = users[email];
+    if (!userRecord) {
+      return res.json({ user: null });
+    }
+
+    const isSuper = isSuperAdmin(email);
+    const isAdmin = isUserAdmin(email, userData);
+    const userRole = isSuper ? 'super_admin' : (userRecord.role || (email.includes('hongtai') ? 'admin' : 'user'));
+
+    return res.json({
+      user: {
+        name: userRecord.name,
+        email: email,
+        picture: userRecord.picture,
+        role: userRole,
+        isSuperAdmin: isSuper,
+        isAdmin,
+        stats: userRecord.stats
+      }
+    });
+  } catch (err) {
+    console.error("GET /api/auth/me error:", err);
+    return res.json({ user: null, error: err.message });
+  }
 });
 
 // POST endpoint to logout
@@ -850,7 +882,7 @@ app.post('/api/auth/logout', async (req, res) => {
       const userData = await readUserData();
       if (userData.sessions && userData.sessions[token]) {
         delete userData.sessions[token];
-        await writeUserData(userData);
+        await writeUserData(userData, null, token);
       }
     } catch (e) {
       console.error('Failed to delete session from user_data.json:', e);
@@ -1785,146 +1817,187 @@ function ensureDailyHistoryIntegrity(stats) {
 }
 
 app.get('/api/user/stats', async (req, res) => {
-  const email = getLoggedInUserEmail(req);
-  if (!email) {
-    return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const email = getLoggedInUserEmail(req);
+    if (!email) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const userData = (await readUserData()) || {};
+    if (!userData.users) userData.users = {};
+    let userRecord = userData.users[email];
+    if (!userRecord) {
+      userRecord = {
+        name: email.split('@')[0],
+        picture: '',
+        role: isSuperAdmin(email) ? 'super_admin' : (email.includes('hongtai') ? 'admin' : 'user'),
+        lastSeenTime: new Date(),
+        stats: {
+          streak: 0,
+          studyTime: 0,
+          lastActiveDate: '',
+          dailyHistory: {}
+        }
+      };
+      userData.users[email] = userRecord;
+      await writeUserData(userData, email);
+    }
+
+    if (!userRecord.stats) {
+      userRecord.stats = {
+        streak: 0,
+        studyTime: 0,
+        lastActiveDate: '',
+        dailyHistory: {}
+      };
+    }
+
+    ensureDailyHistoryIntegrity(userRecord.stats);
+    return res.json(userRecord.stats);
+  } catch (err) {
+    console.error("GET /api/user/stats error:", err);
+    return res.status(500).json({ error: "Failed to load user stats", detail: err.message });
   }
-
-  const userData = await readUserData();
-  const userRecord = userData.users[email];
-  if (!userRecord) {
-    return res.status(404).json({ error: 'User not found' });
-  }
-
-  if (!userRecord.stats) {
-    userRecord.stats = {
-      streak: 0,
-      studyTime: 0,
-      lastActiveDate: '',
-      dailyHistory: {}
-    };
-  }
-
-  ensureDailyHistoryIntegrity(userRecord.stats);
-  await writeUserData(userData);
-
-  res.json(userRecord.stats);
 });
 
 // POST endpoint to update study time & calculate streak
 app.post('/api/user/stats/sync', async (req, res) => {
-  const email = getLoggedInUserEmail(req);
-  if (!email) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
+  try {
+    const email = getLoggedInUserEmail(req);
+    if (!email) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
 
-  const { incrementStudyTime, localDateStr } = req.body;
-  const userData = await readUserData();
-  const userRecord = userData.users[email];
-  if (!userRecord) {
-    return res.status(404).json({ error: 'User not found' });
-  }
+    const { incrementStudyTime, localDateStr } = req.body;
+    const userData = (await readUserData()) || {};
+    if (!userData.users) userData.users = {};
+    let userRecord = userData.users[email];
+    if (!userRecord) {
+      userRecord = {
+        name: email.split('@')[0],
+        picture: '',
+        role: isSuperAdmin(email) ? 'super_admin' : (email.includes('hongtai') ? 'admin' : 'user'),
+        lastSeenTime: new Date(),
+        stats: {
+          streak: 0,
+          studyTime: 0,
+          lastActiveDate: '',
+          dailyHistory: {}
+        }
+      };
+      userData.users[email] = userRecord;
+    }
 
-  if (!userRecord.stats) {
-    userRecord.stats = {
-      streak: 0,
-      studyTime: 0,
-      lastActiveDate: '',
-      dailyHistory: {}
-    };
-  }
-  if (!userRecord.stats.dailyHistory) {
-    userRecord.stats.dailyHistory = {};
-  }
+    if (!userRecord.stats) {
+      userRecord.stats = {
+        streak: 0,
+        studyTime: 0,
+        lastActiveDate: '',
+        dailyHistory: {}
+      };
+    }
+    if (!userRecord.stats.dailyHistory) {
+      userRecord.stats.dailyHistory = {};
+    }
 
-  const vnTimeNow = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
-  const todayStr = localDateStr || vnTimeNow.toISOString().split('T')[0];
+    const vnTimeNow = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
+    const todayStr = localDateStr || vnTimeNow.toISOString().split('T')[0];
 
-  if (typeof incrementStudyTime === 'number' && incrementStudyTime > 0) {
-    userRecord.stats.studyTime += incrementStudyTime;
-    userRecord.stats.dailyHistory[todayStr] = (userRecord.stats.dailyHistory[todayStr] || 0) + incrementStudyTime;
-    userRecord.stats.lastActiveDate = todayStr;
-  } else if (!userRecord.stats.lastActiveDate) {
-    userRecord.stats.lastActiveDate = todayStr;
+    if (typeof incrementStudyTime === 'number' && incrementStudyTime > 0) {
+      userRecord.stats.studyTime += incrementStudyTime;
+      userRecord.stats.dailyHistory[todayStr] = (userRecord.stats.dailyHistory[todayStr] || 0) + incrementStudyTime;
+      userRecord.stats.lastActiveDate = todayStr;
+    } else if (!userRecord.stats.lastActiveDate) {
+      userRecord.stats.lastActiveDate = todayStr;
+    }
+
+    ensureDailyHistoryIntegrity(userRecord.stats);
+    await writeUserData(userData, email);
+    return res.json(userRecord.stats);
+  } catch (err) {
+    console.error("POST /api/user/stats/sync error:", err);
+    return res.status(500).json({ error: "Failed to sync stats", detail: err.message });
   }
-
-  ensureDailyHistoryIntegrity(userRecord.stats);
-  await writeUserData(userData);
-  res.json(userRecord.stats);
 });
 
 // POST endpoint for user Session Heartbeat & Access Logs (Enter / Ping / Exit)
 app.post('/api/user/session/heartbeat', async (req, res) => {
-  let email = getLoggedInUserEmail(req);
-  if (!email && req.body && req.body.email && typeof req.body.email === 'string' && req.body.email.includes('@')) {
-    email = req.body.email.toLowerCase().trim();
-  }
-  if (!email) {
-    return res.json({ ok: false, error: 'Unauthenticated session' });
-  }
+  try {
+    let email = getLoggedInUserEmail(req);
+    if (!email && req.body && req.body.email && typeof req.body.email === 'string' && req.body.email.includes('@')) {
+      email = req.body.email.toLowerCase().trim();
+    }
+    if (!email) {
+      return res.json({ ok: false, error: 'Unauthenticated session' });
+    }
 
-  const { sessionId, action, device, timestamp } = req.body || {};
-  if (!sessionId) {
-    return res.json({ ok: false, error: 'Missing sessionId' });
-  }
+    const { sessionId, action, device, timestamp } = req.body || {};
+    if (!sessionId) {
+      return res.json({ ok: false, error: 'Missing sessionId' });
+    }
 
-  const now = new Date();
-  const userData = await readUserData();
-  let userRecord = userData.users[email];
-  if (!userRecord) {
-    userRecord = {
-      name: email.split('@')[0],
-      picture: '',
-      role: 'user',
-      lastSeenTime: now,
-      accessLogs: []
-    };
-    userData.users[email] = userRecord;
-  }
-
-  if (!Array.isArray(userRecord.accessLogs)) {
-    userRecord.accessLogs = [];
-  }
-
-  userRecord.lastSeenTime = now;
-
-  let session = userRecord.accessLogs.find(s => s.sessionId === sessionId);
-
-  if (action === 'enter' || !session) {
-    if (!session) {
-      session = {
-        sessionId,
-        enterTime: timestamp ? new Date(timestamp) : now,
-        exitTime: now,
-        durationSeconds: 0,
-        device: device || 'Thiết bị web',
-        ip: req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket?.remoteAddress || '',
-        isClosed: false
+    const now = new Date();
+    const userData = (await readUserData()) || {};
+    if (!userData.users) userData.users = {};
+    let userRecord = userData.users[email];
+    if (!userRecord) {
+      userRecord = {
+        name: email.split('@')[0],
+        picture: '',
+        role: 'user',
+        lastSeenTime: now,
+        accessLogs: []
       };
-      userRecord.accessLogs.push(session);
+      userData.users[email] = userRecord;
+    }
+
+    if (!Array.isArray(userRecord.accessLogs)) {
+      userRecord.accessLogs = [];
+    }
+
+    userRecord.lastSeenTime = now;
+
+    let session = userRecord.accessLogs.find(s => s.sessionId === sessionId);
+
+    if (action === 'enter' || !session) {
+      if (!session) {
+        session = {
+          sessionId,
+          enterTime: timestamp ? new Date(timestamp) : now,
+          exitTime: now,
+          durationSeconds: 0,
+          device: device || 'Thiết bị web',
+          ip: req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket?.remoteAddress || '',
+          isClosed: false
+        };
+        userRecord.accessLogs.push(session);
+      } else {
+        session.exitTime = now;
+        session.durationSeconds = Math.max(0, Math.round((new Date(session.exitTime) - new Date(session.enterTime)) / 1000));
+        session.isClosed = false;
+      }
+    } else if (action === 'exit') {
+      session.exitTime = timestamp ? new Date(timestamp) : now;
+      session.durationSeconds = Math.max(0, Math.round((new Date(session.exitTime) - new Date(session.enterTime)) / 1000));
+      session.isClosed = true;
     } else {
+      // 'ping' or periodic keep-alive
       session.exitTime = now;
       session.durationSeconds = Math.max(0, Math.round((new Date(session.exitTime) - new Date(session.enterTime)) / 1000));
       session.isClosed = false;
     }
-  } else if (action === 'exit') {
-    session.exitTime = timestamp ? new Date(timestamp) : now;
-    session.durationSeconds = Math.max(0, Math.round((new Date(session.exitTime) - new Date(session.enterTime)) / 1000));
-    session.isClosed = true;
-  } else {
-    // 'ping' or periodic keep-alive
-    session.exitTime = now;
-    session.durationSeconds = Math.max(0, Math.round((new Date(session.exitTime) - new Date(session.enterTime)) / 1000));
-    session.isClosed = false;
-  }
 
-  // Keep last 150 sessions
-  if (userRecord.accessLogs.length > 150) {
-    userRecord.accessLogs = userRecord.accessLogs.slice(-150);
-  }
+    // Keep last 150 sessions
+    if (userRecord.accessLogs.length > 150) {
+      userRecord.accessLogs = userRecord.accessLogs.slice(-150);
+    }
 
-  await writeUserData(userData);
-  res.json({ ok: true, session });
+    await writeUserData(userData, email);
+    return res.json({ ok: true, session });
+  } catch (err) {
+    console.error("POST /api/user/session/heartbeat error:", err);
+    return res.json({ ok: false, error: err.message });
+  }
 });
 
 // GET endpoint for Super Admin to query access logs of a specific user
@@ -2245,93 +2318,103 @@ app.post('/api/quiz/save', async (req, res) => {
 
 // GET all vocabulary (merges built-in list with user-specific states and custom words)
 app.get('/api/vocabulary', async (req, res) => {
-  const masterList = await readDatabase();
-  const email = getLoggedInUserEmail(req);
+  try {
+    const masterList = await readDatabase();
+    const email = getLoggedInUserEmail(req);
 
-  const targetLevel = req.query.level;
-  const targetLessonId = req.query.lessonId || req.query.lesson;
-  const targetVersion = req.query.version || req.query.hskVersion;
-  const targetCurriculum = req.query.curriculum;
+    const targetLevel = req.query.level;
+    const targetLessonId = req.query.lessonId || req.query.lesson;
+    const targetVersion = req.query.version || req.query.hskVersion;
+    const targetCurriculum = req.query.curriculum;
 
-  let baseList = masterList;
-  if (targetCurriculum) {
-    baseList = baseList.filter(w => (w.curriculum || 'hsk') === targetCurriculum || (w.hskVersion || '') === targetCurriculum);
-  }
-  if (targetLevel) {
-    baseList = baseList.filter(w => String(w.level) === String(targetLevel) || String(w.level) === `HSK ${targetLevel}`);
-  }
-  if (targetLessonId) {
-    baseList = baseList.filter(w => String(w.lessonId) === String(targetLessonId) || String(w.lesson_id) === String(targetLessonId));
-  }
-  if (targetVersion) {
-    baseList = baseList.filter(w => (w.hskVersion || '3.0') === targetVersion);
-  }
+    let baseList = Array.isArray(masterList) ? masterList : [];
+    if (targetCurriculum) {
+      baseList = baseList.filter(w => (w.curriculum || 'hsk') === targetCurriculum || (w.hskVersion || '') === targetCurriculum);
+    }
+    if (targetLevel) {
+      baseList = baseList.filter(w => String(w.level) === String(targetLevel) || String(w.level) === `HSK ${targetLevel}`);
+    }
+    if (targetLessonId) {
+      baseList = baseList.filter(w => String(w.lessonId) === String(targetLessonId) || String(w.lesson_id) === String(targetLessonId));
+    }
+    if (targetVersion) {
+      baseList = baseList.filter(w => (w.hskVersion || '3.0') === targetVersion);
+    }
 
-  const isBrief = req.query.fields === 'brief' || req.query.brief === '1' || req.query.brief === 'true';
-  const formatWord = (w) => {
-    if (!isBrief) return w;
-    return {
-      id: w.id,
-      word: w.word,
-      pinyin: w.pinyin,
-      meaning: w.meaning,
-      level: w.level,
-      curriculum: w.curriculum,
-      hskVersion: w.hskVersion,
-      lessonId: w.lessonId || w.lesson_id,
-      lessonTitle: w.lessonTitle
+    const isBrief = req.query.fields === 'brief' || req.query.brief === '1' || req.query.brief === 'true';
+    const formatWord = (w) => {
+      if (!isBrief) return w;
+      return {
+        id: w.id,
+        word: w.word,
+        pinyin: w.pinyin,
+        meaning: w.meaning,
+        level: w.level,
+        curriculum: w.curriculum,
+        hskVersion: w.hskVersion,
+        lessonId: w.lessonId || w.lesson_id,
+        lessonTitle: w.lessonTitle
+      };
     };
-  };
 
-  if (!email) {
-    // If not logged in, return filtered master list with default unmemorized, unstarred, and not wrong states
-    const defaultList = baseList.map(w => {
-      const formatted = formatWord(w);
+    if (!email) {
+      // If not logged in, return filtered master list with default unmemorized, unstarred, and not wrong states
+      const defaultList = baseList.map(w => {
+        const formatted = formatWord(w);
+        if (!isBrief) {
+          formatted.isMemorized = false;
+          formatted.isStarred = false;
+          formatted.isWrong = false;
+          formatted.isStudied = false;
+        }
+        return formatted;
+      });
+      return res.json(defaultList);
+    }
+
+    const userData = (await readUserData()) || {};
+    const progress = userData.progress || {};
+    const customWords = userData.customWords || {};
+    const userProgress = progress[email] || {};
+    const userCustomWords = Array.isArray(customWords[email]) ? customWords[email] : [];
+
+    // Merge study states for built-in words
+    const mergedList = baseList.map(item => {
+      if (!item) return null;
+      const itemIdStr = item.id != null ? String(item.id) : (item._id != null ? String(item._id) : '');
+      const state = itemIdStr ? userProgress[itemIdStr] : null;
+      const formatted = formatWord(item);
       if (!isBrief) {
-        formatted.isMemorized = false;
-        formatted.isStarred = false;
-        formatted.isWrong = false;
-        formatted.isStudied = false;
+        formatted.isMemorized = state ? !!state.isMemorized : false;
+        formatted.isStarred = state ? !!state.isStarred : false;
+        formatted.isWrong = state ? !!state.isWrong : false;
+        formatted.isStudied = state ? !!state.isStudied : false;
       }
       return formatted;
-    });
-    return res.json(defaultList);
-  }
+    }).filter(Boolean);
 
-  const userData = await readUserData();
-  const userProgress = userData.progress[email] || {};
-  const userCustomWords = userData.customWords[email] || [];
-
-  // Merge study states for built-in words
-  const mergedList = baseList.map(item => {
-    const state = userProgress[item.id.toString()];
-    const formatted = formatWord(item);
-    if (!isBrief) {
-      formatted.isMemorized = state ? !!state.isMemorized : false;
-      formatted.isStarred = state ? !!state.isStarred : false;
-      formatted.isWrong = state ? !!state.isWrong : false;
-      formatted.isStudied = state ? !!state.isStudied : false;
+    // If specific level or lesson was requested, return filtered list directly without appending global custom words
+    if (targetLevel || targetLessonId) {
+      return res.json(mergedList);
     }
-    return formatted;
-  });
 
-  // If specific level or lesson was requested, return filtered list directly without appending global custom words
-  if (targetLevel || targetLessonId) {
-    return res.json(mergedList);
+    // Append user-specific custom words
+    const mappedCustomWords = userCustomWords.map(cw => {
+      if (!cw) return null;
+      const formatted = formatWord(cw);
+      if (!isBrief) {
+        formatted.isCustom = true;
+        formatted.isWrong = !!cw.isWrong;
+        formatted.isStudied = !!cw.isStudied;
+      }
+      return formatted;
+    }).filter(Boolean);
+
+    return res.json([...mergedList, ...mappedCustomWords]);
+  } catch (err) {
+    console.error("GET /api/vocabulary error:", err);
+    return res.status(500).json({ error: "Lỗi tải danh sách từ vựng", detail: err.message });
   }
-
-  // Append user-specific custom words
-  const mappedCustomWords = userCustomWords.map(cw => {
-    const formatted = formatWord(cw);
-    if (!isBrief) {
-      formatted.isCustom = true;
-      formatted.isWrong = !!cw.isWrong;
-      formatted.isStudied = !!cw.isStudied;
-    }
-    return formatted;
-  });
-
-  res.json([...mergedList, ...mappedCustomWords]);
 });
 
 // GET endpoint to fetch structured online lesson content (text, vocab, grammar, exercises)

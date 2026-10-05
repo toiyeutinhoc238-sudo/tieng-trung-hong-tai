@@ -1097,7 +1097,279 @@ import './quick_dict_widget.js';
     }
   });
 
-  // Announcement Ticker Bar Controller
+  // ============================================================
+  // ANNOUNCEMENT TICKER: DYNAMIC RANDOM RUNNER & FEATURE SHOWCASE
+  // ============================================================
+  const TICKER_FEATURE_ITEMS = [
+    {
+      id: 'ai-dialogue',
+      tag: '✨ AI MỚI',
+      tagClass: 'ai',
+      title: 'Hội Thoại AI Nhập Vai:',
+      desc: 'Trò chuyện thực tế nhập vai với AI theo 12 chủ đề đời sống & du lịch.',
+      link: '/ai-dialogue.html',
+      linkText: 'Trải nghiệm ngay →'
+    },
+    {
+      id: 'sentence-reorder',
+      tag: '🧩 790+ CÂU',
+      tagClass: 'feat',
+      title: 'Sắp Xếp Câu Ngữ Pháp:',
+      desc: 'Luyện phản xạ cấu trúc câu chuẩn từ HSK 1 - 6 với chấm điểm tức thì.',
+      link: '/sentence-reorder.html',
+      linkText: 'Luyện tập ngay →'
+    },
+    {
+      id: 'writing-practice',
+      tag: '✍️ LUYỆN VIẾT',
+      tagClass: 'hot',
+      title: 'Luyện Viết Luận & HSKK:',
+      desc: '1,045+ đề thi thực tế, công nghệ AI chấm điểm & sửa lỗi ngữ pháp chi tiết.',
+      link: '/writing-practice.html',
+      linkText: 'Viết ngay →'
+    },
+    {
+      id: 'speaking-practice',
+      tag: '🎙️ LUYỆN NÓI',
+      tagClass: 'audio',
+      title: 'Luyện Phát Âm Trực Tiếp:',
+      desc: 'Nhận diện giọng nói qua Micro AI, kiểm tra độ chuẩn xác thanh điệu từng từ.',
+      link: '/speaking-practice.html',
+      linkText: 'Nói ngay →'
+    },
+    {
+      id: 'reading-practice',
+      tag: '📖 ĐỌC HIỂU',
+      tagClass: 'book',
+      title: 'Luyện Đọc Chuyên Sâu:',
+      desc: 'Hàng trăm bài đọc chuẩn HSK 1 - 6 kèm audio bản xứ, giải nghĩa từ vựng & câu hỏi.',
+      link: '/reading-practice.html',
+      linkText: 'Đọc ngay →'
+    },
+    {
+      id: 'translation-practice',
+      tag: '🌐 DỊCH THUẬT',
+      tagClass: 'feat',
+      title: 'Luyện Dịch Trung - Việt:',
+      desc: 'Rèn luyện phản xạ chuyển ngữ song song Trung - Việt / Việt - Trung chuẩn ngữ cảnh.',
+      link: '/translation-practice.html',
+      linkText: 'Dịch ngay →'
+    },
+    {
+      id: 'video-shadowing',
+      tag: '🎬 SHADOWING',
+      tagClass: 'hot',
+      title: 'Shadowing Video Thực Tế:',
+      desc: 'Phương pháp nhại giọng theo trích đoạn phim đời sống, cải thiện phát âm & độ trôi chảy.',
+      link: '/video-dictation.html?mode=shadowing',
+      linkText: 'Thử ngay →'
+    },
+    {
+      id: 'video-dictation',
+      tag: '🎧 NGHE CHÉP',
+      tagClass: 'audio',
+      title: 'Nghe Chép Chính Tả Video:',
+      desc: 'Luyện tai nghe thực tế qua video ngắn chân thực kèm phụ đề pinyin & dịch nghĩa.',
+      link: '/video-dictation.html?mode=dictation',
+      linkText: 'Luyện nghe ngay →'
+    },
+    {
+      id: 'hanzi-writer',
+      tag: '🖌️ CHỮ HÁN',
+      tagClass: 'feat',
+      title: 'Hanzi Writer & In Phiếu:',
+      desc: 'Mô phỏng thứ tự nét thuận, tra cứu bộ thủ và xuất file PDF tập viết ô chữ điền miễn phí.',
+      link: '/hanzi-writer.html',
+      linkText: 'Tập viết ngay →'
+    },
+    {
+      id: 'chinese-phonetics',
+      tag: '🔤 PINYIN',
+      tagClass: 'feat',
+      title: 'Bảng Phiên Âm Chuẩn:',
+      desc: 'Đầy đủ thanh mẫu, vận mẫu, thanh điệu kèm audio mẫu phát âm chuẩn Bắc Kinh.',
+      link: '/chinese-phonetics.html',
+      linkText: 'Tra cứu ngay →'
+    },
+    {
+      id: 'chinese-radicals',
+      tag: '🏮 214 BỘ THỦ',
+      tagClass: 'feat',
+      title: '214 Bộ Thủ Thần Tốc:',
+      desc: 'Học chữ Hán qua nguồn gốc hình tượng hóa, ý nghĩa và mẹo ghi nhớ nhanh.',
+      link: '/chinese-radicals.html',
+      linkText: 'Học bộ thủ →'
+    },
+    {
+      id: 'han-viet-rules',
+      tag: '⚡ BÍ QUYẾT',
+      tagClass: 'hot',
+      title: 'Chuyển Âm Hán Việt:',
+      desc: 'Mẹo vàng ghi nhớ hàng ngàn từ vựng HSK không cần học vẹt nhờ quy tắc biến đổi âm.',
+      link: '/han-viet-rules.html',
+      linkText: 'Xem quy tắc →'
+    },
+    {
+      id: 'hsk-grammar',
+      tag: '📚 NGỮ PHÁP',
+      tagClass: 'book',
+      title: 'Cẩm Nang Ngữ Pháp Toàn Diện:',
+      desc: 'Hệ thống hóa toàn bộ cấu trúc ngữ pháp HSK 1 - 6 chuẩn Sư Phạm có bài tập & ví dụ.',
+      link: '/hsk-grammar.html',
+      linkText: 'Xem ngữ pháp →'
+    },
+    {
+      id: 'lesson-texts',
+      tag: '🔊 BÀI KHÓA',
+      tagClass: 'book',
+      title: 'Bài Khóa & Audio Chuẩn:',
+      desc: 'Trọn bộ bài khóa HSK theo giáo trình chuẩn, kèm file nghe audio gốc & dịch song ngữ.',
+      link: '/lesson-texts.html',
+      linkText: 'Khám phá ngay →'
+    },
+    {
+      id: 'game-hub',
+      tag: '🎮 5 MINI GAME',
+      tagClass: 'game',
+      title: 'Đấu Trường Mini Game:',
+      desc: 'Vừa chơi vừa ôn luyện: Pháo hoa sinh tồn, Nối chữ Hán, Lật thẻ từ vựng & Bắn bóng!',
+      action: 'gamehub',
+      linkText: 'Vào chơi ngay →'
+    },
+    {
+      id: 'flashcards-spaced',
+      tag: '🃏 FLASHCARD',
+      tagClass: 'feat',
+      title: 'Flashcard Ghi Nhớ Sâu:',
+      desc: 'Thuật toán lặp lại ngắt quãng Spaced Repetition giúp nhớ lâu từ vựng không lo quên.',
+      action: 'flashcards',
+      linkText: 'Luyện từ ngay →'
+    },
+    {
+      id: 'documents-vault',
+      tag: '👑 TÀI LIỆU',
+      tagClass: 'vip',
+      title: 'Kho Sách & Ebook HSK VIP:',
+      desc: 'Tải miễn phí trọn bộ giáo trình HSK 1 - 6, sách ngữ pháp, đề thi thật PDF & audio.',
+      link: '/documents.html',
+      linkText: 'Tải tài liệu →'
+    },
+    {
+      id: 'leaderboard-rank',
+      tag: '🏆 THI ĐUA',
+      tagClass: 'trophy',
+      title: 'Bảng Xếp Hạng Học Viên:',
+      desc: 'Tích lũy điểm khi ôn tập từ vựng & trò chơi để ghi danh Top 1 Tiếng Trung HongTai.',
+      link: '/rank.html',
+      linkText: 'Bảng xếp hạng →'
+    },
+    {
+      id: 'roadmap-guide',
+      tag: '🎯 LỘ TRÌNH',
+      tagClass: 'feat',
+      title: 'Lộ Trình Cá Nhân Hóa:',
+      desc: 'Kế hoạch học tập khoa học theo ngày từ HSK 1 đến HSK 6 với mục tiêu rõ ràng.',
+      action: 'roadmap',
+      linkText: 'Xem lộ trình →'
+    },
+    {
+      id: 'dictionary-lookup',
+      tag: '🔍 TRA CỨU',
+      tagClass: 'feat',
+      title: 'Từ Điển HSK 5,000+ Từ:',
+      desc: 'Tra nghĩa tiếng Việt, pinyin, từ loại, câu ví dụ thực tế và audio phát âm bản xứ.',
+      link: '/detail-list.html',
+      linkText: 'Tra cứu ngay →'
+    },
+    {
+      id: 'vip-upgrade-trial',
+      tag: '🎁 ƯU ĐÃI VIP',
+      tagClass: 'vip',
+      title: 'Trải Nghiệm VIP 30 Ngày:',
+      desc: 'Mở khóa toàn bộ tài liệu độc quyền, tính năng AI nâng cao hoàn toàn miễn phí!',
+      action: 'vip',
+      linkText: 'Nhận 30N VIP →'
+    },
+    {
+      id: 'discussion-forum',
+      tag: '💬 CỘNG ĐỒNG',
+      tagClass: 'feat',
+      title: 'Thảo Luận Cùng Giảng Viên:',
+      desc: 'Giao lưu trao đổi kinh nghiệm học tập, đặt câu hỏi ngữ pháp cùng cộng đồng học viên.',
+      action: 'discussion',
+      linkText: 'Tham gia thảo luận →'
+    },
+    {
+      id: 'online-courses',
+      tag: '🎓 KHÓA HỌC',
+      tagClass: 'book',
+      title: 'Lớp Học Trực Tuyến Sư Phạm:',
+      desc: 'Chương trình đào tạo HSK bài bản cùng đội ngũ giảng viên chuyên ngành tiếng Trung.',
+      link: '/lesson-online.html',
+      linkText: 'Xem lớp học →'
+    },
+    {
+      id: 'hongtai-platform',
+      tag: '🔥 NỔI BẬT',
+      tagClass: 'hot',
+      title: 'Tiếng Trung HongTai:',
+      desc: 'Nền tảng học HSK 1 - 6 trực quan, toàn diện & chuẩn Sư Phạm với 5,000+ từ vựng phong phú.',
+      link: '/',
+      linkText: 'Khám phá ngay →'
+    }
+  ];
+
+  function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function handleTickerAction(actionKey) {
+    if (actionKey === 'gamehub') {
+      if (typeof window.showGameHubGuideModal === 'function') {
+        window.showGameHubGuideModal();
+      } else {
+        window.location.href = '/quiz-game.html';
+      }
+    } else if (actionKey === 'flashcards') {
+      if (typeof window.switchTab === 'function') {
+        window.switchTab('flashcards');
+      } else {
+        window.location.href = '/index.html?tab=flashcards';
+      }
+    } else if (actionKey === 'roadmap') {
+      if (typeof window.showRoadmapView === 'function') {
+        window.showRoadmapView();
+      } else if (typeof window.switchTab === 'function') {
+        window.switchTab('roadmap');
+      } else {
+        window.location.href = '/index.html?tab=roadmap';
+      }
+    } else if (actionKey === 'vip') {
+      if (typeof window.openVipUpgradeModal === 'function') {
+        window.openVipUpgradeModal('trial');
+      }
+    } else if (actionKey === 'discussion') {
+      if (typeof window.openDiscussionModal === 'function') {
+        window.openDiscussionModal();
+      }
+    }
+  }
+
+  function buildTickerItemHTML(item) {
+    const actionAttr = item.action ? `data-ticker-action="${item.action}"` : '';
+    const href = item.link || 'javascript:void(0)';
+    return `<span class="ticker-item" data-ticker-id="${item.id}" ${actionAttr} tabindex="0" role="button">` +
+      `<span class="ticker-tag ${item.tagClass}">${item.tag}</span> ` +
+      `<strong>${item.title}</strong> ${item.desc} ` +
+      `<a href="${href}" class="ticker-action-link" ${actionAttr}>${item.linkText}</a>` +
+    `</span>`;
+  }
+
   window.closeAnnouncementTicker = function () {
     const ticker = document.getElementById('home-announcement-ticker') || document.querySelector('.announcement-ticker-bar');
     if (ticker) {
@@ -1111,13 +1383,146 @@ import './quick_dict_widget.js';
     }
   };
 
+  window.shuffleAnnouncementTicker = function () {
+    const ticker = document.getElementById('home-announcement-ticker') || document.querySelector('.announcement-ticker-bar');
+    if (!ticker) return;
+
+    const shuffleBtn = ticker.querySelector('#ticker-shuffle-btn');
+    if (shuffleBtn) {
+      shuffleBtn.classList.add('spinning');
+      setTimeout(() => shuffleBtn.classList.remove('spinning'), 600);
+    }
+
+    const trackInner = ticker.querySelector('.ticker-track-inner');
+    if (trackInner) {
+      trackInner.style.opacity = '0.35';
+      trackInner.style.transition = 'opacity 0.2s ease';
+      setTimeout(() => {
+        renderAnnouncementItems(ticker, true);
+        trackInner.style.opacity = '1';
+      }, 160);
+    } else {
+      renderAnnouncementItems(ticker, true);
+    }
+
+    if (typeof window.showToast === 'function') {
+      window.showToast('🎲 Đã trộn ngẫu nhiên các tính năng nổi bật!');
+    }
+  };
+
+  function renderAnnouncementItems(ticker, isManualShuffle = false) {
+    const trackInner = ticker.querySelector('.ticker-track-inner');
+    if (!trackInner) return;
+
+    // 1. Ensure controls group exists with Shuffle + Close
+    let controls = ticker.querySelector('.ticker-controls');
+    if (!controls) {
+      const oldCloseBtn = ticker.querySelector('.ticker-close-btn');
+      controls = document.createElement('div');
+      controls.className = 'ticker-controls';
+      controls.innerHTML = `
+        <button type="button" class="ticker-control-btn ticker-shuffle-btn" id="ticker-shuffle-btn" title="Trộn ngẫu nhiên tính năng &amp; tài nguyên" aria-label="Trộn ngẫu nhiên">
+          <i class="fa-solid fa-shuffle"></i>
+        </button>
+        <button type="button" class="ticker-control-btn ticker-close-btn" onclick="window.closeAnnouncementTicker && window.closeAnnouncementTicker()" title="Đóng thông báo" aria-label="Đóng thông báo">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      `;
+      if (oldCloseBtn) {
+        oldCloseBtn.replaceWith(controls);
+      } else {
+        ticker.appendChild(controls);
+      }
+    }
+
+    const shuffleBtn = controls.querySelector('#ticker-shuffle-btn');
+    if (shuffleBtn && !shuffleBtn.dataset.bound) {
+      shuffleBtn.dataset.bound = 'true';
+      shuffleBtn.onclick = function (e) {
+        e.stopPropagation();
+        window.shuffleAnnouncementTicker();
+      };
+    }
+
+    // 2. Completely random shuffle of all 24 feature & resource highlights
+    const shuffled = shuffleArray(TICKER_FEATURE_ITEMS);
+    const itemsHTML = shuffled.map(buildTickerItemHTML).join('');
+
+    // 3. Render 2 identical loops for 100% seamless marquee translation
+    trackInner.innerHTML = `
+      <div class="ticker-content-loop" id="ticker-loop-primary">${itemsHTML}</div>
+      <div class="ticker-content-loop" id="ticker-loop-clone" aria-hidden="true">${itemsHTML}</div>
+    `;
+
+    // 4. Delegated Click Handler on Items & Links
+    trackInner.onclick = function (e) {
+      const itemEl = e.target.closest('.ticker-item');
+      if (!itemEl) return;
+
+      const actionKey = itemEl.getAttribute('data-ticker-action') || (e.target.closest('[data-ticker-action]') && e.target.closest('[data-ticker-action]').getAttribute('data-ticker-action'));
+      if (actionKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        handleTickerAction(actionKey);
+        return;
+      }
+
+      const linkEl = itemEl.querySelector('.ticker-action-link');
+      if (linkEl && linkEl.href && !linkEl.href.includes('javascript:')) {
+        if (e.target !== linkEl) {
+          window.location.href = linkEl.href;
+        }
+      }
+    };
+
+    // 5. Dynamic Speed Calibration & Random Offset
+    const loopPrimary = trackInner.querySelector('#ticker-loop-primary');
+    if (loopPrimary) {
+      // Allow DOM to layout width
+      requestAnimationFrame(() => {
+        const loopWidth = loopPrimary.scrollWidth || 6000;
+        // Optimal reading glide ~ 80px/s
+        const duration = Math.max(45, Math.round(loopWidth / 80));
+        trackInner.style.animationDuration = `${duration}s`;
+
+        if (!isManualShuffle) {
+          // Negative delay immediately begins at a completely random point in the stream
+          const randomOffset = (Math.random() * duration).toFixed(1);
+          trackInner.style.animationDelay = `-${randomOffset}s`;
+        } else {
+          trackInner.style.animationDelay = '0s';
+        }
+      });
+    }
+
+    // 6. Seamless Re-Shuffle on each marquee iteration for infinite non-repeating variety
+    trackInner.onanimationiteration = function () {
+      try {
+        const nextShuffled = shuffleArray(TICKER_FEATURE_ITEMS);
+        const nextHTML = nextShuffled.map(buildTickerItemHTML).join('');
+        const p = trackInner.querySelector('#ticker-loop-primary');
+        const c = trackInner.querySelector('#ticker-loop-clone');
+        if (p && c) {
+          p.innerHTML = nextHTML;
+          c.innerHTML = nextHTML;
+        }
+      } catch (err) {}
+    };
+  }
+
   function initAnnouncementTicker() {
     try {
       if (sessionStorage.getItem('hongtai_ticker_dismissed') === 'true') {
         const ticker = document.getElementById('home-announcement-ticker') || document.querySelector('.announcement-ticker-bar');
         if (ticker) ticker.style.display = 'none';
+        return;
       }
     } catch (e) {}
+
+    const ticker = document.getElementById('home-announcement-ticker') || document.querySelector('.announcement-ticker-bar');
+    if (!ticker) return;
+
+    renderAnnouncementItems(ticker, false);
   }
 
   // Inject or setup on DOM Ready
