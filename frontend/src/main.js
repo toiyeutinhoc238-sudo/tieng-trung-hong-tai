@@ -16550,6 +16550,11 @@ let adminCachedUsersList = [];
 let currentAdminFilter = 'all';
 let currentAdminSearchQuery = '';
 let adminSyncInterval = null;
+let adminCurrentPage = 1;
+let adminPageSize = 10;
+let adminSortColumn = 'name';
+let adminSortDirection = 'asc';
+let adminSelectedUserEmails = new Set();
 
 window.openAdminManagementModal = function () {
   const modal = document.getElementById('admin-management-modal');
@@ -16735,6 +16740,7 @@ window.fetchAdminUsersList = async function (showLoading, isManualRefresh = fals
 
 window.filterAdminUsers = function (filterKey) {
   currentAdminFilter = filterKey;
+  adminCurrentPage = 1;
   document.querySelectorAll('#admin-filter-tabs-container .disc-filter-pill').forEach(btn => {
     if (btn.getAttribute('data-admin-filter') === filterKey) {
       btn.classList.add('active');
@@ -16750,9 +16756,218 @@ window.handleAdminUserSearch = function (query) {
   clearTimeout(adminSearchDebounce);
   adminSearchDebounce = setTimeout(() => {
     currentAdminSearchQuery = query.trim().toLowerCase();
+    adminCurrentPage = 1;
     window.renderAdminUsersTable();
   }, 150);
 };
+
+window.changeAdminPage = function (page) {
+  adminCurrentPage = page;
+  window.renderAdminUsersTable();
+  const container = document.getElementById('admin-users-table-container');
+  if (container) container.scrollTop = 0;
+};
+
+window.changeAdminPageSize = function (size) {
+  adminPageSize = parseInt(size, 10) || 10;
+  adminCurrentPage = 1;
+  window.renderAdminUsersTable();
+};
+
+window.sortAdminTable = function (column) {
+  if (adminSortColumn === column) {
+    adminSortDirection = adminSortDirection === 'asc' ? 'desc' : 'asc';
+  } else {
+    adminSortColumn = column;
+    adminSortDirection = 'asc';
+  }
+  window.renderAdminUsersTable();
+};
+
+window.toggleSelectAllAdminUsers = function (checked) {
+  const container = document.getElementById('admin-users-table-container');
+  if (!container) return;
+  const checkboxes = container.querySelectorAll('.admin-user-checkbox');
+  checkboxes.forEach(cb => {
+    cb.checked = checked;
+    const email = cb.getAttribute('data-email');
+    if (email) {
+      if (checked) adminSelectedUserEmails.add(email);
+      else adminSelectedUserEmails.delete(email);
+    }
+  });
+};
+
+window.toggleSelectUser = function (email, checked) {
+  if (checked) adminSelectedUserEmails.add(email);
+  else adminSelectedUserEmails.delete(email);
+
+  const selectAll = document.getElementById('admin-select-all-users');
+  if (selectAll) {
+    const checkboxes = document.querySelectorAll('.admin-user-checkbox');
+    const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(cb => cb.checked);
+    selectAll.checked = allChecked;
+  }
+};
+
+window.openAdminUserActionDropdown = function (event, targetEmail) {
+  event.stopPropagation();
+  const btn = event.currentTarget;
+  const user = adminCachedUsersList.find(u => u.email === targetEmail);
+  if (!user) return;
+
+  let menu = document.getElementById('admin-user-action-dropdown');
+  if (!menu) {
+    menu = document.createElement('div');
+    menu.id = 'admin-user-action-dropdown';
+    document.body.appendChild(menu);
+  }
+
+  // Toggle if clicked again on same button
+  if (menu.getAttribute('data-email') === targetEmail && menu.style.display === 'block') {
+    menu.style.display = 'none';
+    return;
+  }
+
+  const isCurrentSuper = currentUser && (!!currentUser.isSuperAdmin || isSuperAdmin(currentUser.email));
+  const isCurrentAdmin = currentUser && (!!currentUser.isAdmin || !!currentUser.isSuperAdmin || isUserAdmin(currentUser.email));
+  const safeEmail = escapeHtml(user.email || '');
+  const safeName = escapeHtml(user.name || 'Học viên');
+  const roleText = user.isSuperAdmin ? 'Super Admin' : (user.role === 'teacher' ? 'Giáo viên' : (user.role === 'admin' ? 'Quản trị viên' : 'Học viên'));
+
+  menu.setAttribute('data-email', targetEmail);
+  menu.innerHTML = `
+    <div class="admin-dropdown-popover">
+      <div class="admin-dropdown-header">
+        <div style="font-weight: 800; font-size: 0.88rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${safeName}</div>
+        <div style="font-size: 0.72rem; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${safeEmail}</div>
+        <div style="font-size: 0.68rem; margin-top: 4px; color: #38bdf8; font-weight: 700;">Vai trò: ${roleText}</div>
+      </div>
+      <div class="admin-dropdown-divider"></div>
+
+      <button type="button" class="admin-dropdown-item" onclick="window.closeAdminUserActionDropdown(); window.openStudentHistoryDetail('${safeEmail}')">
+        <i class="fa-solid fa-chart-line" style="color: #22c55e;"></i>
+        <span>Xem nhật ký học tập</span>
+      </button>
+
+      ${isCurrentAdmin ? `
+      <button type="button" class="admin-dropdown-item" onclick="window.closeAdminUserActionDropdown(); window.openAdminVipModal('${safeEmail}')">
+        <i class="fa-solid fa-crown" style="color: #facc15;"></i>
+        <span>${user.isVip ? 'Quản lý / Gia hạn VIP' : 'Cấp gói VIP'}</span>
+      </button>
+      ` : ''}
+
+      ${isCurrentSuper ? `
+      <button type="button" class="admin-dropdown-item" onclick="window.closeAdminUserActionDropdown(); window.openRolePickerModal('${safeEmail}', '${user.role || 'user'}', '${safeName}')">
+        <i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i>
+        <span>Phân quyền quản trị</span>
+      </button>
+      ` : ''}
+
+      <button type="button" class="admin-dropdown-item" onclick="window.closeAdminUserActionDropdown(); window.openStudentHistoryDetail('${safeEmail}', 'games')">
+        <i class="fa-solid fa-gamepad" style="color: #f97316;"></i>
+        <span>Lịch sử chơi &amp; Điểm thi</span>
+      </button>
+
+      <button type="button" class="admin-dropdown-item" onclick="window.closeAdminUserActionDropdown(); window.quickEmailToStudent('${safeEmail}')">
+        <i class="fa-solid fa-envelope" style="color: #a855f7;"></i>
+        <span>Gửi email riêng</span>
+      </button>
+    </div>
+  `;
+
+  menu.style.display = 'block';
+  menu.style.position = 'fixed';
+  menu.style.zIndex = '9999999';
+
+  // Calculate position
+  const rect = btn.getBoundingClientRect();
+  const menuWidth = 230;
+  let left = rect.right - menuWidth;
+  if (left < 10) left = 10;
+  let top = rect.bottom + 4;
+  if (top + 250 > window.innerHeight) {
+    top = Math.max(10, rect.top - 240);
+  }
+
+  menu.style.left = `${left}px`;
+  menu.style.top = `${top}px`;
+};
+
+window.closeAdminUserActionDropdown = function () {
+  const menu = document.getElementById('admin-user-action-dropdown');
+  if (menu) menu.style.display = 'none';
+};
+
+window.quickEmailToStudent = function (email) {
+  window.switchAdminTab('broadcast');
+  const testInput = document.getElementById('admin-email-test-target');
+  if (testInput) {
+    testInput.value = email;
+    testInput.focus();
+  }
+  showToast(`Đã chuyển sang tab Gửi Email cho: ${email}`);
+};
+
+// Global click to close action dropdown
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('admin-user-action-dropdown');
+  if (menu && menu.style.display === 'block') {
+    if (!e.target.closest('#admin-user-action-dropdown') && !e.target.closest('.admin-3dots-btn')) {
+      window.closeAdminUserActionDropdown();
+    }
+  }
+});
+
+function renderAdminPaginationButtons(currentPage, totalPages) {
+  if (totalPages <= 1) return '';
+  let btns = '';
+
+  btns += `
+    <button type="button" class="admin-page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="window.changeAdminPage(${currentPage - 1})" title="Trang trước">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+  `;
+
+  const pagesToShow = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pagesToShow.push(i);
+  } else {
+    pagesToShow.push(1);
+    if (currentPage > 3) pagesToShow.push('...');
+
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(totalPages - 1, currentPage + 1);
+
+    for (let i = start; i <= end; i++) {
+      if (!pagesToShow.includes(i)) pagesToShow.push(i);
+    }
+
+    if (currentPage < totalPages - 2) pagesToShow.push('...');
+    if (!pagesToShow.includes(totalPages)) pagesToShow.push(totalPages);
+  }
+
+  pagesToShow.forEach(p => {
+    if (p === '...') {
+      btns += `<span class="admin-page-ellipsis">...</span>`;
+    } else {
+      const isActive = p === currentPage;
+      btns += `
+        <button type="button" class="admin-page-btn ${isActive ? 'active' : ''}" onclick="window.changeAdminPage(${p})">
+          ${p}
+        </button>
+      `;
+    }
+  });
+
+  btns += `
+    <button type="button" class="admin-page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="window.changeAdminPage(${currentPage + 1})" title="Trang sau">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  `;
+
+  return btns;
+}
 
 window.renderAdminUsersTable = function () {
   const container = document.getElementById('admin-users-table-container');
@@ -16777,128 +16992,158 @@ window.renderAdminUsersTable = function () {
     );
   }
 
+  // Sort filtered array
+  filtered.sort((a, b) => {
+    let valA, valB;
+    if (adminSortColumn === 'name') {
+      valA = (a.name || a.email || '').toLowerCase();
+      valB = (b.name || b.email || '').toLowerCase();
+    } else if (adminSortColumn === 'status') {
+      valA = a.isOnline ? 1 : 0;
+      valB = b.isOnline ? 1 : 0;
+    } else if (adminSortColumn === 'role') {
+      valA = a.role || 'user';
+      valB = b.role || 'user';
+    } else if (adminSortColumn === 'vip') {
+      valA = a.isVip ? 1 : 0;
+      valB = b.isVip ? 1 : 0;
+    } else if (adminSortColumn === 'studyTime') {
+      valA = a.studyTime || 0;
+      valB = b.studyTime || 0;
+    } else if (adminSortColumn === 'streak') {
+      valA = a.streak || 0;
+      valB = b.streak || 0;
+    } else {
+      valA = (a.name || '').toLowerCase();
+      valB = (b.name || '').toLowerCase();
+    }
+
+    if (valA < valB) return adminSortDirection === 'asc' ? -1 : 1;
+    if (valA > valB) return adminSortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
+
   if (filtered.length === 0) {
     container.innerHTML = `
-      <div style="text-align: center; padding: 48px; color: #94a3b8;">
-        <i class="fa-solid fa-user-slash" style="font-size: 2rem; margin-bottom: 10px; color: #64748b;"></i>
-        <p style="margin: 0; font-size: 0.95rem;">Không tìm thấy người học nào phù hợp với bộ lọc.</p>
+      <div style="text-align: center; padding: 56px 20px; color: #94a3b8;">
+        <i class="fa-solid fa-user-slash" style="font-size: 2.2rem; margin-bottom: 12px; color: #64748b;"></i>
+        <p style="margin: 0; font-size: 0.95rem; font-weight: 600;">Không tìm thấy người học nào phù hợp với bộ lọc.</p>
+        <span style="font-size: 0.8rem; color: #64748b; margin-top: 4px; display: block;">Hãy thử từ khóa khác hoặc chuyển sang tab bộ lọc "Tất cả".</span>
       </div>
     `;
     return;
   }
 
-  const isCurrentSuper = currentUser && (!!currentUser.isSuperAdmin || isSuperAdmin(currentUser.email));
-  const isCurrentAdmin = currentUser && (!!currentUser.isAdmin || !!currentUser.isSuperAdmin || isUserAdmin(currentUser.email));
+  // Pagination calculation
+  const totalFiltered = filtered.length;
+  const totalPages = Math.ceil(totalFiltered / adminPageSize) || 1;
+  if (adminCurrentPage > totalPages) adminCurrentPage = totalPages;
+  if (adminCurrentPage < 1) adminCurrentPage = 1;
+
+  const startIndex = (adminCurrentPage - 1) * adminPageSize;
+  const endIndex = Math.min(startIndex + adminPageSize, totalFiltered);
+  const pageUsers = filtered.slice(startIndex, endIndex);
+
+  const getSortIcon = (col) => {
+    if (adminSortColumn !== col) return '<i class="fa-solid fa-sort" style="color: #64748b; font-size: 0.72rem; margin-left: 4px;"></i>';
+    return adminSortDirection === 'asc'
+      ? '<i class="fa-solid fa-sort-up" style="color: #38bdf8; font-size: 0.75rem; margin-left: 4px;"></i>'
+      : '<i class="fa-solid fa-sort-down" style="color: #38bdf8; font-size: 0.75rem; margin-left: 4px;"></i>';
+  };
+
+  const allOnPageChecked = pageUsers.length > 0 && pageUsers.every(u => adminSelectedUserEmails.has(u.email));
 
   let html = `
-    <table class="admin-users-table">
-      <thead>
-        <tr>
-          <th style="min-width: 220px;">Học Viên</th>
-          <th>Trạng Thái</th>
-          <th>Vai Trò</th>
-          <th>Hội Viên VIP ⭐</th>
-          <th>Điểm Thi &amp; Lộ Trình</th>
-          <th>Chuỗi Học 🔥</th>
-          <th>Thời Gian ⏱️</th>
-          <th style="text-align: right; min-width: 170px;">Thao Tác</th>
-        </tr>
-      </thead>
-      <tbody>
+    <div style="width: 100%; display: flex; flex-direction: column; min-height: 100%;">
+      <div style="overflow-x: auto; flex: 1;">
+        <table class="admin-users-table">
+          <thead>
+            <tr>
+              <th style="width: 44px; text-align: center;">
+                <input type="checkbox" id="admin-select-all-users" ${allOnPageChecked ? 'checked' : ''} onchange="window.toggleSelectAllAdminUsers(this.checked)" style="cursor: pointer; accent-color: #2563eb; width: 15px; height: 15px;">
+              </th>
+              <th onclick="window.sortAdminTable('name')" style="min-width: 200px; cursor: pointer;">
+                Học viên ${getSortIcon('name')}
+              </th>
+              <th onclick="window.sortAdminTable('status')" style="cursor: pointer; min-width: 110px;">
+                Trạng thái ${getSortIcon('status')}
+              </th>
+              <th onclick="window.sortAdminTable('role')" style="cursor: pointer; min-width: 120px;">
+                Vai trò ${getSortIcon('role')}
+              </th>
+              <th onclick="window.sortAdminTable('vip')" style="cursor: pointer; min-width: 110px;">
+                Gói học ${getSortIcon('vip')}
+              </th>
+              <th onclick="window.sortAdminTable('studyTime')" style="cursor: pointer; min-width: 100px;">
+                Học tập ${getSortIcon('studyTime')}
+              </th>
+              <th onclick="window.sortAdminTable('streak')" style="cursor: pointer; min-width: 110px;">
+                Streak ${getSortIcon('streak')}
+              </th>
+              <th style="text-align: center; width: 70px;">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
   `;
 
-  filtered.forEach(u => {
+  const avatarColors = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#f43f5e', '#06b6d4', '#6366f1', '#ec4899', '#14b8a6', '#d97706'];
+
+  pageUsers.forEach(u => {
     const safeName = escapeHtml(u.name || 'Học viên');
     const safeEmail = escapeHtml(u.email || '');
     const initial = safeName.charAt(0).toUpperCase();
+    const colorIdx = Math.abs(safeEmail.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0)) % avatarColors.length;
+    const avatarBg = avatarColors[colorIdx];
 
     const avatarHtml = u.picture
-      ? `<img src="${u.picture}" alt="${safeName}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.15);" onerror="this.outerHTML='<div style=\\'width:36px;height:36px;border-radius:50%;background:#0284c7;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;\\'>${initial}</div>'">`
-      : `<div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0284c7, #38bdf8); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">${initial}</div>`;
+      ? `<img src="${u.picture}" alt="${safeName}" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.12); flex-shrink: 0;" onerror="this.outerHTML='<div style=\\'width:34px;height:34px;border-radius:50%;background:${avatarBg};color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;\\'>${initial}</div>'">`
+      : `<div style="width: 34px; height: 34px; border-radius: 50%; background: ${avatarBg}; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0;">${initial}</div>`;
 
     // Status HTML
     const statusHtml = u.isOnline
-      ? `<span class="admin-status-online"><span class="dot"></span> Online</span>`
-      : `<span class="admin-status-offline"><span class="dot"></span> ${u.lastSeen ? formatRelativeTime(u.lastSeen) : 'Chưa rõ'}</span>`;
+      ? `<span class="admin-status-pill online"><span class="status-dot online"></span> Online</span>`
+      : `<span class="admin-status-pill offline"><span class="status-dot offline"></span> Offline</span>`;
 
     // Role HTML
     let roleBadge = '';
     if (u.isSuperAdmin) {
-      roleBadge = `<span class="admin-role-badge admin-role-super"><i class="fa-solid fa-crown"></i> Super Admin</span>`;
+      roleBadge = `<span class="admin-role-badge-pill super">Super Admin</span>`;
     } else if (u.role === 'teacher' || (u.email && u.email.includes('hongtai'))) {
-      roleBadge = `<span class="admin-role-badge admin-role-teacher"><i class="fa-solid fa-chalkboard-user"></i> Giáo viên</span>`;
+      roleBadge = `<span class="admin-role-badge-pill teacher">Giáo viên</span>`;
     } else if (u.isAdmin || u.role === 'admin') {
-      roleBadge = `<span class="admin-role-badge admin-role-admin"><i class="fa-solid fa-shield-halved"></i> Quản trị viên</span>`;
+      roleBadge = `<span class="admin-role-badge-pill admin">Quản trị viên</span>`;
     } else {
-      roleBadge = `<span class="admin-role-badge admin-role-user"><i class="fa-solid fa-graduation-cap"></i> Học viên</span>`;
+      roleBadge = `<span class="admin-role-badge-pill student">Học viên</span>`;
     }
 
-    // VIP Badge HTML
+    // VIP Package HTML
     let vipBadge = '';
     if (u.isVip) {
-      if (u.vipPackage === 'lifetime' || u.isSuperAdmin || (u.vipDaysRemaining && u.vipDaysRemaining > 3650)) {
-        vipBadge = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; background: rgba(234, 179, 8, 0.2); color: #facc15; font-size: 0.74rem; font-weight: 800; border: 1px solid rgba(234, 179, 8, 0.4);"><i class="fa-solid fa-crown"></i> VIP Vĩnh Viễn</span>`;
-      } else {
-        const daysText = (u.vipDaysRemaining !== null && u.vipDaysRemaining !== undefined) ? `Còn ${u.vipDaysRemaining} ngày` : 'Đang hoạt động';
-        vipBadge = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; background: rgba(234, 179, 8, 0.2); color: #facc15; font-size: 0.74rem; font-weight: 800; border: 1px solid rgba(234, 179, 8, 0.4);"><i class="fa-solid fa-crown"></i> VIP (${daysText})</span>`;
-      }
+      vipBadge = `<span class="admin-vip-badge-pill vip"><i class="fa-solid fa-crown" style="font-size: 0.68rem;"></i> VIP</span>`;
     } else if (u.vipStatus === 'expired') {
-      vipBadge = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; background: rgba(239, 68, 68, 0.15); color: #f87171; font-size: 0.74rem; font-weight: 700; border: 1px solid rgba(239, 68, 68, 0.3);"><i class="fa-solid fa-hourglass-end"></i> Hết hạn VIP</span>`;
+      vipBadge = `<span class="admin-vip-badge-pill expired">Hết hạn</span>`;
     } else {
-      vipBadge = `<span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">⚪ Thường</span>`;
+      vipBadge = `<span class="admin-vip-badge-pill regular">Thường</span>`;
     }
 
-    // Scores & progress
-    const highestScoreHtml = u.quizCount > 0
-      ? `<span onclick="window.openStudentHistoryDetail('${safeEmail}', 'games')" style="cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Nhấp để xem chi tiết lịch sử chơi trò chơi"><strong style="color: #22c55e; font-weight: 800;">${u.highestQuizScore}đ</strong> <span style="font-size: 0.72rem; color: #a855f7; text-decoration: underline;">(${u.quizCount} lượt)</span></span>`
-      : `<span style="font-size: 0.78rem; color: #64748b;">Chưa thi</span>`;
-
-    // Format study time
+    // Study Time Formatted
     const studyHours = ((u.studyTime || 0) / 3600).toFixed(1);
     const studyMins = Math.round(((u.studyTime || 0) % 3600) / 60);
-    const timeFormatted = u.studyTime > 3600 ? `${studyHours}h` : `${studyMins} phút`;
+    const timeFormatted = u.studyTime > 3600 ? `${studyHours}h` : `${studyMins}p`;
 
-    // Actions
-    const historyBtnHtml = `
-      <button type="button" onclick="window.openStudentHistoryDetail('${safeEmail}')" style="padding: 5px 9px; font-size: 0.76rem; font-weight: 700; border-radius: 8px; background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;" title="Xem lịch sử học theo từng ngày">
-        <i class="fa-solid fa-chart-line"></i> Nhật ký
-      </button>
-    `;
-
-    const vipBtnHtml = isCurrentAdmin ? `
-      <button type="button" onclick="window.openAdminVipModal('${safeEmail}')" style="padding: 5px 10px; font-size: 0.76rem; font-weight: 800; border-radius: 8px; background: ${u.isVip ? 'rgba(234, 179, 8, 0.2)' : 'rgba(255, 255, 255, 0.08)'}; color: ${u.isVip ? '#facc15' : '#cbd5e1'}; border: 1px solid ${u.isVip ? 'rgba(234, 179, 8, 0.45)' : 'rgba(255, 255, 255, 0.15)'}; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;" title="Kích hoạt hoặc Hủy kích hoạt gói VIP cho học viên này">
-        <i class="fa-solid fa-crown" style="color: ${u.isVip ? '#facc15' : '#94a3b8'};"></i> ${u.isVip ? 'QL VIP' : 'Cấp VIP'}
-      </button>
-    ` : '';
-
-    let actionBtnHtml = '';
-    if (isCurrentSuper) {
-      if (u.isSuperAdmin) {
-        actionBtnHtml = `<div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">${historyBtnHtml} ${vipBtnHtml} <span style="font-size: 0.75rem; color: #f43f5e; font-weight: 700;"><i class="fa-solid fa-lock"></i> Super</span></div>`;
-      } else {
-        const currentRoleText = u.role === 'teacher' ? ' (GV)' : (u.role === 'admin' ? ' (Admin)' : '');
-        actionBtnHtml = `
-          <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
-            ${historyBtnHtml}
-            ${vipBtnHtml}
-            <button type="button" onclick="window.openRolePickerModal('${safeEmail}', '${u.role || 'user'}', '${safeName}')" style="padding: 5px 11px; font-size: 0.76rem; font-weight: 800; border-radius: 8px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s;">
-              <i class="fa-solid fa-shield-halved"></i> Cấp quyền${currentRoleText}
-            </button>
-          </div>
-        `;
-      }
-    } else {
-      actionBtnHtml = `<div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">${historyBtnHtml} ${vipBtnHtml}</div>`;
-    }
+    const isChecked = adminSelectedUserEmails.has(safeEmail);
 
     html += `
       <tr class="admin-user-row">
+        <td style="text-align: center;">
+          <input type="checkbox" class="admin-user-checkbox" data-email="${safeEmail}" ${isChecked ? 'checked' : ''} onchange="window.toggleSelectUser('${safeEmail}', this.checked)" style="cursor: pointer; accent-color: #2563eb; width: 15px; height: 15px;">
+        </td>
         <td>
           <div style="display: flex; align-items: center; gap: 10px;">
             ${avatarHtml}
-            <div>
-              <div style="font-weight: 700; color: #ffffff; font-size: 0.88rem;">${safeName}</div>
-              <div style="font-size: 0.72rem; color: #94a3b8;">${safeEmail}</div>
+            <div style="min-width: 0;">
+              <div class="admin-user-cell-name" style="font-weight: 700; font-size: 0.88rem; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;">${safeName}</div>
+              <div class="admin-user-cell-email" style="font-size: 0.72rem; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;">${safeEmail}</div>
             </div>
           </div>
         </td>
@@ -16906,26 +17151,37 @@ window.renderAdminUsersTable = function () {
         <td>${roleBadge}</td>
         <td>${vipBadge}</td>
         <td>
-          <div>${highestScoreHtml}</div>
+          <span style="font-weight: 700; font-size: 0.84rem;">${timeFormatted}</span>
         </td>
         <td>
-          <span style="font-weight: 800; color: #f97316; font-size: 0.88rem;">
+          <span style="font-weight: 800; color: #f97316; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 4px;">
             <i class="fa-solid fa-fire"></i> ${u.streak || 0} ngày
           </span>
         </td>
-        <td>
-          <span style="font-weight: 700; color: #e2e8f0; font-size: 0.85rem;">
-            ${timeFormatted}
-          </span>
+        <td style="text-align: center;">
+          <button type="button" class="admin-3dots-btn" onclick="window.openAdminUserActionDropdown(event, '${safeEmail}')" title="Thao tác học viên">
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+          </button>
         </td>
-        <td style="text-align: right;">${actionBtnHtml}</td>
       </tr>
     `;
   });
 
   html += `
-      </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination Footer -->
+      <div class="admin-table-footer">
+        <div style="font-size: 0.8rem; color: #94a3b8; font-weight: 600;">
+          Hiển thị ${totalFiltered === 0 ? 0 : startIndex + 1} - ${endIndex} / ${totalFiltered} học viên
+        </div>
+        <div class="admin-pagination-controls" style="display: flex; gap: 4px; align-items: center;">
+          ${renderAdminPaginationButtons(adminCurrentPage, totalPages)}
+        </div>
+      </div>
+    </div>
   `;
 
   container.innerHTML = html;

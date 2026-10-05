@@ -221,12 +221,12 @@
     };
   </script>
   <script type="module" crossorigin src="/assets/vendor-BfYXEYrK.js"></script>
-  <script type="module" crossorigin src="/assets/global_sidebar-CmAoIgQS.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-DZXUUli3.js"></script>
   <script type="module" crossorigin src="/assets/hsk-grammar-data-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/games-data-CBh3wN3X.js"></script>
   <script type="module" crossorigin src="/assets/vendor-pinyin-haNF1LmB.js"></script>
-  <script type="module" crossorigin src="/assets/main-CwCcrMYL.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-D63jLJBM.css">
+  <script type="module" crossorigin src="/assets/main-5vgbTpp9.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-Dza2oeAN.css">
 </head>
 
 <body>
@@ -5413,11 +5413,11 @@
   <div id="admin-management-modal" class="admin-modal-overlay"
     style="position: fixed; inset: 0; background: rgba(10, 15, 29, 0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); display: none; z-index: 99999; align-items: center; justify-content: center; padding: 16px;">
     <div class="admin-modal-dialog"
-      style="width: 100%; max-width: 1100px; max-height: 92vh; background: linear-gradient(180deg, #131d35 0%, #0d1527 100%); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 20px; box-shadow: 0 25px 60px -15px rgba(0,0,0,0.85), 0 0 40px rgba(244,63,94,0.15); display: flex; flex-direction: column; overflow: hidden; animation: zoomIn 0.25s ease-out;">
+      style="width: 96%; max-width: 1240px; max-height: 92vh; background: linear-gradient(180deg, #131d35 0%, #0d1527 100%); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 20px; box-shadow: 0 25px 60px -15px rgba(0,0,0,0.85), 0 0 40px rgba(244,63,94,0.15); display: flex; flex-direction: column; overflow: hidden; animation: zoomIn 0.25s ease-out;">
 
       <!-- Modal Header -->
       <div class="admin-modal-header"
-        style="display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: rgba(15, 23, 42, 0.6);">
+        style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: rgba(15, 23, 42, 0.6);">
         <div style="display: flex; align-items: center; gap: 14px;">
           <div
             style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, rgba(244,63,94,0.2), rgba(225,29,72,0.1)); display: flex; align-items: center; justify-content: center; color: #f43f5e; font-size: 1.3rem; border: 1px solid rgba(244,63,94,0.35); flex-shrink: 0;">
@@ -5426,15 +5426,13 @@
           <div>
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <h2
-                style="font-size: 1.2rem; font-weight: 800; color: #ffffff; margin: 0; font-family: var(--font-display);">
+                style="font-size: 1.22rem; font-weight: 800; color: #ffffff; margin: 0; font-family: var(--font-display);">
                 Trung Tâm Quản Trị &amp; Người Học</h2>
               <span id="admin-my-role-badge"
-                style="font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; background: linear-gradient(135deg, #f43f5e, #e11d48); color: white;">Super
-                Admin</span>
+                style="font-size: 0.72rem; font-weight: 800; padding: 2px 10px; border-radius: 99px; background: rgba(244, 63, 94, 0.18); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.35); display: inline-flex; align-items: center; gap: 4px;">Super Admin (Toàn quyền)</span>
             </div>
             <p class="admin-header-subtitle" style="font-size: 0.8rem; color: #94a3b8; margin: 2px 0 0 0;">Theo dõi trực
-              tuyến (Online/Offline), điểm
-              số, tiến độ học tập &amp; phân quyền quản trị viên</p>
+              tuyến (Online/Offline), điểm số, tiến độ học tập &amp; phân quyền quản trị viên</p>
           </div>
         </div>
         <div class="admin-header-actions" style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
@@ -5455,50 +5453,37 @@
         </div>
       </div>
 
-      <!-- Navigation Tabs: Quản Lý Học Viên vs Gửi Email Thông Báo -->
-      <div
-        style="display: flex; gap: 8px; padding: 10px 24px; background: rgba(15, 23, 42, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
-        <button type="button" id="admin-nav-tab-users" onclick="window.switchAdminTab('users')"
-          style="padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; border: 1px solid #fb7185; background: linear-gradient(135deg, #f43f5e, #e11d48); color: #ffffff; transition: all 0.2s;">
-          <i class="fa-solid fa-users"></i> Học Viên &amp; Thống Kê
-        </button>
-        <button type="button" id="admin-nav-tab-broadcast" onclick="window.switchAdminTab('broadcast')"
-          style="padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.06); color: #94a3b8; transition: all 0.2s;">
-          <i class="fa-solid fa-paper-plane"></i> Gửi Email Thông Báo <span
-            style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: rgba(244,63,94,0.25); color: #fda4af; font-weight: 800;">Resend</span>
-        </button>
+      <!-- Navigation Tabs & Top Search Bar (Search replaces Cấp Quyền on top row) -->
+      <div class="admin-nav-toolbar-row"
+        style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 24px; background: rgba(15, 23, 42, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.06); flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <button type="button" id="admin-nav-tab-users" onclick="window.switchAdminTab('users')"
+            style="padding: 7px 18px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; border: 1px solid #fb7185; background: linear-gradient(135deg, #f43f5e, #e11d48); color: #ffffff; transition: all 0.2s; box-shadow: 0 4px 12px rgba(244, 63, 94, 0.25);">
+            <i class="fa-solid fa-users"></i> Học Viên &amp; Thống Kê
+          </button>
+          <button type="button" id="admin-nav-tab-broadcast" onclick="window.switchAdminTab('broadcast')"
+            style="padding: 7px 18px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.06); color: #94a3b8; transition: all 0.2s;">
+            <i class="fa-solid fa-paper-plane"></i> Gửi Email Thông Báo <span
+              style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: rgba(244,63,94,0.25); color: #fda4af; font-weight: 800;">Resend</span>
+          </button>
+        </div>
+
+        <!-- Prominent Top Search Bar -->
+        <div class="admin-search-wrap" style="position: relative; min-width: 260px; max-width: 320px; width: 100%;">
+          <i class="fa-solid fa-magnifying-glass"
+            style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.82rem; pointer-events: none;"></i>
+          <input type="text" id="admin-user-search-input" placeholder="Tìm kiếm tên, email học viên..."
+            oninput="window.handleAdminUserSearch(this.value)"
+            style="width: 100%; padding: 8px 14px 8px 36px; font-size: 0.84rem; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 10px; color: #ffffff; outline: none; transition: all 0.2s;">
+        </div>
       </div>
 
       <!-- SECTION 1: QUẢN LÝ HỌC VIÊN -->
       <div id="admin-section-users" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
 
-        <!-- Quick Role Grant Box (Only visible for Super Admins) -->
-        <div id="admin-super-grant-container" class="admin-super-grant-wrap"
-          style="display: none; padding: 10px 24px; background: rgba(244, 63, 94, 0.05); border-bottom: 1px dashed rgba(244, 63, 94, 0.2);">
-          <form onsubmit="window.handleGrantRoleSubmit(event)"
-            style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <span
-              style="font-size: 0.85rem; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
-              <i class="fa-solid fa-user-plus" style="color: #f43f5e;"></i> Cấp quyền nhanh:
-            </span>
-            <input type="email" id="admin-grant-email-input" required
-              placeholder="Nhập địa chỉ email người học (vd: hocvien@gmail.com)..."
-              style="flex: 1; min-width: 220px; padding: 7px 12px; font-size: 0.85rem; border-radius: 8px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; outline: none;">
-            <select id="admin-grant-role-select"
-              style="padding: 7px 12px; font-size: 0.85rem; border-radius: 8px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; outline: none; cursor: pointer;">
-              <option value="teacher">🛡️ Giáo viên</option>
-              <option value="admin">👑 Quản trị viên (Admin)</option>
-            </select>
-            <button type="submit" class="btn btn-primary"
-              style="padding: 7px 16px; font-size: 0.85rem; font-weight: 700; border-radius: 8px; background: linear-gradient(135deg, #f43f5e, #e11d48); border: none; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
-              <i class="fa-solid fa-check"></i> Cấp Quyền Ngay
-            </button>
-          </form>
-        </div>
-
-        <!-- Filter & Search Toolbar -->
+        <!-- Filter & Density Toolbar -->
         <div class="admin-toolbar-row"
-          style="display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: rgba(15, 23, 42, 0.3); flex-wrap: wrap; gap: 12px;">
+          style="display: flex; justify-content: space-between; align-items: center; padding: 10px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: rgba(15, 23, 42, 0.3); flex-wrap: wrap; gap: 10px;">
           <!-- Filter Tabs -->
           <div id="admin-filter-tabs-container" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
             <button type="button" class="disc-filter-pill active" data-admin-filter="all"
@@ -5521,26 +5506,28 @@
               onclick="window.filterAdminUsers('users')">
               🎓 Học viên (<span id="admin-tab-count-users">0</span>)
             </button>
+          </div>
+
+          <!-- Right KPIs & Page Size -->
+          <div style="display: flex; align-items: center; gap: 10px;">
             <span
               style="font-size: 0.78rem; font-weight: 700; color: #f59e0b; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); padding: 5px 12px; border-radius: 99px; display: inline-flex; align-items: center; gap: 6px;"
               title="Tổng thời gian học tập của toàn bộ học viên">
               <i class="fa-solid fa-clock"></i> <span id="admin-kpi-total-hours">0h</span>
             </span>
-          </div>
-
-          <!-- Search input -->
-          <div class="admin-search-wrap" style="position: relative; min-width: 240px;">
-            <i class="fa-solid fa-magnifying-glass"
-              style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.8rem;"></i>
-            <input type="text" id="admin-user-search-input" placeholder="Tìm kiếm tên, email học viên..."
-              oninput="window.handleAdminUserSearch(this.value)"
-              style="width: 100%; padding: 6px 12px 6px 32px; font-size: 0.82rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #ffffff; outline: none;">
+            <select id="admin-page-size-select" onchange="window.changeAdminPageSize(this.value)"
+              style="padding: 5px 10px; font-size: 0.78rem; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; outline: none; cursor: pointer; font-weight: 600;">
+              <option value="10" selected>10 / trang</option>
+              <option value="15">15 / trang</option>
+              <option value="25">25 / trang</option>
+              <option value="50">50 / trang</option>
+            </select>
           </div>
         </div>
 
         <!-- Users Table Container -->
         <div id="admin-users-table-container" class="custom-scrollbar admin-users-table-container"
-          style="flex: 1; overflow-y: auto; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 16px 24px; min-height: 320px;">
+          style="flex: 1; overflow-y: auto; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0; min-height: 340px;">
           <!-- Rendered by JS -->
         </div>
 

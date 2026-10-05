@@ -16479,22 +16479,51 @@ html.light-mode #admin-users-table-container {
   background: #ffffff !important;
 }
 
-html:not(.dark) .admin-users-table,
-html.light-mode .admin-users-table {
+/* Users Table in Dark & Light Mode */
+.admin-users-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.84rem;
+  text-align: left;
+}
+
+.admin-users-table th {
+  padding: 11px 14px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  user-select: none;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+html.dark .admin-users-table th {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.08) !important;
 }
 
 html:not(.dark) .admin-users-table th,
 html.light-mode .admin-users-table th {
-  background: #f1f5f9 !important;
-  color: #334155 !important;
-  font-weight: 800 !important;
-  font-size: 0.78rem !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  border-bottom: 2px solid #e2e8f0 !important;
-  padding: 12px 14px !important;
+  background: #f8fafc !important;
+  color: #475569 !important;
+  border-bottom: 1.5px solid #e2e8f0 !important;
+}
+
+.admin-users-table th:hover {
+  color: #38bdf8 !important;
+}
+
+.admin-user-row {
+  transition: background 0.15s ease;
+}
+
+html.dark .admin-user-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+html.dark .admin-user-row:hover {
+  background: rgba(255, 255, 255, 0.03) !important;
 }
 
 html:not(.dark) .admin-user-row,
@@ -16508,26 +16537,388 @@ html.light-mode .admin-user-row:hover {
   background: #f8fafc !important;
 }
 
+.admin-user-row td {
+  padding: 10px 14px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+html.dark .admin-user-row td {
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
 html:not(.dark) .admin-user-row td,
 html.light-mode .admin-user-row td {
   color: #1e293b !important;
   border-bottom: 1px solid #f1f5f9 !important;
-  padding: 12px 14px !important;
 }
 
-html:not(.dark) .admin-user-row div[style*="color: #ffffff"],
-html.light-mode .admin-user-row div[style*="color: #ffffff"] {
+html:not(.dark) .admin-user-cell-name,
+html.light-mode .admin-user-cell-name {
   color: #0f172a !important;
 }
 
-html:not(.dark) .admin-user-row span[style*="color: #e2e8f0"],
-html.light-mode .admin-user-row span[style*="color: #e2e8f0"] {
-  color: #334155 !important;
+html:not(.dark) .admin-user-cell-email,
+html.light-mode .admin-user-cell-email {
+  color: #64748b !important;
 }
 
-html:not(.dark) .admin-status-offline,
-html.light-mode .admin-status-offline {
+/* Status Pill */
+.admin-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.admin-status-pill.online {
+  color: #22c55e !important;
+}
+
+html.dark .admin-status-pill.offline {
+  color: #94a3b8 !important;
+}
+
+html:not(.dark) .admin-status-pill.offline,
+html.light-mode .admin-status-pill.offline {
   color: #64748b !important;
+}
+
+.admin-status-pill .status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.admin-status-pill .status-dot.online {
+  background: #22c55e;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+}
+
+.admin-status-pill .status-dot.offline {
+  background: #94a3b8;
+}
+
+/* Role Badges Pill */
+.admin-role-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1.25;
+}
+
+html.dark .admin-role-badge-pill.student {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+html:not(.dark) .admin-role-badge-pill.student,
+html.light-mode .admin-role-badge-pill.student {
+  background: #e0f2fe;
+  color: #0284c7;
+  border: 1px solid #bae6fd;
+}
+
+html.dark .admin-role-badge-pill.teacher {
+  background: rgba(45, 212, 191, 0.12);
+  color: #2dd4bf;
+  border: 1px solid rgba(45, 212, 191, 0.3);
+}
+
+html:not(.dark) .admin-role-badge-pill.teacher,
+html.light-mode .admin-role-badge-pill.teacher {
+  background: #ccfbf1;
+  color: #0f766e;
+  border: 1px solid #99f6e4;
+}
+
+html.dark .admin-role-badge-pill.admin {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+html:not(.dark) .admin-role-badge-pill.admin,
+html.light-mode .admin-role-badge-pill.admin {
+  background: #f3e8ff;
+  color: #7e22ce;
+  border: 1px solid #e9d5ff;
+}
+
+html.dark .admin-role-badge-pill.super {
+  background: rgba(244, 63, 94, 0.14);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.35);
+}
+
+html:not(.dark) .admin-role-badge-pill.super,
+html.light-mode .admin-role-badge-pill.super {
+  background: #ffe4e6;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+}
+
+/* VIP Badge Pill */
+.admin-vip-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1.25;
+}
+
+html.dark .admin-vip-badge-pill.vip {
+  background: rgba(217, 70, 239, 0.15);
+  color: #f0abfc;
+  border: 1px solid rgba(217, 70, 239, 0.35);
+  box-shadow: 0 2px 8px rgba(217, 70, 239, 0.15);
+}
+
+html:not(.dark) .admin-vip-badge-pill.vip,
+html.light-mode .admin-vip-badge-pill.vip {
+  background: #fdf2f8;
+  color: #c026d3;
+  border: 1px solid #fbcfe8;
+  font-weight: 800;
+}
+
+html.dark .admin-vip-badge-pill.regular {
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+html:not(.dark) .admin-vip-badge-pill.regular,
+html.light-mode .admin-vip-badge-pill.regular {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+html.dark .admin-vip-badge-pill.expired {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+html:not(.dark) .admin-vip-badge-pill.expired,
+html.light-mode .admin-vip-badge-pill.expired {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+/* 3-Dots Action Button */
+.admin-3dots-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-size: 0.95rem;
+}
+
+html.dark .admin-3dots-btn {
+  color: #94a3b8;
+}
+
+html.dark .admin-3dots-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #38bdf8;
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: scale(1.08);
+}
+
+html:not(.dark) .admin-3dots-btn,
+html.light-mode .admin-3dots-btn {
+  color: #64748b;
+}
+
+html:not(.dark) .admin-3dots-btn:hover,
+html.light-mode .admin-3dots-btn:hover {
+  background: #f1f5f9;
+  color: #0284c7;
+  border-color: #cbd5e1;
+  transform: scale(1.08);
+}
+
+/* 3-Dots Dropdown Popover */
+.admin-dropdown-popover {
+  border-radius: 12px;
+  padding: 6px;
+  min-width: 230px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  animation: zoomIn 0.15s ease-out;
+}
+
+html.dark .admin-dropdown-popover {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+html:not(.dark) .admin-dropdown-popover,
+html.light-mode .admin-dropdown-popover {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
+.admin-dropdown-header {
+  padding: 8px 10px 6px 10px;
+}
+
+html:not(.dark) .admin-dropdown-header div:first-child,
+html.light-mode .admin-dropdown-header div:first-child {
+  color: #0f172a !important;
+}
+
+.admin-dropdown-divider {
+  height: 1px;
+  margin: 4px 0;
+}
+
+html.dark .admin-dropdown-divider {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+html:not(.dark) .admin-dropdown-divider,
+html.light-mode .admin-dropdown-divider {
+  background: #e2e8f0;
+}
+
+.admin-dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+html.dark .admin-dropdown-item {
+  color: #cbd5e1;
+}
+
+html.dark .admin-dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #38bdf8;
+}
+
+html:not(.dark) .admin-dropdown-item,
+html.light-mode .admin-dropdown-item {
+  color: #334155;
+}
+
+html:not(.dark) .admin-dropdown-item:hover,
+html.light-mode .admin-dropdown-item:hover {
+  background: #f1f5f9;
+  color: #0284c7;
+}
+
+/* Pagination Footer */
+.admin-table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  font-size: 0.82rem;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+html.dark .admin-table-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.6);
+}
+
+html:not(.dark) .admin-table-footer,
+html.light-mode .admin-table-footer {
+  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.admin-page-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+html.dark .admin-page-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+
+html:not(.dark) .admin-page-btn,
+html.light-mode .admin-page-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.admin-page-btn.active {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+html.dark .admin-page-btn:hover:not(.active):not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+html:not(.dark) .admin-page-btn:hover:not(.active):not(:disabled),
+html.light-mode .admin-page-btn:hover:not(.active):not(:disabled) {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.admin-page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.admin-page-ellipsis {
+  padding: 0 4px;
+  color: #64748b;
+  font-size: 0.85rem;
+  user-select: none;
 }
 
 /* 2. STUDENT HISTORY DETAIL MODAL */
