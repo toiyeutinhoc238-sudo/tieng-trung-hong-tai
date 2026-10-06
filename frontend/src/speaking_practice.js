@@ -46,7 +46,7 @@ let hskkQuestionsData = {
   cao: []
 };
 
-let currentSpeakingLevel = 'trung'; // 'so' | 'trung' | 'cao'
+let currentSpeakingLevel = 'so'; // 'so' | 'trung' | 'cao'
 let currentActiveQuestion = null;
 let aiSuggestionsCache = new Map();
 let isFetchingHint = false;
@@ -150,6 +150,12 @@ async function initSpeakingQuestions() {
 
 // 2. Chuyển đổi Cấp độ: [Sơ] [Trung] [Cao]
 window.switchSpeakingLevel = function (level, btn) {
+  if (level !== 'so' && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      const lvlName = level === 'cao' ? 'Cao cấp' : 'Trung cấp';
+      return window.requireVip(`Luyện nói HSKK ${lvlName}`);
+    }
+  }
   if (!requireSpeakingLoginGate('Chọn Cấp Độ HSKK')) return;
   if (currentSpeakingLevel === level && currentActiveQuestion) return;
   currentSpeakingLevel = level;

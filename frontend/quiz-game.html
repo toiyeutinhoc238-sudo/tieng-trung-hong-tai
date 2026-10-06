@@ -2145,7 +2145,18 @@
     }
 
     // --- EVENT LISTENERS ---
-    selLevel.addEventListener('change', updateLessons);
+    selLevel.addEventListener('change', () => {
+      const val = selLevel.value;
+      if (val !== '1' && val !== 'yct1' && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+        selLevel.value = '1';
+        updateLessons();
+        if (typeof window.requireVip === 'function') {
+          return window.requireVip(`Đấu trường Game Cấp ${val}`);
+        }
+        return;
+      }
+      updateLessons();
+    });
 
     document.getElementById('mode-selector').addEventListener('click', e => {
       const btn = e.target.closest('.mode-btn');
@@ -2241,6 +2252,12 @@
       playedHistory = [];
       let pool = vocabData;
       const lvl = selLevel.value;
+      if (lvl !== '1' && lvl !== 'yct1' && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+        if (typeof window.requireVip === 'function') {
+          return window.requireVip(`Đấu trường Game Cấp ${lvl}`);
+        }
+        return;
+      }
       const lsn = selLesson.value;
 
       const urlParams = new URLSearchParams(window.location.search);

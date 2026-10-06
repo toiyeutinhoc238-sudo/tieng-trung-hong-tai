@@ -89,6 +89,32 @@ import './quick_dict_widget.js';
   }
   window.getCurrentUser = getCurrentUser;
 
+  // Check if current user has VIP status or admin/teacher privileges
+  function isUserVip() {
+    try {
+      const u = getCurrentUser();
+      if (!u) return false;
+      const email = (u.email || '').toLowerCase().trim();
+      if (!email || email === 'guest' || email.startsWith('guest')) return false;
+      if (isUserAdmin(email)) return true;
+      if (u.role === 'admin' || u.role === 'teacher' || u.role === 'superadmin' || u.isSuperAdmin) return true;
+      if (u.isVip === true || u.vipStatus === 'vip') {
+        if (u.vipExpiresAt) {
+          const exp = new Date(u.vipExpiresAt).getTime();
+          if (!isNaN(exp) && exp < Date.now()) return false;
+        }
+        return true;
+      }
+      if (localStorage.getItem(`vip_trial_${email}`) === 'true' || localStorage.getItem('vip_trial_claimed') === 'true') {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+  window.isUserVip = isUserVip;
+
   // Check if a valid authenticated user session exists (Strict: requires verified Google email)
   function isUserLoggedIn() {
     try {
@@ -626,6 +652,249 @@ import './quick_dict_widget.js';
     window._isMandatoryPageLockActive = false;
   }
   window.hideGlobalAuthModal = hideGlobalAuthModal;
+
+  // Global VIP Verification Helper
+  function isUserVip() {
+    const user = getSavedUser();
+    if (!user) return false;
+    if (user.role === 'super_admin' || user.isSuperAdmin) return true;
+    if (user.role === 'teacher' || (user.email && (user.email.includes('hongtai') || user.email.includes('teacher')))) return true;
+    if (user.role === 'admin' || user.isAdmin) return true;
+    if (user.isVip || user.vipStatus === 'vip') return true;
+    return false;
+  }
+  window.isUserVip = isUserVip;
+
+  // Universal Global VIP Upgrade Modal Renderer
+  function ensureGlobalVipModal() {
+    let existingModal = document.getElementById('vip-upgrade-modal');
+    if (existingModal) return existingModal;
+
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.id = 'vip-upgrade-modal';
+    modal.style.cssText = 'display: none; position: fixed; inset: 0; z-index: 999999; background: rgba(10, 15, 29, 0.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); align-items: center; justify-content: center; padding: 14px;';
+    modal.onclick = function (e) {
+      if (e.target === modal) window.closeVipUpgradeModal();
+    };
+
+    modal.innerHTML = `
+      <div class="modal-card glass-panel" style="background: linear-gradient(165deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 24px; width: 100%; max-width: 780px; max-height: 90vh; overflow-y: auto; padding: 24px 22px; box-shadow: 0 25px 65px rgba(0,0,0,0.8), 0 0 40px rgba(245, 158, 11, 0.2); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 16px;">
+        <button type="button" onclick="window.closeVipUpgradeModal()" style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.25rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">&times;</button>
+        
+        <!-- Header -->
+        <div style="text-align: center; padding-right: 28px;">
+          <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.18); border: 1px solid rgba(245, 158, 11, 0.4); padding: 5px 16px; border-radius: 99px; color: #fbbf24; font-size: 0.82rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">
+            <i class="fa-solid fa-crown"></i> Nâng Cấp Tài Khoản VIP
+          </div>
+          <h3 style="font-size: 1.45rem; font-weight: 900; margin: 0; color: #ffffff;">Mở Khóa Toàn Bộ Cấp Độ HSK 1 - 6</h3>
+          <p style="font-size: 0.88rem; color: #94a3b8; margin: 4px 0 0 0;">Nhận ngay 30 ngày VIP miễn phí hoặc đăng ký các gói học tập dài hạn</p>
+        </div>
+
+        <!-- Tab Buttons -->
+        <div style="display: flex; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; overflow-x: auto;">
+          <button type="button" id="vip-tab-btn-trial" class="vip-modal-tab-btn active" onclick="window.switchVipModalTab('trial')" style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-weight: 800; font-size: 0.85rem; cursor: pointer;">
+            🎁 Tặng 30 Ngày VIP (Miễn phí)
+          </button>
+          <button type="button" id="vip-tab-btn-pricing" class="vip-modal-tab-btn" onclick="window.switchVipModalTab('pricing')" style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #cbd5e1; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+            💎 Bảng Giá Các Gói
+          </button>
+          <button type="button" id="vip-tab-btn-payment" class="vip-modal-tab-btn" onclick="window.switchVipModalTab('payment')" style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #cbd5e1; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+            💳 Quét Mã QR Thanh Toán
+          </button>
+        </div>
+
+        <!-- TAB 1: TRIAL -->
+        <div id="vip-tab-pane-trial" class="vip-tab-pane" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 16px; padding: 16px; color: #fef08a; font-size: 0.9rem; line-height: 1.6;">
+            <strong>✨ ĐỢT ƯU ĐÃI ĐẶC BIỆT (ĐẾN HẾT 31/12/2026):</strong><br>
+            Tiếng Trung HongTai dành tặng <strong>30 NGÀY VIP HOÀN TOÀN MIỄN PHÍ</strong>. Mở khóa toàn bộ từ vựng HSK 1 - 6/9, kho giáo trình E-book và toàn bộ bài tập luyện thi thông minh!
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div>
+                <strong style="color: #38bdf8;">Bước 1: Theo dõi kênh mạng xã hội</strong>
+                <p style="margin: 2px 0 0 0; font-size: 0.82rem; color: #94a3b8;">Nhấn theo dõi kênh TikTok và Fanpage của trung tâm để cập nhật bài học mới.</p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <a href="https://www.tiktok.com/@hongtaitiengtrung" target="_blank" rel="noopener noreferrer" style="background: #000; color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fa-brands fa-tiktok"></i> TikTok
+                </a>
+                <a href="https://www.facebook.com/tiengtrunghongtai" target="_blank" rel="noopener noreferrer" style="background: #1877f2; color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="fa-brands fa-facebook"></i> Fanpage
+                </a>
+              </div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div>
+                <strong style="color: #34d399;">Bước 2: Gửi thông tin nhận kích hoạt</strong>
+                <p style="margin: 2px 0 0 0; font-size: 0.82rem; color: #94a3b8;">Điền email tài khoản của bạn để hệ thống cấp quyền VIP trong 2-4h.</p>
+              </div>
+              <a href="https://forms.gle/3Cvu1Sm2doLcB6qP8" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; padding: 10px 18px; border-radius: 10px; font-size: 0.85rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);">
+                <i class="fa-solid fa-gift"></i> Nhận 30N VIP Ngay 🚀
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: PRICING -->
+        <div id="vip-tab-pane-pricing" class="vip-tab-pane" style="display: none; flex-direction: column; gap: 14px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 16px; text-align: center;">
+              <div style="font-weight: 800; color: #38bdf8; font-size: 1.05rem;">GÓI 3 THÁNG</div>
+              <div style="font-size: 1.45rem; font-weight: 900; color: #fde047; margin: 8px 0;">199.000đ</div>
+              <div style="font-size: 0.8rem; color: #94a3b8; text-decoration: line-through;">299.000đ</div>
+              <button onclick="window.selectVipPackage && window.selectVipPackage('3T')" style="margin-top: 12px; width: 100%; padding: 8px; border-radius: 8px; background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; font-weight: 700; cursor: pointer;">Chọn gói</button>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.05); border: 1.5px solid #818cf8; border-radius: 16px; padding: 16px; text-align: center; position: relative;">
+              <span style="position: absolute; top: -10px; right: 12px; background: #6366f1; color: #fff; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 99px;">PHỔ BIẾN</span>
+              <div style="font-weight: 800; color: #a5b4fc; font-size: 1.05rem;">GÓI 6 THÁNG</div>
+              <div style="font-size: 1.45rem; font-weight: 900; color: #fde047; margin: 8px 0;">349.000đ</div>
+              <div style="font-size: 0.8rem; color: #94a3b8; text-decoration: line-through;">599.000đ</div>
+              <button onclick="window.selectVipPackage && window.selectVipPackage('6T')" style="margin-top: 12px; width: 100%; padding: 8px; border-radius: 8px; background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; color: #fff; font-weight: 800; cursor: pointer;">Chọn gói</button>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.05); border: 1.5px solid #f59e0b; border-radius: 16px; padding: 16px; text-align: center; position: relative;">
+              <span style="position: absolute; top: -10px; right: 12px; background: #f59e0b; color: #000; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 99px;">TIẾT KIỆM NHẤT</span>
+              <div style="font-weight: 800; color: #fcd34d; font-size: 1.05rem;">GÓI 1 NĂM</div>
+              <div style="font-size: 1.45rem; font-weight: 900; color: #fde047; margin: 8px 0;">599.000đ</div>
+              <div style="font-size: 0.8rem; color: #94a3b8; text-decoration: line-through;">999.000đ</div>
+              <button onclick="window.selectVipPackage && window.selectVipPackage('1N')" style="margin-top: 12px; width: 100%; padding: 8px; border-radius: 8px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #000; font-weight: 800; cursor: pointer;">Chọn gói</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: PAYMENT -->
+        <div id="vip-tab-pane-payment" class="vip-tab-pane" style="display: none; flex-direction: column; gap: 14px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; align-items: center;">
+            <div style="background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 18px; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+              <span style="font-size: 0.88rem; font-weight: 800; color: #fbbf24;"><i class="fa-solid fa-qrcode"></i> Quét Mã QR Để Chuyển Khoản</span>
+              <div style="background: #fff; padding: 10px; border-radius: 14px; max-width: 220px; width: 100%;">
+                <img src="/assets/ma_qr.jpg" alt="Mã QR ACB" style="width: 100%; height: auto; border-radius: 8px; display: block;" onerror="this.alt='QR Chuyển khoản ACB'">
+              </div>
+              <span style="font-size: 0.78rem; color: #94a3b8;">Hỗ trợ tất cả ứng dụng Ngân hàng</span>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 12px; font-size: 0.88rem;">
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                <span style="color: #94a3b8;">Ngân hàng:</span>
+                <strong style="color: #fbbf24;"><i class="fa-solid fa-building-columns"></i> ACB</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                <span style="color: #94a3b8;">Chủ tài khoản:</span>
+                <strong style="color: #ffffff;">LE THI HONG THAI</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                <span style="color: #94a3b8;">Số tài khoản:</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <strong style="color: #38bdf8; font-family: monospace;">PHATLOC316046</strong>
+                  <button type="button" onclick="navigator.clipboard.writeText('PHATLOC316046'); alert('Đã chép số tài khoản ACB!');" style="background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;">Chép</button>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #94a3b8;">Nội dung CK:</span>
+                <strong id="vip-suggested-memo" style="color: #fde047; font-family: monospace;">[SĐT] 3T</strong>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 6px;">
+            <a href="https://forms.gle/xvM5Nz1xmPuY6JVm7" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; font-size: 0.88rem; padding: 10px 22px; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-receipt"></i> Đã Chuyển Khoản? Gửi Biên Lai Ngay 🚀
+            </a>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; margin-top: 4px; font-size: 0.82rem; color: #94a3b8; flex-wrap: wrap; gap: 10px;">
+          <span>
+            <i class="fa-solid fa-phone" style="color: #38bdf8;"></i> Hỗ trợ / Zalo: <a href="https://zalo.me/0708245997" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-weight: 800; text-decoration: none;">0708245997</a>
+          </span>
+          <button type="button" onclick="window.closeVipUpgradeModal()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; padding: 6px 16px; border-radius: 8px; font-weight: 700; cursor: pointer;">Đóng cửa sổ</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    return modal;
+  }
+
+  window.openVipUpgradeModal = function (tabName = 'trial') {
+    const modal = ensureGlobalVipModal();
+    if (modal) {
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      window.switchVipModalTab(tabName);
+    }
+  };
+
+  window.closeVipUpgradeModal = function () {
+    const modal = document.getElementById('vip-upgrade-modal');
+    if (modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  };
+
+  window.switchVipModalTab = function (tabName) {
+    const tabs = ['trial', 'pricing', 'payment', 'comparison'];
+    tabs.forEach(t => {
+      const btn = document.getElementById('vip-tab-btn-' + t);
+      const pane = document.getElementById('vip-tab-pane-' + t);
+      if (btn) {
+        if (t === tabName) {
+          btn.classList.add('active');
+          btn.style.background = 'rgba(245, 158, 11, 0.2)';
+          btn.style.color = '#fbbf24';
+          btn.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+        } else {
+          btn.classList.remove('active');
+          btn.style.background = 'rgba(255, 255, 255, 0.05)';
+          btn.style.color = '#cbd5e1';
+          btn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+        }
+      }
+      if (pane) {
+        pane.style.display = (t === tabName) ? 'flex' : 'none';
+      }
+    });
+  };
+
+  window.selectVipPackage = function (pkgName) {
+    window.switchVipModalTab('payment');
+    const memo = document.getElementById('vip-suggested-memo');
+    if (memo) memo.textContent = `[SĐT] ${pkgName}`;
+  };
+
+  // Global VIP Gate Interceptor
+  window.requireVip = function (actionName = 'nội dung nâng cao', callback = null) {
+    if (isUserVip()) {
+      if (typeof callback === 'function') callback();
+      return true;
+    }
+
+    if (!isUserLoggedIn()) {
+      showGlobalAuthModal({
+        isMandatoryPageLock: false,
+        actionName: actionName,
+        title: `Đăng Nhập Để Nhận 30 Ngày VIP Miễn Phí`,
+        desc: `Nội dung <strong>${actionName}</strong> thuộc quyền lợi Hội Viên VIP. Hãy đăng nhập tài khoản Google để kích hoạt nhận <strong>30 Ngày VIP Miễn Phí</strong> ngay hôm nay!`,
+        callback: () => {
+          if (isUserVip()) {
+            if (typeof callback === 'function') callback();
+          } else {
+            window.openVipUpgradeModal('trial');
+          }
+        }
+      });
+      return false;
+    }
+
+    showGlobalAuthToast(`👑 ${actionName} dành cho Hội Viên VIP! Bạn hãy nhận 30 Ngày VIP Miễn Phí để mở khóa nhé.`, true);
+    window.openVipUpgradeModal('trial');
+    return false;
+  };
 
   window.openLoginPrompt = function (actionName, callback) {
     if (isUserLoggedIn()) {

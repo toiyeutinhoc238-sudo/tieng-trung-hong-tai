@@ -3018,9 +3018,16 @@ function setupEventListeners() {
       const pill = e.target.closest('.level-pill');
       if (!pill) return;
 
+      const targetLvl = pill.getAttribute('data-level');
+      if (targetLvl && targetLvl !== '1' && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+        if (typeof window.requireVip === 'function') {
+          return window.requireVip(`Bộ thẻ từ vựng Cấp ${targetLvl}`);
+        }
+      }
+
       levelRow.querySelectorAll('.level-pill').forEach(btn => btn.classList.remove('active'));
       pill.classList.add('active');
-      activeLevel = pill.getAttribute('data-level');
+      activeLevel = targetLvl;
 
       // Update Step 4 range title
       const rangeTitle = document.getElementById('smart-range-all-title');
@@ -3276,9 +3283,16 @@ function setupEventListeners() {
     const tab = e.target.closest('.level-tab');
     if (!tab) return;
 
+    const targetLvl = tab.getAttribute('data-level');
+    if (targetLvl && targetLvl !== '1' && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+      if (typeof window.requireVip === 'function') {
+        return window.requireVip(`Từ vựng Cấp ${targetLvl}`);
+      }
+    }
+
     levelTabsContainer.querySelectorAll('.level-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-    activeLevel = tab.getAttribute('data-level');
+    activeLevel = targetLvl;
     stopAutoplay();
     applyFilters();
   });
@@ -5410,11 +5424,14 @@ function renderRoadmapBookshelf() {
 
       const safeTitle = safeEscape(b.title);
       const levelArg = typeof b.level === 'string' ? `'${b.level}'` : b.level;
+      const isVipLocked = String(b.level) !== '1' && (typeof window.isUserVip === 'function' && !window.isUserVip());
+      const vipLockBadgeHtml = isVipLocked ? `<div style="position: absolute; top: 10px; right: 10px; background: rgba(245, 158, 11, 0.95); color: #000; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 999px; z-index: 5; box-shadow: 0 2px 6px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-crown"></i> VIP</div>` : '';
 
       return `
         <div class="comic-book-card" onclick="window.goToRoadmapLevel('${b.ver}', ${levelArg})" title="Vào học bài: ${safeTitle}">
           <div class="comic-book-spine-overlay"></div>
           <div class="comic-book-gloss-overlay"></div>
+          ${vipLockBadgeHtml}
           ${badgeHtml}
           ${innerCoverHtml}
         </div>
@@ -5456,11 +5473,15 @@ function getUnlockedLevelsMap() {
 }
 
 function isLevelUnlocked(ver, level, levelIndex, levelsData, builtInVocabs) {
-  if (ver === 'hanngu') {
-    return parseInt(level) === 1;
+  // Cấp 1 / HSK 1 / Quyển 1 / YCT 1 is completely free for all users
+  if (String(level) === '1') {
+    return true;
   }
-  // All levels in HSK 3.0, HSK 2.0, and YCT are open and unlocked for full learning
-  return true;
+  // Levels > 1 require VIP Membership
+  if (typeof window.isUserVip === 'function' && window.isUserVip()) {
+    return true;
+  }
+  return false;
 }
 
 function isRoadmapLessonUnlocked(hskVersion, level, lessonKey, sortedLessonKeys) {
@@ -5583,7 +5604,7 @@ function renderGamifiedRoadmapPath() {
     } else if (isUnlocked) {
       statusBadge = `<span class="roadmap-badge active-pulse"><i class="fa-solid fa-play"></i> Bắt đầu học</span>`;
     } else {
-      statusBadge = `<span class="roadmap-badge locked" style="background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4);"><i class="fa-solid fa-lock"></i> 🔒 Sắp ra mắt</span>`;
+      statusBadge = `<span class="roadmap-badge locked" style="background: rgba(245, 158, 11, 0.18); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4);"><i class="fa-solid fa-crown"></i> 🔒 Hội Viên VIP</span>`;
     }
 
     const nodeState = isCompleted ? 'node-done' : (isUnlocked ? 'node-active' : 'node-locked');
@@ -5606,14 +5627,9 @@ function renderGamifiedRoadmapPath() {
         </button>
       `;
     } else {
-      const comingSoonLabel = hskVer === 'yct'
-        ? `Lộ trình YCT Cấp ${item.level}`
-        : hskVer === 'hanngu'
-        ? `Lộ trình Hán ngữ Quyển ${item.level}`
-        : `Lộ trình HSK Cấp ${item.level}${hskVer === '2.0' ? ' (2.0)' : ''}`;
       actionButtonsHtml = `
-        <button class="btn-node-start btn-node-locked" style="background: rgba(100, 116, 139, 0.35); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.88rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="window.showComingSoonNotice('${comingSoonLabel}')">
-          <i class="fa-solid fa-lock" style="color: #fbbf24;"></i> Sắp ra mắt (Đang biên soạn)
+        <button class="btn-node-start btn-node-locked" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.45)); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.5); cursor: pointer; border-radius: 12px; font-weight: 700; padding: 12px 20px; font-size: 0.88rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);" onclick="goToRoadmapLevel('${hskVer}', '${item.level}')">
+          <i class="fa-solid fa-crown" style="color: #fbbf24;"></i> Mở khóa VIP (30 Ngày Free)
         </button>
       `;
     }
@@ -5704,6 +5720,14 @@ function renderGamifiedRoadmapPath() {
 
 window.renderGamifiedRoadmapPath = renderGamifiedRoadmapPath;
 window.goToRoadmapLevel = function (ver, level) {
+  const lvlStr = String(level);
+  if (lvlStr !== '1' && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      const lvlName = ver === 'hanngu' ? `Hán ngữ Quyển ${level}` : ver === 'yct' ? `YCT Cấp ${level}` : `HSK ${level}`;
+      return window.requireVip(`Lộ trình ${lvlName}`);
+    }
+  }
+
   const hskVer = ver || activeRoadmapVersion || '3.0';
 
   // Set version
@@ -6552,20 +6576,27 @@ function renderExamLibrary(filterLevel = 'all') {
     const ansLink = directFolderUrl;
     const scriptLink = directFolderUrl;
 
+    const isVipExamLocked = level > 1 && typeof window.isUserVip === 'function' && !window.isUserVip();
+    const actionBtnHtml = isVipExamLocked
+      ? `<button class="exam-lib-btn" onclick="window.requireVip('Bộ đề thi HSK ${level}')" title="Mở khóa tài liệu đề thi HSK ${level}" style="width: 100%; background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.45)); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.5); justify-content: center; font-weight: 700; padding: 10px 14px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-crown"></i> Mở khóa VIP để xem đề ${code} (Nhận 30 Ngày Free)
+        </button>`
+      : `<a class="exam-lib-btn exam-lib-btn-folder" href="${folderLink}" target="_blank" rel="noopener" title="Xem tất cả các file của đề thi ${code}" style="width: 100%; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #ffffff; border: none; justify-content: center; font-weight: 700; padding: 10px 14px; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);">
+          <i class="fa-solid fa-folder-open"></i> Xem trọn bộ tài liệu đề ${code} (Full Files)
+        </a>`;
+
     const card = document.createElement('div');
     card.className = 'exam-lib-card';
     card.setAttribute('data-lib-level', level);
     card.innerHTML = `
-      <span class="exam-lib-card-level-badge">HSK ${level}</span>
+      <span class="exam-lib-card-level-badge">HSK ${level}${isVipExamLocked ? ' · 👑 VIP' : ''}</span>
       <p class="exam-lib-card-code">Đề thi ${code}</p>
       <p class="exam-lib-card-meta">
         <i class="fa-regular fa-calendar"></i> ${sessionText}
         &nbsp;·&nbsp; <i class="fa-solid fa-headphones"></i> Trọn bộ File nghe, Đáp án & Script
       </p>
       <div class="exam-lib-actions" style="display: flex; flex-wrap: wrap; gap: 8px;">
-        <a class="exam-lib-btn exam-lib-btn-folder" href="${folderLink}" target="_blank" rel="noopener" title="Xem tất cả các file của đề thi ${code}" style="width: 100%; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #ffffff; border: none; justify-content: center; font-weight: 700; padding: 10px 14px; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);">
-          <i class="fa-solid fa-folder-open"></i> Xem trọn bộ tài liệu đề ${code} (Full Files)
-        </a>
+        ${actionBtnHtml}
       </div>
     `;
     grid.appendChild(card);
@@ -6579,6 +6610,11 @@ window.switchExamTab = function (tab) {
 };
 
 window.filterExamLibrary = function (btn, level) {
+  if (level !== 'all' && parseInt(level) > 1 && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      return window.requireVip(`Thư viện Đề thi HSK Cấp ${level}`);
+    }
+  }
   document.querySelectorAll('.exam-lib-pill').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   renderExamLibrary(level === 'all' ? 'all' : parseInt(level));
@@ -6587,6 +6623,11 @@ window.filterExamLibrary = function (btn, level) {
 
 
 function startExam(level, setNumber) {
+  if (parseInt(level) > 1 && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      return window.requireVip(`Đề thi thử HSK Cấp ${level}`);
+    }
+  }
   if (!currentUser && (!window.isUserLoggedIn || !window.isUserLoggedIn())) {
     if (window.openLoginPrompt) {
       window.openLoginPrompt('làm bài thi thử HSK', () => startExam(level, setNumber));

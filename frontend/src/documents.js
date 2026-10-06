@@ -955,6 +955,11 @@ if (window.pdfjsLib) {
 
   // --- E-BOOK READER ENGINE (PDF.JS) ---
   window.openBookReader = async function (bookId) {
+    if (typeof window.isUserVip === 'function' && !window.isUserVip()) {
+      if (typeof window.requireVip === 'function') {
+        return window.requireVip('Kho Sách & Ebook Giáo Trình VIP');
+      }
+    }
     const book = allBooks.find(b => b.id === bookId);
     if (!book) return;
 

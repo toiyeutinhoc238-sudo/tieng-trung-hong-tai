@@ -1807,6 +1807,11 @@
       }
       if (urlParams.has('level')) {
         currentLevel = parseInt(urlParams.get('level'), 10) || 1;
+        if (currentLevel > 1 && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+          const requestedLvl = currentLevel;
+          currentLevel = 1;
+          setTimeout(() => { if (typeof window.requireVip === 'function') window.requireVip('Bài khóa HSK ' + requestedLvl); }, 300);
+        }
       }
       if (urlParams.has('version')) {
         currentVersion = urlParams.get('version') || '3.0';
@@ -1834,7 +1839,16 @@
     }
 
     window.switchHskLevel = async function(lvl) {
-      currentLevel = parseInt(lvl, 10) || 1;
+      const targetLvl = parseInt(lvl, 10) || 1;
+      if (targetLvl > 1 && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+        const lvlSel = document.getElementById('level-switcher-select');
+        if (lvlSel) lvlSel.value = String(currentLevel);
+        if (typeof window.requireVip === 'function') {
+          return window.requireVip('Bài khóa HSK ' + lvl);
+        }
+        return;
+      }
+      currentLevel = targetLvl;
       currentLessonId = 1;
       currentDialogueId = 1;
       clozeState = { slots: [], bank: [], userAnswers: {} };

@@ -3230,6 +3230,11 @@ function filterLessons(category = 'all', level = 'all', keyword = '', status = '
 }
 
 function openLessonWorkspace(lesson) {
+  if (lesson && parseInt(lesson.level) > 1 && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      return window.requireVip(`Video Nghe Chép Chính Tả HSK ${lesson.level}`);
+    }
+  }
   currentLesson = lesson;
   currentSentenceIdx = 0;
   lastPausedSentenceIdx = -1;
@@ -4043,6 +4048,11 @@ function switchMainTab(tab) {
 }
 
 function selectPassageLevel(level) {
+  if (parseInt(level) > 1 && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      return window.requireVip(`Luyện nghe đoạn văn HSK ${level}`);
+    }
+  }
   selectedPassageLevel = level;
   document.querySelectorAll('.passage-level-btn').forEach(btn => {
     btn.classList.toggle('active', parseInt(btn.dataset.level, 10) === level);
@@ -4054,6 +4064,11 @@ function selectPassageLevel(level) {
 }
 
 function selectPassageLevelAndOpen(level) {
+  if (parseInt(level) > 1 && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      return window.requireVip(`Luyện nghe đoạn văn HSK ${level}`);
+    }
+  }
   selectedPassageLevel = level;
   selectPassageLevel(level);
 
@@ -4160,6 +4175,11 @@ function openPassageWorkspaceById(id) {
 }
 
 function openPassageWorkspace(passage) {
+  if (passage && parseInt(passage.level) > 1 && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      return window.requireVip(`Luyện nghe đoạn văn HSK ${passage.level}`);
+    }
+  }
   currentPassage = passage;
   selectedPassageLevel = passage.level;
 

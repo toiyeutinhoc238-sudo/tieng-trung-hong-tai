@@ -108,9 +108,15 @@ class ReadingPracticeApp {
     document.querySelectorAll('#rd-level-chips .rd-chip-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
+        const targetLvl = btn.getAttribute('data-level') || 'all';
+        if (targetLvl !== 'all' && targetLvl !== 'HSK 1' && targetLvl !== '1' && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+          if (typeof window.requireVip === 'function') {
+            return window.requireVip(`Bài đọc ${targetLvl}`);
+          }
+        }
         document.querySelectorAll('#rd-level-chips .rd-chip-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        this.currentLevel = btn.getAttribute('data-level') || 'all';
+        this.currentLevel = targetLvl;
         this.applyFilters();
       });
     });
@@ -451,12 +457,17 @@ class ReadingPracticeApp {
       const idiomCount = Array.isArray(article.idioms) ? article.idioms.length : 0;
       const previewText = article.content_zh.slice(0, 80) + (article.content_zh.length > 80 ? '...' : '');
 
+      const isFree = article.level === 'HSK 1' || article.level === '1' || article.level === 'HSK1';
+      const isVipLocked = !isFree && typeof window.isUserVip === 'function' && !window.isUserVip();
+      const vipBadgeHtml = isVipLocked ? `<span class="rd-badge-vip" style="background: rgba(245, 158, 11, 0.95); color: #000; font-weight: 800; font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; margin-left: 6px;"><i class="fa-solid fa-crown"></i> VIP</span>` : '';
+
       card.innerHTML = `
         <div class="rd-card-banner" style="background: ${bannerBg};">
           <div class="rd-card-banner-overlay"></div>
           <i class="fa-solid ${catIcon} rd-card-banner-watermark"></i>
           <div class="rd-card-banner-top">
             <span class="rd-badge-lvl">${article.level}</span>
+            ${vipBadgeHtml}
             ${isDone ? '<span class="rd-badge-done"><i class="fa-solid fa-circle-check"></i> Đã đọc</span>' : ''}
           </div>
           <div class="rd-card-category-tag">
@@ -476,7 +487,7 @@ class ReadingPracticeApp {
             ${idiomCount > 0 ? `<span><i class="fa-solid fa-feather" style="color: var(--rd-accent-gold);"></i> ${idiomCount} thành ngữ</span>` : ''}
           </div>
           <button type="button" class="rd-card-btn-action" title="Đọc bài này">
-            Đọc ngay <i class="fa-solid fa-arrow-right"></i>
+            ${isVipLocked ? 'Mở khóa VIP <i class="fa-solid fa-crown"></i>' : 'Đọc ngay <i class="fa-solid fa-arrow-right"></i>'}
           </button>
         </div>
       `;
@@ -515,6 +526,13 @@ class ReadingPracticeApp {
 
   selectArticle(article, shouldUpdateUI = true) {
     if (!article) return;
+    const isFree = article.level === 'HSK 1' || article.level === '1' || article.level === 'HSK1';
+    if (!isFree && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+      if (typeof window.requireVip === 'function') {
+        window.requireVip(`Bài đọc ${article.level}`);
+      }
+      return;
+    }
     this.currentArticle = article;
     this.lastArticleId = article.id;
     localStorage.setItem('reading_last_article_id', article.id);

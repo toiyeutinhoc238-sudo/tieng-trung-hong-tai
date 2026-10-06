@@ -37,6 +37,11 @@ window.applyQuickScenario = function (topic, aiRole, icon, btnEl) {
 
 // Select level in builder
 window.selectBuilderLevel = function (lvl, btnEl) {
+  if (lvl !== 'HSK 1' && lvl !== '1' && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      return window.requireVip(`Hội thoại AI ${lvl}`);
+    }
+  }
   activeLevel = lvl;
   document.querySelectorAll('.level-select-pill').forEach(b => b.classList.remove('active'));
   if (btnEl) btnEl.classList.add('active');

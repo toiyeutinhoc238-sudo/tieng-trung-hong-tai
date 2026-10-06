@@ -87,7 +87,16 @@ async function loadAllLessons() {
     const urlParams = new URLSearchParams(window.location.search);
     const paramLvl = urlParams.get('level');
     const paramMode = urlParams.get('mode');
-    if (paramLvl) switchLevel(paramLvl);
+    if (paramLvl) {
+      if (paramLvl !== '1' && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+        switchLevel('1');
+        if (typeof window.requireVip === 'function') {
+          window.requireVip(`Luyện dịch HSK ${paramLvl}`);
+        }
+      } else {
+        switchLevel(paramLvl);
+      }
+    }
     if (paramMode && (paramMode === 'dictation' || paramMode === 'translation')) {
       switchMode(paramMode);
     }
@@ -103,6 +112,11 @@ async function loadAllLessons() {
 
 // Level switching
 window.switchLevel = function (lvl, btnEl) {
+  if (lvl !== '1' && lvl !== 1 && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      return window.requireVip(`Luyện dịch HSK ${lvl}`);
+    }
+  }
   currentLevel = lvl;
   applyLevelFilter(lvl);
 

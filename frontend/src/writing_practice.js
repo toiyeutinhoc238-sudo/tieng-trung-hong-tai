@@ -47,7 +47,7 @@ let hskkQuestionsData = {
   cao: []
 };
 
-let currentHskkLevel = 'trung'; // 'so' | 'trung' | 'cao'
+let currentHskkLevel = 'so'; // 'so' | 'trung' | 'cao'
 let currentActiveQuestion = null;
 let aiSuggestionsCache = new Map(); // questionId -> suggestionData
 let isSubmitting = false;
@@ -150,6 +150,12 @@ window.selectWritingMode = function (mode) {
 
 // 3. Chuyển đổi Cấp độ Trình độ: [Sơ] [Trung] [Cao]
 window.switchHskkLevel = function (level, btn) {
+  if (level !== 'so' && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      const lvlName = level === 'cao' ? 'Cao cấp' : 'Trung cấp';
+      return window.requireVip(`Luyện viết HSKK ${lvlName}`);
+    }
+  }
   if (!requireWritingLoginGate('Chọn Cấp Độ HSKK')) return;
   if (currentHskkLevel === level && currentActiveQuestion) return;
   currentHskkLevel = level;

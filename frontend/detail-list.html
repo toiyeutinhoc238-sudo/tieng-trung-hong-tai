@@ -743,7 +743,15 @@
       if (levelSelect) {
         levelSelect.value = activeLevel;
         levelSelect.addEventListener('change', (e) => {
-          activeLevel = e.target.value;
+          const val = e.target.value;
+          if (val !== '1' && val !== 'all' && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+            levelSelect.value = activeLevel || '1';
+            if (typeof window.requireVip === 'function') {
+              return window.requireVip(`Danh sách từ vựng HSK ${val}`);
+            }
+            return;
+          }
+          activeLevel = val;
           applyFilters();
         });
       }

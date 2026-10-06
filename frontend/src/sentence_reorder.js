@@ -354,6 +354,11 @@ window.shuffleCurrentPool = function () {
 
 // Switch level filter
 window.switchLevel = function (lvl, btnEl) {
+  if (lvl !== 1 && typeof window.isUserVip === 'function' && !window.isUserVip()) {
+    if (typeof window.requireVip === 'function') {
+      return window.requireVip(`Sắp xếp câu HSK ${lvl}`);
+    }
+  }
   currentLevel = lvl;
 
   // Update tabs active state
