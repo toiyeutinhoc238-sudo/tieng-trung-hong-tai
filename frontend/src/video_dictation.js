@@ -10,7 +10,7 @@ let allLessons = [];
 let filteredLessons = [];
 let currentLesson = null;
 let currentSentenceIdx = 0;
-let currentMode = 'shadowing'; // 'shadowing' | 'dictation' | 'dubbing'
+let currentMode = 'dictation'; // Mặc định là Nghe Chép Chính Tả (Shadowing đang khóa để nâng cấp)
 let currentSpeed = 0.85;
 let autoPauseEnabled = true;
 let isVideoBlurred = false;
@@ -797,6 +797,10 @@ function clearCurrentNotes() {
 }
 
 function switchMode(mode) {
+  if (mode === 'shadowing') {
+    showToast('🔒 Tính năng Shadowing đang được nâng cấp và hoàn thiện! Bạn hãy luyện Nghe Chép Video hoặc Nghe Đoạn Văn nhé! 🚀', false);
+    mode = 'dictation';
+  }
   currentMode = mode;
   document.querySelectorAll('.mode-tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === mode);
@@ -3272,8 +3276,8 @@ function openLessonWorkspace(lesson) {
   // Update Completed Button in Workspace
   updateWorkspaceCompletedButton();
 
-  // Switch to selected mode (shadowing or dictation)
-  switchMode(currentMode || 'shadowing');
+  // Switch to selected mode (dictation)
+  switchMode(currentMode || 'dictation');
 
   // Populate Dubbing roles from speakers
   populateDubbingRoles(lesson);
@@ -3662,45 +3666,33 @@ async function initVideoDictationPage() {
   const typeTabsEl = document.getElementById('dict-main-type-tabs');
 
   if (urlMode === 'shadowing') {
-    currentMode = 'shadowing';
-    // Ẩn hoàn toàn 2 tab nghe chép khi người dùng đang ở chuyên mục Shadowing
-    if (typeTabsEl) typeTabsEl.style.display = 'none';
-
-    document.querySelectorAll('.mode-tab-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.mode === 'shadowing');
-    });
-
-    const bannerTag = document.getElementById('dict-banner-tag');
-    const bannerTitle = document.getElementById('dict-banner-title');
-    const bannerDesc = document.getElementById('dict-banner-desc');
-    const heading = document.getElementById('dict-catalog-heading');
-    const subheading = document.getElementById('dict-catalog-subheading');
-    if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-microphone-lines"></i> SHADOWING';
-    if (bannerTitle) bannerTitle.textContent = 'Luyện Shadowing Video';
-    if (bannerDesc) bannerDesc.textContent = 'Luyện phản xạ nghe nói và chuẩn hóa ngữ điệu qua video thực tế.';
-    if (heading) heading.innerHTML = '<i class="fa-solid fa-microphone-lines" style="color: #10b981;"></i> Video Shadowing';
-    if (subheading) subheading.textContent = 'Ngắt nhịp câu thoại, luyện phản xạ và ngữ điệu tự nhiên.';
-  } else {
-    // Chế độ Nghe Chép (dictation hoặc mặc định)
-    currentMode = 'dictation';
-    // Hiện 2 tab lựa chọn: Nghe chép theo Video vs Nghe chép Đoạn ngắn HSK
-    if (typeTabsEl) typeTabsEl.style.display = 'flex';
-
-    document.querySelectorAll('.mode-tab-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.mode === 'dictation');
-    });
-
-    const bannerTag = document.getElementById('dict-banner-tag');
-    const bannerTitle = document.getElementById('dict-banner-title');
-    const bannerDesc = document.getElementById('dict-banner-desc');
-    const heading = document.getElementById('dict-catalog-heading');
-    const subheading = document.getElementById('dict-catalog-subheading');
-    if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> CHÉP CHÍNH TẢ';
-    if (bannerTitle) bannerTitle.textContent = 'Luyện Chép Video';
-    if (bannerDesc) bannerDesc.textContent = 'Luyện thính giác phản xạ và ghi nhớ mặt chữ qua video thực tế.';
-    if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square" style="color: #38bdf8;"></i> Video Luyện Chép';
-    if (subheading) subheading.textContent = 'Ngắt nhịp câu thoại, luyện phản xạ và ghi nhớ chữ Hán.';
+    showToast('🔒 Tính năng Shadowing đang được nâng cấp! Hệ thống tự động chuyển sang chế độ Nghe Chép Chính Tả nhé! 🚀', false);
+    try {
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set('mode', 'dictation');
+      window.history.replaceState({}, '', newUrl.toString());
+    } catch (eUrl) {}
   }
+
+  // Mặc định luôn hoạt động ở chế độ Nghe Chép
+  currentMode = 'dictation';
+  // Hiện 2 tab lựa chọn: Nghe chép theo Video vs Nghe chép Đoạn ngắn HSK
+  if (typeTabsEl) typeTabsEl.style.display = 'flex';
+
+  document.querySelectorAll('.mode-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === 'dictation');
+  });
+
+  const bannerTag = document.getElementById('dict-banner-tag');
+  const bannerTitle = document.getElementById('dict-banner-title');
+  const bannerDesc = document.getElementById('dict-banner-desc');
+  const heading = document.getElementById('dict-catalog-heading');
+  const subheading = document.getElementById('dict-catalog-subheading');
+  if (bannerTag) bannerTag.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> CHÉP CHÍNH TẢ';
+  if (bannerTitle) bannerTitle.textContent = 'Luyện Chép Video';
+  if (bannerDesc) bannerDesc.textContent = 'Luyện thính giác phản xạ và ghi nhớ mặt chữ qua video thực tế.';
+  if (heading) heading.innerHTML = '<i class="fa-solid fa-pen-to-square" style="color: #38bdf8;"></i> Video Luyện Chép';
+  if (subheading) subheading.textContent = 'Ngắt nhịp câu thoại, luyện phản xạ và ghi nhớ chữ Hán.';
 
   filteredLessons = [...allLessons];
   renderCatalogGrid();

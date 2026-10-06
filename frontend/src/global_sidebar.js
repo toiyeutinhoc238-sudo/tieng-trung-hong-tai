@@ -951,6 +951,13 @@ import './quick_dict_widget.js';
     }, 3200);
   }
 
+  window.showShadowingUpgradeNotice = function () {
+    showGlobalAuthToast('🔒 Tính năng Shadowing đang được nâng cấp và hoàn thiện! Vui lòng luyện Nghe Chép Chính Tả nhé! 🚀', false);
+    setTimeout(() => {
+      window.location.href = '/video-dictation.html?mode=dictation';
+    }, 900);
+  };
+
   // Page-Level Auth Guard: locks subpages for unauthenticated users
   function checkPageAuthGuard() {
     const path = window.location.pathname.toLowerCase();
@@ -1234,8 +1241,11 @@ import './quick_dict_widget.js';
         <!-- DANH MỤC 2: KỸ NĂNG -->
         <div class="sidebar-section-label">Kỹ Năng</div>
         <ul class="sidebar-menu" style="margin-bottom: 8px;">
-          <li class="sidebar-item ${activeKey === 'shadowing' ? 'active' : ''}" onclick="window.location.href = '/video-dictation.html?mode=shadowing'">
+          <li class="sidebar-item" onclick="window.showShadowingUpgradeNotice()" title="Tính năng Shadowing đang được nâng cấp" style="cursor: pointer;">
             <i class="fa-solid fa-microphone-lines" style="color: #10b981; font-size: 1.1rem;"></i> <span>Shadowing</span>
+            <span style="font-size: 0.65rem; background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); padding: 1px 7px; border-radius: 99px; font-weight: 700; margin-left: auto; display: inline-flex; align-items: center; gap: 3px;">
+              <i class="fa-solid fa-lock" style="font-size: 0.6rem;"></i> Nâng cấp
+            </span>
           </li>
           <li class="sidebar-item ${activeKey === 'dictation' ? 'active' : ''}" onclick="window.location.href = '/video-dictation.html?mode=dictation'">
             <i class="fa-solid fa-pen-to-square" style="color: #38bdf8; font-size: 1.1rem;"></i> <span>Nghe Chép</span>
@@ -1502,12 +1512,12 @@ import './quick_dict_widget.js';
     },
     {
       id: 'video-shadowing',
-      tag: '🎬 SHADOWING',
+      tag: '🎬 ĐANG NÂNG CẤP',
       tagClass: 'hot',
-      title: 'Shadowing Video Thực Tế:',
-      desc: 'Phương pháp nhại giọng theo trích đoạn phim đời sống, cải thiện phát âm & độ trôi chảy.',
-      link: '/video-dictation.html?mode=shadowing',
-      linkText: 'Thử ngay →'
+      title: 'Shadowing Video:',
+      desc: 'Tính năng đang được nâng cấp hoàn thiện. Hãy luyện Nghe Chép Chính Tả trong lúc chờ đợi nhé!',
+      link: '/video-dictation.html?mode=dictation',
+      linkText: 'Luyện Nghe Chép →'
     },
     {
       id: 'video-dictation',

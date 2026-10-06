@@ -1043,11 +1043,22 @@ window.submitEssayForGrading = async function (mode) {
     <div class="writing-card-panel" style="text-align: center; padding: 48px 24px;">
       <i class="fa-solid fa-brain fa-bounce" style="font-size: 3rem; color: #8b5cf6; margin-bottom: 20px;"></i>
       <h2 style="font-size: 1.45rem; font-weight: 800; color: #ffffff; margin: 0 0 10px 0;">
-        Giám Khảo AI Đang Phân Tích Bài Viết...
+        Giám Khảo AI Đang Phân Tích Bài Viết Tự Do...
       </h2>
       <p style="font-size: 0.92rem; color: #94a3b8; max-width: 540px; margin: 0 auto 20px auto;">
-        Đang đối chiếu ngữ pháp HSK, kiểm tra vốn từ vựng, tính mạch lạc câu cú và biên soạn bản viết lại chuẩn người bản xứ.
+        Đang quét toàn diện: soi lỗi ngữ pháp &amp; cấu trúc câu, kiểm tra cách dùng từ, thẩm định logic mạch lạc và biên soạn bản viết lại chuẩn người bản xứ.
       </p>
+      <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+        <span style="font-size: 0.8rem; background: rgba(139, 92, 246, 0.15); color: #d8b4fe; padding: 4px 12px; border-radius: 99px;">
+          ✓ Soi lỗi ngữ pháp &amp; cấu trúc
+        </span>
+        <span style="font-size: 0.8rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 4px 12px; border-radius: 99px;">
+          ✓ Kiểm tra dùng từ &amp; lượng từ
+        </span>
+        <span style="font-size: 0.8rem; background: rgba(16, 185, 129, 0.15); color: #34d399; padding: 4px 12px; border-radius: 99px;">
+          ✓ Soát logic câu &amp; mạch lạc
+        </span>
+      </div>
     </div>
   `;
 

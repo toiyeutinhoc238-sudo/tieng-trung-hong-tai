@@ -3901,38 +3901,54 @@ app.post('/api/ai/grade-essay', async (req, res) => {
   const wordCount = (cleanText.match(/[\u4e00-\u9fa5\u3400-\u4dbfa-zA-Z0-9]/g) || []).length;
   const isPromptMode = mode === 'prompt';
 
+  const modeDescription = isPromptMode
+    ? `- Chế độ: Viết theo đề bài\n- Đề bài: "${topicTitle || ''}"\n- Yêu cầu: "${topicPrompt || ''}"\n${requiredKeywords && requiredKeywords.length > 0 ? `- Các từ khóa bắt buộc: ${JSON.stringify(requiredKeywords)}\n` : ''}- Trình độ mục tiêu: HSK ${hskLevel || 'Tự do'}\n- Độ dài đề xuất: ${minWords || 80} chữ Hán`
+    : `- Chế độ: Bài viết tự do (Học viên tự do luyện viết bài văn / đoạn văn theo chủ đề cá nhân).\n- Trọng tâm chấm điểm: SOI KỸ TOÀN DIỆN TỪNG CÂU TỪ, PHÁT HIỆN TẤT CẢ CÁC LỖI NGỮ PHÁP, LỖI DÙNG TỪ VÀ LỖI LOGIC CÂU ĐỂ GIÚP HỌC VIÊN CẢI THIỆN TRIỆT ĐỂ VĂN PHONG VÀ TRÁNH LỖI SAI.`;
+
   const prompt = `Bạn là Giám khảo chấm thi viết tiếng Trung HSK hàng đầu của "Tiếng Trung Hongtai".
-Nhiệm vụ của bạn là chấm điểm, SOI KỸ TỪNG CÂU TỪ, PHÂN TÍCH RÕ RÀNG TỪNG LỖI SAI (ngữ pháp, lượng từ, bổ ngữ, trật tự từ, dùng từ) và hướng dẫn sửa bài chi tiết, cặn kẽ cho học viên.
+Nhiệm vụ của bạn là chấm điểm, SOI KỸ TỪNG CÂU TỪ, PHÂN TÍCH RÕ RÀNG TẤT CẢ CÁC LỖI SAI (ngữ pháp, lượng từ, bổ ngữ, trật tự từ, dùng từ, logic mạch lạc) và hướng dẫn sửa bài chi tiết, cặn kẽ cho học viên.
 
 Thông tin bài làm:
-- Chế độ: ${isPromptMode ? 'Viết theo đề bài' : 'Bài viết tự do'}
-${isPromptMode ? `- Đề bài: "${topicTitle || ''}"\n- Yêu cầu: "${topicPrompt || ''}"` : ''}
-${isPromptMode && requiredKeywords && requiredKeywords.length > 0 ? `- Các từ khóa bắt buộc: ${JSON.stringify(requiredKeywords)}` : ''}
-- Trình độ mục tiêu: HSK ${hskLevel || 'Tự do'}
-- Số chữ học viên viết: ${wordCount} chữ Hán ${minWords ? `(Yêu cầu đề xuất: ${minWords} chữ)` : ''}
+${modeDescription}
+- Số chữ học viên viết: ${wordCount} chữ Hán
 
 Nội dung bài viết của học viên:
 """
 ${cleanText}
 """
 
-QUY TẮC BẮT BUỘC KHI CHẤM BÀI:
-1. Phải soi xét kỹ lưỡng từng câu, từng vế câu trong bài viết. Tìm tất cả các lỗi dù là nhỏ nhất:
-   - Lỗi lượng từ (ví dụ: "一个奶茶" -> "一杯奶茶")
-   - Lỗi bổ ngữ xu hướng / kết quả (ví dụ: "进去教室" -> "进教室" / "进教室去")
-   - Lỗi trật tự câu / trạng ngữ thời gian hoặc nơi chốn (ví dụ: "我去学校很早" -> "我很早就去学校了")
-   - Lỗi dùng từ / dịch thô từ tiếng Việt (ví dụ: "不会意思" -> "不知道意思" / "不懂意思", "告诉我快一点坐" -> "叫我快点坐下")
-   - Lỗi trợ từ kết cấu 的/地/得, trợ từ ngữ khí 了/过/着
-2. Nếu bài viết CÓ LỖI SAI:
-   - BẮT BUỘC phải liệt kê ĐẦY ĐỦ từng lỗi vào mảng "errorsList". TUYỆT ĐỐI KHÔNG để mảng errorsList rỗng nếu có lỗi!
-   - Mỗi lỗi phải chỉ rõ:
-     + "original": Câu hoặc cụm từ học viên viết sai/chưa chuẩn trong bài.
-     + "errorType": Tên loại lỗi (ví dụ: "Lỗi Lượng Từ", "Lỗi Bổ Ngữ Xu Hướng", "Lỗi Dùng Từ", "Lỗi Trật Tự Từ", "Lỗi Ngữ Pháp")
-     + "corrected": Câu hoặc cụm từ sau khi đã sửa lại chuẩn xác, tự nhiên theo văn phong người bản xứ.
-     + "reason": Giải thích CỰC KỲ CHI TIẾT và RÕ RÀNG bằng tiếng Việt: Sai ở chữ nào? Vì sao sai? Quy tắc ngữ pháp tiếng Trung quy định thế nào? Tại sao nên sửa như vậy để học viên hiểu sâu và không tái phạm.
-3. Điểm số:
-   - Điểm "grammar" (Ngữ pháp & Cú pháp) phải tương xứng với số lỗi sai (1 lỗi: 82-88%, 2-3 lỗi: 72-81%, 4-6 lỗi: 60-71%, >6 lỗi: <60%). Không cho điểm ảo khi bài có lỗi!
-   - "overallScore" là điểm tổng thể phản ánh đúng chất lượng bài.
+🚨 YÊU CẦU ĐẶC BIỆT BẮT BUỘC VỀ SỐ LƯỢNG LỖI SAI (TUYỆT ĐỐI TUÂN THỦ):
+1. TUYỆT ĐỐI KHÔNG ĐƯỢC GIỚI HẠN SỐ LƯỢNG LỖI! TUYỆT ĐỐI KHÔNG ĐƯỢC CHỈ CHỌN RA 2 HOẶC 3 LỖI TIÊU BIỂU RỒI DỪNG LẠI!
+2. Giảng viên và học viên yêu cầu PHẢI SOI RA ĐẦY ĐỦ TẤT CẢ CÁC LỖI trong toàn bộ bài viết: Dù bài viết có 3 lỗi, 5 lỗi, 7 lỗi hay 10+ lỗi, bạn PHẢI TÌM VÀ LIỆT KÊ HẾT TẤT CẢ các lỗi đó vào mảng "errorsList". (Ví dụ: bài có 5 lỗi thì errorsList PHẢI CÓ ĐỦ 5 phần tử; bài có 8 lỗi thì PHẢI CÓ ĐỦ 8 phần tử. Tuyệt đối không được bỏ sót bất kỳ lỗi nào!).
+3. Hãy rà soát lần lượt từng câu một, từ câu đầu tiên đến câu cuối cùng của bài viết theo 3 nhóm lỗi chính:
+
+3 NHÓM LỖI CHÍNH PHẢI SOI KỸ VÀ PHÂN LOẠI CHÍNH XÁC VÀO "errorType":
+- Nhóm 1: "Lỗi Ngữ Pháp" (Ngữ pháp & Cấu trúc câu):
+  + Cấu trúc câu bị sai hoặc lộn xộn: chủ ngữ kép, thiếu chủ ngữ, thiếu vị ngữ, trật tự trạng ngữ thời gian/nơi chốn đặt sai vị trí.
+  + Các mẫu câu đặc thù HSK: câu chữ 把 (把字句), câu bị động 被 (被字句), câu so sánh 比 / 没有 / 不如, câu liên động, câu kiêm ngữ...
+  + Trợ từ kết cấu: nhầm lẫn giữa 的 (định ngữ), 地 (trạng ngữ), 得 (bổ ngữ).
+  + Trợ từ động thái & ngữ khí: dùng sai hoặc thiếu 了, 过, 着.
+  + Bổ ngữ: bổ ngữ xu hướng (lai/khứ), bổ ngữ kết quả, bổ ngữ khả năng (V+得/不+C), bổ ngữ trạng thái, bổ ngữ thời lượng.
+- Nhóm 2: "Lỗi Dùng Từ" (Từ vựng & Kết hợp từ):
+  + Dịch word-by-word thô thiển từ tiếng Việt sang tiếng Trung hoặc dùng từ Hán Việt sai nghĩa tiếng Trung hiện đại.
+  + Dùng từ sai ngữ cảnh, kết hợp từ (collocations) không tự nhiên theo thói quen người bản xứ.
+  + Nhầm lẫn các từ gần nghĩa / đồng nghĩa (ví dụ: 见面 vs 价格, 知道 vs 认识, 常常 vs 往往, 以为 vs 认为, 产生 vs 发生...).
+  + Sai lượng từ danh từ hoặc lượng từ động từ (ví dụ: 一个奶茶 -> 一杯奶茶, 一只笔 -> 一支笔, 两个书 -> 两本书...).
+  + Dùng sai từ loại (danh từ dùng làm vị ngữ tính từ, tính từ làm phó từ sai...).
+- Nhóm 3: "Lỗi Logic Câu" (Logic tư duy & Mạch lạc liên kết):
+  + Dùng sai liên từ hoặc cặp liên từ quan hệ: nguyên nhân - kết quả (因为...所以), chuyển tiếp (虽然...但是, 尽管...可是), tăng tiến (不仅...而且), giả thiết (如果...就), điều kiện (只要...就, 只有...才).
+  + Logic giữa các vế câu bị mâu thuẫn, gượng ép, đứt đoạn, nhảy cóc ý tưởng hoặc trước sau không ăn khớp nhau.
+  + Diễn đạt lủng củng, lặp ý, câu cụt hoặc câu què làm người đọc bản xứ khó hiểu.
+
+MỖI LỖI TRONG "errorsList" PHẢI GỒM:
+- "original": Câu hoặc cụm từ nguyên văn học viên viết sai/chưa chuẩn trong bài.
+- "errorType": Đúng 1 trong 3 nhóm lỗi chính: "Lỗi Ngữ Pháp" | "Lỗi Dùng Từ" | "Lỗi Logic Câu" (hoặc "Lỗi Lượng Từ" / "Lỗi Trật Tự Từ").
+- "corrected": Câu hoặc cụm từ sau khi đã sửa lại chuẩn xác, tự nhiên theo văn phong người bản xứ.
+- "reason": Giải thích CỰC KỲ CHI TIẾT và RÕ RÀNG bằng tiếng Việt: Sai ở chữ nào? Vì sao sai? Quy tắc ngữ pháp tiếng Trung quy định thế nào? Tại sao nên sửa như vậy để học viên hiểu sâu và không tái phạm.
+
+ĐIỂM SỐ:
+- Điểm "grammar" (Ngữ pháp & Cú pháp) phải tương xứng với số lỗi sai (0 lỗi: 90-100, 1-2 lỗi: 80-89, 3-4 lỗi: 70-79, 5-6 lỗi: 60-69, >6 lỗi: <60). Không cho điểm ảo khi bài có lỗi!
+- "overallScore" là điểm tổng thể phản ánh đúng chất lượng bài.
 
 Trả về ĐÚNG 1 JSON object thuần túy, không có markdown block nào ngoài JSON:
 {
@@ -3945,7 +3961,7 @@ Trả về ĐÚNG 1 JSON object thuần túy, không có markdown block nào ngo
     "coherence": <điểm mạch lạc liên kết 0-100>,
     "taskFulfillment": <điểm bám sát đề và độ dài 0-100>
   },
-  "generalFeedback": "<Nhận xét tổng quan bằng tiếng Việt: chỉ rõ điểm tốt và tóm tắt những điểm ngữ pháp/từ vựng học viên cần lưu ý sửa>",
+  "generalFeedback": "<Nhận xét tổng quan bằng tiếng Việt: chỉ rõ điểm tốt và tóm tắt những điểm ngữ pháp/từ vựng/logic học viên cần lưu ý sửa>",
   "strengths": [
     "<Điểm sáng 1 của bài viết>",
     "<Điểm sáng 2 của bài viết>"
@@ -3953,7 +3969,7 @@ Trả về ĐÚNG 1 JSON object thuần túy, không có markdown block nào ngo
   "errorsList": [
     {
       "original": "<câu hoặc cụm từ gốc bị sai trong bài>",
-      "errorType": "<Loại lỗi: Lỗi Lượng Từ | Lỗi Bổ Ngữ Xu Hướng | Lỗi Dùng Từ | Lỗi Trật Tự Từ | Lỗi Ngữ Pháp>",
+      "errorType": "Lỗi Ngữ Pháp",
       "corrected": "<cách sửa lại đúng ngữ pháp và tự nhiên>",
       "reason": "<giải thích tường tận lý do sai, quy tắc ngữ pháp và cách sửa bằng tiếng Việt>"
     }
@@ -3983,7 +3999,7 @@ Trả về ĐÚNG 1 JSON object thuần túy, không có markdown block nào ngo
             model: m,
             messages: [{ role: 'user', content: prompt }],
             temperature: 0.2,
-            max_tokens: 3500
+            max_tokens: 5000
           });
           reply = completion.choices[0]?.message?.content || '';
           if (reply && reply.includes('{') && reply.includes('}')) break;
@@ -3995,7 +4011,7 @@ Trả về ĐÚNG 1 JSON object thuần túy, không có markdown block nào ngo
 
     // Ưu tiên 2: Gemini
     if (!reply && GEMINI_API_KEY) {
-      for (const model of ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-3.8-flash']) {
+      for (const model of ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-2.5-flash']) {
         try {
           const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
@@ -4004,7 +4020,7 @@ Trả về ĐÚNG 1 JSON object thuần túy, không có markdown block nào ngo
               contents: [{ parts: [{ text: prompt }] }],
               generationConfig: {
                 temperature: 0.2,
-                maxOutputTokens: 4000
+                maxOutputTokens: 6000
               }
             })
           });
