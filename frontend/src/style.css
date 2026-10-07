@@ -8330,11 +8330,13 @@ html.dark .lb-page-btn:hover:not(:disabled) {
   outline: none;
   transition: border-color 0.2s;
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .lb-jump-input::-webkit-outer-spin-button,
 .lb-jump-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+  appearance: none;
   margin: 0;
 }
 
