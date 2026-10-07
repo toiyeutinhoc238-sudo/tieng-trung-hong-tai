@@ -696,14 +696,14 @@ import{h as at}from"./vendor-BfYXEYrK.js";(function(){const e=document.createEle
 
     /* Floating highlight mini tooltip */
     .quick-dict-selection-tooltip {
-      position: fixed;
+      position: absolute;
       background: #0f172a;
       border: 1px solid #10b981;
       color: #ffffff;
-      padding: 5px 11px;
-      border-radius: 8px;
+      padding: 5px 12px;
+      border-radius: 99px;
       font-size: 0.8rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       box-shadow: 0 8px 20px rgba(0,0,0,0.4), 0 0 12px rgba(16, 185, 129, 0.35);
       z-index: 100002;
@@ -711,12 +711,31 @@ import{h as at}from"./vendor-BfYXEYrK.js";(function(){const e=document.createEle
       align-items: center;
       gap: 6px;
       animation: dictFadeIn 0.18s ease;
-      transition: transform 0.15s ease;
+      transition: transform 0.15s ease, background 0.15s ease;
+      white-space: nowrap;
+      user-select: none;
     }
 
     .quick-dict-selection-tooltip:hover {
-      transform: scale(1.06);
+      transform: scale(1.05);
       background: #047857;
+      color: #ffffff;
+    }
+
+    /* Light Mode Overrides for Tooltip */
+    html.light-mode .quick-dict-selection-tooltip,
+    body.light-mode .quick-dict-selection-tooltip {
+      background: #ffffff !important;
+      border: 1.5px solid #10b981 !important;
+      color: #065f46 !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12), 0 0 10px rgba(16, 185, 129, 0.25) !important;
+    }
+
+    html.light-mode .quick-dict-selection-tooltip:hover,
+    body.light-mode .quick-dict-selection-tooltip:hover {
+      background: #ecfdf5 !important;
+      color: #047857 !important;
+      border-color: #059669 !important;
     }
 
     /* Light Mode Overrides */

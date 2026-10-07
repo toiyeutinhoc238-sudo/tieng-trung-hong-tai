@@ -9040,17 +9040,36 @@ function renderLessonHeroCardContent(w, index, total) {
 
   const currentVocabMode = (typeof localStorage !== 'undefined' && localStorage.getItem('hongtai_vocab_practice_mode')) || 'translate';
 
+  const phChars = (char.match(/[\u4e00-\u9fa5]/g) || [char.charAt(0)]);
+  const phCount = phChars.length;
+  let phBoxWidth = 140;
+  let phBoxHeight = 140;
+  let phFontSize = '3.8rem';
+  if (phCount === 2) {
+    phBoxWidth = 220;
+    phBoxHeight = 118;
+    phFontSize = '2.7rem';
+  } else if (phCount === 3) {
+    phBoxWidth = 276;
+    phBoxHeight = 104;
+    phFontSize = '2.2rem';
+  } else if (phCount >= 4) {
+    phBoxWidth = Math.min(phCount * 72 + 16, 340);
+    phBoxHeight = 92;
+    phFontSize = '1.8rem';
+  }
+
   return `
     <div style="display: flex; flex-direction: column; gap: 20px; width: 100%;">
       <!-- Top Grid: Stroke Box + Vocab Info -->
       <div style="display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; width: 100%;">
         <!-- Left: Stroke Writer Container -->
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 150px; margin: 0 auto;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; min-width: ${Math.min(phBoxWidth, 260)}px; margin: 0 auto; max-width: 100%;">
           <div style="font-size: 0.82rem; font-weight: 800; color: #38bdf8; margin-bottom: 2px; display: flex; align-items: center; gap: 6px;">
             <i class="fa-solid fa-pen-nib"></i> <span>Nét Viết Chữ Hán</span>
           </div>
-          <div id="lesson-hanzi-writer-box" style="width: 150px; height: 150px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); border-radius: 18px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.2);">
-            <div style="font-size: 4rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${char}</div>
+          <div id="lesson-hanzi-writer-box" style="width: ${phBoxWidth}px; max-width: 100%; height: ${phBoxHeight}px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); border-radius: 18px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.2); box-sizing: border-box;">
+            <div style="font-size: ${phFontSize}; font-weight: 800; font-family: var(--font-display); color: var(--text-primary); text-align: center; white-space: nowrap; letter-spacing: 2px;">${char}</div>
           </div>
           <div style="display: flex; gap: 8px; width: 100%; justify-content: center; flex-wrap: wrap;">
             <button id="lesson-replay-stroke-btn" type="button" class="btn btn-sm btn-outline-primary" onclick="window.replayLessonHanziStrokes()" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 12px; gap: 6px; display: flex; align-items: center; white-space: nowrap;">
@@ -10093,24 +10112,41 @@ function initLessonHanziWriter(wordStr) {
   const chineseChars = wordStr.match(/[\u4e00-\u9fa5]/g) || [wordStr.charAt(0)];
   const numChars = chineseChars.length;
 
-  // Dynamically calculate width based on character count
-  const boxWidth = Math.min(numChars * 130 + (numChars - 1) * 8 + 16, 540);
-  box.style.cssText = `width: ${boxWidth}px; height: 138px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); border-radius: 18px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 8px; position: relative; overflow-x: auto; padding: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.2); transition: all 0.3s ease;`;
+  // Responsive sizing based on character count so all characters fit comfortably without clipping
+  let charSize = 116;
+  let boxWidth = 140;
+  let boxHeight = 140;
+
+  if (numChars === 2) {
+    charSize = 96;
+    boxWidth = 220;
+    boxHeight = 118;
+  } else if (numChars === 3) {
+    charSize = 80;
+    boxWidth = 276;
+    boxHeight = 104;
+  } else if (numChars >= 4) {
+    charSize = 65;
+    boxWidth = Math.min(numChars * 72 + 16, 340);
+    boxHeight = 92;
+  }
+
+  box.style.cssText = `width: ${boxWidth}px; max-width: 100%; height: ${boxHeight}px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); border-radius: 18px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 6px; position: relative; overflow-x: auto; padding: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.2); transition: all 0.3s ease; box-sizing: border-box;`;
 
   if (typeof HanziWriter !== 'undefined') {
     chineseChars.forEach((ch, idx) => {
       const charDiv = document.createElement('div');
       const divId = `lesson-hanzi-char-${idx}`;
       charDiv.id = divId;
-      charDiv.style.cssText = 'width: 125px; height: 125px; flex-shrink: 0; background: transparent; display: flex; align-items: center; justify-content: center;';
+      charDiv.style.cssText = `width: ${charSize}px; height: ${charSize}px; flex-shrink: 0; background: transparent; display: flex; align-items: center; justify-content: center;`;
       box.appendChild(charDiv);
 
       const isDark = document.documentElement.classList.contains('dark');
       try {
         const writer = HanziWriter.create(divId, ch, {
-          width: 120,
-          height: 120,
-          padding: 4,
+          width: charSize - 4,
+          height: charSize - 4,
+          padding: Math.max(2, Math.round(charSize * 0.04)),
           strokeColor: isDark ? '#38bdf8' : '#2563eb',
           radicalColor: '#ef4444',
           outlineColor: isDark ? '#475569' : '#94a3b8',
@@ -10119,14 +10155,14 @@ function initLessonHanziWriter(wordStr) {
         });
         lessonWriterArray.push(writer);
       } catch (e) {
-        charDiv.innerHTML = `<div style="font-size: 3.2rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${ch}</div>`;
+        charDiv.innerHTML = `<div style="font-size: ${(charSize * 0.45).toFixed(1)}px; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${ch}</div>`;
       }
     });
 
     // Animate all characters simultaneously at the exact same time
     animateLessonHanziSimultaneously();
   } else {
-    box.innerHTML = `<div style="font-size: 3.5rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${wordStr}</div>`;
+    box.innerHTML = `<div style="font-size: 2.2rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${wordStr}</div>`;
   }
 }
 
@@ -10403,7 +10439,7 @@ function renderRoadmapStrokeStepsDOM(wordChars, dataMap, container) {
       <div style="display: flex; flex-direction: column; gap: 6px; background: rgba(15, 23, 42, 0.6); padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.2);">
         <div style="font-size: 0.88rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
           <span>Chữ <strong style="font-family: var(--font-chinese, serif); font-size: 1.2em; color: #ffffff;">"${ch}"</strong> (${data.strokes.length} nét):</span>
-          <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">(Nét đỏ: nét đang vẽ ở bước này)</span>
+          <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">(Nét đỏ: nét đang vẽ | Nét xanh: các nét đã vẽ)</span>
         </div>
         <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
     `;
@@ -10414,9 +10450,9 @@ function renderRoadmapStrokeStepsDOM(wordChars, dataMap, container) {
       data.strokes.forEach(s => {
         paths += `<path d="${s}" fill="#e2e8f0" opacity="0.85" />`;
       });
-      // 2. Previously drawn strokes in dark black
+      // 2. Previously drawn strokes in distinct royal blue (not pitch black!)
       for (let j = 0; j < idx; j++) {
-        paths += `<path d="${data.strokes[j]}" fill="#0f172a" />`;
+        paths += `<path d="${data.strokes[j]}" fill="#2563eb" />`;
       }
       // 3. Current newly drawn stroke in bold red
       paths += `<path d="${data.strokes[idx]}" fill="#dc2626" />`;

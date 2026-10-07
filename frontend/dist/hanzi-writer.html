@@ -1211,7 +1211,7 @@
     }
   </style>
   <script type="module" crossorigin src="/assets/vendor-BfYXEYrK.js"></script>
-  <script type="module" crossorigin src="/assets/global_sidebar-CX6hXSeg.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-D5ouXx7Q.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/global_sidebar-OCy83h-e.css">
 </head>
 
@@ -2022,7 +2022,7 @@
         html += `<div style="display:flex; flex-direction:column; gap:6px; background:rgba(15,23,42,0.6); padding:10px 14px; border-radius:12px; border:1px solid rgba(56,189,248,0.25); margin-bottom:8px;">`;
         html += `<div class="stroke-char-header" style="font-size:0.95rem; font-weight:bold; color:#38bdf8; font-family: var(--font-sans) !important; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
           <span>Chữ <span style="font-family: var(--font-chinese) !important; font-size:1.2em; color:#fff;">"${ch}"</span> (${data.strokes.length} nét):</span>
-          <span style="font-size:0.72rem; color:#94a3b8; font-weight:normal;">(Nét đỏ: nét đang vẽ ở bước này)</span>
+          <span style="font-size:0.72rem; color:#94a3b8; font-weight:normal;">(Nét đỏ: nét đang vẽ | Nét xanh: các nét đã vẽ)</span>
         </div>`;
         html += `<div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">`;
         data.strokes.forEach((_, idx) => {
@@ -2032,9 +2032,9 @@
           data.strokes.forEach(s => {
             paths += `<path d="${s}" fill="#e2e8f0" opacity="0.85" />`;
           });
-          // 2. Previously drawn strokes in dark black
+          // 2. Previously drawn strokes in distinct royal blue (not pitch black!)
           for (let j = 0; j < idx; j++) {
-            paths += `<path d="${data.strokes[j]}" fill="#0f172a" />`;
+            paths += `<path d="${data.strokes[j]}" fill="#2563eb" />`;
           }
           // 3. Current newly drawn stroke in bold red
           paths += `<path d="${data.strokes[idx]}" fill="#dc2626" />`;
