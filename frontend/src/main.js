@@ -15852,6 +15852,315 @@ window.showLeaderboardModal = function () {
   window.location.href = '/rank.html';
 };
 
+// --- LEADERBOARD & RANK CEREMONY CONTROLLER (PAGINATION 10 USERS/PAGE) ---
+let rankLeaderboardAllData = [];
+let rankCurrentPage = 1;
+const RANK_PAGE_SIZE = 10;
+
+function getCurrentUserLeaderboardRank(allData) {
+  try {
+    const raw = localStorage.getItem('user') || localStorage.getItem('hongtai_current_user') || localStorage.getItem('currentUser') || sessionStorage.getItem('user');
+    if (!raw) return null;
+    const user = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    if (!user) return null;
+    const email = (user.email || '').toLowerCase().trim();
+    const name = (user.name || user.displayName || user.username || '').toLowerCase().trim();
+
+    return allData.find(item => {
+      if (email && item.email && item.email.toLowerCase().trim() === email) return true;
+      if (name && item.name && item.name.toLowerCase().trim() === name) return true;
+      return false;
+    }) || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function renderLeaderboardAvatar(item, size = 52, borderCol = '#fbbf24') {
+  if (!item) return '';
+  if (item.picture) {
+    return `<img src="${item.picture}" style="width: ${size}px; height: ${size}px; border-radius: 50%; object-fit: cover; border: 3px solid ${borderCol}; box-shadow: 0 0 12px ${borderCol}80;">`;
+  }
+  return `<div style="width: ${size}px; height: ${size}px; border-radius: 50%; background: linear-gradient(135deg, ${borderCol}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: ${size * 0.4}px; border: 3px solid ${borderCol}; box-shadow: 0 0 12px ${borderCol}80;">${item.name ? item.name.charAt(0).toUpperCase() : '?'}</div>`;
+}
+
+function getPaginationPages(current, total) {
+  if (total <= 6) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  const pages = [];
+  pages.push(1);
+  let start = Math.max(2, current - 1);
+  let end = Math.min(total - 1, current + 1);
+
+  if (current <= 3) {
+    start = 2;
+    end = 4;
+  } else if (current >= total - 2) {
+    start = total - 3;
+    end = total - 1;
+  }
+
+  if (start > 2) {
+    pages.push('...');
+  }
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+  if (end < total - 1) {
+    pages.push('...');
+  }
+  pages.push(total);
+  return pages;
+}
+
+window.renderRankLeaderboardPage = function (page = 1, highlightRank = null) {
+  const container = document.getElementById('leaderboard-list-container');
+  if (!container) return;
+
+  let paginationContainer = document.getElementById('leaderboard-pagination-container');
+  if (!paginationContainer) {
+    const parent = container.parentElement;
+    if (parent) {
+      paginationContainer = document.createElement('div');
+      paginationContainer.id = 'leaderboard-pagination-container';
+      paginationContainer.className = 'lb-pagination-sticky-footer';
+      parent.appendChild(paginationContainer);
+    }
+  }
+
+  const data = rankLeaderboardAllData;
+  const totalUsers = data.length;
+  if (!totalUsers) {
+    container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px;">Chưa có học viên nào hoàn thành bài học. Hãy là người đầu tiên lên bục vinh quang!</div>`;
+    if (paginationContainer) paginationContainer.innerHTML = '';
+    return;
+  }
+
+  const totalPages = Math.max(1, Math.ceil(totalUsers / RANK_PAGE_SIZE));
+  if (page < 1) page = 1;
+  if (page > totalPages) page = totalPages;
+  rankCurrentPage = page;
+
+  let html = '';
+
+  if (page === 1) {
+    // Trang 1: Top 3 hiển thị trên Bục Vinh Quang + Rank 4 đến 10 hiển thị danh sách (Tổng đúng 10 học viên)
+    const top1 = data.find(d => d.rank === 1) || data[0];
+    const top2 = data.length > 1 ? (data.find(d => d.rank === 2) || data[1]) : null;
+    const top3 = data.length > 2 ? (data.find(d => d.rank === 3) || data[2]) : null;
+    const page1Rest = data.slice(3, RANK_PAGE_SIZE);
+
+    html += `
+      <div class="lb-podium-stage">
+        
+        <!-- Rank 2 Podium (Left) -->
+        <div class="lb-podium-slot rank-2-slot ${!top2 ? 'empty' : ''} ${highlightRank === 2 ? 'lb-row-highlight' : ''}">
+          ${top2 ? `
+            <div class="lb-podium-crown">🥈</div>
+            <div class="lb-podium-avatar-wrap">${renderLeaderboardAvatar(top2, 52, '#94a3b8')}</div>
+            <div class="lb-podium-user">${top2.name}</div>
+            <div class="lb-podium-score">${top2.score} Điểm</div>
+          ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
+          <div class="lb-podium-stand p-2">
+            <span class="lb-podium-num">2</span>
+          </div>
+        </div>
+
+        <!-- Rank 1 Podium (Center - Highest) -->
+        <div class="lb-podium-slot rank-1-slot ${!top1 ? 'empty' : ''} ${highlightRank === 1 ? 'lb-row-highlight' : ''}">
+          ${top1 ? `
+            <div class="lb-podium-crown gold-crown">👑</div>
+            <div class="lb-podium-avatar-wrap">${renderLeaderboardAvatar(top1, 64, '#fbbf24')}</div>
+            <div class="lb-podium-user gold-user">${top1.name}</div>
+            <div class="lb-podium-score gold-score">${top1.score} Điểm</div>
+          ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
+          <div class="lb-podium-stand p-1">
+            <span class="lb-podium-num">1</span>
+          </div>
+        </div>
+
+        <!-- Rank 3 Podium (Right) -->
+        <div class="lb-podium-slot rank-3-slot ${!top3 ? 'empty' : ''} ${highlightRank === 3 ? 'lb-row-highlight' : ''}">
+          ${top3 ? `
+            <div class="lb-podium-crown">🥉</div>
+            <div class="lb-podium-avatar-wrap">${renderLeaderboardAvatar(top3, 48, '#e11d48')}</div>
+            <div class="lb-podium-user">${top3.name}</div>
+            <div class="lb-podium-score">${top3.score} Điểm</div>
+          ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
+          <div class="lb-podium-stand p-3">
+            <span class="lb-podium-num">3</span>
+          </div>
+        </div>
+
+      </div>
+    `;
+
+    if (page1Rest.length > 0) {
+      html += `<div class="lb-rest-title">Top 4 – 10 Tiếp Theo</div>`;
+      html += `<div class="lb-rest-list">`;
+      page1Rest.forEach((item, index) => {
+        const rankNum = item.rank || (index + 4);
+        const isHighlight = highlightRank === rankNum;
+        html += `
+          <div class="leaderboard-item rank-rest ${isHighlight ? 'lb-row-highlight' : ''}" data-rank="${rankNum}">
+            <span class="lb-rank-num">#${rankNum}</span>
+            ${item.picture ? `<img src="${item.picture}" class="lb-row-avatar">` : `<div class="lb-row-avatar-placeholder">${item.name ? item.name.charAt(0) : '?'}</div>`}
+            <div style="flex: 1; min-width: 0;">
+              <div class="lb-user-name">${item.name}</div>
+              <div class="lb-subtext">Chuỗi ngày học: <strong style="color: #f97316;">🔥 ${item.streak || 0} ngày</strong></div>
+            </div>
+            <div style="text-align: right;">
+              <div class="lb-score-val">${item.score} Điểm</div>
+              <div class="lb-subtext">${item.quizCount ? `<span style="color: #38bdf8; font-weight: 700;">${item.quizCount} đề</span> • ` : ''}${item.studyTimeMinutes || 0} phút</div>
+            </div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+    }
+  } else {
+    // Trang 2+: 10 người mỗi trang (ví dụ Trang 2: #11 - #20)
+    const startIndex = (page - 1) * RANK_PAGE_SIZE;
+    const pageItems = data.slice(startIndex, startIndex + RANK_PAGE_SIZE);
+    const startRank = startIndex + 1;
+    const endRank = Math.min(startIndex + pageItems.length, totalUsers);
+
+    html += `
+      <div class="lb-page-banner">
+        <div class="lb-page-banner-info">
+          <i class="fa-solid fa-list-ol"></i>
+          <span>Trang ${page} &bull; Thứ hạng #${startRank} – #${endRank}</span>
+        </div>
+        <button class="lb-top3-shortcut-btn" onclick="window.changeLeaderboardPage(1)">
+          <i class="fa-solid fa-trophy"></i> Bục Vinh Quang Top 3
+        </button>
+      </div>
+    `;
+
+    html += `<div class="lb-rest-list">`;
+    pageItems.forEach((item, index) => {
+      const rankNum = item.rank || (startIndex + index + 1);
+      const isHighlight = highlightRank === rankNum;
+      html += `
+        <div class="leaderboard-item rank-rest ${isHighlight ? 'lb-row-highlight' : ''}" data-rank="${rankNum}">
+          <span class="lb-rank-num">#${rankNum}</span>
+          ${item.picture ? `<img src="${item.picture}" class="lb-row-avatar">` : `<div class="lb-row-avatar-placeholder">${item.name ? item.name.charAt(0) : '?'}</div>`}
+          <div style="flex: 1; min-width: 0;">
+            <div class="lb-user-name">${item.name}</div>
+            <div class="lb-subtext">Chuỗi ngày học: <strong style="color: #f97316;">🔥 ${item.streak || 0} ngày</strong></div>
+          </div>
+          <div style="text-align: right;">
+            <div class="lb-score-val">${item.score} Điểm</div>
+            <div class="lb-subtext">${item.quizCount ? `<span style="color: #38bdf8; font-weight: 700;">${item.quizCount} đề</span> • ` : ''}${item.studyTimeMinutes || 0} phút</div>
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+
+  // Cuộn mượt về đầu danh sách khi chuyển trang
+  container.scrollTop = 0;
+
+  // Tự động cuộn đến học viên được highlight nếu có
+  if (highlightRank) {
+    setTimeout(() => {
+      const el = container.querySelector('.lb-row-highlight');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 150);
+  }
+
+  // Đồng bộ URL parameter (không reload) để người dùng có thể chia sẻ hoặc F5 giữ nguyên trang
+  try {
+    const url = new URL(window.location);
+    if (page > 1) {
+      url.searchParams.set('page', page);
+    } else {
+      url.searchParams.delete('page');
+    }
+    window.history.replaceState({}, '', url);
+  } catch (e) {}
+
+  // Render thanh phân trang Docked Footer
+  if (paginationContainer) {
+    const myRankUser = getCurrentUserLeaderboardRank(data);
+    const paginationPages = getPaginationPages(page, totalPages);
+
+    let pagesNavHtml = `
+      <button class="lb-page-btn lb-prev-btn" onclick="window.changeLeaderboardPage(${page - 1})" ${page === 1 ? 'disabled' : ''} title="Trang trước" aria-label="Trang trước">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+    `;
+
+    paginationPages.forEach(p => {
+      if (p === '...') {
+        pagesNavHtml += `<span class="lb-page-ellipsis">…</span>`;
+      } else {
+        pagesNavHtml += `
+          <button class="lb-page-btn ${p === page ? 'active' : ''}" onclick="window.changeLeaderboardPage(${p})" title="Trang ${p}">
+            ${p}
+          </button>
+        `;
+      }
+    });
+
+    pagesNavHtml += `
+      <button class="lb-page-btn lb-next-btn" onclick="window.changeLeaderboardPage(${page + 1})" ${page === totalPages ? 'disabled' : ''} title="Trang sau" aria-label="Trang sau">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    `;
+
+    paginationContainer.innerHTML = `
+      <div class="lb-pagination-info">
+        <span class="lb-page-count-badge">Trang <strong>${page}</strong> / ${totalPages}</span>
+        <span class="lb-total-badge">(${totalUsers} học viên)</span>
+      </div>
+
+      <div class="lb-pagination-nav">
+        ${pagesNavHtml}
+      </div>
+
+      <div class="lb-pagination-actions">
+        ${myRankUser ? `
+          <button class="lb-my-rank-btn" onclick="window.jumpToMyRank(${myRankUser.rank})" title="Nhảy đến vị trí của bạn trên bảng xếp hạng">
+            🎯 Hạng #${myRankUser.rank}
+          </button>
+        ` : ''}
+
+        <div class="lb-pagination-quick-jump">
+          <span>Đến:</span>
+          <input type="number" min="1" max="${totalPages}" class="lb-jump-input" id="lb-jump-page-input" value="${page}" onkeydown="if(event.key==='Enter')window.jumpToLeaderboardPage()">
+          <button class="lb-jump-go-btn" onclick="window.jumpToLeaderboardPage()">Đi</button>
+        </div>
+      </div>
+    `;
+  }
+};
+
+window.changeLeaderboardPage = function (page) {
+  window.renderRankLeaderboardPage(page);
+};
+
+window.jumpToLeaderboardPage = function () {
+  const input = document.getElementById('lb-jump-page-input');
+  if (!input) return;
+  const pageNum = parseInt(input.value, 10);
+  if (!isNaN(pageNum)) {
+    window.renderRankLeaderboardPage(pageNum);
+  }
+};
+
+window.jumpToMyRank = function (rank) {
+  if (!rank || !rankLeaderboardAllData.length) return;
+  const targetPage = Math.ceil(rank / RANK_PAGE_SIZE);
+  window.renderRankLeaderboardPage(targetPage, rank);
+};
+
 window.loadRankPageData = function () {
   const container = document.getElementById('leaderboard-list-container');
   if (!container) return;
@@ -15861,98 +16170,19 @@ window.loadRankPageData = function () {
   fetch(`${API_BASE_URL}/api/leaderboard`)
     .then(res => res.json())
     .then(data => {
-      if (!container) return;
-
       if (!Array.isArray(data) || data.length === 0) {
-        container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px;">Chưa có học viên nào hoàn thành bài học. Hãy là người đầu tiên lên bục vinh quang!</div>`;
+        rankLeaderboardAllData = [];
+        window.renderRankLeaderboardPage(1);
         return;
       }
-
-      // Find top 3 (Podium) and remaining learners
-      const top1 = data.find(d => d.rank === 1) || data[0];
-      const top2 = data.length > 1 ? (data.find(d => d.rank === 2) || data[1]) : null;
-      const top3 = data.length > 2 ? (data.find(d => d.rank === 3) || data[2]) : null;
-      const remaining = data.filter(d => d !== top1 && d !== top2 && d !== top3);
-
-      function renderAvatar(item, size = 52, borderCol = '#fbbf24') {
-        if (!item) return '';
-        if (item.picture) {
-          return `<img src="${item.picture}" style="width: ${size}px; height: ${size}px; border-radius: 50%; object-fit: cover; border: 3px solid ${borderCol}; box-shadow: 0 0 12px ${borderCol}80;">`;
-        }
-        return `<div style="width: ${size}px; height: ${size}px; border-radius: 50%; background: linear-gradient(135deg, ${borderCol}, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: ${size * 0.4}px; border: 3px solid ${borderCol}; box-shadow: 0 0 12px ${borderCol}80;">${item.name ? item.name.charAt(0).toUpperCase() : '?'}</div>`;
-      }
-
-      // Build Podium Stage HTML (Order: Rank 2 - Rank 1 - Rank 3)
-      let html = `
-        <div class="lb-podium-stage">
-          
-          <!-- Rank 2 Podium (Left) -->
-          <div class="lb-podium-slot rank-2-slot ${!top2 ? 'empty' : ''}">
-            ${top2 ? `
-              <div class="lb-podium-crown">🥈</div>
-              <div class="lb-podium-avatar-wrap">${renderAvatar(top2, 52, '#94a3b8')}</div>
-              <div class="lb-podium-user">${top2.name}</div>
-              <div class="lb-podium-score">${top2.score} Điểm</div>
-            ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
-            <div class="lb-podium-stand p-2">
-              <span class="lb-podium-num">2</span>
-            </div>
-          </div>
-
-          <!-- Rank 1 Podium (Center - Highest) -->
-          <div class="lb-podium-slot rank-1-slot ${!top1 ? 'empty' : ''}">
-            ${top1 ? `
-              <div class="lb-podium-crown gold-crown">👑</div>
-              <div class="lb-podium-avatar-wrap">${renderAvatar(top1, 64, '#fbbf24')}</div>
-              <div class="lb-podium-user gold-user">${top1.name}</div>
-              <div class="lb-podium-score gold-score">${top1.score} Điểm</div>
-            ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
-            <div class="lb-podium-stand p-1">
-              <span class="lb-podium-num">1</span>
-            </div>
-          </div>
-
-          <!-- Rank 3 Podium (Right) -->
-          <div class="lb-podium-slot rank-3-slot ${!top3 ? 'empty' : ''}">
-            ${top3 ? `
-              <div class="lb-podium-crown">🥉</div>
-              <div class="lb-podium-avatar-wrap">${renderAvatar(top3, 48, '#e11d48')}</div>
-              <div class="lb-podium-user">${top3.name}</div>
-              <div class="lb-podium-score">${top3.score} Điểm</div>
-            ` : '<div class="lb-podium-empty-txt">Đang chờ...</div>'}
-            <div class="lb-podium-stand p-3">
-              <span class="lb-podium-num">3</span>
-            </div>
-          </div>
-
-        </div>
-      `;
-
-      // Remaining Learners List Section (Rank 4+)
-      if (remaining.length > 0) {
-        html += `<div class="lb-rest-title">Bảng Xếp Hạng Tiếp Theo</div>`;
-        html += `<div class="lb-rest-list">`;
-        remaining.forEach((item, index) => {
-          const rankNum = item.rank || (index + 4);
-          html += `
-            <div class="leaderboard-item rank-rest">
-              <span class="lb-rank-num">#${rankNum}</span>
-              ${item.picture ? `<img src="${item.picture}" class="lb-row-avatar">` : `<div class="lb-row-avatar-placeholder">${item.name.charAt(0)}</div>`}
-              <div style="flex: 1; min-width: 0;">
-                <div class="lb-user-name">${item.name}</div>
-                <div class="lb-subtext">Chuỗi ngày học: <strong style="color: #f97316;">🔥 ${item.streak || 0} ngày</strong></div>
-              </div>
-              <div style="text-align: right;">
-                <div class="lb-score-val">${item.score} Điểm</div>
-                <div class="lb-subtext">${item.quizCount ? `<span style="color: #38bdf8; font-weight: 700;">${item.quizCount} đề</span> • ` : ''}${item.studyTimeMinutes} phút</div>
-              </div>
-            </div>
-          `;
-        });
-        html += `</div>`;
-      }
-
-      container.innerHTML = html;
+      rankLeaderboardAllData = data;
+      let initialPage = 1;
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const p = parseInt(urlParams.get('page'), 10);
+        if (!isNaN(p) && p >= 1) initialPage = p;
+      } catch (e) {}
+      window.renderRankLeaderboardPage(initialPage);
     })
     .catch(err => {
       console.error("Leaderboard fetch error:", err);

@@ -8136,13 +8136,366 @@ html.dark .rank-theme-btn {
   padding: 32px 16px;
 }
 
+/* ──────── LEADERBOARD STANDALONE & DOCKED PAGINATION FOOTER ──────── */
 .rank-modal-standalone {
   margin: 0 auto;
-  max-width: 720px !important;
+  width: 100%;
+  max-width: 740px !important;
+  height: 88vh;
+  max-height: 860px;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  padding: 24px 24px 0 24px !important;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.rank-modal-standalone .lb-modal-header {
+  flex-shrink: 0;
+  padding-bottom: 8px;
+}
+
+.rank-modal-standalone .lb-body-container {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+  padding-bottom: 12px;
+  scroll-behavior: smooth;
 }
 
 .rank-modal-standalone .lb-close-btn {
   display: none !important;
+}
+
+/* Docked Sticky Pagination Footer */
+.lb-pagination-sticky-footer {
+  flex-shrink: 0;
+  margin: 0 -24px;
+  padding: 12px 20px;
+  border-top: 1.5px solid var(--border-glass, rgba(255, 255, 255, 0.12));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  z-index: 10;
+  border-radius: 0 0 26px 26px;
+}
+
+html.light-mode .lb-pagination-sticky-footer,
+html:not(.dark) .lb-pagination-sticky-footer {
+  background: rgba(248, 250, 252, 0.94) !important;
+  border-top: 1.5px solid #e2e8f0 !important;
+}
+
+html.dark .lb-pagination-sticky-footer {
+  background: rgba(15, 23, 42, 0.90) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Pagination Info (Left) */
+.lb-pagination-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+html.light-mode .lb-pagination-info,
+html:not(.dark) .lb-pagination-info {
+  color: #475569;
+}
+
+html.dark .lb-pagination-info {
+  color: #94a3b8;
+}
+
+.lb-page-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lb-total-badge {
+  font-size: 0.78rem;
+  opacity: 0.85;
+}
+
+/* Navigation Buttons (Center) */
+.lb-pagination-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lb-page-btn {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1.5px solid transparent;
+  outline: none;
+  user-select: none;
+}
+
+html.light-mode .lb-page-btn,
+html:not(.dark) .lb-page-btn {
+  background: #f1f5f9;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+html.light-mode .lb-page-btn:hover:not(:disabled),
+html:not(.dark) .lb-page-btn:hover:not(:disabled) {
+  background: #e2e8f0;
+  color: #2563eb;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+html.dark .lb-page-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+html.dark .lb-page-btn:hover:not(:disabled) {
+  background: rgba(59, 130, 246, 0.2);
+  color: #38bdf8;
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-1px);
+}
+
+.lb-page-btn.active {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35) !important;
+  font-weight: 900 !important;
+}
+
+.lb-page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  transform: none !important;
+}
+
+.lb-page-ellipsis {
+  min-width: 20px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  opacity: 0.55;
+}
+
+/* Quick Jump & My Rank (Right) */
+.lb-pagination-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lb-pagination-quick-jump {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.lb-jump-input {
+  width: 48px;
+  height: 32px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  font-family: inherit;
+  border: 1.5px solid var(--border-glass, #cbd5e1);
+  background: var(--bg-secondary, rgba(255, 255, 255, 0.1));
+  color: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+  -moz-appearance: textfield;
+}
+
+.lb-jump-input::-webkit-outer-spin-button,
+.lb-jump-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.lb-jump-input:focus {
+  border-color: #3b82f6;
+}
+
+.lb-jump-go-btn {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: none;
+  background: #3b82f6;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lb-jump-go-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.lb-my-rank-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 16px;
+  border: 1.5px solid #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  font-weight: 800;
+  font-size: 0.78rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.lb-my-rank-btn:hover {
+  background: #f59e0b;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+/* Page 2+ Subheader / Banner */
+.lb-page-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+html.light-mode .lb-page-banner,
+html:not(.dark) .lb-page-banner {
+  background: #eff6ff;
+  border: 1.5px solid #bfdbfe;
+  color: #1d4ed8;
+}
+
+html.dark .lb-page-banner {
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #38bdf8;
+}
+
+.lb-page-banner-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.lb-top3-shortcut-btn {
+  padding: 6px 14px;
+  border-radius: 18px;
+  border: 1.5px solid #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.lb-top3-shortcut-btn:hover {
+  background: #f59e0b;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Target Row Highlight Effect */
+.lb-row-highlight {
+  position: relative;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px #3b82f6, 0 8px 24px rgba(59, 130, 246, 0.35) !important;
+  animation: lbPulseHighlight 2.5s ease-in-out;
+}
+
+@keyframes lbPulseHighlight {
+  0%, 100% {
+    transform: scale(1);
+  }
+  30%, 70% {
+    transform: scale(1.02);
+  }
+}
+
+/* Mobile Responsiveness for Pagination */
+@media (max-width: 640px) {
+  .rank-main-wrapper {
+    padding: 10px 8px;
+  }
+  .rank-modal-standalone {
+    height: calc(100vh - 78px);
+    max-height: none;
+    padding: 16px 14px 0 14px !important;
+    border-radius: 20px !important;
+  }
+  .lb-pagination-sticky-footer {
+    margin: 0 -14px;
+    padding: 10px 10px;
+    gap: 8px;
+    justify-content: center;
+    border-radius: 0 0 20px 20px;
+  }
+  .lb-pagination-quick-jump {
+    display: none;
+  }
+  .lb-page-btn {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 6px;
+    font-size: 0.78rem;
+    border-radius: 8px;
+  }
+  .lb-pagination-info {
+    font-size: 0.76rem;
+    width: 100%;
+    justify-content: center;
+  }
+  .lb-pagination-nav {
+    gap: 4px;
+  }
+  .lb-page-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 }
 
 /* ─── LIGHT MODE EXTENDED: Game History modal ─── */
