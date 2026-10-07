@@ -6156,6 +6156,16 @@ window.showLearningFlashcard = function (index) {
         <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
           <div id="roadmap-tianzige-container"></div>
 
+          <!-- Buttons: Phát lại nét + Tự viết -->
+          <div style="display: flex; gap: 8px; width: 100%; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.animateRoadmapStroke()" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 12px; gap: 6px; display: flex; align-items: center; white-space: nowrap;">
+              <i class="fa-solid fa-rotate-right"></i> Phát lại nét
+            </button>
+            <button type="button" class="btn btn-sm" onclick="window.openLessonWritingModal('${hz.replace(/'/g, "\\'")}', '${py.replace(/'/g, "\\'")}', '${mn.replace(/'/g, "\\'")}')" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 14px; gap: 6px; display: flex; align-items: center; background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; border: none; cursor: pointer; box-shadow: 0 3px 10px rgba(245, 158, 11, 0.35); white-space: nowrap; transition: transform 0.15s, box-shadow 0.15s;" onmouseenter="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 5px 14px rgba(245, 158, 11, 0.45)';" onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(245, 158, 11, 0.35)';">
+              <i class="fa-solid fa-pencil"></i> Tự viết
+            </button>
+          </div>
+
           <!-- Từ loại badge -->
           <div style="background: rgba(37, 99, 235, 0.12); color: #2563eb; border: 1.5px solid rgba(37, 99, 235, 0.3); font-weight: 700; font-size: 0.9rem; padding: 4px 18px; border-radius: 99px; text-align: center; letter-spacing: 0.5px;">
             ${pos}
@@ -9042,9 +9052,14 @@ function renderLessonHeroCardContent(w, index, total) {
           <div id="lesson-hanzi-writer-box" style="width: 150px; height: 150px; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.18); border-radius: 18px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.2);">
             <div style="font-size: 4rem; font-weight: 800; font-family: var(--font-display); color: var(--text-primary);">${char}</div>
           </div>
-          <button id="lesson-replay-stroke-btn" class="btn btn-sm btn-outline-primary" onclick="window.replayLessonHanziStrokes()" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 14px; gap: 6px; display: flex; align-items: center;">
-            <i class="fa-solid fa-rotate-right"></i> Phát lại nét
-          </button>
+          <div style="display: flex; gap: 8px; width: 100%; justify-content: center; flex-wrap: wrap;">
+            <button id="lesson-replay-stroke-btn" type="button" class="btn btn-sm btn-outline-primary" onclick="window.replayLessonHanziStrokes()" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 12px; gap: 6px; display: flex; align-items: center; white-space: nowrap;">
+              <i class="fa-solid fa-rotate-right"></i> Phát lại nét
+            </button>
+            <button id="lesson-practice-stroke-btn" type="button" class="btn btn-sm" onclick="window.openLessonWritingModal('${char.replace(/'/g, "\\'")}', '${pinyin.replace(/'/g, "\\'")}', '${meaning.replace(/'/g, "\\'")}')" style="border-radius: 10px; font-size: 0.82rem; font-weight: 700; padding: 6px 14px; gap: 6px; display: flex; align-items: center; background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; border: none; cursor: pointer; box-shadow: 0 3px 10px rgba(245, 158, 11, 0.35); white-space: nowrap; transition: transform 0.15s, box-shadow 0.15s;" onmouseenter="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 5px 14px rgba(245, 158, 11, 0.45)';" onmouseleave="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(245, 158, 11, 0.35)';">
+              <i class="fa-solid fa-pencil"></i> Tự viết
+            </button>
+          </div>
           <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 2px;">
             <button class="stage-mini-nav-btn" onclick="window.navigateLessonFlashcard(-1)" title="Thẻ trước (←)" style="width: 32px; height: 32px; border-radius: 50%; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #60a5fa; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.2s;" onmouseenter="this.style.background='rgba(59,130,246,0.4)'; this.style.transform='scale(1.08)';" onmouseleave="this.style.background='rgba(59,130,246,0.2)'; this.style.transform='scale(1)';">
               <i class="fa-solid fa-chevron-left"></i>
@@ -10131,6 +10146,312 @@ window.replayLessonHanziStrokes = function () {
 };
 
 window.switchCardVisualTab = function (tab) {};
+
+// ===== ROADMAP VOCABULARY WRITING MODAL (TỰ TẬP VIẾT CHỮ HÁN) =====
+let roadmapWritingInstance = null;
+let roadmapWritingWordStr = '';
+let roadmapWritingCurrentChar = '';
+let roadmapWritingOutline = true;
+
+function updateRoadmapWritingStatus(htmlText) {
+  const el = document.getElementById('roadmap-writing-status-banner');
+  if (el) el.innerHTML = htmlText;
+}
+
+window.openLessonWritingModal = function (wordStr, pinyinStr = '', meaningStr = '') {
+  if (!wordStr) return;
+  const modal = document.getElementById('roadmap-writing-modal');
+  if (!modal) return;
+
+  roadmapWritingWordStr = wordStr;
+  roadmapWritingOutline = true;
+
+  // Set modal header texts
+  const wordEl = document.getElementById('roadmap-writing-word');
+  const pinyinEl = document.getElementById('roadmap-writing-pinyin');
+  const meaningEl = document.getElementById('roadmap-writing-meaning');
+  if (wordEl) wordEl.textContent = wordStr;
+  if (pinyinEl) pinyinEl.textContent = pinyinStr || '';
+  if (meaningEl) meaningEl.textContent = meaningStr || '';
+
+  // Extract Chinese characters
+  const chineseChars = Array.from(wordStr).filter(c => /[\u4e00-\u9fa5]/.test(c));
+  if (chineseChars.length === 0) {
+    chineseChars.push(wordStr.charAt(0));
+  }
+
+  // Build character selector tabs
+  const tabsContainer = document.getElementById('roadmap-char-tabs-container');
+  if (tabsContainer) {
+    tabsContainer.innerHTML = '';
+    chineseChars.forEach((ch, idx) => {
+      const tabBtn = document.createElement('button');
+      tabBtn.type = 'button';
+      tabBtn.className = 'roadmap-char-tab-btn';
+      tabBtn.id = `roadmap-char-tab-${idx}`;
+      tabBtn.dataset.char = ch;
+      tabBtn.textContent = ch;
+      tabBtn.style.cssText = `
+        padding: 6px 16px;
+        border-radius: 10px;
+        font-size: 1.25rem;
+        font-weight: 800;
+        font-family: var(--font-chinese, serif);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: ${idx === 0 ? '#3b82f6' : 'rgba(255, 255, 255, 0.08)'};
+        color: ${idx === 0 ? '#ffffff' : '#cbd5e1'};
+        border: 1.5px solid ${idx === 0 ? '#60a5fa' : 'rgba(255, 255, 255, 0.15)'};
+        box-shadow: ${idx === 0 ? '0 4px 12px rgba(59, 130, 246, 0.4)' : 'none'};
+      `;
+      tabBtn.onclick = () => window.roadmapSelectCharToDraw(ch, idx);
+      tabsContainer.appendChild(tabBtn);
+    });
+  }
+
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  // Render stroke sequence breakdown for all characters
+  renderRoadmapStrokeSequence(chineseChars);
+
+  // Initialize writer for first character
+  window.roadmapSelectCharToDraw(chineseChars[0], 0);
+};
+
+window.closeLessonWritingModal = function () {
+  const modal = document.getElementById('roadmap-writing-modal');
+  if (modal) modal.style.display = 'none';
+  document.body.style.overflow = '';
+  if (roadmapWritingInstance) {
+    try {
+      roadmapWritingInstance.cancelQuiz();
+    } catch (e) { }
+  }
+};
+
+window.roadmapSelectCharToDraw = function (char, activeIdx = 0) {
+  roadmapWritingCurrentChar = char;
+
+  // Highlight active tab
+  const tabs = document.querySelectorAll('.roadmap-char-tab-btn');
+  tabs.forEach((tab, i) => {
+    const isCur = tab.dataset.char === char || i === activeIdx;
+    tab.style.background = isCur ? '#3b82f6' : 'rgba(255, 255, 255, 0.08)';
+    tab.style.color = isCur ? '#ffffff' : '#cbd5e1';
+    tab.style.borderColor = isCur ? '#60a5fa' : 'rgba(255, 255, 255, 0.15)';
+    tab.style.boxShadow = isCur ? '0 4px 12px rgba(59, 130, 246, 0.4)' : 'none';
+  });
+
+  const targetBox = document.getElementById('roadmap-hanzi-target-box');
+  if (!targetBox) return;
+  targetBox.innerHTML = '';
+
+  const strokeInfo = document.getElementById('roadmap-char-stroke-info');
+
+  if (typeof HanziWriter === 'undefined') {
+    targetBox.innerHTML = `<span style="font-size: 5rem; font-weight: 800; color: #0f172a;">${char}</span>`;
+    return;
+  }
+
+  // Update stroke count info
+  HanziWriter.loadCharacterData(char).then(data => {
+    if (strokeInfo && data && data.strokes) {
+      strokeInfo.textContent = `Chữ "${char}": ${data.strokes.length} nét`;
+    }
+  }).catch(() => {
+    if (strokeInfo) strokeInfo.textContent = `Chữ "${char}"`;
+  });
+
+  try {
+    roadmapWritingInstance = HanziWriter.create('roadmap-hanzi-target-box', char, {
+      width: 236,
+      height: 236,
+      padding: 8,
+      showOutline: roadmapWritingOutline,
+      strokeColor: '#0f172a',
+      outlineColor: 'rgba(15, 23, 42, 0.18)',
+      drawingColor: '#2563eb',
+      radicalColor: '#d97706',
+      showHintAfterMisses: 1,
+      highlightOnComplete: true,
+      drawingWidth: 16
+    });
+
+    // Automatically start quiz mode so user can immediately write
+    setTimeout(() => {
+      window.roadmapStartWritingQuiz();
+    }, 120);
+  } catch (err) {
+    console.error('Error creating HanziWriter in modal:', err);
+    targetBox.innerHTML = `<span style="font-size: 5rem; font-weight: 800; color: #0f172a;">${char}</span>`;
+  }
+};
+
+window.roadmapAnimateStrokes = function () {
+  if (!roadmapWritingInstance) return;
+  try {
+    roadmapWritingInstance.cancelQuiz();
+    roadmapWritingInstance.showCharacter();
+    updateRoadmapWritingStatus(`<i class="fa-solid fa-spinner fa-spin" style="color:#60a5fa;"></i> Đang vẽ chữ <strong>"${roadmapWritingCurrentChar}"</strong> từ đầu đến cuối...`);
+    roadmapWritingInstance.animateCharacter({
+      onComplete: function () {
+        updateRoadmapWritingStatus(`<i class="fa-solid fa-check" style="color:#10b981;"></i> Đã vẽ xong chữ <strong>"${roadmapWritingCurrentChar}"</strong>! Bấm <strong>"Tự tập viết"</strong> để tự vẽ.`);
+      }
+    });
+  } catch (e) { }
+};
+
+window.roadmapStartWritingQuiz = function () {
+  if (!roadmapWritingInstance) return;
+  try {
+    roadmapWritingInstance.cancelQuiz();
+    roadmapWritingInstance.hideCharacter();
+    if (roadmapWritingOutline) {
+      roadmapWritingInstance.showOutline();
+    }
+    updateRoadmapWritingStatus(`<i class="fa-solid fa-pen-nib" style="color:#f59e0b;"></i> Chế độ tập viết: Hãy vẽ từng nét chữ <strong>"${roadmapWritingCurrentChar}"</strong> trực tiếp lên ô Mễ Tự Cách!`);
+    roadmapWritingInstance.quiz({
+      onCorrectStroke: function (strokeData) {
+        updateRoadmapWritingStatus(`<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> Vẽ đúng nét rồi! Tiếp tục vẽ nét tiếp theo...`);
+      },
+      onMistake: function (strokeData) {
+        updateRoadmapWritingStatus(`<i class="fa-solid fa-circle-xmark" style="color:#ef4444;"></i> Vẽ sai nét hoặc sai thứ tự. Hãy nhìn gợi ý nhấp nháy để vẽ lại!`);
+      },
+      onComplete: function (summaryData) {
+        if (typeof window.speakLessonWord === 'function') {
+          window.speakLessonWord(roadmapWritingCurrentChar);
+        } else if (typeof window.speakText === 'function') {
+          window.speakText(roadmapWritingCurrentChar);
+        }
+        updateRoadmapWritingStatus(`🎉 <strong>XUẤT SẮC!</strong> Bạn đã hoàn thành tự tay viết chữ <strong>"${roadmapWritingCurrentChar}"</strong>!`);
+      }
+    });
+  } catch (e) { }
+};
+
+window.roadmapShowStrokeHint = function () {
+  if (!roadmapWritingInstance) return;
+  try {
+    roadmapWritingInstance.quiz();
+    roadmapWritingInstance.showHint();
+    updateRoadmapWritingStatus(`<i class="fa-solid fa-lightbulb" style="color:#fbbf24;"></i> Đã hiển thị gợi ý nhấp nháy nét bút tiếp theo cho chữ <strong>"${roadmapWritingCurrentChar}"</strong>!`);
+  } catch (e) { }
+};
+
+window.roadmapToggleOutline = function () {
+  if (!roadmapWritingInstance) return;
+  roadmapWritingOutline = !roadmapWritingOutline;
+  try {
+    if (roadmapWritingOutline) {
+      roadmapWritingInstance.showOutline();
+      updateRoadmapWritingStatus(`<i class="fa-solid fa-eye" style="color:#60a5fa;"></i> Đã BẬT nét chữ mờ mẫu.`);
+    } else {
+      roadmapWritingInstance.hideOutline();
+      updateRoadmapWritingStatus(`<i class="fa-solid fa-eye-slash" style="color:#94a3b8;"></i> Đã ẨN nét chữ mờ mẫu.`);
+    }
+  } catch (e) { }
+};
+
+window.roadmapResetWriter = function () {
+  if (!roadmapWritingInstance) return;
+  try {
+    roadmapWritingInstance.cancelQuiz();
+    roadmapWritingInstance.showCharacter();
+    updateRoadmapWritingStatus(`<i class="fa-solid fa-arrow-rotate-right" style="color:#60a5fa;"></i> Đã làm mới bảng vẽ chữ <strong>"${roadmapWritingCurrentChar}"</strong>.`);
+  } catch (e) { }
+};
+
+window.speakLessonWritingWord = function () {
+  const target = roadmapWritingWordStr || roadmapWritingCurrentChar;
+  if (!target) return;
+  if (typeof window.speakLessonWord === 'function') {
+    window.speakLessonWord(target);
+  } else if (typeof window.speakText === 'function') {
+    window.speakText(target);
+  }
+};
+
+function renderRoadmapStrokeSequence(wordChars) {
+  const container = document.getElementById('roadmap-writing-stroke-steps');
+  if (!container || !wordChars || wordChars.length === 0) return;
+
+  container.innerHTML = '<span style="font-size:0.8rem; color:#94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải dãy nét thuận bút...</span>';
+
+  let pending = wordChars.length;
+  const dataMap = {};
+
+  wordChars.forEach(ch => {
+    HanziWriter.loadCharacterData(ch).then(data => {
+      dataMap[ch] = data;
+      pending--;
+      if (pending === 0) renderRoadmapStrokeStepsDOM(wordChars, dataMap, container);
+    }).catch(() => {
+      pending--;
+      if (pending === 0) renderRoadmapStrokeStepsDOM(wordChars, dataMap, container);
+    });
+  });
+}
+
+function renderRoadmapStrokeStepsDOM(wordChars, dataMap, container) {
+  let html = '';
+  const targets = [];
+
+  wordChars.forEach(ch => {
+    const data = dataMap[ch];
+    if (!data || !data.strokes) return;
+    html += `
+      <div style="display: flex; flex-direction: column; gap: 6px; background: rgba(15, 23, 42, 0.6); padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.2);">
+        <div style="font-size: 0.88rem; font-weight: 700; color: #38bdf8;">
+          Chữ <span style="font-family: var(--font-chinese, serif); font-size: 1.15em; font-weight: 800;">"${ch}"</span> (${data.strokes.length} nét):
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+    `;
+    data.strokes.forEach((_, idx) => {
+      const stepNum = idx + 1;
+      const tid = `rm-stroke-step-${Math.random().toString(36).substring(2, 9)}`;
+      targets.push({ id: tid, char: ch, stepNum });
+      html += `
+        <div style="display: inline-flex; flex-direction: column; align-items: center; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 3px;">
+          <div id="${tid}" style="width: 36px; height: 36px;"></div>
+          <span style="font-size: 0.62rem; color: #64748b; font-weight: 700; margin-top: 1px;">Nét ${stepNum}</span>
+        </div>
+      `;
+    });
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html || '<span style="font-size: 0.8rem; color: #94a3b8;">Không tải được dãy nét thuận bút.</span>';
+
+  setTimeout(() => {
+    targets.forEach(item => {
+      const el = document.getElementById(item.id);
+      if (el && typeof HanziWriter !== 'undefined') {
+        try {
+          const w = HanziWriter.create(item.id, item.char, {
+            width: 36,
+            height: 36,
+            padding: 2,
+            showOutline: true,
+            strokeColor: '#0f172a',
+            outlineColor: '#cbd5e1',
+            showCharacter: false
+          });
+          w.showCharacter({ strokeNum: item.stepNum });
+        } catch (e) { }
+      }
+    });
+  }, 50);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('roadmap-writing-modal');
+    if (modal && modal.style.display !== 'none') {
+      window.closeLessonWritingModal();
+    }
+  }
+});
 
 function startLessonStudy(lesson, sliceWords) {
   if (!currentUser) {
