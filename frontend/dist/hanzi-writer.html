@@ -2015,22 +2015,46 @@
 
     function renderStrokeStepsDOM(wordChars, charDataMap, stepsContainer) {
       let html = '';
-      const targets = [];
 
       wordChars.forEach(ch => {
         const data = charDataMap[ch];
         if (!data || !data.strokes) return;
         html += `<div style="display:flex; flex-direction:column; gap:6px; background:rgba(15,23,42,0.6); padding:10px 14px; border-radius:12px; border:1px solid rgba(56,189,248,0.25); margin-bottom:8px;">`;
-        html += `<div class="stroke-char-header" style="font-size:0.95rem; font-weight:bold; color:#38bdf8; font-family: var(--font-sans) !important;">Chữ <span style="font-family: var(--font-chinese) !important; font-size:1.2em;">"${ch}"</span> (${data.strokes.length} nét):</div>`;
+        html += `<div class="stroke-char-header" style="font-size:0.95rem; font-weight:bold; color:#38bdf8; font-family: var(--font-sans) !important; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+          <span>Chữ <span style="font-family: var(--font-chinese) !important; font-size:1.2em; color:#fff;">"${ch}"</span> (${data.strokes.length} nét):</span>
+          <span style="font-size:0.72rem; color:#94a3b8; font-weight:normal;">(Nét đỏ: nét đang vẽ ở bước này)</span>
+        </div>`;
         html += `<div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">`;
         data.strokes.forEach((_, idx) => {
           const stepNum = idx + 1;
-          const tid = `pgstep-${Math.random().toString(36).substring(2, 9)}`;
-          targets.push({ id: tid, char: ch, stepNum: stepNum });
+          let paths = '';
+          // 1. Ghost outline of entire character in faint gray
+          data.strokes.forEach(s => {
+            paths += `<path d="${s}" fill="#e2e8f0" opacity="0.85" />`;
+          });
+          // 2. Previously drawn strokes in dark black
+          for (let j = 0; j < idx; j++) {
+            paths += `<path d="${data.strokes[j]}" fill="#0f172a" />`;
+          }
+          // 3. Current newly drawn stroke in bold red
+          paths += `<path d="${data.strokes[idx]}" fill="#dc2626" />`;
+
           html += `
-            <div style="display:inline-flex; flex-direction:column; align-items:center; background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:4px;">
-              <div id="${tid}" style="width:40px; height:40px;"></div>
-              <span style="font-size:0.65rem; color:#64748b; font-weight:700; margin-top:2px;">Nét ${stepNum}</span>
+            <div style="display:inline-flex; flex-direction:column; align-items:center; background:#ffffff; border:1.5px solid #cbd5e1; border-radius:8px; padding:4px 6px; box-shadow:0 2px 6px rgba(0,0,0,0.12); cursor:pointer; transition:transform 0.15s, border-color 0.15s;" onmouseenter="this.style.transform='translateY(-2px)'; this.style.borderColor='#38bdf8';" onmouseleave="this.style.transform='none'; this.style.borderColor='#cbd5e1';" title="Nét ${stepNum} của chữ ${ch}">
+              <div style="width:44px; height:44px; position:relative; display:flex; align-items:center; justify-content:center;">
+                <svg viewBox="0 0 100 100" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
+                  <line x1="0" y1="0" x2="100" y2="100" stroke="rgba(220, 38, 38, 0.18)" stroke-width="1" stroke-dasharray="2 2" />
+                  <line x1="100" y1="0" x2="0" y2="100" stroke="rgba(220, 38, 38, 0.18)" stroke-width="1" stroke-dasharray="2 2" />
+                  <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(220, 38, 38, 0.22)" stroke-width="1" stroke-dasharray="3 3" />
+                  <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(220, 38, 38, 0.22)" stroke-width="1" stroke-dasharray="3 3" />
+                </svg>
+                <svg viewBox="0 0 1024 1024" style="width:100%; height:100%; position:relative; z-index:2;">
+                  <g transform="translate(0, 900) scale(1, -1)">
+                    ${paths}
+                  </g>
+                </svg>
+              </div>
+              <span style="font-size:0.68rem; color:#475569; font-weight:800; margin-top:3px;">Nét ${stepNum}</span>
             </div>
           `;
         });
@@ -2038,26 +2062,6 @@
       });
 
       stepsContainer.innerHTML = html || '<span style="font-size:0.85rem; color:#94a3b8;">Không tải được dãy nét thuận bút.</span>';
-
-      setTimeout(() => {
-        targets.forEach(item => {
-          const el = document.getElementById(item.id);
-          if (el && typeof HanziWriter !== 'undefined') {
-            try {
-              const w = HanziWriter.create(item.id, item.char, {
-                width: 40,
-                height: 40,
-                padding: 3,
-                showOutline: true,
-                strokeColor: '#0f172a',
-                outlineColor: '#cbd5e1',
-                showCharacter: false
-              });
-              w.showCharacter({ strokeNum: item.stepNum });
-            } catch (e) {}
-          }
-        });
-      }, 50);
     }
 
     window.animateStrokes = function () {
