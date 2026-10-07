@@ -414,8 +414,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   const isMainAppPage = !pathname.includes('.html') || pathname.endsWith('index.html') || pathname === '/';
 
   if (isMainAppPage) {
-    await fetchVocabulary();
-    renderGamifiedRoadmapPath();
+    try {
+      await fetchVocabulary();
+    } catch (err) {
+      console.warn('fetchVocabulary failed:', err);
+    }
+    try {
+      renderGamifiedRoadmapPath();
+    } catch (err) {
+      console.warn('renderGamifiedRoadmapPath failed:', err);
+    }
     setupEventListeners();
     initExams();
     initLessonsView();
@@ -3372,12 +3380,15 @@ function setupEventListeners() {
 
   // User Profile Dropdown Toggle on Click
   window.toggleUserDropdown = function (e) {
-    if (e) {
-      if (e._toggleUserDropdownHandled) return;
-      e._toggleUserDropdownHandled = true;
-      e.stopPropagation();
+    if (typeof window.toggleGlobalUserDropdown === 'function') {
+      return window.toggleGlobalUserDropdown(e);
     }
-    const dropdown = document.querySelector('.user-dropdown');
+    if (e) {
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+    }
+    const trigger = (e && (e.currentTarget || e.target)) ? (e.currentTarget || e.target) : null;
+    const dropdown = trigger ? trigger.closest('.user-dropdown') : (document.querySelector('.app-sidebar .user-dropdown') || document.querySelector('.user-dropdown'));
     if (dropdown) {
       dropdown.classList.toggle('show-menu');
     }
@@ -3391,9 +3402,8 @@ function setupEventListeners() {
 
   // Close dropdown when clicking outside
   document.addEventListener('click', (e) => {
-    const activeDropdown = document.querySelector('.user-dropdown.show-menu');
-    if (activeDropdown && !activeDropdown.contains(e.target)) {
-      activeDropdown.classList.remove('show-menu');
+    if (!e.target.closest('.user-dropdown')) {
+      document.querySelectorAll('.user-dropdown.show-menu').forEach(d => d.classList.remove('show-menu'));
     }
   });
 

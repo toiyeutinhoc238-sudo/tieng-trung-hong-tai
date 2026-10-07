@@ -221,12 +221,12 @@
     };
   </script>
   <script type="module" crossorigin src="/assets/vendor-BfYXEYrK.js"></script>
-  <script type="module" crossorigin src="/assets/global_sidebar-CPjnwZ7C.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-CX6hXSeg.js"></script>
   <script type="module" crossorigin src="/assets/hsk-grammar-data-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/games-data-CBh3wN3X.js"></script>
   <script type="module" crossorigin src="/assets/vendor-pinyin-haNF1LmB.js"></script>
-  <script type="module" crossorigin src="/assets/main-BYKRQ44E.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-B4TdueKr.css">
+  <script type="module" crossorigin src="/assets/main-Bhwky7uK.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/global_sidebar-OCy83h-e.css">
 </head>
 
 <body>
@@ -290,7 +290,7 @@
       <!-- Logged in state elements -->
       <div class="logged-in-view user-dropdown" style="width: 100%; position: relative;">
         <!-- Profile card (click to open dropdown) -->
-        <div class="user-profile sidebar-profile-card">
+        <div class="user-profile sidebar-profile-card" onclick="window.toggleGlobalUserDropdown && window.toggleGlobalUserDropdown(event)" style="cursor: pointer;">
           <div class="sidebar-avatar-wrap">
             <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none;">
             <div id="user-avatar-placeholder" class="user-avatar sidebar-avatar-placeholder"><i
@@ -301,7 +301,7 @@
             <span class="user-sub" id="user-display-email">phanphiphu04@gmail.com</span>
             <span class="user-role-badge" id="user-display-role"><i class="fa-solid fa-crown"></i> Super Admin</span>
           </div>
-          <i class="fa-solid fa-chevron-down profile-chevron"></i>
+          <i class="fa-solid fa-chevron-down profile-chevron" onclick="window.toggleGlobalUserDropdown && window.toggleGlobalUserDropdown(event)" style="cursor: pointer;"></i>
         </div>
         <ul class="profile-dropdown-menu">
           <li>
@@ -316,7 +316,7 @@
           </li>
           <li>
             <a href="javascript:void(0)" id="logout-btn" class="logout-link"
-              onclick="window.handleLogout && window.handleLogout(event)">
+              onclick="(window.handleLogout ? window.handleLogout(event) : (window.handleGlobalLogout && window.handleGlobalLogout(event)))">
               <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
             </a>
           </li>

@@ -582,14 +582,16 @@ body.light-mode .profile-dropdown-menu,
 }
 
 .user-dropdown.show-menu .profile-dropdown-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  pointer-events: auto;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+  z-index: 10000 !important;
 }
 
 .user-dropdown.show-menu .profile-chevron {
-  transform: rotate(180deg);
+  transform: rotate(180deg) !important;
 }
 
 .profile-dropdown-menu li a {

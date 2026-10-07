@@ -335,6 +335,52 @@ import './quick_dict_widget.js';
         pointer-events: none;
         animation: globalAuthFadeIn 0.25s ease forwards;
       }
+
+      /* Universal User Profile Dropdown Styling */
+      .user-dropdown {
+        position: relative !important;
+      }
+      .profile-dropdown-menu {
+        position: absolute !important;
+        top: calc(100% + 6px) !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        background: #1e293b !important;
+        background-color: rgba(30, 41, 59, 0.98) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6) !important;
+        padding: 8px 6px !important;
+        list-style: none !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(8px);
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+        z-index: 99999 !important;
+      }
+      .user-dropdown.show-menu .profile-dropdown-menu {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: translateY(0) !important;
+        pointer-events: auto !important;
+      }
+      .user-dropdown.show-menu .profile-chevron {
+        transform: rotate(180deg) !important;
+      }
+      .sidebar-profile-card {
+        cursor: pointer !important;
+        user-select: none !important;
+      }
+      .sidebar-profile-card * {
+        pointer-events: auto !important;
+      }
     `;
     document.head.appendChild(style);
   }
@@ -655,13 +701,29 @@ import './quick_dict_widget.js';
 
   // Global VIP Verification Helper
   function isUserVip() {
-    const user = getSavedUser();
-    if (!user) return false;
-    if (user.role === 'super_admin' || user.isSuperAdmin) return true;
-    if (user.role === 'teacher' || (user.email && (user.email.includes('hongtai') || user.email.includes('teacher')))) return true;
-    if (user.role === 'admin' || user.isAdmin) return true;
-    if (user.isVip || user.vipStatus === 'vip') return true;
-    return false;
+    try {
+      const user = (typeof getCurrentUser === 'function') ? getCurrentUser() : null;
+      if (!user) return false;
+      const email = (user.email || '').toLowerCase().trim();
+      if (!email || email === 'guest' || email.startsWith('guest')) return false;
+      if (typeof isUserAdmin === 'function' && isUserAdmin(email)) return true;
+      if (user.role === 'super_admin' || user.role === 'superadmin' || user.isSuperAdmin) return true;
+      if (user.role === 'teacher' || email.includes('hongtai') || email.includes('teacher')) return true;
+      if (user.role === 'admin' || user.isAdmin) return true;
+      if (user.isVip === true || user.vipStatus === 'vip') {
+        if (user.vipExpiresAt) {
+          const exp = new Date(user.vipExpiresAt).getTime();
+          if (!isNaN(exp) && exp < Date.now()) return false;
+        }
+        return true;
+      }
+      if (localStorage.getItem(`vip_trial_${email}`) === 'true' || localStorage.getItem('vip_trial_claimed') === 'true') {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
   }
   window.isUserVip = isUserVip;
 
@@ -1389,10 +1451,11 @@ import './quick_dict_widget.js';
   // User Dropdown Handlers
   window.toggleGlobalUserDropdown = function (e) {
     if (e) {
-      e.stopPropagation();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
       if (typeof e.preventDefault === 'function') e.preventDefault();
     }
-    const currentDropdown = (e && e.target) ? e.target.closest('.user-dropdown') : null;
+    const trigger = (e && (e.currentTarget || e.target)) ? (e.currentTarget || e.target) : null;
+    const currentDropdown = trigger ? trigger.closest('.user-dropdown') : (document.querySelector('.app-sidebar .user-dropdown') || document.querySelector('.user-dropdown'));
     if (currentDropdown) {
       currentDropdown.classList.toggle('show-menu');
     } else {
@@ -1446,11 +1509,36 @@ import './quick_dict_widget.js';
     }
   });
 
+  // Universal delegated click listener on document (capture phase for 100% reliability)
   document.addEventListener('click', function (e) {
+    // 1. If clicking profile card or chevron trigger -> toggle menu
+    const trigger = e.target.closest('.sidebar-profile-card, .user-profile, .profile-chevron');
+    if (trigger) {
+      e.preventDefault();
+      e.stopPropagation();
+      const dd = trigger.closest('.user-dropdown') || document.querySelector('.user-dropdown');
+      if (dd) {
+        dd.classList.toggle('show-menu');
+      }
+      return;
+    }
+
+    // 2. If clicking inside dropdown menu
+    if (e.target.closest('.profile-dropdown-menu')) {
+      const link = e.target.closest('a');
+      if (link) {
+        setTimeout(() => {
+          document.querySelectorAll('.user-dropdown.show-menu').forEach(d => d.classList.remove('show-menu'));
+        }, 120);
+      }
+      return;
+    }
+
+    // 3. If clicking outside dropdown -> close all open dropdowns
     if (!e.target.closest('.user-dropdown')) {
       document.querySelectorAll('.user-dropdown.show-menu').forEach(d => d.classList.remove('show-menu'));
     }
-  });
+  }, true);
 
   // ============================================================
   // ANNOUNCEMENT TICKER: DYNAMIC RANDOM RUNNER & FEATURE SHOWCASE
