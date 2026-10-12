@@ -15,6 +15,7 @@
   let activeSearchQuery = '';
   let searchDebounceTimer = null;
   let dockSide = localStorage.getItem('hongtai_quick_dict_dock') || 'right';
+  let toggleDictFn = null;
 
   // Load search history
   function getSearchHistory() {
@@ -157,29 +158,54 @@
 
     /* Dictionary Panel Modal */
     .quick-dict-panel {
-      position: absolute;
-      bottom: 66px;
-      right: 0;
-      width: 390px;
+      position: fixed;
+      bottom: 84px;
+      right: 24px;
+      width: 410px;
       max-width: calc(100vw - 32px);
-      max-height: 580px;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      max-height: min(600px, calc(100vh - 96px));
+      max-height: min(600px, calc(100dvh - 96px));
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 20px;
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55), 0 0 35px rgba(13, 148, 136, 0.22);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      animation: dictFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 100000;
+      animation: dictFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100001;
       color: #f8fafc;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .quick-dict-widget.dock-left .quick-dict-panel {
-      right: auto;
-      left: 0;
+      right: auto !important;
+      left: 24px !important;
+    }
+
+    @media (max-width: 600px) {
+      .quick-dict-panel {
+        right: 12px !important;
+        left: 12px !important;
+        width: calc(100vw - 24px) !important;
+        max-width: calc(100vw - 24px) !important;
+        bottom: 74px !important;
+        max-height: calc(100dvh - 84px) !important;
+        border-radius: 16px !important;
+      }
+      .quick-dict-widget.dock-left .quick-dict-panel {
+        left: 12px !important;
+        right: 12px !important;
+      }
+    }
+
+    @media (max-height: 700px) {
+      .quick-dict-panel {
+        bottom: 70px !important;
+        max-height: calc(100vh - 80px) !important;
+      }
     }
 
     @keyframes dictFadeIn {
@@ -195,12 +221,19 @@
 
     /* Panel Header */
     .quick-dict-header {
-      padding: 14px 16px;
-      background: linear-gradient(135deg, rgba(13, 148, 136, 0.3) 0%, rgba(2, 132, 199, 0.2) 100%);
+      padding: 12px 16px;
+      background: linear-gradient(135deg, rgba(13, 148, 136, 0.35) 0%, rgba(2, 132, 199, 0.25) 100%);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-shrink: 0;
+      user-select: none;
+      cursor: grab;
+    }
+
+    .quick-dict-header:active {
+      cursor: grabbing;
     }
 
     .quick-dict-title-wrap {
@@ -266,8 +299,9 @@
     /* Search Box */
     .quick-dict-search-wrap {
       padding: 12px 16px;
-      background: rgba(0, 0, 0, 0.2);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(0, 0, 0, 0.25);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
     }
 
     .quick-dict-input-container {
@@ -355,12 +389,14 @@
 
     /* Body / Content Area */
     .quick-dict-body {
-      padding: 16px;
+      padding: 14px 16px;
       overflow-y: auto;
-      flex: 1;
+      flex: 1 1 auto;
+      min-height: 0;
       display: flex;
       flex-direction: column;
       gap: 12px;
+      overscroll-behavior: contain;
     }
 
     /* Default Empty State */
@@ -546,16 +582,19 @@
       display: flex;
       gap: 8px;
       margin-top: 4px;
+      flex-wrap: wrap;
     }
 
     .quick-dict-link-btn {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      flex: 1 1 calc(50% - 6px);
+      min-width: 120px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 10px;
-      padding: 7px 10px;
+      padding: 8px 10px;
       color: #cbd5e1;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -563,12 +602,26 @@
       gap: 6px;
       text-decoration: none;
       transition: all 0.2s ease;
+      box-sizing: border-box;
     }
 
     .quick-dict-link-btn:hover {
       background: rgba(16, 185, 129, 0.2);
       border-color: #10b981;
       color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .quick-dict-btn-highlight {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(2, 132, 199, 0.25) 100%) !important;
+      border: 1.5px solid #10b981 !important;
+      color: #34d399 !important;
+      font-weight: 700 !important;
+    }
+
+    .quick-dict-btn-highlight:hover {
+      background: linear-gradient(135deg, #059669 0%, #0284c7 100%) !important;
+      color: #ffffff !important;
     }
 
     /* Floating highlight mini tooltip */
@@ -618,7 +671,7 @@
     /* Light Mode Overrides */
     html.light-mode .quick-dict-panel,
     body.light-mode .quick-dict-panel {
-      background: rgba(255, 255, 255, 0.96) !important;
+      background: #ffffff !important;
       border-color: rgba(0, 0, 0, 0.12) !important;
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15), 0 0 35px rgba(13, 148, 136, 0.15) !important;
       color: #0f172a !important;
@@ -627,6 +680,7 @@
     html.light-mode .quick-dict-header,
     body.light-mode .quick-dict-header {
       background: linear-gradient(135deg, rgba(13, 148, 136, 0.15) 0%, rgba(2, 132, 199, 0.1) 100%) !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
     }
 
     html.light-mode .quick-dict-name,
@@ -634,17 +688,63 @@
       color: #0f172a !important;
     }
 
+    html.light-mode .quick-dict-sub,
+    body.light-mode .quick-dict-sub {
+      color: #059669 !important;
+      font-weight: 600 !important;
+    }
+
+    html.light-mode .quick-dict-action-btn,
+    body.light-mode .quick-dict-action-btn {
+      background: #f1f5f9 !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #334155 !important;
+    }
+
+    html.light-mode .quick-dict-action-btn:hover,
+    body.light-mode .quick-dict-action-btn:hover {
+      background: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+
+    html.light-mode .quick-dict-search-wrap,
+    body.light-mode .quick-dict-search-wrap {
+      background: #f8fafc !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    }
+
     html.light-mode .quick-dict-input,
     body.light-mode .quick-dict-input {
-      background: #f8fafc !important;
+      background: #ffffff !important;
       color: #0f172a !important;
-      border-color: rgba(13, 148, 136, 0.3) !important;
+      border: 1.5px solid #cbd5e1 !important;
+    }
+
+    html.light-mode .quick-dict-input:focus,
+    body.light-mode .quick-dict-input:focus {
+      border-color: #10b981 !important;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+      background: #ffffff !important;
+    }
+
+    html.light-mode .quick-dict-pill,
+    body.light-mode .quick-dict-pill {
+      background: #f1f5f9 !important;
+      border: 1px solid #cbd5e1 !important;
+      color: #1e293b !important;
+    }
+
+    html.light-mode .quick-dict-pill:hover,
+    body.light-mode .quick-dict-pill:hover {
+      background: #d1fae5 !important;
+      border-color: #10b981 !important;
+      color: #065f46 !important;
     }
 
     html.light-mode .quick-dict-card,
     body.light-mode .quick-dict-card {
-      background: #f1f5f9 !important;
-      border-color: rgba(0, 0, 0, 0.08) !important;
+      background: #f8fafc !important;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
     }
 
     html.light-mode .quick-dict-hanzi,
@@ -652,19 +752,106 @@
       color: #0f172a !important;
     }
 
-    html.light-mode .quick-dict-meaning-text,
-    body.light-mode .quick-dict-meaning-text {
-      color: #1e293b !important;
+    html.light-mode .quick-dict-pinyin,
+    body.light-mode .quick-dict-pinyin {
+      color: #0284c7 !important;
+      font-weight: 700 !important;
+    }
+
+    html.light-mode .quick-dict-pos-badge,
+    body.light-mode .quick-dict-pos-badge {
+      background: #e2e8f0 !important;
+      color: #334155 !important;
+      border: 1px solid #cbd5e1 !important;
+      font-weight: 700 !important;
     }
 
     html.light-mode .quick-dict-meaning-box,
     body.light-mode .quick-dict-meaning-box {
       background: #ffffff !important;
+      border: 1px solid rgba(0, 0, 0, 0.06) !important;
+      border-left: 3.5px solid #10b981 !important;
+    }
+
+    html.light-mode .quick-dict-meaning-label,
+    body.light-mode .quick-dict-meaning-label {
+      color: #059669 !important;
+      font-weight: 800 !important;
+    }
+
+    html.light-mode .quick-dict-meaning-text,
+    body.light-mode .quick-dict-meaning-text {
+      color: #1e293b !important;
+    }
+
+    html.light-mode .quick-dict-example-box,
+    body.light-mode .quick-dict-example-box {
+      background: #f0fdf4 !important;
+      border: 1px dashed #86efac !important;
+    }
+
+    html.light-mode .quick-dict-ex-label,
+    body.light-mode .quick-dict-ex-label {
+      color: #0284c7 !important;
+      font-weight: 800 !important;
     }
 
     html.light-mode .quick-dict-ex-zh,
     body.light-mode .quick-dict-ex-zh {
       color: #0f172a !important;
+      font-weight: 600 !important;
+    }
+
+    html.light-mode .quick-dict-ex-py,
+    body.light-mode .quick-dict-ex-py {
+      color: #64748b !important;
+    }
+
+    html.light-mode .quick-dict-ex-vi,
+    body.light-mode .quick-dict-ex-vi {
+      color: #334155 !important;
+      font-weight: 500 !important;
+      font-style: italic !important;
+    }
+
+    html.light-mode .quick-dict-link-btn,
+    body.light-mode .quick-dict-link-btn {
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      color: #1e293b !important;
+      font-weight: 600 !important;
+    }
+
+    html.light-mode .quick-dict-link-btn:hover,
+    body.light-mode .quick-dict-link-btn:hover {
+      background: #ecfdf5 !important;
+      border-color: #10b981 !important;
+      color: #047857 !important;
+    }
+
+    html.light-mode .quick-dict-btn-highlight,
+    body.light-mode .quick-dict-btn-highlight {
+      background: #ecfdf5 !important;
+      border: 1.5px solid #059669 !important;
+      color: #047857 !important;
+      font-weight: 700 !important;
+    }
+
+    html.light-mode .quick-dict-btn-highlight:hover,
+    body.light-mode .quick-dict-btn-highlight:hover {
+      background: #059669 !important;
+      border-color: #059669 !important;
+      color: #ffffff !important;
+    }
+
+    html.light-mode .quick-dict-empty-title,
+    body.light-mode .quick-dict-empty-title {
+      color: #1e293b !important;
+    }
+
+    html.light-mode .quick-dict-empty-hint,
+    body.light-mode .quick-dict-empty-hint {
+      color: #64748b !important;
     }
   `;
   document.head.appendChild(styleEl);
@@ -760,23 +947,102 @@
       document.body.classList.toggle('quick-dict-panel-open', next);
       if (next) {
         panel.style.display = 'flex';
+        // Reset manual dragged positioning on fresh open
+        panel.style.top = '';
+        panel.style.bottom = '';
+        panel.style.left = '';
+        panel.style.right = '';
+
         loadLocalDict();
         renderHistoryTags();
-        setTimeout(() => input.focus(), 80);
+
+        // Safety clamp: Ensure panel never extends off-screen at the top
+        requestAnimationFrame(() => {
+          const rect = panel.getBoundingClientRect();
+          if (rect.top < 12) {
+            panel.style.top = '12px';
+            panel.style.bottom = 'auto';
+          }
+        });
+
+        setTimeout(() => {
+          input.focus();
+          if (input.value) input.select();
+        }, 80);
       } else {
         panel.style.display = 'none';
       }
     }
 
+    toggleDictFn = toggleDict;
+    window.closeQuickDict = () => toggleDict(false);
+
     toggleBtn.addEventListener('click', () => toggleDict());
     closeBtn.addEventListener('click', () => toggleDict(false));
 
+    // Dragging support for desktop so user can move panel anywhere
+    let isDragging = false;
+    let dragStartX = 0, dragStartY = 0;
+    let initialLeft = 0, initialTop = 0;
+
+    const header = panel.querySelector('.quick-dict-header');
+    if (header) {
+      header.addEventListener('mousedown', (e) => {
+        if (e.target.closest('button')) return; // ignore clicking buttons
+        isDragging = true;
+        const rect = panel.getBoundingClientRect();
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        initialLeft = rect.left;
+        initialTop = rect.top;
+
+        panel.style.position = 'fixed';
+        panel.style.bottom = 'auto';
+        panel.style.right = 'auto';
+        panel.style.left = `${initialLeft}px`;
+        panel.style.top = `${initialTop}px`;
+        e.preventDefault();
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - dragStartX;
+        const deltaY = e.clientY - dragStartY;
+        const newLeft = Math.max(10, Math.min(window.innerWidth - panel.offsetWidth - 10, initialLeft + deltaX));
+        const newTop = Math.max(10, Math.min(window.innerHeight - panel.offsetHeight - 10, initialTop + deltaY));
+        panel.style.left = `${newLeft}px`;
+        panel.style.top = `${newTop}px`;
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+    }
+
+    // Click outside to close panel
+    document.addEventListener('mousedown', (e) => {
+      if (panel.style.display !== 'none' && !isDragging) {
+        if (!widget.contains(e.target) && !e.target.closest('.quick-dict-selection-tooltip')) {
+          toggleDict(false);
+        }
+      }
+    });
+
     // Clear Button
-    clearBtn.addEventListener('click', () => {
+    clearBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       input.value = '';
       clearBtn.style.display = 'none';
       showEmptyState();
       input.focus();
+    });
+
+    // Auto select on input click/focus
+    input.addEventListener('focus', () => {
+      input.select();
+    });
+    input.addEventListener('click', () => {
+      if (input.value) input.select();
     });
 
     // Dock Button
@@ -784,6 +1050,11 @@
       dockSide = dockSide === 'right' ? 'left' : 'right';
       localStorage.setItem('hongtai_quick_dict_dock', dockSide);
       widget.classList.toggle('dock-left', dockSide === 'left');
+      // Reset any manual drag offsets so it docks cleanly
+      panel.style.top = '';
+      panel.style.bottom = '';
+      panel.style.left = '';
+      panel.style.right = '';
     });
 
     // Input Handler with Debounce
@@ -809,11 +1080,13 @@
       }
     });
 
-    // Keyboard shortcut Alt + D
+    // Global keyboard shortcut Alt + D & Escape
     window.addEventListener('keydown', (e) => {
       if (e.altKey && (e.key === 'd' || e.key === 'D')) {
         e.preventDefault();
         toggleDict();
+      } else if (e.key === 'Escape' && panel.style.display !== 'none') {
+        toggleDict(false);
       }
     });
 
@@ -1009,15 +1282,58 @@
 
         <!-- Bottom Actions -->
         <div class="quick-dict-card-actions">
-          <button class="quick-dict-link-btn" id="quick-dict-copy-btn">
+          <button class="quick-dict-link-btn quick-dict-btn-highlight" id="quick-dict-new-search-btn" title="Tra từ vựng khác">
+            <i class="fa-solid fa-magnifying-glass"></i> Tra từ khác
+          </button>
+          <button class="quick-dict-link-btn" id="quick-dict-copy-btn" title="Sao chép chữ này">
             <i class="fa-regular fa-copy"></i> Sao chép từ
           </button>
           <a class="quick-dict-link-btn" href="/hanzi-writer.html?word=${encodeURIComponent(data.word)}" target="_blank" title="Tập viết chữ này">
             <i class="fa-solid fa-pen-nib"></i> Tập viết chữ Hán
           </a>
+          <button class="quick-dict-link-btn" id="quick-dict-card-close-btn" title="Đóng từ điển">
+            <i class="fa-solid fa-xmark"></i> Đóng
+          </button>
         </div>
       </div>
     `;
+
+    // Safety check on newly rendered card
+    requestAnimationFrame(() => {
+      const panel = document.getElementById('quick-dict-panel');
+      if (panel) {
+        const rect = panel.getBoundingClientRect();
+        if (rect.top < 12) {
+          panel.style.top = '12px';
+          panel.style.bottom = 'auto';
+        }
+      }
+    });
+
+    // New Search Button Listener
+    const newSearchBtn = document.getElementById('quick-dict-new-search-btn');
+    if (newSearchBtn) {
+      newSearchBtn.addEventListener('click', () => {
+        const input = document.getElementById('quick-dict-input');
+        const clearBtn = document.getElementById('quick-dict-clear-btn');
+        if (input) {
+          input.value = '';
+          if (clearBtn) clearBtn.style.display = 'none';
+          showEmptyState();
+          input.focus();
+        }
+      });
+    }
+
+    // Card Close Button Listener
+    const cardCloseBtn = document.getElementById('quick-dict-card-close-btn');
+    if (cardCloseBtn) {
+      cardCloseBtn.addEventListener('click', () => {
+        if (typeof toggleDictFn === 'function') {
+          toggleDictFn(false);
+        }
+      });
+    }
 
     // Speak Button Listener
     const speakBtn = document.getElementById('quick-dict-card-speak-btn');
