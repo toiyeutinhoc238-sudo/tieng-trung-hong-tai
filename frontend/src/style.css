@@ -8500,6 +8500,202 @@ html.dark .lb-page-banner {
   }
 }
 
+/* ─── ROADMAP HANZI WRITING MODAL (Light & Dark Theme) ─── */
+.roadmap-writing-modal-card {
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+/* Dark mode (default) */
+html.dark .roadmap-writing-modal-card,
+html:not(.light-mode) .roadmap-writing-modal-card {
+  background: #0f172a !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.3) !important;
+  color: #ffffff !important;
+}
+
+html.dark .roadmap-writing-word-title,
+html:not(.light-mode) .roadmap-writing-word-title {
+  color: #ffffff !important;
+}
+
+html.dark .roadmap-writing-meaning-text,
+html:not(.light-mode) .roadmap-writing-meaning-text {
+  color: #cbd5e1 !important;
+}
+
+html.dark .roadmap-char-picker-label,
+html:not(.light-mode) .roadmap-char-picker-label {
+  color: #94a3b8 !important;
+}
+
+html.dark .roadmap-writing-close-btn,
+html:not(.light-mode) .roadmap-writing-close-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark .roadmap-action-btn,
+html:not(.light-mode) .roadmap-action-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f1f5f9 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+html.dark .roadmap-action-btn.roadmap-btn-quiz,
+html:not(.light-mode) .roadmap-action-btn.roadmap-btn-quiz {
+  background: rgba(245, 158, 11, 0.2) !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
+}
+
+html.dark .roadmap-writing-status-banner,
+html:not(.light-mode) .roadmap-writing-status-banner {
+  background: rgba(30, 41, 59, 0.85) !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark .roadmap-writing-steps-container,
+html:not(.light-mode) .roadmap-writing-steps-container {
+  background: rgba(30, 41, 59, 0.65) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #f1f5f9 !important;
+}
+
+/* Light mode */
+html.light-mode .roadmap-writing-modal-card {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18) !important;
+}
+
+html.light-mode .roadmap-writing-word-title {
+  color: #0f172a !important;
+}
+
+html.light-mode .roadmap-writing-pinyin-text {
+  color: #0284c7 !important;
+}
+
+html.light-mode .roadmap-writing-dot-sep {
+  color: #94a3b8 !important;
+}
+
+html.light-mode .roadmap-writing-meaning-text {
+  color: #334155 !important;
+}
+
+html.light-mode .roadmap-writing-header-wrap {
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html.light-mode .roadmap-char-picker-label {
+  color: #475569 !important;
+}
+
+html.light-mode .roadmap-writing-close-btn {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+html.light-mode .roadmap-writing-close-btn:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.light-mode .roadmap-action-btn {
+  background: #f8fafc !important;
+  color: #1e293b !important;
+  border: 1.5px solid #cbd5e1 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+html.light-mode .roadmap-action-btn:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+}
+
+html.light-mode .roadmap-action-btn.roadmap-btn-quiz {
+  background: #fef3c7 !important;
+  color: #b45309 !important;
+  border: 1.5px solid #f59e0b !important;
+}
+
+html.light-mode .roadmap-action-btn.roadmap-btn-quiz:hover {
+  background: #fde68a !important;
+}
+
+html.light-mode .roadmap-writing-status-banner {
+  background: #f0f9ff !important;
+  border: 1.5px solid #bae6fd !important;
+  color: #0369a1 !important;
+  font-weight: 600;
+}
+
+html.light-mode .roadmap-writing-steps-container {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+/* Ensure Canvas and Action Grid Styling */
+.roadmap-canvas-rice-grid-box {
+  width: 250px !important;
+  height: 250px !important;
+  min-width: 250px !important;
+  min-height: 250px !important;
+  flex-shrink: 0 !important;
+}
+
+.roadmap-action-btn {
+  padding: 8px 6px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.2s;
+}
+
+.roadmap-writing-status-banner {
+  width: 100%;
+  padding: 9px 14px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.4;
+}
+
+.roadmap-writing-steps-container {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+}
+
+.roadmap-writing-steps-header {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #38bdf8;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+}
+
+html.light-mode .roadmap-writing-steps-header {
+  color: #0284c7 !important;
+}
+
 /* ─── LIGHT MODE EXTENDED: Game History modal ─── */
 html.light-mode #gameHistoryModal .modal-content,
 html.light-mode .modal-card {

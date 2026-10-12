@@ -10218,6 +10218,7 @@ window.openLessonWritingModal = function (wordStr, pinyinStr = '', meaningStr = 
 
   // Build character selector tabs
   const tabsContainer = document.getElementById('roadmap-char-tabs-container');
+  const isLight = document.documentElement.classList.contains('light-mode');
   if (tabsContainer) {
     tabsContainer.innerHTML = '';
     chineseChars.forEach((ch, idx) => {
@@ -10227,6 +10228,7 @@ window.openLessonWritingModal = function (wordStr, pinyinStr = '', meaningStr = 
       tabBtn.id = `roadmap-char-tab-${idx}`;
       tabBtn.dataset.char = ch;
       tabBtn.textContent = ch;
+      const isCur = idx === 0;
       tabBtn.style.cssText = `
         padding: 6px 16px;
         border-radius: 10px;
@@ -10235,10 +10237,10 @@ window.openLessonWritingModal = function (wordStr, pinyinStr = '', meaningStr = 
         font-family: var(--font-chinese, serif);
         cursor: pointer;
         transition: all 0.2s ease;
-        background: ${idx === 0 ? '#3b82f6' : 'rgba(255, 255, 255, 0.08)'};
-        color: ${idx === 0 ? '#ffffff' : '#cbd5e1'};
-        border: 1.5px solid ${idx === 0 ? '#60a5fa' : 'rgba(255, 255, 255, 0.15)'};
-        box-shadow: ${idx === 0 ? '0 4px 12px rgba(59, 130, 246, 0.4)' : 'none'};
+        background: ${isCur ? '#3b82f6' : (isLight ? '#f1f5f9' : 'rgba(255, 255, 255, 0.08)')};
+        color: ${isCur ? '#ffffff' : (isLight ? '#1e293b' : '#cbd5e1')};
+        border: 1.5px solid ${isCur ? '#60a5fa' : (isLight ? '#cbd5e1' : 'rgba(255, 255, 255, 0.15)')};
+        box-shadow: ${isCur ? '0 4px 12px rgba(59, 130, 246, 0.4)' : 'none'};
       `;
       tabBtn.onclick = () => window.roadmapSelectCharToDraw(ch, idx);
       tabsContainer.appendChild(tabBtn);
@@ -10268,14 +10270,15 @@ window.closeLessonWritingModal = function () {
 
 window.roadmapSelectCharToDraw = function (char, activeIdx = 0) {
   roadmapWritingCurrentChar = char;
+  const isLight = document.documentElement.classList.contains('light-mode');
 
   // Highlight active tab
   const tabs = document.querySelectorAll('.roadmap-char-tab-btn');
   tabs.forEach((tab, i) => {
     const isCur = tab.dataset.char === char || i === activeIdx;
-    tab.style.background = isCur ? '#3b82f6' : 'rgba(255, 255, 255, 0.08)';
-    tab.style.color = isCur ? '#ffffff' : '#cbd5e1';
-    tab.style.borderColor = isCur ? '#60a5fa' : 'rgba(255, 255, 255, 0.15)';
+    tab.style.background = isCur ? '#3b82f6' : (isLight ? '#f1f5f9' : 'rgba(255, 255, 255, 0.08)');
+    tab.style.color = isCur ? '#ffffff' : (isLight ? '#1e293b' : '#cbd5e1');
+    tab.style.borderColor = isCur ? '#60a5fa' : (isLight ? '#cbd5e1' : 'rgba(255, 255, 255, 0.15)');
     tab.style.boxShadow = isCur ? '0 4px 12px rgba(59, 130, 246, 0.4)' : 'none';
   });
 
@@ -10431,15 +10434,16 @@ function renderRoadmapStrokeSequence(wordChars) {
 
 function renderRoadmapStrokeStepsDOM(wordChars, dataMap, container) {
   let html = '';
+  const isLight = document.documentElement.classList.contains('light-mode');
 
   wordChars.forEach(ch => {
     const data = dataMap[ch];
     if (!data || !data.strokes) return;
     html += `
-      <div style="display: flex; flex-direction: column; gap: 6px; background: rgba(15, 23, 42, 0.6); padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.2);">
-        <div style="font-size: 0.88rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
-          <span>Chữ <strong style="font-family: var(--font-chinese, serif); font-size: 1.2em; color: #ffffff;">"${ch}"</strong> (${data.strokes.length} nét):</span>
-          <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 500;">(Nét đỏ: nét đang vẽ | Nét xanh: các nét đã vẽ)</span>
+      <div style="display: flex; flex-direction: column; gap: 6px; background: ${isLight ? '#ffffff' : 'rgba(15, 23, 42, 0.6)'}; padding: 8px 12px; border-radius: 12px; border: 1px solid ${isLight ? '#cbd5e1' : 'rgba(56, 189, 248, 0.2)'}; box-shadow: ${isLight ? '0 1px 3px rgba(0,0,0,0.05)' : 'none'};">
+        <div style="font-size: 0.88rem; font-weight: 700; color: ${isLight ? '#0284c7' : '#38bdf8'}; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+          <span>Chữ <strong style="font-family: var(--font-chinese, serif); font-size: 1.2em; color: ${isLight ? '#0f172a' : '#ffffff'};">"${ch}"</strong> (${data.strokes.length} nét):</span>
+          <span style="font-size: 0.72rem; color: ${isLight ? '#475569' : '#94a3b8'}; font-weight: 500;">(Nét đỏ: nét đang vẽ | Nét xanh: các nét đã vẽ)</span>
         </div>
         <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
     `;
@@ -13607,6 +13611,8 @@ function renderCreateNbLessonPills() {
   });
 
   const sortedLessonIds = Object.keys(uniqueLessons).map(Number).sort((a, b) => a - b);
+  const isVip = typeof window.isUserVip === 'function' ? window.isUserVip() : false;
+  const isHsk2Plus = (createNbVersion === '3.0' || createNbVersion === '2.0') && String(createNbLevel) !== '1';
 
   let html = `
     <button type="button" class="nb-picker-pill ${createNbLesson === 'all' ? 'active' : ''}" onclick="window.setCreateNbLesson('all')">
@@ -13616,9 +13622,10 @@ function renderCreateNbLessonPills() {
 
   sortedLessonIds.forEach(id => {
     const lessonWords = baseWords.filter(w => String(w.lessonId || 1) === String(id));
+    const lockIcon = (isHsk2Plus && !isVip) ? '<i class="fa-solid fa-lock" style="font-size:0.68rem; color:#f59e0b; margin-right:4px;"></i>' : '';
     html += `
-      <button type="button" class="nb-picker-pill ${String(createNbLesson) === String(id) ? 'active' : ''}" onclick="window.setCreateNbLesson('${id}')">
-        ${uniqueLessons[id]} (${lessonWords.length})
+      <button type="button" class="nb-picker-pill ${String(createNbLesson) === String(id) ? 'active' : ''}" onclick="window.setCreateNbLesson('${id}')" title="${isHsk2Plus && !isVip ? 'Khóa chọn bài học HSK 2+. Nâng cấp VIP để mở khóa!' : ''}">
+        ${lockIcon}${uniqueLessons[id]} (${lessonWords.length})
       </button>
     `;
   });
@@ -13627,6 +13634,17 @@ function renderCreateNbLessonPills() {
 }
 
 window.setCreateNbLesson = function (lessonId) {
+  if (lessonId !== 'all') {
+    const isVip = typeof window.isUserVip === 'function' ? window.isUserVip() : false;
+    const isHsk2Plus = (createNbVersion === '3.0' || createNbVersion === '2.0') && String(createNbLevel) !== '1';
+    if (isHsk2Plus && !isVip) {
+      if (typeof window.requireVip === 'function') {
+        return window.requireVip(`Tùy chọn bài học HSK ${createNbLevel} khi tạo sổ tay`);
+      } else {
+        return showToast(`Tính năng chọn bài học riêng lẻ HSK ${createNbLevel} dành cho học viên VIP. Bạn có thể chọn toàn bộ bài học để tạo sổ tay nhé!`, true);
+      }
+    }
+  }
   createNbLesson = lessonId;
   renderCreateNbLessonPills();
   window.renderCreateNbWordsList();
@@ -14345,11 +14363,15 @@ function openNotebookDashboard(notebookId, preservePage = false) {
         });
 
         const sortedLessonIds = Object.keys(uniqueLessons).map(Number).sort((a, b) => a - b);
+        const isVip = typeof window.isUserVip === 'function' ? window.isUserVip() : false;
+        const isHsk2Plus = notebookId.startsWith('hsk:') && lvl !== '1';
 
         // Function to update count badge
         const updateCountBadge = () => {
           if (countBadge) {
-            if (selectedDashboardLessons.length === 0) {
+            if (isHsk2Plus && !isVip) {
+              countBadge.innerHTML = `<i class="fa-solid fa-lock" style="color: #f59e0b; margin-right: 4px;"></i> Tất cả bài (Khóa chọn bài HSK ${lvl})`;
+            } else if (selectedDashboardLessons.length === 0) {
               countBadge.textContent = 'Tất cả bài';
             } else {
               countBadge.textContent = `Đã chọn: ${selectedDashboardLessons.length} / ${sortedLessonIds.length} bài`;
@@ -14362,6 +14384,13 @@ function openNotebookDashboard(notebookId, preservePage = false) {
         if (selectAllBtn) {
           selectAllBtn.onclick = (e) => {
             e.preventDefault();
+            if (isHsk2Plus && !isVip) {
+              if (typeof window.requireVip === 'function') {
+                return window.requireVip(`Tùy chọn bài học ôn tập Sổ tay HSK ${lvl}`);
+              } else {
+                return showToast(`Tính năng chọn bài ôn tập từ HSK 2 trở lên dành cho học viên VIP. Bạn có thể ôn tập toàn bộ từ vựng miễn phí!`, true);
+              }
+            }
             selectedDashboardLessons = [...sortedLessonIds];
             document.querySelectorAll('#nb-hsk-lessons-list .nb-lesson-check-card').forEach(card => {
               card.classList.add('selected');
@@ -14381,6 +14410,13 @@ function openNotebookDashboard(notebookId, preservePage = false) {
         if (deselectAllBtn) {
           deselectAllBtn.onclick = (e) => {
             e.preventDefault();
+            if (isHsk2Plus && !isVip) {
+              if (typeof window.requireVip === 'function') {
+                return window.requireVip(`Tùy chọn bài học ôn tập Sổ tay HSK ${lvl}`);
+              } else {
+                return showToast(`Tính năng chọn bài ôn tập từ HSK 2 trở lên dành cho học viên VIP. Bạn có thể ôn tập toàn bộ từ vựng miễn phí!`, true);
+              }
+            }
             selectedDashboardLessons = [];
             document.querySelectorAll('#nb-hsk-lessons-list .nb-lesson-check-card').forEach(card => {
               card.classList.remove('selected');
@@ -14396,36 +14432,56 @@ function openNotebookDashboard(notebookId, preservePage = false) {
           };
         }
 
-        // Add individual lesson checkbox cards (All Unlocked)
+        // Add individual lesson checkbox cards
         sortedLessonIds.forEach(lId => {
           const card = document.createElement('div');
           const isSelected = selectedDashboardLessons.includes(lId);
 
-          card.className = `nb-lesson-check-card ${isSelected ? 'selected' : ''}`;
-          card.setAttribute('data-lesson-id', lId);
-          card.innerHTML = `
-            <span class="nb-check-icon"><i class="fa-solid ${isSelected ? 'fa-square-check' : 'fa-regular fa-square'}"></i></span>
-            <span class="nb-lesson-title">${uniqueLessons[lId]}</span>
-          `;
-          card.addEventListener('click', () => {
-            const nowSelected = selectedDashboardLessons.includes(lId);
-            if (nowSelected) {
-              selectedDashboardLessons = selectedDashboardLessons.filter(id => id !== lId);
-              card.classList.remove('selected');
-              const icon = card.querySelector('.nb-check-icon i');
-              if (icon) icon.className = 'fa-regular fa-square';
-            } else {
-              selectedDashboardLessons.push(lId);
-              card.classList.add('selected');
-              const icon = card.querySelector('.nb-check-icon i');
-              if (icon) icon.className = 'fa-solid fa-square-check';
-            }
+          if (isHsk2Plus && !isVip) {
+            // Locked for HSK 2+ non-VIP: user can review all, but cannot select specific lessons
+            card.className = 'nb-lesson-check-card locked';
+            card.setAttribute('data-lesson-id', lId);
+            card.title = `Khóa chọn bài học HSK ${lvl}. Bấm để nâng cấp VIP!`;
+            card.innerHTML = `
+              <span class="nb-check-icon"><i class="fa-solid fa-lock" style="color: #f59e0b; font-size: 0.85rem;"></i></span>
+              <span class="nb-lesson-title">${uniqueLessons[lId]}</span>
+              <span style="font-size: 0.65rem; background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); padding: 1px 6px; border-radius: 99px; font-weight: 800; margin-left: auto;">VIP</span>
+            `;
+            card.addEventListener('click', () => {
+              if (typeof window.requireVip === 'function') {
+                return window.requireVip(`Tùy chọn bài ôn tập Sổ tay HSK ${lvl}`);
+              } else {
+                showToast(`Tính năng chọn bài học riêng lẻ HSK ${lvl} dành cho học viên VIP. Bạn vẫn có thể ôn tập toàn bộ từ vựng miễn phí!`, true);
+              }
+            });
+          } else {
+            // Unlocked for HSK 1 or VIP
+            card.className = `nb-lesson-check-card ${isSelected ? 'selected' : ''}`;
+            card.setAttribute('data-lesson-id', lId);
+            card.innerHTML = `
+              <span class="nb-check-icon"><i class="fa-solid ${isSelected ? 'fa-square-check' : 'fa-regular fa-square'}"></i></span>
+              <span class="nb-lesson-title">${uniqueLessons[lId]}</span>
+            `;
+            card.addEventListener('click', () => {
+              const nowSelected = selectedDashboardLessons.includes(lId);
+              if (nowSelected) {
+                selectedDashboardLessons = selectedDashboardLessons.filter(id => id !== lId);
+                card.classList.remove('selected');
+                const icon = card.querySelector('.nb-check-icon i');
+                if (icon) icon.className = 'fa-regular fa-square';
+              } else {
+                selectedDashboardLessons.push(lId);
+                card.classList.add('selected');
+                const icon = card.querySelector('.nb-check-icon i');
+                if (icon) icon.className = 'fa-solid fa-square-check';
+              }
 
-            updateCountBadge();
-            updateNotebookDashboardStatsOnly(notebookId);
-            currentNotebookPage = 1;
-            renderNotebookWordsTable();
-          });
+              updateCountBadge();
+              updateNotebookDashboardStatsOnly(notebookId);
+              currentNotebookPage = 1;
+              renderNotebookWordsTable();
+            });
+          }
           lessonsList.appendChild(card);
         });
       }
