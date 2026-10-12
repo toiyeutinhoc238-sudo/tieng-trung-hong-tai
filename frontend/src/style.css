@@ -23354,6 +23354,354 @@ html.light-mode .vip-modal-footer button:hover {
   color: #0f172a !important;
 }
 
+/* ─── GLOBAL VIP UPGRADE MODAL (Theme adaptive: Light & Dark) ─── */
+.global-vip-modal-card {
+  width: 100%;
+  max-width: 780px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px 22px;
+  border-radius: 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+/* Dark mode default */
+html.dark .global-vip-modal-card,
+html:not(.light-mode) .global-vip-modal-card {
+  background: linear-gradient(165deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.45) !important;
+  color: #ffffff !important;
+  box-shadow: 0 25px 65px rgba(0,0,0,0.8), 0 0 35px rgba(245, 158, 11, 0.25) !important;
+}
+
+html.dark .global-vip-close-btn,
+html:not(.light-mode) .global-vip-close-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #cbd5e1 !important;
+}
+html.dark .global-vip-close-btn:hover,
+html:not(.light-mode) .global-vip-close-btn:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+}
+
+html.dark .global-vip-badge,
+html:not(.light-mode) .global-vip-badge {
+  background: rgba(245, 158, 11, 0.18) !important;
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
+  color: #fbbf24 !important;
+}
+
+html.dark .global-vip-title,
+html:not(.light-mode) .global-vip-title {
+  color: #ffffff !important;
+}
+
+html.dark .global-vip-sub,
+html:not(.light-mode) .global-vip-sub {
+  color: #94a3b8 !important;
+}
+
+html.dark .global-vip-tab-bar,
+html:not(.light-mode) .global-vip-tab-bar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark .global-vip-tab-btn,
+html:not(.light-mode) .global-vip-tab-btn {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #cbd5e1 !important;
+}
+html.dark .global-vip-tab-btn:hover,
+html:not(.light-mode) .global-vip-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+html.dark .global-vip-tab-btn.active,
+html:not(.light-mode) .global-vip-tab-btn.active {
+  background: rgba(245, 158, 11, 0.22) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.5) !important;
+  color: #fbbf24 !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3) !important;
+}
+
+/* Promo box in Dark Mode */
+.global-vip-promo-box {
+  border-radius: 16px;
+  padding: 16px;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  transition: all 0.2s ease;
+}
+html.dark .global-vip-promo-box,
+html:not(.light-mode) .global-vip-promo-box {
+  background: rgba(245, 158, 11, 0.15) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.4) !important;
+  color: #fef08a !important;
+}
+html.dark .global-vip-promo-box strong,
+html:not(.light-mode) .global-vip-promo-box strong {
+  color: #fbbf24 !important;
+}
+
+html.dark .global-vip-step-card,
+html:not(.light-mode) .global-vip-step-card {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+html.dark .global-vip-step-title-blue,
+html:not(.light-mode) .global-vip-step-title-blue {
+  color: #38bdf8 !important;
+}
+html.dark .global-vip-step-title-green,
+html:not(.light-mode) .global-vip-step-title-green {
+  color: #34d399 !important;
+}
+html.dark .global-vip-step-desc,
+html:not(.light-mode) .global-vip-step-desc {
+  color: #94a3b8 !important;
+}
+
+html.dark .global-vip-price-card,
+html:not(.light-mode) .global-vip-price-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+html.dark .global-vip-price-num,
+html:not(.light-mode) .global-vip-price-num {
+  color: #fde047 !important;
+}
+
+html.dark .global-vip-qr-card,
+html:not(.light-mode) .global-vip-qr-card {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1.5px dashed rgba(245, 158, 11, 0.4) !important;
+}
+html.dark .global-vip-qr-title,
+html:not(.light-mode) .global-vip-qr-title {
+  color: #fbbf24 !important;
+}
+html.dark .global-vip-bank-card,
+html:not(.light-mode) .global-vip-bank-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+html.dark .global-vip-bank-label,
+html:not(.light-mode) .global-vip-bank-label {
+  color: #94a3b8 !important;
+}
+html.dark .global-vip-bank-owner,
+html:not(.light-mode) .global-vip-bank-owner {
+  color: #ffffff !important;
+}
+html.dark .global-vip-bank-acc,
+html:not(.light-mode) .global-vip-bank-acc {
+  color: #38bdf8 !important;
+}
+html.dark .global-vip-bank-memo,
+html:not(.light-mode) .global-vip-bank-memo {
+  color: #fde047 !important;
+}
+
+html.dark .global-vip-footer,
+html:not(.light-mode) .global-vip-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #94a3b8 !important;
+}
+html.dark .global-vip-footer-close-btn,
+html:not(.light-mode) .global-vip-footer-close-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #cbd5e1 !important;
+}
+
+/* Light mode */
+html:not(.dark) .global-vip-modal-card,
+html.light-mode .global-vip-modal-card {
+  background: #ffffff !important;
+  border: 1.5px solid #f59e0b !important;
+  color: #0f172a !important;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.18), 0 0 35px rgba(245, 158, 11, 0.15) !important;
+}
+
+html:not(.dark) .global-vip-close-btn,
+html.light-mode .global-vip-close-btn {
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #475569 !important;
+}
+html:not(.dark) .global-vip-close-btn:hover,
+html.light-mode .global-vip-close-btn:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) .global-vip-badge,
+html.light-mode .global-vip-badge {
+  background: #fef3c7 !important;
+  border: 1px solid #f59e0b !important;
+  color: #b45309 !important;
+}
+
+html:not(.dark) .global-vip-title,
+html.light-mode .global-vip-title {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .global-vip-sub,
+html.light-mode .global-vip-sub {
+  color: #475569 !important;
+}
+
+html:not(.dark) .global-vip-tab-bar,
+html.light-mode .global-vip-tab-bar {
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html:not(.dark) .global-vip-tab-btn,
+html.light-mode .global-vip-tab-btn {
+  background: #f8fafc !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #475569 !important;
+}
+html:not(.dark) .global-vip-tab-btn:hover,
+html.light-mode .global-vip-tab-btn:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
+}
+html:not(.dark) .global-vip-tab-btn.active,
+html.light-mode .global-vip-tab-btn.active {
+  background: #fef3c7 !important;
+  border: 1.5px solid #f59e0b !important;
+  color: #b45309 !important;
+  box-shadow: 0 3px 10px rgba(245, 158, 11, 0.25) !important;
+}
+
+/* Promo box in Light Mode: Crisp, rich contrast (warm cream + dark amber brown text) */
+html:not(.dark) .global-vip-promo-box,
+html.light-mode .global-vip-promo-box {
+  background: #fffbeb !important;
+  border: 1.5px solid #f59e0b !important;
+  color: #78350f !important;
+  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.1) !important;
+}
+html:not(.dark) .global-vip-promo-box strong,
+html.light-mode .global-vip-promo-box strong {
+  color: #9a3412 !important;
+  font-weight: 800 !important;
+}
+
+html:not(.dark) .global-vip-step-card,
+html.light-mode .global-vip-step-card {
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+}
+html:not(.dark) .global-vip-step-title-blue,
+html.light-mode .global-vip-step-title-blue {
+  color: #0284c7 !important;
+}
+html:not(.dark) .global-vip-step-title-green,
+html.light-mode .global-vip-step-title-green {
+  color: #059669 !important;
+}
+html:not(.dark) .global-vip-step-desc,
+html.light-mode .global-vip-step-desc {
+  color: #475569 !important;
+}
+
+html:not(.dark) .global-vip-price-card,
+html.light-mode .global-vip-price-card {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+html:not(.dark) .global-vip-price-num,
+html.light-mode .global-vip-price-num {
+  color: #d97706 !important;
+  font-weight: 900 !important;
+}
+
+html:not(.dark) .global-vip-qr-card,
+html.light-mode .global-vip-qr-card {
+  background: #f8fafc !important;
+  border: 1.5px dashed #f59e0b !important;
+}
+html:not(.dark) .global-vip-qr-title,
+html.light-mode .global-vip-qr-title {
+  color: #b45309 !important;
+}
+html:not(.dark) .global-vip-bank-card,
+html.light-mode .global-vip-bank-card {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+html:not(.dark) .global-vip-bank-label,
+html.light-mode .global-vip-bank-label {
+  color: #64748b !important;
+}
+html:not(.dark) .global-vip-bank-owner,
+html.light-mode .global-vip-bank-owner {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+html:not(.dark) .global-vip-bank-acc,
+html.light-mode .global-vip-bank-acc {
+  color: #0284c7 !important;
+}
+html:not(.dark) .global-vip-bank-memo,
+html.light-mode .global-vip-bank-memo {
+  color: #b45309 !important;
+  background: #fef3c7 !important;
+  padding: 2px 8px !important;
+  border-radius: 6px !important;
+}
+
+html:not(.dark) .global-vip-footer,
+html.light-mode .global-vip-footer {
+  border-top: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+}
+html:not(.dark) .global-vip-footer-close-btn,
+html.light-mode .global-vip-footer-close-btn {
+  background: #f1f5f9 !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #334155 !important;
+}
+html:not(.dark) .global-vip-footer-close-btn:hover,
+html.light-mode .global-vip-footer-close-btn:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* Also support hero box on index.html in light mode */
+html:not(.dark) .vip-tab-hero-box,
+html.light-mode .vip-tab-hero-box {
+  background: #fffbeb !important;
+  border: 1.5px solid #f59e0b !important;
+  color: #78350f !important;
+}
+html:not(.dark) .vip-tab-hero-box h4,
+html.light-mode .vip-tab-hero-box h4 {
+  color: #9a3412 !important;
+}
+html:not(.dark) .vip-tab-hero-box p,
+html.light-mode .vip-tab-hero-box p {
+  color: #78350f !important;
+}
+html:not(.dark) .vip-tab-hero-box span,
+html.light-mode .vip-tab-hero-box span {
+  color: #b45309 !important;
+}
+
 /* Tab 1 Step Cards in Modal */
 .vip-modal-step-card {
   display: flex;

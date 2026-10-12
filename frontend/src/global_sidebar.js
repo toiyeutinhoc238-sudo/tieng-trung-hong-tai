@@ -741,43 +741,43 @@ import './quick_dict_widget.js';
     };
 
     modal.innerHTML = `
-      <div class="modal-card glass-panel" style="background: linear-gradient(165deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); border: 1.5px solid rgba(245, 158, 11, 0.4); border-radius: 24px; width: 100%; max-width: 780px; max-height: 90vh; overflow-y: auto; padding: 24px 22px; box-shadow: 0 25px 65px rgba(0,0,0,0.8), 0 0 40px rgba(245, 158, 11, 0.2); color: #ffffff; position: relative; display: flex; flex-direction: column; gap: 16px;">
-        <button type="button" onclick="window.closeVipUpgradeModal()" style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 1.25rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">&times;</button>
+      <div class="modal-card glass-panel vip-modal-card global-vip-modal-card">
+        <button type="button" class="global-vip-close-btn" onclick="window.closeVipUpgradeModal()" style="position: absolute; top: 16px; right: 16px; font-size: 1.25rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 2;">&times;</button>
         
         <!-- Header -->
-        <div style="text-align: center; padding-right: 28px;">
-          <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.18); border: 1px solid rgba(245, 158, 11, 0.4); padding: 5px 16px; border-radius: 99px; color: #fbbf24; font-size: 0.82rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">
+        <div class="global-vip-header" style="text-align: center; padding-right: 28px;">
+          <div class="global-vip-badge" style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 16px; border-radius: 99px; font-size: 0.82rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">
             <i class="fa-solid fa-crown"></i> Nâng Cấp Tài Khoản VIP
           </div>
-          <h3 style="font-size: 1.45rem; font-weight: 900; margin: 0; color: #ffffff;">Mở Khóa Toàn Bộ Cấp Độ HSK 1 - 6</h3>
-          <p style="font-size: 0.88rem; color: #94a3b8; margin: 4px 0 0 0;">Nhận ngay 30 ngày VIP miễn phí hoặc đăng ký các gói học tập dài hạn</p>
+          <h3 class="global-vip-title" style="font-size: 1.45rem; font-weight: 900; margin: 0;">Mở Khóa Toàn Bộ Cấp Độ HSK 1 - 6</h3>
+          <p class="global-vip-sub" style="font-size: 0.88rem; margin: 4px 0 0 0;">Nhận ngay 30 ngày VIP miễn phí hoặc đăng ký các gói học tập dài hạn</p>
         </div>
 
         <!-- Tab Buttons -->
-        <div style="display: flex; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; overflow-x: auto;">
-          <button type="button" id="vip-tab-btn-trial" class="vip-modal-tab-btn active" onclick="window.switchVipModalTab('trial')" style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-weight: 800; font-size: 0.85rem; cursor: pointer;">
+        <div class="global-vip-tab-bar" style="display: flex; gap: 8px; padding-bottom: 10px; overflow-x: auto;">
+          <button type="button" id="vip-tab-btn-trial" class="vip-modal-tab-btn global-vip-tab-btn active" onclick="window.switchVipModalTab('trial')" style="padding: 8px 16px; border-radius: 10px; font-weight: 800; font-size: 0.85rem; cursor: pointer;">
             🎁 Tặng 30 Ngày VIP (Miễn phí)
           </button>
-          <button type="button" id="vip-tab-btn-pricing" class="vip-modal-tab-btn" onclick="window.switchVipModalTab('pricing')" style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #cbd5e1; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+          <button type="button" id="vip-tab-btn-pricing" class="vip-modal-tab-btn global-vip-tab-btn" onclick="window.switchVipModalTab('pricing')" style="padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
             💎 Bảng Giá Các Gói
           </button>
-          <button type="button" id="vip-tab-btn-payment" class="vip-modal-tab-btn" onclick="window.switchVipModalTab('payment')" style="padding: 8px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #cbd5e1; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
+          <button type="button" id="vip-tab-btn-payment" class="vip-modal-tab-btn global-vip-tab-btn" onclick="window.switchVipModalTab('payment')" style="padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer;">
             💳 Quét Mã QR Thanh Toán
           </button>
         </div>
 
         <!-- TAB 1: TRIAL -->
         <div id="vip-tab-pane-trial" class="vip-tab-pane" style="display: flex; flex-direction: column; gap: 14px;">
-          <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 16px; padding: 16px; color: #fef08a; font-size: 0.9rem; line-height: 1.6;">
+          <div class="global-vip-promo-box">
             <strong>✨ ĐỢT ƯU ĐÃI ĐẶC BIỆT (ĐẾN HẾT 31/12/2026):</strong><br>
             Tiếng Trung HongTai dành tặng <strong>30 NGÀY VIP HOÀN TOÀN MIỄN PHÍ</strong>. Mở khóa toàn bộ từ vựng HSK 1 - 6/9, kho giáo trình E-book và toàn bộ bài tập luyện thi thông minh!
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div class="global-vip-step-card" style="border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
               <div>
-                <strong style="color: #38bdf8;">Bước 1: Theo dõi kênh mạng xã hội</strong>
-                <p style="margin: 2px 0 0 0; font-size: 0.82rem; color: #94a3b8;">Nhấn theo dõi kênh TikTok và Fanpage của trung tâm để cập nhật bài học mới.</p>
+                <strong class="global-vip-step-title-blue">Bước 1: Theo dõi kênh mạng xã hội</strong>
+                <p class="global-vip-step-desc" style="margin: 2px 0 0 0; font-size: 0.82rem;">Nhấn theo dõi kênh TikTok và Fanpage của trung tâm để cập nhật bài học mới.</p>
               </div>
               <div style="display: flex; gap: 8px;">
                 <a href="https://www.tiktok.com/@hongtaitiengtrung" target="_blank" rel="noopener noreferrer" style="background: #000; color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
@@ -789,10 +789,10 @@ import './quick_dict_widget.js';
               </div>
             </div>
 
-            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div class="global-vip-step-card" style="border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
               <div>
-                <strong style="color: #34d399;">Bước 2: Gửi thông tin nhận kích hoạt</strong>
-                <p style="margin: 2px 0 0 0; font-size: 0.82rem; color: #94a3b8;">Điền email tài khoản của bạn để hệ thống cấp quyền VIP trong 2-4h.</p>
+                <strong class="global-vip-step-title-green">Bước 2: Gửi thông tin nhận kích hoạt</strong>
+                <p class="global-vip-step-desc" style="margin: 2px 0 0 0; font-size: 0.82rem;">Điền email tài khoản của bạn để hệ thống cấp quyền VIP trong 2-4h.</p>
               </div>
               <a href="https://forms.gle/3Cvu1Sm2doLcB6qP8" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; padding: 10px 18px; border-radius: 10px; font-size: 0.85rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);">
                 <i class="fa-solid fa-gift"></i> Nhận 30N VIP Ngay 🚀
@@ -804,25 +804,25 @@ import './quick_dict_widget.js';
         <!-- TAB 2: PRICING -->
         <div id="vip-tab-pane-pricing" class="vip-tab-pane" style="display: none; flex-direction: column; gap: 14px;">
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 16px; text-align: center;">
+            <div class="global-vip-price-card" style="border-radius: 16px; padding: 16px; text-align: center;">
               <div style="font-weight: 800; color: #38bdf8; font-size: 1.05rem;">GÓI 3 THÁNG</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #fde047; margin: 8px 0;">199.000đ</div>
+              <div class="global-vip-price-num" style="font-size: 1.45rem; font-weight: 900; margin: 8px 0;">199.000đ</div>
               <div style="font-size: 0.8rem; color: #94a3b8; text-decoration: line-through;">299.000đ</div>
-              <button onclick="window.selectVipPackage && window.selectVipPackage('3T')" style="margin-top: 12px; width: 100%; padding: 8px; border-radius: 8px; background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; font-weight: 700; cursor: pointer;">Chọn gói</button>
+              <button onclick="window.selectVipPackage && window.selectVipPackage('3T')" style="margin-top: 12px; width: 100%; padding: 8px; border-radius: 8px; background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: #0284c7; font-weight: 700; cursor: pointer;">Chọn gói</button>
             </div>
-            <div style="background: rgba(255, 255, 255, 0.05); border: 1.5px solid #818cf8; border-radius: 16px; padding: 16px; text-align: center; position: relative;">
+            <div class="global-vip-price-card" style="border: 1.5px solid #818cf8 !important; border-radius: 16px; padding: 16px; text-align: center; position: relative;">
               <span style="position: absolute; top: -10px; right: 12px; background: #6366f1; color: #fff; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 99px;">PHỔ BIẾN</span>
-              <div style="font-weight: 800; color: #a5b4fc; font-size: 1.05rem;">GÓI 6 THÁNG</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #fde047; margin: 8px 0;">349.000đ</div>
+              <div style="font-weight: 800; color: #818cf8; font-size: 1.05rem;">GÓI 6 THÁNG</div>
+              <div class="global-vip-price-num" style="font-size: 1.45rem; font-weight: 900; margin: 8px 0;">349.000đ</div>
               <div style="font-size: 0.8rem; color: #94a3b8; text-decoration: line-through;">599.000đ</div>
               <button onclick="window.selectVipPackage && window.selectVipPackage('6T')" style="margin-top: 12px; width: 100%; padding: 8px; border-radius: 8px; background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; color: #fff; font-weight: 800; cursor: pointer;">Chọn gói</button>
             </div>
-            <div style="background: rgba(255, 255, 255, 0.05); border: 1.5px solid #f59e0b; border-radius: 16px; padding: 16px; text-align: center; position: relative;">
+            <div class="global-vip-price-card" style="border: 1.5px solid #f59e0b !important; border-radius: 16px; padding: 16px; text-align: center; position: relative;">
               <span style="position: absolute; top: -10px; right: 12px; background: #f59e0b; color: #000; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 99px;">TIẾT KIỆM NHẤT</span>
-              <div style="font-weight: 800; color: #fcd34d; font-size: 1.05rem;">GÓI 1 NĂM</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #fde047; margin: 8px 0;">599.000đ</div>
+              <div style="font-weight: 800; color: #d97706; font-size: 1.05rem;">GÓI 1 NĂM</div>
+              <div class="global-vip-price-num" style="font-size: 1.45rem; font-weight: 900; margin: 8px 0;">599.000đ</div>
               <div style="font-size: 0.8rem; color: #94a3b8; text-decoration: line-through;">999.000đ</div>
-              <button onclick="window.selectVipPackage && window.selectVipPackage('1N')" style="margin-top: 12px; width: 100%; padding: 8px; border-radius: 8px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #000; font-weight: 800; cursor: pointer;">Chọn gói</button>
+              <button onclick="window.selectVipPackage && window.selectVipPackage('1N')" style="margin-top: 12px; width: 100%; padding: 8px; border-radius: 8px; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #fff; font-weight: 800; cursor: pointer;">Chọn gói</button>
             </div>
           </div>
         </div>
@@ -830,50 +830,50 @@ import './quick_dict_widget.js';
         <!-- TAB 3: PAYMENT -->
         <div id="vip-tab-pane-payment" class="vip-tab-pane" style="display: none; flex-direction: column; gap: 14px;">
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; align-items: center;">
-            <div style="background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(245, 158, 11, 0.4); border-radius: 18px; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-              <span style="font-size: 0.88rem; font-weight: 800; color: #fbbf24;"><i class="fa-solid fa-qrcode"></i> Quét Mã QR Để Chuyển Khoản</span>
-              <div style="background: #fff; padding: 10px; border-radius: 14px; max-width: 220px; width: 100%;">
+            <div class="global-vip-qr-card" style="border-radius: 18px; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+              <span class="global-vip-qr-title" style="font-size: 0.88rem; font-weight: 800;"><i class="fa-solid fa-qrcode"></i> Quét Mã QR Để Chuyển Khoản</span>
+              <div style="background: #fff; padding: 10px; border-radius: 14px; max-width: 220px; width: 100%; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
                 <img src="/assets/ma_qr.jpg" alt="Mã QR ACB" style="width: 100%; height: auto; border-radius: 8px; display: block;" onerror="this.alt='QR Chuyển khoản ACB'">
               </div>
               <span style="font-size: 0.78rem; color: #94a3b8;">Hỗ trợ tất cả ứng dụng Ngân hàng</span>
             </div>
 
-            <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 12px; font-size: 0.88rem;">
-              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
-                <span style="color: #94a3b8;">Ngân hàng:</span>
-                <strong style="color: #fbbf24;"><i class="fa-solid fa-building-columns"></i> ACB</strong>
+            <div class="global-vip-bank-card" style="border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 12px; font-size: 0.88rem;">
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 8px;">
+                <span class="global-vip-bank-label">Ngân hàng:</span>
+                <strong style="color: #f59e0b;"><i class="fa-solid fa-building-columns"></i> ACB</strong>
               </div>
-              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
-                <span style="color: #94a3b8;">Chủ tài khoản:</span>
-                <strong style="color: #ffffff;">LE THI HONG THAI</strong>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 8px;">
+                <span class="global-vip-bank-label">Chủ tài khoản:</span>
+                <strong class="global-vip-bank-owner">LE THI HONG THAI</strong>
               </div>
-              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
-                <span style="color: #94a3b8;">Số tài khoản:</span>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(148, 163, 184, 0.2); padding-bottom: 8px;">
+                <span class="global-vip-bank-label">Số tài khoản:</span>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <strong style="color: #38bdf8; font-family: monospace;">PHATLOC316046</strong>
-                  <button type="button" onclick="navigator.clipboard.writeText('PHATLOC316046'); alert('Đã chép số tài khoản ACB!');" style="background: rgba(56, 189, 248, 0.2); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;">Chép</button>
+                  <strong class="global-vip-bank-acc" style="font-family: monospace; font-size: 1.05rem;">PHATLOC316046</strong>
+                  <button type="button" onclick="navigator.clipboard.writeText('PHATLOC316046'); alert('Đã chép số tài khoản ACB!');" class="global-vip-copy-btn" style="padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: 700;">Chép</button>
                 </div>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="color: #94a3b8;">Nội dung CK:</span>
-                <strong id="vip-suggested-memo" style="color: #fde047; font-family: monospace;">[SĐT] 3T</strong>
+                <span class="global-vip-bank-label">Nội dung CK:</span>
+                <strong id="vip-suggested-memo" class="global-vip-bank-memo" style="font-family: monospace; font-size: 0.95rem;">[SĐT] 3T</strong>
               </div>
             </div>
           </div>
 
           <div style="text-align: center; margin-top: 6px;">
-            <a href="https://forms.gle/xvM5Nz1xmPuY6JVm7" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; font-size: 0.88rem; padding: 10px 22px; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+            <a href="https://forms.gle/xvM5Nz1xmPuY6JVm7" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-weight: 800; font-size: 0.88rem; padding: 10px 22px; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);">
               <i class="fa-solid fa-receipt"></i> Đã Chuyển Khoản? Gửi Biên Lai Ngay 🚀
             </a>
           </div>
         </div>
 
         <!-- Footer -->
-        <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; margin-top: 4px; font-size: 0.82rem; color: #94a3b8; flex-wrap: wrap; gap: 10px;">
+        <div class="global-vip-footer" style="display: flex; align-items: center; justify-content: space-between; padding-top: 12px; margin-top: 4px; font-size: 0.82rem; flex-wrap: wrap; gap: 10px;">
           <span>
-            <i class="fa-solid fa-phone" style="color: #38bdf8;"></i> Hỗ trợ / Zalo: <a href="https://zalo.me/0708245997" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-weight: 800; text-decoration: none;">0708245997</a>
+            <i class="fa-solid fa-phone" style="color: #38bdf8;"></i> Hỗ trợ / Zalo: <a href="https://zalo.me/0708245997" target="_blank" rel="noopener noreferrer" style="color: #0284c7; font-weight: 800; text-decoration: none;">0708245997</a>
           </span>
-          <button type="button" onclick="window.closeVipUpgradeModal()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; padding: 6px 16px; border-radius: 8px; font-weight: 700; cursor: pointer;">Đóng cửa sổ</button>
+          <button type="button" class="global-vip-footer-close-btn" onclick="window.closeVipUpgradeModal()" style="padding: 6px 16px; border-radius: 8px; font-weight: 700; cursor: pointer;">Đóng cửa sổ</button>
         </div>
       </div>
     `;
@@ -881,6 +881,7 @@ import './quick_dict_widget.js';
     document.body.appendChild(modal);
     return modal;
   }
+  window.ensureGlobalVipModal = ensureGlobalVipModal;
 
   window.openVipUpgradeModal = function (tabName = 'trial') {
     const modal = ensureGlobalVipModal();
@@ -905,17 +906,10 @@ import './quick_dict_widget.js';
       const btn = document.getElementById('vip-tab-btn-' + t);
       const pane = document.getElementById('vip-tab-pane-' + t);
       if (btn) {
-        if (t === tabName) {
-          btn.classList.add('active');
-          btn.style.background = 'rgba(245, 158, 11, 0.2)';
-          btn.style.color = '#fbbf24';
-          btn.style.borderColor = 'rgba(245, 158, 11, 0.4)';
-        } else {
-          btn.classList.remove('active');
-          btn.style.background = 'rgba(255, 255, 255, 0.05)';
-          btn.style.color = '#cbd5e1';
-          btn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-        }
+        btn.classList.toggle('active', t === tabName);
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.style.borderColor = '';
       }
       if (pane) {
         pane.style.display = (t === tabName) ? 'flex' : 'none';

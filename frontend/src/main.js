@@ -16547,12 +16547,17 @@ window.closeSurveyModal = function () {
 // ==========================================================================
 // VIP 30-DAY FREE TRIAL & UPGRADE MODAL HANDLERS
 // ==========================================================================
-window.openVipUpgradeModal = function (tabName) {
-  const modal = document.getElementById('vip-upgrade-modal');
+window.openVipUpgradeModal = function (tabName = 'trial') {
+  let modal = document.getElementById('vip-upgrade-modal');
+  if (!modal && typeof window.ensureGlobalVipModal === 'function') {
+    modal = window.ensureGlobalVipModal();
+  }
   if (modal) {
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    if (tabName) window.switchVipModalTab(tabName);
+    if (typeof window.switchVipModalTab === 'function') {
+      window.switchVipModalTab(tabName);
+    }
   } else {
     window.open('https://forms.gle/3Cvu1Sm2doLcB6qP8', '_blank');
   }
@@ -16566,14 +16571,16 @@ window.closeVipUpgradeModal = function () {
   }
 };
 
-window.switchVipModalTab = function (tabKey) {
+window.switchVipModalTab = function (tabKey = 'trial') {
   const tabs = ['trial', 'comparison', 'pricing', 'payment'];
   tabs.forEach(function (t) {
     const btn = document.getElementById('vip-tab-btn-' + t);
     const pane = document.getElementById('vip-tab-pane-' + t);
     if (btn) {
-      if (t === tabKey) btn.classList.add('active');
-      else btn.classList.remove('active');
+      btn.classList.toggle('active', t === tabKey);
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.borderColor = '';
     }
     if (pane) {
       pane.style.display = (t === tabKey) ? 'flex' : 'none';
