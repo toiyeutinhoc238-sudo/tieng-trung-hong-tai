@@ -2429,6 +2429,21 @@
 
             </div>
 
+            <!-- Flashcard Face Mode Selector Bar (Chọn xem mặt trước: Tiếng Trung hay Tiếng Việt) -->
+            <div class="flashcard-face-mode-bar" id="flashcard-face-mode-bar" style="display: none;">
+              <div class="fc-face-mode-title">
+                <i class="fa-solid fa-arrows-rotate"></i> <span>Mặt trước thẻ:</span>
+              </div>
+              <div class="fc-face-mode-toggle" role="group" aria-label="Chọn mặt trước Flashcard">
+                <button type="button" class="fc-face-mode-btn active" id="fc-face-mode-btn-zh" onclick="window.setFlashcardFaceMode('zh')">
+                  <span class="fc-mode-flag">🇨🇳</span> <span>Tiếng Trung</span>
+                </button>
+                <button type="button" class="fc-face-mode-btn" id="fc-face-mode-btn-vi" onclick="window.setFlashcardFaceMode('vi')">
+                  <span class="fc-mode-flag">🇻🇳</span> <span>Tiếng Việt</span>
+                </button>
+              </div>
+            </div>
+
             <!-- Rotating Card Container (Flip Flashcard Mode) with Swipe Gestures -->
             <div class="flashcard-card-container" id="flashcard-card-container" style="display: none;">
               <!-- Swipe Track & Gesture Badges -->
@@ -2448,18 +2463,33 @@
                   <div class="card-side card-front">
                     <div class="card-header-tags">
                       <span class="badge badge-level" id="card-level-front">HSK 1</span>
+                      <button type="button" class="fc-card-swap-pill" id="fc-card-swap-pill" title="Đổi nhanh mặt trước (Tiếng Trung / Tiếng Việt)" onclick="event.stopPropagation(); window.toggleFlashcardFaceMode(event);">
+                        <i class="fa-solid fa-repeat"></i> <span id="fc-card-swap-text">Mặt: 🇨🇳 Trung</span>
+                      </button>
                       <span class="badge badge-category" id="card-category-front">Động từ</span>
                     </div>
 
-                    <div class="card-content-main">
-                      <h2 class="chinese-word" id="card-word-front">学习</h2>
+                    <div class="card-content-main" id="card-content-front">
+                      <!-- Mode ZH (Mặt trước Tiếng Trung): Chữ Hán to rõ -->
+                      <div class="fc-front-zh-box" id="fc-front-zh-box">
+                        <h2 class="chinese-word" id="card-word-front">学习</h2>
+                      </div>
+
+                      <!-- Mode VI (Mặt trước Tiếng Việt): Nghĩa tiếng Việt to rõ -->
+                      <div class="fc-front-vi-box" id="fc-front-vi-box" style="display: none;">
+                        <span class="fc-vi-mode-prompt-badge">
+                          <i class="fa-solid fa-language"></i> Nghĩa tiếng Việt
+                        </span>
+                        <h2 class="fc-vi-word-front" id="card-meaning-front">học tập, học hành</h2>
+                        <div class="fc-vi-hint-sub">Đoán chữ Hán & Pinyin rồi lật thẻ để kiểm tra</div>
+                      </div>
                     </div>
 
                     <div class="card-action-bar">
                       <button id="speak-btn-front" class="speak-btn circle-btn" title="Nghe phát âm">
                         <i class="fa-solid fa-volume-high"></i>
                       </button>
-                      <span class="click-hint"><i class="fa-solid fa-rotate"></i> Chạm để lật mặt sau</span>
+                      <span class="click-hint" id="fc-click-hint-front"><i class="fa-solid fa-rotate"></i> Chạm để lật mặt sau</span>
                       <div class="placeholder-icon"></div>
                     </div>
                   </div>
@@ -2468,10 +2498,23 @@
                   <div class="card-side card-back">
                     <div class="card-header-tags">
                       <span class="badge badge-level" id="card-level-back">HSK 1</span>
+                      <span class="badge badge-flip-status" id="card-back-badge-status">
+                        <i class="fa-solid fa-circle-check"></i> Mặt sau (Đáp án)
+                      </span>
                       <span class="badge badge-category" id="card-category-back">Động từ</span>
                     </div>
 
-                    <div class="card-content-main">
+                    <div class="card-content-main" id="card-content-back">
+                      <!-- Khi ở chế độ VI: Mặt sau hiện Chữ Hán to + Nút phát âm làm đáp án -->
+                      <div class="fc-back-zh-reveal" id="fc-back-zh-reveal" style="display: none;">
+                        <div class="fc-back-zh-wrap">
+                          <h2 class="chinese-word fc-word-back" id="card-word-back">学习</h2>
+                          <button type="button" id="speak-btn-back" class="speak-btn circle-btn" title="Nghe phát âm từ vựng">
+                            <i class="fa-solid fa-volume-high"></i>
+                          </button>
+                        </div>
+                      </div>
+
                       <div class="pinyin-text" id="card-pinyin-back">xuéxí</div>
                       <div class="meaning-text" id="card-meaning-back">học tập, học hành</div>
 

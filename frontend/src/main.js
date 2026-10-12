@@ -240,6 +240,7 @@ let vocabList = [];       // Master list of all vocabulary (seeded + custom)
 let filteredList = [];    // Current active subset based on active filters/search
 let currentIndex = 0;     // Selected card index in filteredList
 let isFlipped = false;    // Card orientation state
+let flashcardFaceMode = localStorage.getItem('fc_face_mode') || 'zh'; // 'zh': Tiếng Trung mặt trước, 'vi': Tiếng Việt mặt trước
 let autoplayTimer = null; // Timer reference for autoplay loop
 let isAutoplayActive = false; // Autoplay state
 let activeLevel = '1';  // Level filter state: 'all', '1', '2', '3', '4'
@@ -1578,6 +1579,55 @@ function toggleLessonStandardAnswer() {
   }
 }
 
+// --- FLASHCARD FACE MODE CONTROLLER (Tiếng Trung <-> Tiếng Việt) ---
+export function updateFlashcardFaceModeUI() {
+  const btnZh = document.getElementById('fc-face-mode-btn-zh');
+  const btnVi = document.getElementById('fc-face-mode-btn-vi');
+  if (btnZh && btnVi) {
+    if (flashcardFaceMode === 'vi') {
+      btnVi.classList.add('active');
+      btnZh.classList.remove('active');
+    } else {
+      btnZh.classList.add('active');
+      btnVi.classList.remove('active');
+    }
+  }
+  const fcCardSwapText = document.getElementById('fc-card-swap-text');
+  if (fcCardSwapText) {
+    fcCardSwapText.innerHTML = flashcardFaceMode === 'vi' ? 'Mặt: 🇻🇳 Việt' : 'Mặt: 🇨🇳 Trung';
+  }
+}
+window.updateFlashcardFaceModeUI = updateFlashcardFaceModeUI;
+
+export function setFlashcardFaceMode(mode) {
+  if (mode !== 'zh' && mode !== 'vi') mode = 'zh';
+  flashcardFaceMode = mode;
+  try {
+    localStorage.setItem('fc_face_mode', mode);
+  } catch (e) {
+    console.warn('Cannot save fc_face_mode', e);
+  }
+  updateFlashcardFaceModeUI();
+  if (cardElement) {
+    cardElement.classList.remove('flipped');
+  }
+  isFlipped = false;
+  if (filteredList && filteredList.length > 0) {
+    renderActiveCard();
+  }
+  if (typeof showToast === 'function') {
+    showToast(mode === 'vi' ? 'Đã đổi: Xem mặt trước Tiếng Việt 🇻🇳' : 'Đã đổi: Xem mặt trước Tiếng Trung 🇨🇳');
+  }
+}
+window.setFlashcardFaceMode = setFlashcardFaceMode;
+
+export function toggleFlashcardFaceMode(e) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  const nextMode = (flashcardFaceMode === 'vi') ? 'zh' : 'vi';
+  setFlashcardFaceMode(nextMode);
+}
+window.toggleFlashcardFaceMode = toggleFlashcardFaceMode;
+
 // --- RENDER FUNCTIONS ---
 function renderActiveCard() {
   if (!filteredList) return;
@@ -1586,6 +1636,8 @@ function renderActiveCard() {
     if (cardViewport) cardViewport.style.display = 'none';
     if (cardHudControls) cardHudControls.style.display = 'none';
     if (cardPageIndicator) cardPageIndicator.style.display = 'none';
+    const faceModeBar = document.getElementById('flashcard-face-mode-bar');
+    if (faceModeBar) faceModeBar.style.display = 'none';
     return;
   }
 
@@ -1593,6 +1645,10 @@ function renderActiveCard() {
   if (cardViewport) cardViewport.style.display = 'block';
   if (cardHudControls) cardHudControls.style.display = 'flex';
   if (cardPageIndicator) cardPageIndicator.style.display = 'block';
+  const faceModeBar = document.getElementById('flashcard-face-mode-bar');
+  if (faceModeBar && (!studyMode || studyMode === 'flip')) {
+    faceModeBar.style.display = 'flex';
+  }
 
   // Ensure index is within boundaries
   if (currentIndex >= filteredList.length) currentIndex = 0;
@@ -1639,16 +1695,58 @@ function renderActiveCard() {
     return `HSK ${w.level} (v${w.hskVersion || '3.0'})`;
   };
 
-  // Render Front Face
-  if (cardWordFront) cardWordFront.textContent = current.word;
+  // Render Tags
   if (cardLevelFront) cardLevelFront.textContent = getLevelLabel(current);
   if (cardCategoryFront) cardCategoryFront.textContent = current.category || 'Chưa phân loại';
-
-  // Render Back Face
-  if (cardPinyinBack) cardPinyinBack.textContent = current.pinyin;
-  if (cardMeaningBack) cardMeaningBack.textContent = current.meaning;
   if (cardLevelBack) cardLevelBack.textContent = getLevelLabel(current);
   if (cardCategoryBack) cardCategoryBack.textContent = current.category || 'Chưa phân loại';
+
+  // Support dual face mode (zh or vi)
+  const fcFrontZhBox = document.getElementById('fc-front-zh-box');
+  const fcFrontViBox = document.getElementById('fc-front-vi-box');
+  const cardMeaningFront = document.getElementById('card-meaning-front');
+  const fcBackZhReveal = document.getElementById('fc-back-zh-reveal');
+  const cardWordBack = document.getElementById('card-word-back');
+  const fcClickHintFront = document.getElementById('fc-click-hint-front');
+
+  if (flashcardFaceMode === 'vi') {
+    // Mode VI: Mặt trước Tiếng Việt, Mặt sau Chữ Hán
+    if (cardElement) {
+      cardElement.classList.add('face-mode-vi');
+      cardElement.classList.remove('face-mode-zh');
+    }
+    if (fcFrontZhBox) fcFrontZhBox.style.display = 'none';
+    if (fcFrontViBox) fcFrontViBox.style.display = 'flex';
+    if (cardMeaningFront) cardMeaningFront.textContent = current.meaning || '';
+
+    if (fcBackZhReveal) fcBackZhReveal.style.display = 'flex';
+    if (cardWordBack) cardWordBack.textContent = current.word || '';
+    if (cardPinyinBack) cardPinyinBack.textContent = current.pinyin || '';
+    if (cardMeaningBack) cardMeaningBack.textContent = current.meaning || '';
+
+    if (fcClickHintFront) {
+      fcClickHintFront.innerHTML = '<i class="fa-solid fa-rotate"></i> Chạm để xem Chữ Hán & Pinyin';
+    }
+  } else {
+    // Mode ZH: Mặt trước Tiếng Trung, Mặt sau Pinyin & Tiếng Việt (Mặc định)
+    if (cardElement) {
+      cardElement.classList.add('face-mode-zh');
+      cardElement.classList.remove('face-mode-vi');
+    }
+    if (fcFrontZhBox) fcFrontZhBox.style.display = 'flex';
+    if (fcFrontViBox) fcFrontViBox.style.display = 'none';
+    if (cardWordFront) cardWordFront.textContent = current.word || '';
+
+    if (fcBackZhReveal) fcBackZhReveal.style.display = 'none';
+    if (cardPinyinBack) cardPinyinBack.textContent = current.pinyin || '';
+    if (cardMeaningBack) cardMeaningBack.textContent = current.meaning || '';
+
+    if (fcClickHintFront) {
+      fcClickHintFront.innerHTML = '<i class="fa-solid fa-rotate"></i> Chạm để lật mặt sau';
+    }
+  }
+
+  updateFlashcardFaceModeUI();
 
   const exampleBox = document.querySelector('.example-box');
   if (current.example_zh) {
@@ -1999,6 +2097,10 @@ function _applyStudyModeUI(mode) {
   const flashcardSwipeHintBar = document.getElementById('flashcard-swipe-hint-bar');
   if (flashcardSwipeHintBar) {
     flashcardSwipeHintBar.style.display = (!mode || mode === 'flip') ? 'flex' : 'none';
+  }
+  const flashcardFaceModeBar = document.getElementById('flashcard-face-mode-bar');
+  if (flashcardFaceModeBar) {
+    flashcardFaceModeBar.style.display = (!mode || mode === 'flip') ? 'flex' : 'none';
   }
 }
 
@@ -2444,13 +2546,18 @@ function runAutoplayCycle() {
   const current = filteredList[currentIndex];
   const delay = parseInt(autoplayDelaySelect.value);
 
-  // 1. Pronounce front word
+  // 1. Pronounce front word (if zh mode)
   if (!isFlipped) {
-    speakText(current.word);
+    if (flashcardFaceMode !== 'vi') {
+      speakText(current.word);
+    }
 
     // 2. Wait, then flip to back
     autoplayTimer = setTimeout(() => {
       flipCard();
+      if (flashcardFaceMode === 'vi') {
+        speakText(current.word);
+      }
 
       // 3. Wait 1s, then pronounce example (if exists) or just prepare next slide
       autoplayTimer = setTimeout(() => {
@@ -3277,6 +3384,17 @@ function setupEventListeners() {
       speakText(filteredList[currentIndex].word);
     }
   });
+
+  const speakBtnBack = document.getElementById('speak-btn-back');
+  if (speakBtnBack) {
+    speakBtnBack.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (filteredList.length > 0 && filteredList[currentIndex]) {
+        markWordAsStudied(filteredList[currentIndex].id);
+        speakText(filteredList[currentIndex].word);
+      }
+    });
+  }
 
   speakExampleBtn.addEventListener('click', (e) => {
     e.stopPropagation();
