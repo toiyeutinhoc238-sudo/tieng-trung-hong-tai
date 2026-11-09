@@ -12117,19 +12117,6 @@
       },
       "gameHistory": [],
       "accessLogs": []
-    },
-    "test@gmail.com": {
-      "name": "Test User",
-      "picture": "https://example.com/pic.jpg",
-      "role": "user",
-      "lastSeenTime": "2026-10-05T07:05:27.809Z",
-      "stats": {
-        "streak": 0,
-        "studyTime": 0,
-        "lastActiveDate": ""
-      },
-      "gameHistory": [],
-      "accessLogs": []
     }
   },
   "progress": {

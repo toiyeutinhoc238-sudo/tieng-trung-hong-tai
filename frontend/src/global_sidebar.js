@@ -99,19 +99,6 @@ import './quick_dict_widget.js';
       if (isUserAdmin(email)) return true;
       if (u.role === 'admin' || u.role === 'teacher' || u.role === 'superadmin' || u.isSuperAdmin) return true;
 
-      // Ưu đãi đặc biệt: Mở miễn phí toàn bộ hệ thống hết năm 2026 cho toàn bộ học viên!
-      const currentYear = new Date().getFullYear();
-      if (currentYear <= 2026) return true;
-
-      // Bước sang năm mới (> 2026): Reset cờ dùng thử cũ và tự động cấp lại 30 ngày VIP miễn phí mới
-      const trialClaimYear = parseInt(localStorage.getItem(`vip_trial_year_${email}`) || '2026', 10);
-      if (currentYear > trialClaimYear) {
-        localStorage.setItem(`vip_trial_year_${email}`, String(currentYear));
-        localStorage.setItem(`vip_trial_${email}`, 'true');
-        localStorage.setItem('vip_trial_claimed', 'true');
-        return true;
-      }
-
       if (u.isVip === true || u.vipStatus === 'vip') {
         if (u.vipExpiresAt) {
           const exp = new Date(u.vipExpiresAt).getTime();
@@ -765,19 +752,6 @@ import './quick_dict_widget.js';
       if (user.role === 'super_admin' || user.role === 'superadmin' || user.isSuperAdmin) return true;
       if (user.role === 'teacher' || email.includes('hongtai') || email.includes('teacher')) return true;
       if (user.role === 'admin' || user.isAdmin) return true;
-
-      // Ưu đãi đặc biệt: Mở miễn phí toàn bộ hệ thống hết năm 2026 cho toàn bộ học viên!
-      const currentYear = new Date().getFullYear();
-      if (currentYear <= 2026) return true;
-
-      // Bước sang năm mới (> 2026): Tự động cấp lại 30 ngày VIP miễn phí mới cho học viên
-      const trialClaimYear = parseInt(localStorage.getItem(`vip_trial_year_${email}`) || '2026', 10);
-      if (currentYear > trialClaimYear) {
-        localStorage.setItem(`vip_trial_year_${email}`, String(currentYear));
-        localStorage.setItem(`vip_trial_${email}`, 'true');
-        localStorage.setItem('vip_trial_claimed', 'true');
-        return true;
-      }
 
       if (user.isVip === true || user.vipStatus === 'vip') {
         if (user.vipExpiresAt) {
