@@ -12420,35 +12420,31 @@ html.dark .games-selector-intro p {
 
 .games-selector-grid-6 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 12px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1024px) {
   .games-selector-grid-6 {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 840px) {
-  .games-selector-grid-6 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
   }
 }
 
 @media (max-width: 540px) {
   .games-selector-grid-6 {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 8px;
   }
 }
 
 .game-choice-card {
   background: #ffffff;
-  border: 2px solid #e2e8f0;
-  border-radius: 20px;
-  padding: 22px 18px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12611,16 +12607,16 @@ html.dark .card-rhythm .card-tag {
 }
 
 .card-icon-hero {
-  font-size: 3.2rem;
-  margin-bottom: 12px;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
 }
 
 .card-title {
-  font-size: 1.25rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: #0f172a;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 html.dark .card-title {
@@ -12628,10 +12624,10 @@ html.dark .card-title {
 }
 
 .card-desc {
-  font-size: 0.86rem;
+  font-size: 0.78rem;
   color: #475569;
-  line-height: 1.5;
-  margin-bottom: 16px;
+  line-height: 1.4;
+  margin-bottom: 10px;
   flex-grow: 1;
 }
 
@@ -12642,11 +12638,11 @@ html.dark .card-desc {
 .card-features {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: 0.78rem;
+  gap: 4px;
+  font-size: 0.72rem;
   font-weight: 600;
   color: #64748b;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
   width: 100%;
 }
 
@@ -12657,20 +12653,20 @@ html.dark .card-features {
 .card-features span {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   justify-content: center;
 }
 
 .game-launch-btn {
   width: 100%;
-  padding: 10px 16px;
+  padding: 8px 12px;
   font-weight: 800;
-  font-size: 0.9rem;
-  border-radius: 12px;
+  font-size: 0.82rem;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -14264,8 +14260,8 @@ html.dark .stepper-notes {
 
 .games-selector-grid-6 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 12px;
 }
 
 .card-quiz-highlight {
@@ -18260,9 +18256,9 @@ html.dark .games-selector-intro p {
 .game-choice-card {
   background: #ffffff !important;
   border: 1.5px solid #cbd5e1 !important;
-  border-radius: 22px !important;
-  padding: 22px !important;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 16px !important;
+  padding: 14px 12px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
@@ -18271,22 +18267,22 @@ html.dark .games-selector-intro p {
 html.dark .game-choice-card {
   background: #1e293b !important;
   border-color: rgba(255, 255, 255, 0.15) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35) !important;
 }
 
 .game-choice-card:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1) !important;
 }
 
 html.dark .game-choice-card:hover {
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45) !important;
 }
 
 .card-title {
   color: #0f172a !important;
-  font-weight: 900 !important;
-  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  font-size: 1.05rem !important;
 }
 
 html.dark .card-title {
@@ -18295,8 +18291,8 @@ html.dark .card-title {
 
 .card-desc {
   color: #334155 !important;
-  font-size: 0.88rem !important;
-  line-height: 1.5 !important;
+  font-size: 0.78rem !important;
+  line-height: 1.4 !important;
 }
 
 html.dark .card-desc {
@@ -18307,9 +18303,10 @@ html.dark .card-desc {
   background: #f1f5f9 !important;
   border: 1px solid #e2e8f0 !important;
   color: #334155 !important;
-  font-weight: 700 !important;
-  padding: 4px 10px !important;
-  border-radius: 8px !important;
+  font-weight: 600 !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  font-size: 0.72rem !important;
 }
 
 html.dark .card-features span {

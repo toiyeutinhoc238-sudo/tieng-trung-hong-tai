@@ -854,6 +854,39 @@ function checkAndComputeUserVip(userRecord, email = null) {
     };
   }
 
+  // Ưu đãi đặc biệt: Mở miễn phí toàn bộ hệ thống hết năm 2026 cho toàn bộ học viên có tài khoản!
+  const currentYear = new Date().getFullYear();
+  if (currentYear <= 2026) {
+    const endOfYear = new Date('2026-12-31T23:59:59.999Z');
+    const daysLeft = Math.max(1, Math.ceil((endOfYear.getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
+    return {
+      isVip: true,
+      vipStatus: 'vip',
+      vipExpiresAt: endOfYear,
+      vipActivatedAt: userRecord.vipActivatedAt || new Date('2026-01-01'),
+      vipPackage: 'free_2026_campaign',
+      vipDaysRemaining: daysLeft
+    };
+  }
+
+  // Bước sang năm mới (> 2026): Tài khoản đã nhận 30 ngày dùng thử ở năm cũ sẽ được cấp lại 30 ngày miễn phí mới
+  if (userRecord.vipTrialYear && userRecord.vipTrialYear < currentYear) {
+    userRecord.vipTrialYear = currentYear;
+    userRecord.isVip = true;
+    userRecord.vipStatus = 'vip';
+    userRecord.vipActivatedAt = new Date();
+    userRecord.vipExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    userRecord.vipPackage = 'trial_30d_new_year';
+    return {
+      isVip: true,
+      vipStatus: 'vip',
+      vipExpiresAt: userRecord.vipExpiresAt,
+      vipActivatedAt: userRecord.vipActivatedAt,
+      vipPackage: 'trial_30d_new_year',
+      vipDaysRemaining: 30
+    };
+  }
+
   const rawIsVip = !!userRecord.isVip || userRecord.vipStatus === 'vip';
   if (!rawIsVip) {
     return {

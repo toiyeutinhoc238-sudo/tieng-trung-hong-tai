@@ -15884,7 +15884,7 @@ window.showGameHubGuideModal = function () {
       </div>
 
       <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 8px; color: #fbbf24; text-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);">
-        Đấu Trường 5 Trò Chơi Ôn Tập
+        Đấu Trường 4 Trò Chơi Ôn Tập
       </h3>
 
       <div style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 14px 18px; margin: 16px 0 22px 0; text-align: left;">
@@ -15893,7 +15893,7 @@ window.showGameHubGuideModal = function () {
           <span>Vào <strong>Sổ tay từ vựng</strong> để biết thêm chi tiết và chọn bài học bạn muốn chơi game ôn tập nhé!</span>
         </div>
         <div style="font-size: 0.82rem; color: #cbd5e1; margin-top: 10px; line-height: 1.45; padding-left: 28px; font-weight: 600;">
-          ⚡ Quiz Game • 🀄 Mạt Chược • ⚗️ Lò Luyện • 🐍 Nuôi Rắn • 🗡️ Phi Đao
+          ⚡ Quiz Game • 🀄 Mạt Chược • 🐍 Nuôi Rắn • 🗡️ Phi Đao
         </div>
       </div>
 

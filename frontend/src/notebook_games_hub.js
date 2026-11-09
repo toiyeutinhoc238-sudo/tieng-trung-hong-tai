@@ -5,7 +5,6 @@
 
 import { CannonGameEngine } from './notebook_cannon_game.js';
 import { SnakeGameEngine } from './notebook_snake_game.js';
-import { AlchemistGameEngine } from './notebook_alchemist_game.js';
 import { MahjongGameEngine } from './notebook_mahjong_game.js';
 
 function isSuperAdminUser(user) {
@@ -66,7 +65,7 @@ export class NotebookGamesHub {
           </div>
 
           <div class="hub-header-badge">
-            <span class="beta-pill" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;"><i class="fa-solid fa-wand-magic-sparkles"></i> Đầy đủ 5 Trò Chơi Ôn Luyện (Miễn Phí)</span>
+            <span class="beta-pill" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;"><i class="fa-solid fa-wand-magic-sparkles"></i> Đầy đủ 4 Trò Chơi Ôn Luyện (Miễn Phí)</span>
           </div>
         </div>
 
@@ -84,7 +83,7 @@ export class NotebookGamesHub {
     return `
       <div class="games-selector-container">
         <div class="games-selector-intro">
-          <h3>Chọn 1 trong 5 trò chơi để bắt đầu ôn luyện từ vựng</h3>
+          <h3>Chọn 1 trong 4 trò chơi để bắt đầu ôn luyện từ vựng</h3>
           <p>Học tập và rèn luyện phản xạ nhẹ nhàng từ <strong>${this.notebookTitle}</strong>, không tính điểm xếp hạng hay khóa cấp!</p>
         </div>
 
@@ -123,24 +122,7 @@ export class NotebookGamesHub {
             </button>
           </div>
 
-          <!-- CARD GAME 2: ALCHEMIST -->
-          <div class="game-choice-card card-alchemist" id="btn-choose-alchemist" style="cursor: pointer;">
-            <div class="card-tag">⚗️ CHIẾT TỰ & BỘ THỦ • 📱 CHẠM CẢM ỨNG SIÊU MƯỢT</div>
-            <div class="card-icon-hero">⚗️ ✨</div>
-            <h3 class="card-title">Lò Luyện Chiết Tự</h3>
-            <p class="card-desc">
-              Trở thành nhà giả kim! Chọn các <strong>Bộ thủ nguyên liệu</strong> nạp vào vạc luyện kim thần kỳ để hợp nhất chế tạo ra chữ Hán mục tiêu.
-            </p>
-            <div class="card-features">
-              <span><i class="fa-solid fa-gem"></i> Nhớ sâu gốc rễ bộ thủ</span>
-              <span><i class="fa-solid fa-wand-magic-sparkles"></i> Luyện hợp thể chữ</span>
-            </div>
-            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #9333ea, #7e22ce); color: #ffffff;">
-              Chơi Luyện Chữ <i class="fa-solid fa-play"></i>
-            </button>
-          </div>
-
-          <!-- CARD GAME 3: SNAKE -->
+          <!-- CARD GAME 2: SNAKE -->
           <div class="game-choice-card card-snake" id="btn-choose-snake" style="cursor: pointer;">
             <div class="card-tag">🐍 NHẬN DIỆN MẶT CHỮ • 📱 VUỐT CẢM ỨNG & ⌨️ PHÍM MŨI TÊN</div>
             <div class="card-icon-hero">🐍 🍏</div>
@@ -157,7 +139,7 @@ export class NotebookGamesHub {
             </button>
           </div>
 
-          <!-- CARD GAME 4: PHI DAO (CANNON) -->
+          <!-- CARD GAME 3: PHI DAO (CANNON) -->
           <div class="game-choice-card card-cannon" id="btn-choose-cannon" style="cursor: pointer;">
             <div class="card-tag">🗡️ PHI ĐAO LUYỆN CHỮ • ⌨️ DÀNH CHO MÁY TÍNH (CẦN BÀN PHÍM)</div>
             <div class="card-icon-hero">🗡️ 🥷</div>
@@ -200,7 +182,6 @@ export class NotebookGamesHub {
     const nativeGames = [
       { id: '#btn-choose-cannon', type: 'cannon' },
       { id: '#btn-choose-snake', type: 'snake' },
-      { id: '#btn-choose-alchemist', type: 'alchemist' },
       { id: '#btn-choose-mahjong', type: 'mahjong' }
     ];
 
@@ -314,8 +295,6 @@ export class NotebookGamesHub {
       this.currentGameEngine = new CannonGameEngine(viewport, this.words, onExit);
     } else if (gameType === 'snake') {
       this.currentGameEngine = new SnakeGameEngine(viewport, this.words, onExit);
-    } else if (gameType === 'alchemist') {
-      this.currentGameEngine = new AlchemistGameEngine(viewport, this.words, onExit);
     } else if (gameType === 'mahjong') {
       this.currentGameEngine = new MahjongGameEngine(viewport, this.words, onExit);
     }

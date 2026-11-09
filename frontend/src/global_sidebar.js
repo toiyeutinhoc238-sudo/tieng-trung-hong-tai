@@ -98,6 +98,20 @@ import './quick_dict_widget.js';
       if (!email || email === 'guest' || email.startsWith('guest')) return false;
       if (isUserAdmin(email)) return true;
       if (u.role === 'admin' || u.role === 'teacher' || u.role === 'superadmin' || u.isSuperAdmin) return true;
+
+      // Ưu đãi đặc biệt: Mở miễn phí toàn bộ hệ thống hết năm 2026 cho toàn bộ học viên!
+      const currentYear = new Date().getFullYear();
+      if (currentYear <= 2026) return true;
+
+      // Bước sang năm mới (> 2026): Reset cờ dùng thử cũ và tự động cấp lại 30 ngày VIP miễn phí mới
+      const trialClaimYear = parseInt(localStorage.getItem(`vip_trial_year_${email}`) || '2026', 10);
+      if (currentYear > trialClaimYear) {
+        localStorage.setItem(`vip_trial_year_${email}`, String(currentYear));
+        localStorage.setItem(`vip_trial_${email}`, 'true');
+        localStorage.setItem('vip_trial_claimed', 'true');
+        return true;
+      }
+
       if (u.isVip === true || u.vipStatus === 'vip') {
         if (u.vipExpiresAt) {
           const exp = new Date(u.vipExpiresAt).getTime();
@@ -751,6 +765,20 @@ import './quick_dict_widget.js';
       if (user.role === 'super_admin' || user.role === 'superadmin' || user.isSuperAdmin) return true;
       if (user.role === 'teacher' || email.includes('hongtai') || email.includes('teacher')) return true;
       if (user.role === 'admin' || user.isAdmin) return true;
+
+      // Ưu đãi đặc biệt: Mở miễn phí toàn bộ hệ thống hết năm 2026 cho toàn bộ học viên!
+      const currentYear = new Date().getFullYear();
+      if (currentYear <= 2026) return true;
+
+      // Bước sang năm mới (> 2026): Tự động cấp lại 30 ngày VIP miễn phí mới cho học viên
+      const trialClaimYear = parseInt(localStorage.getItem(`vip_trial_year_${email}`) || '2026', 10);
+      if (currentYear > trialClaimYear) {
+        localStorage.setItem(`vip_trial_year_${email}`, String(currentYear));
+        localStorage.setItem(`vip_trial_${email}`, 'true');
+        localStorage.setItem('vip_trial_claimed', 'true');
+        return true;
+      }
+
       if (user.isVip === true || user.vipStatus === 'vip') {
         if (user.vipExpiresAt) {
           const exp = new Date(user.vipExpiresAt).getTime();
@@ -810,8 +838,8 @@ import './quick_dict_widget.js';
         <!-- TAB 1: TRIAL -->
         <div id="vip-tab-pane-trial" class="vip-tab-pane" style="display: flex; flex-direction: column; gap: 14px;">
           <div class="global-vip-promo-box">
-            <strong>✨ ĐỢT ƯU ĐÃI ĐẶC BIỆT (ĐẾN HẾT 31/12/2026):</strong><br>
-            Tiếng Trung HongTai dành tặng <strong>30 NGÀY VIP HOÀN TOÀN MIỄN PHÍ</strong>. Mở khóa toàn bộ từ vựng HSK 1 - 6/9, kho giáo trình E-book và toàn bộ bài tập luyện thi thông minh!
+            <strong>🎉 ĐẶC BIỆT: MỞ MIỄN PHÍ TOÀN BỘ HỆ THỐNG HẾT NĂM NAY (ĐẾN HẾT 31/12/2026)!</strong><br>
+            Hệ thống Tiếng Trung HongTai mở cửa <strong>MIỄN PHÍ 100%</strong> toàn bộ bài học, từ vựng HSK 1 - 6/9, E-book và các tính năng luyện tập thông minh. <strong>Đặc biệt:</strong> Mọi tài khoản đã nhận 30 ngày dùng thử sẽ được <em>tự động kích hoạt thêm 30 ngày VIP miễn phí mới</em> khi bước sang năm mới!
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -1706,11 +1734,20 @@ import './quick_dict_widget.js';
       linkText: 'Khám phá ngay →'
     },
     {
+      id: 'free-all-year-2026',
+      tag: '🎉 MIỄN PHÍ 2026',
+      tagClass: 'hot',
+      title: 'Mở Miễn Phí Toàn Bộ Hệ Thống Hết Năm Nay!',
+      desc: 'Toàn bộ tính năng VIP mở miễn phí không giới hạn đến hết 31/12/2026. Các tài khoản đã nhận 30 ngày dùng thử sẽ được tự động kích hoạt lại 30 ngày miễn phí khi bước sang năm mới!',
+      action: 'vip',
+      linkText: 'Xem thông báo →'
+    },
+    {
       id: 'game-hub',
-      tag: '🎮 5 MINI GAME',
+      tag: '🎮 4 MINI GAME',
       tagClass: 'game',
-      title: 'Đấu Trường Mini Game:',
-      desc: 'Vừa chơi vừa ôn luyện: Pháo hoa sinh tồn, Nối chữ Hán, Lật thẻ từ vựng & Bắn bóng!',
+      title: 'Đấu Trường 4 Trò Chơi Ôn Tập:',
+      desc: 'Vừa chơi vừa ôn luyện: Đấu Trường Quiz Game, Mạt Chược Nối Từ, Nuôi Rắn Từ Vựng & Phi Đao Luyện Chữ!',
       action: 'gamehub',
       linkText: 'Vào chơi ngay →'
     },
