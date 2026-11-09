@@ -7477,11 +7477,11 @@ function renderActiveCardSentence(current) {
 function detectChineseGrammarPoints(sentence) {
   if (!sentence) return [];
   const points = [];
-  
+
   // 1. Cấu trúc câu phức & Liên từ cặp đôi
   if (/虽然|尽管/.test(sentence) && /但是|但|可是|却/.test(sentence)) points.push('Mệnh đề nhượng bộ (虽然...但是...)');
   else if (/虽然|尽管/.test(sentence)) points.push('Từ nối nhượng bộ (虽然/尽管)');
-  
+
   if (/因为/.test(sentence) && /所以/.test(sentence)) points.push('Mệnh đề nhân quả (因为...所以...)');
   else if (/因为|由于/.test(sentence)) points.push('Nguyên nhân (因为/由于)');
   else if (/所以|因此/.test(sentence)) points.push('Kết quả (所以/因此)');
@@ -8844,8 +8844,8 @@ function renderLessonsList() {
   const mapHeaderTitle = activeLessonsCurriculum === 'yct'
     ? `BẢN ĐỒ BÀI HỌC YCT CẤP ${activeYctLevel}`
     : activeLessonsCurriculum === 'hanngu'
-    ? `BẢN ĐỒ BÀI HỌC HÁN NGỮ - QUYỂN ${activeLessonsLevel || 1}`
-    : `BẢN ĐỒ BÀI HỌC HSK CẤP ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel} (${activeHskVersion})`;
+      ? `BẢN ĐỒ BÀI HỌC HÁN NGỮ - QUYỂN ${activeLessonsLevel || 1}`
+      : `BẢN ĐỒ BÀI HỌC HSK CẤP ${activeLessonsLevel === '7-9' ? '7-8-9' : activeLessonsLevel} (${activeHskVersion})`;
 
   // View Switcher Bar Header
   const viewSwitcherHtml = `
@@ -10208,9 +10208,9 @@ function renderLessonAiCheckResult(data, container, targetWord) {
   const score = typeof data.score === 'number' ? data.score : (isCorrect ? 58 : 20);
   const badge = data.badge || (
     score >= 90 ? 'Xuất Sắc 🏆' :
-    score >= 80 ? 'Rất Tốt 🌟' :
-    score >= 70 ? 'Khá 👏' :
-    score >= 50 ? 'Đạt (Cơ Bản) 👍' : 'Chưa Đạt / Cần Sửa ❌'
+      score >= 80 ? 'Rất Tốt 🌟' :
+        score >= 70 ? 'Khá 👏' :
+          score >= 50 ? 'Đạt (Cơ Bản) 👍' : 'Chưa Đạt / Cần Sửa ❌'
   );
   const scoreColor = isCorrect && score >= 80 ? '#10b981' : (isCorrect && score >= 50 ? '#0284c7' : '#ef4444');
 
@@ -10369,7 +10369,7 @@ window.replayLessonHanziStrokes = function () {
   animateLessonHanziSimultaneously();
 };
 
-window.switchCardVisualTab = function (tab) {};
+window.switchCardVisualTab = function (tab) { };
 
 // ===== ROADMAP VOCABULARY WRITING MODAL (TỰ TẬP VIẾT CHỮ HÁN) =====
 let roadmapWritingInstance = null;
@@ -14035,7 +14035,7 @@ window.submitCreateCustomNotebook = async function () {
             explanation: w.explanation
           }),
           credentials: 'include'
-        }).catch(() => {});
+        }).catch(() => { });
       }
     } catch (e) {
       console.warn('Sync custom words API error:', e);
@@ -15473,7 +15473,7 @@ function recordWordLearningResult(wordObjOrId, isCorrect, notifyServer = true) {
 
   // 1. Update in-memory vocabList if available
   let matchedWord = null;
-  const index = vocabList.findIndex(w => 
+  const index = vocabList.findIndex(w =>
     (wordId && (w.id === wordId || String(w.id) === String(wordId))) ||
     (wordText && w.word === wordText)
   );
@@ -15519,7 +15519,7 @@ function recordWordLearningResult(wordObjOrId, isCorrect, notifyServer = true) {
       if (currentUser.id) userKeys.push(String(currentUser.id));
       if (currentUser.email) userKeys.push(String(currentUser.email));
     }
-  } catch (e) {}
+  } catch (e) { }
 
   userKeys = Array.from(new Set(userKeys.filter(Boolean)));
 
@@ -15531,7 +15531,7 @@ function recordWordLearningResult(wordObjOrId, isCorrect, notifyServer = true) {
       if (finalId) data[String(finalId)] = { ...(data[String(finalId)] || {}), ...progState };
       if (finalWord) data[finalWord] = { ...(data[finalWord] || {}), ...progState };
       localStorage.setItem(sk, JSON.stringify(data));
-    } catch (e) {}
+    } catch (e) { }
   });
 
   // Also write guest_progress
@@ -15541,7 +15541,7 @@ function recordWordLearningResult(wordObjOrId, isCorrect, notifyServer = true) {
     if (finalId) gData[String(finalId)] = { ...(gData[String(finalId)] || {}), ...progState };
     if (finalWord) gData[finalWord] = { ...(gData[finalWord] || {}), ...progState };
     localStorage.setItem('guest_progress', JSON.stringify(gData));
-  } catch (e) {}
+  } catch (e) { }
 
   // 3. Update UI stats and tables immediately
   try {
@@ -15557,7 +15557,7 @@ function recordWordLearningResult(wordObjOrId, isCorrect, notifyServer = true) {
         renderSubdecksList();
       }
     }
-  } catch (eUI) {}
+  } catch (eUI) { }
 
   // 4. Notify backend if requested
   if (notifyServer && currentUser) {
@@ -15568,16 +15568,16 @@ function recordWordLearningResult(wordObjOrId, isCorrect, notifyServer = true) {
           headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
           body: JSON.stringify({ id: finalId, isWrong: true }),
           credentials: 'include'
-        }).catch(() => {});
+        }).catch(() => { });
       } else {
         fetch(API_BASE_URL + '/api/vocabulary/set-memorized', {
           method: 'POST',
           headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
           body: JSON.stringify({ id: finalId, isMemorized: true }),
           credentials: 'include'
-        }).catch(() => {});
+        }).catch(() => { });
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 }
 
@@ -16336,7 +16336,7 @@ window.renderRankLeaderboardPage = function (page = 1, highlightRank = null) {
       url.searchParams.delete('page');
     }
     window.history.replaceState({}, '', url);
-  } catch (e) {}
+  } catch (e) { }
 
   // Render thanh phân trang Docked Footer
   if (paginationContainer) {
@@ -16433,7 +16433,7 @@ window.loadRankPageData = function () {
         const urlParams = new URLSearchParams(window.location.search);
         const p = parseInt(urlParams.get('page'), 10);
         if (!isNaN(p) && p >= 1) initialPage = p;
-      } catch (e) {}
+      } catch (e) { }
       window.renderRankLeaderboardPage(initialPage);
     })
     .catch(err => {
@@ -18948,7 +18948,7 @@ window.submitAdminVipAction = async function (targetEmail, action) {
 
 window.currentAdminTab = 'users';
 
-window.switchAdminTab = function(tabName) {
+window.switchAdminTab = function (tabName) {
   window.currentAdminTab = tabName;
   const usersSec = document.getElementById('admin-section-users');
   const broadcastSec = document.getElementById('admin-section-broadcast');
@@ -18986,7 +18986,7 @@ window.switchAdminTab = function(tabName) {
   }
 };
 
-window.fetchBroadcastEmailStatus = async function() {
+window.fetchBroadcastEmailStatus = async function () {
   try {
     const res = await fetch(`${API_BASE_URL}/api/admin/broadcast-email/status`, {
       method: 'GET',
@@ -18995,7 +18995,7 @@ window.fetchBroadcastEmailStatus = async function() {
     });
     if (!res.ok) return;
     const data = await res.json();
-    
+
     const countBadge = document.getElementById('admin-broadcast-learner-count');
     if (countBadge) countBadge.textContent = `${data.totalLearners || 0} học viên`;
 
@@ -19016,7 +19016,7 @@ window.fetchBroadcastEmailStatus = async function() {
   }
 };
 
-window.updateBroadcastPreview = function() {
+window.updateBroadcastPreview = function () {
   const subjInput = document.getElementById('admin-email-subject');
   const headInput = document.getElementById('admin-email-headline');
   const msgInput = document.getElementById('admin-email-message');
@@ -19049,7 +19049,7 @@ window.updateBroadcastPreview = function() {
   }
 };
 
-window.handleSendBroadcastEmail = async function(target) {
+window.handleSendBroadcastEmail = async function (target) {
   const subjInput = document.getElementById('admin-email-subject');
   const headInput = document.getElementById('admin-email-headline');
   const msgInput = document.getElementById('admin-email-message');

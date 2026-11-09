@@ -166,11 +166,16 @@ import './quick_dict_widget.js';
         background: rgba(8, 13, 25, 0.88) !important;
         backdrop-filter: blur(20px) !important;
         -webkit-backdrop-filter: blur(20px) !important;
-        display: flex !important;
+        display: none !important;
         align-items: center !important;
         justify-content: center !important;
         padding: 16px !important;
         box-sizing: border-box !important;
+      }
+      .global-auth-modal-overlay.active,
+      .global-auth-modal-overlay.show,
+      .global-auth-modal-overlay[style*="display: flex"] {
+        display: flex !important;
         animation: globalAuthFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
       .global-auth-card {
@@ -208,11 +213,13 @@ import './quick_dict_widget.js';
         align-items: center !important;
         justify-content: center !important;
         transition: all 0.2s ease !important;
+        z-index: 100 !important;
+        pointer-events: auto !important;
       }
       .global-auth-close-btn:hover {
-        background: rgba(239, 68, 68, 0.2) !important;
+        background: rgba(239, 68, 68, 0.3) !important;
         color: #f87171 !important;
-        border-color: rgba(239, 68, 68, 0.4) !important;
+        border-color: rgba(239, 68, 68, 0.5) !important;
         transform: rotate(90deg);
       }
       .global-auth-badge {
@@ -398,7 +405,7 @@ import './quick_dict_widget.js';
 
     modal.innerHTML = `
       <div class="modal-card global-auth-card">
-        <button class="global-auth-close-btn" id="global-auth-close-btn" title="Đóng" onclick="window.hideGlobalAuthModal && window.hideGlobalAuthModal()">&times;</button>
+        <button type="button" class="global-auth-close-btn" id="global-auth-close-btn" title="Đóng" onclick="window.hideGlobalAuthModal && window.hideGlobalAuthModal(true)">&times;</button>
         <div class="global-auth-badge-wrap">
           <span class="global-auth-badge"><i class="fa-solid fa-shield-halved"></i> Yêu Cầu Đăng Nhập</span>
         </div>
@@ -442,11 +449,36 @@ import './quick_dict_widget.js';
 
     document.body.appendChild(modal);
 
+    const closeBtn = modal.querySelector('#global-auth-close-btn');
+    if (closeBtn) {
+      closeBtn.onclick = function (e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        hideGlobalAuthModal(true);
+      };
+      closeBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        hideGlobalAuthModal(true);
+      });
+    }
+
     modal.addEventListener('click', (e) => {
-      if (e.target === modal && !window._isMandatoryPageLockActive) {
-        window.hideGlobalAuthModal();
+      if ((e.target === modal || e.target.classList.contains('global-auth-modal-overlay')) && !window._isMandatoryPageLockActive) {
+        hideGlobalAuthModal(true);
       }
     });
+
+    if (!window._globalAuthEscAttached) {
+      window._globalAuthEscAttached = true;
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !window._isMandatoryPageLockActive) {
+          hideGlobalAuthModal(true);
+        }
+      });
+    }
 
     return modal;
   }
@@ -657,6 +689,8 @@ import './quick_dict_widget.js';
       homeBtnWrap.style.setProperty('display', opts.isMandatoryPageLock ? 'block' : 'none', 'important');
     }
 
+    modal.classList.add('active');
+    modal.style.setProperty('display', 'flex', 'important');
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     renderGlobalGoogleSignInButton();
@@ -679,21 +713,28 @@ import './quick_dict_widget.js';
       updateSidebarUserProfile();
       window.dispatchEvent(new CustomEvent('user-auth-changed', { detail: event.data.user }));
       window.dispatchEvent(new CustomEvent('hongtai-auth-success', { detail: event.data.user }));
-      hideGlobalAuthModal();
+      hideGlobalAuthModal(true);
       if (typeof window.initUserSessionTracking === 'function') {
         window.initUserSessionTracking();
       }
     }
   });
 
-  function hideGlobalAuthModal() {
-    if (window._isMandatoryPageLockActive && !isUserLoggedIn()) {
+  function hideGlobalAuthModal(force = false) {
+    if (!force && window._isMandatoryPageLockActive && !isUserLoggedIn()) {
       return; // Do not close if page is locked and still unauthenticated
     }
     const modal = document.getElementById('global-auth-required-modal');
-    if (modal) modal.style.display = 'none';
+    if (modal) {
+      modal.classList.remove('active');
+      modal.style.setProperty('display', 'none', 'important');
+      modal.style.display = 'none';
+    }
     const oldModal = document.getElementById('auth-required-modal');
-    if (oldModal) oldModal.style.display = 'none';
+    if (oldModal) {
+      oldModal.style.setProperty('display', 'none', 'important');
+      oldModal.style.display = 'none';
+    }
     document.body.style.overflow = '';
     window._isMandatoryPageLockActive = false;
   }
