@@ -605,6 +605,8 @@ import './quick_dict_widget.js';
 
       localStorage.setItem('user', JSON.stringify(userObj));
       localStorage.setItem('currentUser', JSON.stringify(userObj));
+      localStorage.setItem('hongtai_user', JSON.stringify(userObj));
+      localStorage.setItem('hongtai_current_user', JSON.stringify(userObj));
 
       updateSidebarUserProfile();
       window.dispatchEvent(new CustomEvent('user-auth-changed', { detail: userObj }));
@@ -624,20 +626,30 @@ import './quick_dict_widget.js';
       const userName = userObj.name || (userObj.email ? userObj.email.split('@')[0] : 'Học viên');
       showGlobalAuthToast(`Chào mừng ${userName} đã đăng nhập thành công! 👋`);
 
-      // If on subpage and previously locked, reload page so full user-specific data initializes
-      const isIndex = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html') || window.location.pathname === '';
-      if (!isIndex && !isEmbeddedInIframe) {
+      // 1. If user was attempting to visit a specific guarded feature/link, redirect immediately!
+      if (window._pendingGuardedAuthTargetUrl) {
+        const dest = window._pendingGuardedAuthTargetUrl;
+        window._pendingGuardedAuthTargetUrl = null;
+        window._pendingGuardedAuthCallback = null;
         setTimeout(() => {
-          window.location.reload();
+          window.location.href = dest;
         }, 350);
         return;
       }
 
-      // Execute pending guarded callback if any
+      // 2. Execute pending guarded callback if any
       if (typeof window._pendingGuardedAuthCallback === 'function') {
         const cb = window._pendingGuardedAuthCallback;
         window._pendingGuardedAuthCallback = null;
         try { cb(); } catch (e) { console.error('Error executing pending auth callback:', e); }
+      }
+
+      // 3. Always reload/refresh the page after login so user profile avatar, name, streak, and progress are 100% active!
+      if (!isEmbeddedInIframe) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 350);
+        return;
       }
     } catch (e) {
       console.error('Google Auth Error:', e);
@@ -663,6 +675,7 @@ import './quick_dict_widget.js';
     const modal = ensureGlobalAuthModal();
     window._isMandatoryPageLockActive = !!opts.isMandatoryPageLock;
     window._pendingGuardedAuthCallback = opts.callback || null;
+    window._pendingGuardedAuthTargetUrl = opts.targetUrl || null;
 
     const titleEl = document.getElementById('global-auth-title');
     const descEl = document.getElementById('global-auth-desc');
@@ -2386,11 +2399,22 @@ import './quick_dict_widget.js';
             e.preventDefault();
             e.stopPropagation();
             const text = el.textContent.trim().split('\n')[0] || 'tính năng này';
+
+            // Extract target URL from href or onclick attribute
+            let targetUrl = el.getAttribute('href') || '';
+            if (!targetUrl || targetUrl === 'javascript:void(0)' || targetUrl === '#') {
+              const onclickAttr = el.getAttribute('onclick') || '';
+              const match = onclickAttr.match(/['"](\/[^'"]+\.html[^'"]*)['"]/);
+              if (match) targetUrl = match[1];
+            }
+
             showGlobalAuthModal({
               isMandatoryPageLock: false,
               actionName: text,
               title: `Đăng Nhập Để Dùng: ${text}`,
-              desc: `Vui lòng đăng nhập với tài khoản Google để sử dụng tính năng <strong>${text}</strong>.`
+              desc: `Vui lòng đăng nhập với tài khoản Google để sử dụng tính năng <strong>${text}</strong>.`,
+              targetUrl: targetUrl || null,
+              callback: targetUrl ? () => { window.location.href = targetUrl; } : null
             });
           }
         }, true);

@@ -4635,6 +4635,29 @@ async function handleCredentialResponse(response) {
 }
 window.handleCredentialResponse = handleCredentialResponse;
 
+// Synchronize with Global Auth and external login callbacks
+window.addEventListener('user-auth-changed', (e) => {
+  if (e && e.detail) {
+    currentUser = e.detail;
+    renderUserProfile();
+    if (typeof window.initUserSessionTracking === 'function') {
+      window.initUserSessionTracking();
+    }
+    try { fetchVocabulary(); } catch (ve) {}
+  }
+});
+
+window.addEventListener('hongtai-auth-success', (e) => {
+  if (e && e.detail) {
+    currentUser = e.detail;
+    renderUserProfile();
+    if (typeof window.initUserSessionTracking === 'function') {
+      window.initUserSessionTracking();
+    }
+    try { fetchVocabulary(); } catch (ve) {}
+  }
+});
+
 // Logout Click Handler
 export async function handleLogout(e) {
   if (e && typeof e.preventDefault === 'function') e.preventDefault();
