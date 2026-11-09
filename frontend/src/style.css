@@ -25375,8 +25375,43 @@ html.light-mode .vip-pricing-schedule-note {
   }
 }
 
+/* ==========================================================================
+   POPUP QUẢNG CÁO / THÔNG BÁO ĂN MỪNG CHIẾN THẮNG
+   ========================================================================== */
 
+@keyframes victoryPromoZoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
+.victory-promo-overlay {
+  z-index: 9999999 !important;
+}
 
+#victory-promo-close-btn:hover {
+  background: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  transform: scale(1.1) rotate(90deg) !important;
+}
 
+@media (max-width: 600px) {
+  .victory-promo-card {
+    max-width: 95% !important;
+    border-radius: 18px !important;
+  }
+  #victory-promo-close-btn {
+    top: 10px !important;
+    right: 10px !important;
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 1.1rem !important;
+  }
+}
 

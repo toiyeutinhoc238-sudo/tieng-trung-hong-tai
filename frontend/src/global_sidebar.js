@@ -943,6 +943,59 @@ import './quick_dict_widget.js';
     }
   };
 
+  // Universal Victory Promo Popup Helper
+  window.showVictoryPromoModal = function () {
+    let modal = document.getElementById('victory-promo-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'victory-promo-modal';
+      modal.className = 'modal-overlay victory-promo-overlay';
+      modal.style.cssText = 'display: none; position: fixed; inset: 0; z-index: 9999999; background: rgba(10, 15, 29, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 16px; overflow-y: auto;';
+      modal.onclick = function (e) {
+        if (e.target === modal) window.closeVictoryPromoModal();
+      };
+      modal.innerHTML = `
+        <div class="victory-promo-card"
+          style="position: relative; max-width: 480px; width: 100%; max-height: 92vh; background: #0f172a; border: 2px solid rgba(245, 158, 11, 0.6); border-radius: 24px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(245, 158, 11, 0.35); overflow: hidden; display: flex; flex-direction: column; animation: victoryPromoZoom 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+          
+          <button type="button" id="victory-promo-close-btn" onclick="window.closeVictoryPromoModal()" aria-label="Đóng quảng cáo"
+            style="position: absolute; top: 12px; right: 12px; z-index: 20; width: 38px; height: 38px; border-radius: 50%; background: rgba(15, 23, 42, 0.85); border: 2px solid rgba(255, 255, 255, 0.7); color: #ffffff; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: all 0.2s ease;">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+
+          <div style="width: 100%; overflow: hidden; background: #020617; position: relative;">
+            <img src="/assets/an_mung_chien_thang.jpg" alt="Ăn Mừng Chiến Thắng"
+              onerror="this.onerror=null; this.src='/an_mung_chien_thang.jpg';"
+              style="width: 100%; height: auto; max-height: 72vh; object-fit: contain; display: block;" />
+          </div>
+
+          <div style="padding: 12px 18px 16px 18px; background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); display: flex; gap: 10px; align-items: center; justify-content: center; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <button type="button" onclick="window.closeVictoryPromoModal()"
+              style="flex: 1; padding: 10px 18px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000000; font-weight: 800; font-size: 0.95rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); transition: transform 0.15s ease;">
+              <i class="fa-solid fa-fire"></i> Vào Khám Phá Ngay
+            </button>
+            <button type="button" onclick="window.closeVictoryPromoModal()"
+              style="padding: 10px 16px; border-radius: 12px; background: rgba(255, 255, 255, 0.1); color: #94a3b8; font-weight: 700; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.15); cursor: pointer; transition: all 0.15s ease;">
+              Đóng
+            </button>
+          </div>
+
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeVictoryPromoModal = function () {
+    const modal = document.getElementById('victory-promo-modal');
+    if (modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  };
+
   window.switchVipModalTab = function (tabName) {
     const tabs = ['trial', 'pricing', 'payment', 'comparison'];
     tabs.forEach(t => {
@@ -2426,9 +2479,21 @@ import './quick_dict_widget.js';
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGlobalSidebar);
+    document.addEventListener('DOMContentLoaded', function () {
+      initGlobalSidebar();
+      setTimeout(function () {
+        if (typeof window.showVictoryPromoModal === 'function') {
+          window.showVictoryPromoModal();
+        }
+      }, 200);
+    });
   } else {
     initGlobalSidebar();
+    setTimeout(function () {
+      if (typeof window.showVictoryPromoModal === 'function') {
+        window.showVictoryPromoModal();
+      }
+    }, 200);
   }
 
 })();
