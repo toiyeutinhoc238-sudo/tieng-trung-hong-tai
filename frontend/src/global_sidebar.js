@@ -626,26 +626,24 @@ import './quick_dict_widget.js';
       const userName = userObj.name || (userObj.email ? userObj.email.split('@')[0] : 'Học viên');
       showGlobalAuthToast(`Chào mừng ${userName} đã đăng nhập thành công! 👋`);
 
-      // 1. If user was attempting to visit a specific guarded feature/link, redirect immediately!
-      if (window._pendingGuardedAuthTargetUrl) {
-        const dest = window._pendingGuardedAuthTargetUrl;
-        window._pendingGuardedAuthTargetUrl = null;
-        window._pendingGuardedAuthCallback = null;
-        setTimeout(() => {
-          window.location.href = dest;
-        }, 350);
-        return;
-      }
-
-      // 2. Execute pending guarded callback if any
-      if (typeof window._pendingGuardedAuthCallback === 'function') {
-        const cb = window._pendingGuardedAuthCallback;
-        window._pendingGuardedAuthCallback = null;
-        try { cb(); } catch (e) { console.error('Error executing pending auth callback:', e); }
-      }
-
-      // 3. Always reload/refresh the page after login so user profile avatar, name, streak, and progress are 100% active!
+      // Always refresh/redirect after successful login so all user state, avatar, VIP status and progress take effect immediately
       if (!isEmbeddedInIframe) {
+        if (window._pendingGuardedAuthTargetUrl) {
+          const dest = window._pendingGuardedAuthTargetUrl;
+          window._pendingGuardedAuthTargetUrl = null;
+          window._pendingGuardedAuthCallback = null;
+          setTimeout(() => {
+            window.location.href = dest;
+          }, 350);
+          return;
+        }
+
+        if (typeof window._pendingGuardedAuthCallback === 'function') {
+          const cb = window._pendingGuardedAuthCallback;
+          window._pendingGuardedAuthCallback = null;
+          try { cb(); } catch (e) { console.error('Error executing pending auth callback:', e); }
+        }
+
         setTimeout(() => {
           window.location.reload();
         }, 350);
@@ -958,6 +956,7 @@ import './quick_dict_widget.js';
 
   // Universal Victory Promo Popup Helper
   window.showVictoryPromoModal = function () {
+    try { sessionStorage.setItem('victory_promo_shown', 'true'); } catch (e) {}
     let modal = document.getElementById('victory-promo-modal');
     if (!modal) {
       modal = document.createElement('div');
@@ -1002,6 +1001,7 @@ import './quick_dict_widget.js';
   };
 
   window.closeVictoryPromoModal = function () {
+    try { sessionStorage.setItem('victory_promo_shown', 'true'); } catch (e) {}
     const modal = document.getElementById('victory-promo-modal');
     if (modal) {
       modal.style.display = 'none';
@@ -1117,10 +1117,7 @@ import './quick_dict_widget.js';
   }
 
   window.showShadowingUpgradeNotice = function () {
-    showGlobalAuthToast('🔒 Tính năng Shadowing đang được nâng cấp và hoàn thiện! Vui lòng luyện Nghe Chép Chính Tả nhé! 🚀', false);
-    setTimeout(() => {
-      window.location.href = '/video-dictation.html?mode=dictation';
-    }, 900);
+    window.location.href = '/video-dictation.html?mode=shadowing';
   };
 
   // Page-Level Auth Guard: locks subpages for unauthenticated users
@@ -1406,11 +1403,8 @@ import './quick_dict_widget.js';
         <!-- DANH MỤC 2: KỸ NĂNG -->
         <div class="sidebar-section-label">Kỹ Năng</div>
         <ul class="sidebar-menu" style="margin-bottom: 8px;">
-          <li class="sidebar-item" onclick="window.showShadowingUpgradeNotice()" title="Tính năng Shadowing đang được nâng cấp" style="cursor: pointer;">
+          <li class="sidebar-item ${activeKey === 'shadowing' ? 'active' : ''}" onclick="window.location.href = '/video-dictation.html?mode=shadowing'" title="Luyện Shadowing qua Video thực tế" style="cursor: pointer;">
             <i class="fa-solid fa-microphone-lines" style="color: #10b981; font-size: 1.1rem;"></i> <span>Shadowing</span>
-            <span style="font-size: 0.65rem; background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); padding: 1px 7px; border-radius: 99px; font-weight: 700; margin-left: auto; display: inline-flex; align-items: center; gap: 3px;">
-              <i class="fa-solid fa-lock" style="font-size: 0.6rem;"></i> Nâng cấp
-            </span>
           </li>
           <li class="sidebar-item ${activeKey === 'dictation' ? 'active' : ''}" onclick="window.location.href = '/video-dictation.html?mode=dictation'">
             <i class="fa-solid fa-pen-to-square" style="color: #38bdf8; font-size: 1.1rem;"></i> <span>Nghe Chép</span>
@@ -2505,19 +2499,9 @@ import './quick_dict_widget.js';
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       initGlobalSidebar();
-      setTimeout(function () {
-        if (typeof window.showVictoryPromoModal === 'function') {
-          window.showVictoryPromoModal();
-        }
-      }, 200);
     });
   } else {
     initGlobalSidebar();
-    setTimeout(function () {
-      if (typeof window.showVictoryPromoModal === 'function') {
-        window.showVictoryPromoModal();
-      }
-    }, 200);
   }
 
 })();

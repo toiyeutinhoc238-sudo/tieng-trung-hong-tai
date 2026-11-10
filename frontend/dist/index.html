@@ -221,11 +221,11 @@
     };
   </script>
   <script type="module" crossorigin src="/assets/vendor-BfYXEYrK.js"></script>
-  <script type="module" crossorigin src="/assets/global_sidebar-PyW2N1AC.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-DBRh8uCM.js"></script>
   <script type="module" crossorigin src="/assets/hsk-grammar-data-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/games-data-Cei7A8X3.js"></script>
   <script type="module" crossorigin src="/assets/vendor-pinyin-haNF1LmB.js"></script>
-  <script type="module" crossorigin src="/assets/main-CDfeJRpt.js"></script>
+  <script type="module" crossorigin src="/assets/main-BlmE_Nj0.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/global_sidebar-UEsj2WVq.css">
 </head>
 
@@ -5977,6 +5977,9 @@ Chúc các bạn có những giờ học tập thật hào hứng và nhanh chó
       };
 
       window.closeVictoryPromoModal = function () {
+        try {
+          sessionStorage.setItem('victory_promo_shown', 'true');
+        } catch (e) {}
         var modal = document.getElementById('victory-promo-modal');
         if (modal) {
           modal.style.display = 'none';
@@ -5984,13 +5987,23 @@ Chúc các bạn có những giờ học tập thật hào hứng và nhanh chó
         }
       };
 
-      // Tự động mở popup ngay lập tức khi vừa truy cập web
+      // Tự động mở popup ngay khi vừa truy cập web (chỉ hiển thị 1 lần duy nhất mỗi phiên truy cập)
+      function autoShowVictoryPromoOnce() {
+        try {
+          if (sessionStorage.getItem('victory_promo_shown')) {
+            return;
+          }
+          sessionStorage.setItem('victory_promo_shown', 'true');
+        } catch (e) {}
+        window.showVictoryPromoModal();
+      }
+
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function () {
-          setTimeout(window.showVictoryPromoModal, 150);
+          setTimeout(autoShowVictoryPromoOnce, 250);
         });
       } else {
-        setTimeout(window.showVictoryPromoModal, 150);
+        setTimeout(autoShowVictoryPromoOnce, 250);
       }
 
       window.addEventListener('keydown', function (e) {
