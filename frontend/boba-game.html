@@ -50,6 +50,38 @@
           <path d="M 18 160 L 18 35 L 12 35 L 20 10 L 28 35 L 22 35 L 22 160 Z" fill="#475569" />
           <polygon points="12,35 28,35 25,50 15,50" fill="#fef08a" />
         </svg>
+
+        <!-- Animated Street Passersby (Hành khách anime lướt qua lại) -->
+        <div class="street-passersby-container" aria-hidden="true">
+          <!-- Walking Track 1: Trái sang Phải -->
+          <div class="passerby-walker walker-track-1">
+            <div class="walker-sprite walker-girl-boba">
+              <span class="walker-bubble">🧋</span>
+              <div class="walker-figure">👧</div>
+            </div>
+          </div>
+          <!-- Walking Track 2: Phải sang Trái -->
+          <div class="passerby-walker walker-track-2">
+            <div class="walker-sprite walker-dog-walker">
+              <span class="walker-bubble">🐶</span>
+              <div class="walker-figure">👦</div>
+            </div>
+          </div>
+          <!-- Walking Track 3: Học sinh đeo cặp lướt qua -->
+          <div class="passerby-walker walker-track-3">
+            <div class="walker-sprite walker-student">
+              <span class="walker-bubble">🎒</span>
+              <div class="walker-figure">🧑‍🎓</div>
+            </div>
+          </div>
+          <!-- Walking Track 4: Xe đạp & bóng bay -->
+          <div class="passerby-walker walker-track-4">
+            <div class="walker-sprite walker-bicycle">
+              <span class="walker-bubble">🎈</span>
+              <div class="walker-figure">🚲</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Wooden Counter Header & Top -->
@@ -148,69 +180,75 @@
 
     <!-- 5. CUSTOMER ZONE & SPEECH BALLOON -->
     <div class="boba-customer-zone">
-      <!-- Anime Chibi Customer Sprite -->
+      <!-- Anime Chibi Customer Sprite with Rotating Characters -->
       <div class="customer-sprite-wrap" id="customer-sprite-wrap" title="Khách hàng (Bấm để nghe lại)">
-        <!-- SVG Vector Anime Girl Artwork matching reference 100% -->
-        <svg viewBox="0 0 160 210" width="160" height="210">
-          <defs>
-            <radialGradient id="faceGrad" cx="50%" cy="40%" r="50%">
-              <stop offset="0%" stop-color="#fff5f0" />
-              <stop offset="100%" stop-color="#fed7cc" />
-            </radialGradient>
-            <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#693b22" />
-              <stop offset="100%" stop-color="#451e0e" />
-            </linearGradient>
-            <linearGradient id="blouseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#fffbeb" />
-              <stop offset="100%" stop-color="#fef08a" />
-            </linearGradient>
-          </defs>
+        <div class="customer-avatar-inner" id="customer-avatar-inner">
+          <!-- Default SVG Vector Anime Girl Artwork matching reference 100% -->
+          <svg viewBox="0 0 160 210" width="160" height="210" class="customer-svg-sprite">
+            <defs>
+              <radialGradient id="faceGrad" cx="50%" cy="40%" r="50%">
+                <stop offset="0%" stop-color="#fff5f0" />
+                <stop offset="100%" stop-color="#fed7cc" />
+              </radialGradient>
+              <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#693b22" />
+                <stop offset="100%" stop-color="#451e0e" />
+              </linearGradient>
+              <linearGradient id="blouseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#fffbeb" />
+                <stop offset="100%" stop-color="#fef08a" />
+              </linearGradient>
+            </defs>
 
-          <!-- Back Hair -->
-          <ellipse cx="80" cy="95" rx="52" ry="58" fill="url(#hairGrad)" />
+            <!-- Back Hair -->
+            <ellipse cx="80" cy="95" rx="52" ry="58" fill="url(#hairGrad)" />
 
-          <!-- Body / Blouse -->
-          <path d="M 40 210 Q 45 155 80 155 Q 115 155 120 210 Z" fill="url(#blouseGrad)" />
-          <!-- White Collar & Bowtie -->
-          <polygon points="68,155 80,172 60,165" fill="#ffffff" />
-          <polygon points="92,155 80,172 100,165" fill="#ffffff" />
-          <circle cx="80" cy="172" r="5" fill="#f59e0b" />
-          <path d="M 75 172 L 66 182 L 72 186 Z" fill="#d97706" />
-          <path d="M 85 172 L 94 182 L 88 186 Z" fill="#d97706" />
+            <!-- Body / Blouse -->
+            <path d="M 40 210 Q 45 155 80 155 Q 115 155 120 210 Z" fill="url(#blouseGrad)" />
+            <!-- White Collar & Bowtie -->
+            <polygon points="68,155 80,172 60,165" fill="#ffffff" />
+            <polygon points="92,155 80,172 100,165" fill="#ffffff" />
+            <circle cx="80" cy="172" r="5" fill="#f59e0b" />
+            <path d="M 75 172 L 66 182 L 72 186 Z" fill="#d97706" />
+            <path d="M 85 172 L 94 182 L 88 186 Z" fill="#d97706" />
 
-          <!-- Face -->
-          <ellipse cx="80" cy="100" rx="38" ry="34" fill="url(#faceGrad)" />
-          <!-- Blush -->
-          <ellipse cx="58" cy="110" rx="7" ry="4" fill="#fca5a5" opacity="0.6" />
-          <ellipse cx="102" cy="110" rx="7" ry="4" fill="#fca5a5" opacity="0.6" />
+            <!-- Face -->
+            <ellipse cx="80" cy="100" rx="38" ry="34" fill="url(#faceGrad)" />
+            <!-- Blush -->
+            <ellipse cx="58" cy="110" rx="7" ry="4" fill="#fca5a5" opacity="0.6" />
+            <ellipse cx="102" cy="110" rx="7" ry="4" fill="#fca5a5" opacity="0.6" />
 
-          <!-- Eyes -->
-          <ellipse cx="64" cy="98" rx="6.5" ry="9" fill="#2d150b" />
-          <circle cx="62" cy="95" r="2.8" fill="#ffffff" />
-          <circle cx="66" cy="102" r="1.5" fill="#ffffff" />
-          <ellipse cx="96" cy="98" rx="6.5" ry="9" fill="#2d150b" />
-          <circle cx="94" cy="95" r="2.8" fill="#ffffff" />
-          <circle cx="98" cy="102" r="1.5" fill="#ffffff" />
+            <!-- Eyes -->
+            <ellipse cx="64" cy="98" rx="6.5" ry="9" fill="#2d150b" />
+            <circle cx="62" cy="95" r="2.8" fill="#ffffff" />
+            <circle cx="66" cy="102" r="1.5" fill="#ffffff" />
+            <ellipse cx="96" cy="98" rx="6.5" ry="9" fill="#2d150b" />
+            <circle cx="94" cy="95" r="2.8" fill="#ffffff" />
+            <circle cx="98" cy="102" r="1.5" fill="#ffffff" />
 
-          <!-- Eyebrows & Smile -->
-          <path d="M 58 87 Q 64 84 70 88" stroke="#451e0e" stroke-width="2.5" fill="none" stroke-linecap="round" />
-          <path d="M 90 88 Q 96 84 102 87" stroke="#451e0e" stroke-width="2.5" fill="none" stroke-linecap="round" />
-          <path d="M 74 114 Q 80 122 86 114" stroke="#e11d48" stroke-width="2.5" fill="#fb7185"
-            stroke-linecap="round" />
+            <!-- Eyebrows & Smile -->
+            <path d="M 58 87 Q 64 84 70 88" stroke="#451e0e" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <path d="M 90 88 Q 96 84 102 87" stroke="#451e0e" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <path d="M 74 114 Q 80 122 86 114" stroke="#e11d48" stroke-width="2.5" fill="#fb7185"
+              stroke-linecap="round" />
 
-          <!-- Front Hair & Bangs -->
-          <path d="M 44 95 Q 50 65 80 65 Q 110 65 116 95 Q 100 82 80 84 Q 60 82 44 95 Z" fill="url(#hairGrad)" />
-          <!-- Hair Angel Ring Shine -->
-          <ellipse cx="80" cy="74" rx="26" ry="4.5" fill="#a26340" opacity="0.6" />
-          <path d="M 58 74 Q 80 71 102 74" stroke="#fed7aa" stroke-width="2.5" fill="none" opacity="0.9" />
-          <!-- White Hairband -->
-          <path d="M 45 88 Q 80 50 115 88" stroke="#ffffff" stroke-width="6" fill="none" stroke-linecap="round" />
+            <!-- Front Hair & Bangs -->
+            <path d="M 44 95 Q 50 65 80 65 Q 110 65 116 95 Q 100 82 80 84 Q 60 82 44 95 Z" fill="url(#hairGrad)" />
+            <!-- Hair Angel Ring Shine -->
+            <ellipse cx="80" cy="74" rx="26" ry="4.5" fill="#a26340" opacity="0.6" />
+            <path d="M 58 74 Q 80 71 102 74" stroke="#fed7aa" stroke-width="2.5" fill="none" opacity="0.9" />
+            <!-- White Hairband -->
+            <path d="M 45 88 Q 80 50 115 88" stroke="#ffffff" stroke-width="6" fill="none" stroke-linecap="round" />
 
-          <!-- Cute Chibi Hands resting on counter -->
-          <ellipse cx="48" cy="204" rx="12" ry="8" fill="#fff5f0" stroke="#fecdd3" stroke-width="1.8" />
-          <ellipse cx="112" cy="204" rx="12" ry="8" fill="#fff5f0" stroke="#fecdd3" stroke-width="1.8" />
-        </svg>
+            <!-- Cute Chibi Hands resting on counter -->
+            <ellipse cx="48" cy="204" rx="12" ry="8" fill="#fff5f0" stroke="#fecdd3" stroke-width="1.8" />
+            <ellipse cx="112" cy="204" rx="12" ry="8" fill="#fff5f0" stroke="#fecdd3" stroke-width="1.8" />
+          </svg>
+        </div>
+        <div class="customer-nametag" id="customer-nametag">
+          <span class="customer-name-chn">小雨</span>
+          <span class="customer-name-vi">(Bé Mưa)</span>
+        </div>
       </div>
 
       <!-- Speech Order Balloon -->

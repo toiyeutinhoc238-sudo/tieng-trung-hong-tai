@@ -41,6 +41,7 @@ import './quick_dict_widget.js';
     if (path.includes('vocab-practice')) return 'vocab-practice';
     if (path.includes('detail-list')) return 'vocabulary';
     if (path.includes('boba-game')) return 'boba';
+    if (path.includes('grocery-game')) return 'grocery';
     if (path.includes('quiz-game')) return 'games';
     if (path.includes('han-viet-rules')) return 'rules';
     if (path.includes('rank')) return 'rank';
@@ -1399,6 +1400,10 @@ import './quick_dict_widget.js';
           <li class="sidebar-item ${activeKey === 'boba' ? 'active' : ''}" onclick="window.location.href = '/boba-game.html'" title="Tiệm Trà Sữa Của Tôi (HOT)" style="cursor: pointer;">
             <i class="fa-solid fa-mug-hot" style="color: #f43f5e; font-size: 1.1rem;"></i> <span>Tiệm Trà Sữa</span>
             <span style="font-size: 0.65rem; background: rgba(244, 63, 94, 0.18); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.35); padding: 1px 6px; border-radius: 99px; font-weight: 800; margin-left: auto;">HOT</span>
+          </li>
+          <li class="sidebar-item ${activeKey === 'grocery' ? 'active' : ''}" onclick="window.location.href = '/grocery-game.html'" title="Tiệm Tạp Hóa Của Tôi (Mới)" style="cursor: pointer;">
+            <i class="fa-solid fa-store" style="color: #ea580c; font-size: 1.1rem;"></i> <span>Tiệm Tạp Hóa</span>
+            <span style="font-size: 0.65rem; background: rgba(234, 88, 12, 0.18); color: #ea580c; border: 1px solid rgba(234, 88, 12, 0.35); padding: 1px 6px; border-radius: 99px; font-weight: 800; margin-left: auto;">MỚI</span>
           </li>
           <li class="sidebar-item ${activeKey === 'games' ? 'active' : ''}" onclick="window.location.href = '/quiz-game.html'">
             <i class="fa-solid fa-gamepad" style="color: #f59e0b;"></i> <span>Đấu Trường Game</span>

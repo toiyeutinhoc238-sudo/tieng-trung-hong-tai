@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tiệm Tạp Hóa Của Tôi (我的小卖部) | Tiếng Trung HongTai</title>
+  <link rel="icon" type="image/png" href="/assets/logo-CnsJJgQP.png">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous">
+  <!-- Google Fonts: Be Vietnam Pro (Đầy đủ dấu Tiếng Việt sắc nét) + LXGW WenKai Lite (Chuẩn Khải Thể / 楷体) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=LXGW+WenKai+Lite:wght@400;600;700&display=swap"
+    rel="stylesheet">
+
+  <script type="module" crossorigin src="/assets/groceryGame-DRR0pHd7.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="stylesheet" crossorigin href="/assets/groceryGame-CkJFqOtY.css">
+</head>
+
+<body class="grocery-body">
+
+  <div class="grocery-container">
+
+    <!-- 1. TOP HUD (TRẠNG THÁI TIỆM & ĐIỀU HÀNH) -->
+    <header class="grocery-top-hud">
+      <div class="hud-left">
+        <!-- Back to Hub -->
+        <a href="index.html" class="hud-circle-btn" title="Về Trang Chủ">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <!-- Pause / Settings -->
+        <button type="button" class="hud-circle-btn" id="btn-pause-game" title="Tạm dừng & Cài đặt">
+          <i class="fa-solid fa-pause"></i>
+        </button>
+
+        <!-- Money Pill (Vốn & Tiền Tiệm) -->
+        <div class="hud-stat-card money-card" title="Số vốn tiền mặt hiện có">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <span class="stat-label">Tiền Vốn / 资金</span>
+            <span class="stat-value" id="hud-money-val">50.00 ¥</span>
+          </div>
+        </div>
+
+        <!-- Day Pill (Ngày làm việc) -->
+        <div class="hud-stat-card day-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-info">
+            <span class="stat-label">Ngày / 天数</span>
+            <span class="stat-value kaiti-font" id="hud-day-val">第 1 天</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hud-center">
+        <!-- Business Time Clock (Ca làm việc) -->
+        <div class="hud-time-panel">
+          <div class="time-header">
+            <span class="time-status" id="hud-status-badge">🟢 正在营业 (Đang mở cửa)</span>
+            <span class="time-clock" id="hud-clock-val">08:30</span>
+          </div>
+          <div class="time-progress-bar">
+            <div class="time-progress-fill" id="hud-time-fill" style="width: 15%;"></div>
+          </div>
+        </div>
+
+        <!-- Early Close Button (Đóng cửa sớm qua ngày mới) -->
+        <button type="button" class="btn-early-close" id="btn-early-close" title="Bán hết hàng hoặc đóng cửa sớm để qua ngày mới">
+          <i class="fa-solid fa-door-closed"></i>
+          <span>提前打烊 (Đóng Cửa Sớm)</span>
+        </button>
+      </div>
+
+      <div class="hud-right">
+        <!-- Sách từ vựng Tạp hóa -->
+        <button type="button" class="hud-action-pill" id="btn-open-vocab" title="Sổ tay từ vựng tạp hóa & lượng từ">
+          <span class="icon">📖</span>
+          <span class="text">生词本 (Từ Vựng)</span>
+          <span class="badge" id="hud-vocab-badge">3/20</span>
+        </button>
+
+        <!-- Nhập hàng Modal Button -->
+        <button type="button" class="hud-action-pill stock-pill" id="btn-open-restock" title="Nhập hàng & Quản lý kệ">
+          <span class="icon">📦</span>
+          <span class="text">进货 (Nhập Hàng)</span>
+        </button>
+
+        <!-- Mascot HongTai Cheering -->
+        <div class="hud-mascot-cheer" id="hud-mascot-dragon" title="Bấm để nghe cổ vũ!">
+          <div class="mascot-speech">
+            <span class="mascot-title kaiti-font">生意兴隆！</span>
+            <span class="mascot-sub">(Mua may bán đắt!)</span>
+          </div>
+          <div class="mascot-avatar">🐲</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. MAIN WORKSPACE: BỐ CỤC 3 CỘT (3 DISTINCT COLUMNS) -->
+    <main class="grocery-main-grid">
+
+      <!-- ====================================================================
+           CỘT 1: GIAN HÀNG / KỆ TRƯNG BÀY (货架区 - STORE SHELVES)
+           ==================================================================== -->
+      <section class="grid-column col-shelves" id="col-shelves-section">
+        <div class="column-header">
+          <div class="col-title-wrap">
+            <h2 class="col-title">
+              <span class="icon">🏪</span>
+              <span class="title-chn kaiti-font">货架区</span>
+              <span class="title-vi">Kệ Hàng Trưng Bày</span>
+            </h2>
+            <span class="col-subtitle">Chạm vào hàng hóa để nhặt cho khách</span>
+          </div>
+          <div class="shelves-actions">
+            <button type="button" class="btn-sm-action" id="btn-quick-restock" title="Nhập bổ sung nhanh">
+              <i class="fa-solid fa-boxes-packing"></i> Bổ sung hàng
+            </button>
+          </div>
+        </div>
+
+        <!-- Shelf Rack Container (Khung kệ gỗ trưng bày hàng) -->
+        <div class="shelf-rack-scroll" id="shelf-rack-container">
+          <!-- Shelves Grid injected via JS (Kệ 1 -> Kệ 5 ban đầu, mở rộng dần) -->
+        </div>
+
+        <!-- Bottom Expansion Banner -->
+        <div class="shelf-expand-banner">
+          <div class="expand-info">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+            <span>Mở rộng thêm gian hàng khi tích lũy đủ vốn</span>
+          </div>
+          <button type="button" class="btn-unlock-shelf" id="btn-unlock-next-shelf">
+            <i class="fa-solid fa-unlock-keyhole"></i> Mở Gian Hàng Mới
+          </button>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           CỘT 2: GIỎ HÀNG & KHÁCH HÀNG (顾客与购物篮 - CUSTOMER & BASKET)
+           ==================================================================== -->
+      <section class="grid-column col-customer-basket" id="col-customer-section">
+        <div class="column-header">
+          <div class="col-title-wrap">
+            <h2 class="col-title">
+              <span class="icon">🛒</span>
+              <span class="title-chn kaiti-font">顾客与购物篮</span>
+              <span class="title-vi">Khách & Giỏ Hàng</span>
+            </h2>
+            <span class="col-subtitle">Lắng nghe đơn hàng & nhặt đúng món</span>
+          </div>
+        </div>
+
+        <!-- Customer Interaction Area (Khách hàng anime chibi & lời thoại) -->
+        <div class="customer-stage">
+          <!-- Character Chibi Sprite -->
+          <div class="customer-avatar-box" id="customer-avatar-box">
+            <div class="customer-chibi-visual" id="customer-chibi-visual">
+              <span class="customer-emoji-avatar">👦</span>
+            </div>
+            <div class="customer-name-badge" id="customer-name-badge">
+              <span class="c-name kaiti-font">小浩</span>
+              <span class="c-role">(Học sinh tiểu học)</span>
+            </div>
+          </div>
+
+          <!-- Customer Speech Balloon -->
+          <div class="customer-dialog-bubble" id="customer-dialog-bubble">
+            <div class="bubble-header">
+              <span class="bubble-tag">Đơn hàng của khách</span>
+              <button type="button" class="btn-bubble-audio" id="btn-replay-order-audio" title="Nghe lại câu thoại">
+                <i class="fa-solid fa-volume-high"></i> Nghe đọc
+              </button>
+            </div>
+            <div class="order-chn-text kaiti-font" id="order-chn-text">
+              老板，我要两包辣条和一瓶冰红茶！
+            </div>
+            <div class="order-pin-text" id="order-pin-text">
+              Lǎobǎn, wǒ yào liǎng bāo làtiáo hé yī píng bīnghóngchá!
+            </div>
+            <div class="order-vi-text" id="order-vi-text">
+              (Ông chủ, cho tôi 2 gói que cay và 1 chai trà xanh lạnh!)
+            </div>
+          </div>
+        </div>
+
+        <!-- Shopping Basket Box (Giỏ hàng đang nhặt) -->
+        <div class="basket-container">
+          <div class="basket-header">
+            <span class="basket-title">
+              <i class="fa-solid fa-basket-shopping"></i> Giỏ hàng của khách (<span id="basket-count-badge">0</span> món)
+            </span>
+            <button type="button" class="btn-clear-basket" id="btn-clear-basket" title="Gỡ toàn bộ hàng trong giỏ">
+              <i class="fa-solid fa-trash-can"></i> Làm rỗng giỏ
+            </button>
+          </div>
+
+          <!-- Basket Item List -->
+          <div class="basket-item-list" id="basket-item-list">
+            <!-- Injected dynamically -->
+            <div class="basket-empty-state">
+              <i class="fa-solid fa-cart-arrow-down"></i>
+              <p>Chưa có món hàng nào. Hãy bấm vào các món ở Cột 1 (Gian Hàng) để nhặt cho khách!</p>
+            </div>
+          </div>
+
+          <!-- Basket Total & Checkout Trigger -->
+          <div class="basket-summary">
+            <div class="summary-line">
+              <span>Tạm tính hàng:</span>
+              <span class="sum-amount" id="basket-total-amount">0.00 ¥</span>
+            </div>
+            <button type="button" class="btn-proceed-checkout" id="btn-proceed-checkout" disabled>
+              <span>👉 Chuyển Sang Thanh Toán (前往结账)</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           CỘT 3: QUẦY THU NGÂN & TÍNH TIỀN THỐI (收银台与找零 - CASHIER & CHANGE)
+           ==================================================================== -->
+      <section class="grid-column col-cashier" id="col-cashier-section">
+        <div class="column-header">
+          <div class="col-title-wrap">
+            <h2 class="col-title">
+              <span class="icon">📠</span>
+              <span class="title-chn kaiti-font">收银台与找零</span>
+              <span class="title-vi">Thu Ngân & Tính Tiền Thối</span>
+            </h2>
+            <span class="col-subtitle">Tính toán chính xác tiền thối cho khách</span>
+          </div>
+        </div>
+
+        <!-- POS Terminal Display (Màn hình điện tử máy thu ngân) -->
+        <div class="pos-terminal-card">
+          <div class="pos-screen">
+            <div class="pos-row">
+              <span class="pos-label">应付金额 (Tổng Phải Thu):</span>
+              <span class="pos-val-primary" id="pos-due-amount">0.00 ¥</span>
+            </div>
+            <div class="pos-row customer-paid-row">
+              <span class="pos-label">顾客付款 (Khách Đưa):</span>
+              <span class="pos-val-paid" id="pos-paid-amount">0.00 ¥</span>
+            </div>
+            <div class="pos-divider"></div>
+            <div class="pos-row change-target-row">
+              <span class="pos-label highlight">需要找零 (Cần Thối Lại):</span>
+              <span class="pos-val-change" id="pos-change-needed">0.00 ¥</span>
+            </div>
+          </div>
+          <div class="pos-speaker-hint" id="pos-math-formula">
+            Formula: Khách đưa - Phải thu = Tiền thối
+          </div>
+        </div>
+
+        <!-- Customer Given Money Visual (Hình tờ tiền khách đặt lên bàn thu ngân) -->
+        <div class="customer-cash-table">
+          <span class="table-label">Tiền mặt khách đưa tới quầy:</span>
+          <div class="given-cash-preview" id="given-cash-display">
+            <!-- Injected bill image / badge -->
+          </div>
+        </div>
+
+        <!-- Cash Drawer & Denomination Selector (Ngăn kéo tiền mặt RMB) -->
+        <div class="cash-drawer-box">
+          <div class="drawer-header">
+            <span class="drawer-title">
+              <i class="fa-solid fa-money-bill-wave"></i> Chọn tiền RMB thối lại (点击面额找零):
+            </span>
+          </div>
+
+          <!-- Denomination Buttons (Tiền giấy & Tiền xu) -->
+          <div class="denominations-grid">
+            <button type="button" class="btn-money-bill bill-50" data-value="50">
+              <span class="bill-rmb">50 元</span>
+              <span class="bill-sub">Tờ 50¥</span>
+            </button>
+            <button type="button" class="btn-money-bill bill-20" data-value="20">
+              <span class="bill-rmb">20 元</span>
+              <span class="bill-sub">Tờ 20¥</span>
+            </button>
+            <button type="button" class="btn-money-bill bill-10" data-value="10">
+              <span class="bill-rmb">10 元</span>
+              <span class="bill-sub">Tờ 10¥</span>
+            </button>
+            <button type="button" class="btn-money-bill bill-5" data-value="5">
+              <span class="bill-rmb">5 元</span>
+              <span class="bill-sub">Tờ 5¥</span>
+            </button>
+            <button type="button" class="btn-money-bill bill-1" data-value="1">
+              <span class="bill-rmb">1 元</span>
+              <span class="bill-sub">Tờ 1¥</span>
+            </button>
+            <button type="button" class="btn-money-coin coin-50cent" data-value="0.5">
+              <span class="coin-rmb">5 角</span>
+              <span class="coin-sub">0.5¥</span>
+            </button>
+            <button type="button" class="btn-money-coin coin-10cent" data-value="0.1">
+              <span class="coin-rmb">1 角</span>
+              <span class="coin-sub">0.1¥</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Change Tray (Khay tiền thối đang nhặt ra) -->
+        <div class="change-tray-box">
+          <div class="tray-header">
+            <div class="tray-title-wrap">
+              <span class="tray-title"><i class="fa-solid fa-hand-holding-dollar"></i> Khay tiền thối (找零盘)</span>
+              <span class="tray-sum" id="tray-current-sum">Đã nhặt: 0.00 ¥</span>
+            </div>
+            <button type="button" class="btn-reset-tray" id="btn-reset-tray" title="Bỏ tiền ra chọn lại">
+              <i class="fa-solid fa-rotate-left"></i> Xếp lại
+            </button>
+          </div>
+
+          <!-- Visual tray with dropped bills and coins -->
+          <div class="tray-coins-container" id="tray-coins-container">
+            <span class="tray-placeholder">Chạm các mệnh giá tiền ở trên để nhặt tiền thối vào đây</span>
+          </div>
+
+          <!-- Verification Button -->
+          <button type="button" class="btn-verify-change" id="btn-verify-change">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>确认找零 (Xác Nhận Thối Tiền & Hoàn Tất Đơn)</span>
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ====================================================================
+         3. MODALS (NHẬP HÀNG, TỔNG KẾT NGÀY, SỔ TỪ VỰNG, CÀI ĐẶT)
+         ==================================================================== -->
+
+    <!-- MODAL 1: NHẬP HÀNG TRƯỚC GIỜ MỞ CỬA (进货与准备营业) -->
+    <div class="grocery-modal-backdrop" id="modal-restock" style="display: none;">
+      <div class="grocery-modal-card stock-modal-card">
+        <div class="modal-card-header">
+          <div class="modal-title-wrap">
+            <span class="modal-tag">CHUẨN BỊ MỞ CỬA</span>
+            <h3 class="modal-title kaiti-font">📦 进货与上架 (Nhập Hàng & Trưng Bày)</h3>
+            <p class="modal-subtitle">Dùng số vốn hiện có để nhập hàng lên các kệ trước ca bán hàng</p>
+          </div>
+          <button type="button" class="btn-close-modal" onclick="window.groceryGame && window.groceryGame.closeRestockModal()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="stock-balance-bar">
+          <div class="bal-item">
+            <span>Tiền vốn hiện có:</span>
+            <strong class="text-orange" id="modal-stock-current-bal">50.00 ¥</strong>
+          </div>
+          <div class="bal-item">
+            <span>Chi phí nhập dự kiến:</span>
+            <strong class="text-rose" id="modal-stock-total-cost">0.00 ¥</strong>
+          </div>
+          <div class="bal-item">
+            <span>Số dư sau khi nhập:</span>
+            <strong class="text-emerald" id="modal-stock-remaining-bal">50.00 ¥</strong>
+          </div>
+        </div>
+
+        <div class="stock-table-wrap">
+          <table class="stock-table">
+            <thead>
+              <tr>
+                <th>Hàng hóa</th>
+                <th>Tồn kệ</th>
+                <th>Giá vốn nhập</th>
+                <th>Giá bán lẻ</th>
+                <th>Số lượng nhập thêm</th>
+                <th>Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody id="stock-table-body">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="modal-card-footer">
+          <button type="button" class="btn-modal-secondary" id="btn-autofill-all-stock">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Nhập đầy tất cả kệ (一键补齐)
+          </button>
+          <button type="button" class="btn-modal-primary" id="btn-confirm-restock-open">
+            <i class="fa-solid fa-store"></i> Xác Nhận Nhập & Mở Cửa Bán! (开门营业)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: TỔNG KẾT NGÀY (每日营业结算) -->
+    <div class="grocery-modal-backdrop" id="modal-day-summary" style="display: none;">
+      <div class="grocery-modal-card summary-modal-card">
+        <div class="modal-card-header text-center">
+          <div class="summary-congrats-icon">🏮</div>
+          <h3 class="modal-title kaiti-font" id="summary-day-title">第 1 天 · 每日营业结算</h3>
+          <p class="modal-subtitle">Báo cáo kết quả kinh doanh và học tập trong ngày</p>
+        </div>
+
+        <div class="summary-stats-grid">
+          <div class="stat-box">
+            <span class="label">今日营业额 (Tổng Doanh Thu):</span>
+            <span class="value text-orange" id="summary-revenue-val">0.00 ¥</span>
+          </div>
+          <div class="stat-box">
+            <span class="label">进货成本 (Chi Phí Nhập Hàng):</span>
+            <span class="value text-rose" id="summary-cost-val">0.00 ¥</span>
+          </div>
+          <div class="stat-box profit-box">
+            <span class="label">今日净利润 (Lợi Nhuận Ròng):</span>
+            <span class="value text-emerald" id="summary-profit-val">+0.00 ¥</span>
+          </div>
+          <div class="stat-box">
+            <span class="label">服务顾客 (Khách Đã Phục Vụ):</span>
+            <span class="value text-blue" id="summary-customers-val">0 người</span>
+          </div>
+          <div class="stat-box">
+            <span class="label">找零准确率 (Chính Xác Thối Tiền):</span>
+            <span class="value text-amber" id="summary-accuracy-val">100%</span>
+          </div>
+          <div class="stat-box">
+            <span class="label">新掌握生词 (Từ Vựng Đã Học):</span>
+            <span class="value text-purple" id="summary-words-val">5 từ</span>
+          </div>
+        </div>
+
+        <div class="summary-reward-box">
+          <div class="reward-title kaiti-font">🎉 恭喜获得经营奖励！</div>
+          <div class="reward-desc">Bạn làm rất tốt! Quán ngày càng phát đạt. Hãy dùng tiền tích lũy để mở thêm nhiều gian hàng mới!</div>
+        </div>
+
+        <div class="modal-card-footer justify-center">
+          <button type="button" class="btn-modal-primary btn-lg" id="btn-next-day-start">
+            <i class="fa-solid fa-sun"></i> 进入下一天 (Bắt Đầu Ngày Mới)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 3: SỔ TAY TỪ VỰNG TẠP HÓA (小卖部生词本) -->
+    <div class="grocery-modal-backdrop" id="modal-vocab" style="display: none;">
+      <div class="grocery-modal-card vocab-modal-card">
+        <div class="modal-card-header">
+          <div class="modal-title-wrap">
+            <span class="modal-tag">SỔ TAY TỪ VỰNG</span>
+            <h3 class="modal-title kaiti-font">📖 小卖部实用词汇与量词 (Từ Vựng Tạp Hóa)</h3>
+            <p class="modal-subtitle">Chạm vào biểu tượng 🔊 để nghe phát âm chuẩn giọng bản xứ</p>
+          </div>
+          <button type="button" class="btn-close-modal" onclick="document.getElementById('modal-vocab').style.display='none'">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="vocab-categories-tab">
+          <button type="button" class="vocab-tab-btn active" data-tab="snacks">Đồ Ăn Vặt (零食小吃)</button>
+          <button type="button" class="vocab-tab-btn" data-tab="drinks">Đồ Uống (饮料茶饮)</button>
+          <button type="button" class="vocab-tab-btn" data-tab="quantifiers">Lượng Từ (常用量词)</button>
+          <button type="button" class="vocab-tab-btn" data-tab="business">Thuật Ngữ Mua Bán (经营用语)</button>
+        </div>
+
+        <div class="vocab-list-scroll" id="vocab-items-grid">
+          <!-- Dynamically populated cards -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 4: MỞ KHÓA GIAN HÀNG MỚI (解锁新货架) -->
+    <div class="grocery-modal-backdrop" id="modal-unlock-shelf" style="display: none;">
+      <div class="grocery-modal-card unlock-modal-card">
+        <div class="modal-card-header">
+          <div class="modal-title-wrap">
+            <span class="modal-tag">MỞ RỘNG TIỆM</span>
+            <h3 class="modal-title kaiti-font">🏪 解锁新货架 (Mở Gian Hàng Mới)</h3>
+            <p class="modal-subtitle">Tăng dung lượng và bày bán các mặt hàng giá trị cao hơn</p>
+          </div>
+          <button type="button" class="btn-close-modal" onclick="document.getElementById('modal-unlock-shelf').style.display='none'">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="unlock-shelves-list" id="unlock-shelves-list">
+          <!-- List of locked shelves with pricing & preview items -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 5: TẠM DỪNG & CÀI ĐẶT -->
+    <div class="grocery-modal-backdrop" id="modal-settings" style="display: none;">
+      <div class="grocery-modal-card settings-modal-card">
+        <div class="modal-card-header">
+          <h3 class="modal-title kaiti-font">⚙️ 游戏设置 (Cài Đặt & Hỗ Trợ)</h3>
+          <button type="button" class="btn-close-modal" onclick="document.getElementById('modal-settings').style.display='none'">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="settings-options-list">
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-name">Hiệu ứng âm thanh (SFX)</span>
+              <span class="setting-desc">Tiếng máy tính tiền, bấm tiền leng keng, chọn đồ</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-sfx" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-name">Giọng đọc tiếng Trung (AI Voice)</span>
+              <span class="setting-desc">Phát âm câu gọi món và từ vựng giọng bản xứ</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-voice" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-name">Hiện phiên âm Pinyin</span>
+              <span class="setting-desc">Hỗ trợ đọc chữ Hán chính xác kèm thanh điệu</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-pinyin" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-name">Hiện dịch nghĩa Tiếng Việt</span>
+              <span class="setting-desc">Hiển thị gợi ý nghĩa tiếng Việt khi cần</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-vietnamese" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-card-footer justify-between">
+          <button type="button" class="btn-modal-secondary text-rose" id="btn-reset-save">
+            <i class="fa-solid fa-trash"></i> Chơi lại từ đầu
+          </button>
+          <button type="button" class="btn-modal-primary" onclick="document.getElementById('modal-settings').style.display='none'">
+            Tiếp tục chơi
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>

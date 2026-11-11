@@ -202,7 +202,16 @@ const BOBA_VOCAB = {
 // ============================================================================
 // MAIN BOBA GAME ENGINE
 // ============================================================================
-export class BobaGameEngine {
+export // CUSTOMER ROSTER (DANH SÁCH NHÂN VẬT KHÁCH HÀNG HOẠT HÌNH ANIME CHIBI)
+const BOBA_CUSTOMERS = [
+  { id: 'xiaoyu', nameChn: '小雨', nameVi: 'Bé Mưa', type: 'svg_default' },
+  { id: 'xiaohao', nameChn: '小浩', nameVi: 'Tiểu Hạo', icon: '👦', role: 'Học sinh tiểu học', bg: '#fef3c7' },
+  { id: 'xiaotong', nameChn: '晓彤', nameVi: 'Hiểu Đồng', icon: '👧', role: 'Nữ sinh dễ thương', bg: '#fce7f3' },
+  { id: 'linjie', nameChn: '林姐', nameVi: 'Chị Lâm', icon: '👩‍💼', role: 'Chị gái văn phòng', bg: '#e0e7ff' },
+  { id: 'abao', nameChn: '阿宝', nameVi: 'Gấu A Bảo', icon: '🐼', role: 'Linh vật đáng yêu', bg: '#ecfccb' }
+];
+
+class BobaGameEngine {
   constructor() {
     this.audio = new BobaAudioSynth();
 
@@ -249,6 +258,7 @@ export class BobaGameEngine {
   }
 
   initUI() {
+    this.originalGirlSvg = document.getElementById('customer-avatar-inner')?.innerHTML || '';
     this.updateHUD();
     this.updateLeftClipboard();
     this.renderCurrentCup();
@@ -292,6 +302,7 @@ export class BobaGameEngine {
         sugar: BOBA_VOCAB.sugars.find(s => s.id === 'less_sugar'),
         ice: BOBA_VOCAB.ices.find(i => i.id === 'no_ice')
       };
+      this.currentCustomer = BOBA_CUSTOMERS[0];
     } else {
       // Dynamic random order matching level
       const tea = BOBA_VOCAB.teas[Math.floor(Math.random() * BOBA_VOCAB.teas.length)];
@@ -300,9 +311,11 @@ export class BobaGameEngine {
       const ice = BOBA_VOCAB.ices[Math.floor(Math.random() * BOBA_VOCAB.ices.length)];
 
       this.currentOrder = { tea, topping, sugar, ice };
+      this.currentCustomer = BOBA_CUSTOMERS[Math.floor(Math.random() * BOBA_CUSTOMERS.length)];
     }
 
     this.isOrderActive = true;
+    this.renderCustomerAvatar();
     this.renderCustomerBalloon();
     this.resetCup();
 
@@ -310,6 +323,30 @@ export class BobaGameEngine {
     setTimeout(() => {
       this.speakOrder();
     }, 600);
+  }
+
+  renderCustomerAvatar() {
+    const cust = this.currentCustomer;
+    if (!cust) return;
+
+    const avatarInner = document.getElementById('customer-avatar-inner');
+    if (avatarInner) {
+      if (cust.type === 'svg_default' && this.originalGirlSvg) {
+        avatarInner.innerHTML = this.originalGirlSvg;
+      } else {
+        avatarInner.innerHTML = `
+          <div class="customer-chibi-card" style="background: radial-gradient(circle, ${cust.bg} 0%, transparent 70%);">
+            <div class="customer-chibi-badge">${cust.icon}</div>
+            <div style="font-size: 0.82rem; font-weight: 800; color: #475569; margin-top: 4px;">${cust.role}</div>
+          </div>
+        `;
+      }
+    }
+
+    const tagChn = document.querySelector('#customer-nametag .customer-name-chn');
+    const tagVi = document.querySelector('#customer-nametag .customer-name-vi');
+    if (tagChn) tagChn.textContent = cust.nameChn;
+    if (tagVi) tagVi.textContent = `(${cust.nameVi})`;
   }
 
   renderCustomerBalloon() {

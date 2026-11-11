@@ -105,6 +105,23 @@ export class NotebookGamesHub {
             </button>
           </div>
 
+          <!-- CARD GAME GROCERY: TIỆM TẠP HÓA CỦA TÔI -->
+          <div class="game-choice-card card-grocery" id="btn-choose-grocery" style="cursor: pointer; border: 2px solid #fdba74;">
+            <div class="card-tag" style="background: linear-gradient(135deg, #f97316, #ea580c); color: #ffffff;">🏪 MỚI RA MẮT • 💴 MÔ PHỎNG TẠP HÓA 3 CỘT & TÍNH TIỀN THỐI</div>
+            <div class="card-icon-hero">🏪 🥢</div>
+            <h3 class="card-title" style="color: #ea580c;">Tiệm Tạp Hóa Của Tôi</h3>
+            <p class="card-desc">
+              Kinh doanh tiệm tạp hóa Trung Hoa tuổi thơ! Dùng vốn nhập hàng, bày 5 gian hàng, đón khách mua sắm, nhặt đồ vào giỏ và tính tiền thối bằng tiền RMB cực thú vị!
+            </p>
+            <div class="card-features">
+              <span><i class="fa-solid fa-store"></i> 3 Cột: Kệ • Giỏ • Thu ngân</span>
+              <span><i class="fa-solid fa-coins"></i> Tính tiền thối RMB</span>
+            </div>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #f97316, #ea580c); color: #ffffff;">
+              Vào Tiệm Tạp Hóa <i class="fa-solid fa-play"></i>
+            </button>
+          </div>
+
           <!-- CARD GAME 0: QUIZ GAME (UNLOCKED ALL) -->
           <div class="game-choice-card card-quiz-highlight" id="btn-choose-quiz" style="cursor: pointer;">
             <div class="card-tag">⭐ GAME ĐỀ XUẤT • 📱 CHƠI MƯỢT MỌI THIẾT BỊ (ĐT / IPAD / PC)</div>
@@ -191,6 +208,14 @@ export class NotebookGamesHub {
       bobaCard.addEventListener('click', (e) => {
         e.preventDefault();
         window.location.href = '/boba-game.html';
+      });
+    }
+
+    const groceryCard = this.container.querySelector('#btn-choose-grocery');
+    if (groceryCard) {
+      groceryCard.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = '/grocery-game.html';
       });
     }
 
