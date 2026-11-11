@@ -11,6 +11,17 @@ class BobaAudioSynth {
     this.ctx = null;
     this.sfxEnabled = true;
     this.voiceEnabled = true;
+    this.cachedVoices = [];
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        try {
+          this.cachedVoices = window.speechSynthesis.getVoices();
+        } catch (e) {}
+      };
+      try {
+        this.cachedVoices = window.speechSynthesis.getVoices();
+      } catch (e) {}
+    }
   }
 
   init() {
@@ -140,15 +151,15 @@ class BobaAudioSynth {
   }
 
   speak(text) {
-    if (!this.voiceEnabled) return;
+    if (!this.voiceEnabled || !text) return;
     if (!('speechSynthesis' in window)) return;
     try {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'zh-CN';
-      u.rate = 0.88;
-      const voices = window.speechSynthesis.getVoices();
-      const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+      u.rate = 0.85;
+      const voices = (this.cachedVoices && this.cachedVoices.length) ? this.cachedVoices : window.speechSynthesis.getVoices();
+      const zhVoice = voices.find(v => v.lang && (v.lang.toLowerCase().includes('zh') || v.lang.toLowerCase().includes('cmn')));
       if (zhVoice) u.voice = zhVoice;
       window.speechSynthesis.speak(u);
     } catch (e) {
