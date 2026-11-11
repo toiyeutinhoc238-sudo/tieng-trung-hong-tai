@@ -563,7 +563,7 @@ export class BobaGameEngine {
 
       this.showFeedbackModal({
         success: true,
-        title: '🎉 太好喝了！(Ngon Tuyệt Cú Mèo!)',
+        title: '🎉 <span class="chinese-text">太好喝了！</span> <span>(Ngon Tuyệt Cú Mèo!)</span>',
         chineseQuote: '“哇！珍珠好Q弹，味道正好，太感谢你啦！”',
         viQuote: '“Oa! Trân châu dai dẻo vừa miệng, đúng ý mình dặn luôn, cảm ơn bạn nhiều nha!”',
         rewardCoin: '+120 ¥',
@@ -584,7 +584,7 @@ export class BobaGameEngine {
 
       this.showFeedbackModal({
         success: false,
-        title: '😅 哎呀！(Ủa, nhầm vị một chút nè...)',
+        title: '😅 <span class="chinese-text">哎呀！</span> <span>(Ủa, nhầm vị một chút nè...)</span>',
         chineseQuote: '“好像和我想象的有点不一样呢...”',
         viQuote: mistakeDetail,
         rewardCoin: '+40 ¥ (Khách vẫn boa nhẹ)',
@@ -603,7 +603,7 @@ export class BobaGameEngine {
     const coinEl = document.getElementById('feedback-reward-coin');
     const expEl = document.getElementById('feedback-reward-exp');
 
-    if (titleEl) titleEl.textContent = data.title;
+    if (titleEl) titleEl.innerHTML = data.title;
     if (chnEl) chnEl.textContent = data.chineseQuote;
     if (viEl) viEl.textContent = data.viQuote;
     if (coinEl) coinEl.textContent = data.rewardCoin;
@@ -626,46 +626,45 @@ export class BobaGameEngine {
     let html = '';
 
     // Teas
-    html += '<div style="font-weight: 800; color: #854019; margin: 10px 0 6px 0; font-size: 0.95rem;">🍃 Các Loại Trà (茶饮)</div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">';
+    html += '<div style="font-family: var(--boba-font-main) !important; font-weight: 800; color: #854019; margin: 10px 0 6px 0; font-size: 0.95rem;">🍃 Các Loại Trà <span class="chinese-text">(茶饮)</span></div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">';
     BOBA_VOCAB.teas.forEach(t => {
-      const isLearned = this.learnedWords.has(t.hanzi);
       html += `
-        <div style="background: #fff; border: 1.5px solid #fed7aa; border-radius: 10px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="background: #fff; border: 1.5px solid #fed7aa; border-radius: 12px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
           <div>
-            <div style="font-size: 1.05rem; font-weight: 800; font-family: var(--boba-font-chinese);">${t.hanzi}</div>
-            <div style="font-size: 0.72rem; color: #64748b;">${t.pinyin} • ${t.vi}</div>
+            <div class="chinese-text" style="font-size: 1.15rem; font-weight: 800; color: #1e293b;">${t.hanzi}</div>
+            <div style="font-family: var(--boba-font-main) !important; font-size: 0.76rem; color: #64748b; font-weight: 600; margin-top: 2px;">${t.pinyin} • ${t.vi}</div>
           </div>
-          <button onclick="window.bobaGame.audio.speak('${t.hanzi}')" style="background: #e0f2fe; border: none; border-radius: 50%; width: 28px; height: 28px; color: #0284c7; cursor: pointer;">🔊</button>
+          <button onclick="window.bobaGame.audio.speak('${t.hanzi}')" style="background: #e0f2fe; border: none; border-radius: 50%; width: 32px; height: 32px; color: #0284c7; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; box-shadow: 0 2px 4px rgba(2,132,199,0.15);">🔊</button>
         </div>
       `;
     });
     html += '</div>';
 
     // Toppings
-    html += '<div style="font-weight: 800; color: #854019; margin: 14px 0 6px 0; font-size: 0.95rem;">🧋 Topping & Thạch (配料)</div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">';
+    html += '<div style="font-family: var(--boba-font-main) !important; font-weight: 800; color: #854019; margin: 14px 0 6px 0; font-size: 0.95rem;">🧋 Topping & Thạch <span class="chinese-text">(配料)</span></div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">';
     BOBA_VOCAB.toppings.forEach(t => {
       html += `
-        <div style="background: #fff; border: 1.5px solid #fed7aa; border-radius: 10px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="background: #fff; border: 1.5px solid #fed7aa; border-radius: 12px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
           <div>
-            <div style="font-size: 1.05rem; font-weight: 800; font-family: var(--boba-font-chinese);">${t.icon} ${t.hanzi}</div>
-            <div style="font-size: 0.72rem; color: #64748b;">${t.pinyin} • ${t.vi}</div>
+            <div class="chinese-text" style="font-size: 1.15rem; font-weight: 800; color: #1e293b;">${t.icon} ${t.hanzi}</div>
+            <div style="font-family: var(--boba-font-main) !important; font-size: 0.76rem; color: #64748b; font-weight: 600; margin-top: 2px;">${t.pinyin} • ${t.vi}</div>
           </div>
-          <button onclick="window.bobaGame.audio.speak('${t.hanzi}')" style="background: #e0f2fe; border: none; border-radius: 50%; width: 28px; height: 28px; color: #0284c7; cursor: pointer;">🔊</button>
+          <button onclick="window.bobaGame.audio.speak('${t.hanzi}')" style="background: #e0f2fe; border: none; border-radius: 50%; width: 32px; height: 32px; color: #0284c7; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; box-shadow: 0 2px 4px rgba(2,132,199,0.15);">🔊</button>
         </div>
       `;
     });
     html += '</div>';
 
     // Sugar & Ice
-    html += '<div style="font-weight: 800; color: #854019; margin: 14px 0 6px 0; font-size: 0.95rem;">🍬 Đường & Đá (糖冰)</div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">';
+    html += '<div style="font-family: var(--boba-font-main) !important; font-weight: 800; color: #854019; margin: 14px 0 6px 0; font-size: 0.95rem;">🍬 Đường & Đá <span class="chinese-text">(糖冰)</span></div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">';
     [...BOBA_VOCAB.sugars, ...BOBA_VOCAB.ices].forEach(t => {
       html += `
-        <div style="background: #fff; border: 1.5px solid #fed7aa; border-radius: 10px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="background: #fff; border: 1.5px solid #fed7aa; border-radius: 12px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
           <div>
-            <div style="font-size: 1.05rem; font-weight: 800; font-family: var(--boba-font-chinese);">${t.hanzi}</div>
-            <div style="font-size: 0.72rem; color: #64748b;">${t.pinyin} • ${t.vi}</div>
+            <div class="chinese-text" style="font-size: 1.15rem; font-weight: 800; color: #1e293b;">${t.hanzi}</div>
+            <div style="font-family: var(--boba-font-main) !important; font-size: 0.76rem; color: #64748b; font-weight: 600; margin-top: 2px;">${t.pinyin} • ${t.vi}</div>
           </div>
-          <button onclick="window.bobaGame.audio.speak('${t.hanzi}')" style="background: #e0f2fe; border: none; border-radius: 50%; width: 28px; height: 28px; color: #0284c7; cursor: pointer;">🔊</button>
+          <button onclick="window.bobaGame.audio.speak('${t.hanzi}')" style="background: #e0f2fe; border: none; border-radius: 50%; width: 32px; height: 32px; color: #0284c7; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; box-shadow: 0 2px 4px rgba(2,132,199,0.15);">🔊</button>
         </div>
       `;
     });

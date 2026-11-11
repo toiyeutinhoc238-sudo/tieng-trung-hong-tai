@@ -76,21 +76,33 @@ body.boba-game-body {
   }
 }
 
-/* Apply Khải Thể font to all Chinese text */
+/* CHỈ ÁP DỤNG FONT KHẢI THỂ (楷体) CHO CÁC PHẦN TỬ CHỮ HÁN THUẦN TÚY */
 .kaiti-font,
+.chinese-text,
 .order-chinese-sentence,
 .blackboard-title,
 .clipboard-header,
 .station-label-pill,
 .topping-name-sub,
 .boba-preset-btn,
-.boba-finish-btn,
 .hud-mascot-title,
-.boba-modal-title,
 #feedback-modal-chn,
 [lang="zh"] {
-  font-family: var(--boba-font-chinese) !important;
+  font-family: var(--boba-font-chinese), var(--boba-font-main);
   letter-spacing: 0.5px;
+}
+
+/* ĐẢM BẢO 100% TIẾNG VIỆT DÙNG BE VIETNAM PRO SẮC NÉT KHÔNG LỖI DẤU */
+.boba-modal-title,
+.boba-modal-card,
+.order-vietnamese-sentence,
+.order-pinyin-sentence,
+.hud-mascot-sub,
+#feedback-modal-vi,
+.cookbook-cat-title,
+.cookbook-vi-meaning,
+.vietnamese-text {
+  font-family: var(--boba-font-main) !important;
 }
 
 /* ==========================================================================
@@ -1308,6 +1320,7 @@ body.boba-game-body {
 }
 
 .boba-modal-title {
+  font-family: var(--boba-font-main) !important;
   font-size: 1.45rem;
   font-weight: 900;
   color: #881337;

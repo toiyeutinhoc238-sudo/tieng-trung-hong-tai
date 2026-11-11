@@ -8,13 +8,16 @@
   <link rel="icon" type="image/png" href="/assets/logo-CnsJJgQP.png">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
-  <!-- Google Fonts: Be Vietnam Pro + LXGW WenKai Lite (Chuẩn Khải Thể / 楷体) -->
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&family=LXGW+WenKai+Lite:wght@400;600;700&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous">
+  <!-- Google Fonts: Be Vietnam Pro (Đầy đủ dấu Tiếng Việt) + LXGW WenKai Lite (Chuẩn Khải Thể / 楷体) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=LXGW+WenKai+Lite:wght@400;600;700&display=swap"
+    rel="stylesheet">
 
-  <script type="module" crossorigin src="/assets/bobaGame-C6PbwDaL.js"></script>
+  <script type="module" crossorigin src="/assets/bobaGame-B26tVqpI.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/bobaGame-BWO7lMAQ.css">
+  <link rel="stylesheet" crossorigin href="/assets/bobaGame-BV8AD_hs.css">
 </head>
 
 <body class="boba-game-body">
@@ -74,7 +77,8 @@
     <div class="boba-top-hud">
       <div class="hud-left">
         <!-- Pause Button -->
-        <button type="button" class="hud-btn-pause" onclick="document.getElementById('boba-pause-modal').style.display='flex';" title="Tạm dừng & Cài đặt">
+        <button type="button" class="hud-btn-pause"
+          onclick="document.getElementById('boba-pause-modal').style.display='flex';" title="Tạm dừng & Cài đặt">
           <i class="fa-solid fa-pause"></i>
         </button>
 
@@ -82,7 +86,8 @@
         <div class="hud-stat-pill">
           <div class="hud-stat-icon coin">🪙</div>
           <span class="hud-stat-val" id="hud-coin-val">120</span>
-          <button type="button" class="hud-stat-add-btn" onclick="window.bobaGame && window.bobaGame.audio.playCoin()" title="Nạp thưởng">+</button>
+          <button type="button" class="hud-stat-add-btn" onclick="window.bobaGame && window.bobaGame.audio.playCoin()"
+            title="Nạp thưởng">+</button>
         </div>
       </div>
 
@@ -193,7 +198,8 @@
           <!-- Eyebrows & Smile -->
           <path d="M 58 87 Q 64 84 70 88" stroke="#451e0e" stroke-width="2.5" fill="none" stroke-linecap="round" />
           <path d="M 90 88 Q 96 84 102 87" stroke="#451e0e" stroke-width="2.5" fill="none" stroke-linecap="round" />
-          <path d="M 74 114 Q 80 122 86 114" stroke="#e11d48" stroke-width="2.5" fill="#fb7185" stroke-linecap="round" />
+          <path d="M 74 114 Q 80 122 86 114" stroke="#e11d48" stroke-width="2.5" fill="#fb7185"
+            stroke-linecap="round" />
 
           <!-- Front Hair & Bangs -->
           <path d="M 44 95 Q 50 65 80 65 Q 110 65 116 95 Q 100 82 80 84 Q 60 82 44 95 Z" fill="url(#hairGrad)" />
@@ -239,7 +245,8 @@
         </div>
 
         <!-- Audio Speaker Button -->
-        <button type="button" class="order-audio-listen-btn" id="order-audio-listen-btn" title="Nghe phát âm tiếng Trung">
+        <button type="button" class="order-audio-listen-btn" id="order-audio-listen-btn"
+          title="Nghe phát âm tiếng Trung">
           <i class="fa-solid fa-volume-high"></i>
         </button>
       </div>
@@ -353,16 +360,20 @@
         <div class="sugar-ice-buttons-grid">
           <!-- Sugar Row -->
           <div class="preset-btn-row">
-            <button type="button" class="boba-preset-btn sugar-btn" data-sugar="less_sugar" title="Ít đường (30%)">少糖</button>
-            <button type="button" class="boba-preset-btn sugar-btn" data-sugar="half_sugar" title="Nửa đường (50%)">半糖</button>
-            <button type="button" class="boba-preset-btn sugar-btn" data-sugar="full_sugar" title="Nhiều đường (100%)">多糖</button>
+            <button type="button" class="boba-preset-btn sugar-btn" data-sugar="less_sugar"
+              title="Ít đường (30%)">少糖</button>
+            <button type="button" class="boba-preset-btn sugar-btn" data-sugar="half_sugar"
+              title="Nửa đường (50%)">半糖</button>
+            <button type="button" class="boba-preset-btn sugar-btn" data-sugar="full_sugar"
+              title="Nhiều đường (100%)">多糖</button>
           </div>
           <!-- Ice Row -->
           <div class="preset-btn-row">
             <button type="button" class="boba-preset-btn ice-btn" data-ice="no_ice" title="Không đá (0%)">去冰</button>
             <button type="button" class="boba-preset-btn ice-btn" data-ice="less_ice" title="Ít đá (30%)">少冰</button>
             <button type="button" class="boba-preset-btn ice-btn" data-ice="normal_ice" title="Đá vừa (70%)">正常</button>
-            <button type="button" class="boba-preset-btn ice-btn" data-ice="more_ice" title="Nhiều đá (100%)">多冰</button>
+            <button type="button" class="boba-preset-btn ice-btn" data-ice="more_ice"
+              title="Nhiều đá (100%)">多冰</button>
           </div>
         </div>
         <div class="station-label-pill">糖冰区</div>
@@ -410,7 +421,7 @@
       <!-- Bottom Right: Finish Button (完成制作 >) -->
       <div class="workbench-finish-btn-wrap">
         <button type="button" class="boba-finish-btn" id="boba-finish-btn" title="Hoàn thành & Giao cho khách">
-          <span>🧋</span> <span>完成制作</span> <i class="fa-solid fa-chevron-right" style="font-size: 1rem;"></i>
+          <span>🧋</span> <span class="chinese-text">完成制作</span> <i class="fa-solid fa-chevron-right" style="font-size: 1rem;"></i>
         </button>
       </div>
 
@@ -419,26 +430,32 @@
     <!-- MODAL 1: FEEDBACK & EVALUATION (Khách Đánh Giá) -->
     <div class="boba-modal-backdrop" id="boba-feedback-modal">
       <div class="boba-modal-card">
-        <div class="boba-modal-title" id="feedback-modal-title">🎉 太好喝了！</div>
+        <div class="boba-modal-title" id="feedback-modal-title">🎉 Đánh Giá Của Khách</div>
 
-        <div style="text-align: center; font-size: 1.15rem; font-weight: 800; color: #1e293b; font-family: var(--boba-font-chinese);" id="feedback-modal-chn">
+        <div
+          style="text-align: center; font-size: 1.25rem; font-weight: 800; color: #1e293b;"
+          class="chinese-text"
+          id="feedback-modal-chn">
           “哇！珍珠好Q弹，味道正好，太感谢你啦！”
         </div>
-        <div style="text-align: center; font-size: 0.85rem; color: #64748b; font-weight: 600;" id="feedback-modal-vi">
+        <div style="text-align: center; font-size: 0.88rem; color: #64748b; font-weight: 600; font-family: var(--boba-font-main) !important;" id="feedback-modal-vi">
           “Oa! Trân châu dai dẻo vừa miệng, đúng ý mình dặn luôn, cảm ơn bạn nhiều nha!”
         </div>
 
         <div style="display: flex; justify-content: center; gap: 16px; margin: 8px 0;">
-          <div style="background: #fef3c7; border: 1.5px solid #fde68a; border-radius: 12px; padding: 6px 14px; font-weight: 800; color: #b45309;">
+          <div
+            style="background: #fef3c7; border: 1.5px solid #fde68a; border-radius: 12px; padding: 6px 14px; font-weight: 800; color: #b45309; font-family: var(--boba-font-main);">
             🪙 <span id="feedback-reward-coin">+120 ¥</span>
           </div>
-          <div style="background: #dbeafe; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 6px 14px; font-weight: 800; color: #1d4ed8;">
+          <div
+            style="background: #dbeafe; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 6px 14px; font-weight: 800; color: #1d4ed8; font-family: var(--boba-font-main);">
             ⭐️ <span id="feedback-reward-exp">+25 EXP</span>
           </div>
         </div>
 
         <div class="boba-modal-actions">
-          <button type="button" class="boba-modal-btn primary" onclick="window.bobaGame && window.bobaGame.closeFeedbackModal()">
+          <button type="button" class="boba-modal-btn primary"
+            onclick="window.bobaGame && window.bobaGame.closeFeedbackModal()">
             <i class="fa-solid fa-arrow-right"></i> Đón Khách Tiếp Theo
           </button>
         </div>
@@ -449,16 +466,17 @@
     <div class="boba-modal-backdrop" id="boba-cookbook-modal">
       <div class="boba-modal-card" style="max-width: 600px; max-height: 85vh; overflow-y: auto;">
         <div class="boba-modal-title">
-          📖 Sổ Tay Từ Vựng Trà Sữa (奶茶词典)
+          📖 Sổ Tay Từ Vựng Trà Sữa <span class="chinese-text" style="margin-left: 6px;">(奶茶词典)</span>
         </div>
-        <p style="text-align: center; font-size: 0.8rem; color: #64748b;">
+        <p style="text-align: center; font-size: 0.85rem; color: #64748b; font-family: var(--boba-font-main) !important;">
           Chạm vào biểu tượng 🔊 để nghe phát âm chuẩn giọng bản xứ.
         </p>
 
         <div id="cookbook-cards-grid"></div>
 
         <div class="boba-modal-actions">
-          <button type="button" class="boba-modal-btn primary" onclick="document.getElementById('boba-cookbook-modal').style.display='none';">
+          <button type="button" class="boba-modal-btn primary"
+            onclick="document.getElementById('boba-cookbook-modal').style.display='none';">
             Đóng Sổ Tay
           </button>
         </div>
@@ -473,21 +491,28 @@
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 12px;">
-          <label style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
+          <label
+            style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
             <span>🔊 Âm thanh hiệu ứng (SFX)</span>
             <input type="checkbox" id="setting-sfx" checked onchange="window.bobaGame.audio.sfxEnabled = this.checked;">
           </label>
-          <label style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
+          <label
+            style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
             <span>🗣️ Giọng đọc tiếng Trung</span>
-            <input type="checkbox" id="setting-voice" checked onchange="window.bobaGame.audio.voiceEnabled = this.checked;">
+            <input type="checkbox" id="setting-voice" checked
+              onchange="window.bobaGame.audio.voiceEnabled = this.checked;">
           </label>
-          <label style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
+          <label
+            style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
             <span>🔤 Hiển thị phiên âm Pinyin</span>
-            <input type="checkbox" id="setting-pinyin" checked onchange="window.bobaGame.showPinyin = this.checked; window.bobaGame.renderCustomerBalloon();">
+            <input type="checkbox" id="setting-pinyin" checked
+              onchange="window.bobaGame.showPinyin = this.checked; window.bobaGame.renderCustomerBalloon();">
           </label>
-          <label style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
+          <label
+            style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
             <span>🇻🇳 Hiển thị gợi ý Tiếng Việt</span>
-            <input type="checkbox" id="setting-vi" checked onchange="window.bobaGame.showVietnamese = this.checked; window.bobaGame.renderCustomerBalloon();">
+            <input type="checkbox" id="setting-vi" checked
+              onchange="window.bobaGame.showVietnamese = this.checked; window.bobaGame.renderCustomerBalloon();">
           </label>
         </div>
 
@@ -495,7 +520,8 @@
           <button type="button" class="boba-modal-btn secondary" onclick="window.location.href='/quiz-game.html'">
             <i class="fa-solid fa-arrow-left"></i> Về Đấu Trường Game
           </button>
-          <button type="button" class="boba-modal-btn primary" onclick="document.getElementById('boba-pause-modal').style.display='none';">
+          <button type="button" class="boba-modal-btn primary"
+            onclick="document.getElementById('boba-pause-modal').style.display='none';">
             Tiếp Tục Pha Chế
           </button>
         </div>
@@ -507,4 +533,3 @@
 </body>
 
 </html>
-
