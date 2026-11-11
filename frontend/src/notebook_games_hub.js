@@ -83,11 +83,28 @@ export class NotebookGamesHub {
     return `
       <div class="games-selector-container">
         <div class="games-selector-intro">
-          <h3>Chọn 1 trong 4 trò chơi để bắt đầu ôn luyện từ vựng</h3>
+          <h3>Chọn trò chơi để bắt đầu ôn luyện từ vựng</h3>
           <p>Học tập và rèn luyện phản xạ nhẹ nhàng từ <strong>${this.notebookTitle}</strong>, không tính điểm xếp hạng hay khóa cấp!</p>
         </div>
 
         <div class="games-selector-grid-6">
+          <!-- CARD GAME BOBA: TIỆM TRÀ SỮA CỦA TÔI -->
+          <div class="game-choice-card card-boba" id="btn-choose-boba" style="cursor: pointer; border: 2px solid #fda4af;">
+            <div class="card-tag" style="background: linear-gradient(135deg, #f43f5e, #e11d48); color: #ffffff;">🧋 MỚI RA MẮT • 📱 MÔ PHỎNG PHA CHẾ ANIME 1:1</div>
+            <div class="card-icon-hero">🧋 🌸</div>
+            <h3 class="card-title" style="color: #f43f5e;">Tiệm Trà Sữa Của Tôi</h3>
+            <p class="card-desc">
+              Trở thành Barista tiệm trà sữa Anime! Đọc/nghe khách gọi món bằng tiếng Trung, rót trà, múc 6 loại topping, chọn đường đá và hoàn thành đơn hàng nhận tiền vàng & kinh nghiệm!
+            </p>
+            <div class="card-features">
+              <span><i class="fa-solid fa-mug-hot"></i> 5 Trạm pha chế</span>
+              <span><i class="fa-solid fa-headphones"></i> Phát âm tiếng Trung</span>
+            </div>
+            <button type="button" class="btn btn-primary game-launch-btn" style="background: linear-gradient(135deg, #f43f5e, #e11d48); color: #ffffff;">
+              Vào Tiệm Trà Sữa <i class="fa-solid fa-play"></i>
+            </button>
+          </div>
+
           <!-- CARD GAME 0: QUIZ GAME (UNLOCKED ALL) -->
           <div class="game-choice-card card-quiz-highlight" id="btn-choose-quiz" style="cursor: pointer;">
             <div class="card-tag">⭐ GAME ĐỀ XUẤT • 📱 CHƠI MƯỢT MỌI THIẾT BỊ (ĐT / IPAD / PC)</div>
@@ -166,6 +183,14 @@ export class NotebookGamesHub {
       backBtn.addEventListener('click', (e) => {
         e.preventDefault();
         this.exitHub();
+      });
+    }
+
+    const bobaCard = this.container.querySelector('#btn-choose-boba');
+    if (bobaCard) {
+      bobaCard.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = '/boba-game.html';
       });
     }
 

@@ -35,7 +35,8 @@ export default defineConfig({
         documents: resolve(__dirname, 'documents.html'),
         sentenceReorder: resolve(__dirname, 'sentence-reorder.html'),
         aiDialogue: resolve(__dirname, 'ai-dialogue.html'),
-        translation: resolve(__dirname, 'translation-practice.html')
+        translation: resolve(__dirname, 'translation-practice.html'),
+        bobaGame: resolve(__dirname, 'boba-game.html')
       },
       output: {
         manualChunks(id) {
