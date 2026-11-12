@@ -1490,3 +1490,4 @@ class GroceryGameEngine {
 window.addEventListener('DOMContentLoaded', () => {
   window.groceryGame = new GroceryGameEngine();
 });
+

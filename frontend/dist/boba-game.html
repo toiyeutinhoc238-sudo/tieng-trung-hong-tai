@@ -4,122 +4,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Tiệm Trà Sữa Của Tôi (我的奶茶店) | Tiếng Trung HongTai</title>
+  <title>Tiệm Trà Sữa Của Tôi (我的奶茶店 - Papa's Boba Cafe) | Tiếng Trung HongTai</title>
   <link rel="icon" type="image/png" href="/assets/logo-CnsJJgQP.png">
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous">
-  <!-- Google Fonts: Be Vietnam Pro (Đầy đủ dấu Tiếng Việt) + LXGW WenKai Lite (Chuẩn Khải Thể / 楷体) -->
+  <!-- Google Fonts: Be Vietnam Pro (Đầy đủ dấu Tiếng Việt sắc nét) + LXGW WenKai Lite (Chuẩn Khải Thể / 楷体) -->
   <link
     href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=LXGW+WenKai+Lite:wght@400;600;700&display=swap"
     rel="stylesheet">
 
-  <script type="module" crossorigin src="/assets/bobaGame-DA0BS12w.js"></script>
+  <script type="module" crossorigin src="/assets/bobaGame-BMpOje-S.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/bobaGame-CYTLdEty.css">
+  <link rel="stylesheet" crossorigin href="/assets/bobaGame-BCma-0yw.css">
 </head>
 
 <body class="boba-game-body">
 
-  <div class="boba-game-container">
+  <div class="boba-game-container" id="boba-game-container">
 
-    <!-- 1. SCENE BACKGROUND (OUTDOOR STREET & SHOP WINDOW) -->
-    <div class="boba-scene-bg">
-      <div class="boba-outdoor-street">
-        <!-- SVG Vector of European Pastel Street & Green Trees -->
-        <svg class="street-silhouette" viewBox="0 0 1280 360" preserveAspectRatio="none">
-          <!-- Sky soft warmth -->
-          <rect width="1280" height="360" fill="transparent" />
-          <!-- Street Houses / Shops across the street -->
-          <path d="M 0 360 L 0 160 L 80 120 L 160 160 L 160 360 Z" fill="#ffd8be" opacity="0.45" />
-          <path d="M 160 360 L 160 140 L 260 140 L 260 360 Z" fill="#ffcca7" opacity="0.4" />
-          <path d="M 260 360 L 260 180 L 380 180 L 380 360 Z" fill="#fed7aa" opacity="0.5" />
-          <path d="M 880 360 L 880 130 L 980 90 L 1080 130 L 1080 360 Z" fill="#fed7aa" opacity="0.4" />
-          <path d="M 1080 360 L 1080 150 L 1280 150 L 1280 360 Z" fill="#ffd8be" opacity="0.45" />
-          <!-- Awnings -->
-          <rect x="180" y="210" width="70" height="15" rx="3" fill="#fb7185" opacity="0.6" />
-          <rect x="940" y="200" width="80" height="16" rx="3" fill="#f43f5e" opacity="0.5" />
-          <!-- Trees -->
-          <circle cx="120" cy="220" r="45" fill="#86efac" opacity="0.55" />
-          <circle cx="440" cy="230" r="50" fill="#a7f3d0" opacity="0.5" />
-          <circle cx="850" cy="240" r="42" fill="#86efac" opacity="0.55" />
-          <circle cx="1180" cy="210" r="55" fill="#a7f3d0" opacity="0.5" />
-        </svg>
-
-        <!-- Street Lamp -->
-        <svg class="street-lamp" viewBox="0 0 40 160">
-          <path d="M 18 160 L 18 35 L 12 35 L 20 10 L 28 35 L 22 35 L 22 160 Z" fill="#475569" />
-          <polygon points="12,35 28,35 25,50 15,50" fill="#fef08a" />
-        </svg>
-
-        <!-- Animated Street Passersby (Hành khách anime lướt qua lại) -->
-        <div class="street-passersby-container" aria-hidden="true">
-          <!-- Walking Track 1: Trái sang Phải -->
-          <div class="passerby-walker walker-track-1">
-            <div class="walker-sprite walker-girl-boba">
-              <span class="walker-bubble">🧋</span>
-              <div class="walker-figure">👧</div>
-            </div>
-          </div>
-          <!-- Walking Track 2: Phải sang Trái -->
-          <div class="passerby-walker walker-track-2">
-            <div class="walker-sprite walker-dog-walker">
-              <span class="walker-bubble">🐶</span>
-              <div class="walker-figure">👦</div>
-            </div>
-          </div>
-          <!-- Walking Track 3: Học sinh đeo cặp lướt qua -->
-          <div class="passerby-walker walker-track-3">
-            <div class="walker-sprite walker-student">
-              <span class="walker-bubble">🎒</span>
-              <div class="walker-figure">🧑‍🎓</div>
-            </div>
-          </div>
-          <!-- Walking Track 4: Xe đạp & bóng bay -->
-          <div class="passerby-walker walker-track-4">
-            <div class="walker-sprite walker-bicycle">
-              <span class="walker-bubble">🎈</span>
-              <div class="walker-figure">🚲</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Wooden Counter Header & Top -->
-      <div class="shop-counter-top"></div>
-      <div class="shop-counter-edge"></div>
-
-      <!-- Potted plant on left counter -->
-      <div class="counter-plant">
-        <svg viewBox="0 0 60 80">
-          <!-- Pot -->
-          <polygon points="16,50 44,50 40,78 20,78" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />
-          <rect x="14" y="46" width="32" height="6" rx="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
-          <!-- Leaves -->
-          <ellipse cx="30" cy="35" rx="12" ry="18" fill="#22c55e" />
-          <ellipse cx="20" cy="40" rx="10" ry="14" fill="#16a34a" transform="rotate(-25 20 40)" />
-          <ellipse cx="40" cy="38" rx="10" ry="15" fill="#16a34a" transform="rotate(25 40 38)" />
-          <ellipse cx="30" cy="20" rx="8" ry="12" fill="#4ade80" />
-        </svg>
-      </div>
-    </div>
-
-    <!-- 2. TOP HUD BAR -->
-    <div class="boba-top-hud">
+    <!-- ====================================================================
+         1. TOP HUD BAR (TRẠNG THÁI QUÁN, TIỀN VÀNG & CỔ VŨ)
+         ==================================================================== -->
+    <header class="boba-top-hud">
       <div class="hud-left">
-        <!-- Pause Button -->
-        <button type="button" class="hud-btn-pause"
-          onclick="document.getElementById('boba-pause-modal').style.display='flex';" title="Tạm dừng & Cài đặt">
+        <!-- Back to Hub -->
+        <a href="index.html" class="hud-btn-circle" title="Về Trang Chủ">
+          <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <!-- Pause / Settings Button -->
+        <button type="button" class="hud-btn-circle" id="btn-pause-boba" title="Tạm dừng & Cài đặt">
           <i class="fa-solid fa-pause"></i>
         </button>
 
         <!-- Coin Pill -->
-        <div class="hud-stat-pill">
+        <div class="hud-stat-pill" title="Tiền vàng tích lũy">
           <div class="hud-stat-icon coin">🪙</div>
-          <span class="hud-stat-val" id="hud-coin-val">120</span>
-          <button type="button" class="hud-stat-add-btn" onclick="window.bobaGame && window.bobaGame.audio.playCoin()"
-            title="Nạp thưởng">+</button>
+          <span class="hud-stat-val" id="hud-coin-val">120 ¥</span>
+          <button type="button" class="hud-stat-add-btn" id="btn-add-coin" title="Thưởng thêm">+</button>
         </div>
       </div>
 
@@ -130,437 +53,688 @@
             <i class="fa-solid fa-store" style="color: #ea580c;"></i> Lv.1
           </div>
           <div class="hud-level-progress-bar">
-            <div class="hud-level-progress-fill" id="hud-level-fill" style="width: 0%;"></div>
+            <div class="hud-level-progress-fill" id="hud-level-fill" style="width: 20%;"></div>
           </div>
-          <span class="hud-level-progress-text" id="hud-level-text">0/100</span>
+          <span class="hud-level-progress-text" id="hud-level-text">20/100</span>
         </div>
 
-        <!-- Book Pill -->
-        <div class="hud-stat-pill" id="hud-book-pill" style="cursor: pointer;" title="Mở Sổ tay Từ Vựng Trà Sữa">
-          <div class="hud-stat-icon book">📖</div>
-          <span class="hud-stat-val" id="hud-book-val">2/15</span>
-          <button type="button" class="hud-stat-add-btn">+</button>
-        </div>
+        <!-- Book Pill (Sổ từ vựng trà sữa) -->
+        <button type="button" class="hud-action-pill" id="btn-open-cookbook" title="Mở Sổ tay Từ Vựng Trà Sữa">
+          <span class="icon">📖</span>
+          <span class="text">奶茶词典 (Sổ Từ)</span>
+          <span class="badge" id="hud-book-val">3/15</span>
+        </button>
       </div>
 
       <div class="hud-right">
-        <!-- Mascot Encouragement -->
-        <div class="hud-mascot-wrap" onclick="window.bobaGame && window.bobaGame.audio.speak('加油，你最棒！')">
+        <!-- Mascot Encouragement (HongTai Dragon) -->
+        <div class="hud-mascot-wrap" id="hud-mascot-dragon" title="Bấm để nghe cổ vũ!">
           <div class="hud-mascot-bubble">
-            <span class="hud-mascot-title">加油！</span>
+            <span class="hud-mascot-title kaiti-font">加油！</span>
             <span class="hud-mascot-sub">( Cố lên nhé! )</span>
           </div>
           <div class="hud-mascot-avatar">🐲</div>
         </div>
       </div>
-    </div>
+    </header>
 
-    <!-- 3. LEFT WOODEN CLIPBOARD: DAILY REVENUE -->
-    <div class="boba-left-clipboard">
-      <div class="clipboard-header">今日营收</div>
-      <div class="clipboard-revenue">
-        <span>🪙</span> <span id="clipboard-rev-val">120 ¥</span>
+    <!-- ====================================================================
+         2. TICKET RAIL (THANH RAY TRƯỢT KẸP PHIẾU GỌI MÓN PAPA'S STYLE)
+         ==================================================================== -->
+    <div class="boba-ticket-rail" id="boba-ticket-rail">
+      <div class="rail-bar-metal">
+        <span class="rail-title-label">📋 ORDER TICKETS (点单夹)</span>
       </div>
-      <div class="clipboard-stat-row">
-        <span>✅ 已完成订单</span>
-        <span class="val" id="clipboard-order-val">1</span>
-      </div>
-      <div class="clipboard-stat-row">
-        <span>📖 新词汇</span>
-        <span class="val" id="clipboard-words-val">2</span>
-      </div>
-    </div>
-
-    <!-- 4. RIGHT HANGING BLACKBOARD -->
-    <div class="boba-right-blackboard">
-      <div class="blackboard-title">奶茶店</div>
-      <div class="blackboard-doodle">
-        <span style="font-size: 0.8rem; color: #f43f5e;">❤️</span>
-        <span style="font-size: 1.6rem;">🧋</span>
-      </div>
-    </div>
-
-    <!-- 5. CUSTOMER ZONE & SPEECH BALLOON -->
-    <div class="boba-customer-zone">
-      <!-- Anime Chibi Customer Sprite with Rotating Characters -->
-      <div class="customer-sprite-wrap" id="customer-sprite-wrap" title="Khách hàng (Bấm để nghe lại)">
-        <div class="customer-avatar-inner" id="customer-avatar-inner">
-          <!-- Default SVG Vector Anime Girl Artwork matching reference 100% -->
-          <svg viewBox="0 0 160 210" width="160" height="210" class="customer-svg-sprite">
-            <defs>
-              <radialGradient id="faceGrad" cx="50%" cy="40%" r="50%">
-                <stop offset="0%" stop-color="#fff5f0" />
-                <stop offset="100%" stop-color="#fed7cc" />
-              </radialGradient>
-              <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#693b22" />
-                <stop offset="100%" stop-color="#451e0e" />
-              </linearGradient>
-              <linearGradient id="blouseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#fffbeb" />
-                <stop offset="100%" stop-color="#fef08a" />
-              </linearGradient>
-            </defs>
-
-            <!-- Back Hair -->
-            <ellipse cx="80" cy="95" rx="52" ry="58" fill="url(#hairGrad)" />
-
-            <!-- Body / Blouse -->
-            <path d="M 40 210 Q 45 155 80 155 Q 115 155 120 210 Z" fill="url(#blouseGrad)" />
-            <!-- White Collar & Bowtie -->
-            <polygon points="68,155 80,172 60,165" fill="#ffffff" />
-            <polygon points="92,155 80,172 100,165" fill="#ffffff" />
-            <circle cx="80" cy="172" r="5" fill="#f59e0b" />
-            <path d="M 75 172 L 66 182 L 72 186 Z" fill="#d97706" />
-            <path d="M 85 172 L 94 182 L 88 186 Z" fill="#d97706" />
-
-            <!-- Face -->
-            <ellipse cx="80" cy="100" rx="38" ry="34" fill="url(#faceGrad)" />
-            <!-- Blush -->
-            <ellipse cx="58" cy="110" rx="7" ry="4" fill="#fca5a5" opacity="0.6" />
-            <ellipse cx="102" cy="110" rx="7" ry="4" fill="#fca5a5" opacity="0.6" />
-
-            <!-- Eyes -->
-            <ellipse cx="64" cy="98" rx="6.5" ry="9" fill="#2d150b" />
-            <circle cx="62" cy="95" r="2.8" fill="#ffffff" />
-            <circle cx="66" cy="102" r="1.5" fill="#ffffff" />
-            <ellipse cx="96" cy="98" rx="6.5" ry="9" fill="#2d150b" />
-            <circle cx="94" cy="95" r="2.8" fill="#ffffff" />
-            <circle cx="98" cy="102" r="1.5" fill="#ffffff" />
-
-            <!-- Eyebrows & Smile -->
-            <path d="M 58 87 Q 64 84 70 88" stroke="#451e0e" stroke-width="2.5" fill="none" stroke-linecap="round" />
-            <path d="M 90 88 Q 96 84 102 87" stroke="#451e0e" stroke-width="2.5" fill="none" stroke-linecap="round" />
-            <path d="M 74 114 Q 80 122 86 114" stroke="#e11d48" stroke-width="2.5" fill="#fb7185"
-              stroke-linecap="round" />
-
-            <!-- Front Hair & Bangs -->
-            <path d="M 44 95 Q 50 65 80 65 Q 110 65 116 95 Q 100 82 80 84 Q 60 82 44 95 Z" fill="url(#hairGrad)" />
-            <!-- Hair Angel Ring Shine -->
-            <ellipse cx="80" cy="74" rx="26" ry="4.5" fill="#a26340" opacity="0.6" />
-            <path d="M 58 74 Q 80 71 102 74" stroke="#fed7aa" stroke-width="2.5" fill="none" opacity="0.9" />
-            <!-- White Hairband -->
-            <path d="M 45 88 Q 80 50 115 88" stroke="#ffffff" stroke-width="6" fill="none" stroke-linecap="round" />
-
-            <!-- Cute Chibi Hands resting on counter -->
-            <ellipse cx="48" cy="204" rx="12" ry="8" fill="#fff5f0" stroke="#fecdd3" stroke-width="1.8" />
-            <ellipse cx="112" cy="204" rx="12" ry="8" fill="#fff5f0" stroke="#fecdd3" stroke-width="1.8" />
-          </svg>
-        </div>
-        <div class="customer-nametag" id="customer-nametag">
-          <span class="customer-name-chn">小雨</span>
-          <span class="customer-name-vi">(Bé Mưa)</span>
-        </div>
-      </div>
-
-      <!-- Speech Order Balloon -->
-      <div class="customer-order-balloon">
-        <!-- Target Cup Preview -->
-        <div class="order-target-cup-preview" title="Mẫu đồ uống khách yêu cầu">
-          <svg viewBox="0 0 50 65" width="46" height="60">
-            <rect x="12" y="14" width="26" height="42" rx="6" fill="#f5caa0" />
-            <ellipse cx="25" cy="50" rx="10" ry="4" fill="#1e293b" />
-            <!-- Straw -->
-            <rect x="22" y="4" width="5" height="40" rx="2" fill="#f43f5e" transform="rotate(10 22 4)" />
-            <!-- Lid -->
-            <path d="M 10 16 Q 25 8 40 16 Z" fill="rgba(255,255,255,0.7)" stroke="#ffffff" stroke-width="1.5" />
-          </svg>
-        </div>
-
-        <!-- Order Text (Hanzi, Pinyin, Vi) -->
-        <div class="order-balloon-text">
-          <div class="order-chinese-sentence" id="order-chinese-sentence">
-            我要一杯<br>
-            <strong>珍珠奶茶</strong>，<br>
-            <span class="highlight-accent">少糖，去冰</span>。
+      <div class="tickets-clip-area" id="tickets-clip-area">
+        <!-- Ticket Card Papa's Style (Click to zoom/inspect) -->
+        <div class="papa-order-ticket" id="active-order-ticket" title="Bấm để phóng to xem phiếu gọi món">
+          <div class="ticket-clip-pin"></div>
+          <div class="ticket-header">
+            <span class="ticket-cust-name kaiti-font" id="ticket-header-name">小雨</span>
+            <span class="ticket-order-id">#101</span>
           </div>
-          <div class="order-pinyin-sentence" id="order-pinyin-sentence">
-            Wǒ yào yībēi zhēnzhū nǎichá, shǎo táng, qù bīng.
+          <div class="ticket-body">
+            <div class="ticket-tea-icon" id="ticket-icon-preview">🧋</div>
+            <div class="ticket-line-item">
+              <span class="tag">茶:</span>
+              <strong class="kaiti-font" id="ticket-tea-text">珍珠奶茶</strong>
+            </div>
+            <div class="ticket-line-item">
+              <span class="tag">糖:</span>
+              <span class="kaiti-font" id="ticket-sugar-text">少糖(70%)</span>
+            </div>
+            <div class="ticket-line-item">
+              <span class="tag">冰:</span>
+              <span class="kaiti-font" id="ticket-ice-text">去冰(0%)</span>
+            </div>
+            <div class="ticket-line-item">
+              <span class="tag">料:</span>
+              <span class="kaiti-font" id="ticket-topping-text">珍珠</span>
+            </div>
           </div>
-          <div class="order-vietnamese-sentence" id="order-vietnamese-sentence">
-            (Cho tôi 1 ly trà sữa trân châu, ít đường, không đá)
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         3. MAIN VIEWPORT (CHUYỂN ĐỔI 4 TRẠM - STATIONS CONTAINER)
+         ==================================================================== -->
+    <main class="boba-main-viewport">
+
+      <!-- ==================================================================
+           STATION 1: ORDER STATION (点单台 · QUẦY ĐÓN KHÁCH & GHI PHIẾU)
+           ================================================================== -->
+      <section class="station-view station-order-view active" id="view-order-station">
+        <!-- Outdoor street scene behind counter -->
+        <div class="order-outdoor-street">
+          <!-- Animated Pedestrians walking by -->
+          <div class="street-passersby-container" aria-hidden="true">
+            <div class="passerby-walker walker-track-1"><div class="walker-sprite">🧋 👧</div></div>
+            <div class="passerby-walker walker-track-2"><div class="walker-sprite">🐶 👦</div></div>
+            <div class="passerby-walker walker-track-3"><div class="walker-sprite">🎒 🧑‍🎓</div></div>
           </div>
         </div>
 
-        <!-- Audio Speaker Button -->
-        <button type="button" class="order-audio-listen-btn" id="order-audio-listen-btn"
-          title="Nghe phát âm tiếng Trung">
-          <i class="fa-solid fa-volume-high"></i>
+        <!-- Left Wooden Clipboard (Thống kê ngày) -->
+        <div class="boba-left-clipboard">
+          <div class="clipboard-header kaiti-font">今日营业</div>
+          <div class="clipboard-revenue">
+            <span>🪙</span> <span id="clipboard-rev-val">120 ¥</span>
+          </div>
+          <div class="clipboard-stat-row">
+            <span>✅ 已完成订单</span>
+            <span class="val" id="clipboard-order-val">1</span>
+          </div>
+          <div class="clipboard-stat-row">
+            <span>📖 新词汇</span>
+            <span class="val" id="clipboard-words-val">3</span>
+          </div>
+        </div>
+
+        <!-- Right Blackboard Signboard -->
+        <div class="boba-right-blackboard">
+          <div class="blackboard-title kaiti-font">奶茶店</div>
+          <div class="blackboard-doodle">
+            <span style="font-size: 0.9rem; color: #f43f5e;">❤️</span>
+            <span style="font-size: 1.8rem;">🧋</span>
+          </div>
+        </div>
+
+        <!-- Customer Stage -->
+        <div class="order-customer-stage">
+          <!-- Anime Chibi Customer Visual -->
+          <div class="customer-figure-wrap" id="customer-figure-wrap">
+            <div class="customer-avatar-render" id="customer-avatar-render">
+              <!-- Default Anime Customer Character -->
+              <div class="anime-customer-card">
+                <span class="customer-chibi-emoji">👧</span>
+                <div class="customer-chibi-badge-wrap">
+                  <span class="c-name kaiti-font" id="customer-name-label">小雨</span>
+                  <span class="c-role" id="customer-role-label">(Bé Mưa)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer Speech Order Balloon -->
+          <div class="order-speech-balloon" id="order-speech-balloon">
+            <div class="balloon-header">
+              <span class="balloon-tag">顾客点单 (Khách gọi món)</span>
+              <button type="button" class="btn-audio-listen" id="btn-listen-order-speech" title="Nghe giọng đọc tiếng Trung">
+                <i class="fa-solid fa-volume-high"></i> Nghe phát âm
+              </button>
+            </div>
+            <div class="speech-chn kaiti-font" id="order-chinese-sentence">
+              我要一杯<br>
+              <strong>珍珠奶茶</strong>，<br>
+              <span class="highlight-accent">少糖，去冰</span>。
+            </div>
+            <div class="speech-pin" id="order-pinyin-sentence">
+              Wǒ yào yībēi zhēnzhū nǎichá, shǎo táng, qù bīng.
+            </div>
+            <div class="speech-vi" id="order-vietnamese-sentence">
+              (Cho tôi 1 ly trà sữa trân châu, ít đường 70%, không đá)
+            </div>
+
+            <!-- Action: Take Order (Ghi phiếu gọi món) -->
+            <div class="balloon-actions">
+              <button type="button" class="btn-take-order-papa" id="btn-take-order-action">
+                <i class="fa-solid fa-pencil"></i>
+                <span>接单 · 记录要求 (Ghi Phiếu Order)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Station Counter Footer -->
+        <div class="order-counter-footer">
+          <div class="footer-hint" id="order-footer-hint">
+            💡 Bấm <strong>"接单 (Ghi Phiếu Order)"</strong> để nhận yêu cầu của khách và bắt đầu pha chế!
+          </div>
+          <!-- Next Station Prompt Button -->
+          <button type="button" class="btn-next-station-pulse" id="btn-goto-pour-from-order" style="display: none;">
+            <span>👉 前往调制台 (Đến Trạm Rót Trà)</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           STATION 2: POUR STATION (调制台 · TRẠM RÓT TRÀ & ĐƯỜNG ĐÁ)
+           ================================================================== -->
+      <section class="station-view station-pour-view" id="view-pour-station">
+        <div class="station-stage-header">
+          <div class="stage-title-wrap">
+            <h2 class="stage-title kaiti-font">🍵 调制台 (Pour Station)</h2>
+            <p class="stage-desc">Nhấn giữ vòi rót trà vào ly đạt đúng vạch xanh, sau đó chọn lượng đường và đá</p>
+          </div>
+          <div class="pour-target-hint" id="pour-target-hint">
+            Đơn yêu cầu: <strong class="kaiti-font" id="pour-target-tea-name">奶茶 · 少糖 · 去冰</strong>
+          </div>
+        </div>
+
+        <div class="pour-workbench-grid">
+          <!-- 4 TEA DISPENSERS (CÁC VÒI RÓT TRÀ CÓ DÒNG CHẢY) -->
+          <div class="tea-dispensers-section">
+            <div class="dispensers-banner kaiti-font">饮料区 · 按住龙头倒茶 (Nhấn giữ vòi để rót)</div>
+            <div class="dispensers-row">
+              <!-- Urn 1: Sữa Tươi (鲜奶) -->
+              <div class="tea-urn-station" data-tea="milk">
+                <div class="urn-tank milk">
+                  <span class="urn-icon">🐮</span>
+                  <span class="urn-name kaiti-font">鲜奶</span>
+                </div>
+                <button type="button" class="btn-spout-lever" data-tea="milk">
+                  <i class="fa-solid fa-faucet-drip"></i> Rót Sữa
+                </button>
+              </div>
+
+              <!-- Urn 2: Hồng Trà (红茶) -->
+              <div class="tea-urn-station" data-tea="blacktea">
+                <div class="urn-tank blacktea">
+                  <span class="urn-icon">🍂</span>
+                  <span class="urn-name kaiti-font">红茶</span>
+                </div>
+                <button type="button" class="btn-spout-lever" data-tea="blacktea">
+                  <i class="fa-solid fa-faucet-drip"></i> Rót Hồng Trà
+                </button>
+              </div>
+
+              <!-- Urn 3: Trà Sữa (奶茶) -->
+              <div class="tea-urn-station" data-tea="milktea">
+                <div class="urn-tank milktea">
+                  <span class="urn-icon">🍃</span>
+                  <span class="urn-name kaiti-font">奶茶</span>
+                </div>
+                <button type="button" class="btn-spout-lever" data-tea="milktea">
+                  <i class="fa-solid fa-faucet-drip"></i> Rót Trà Sữa
+                </button>
+              </div>
+
+              <!-- Urn 4: Trà Khoai Môn (芋泥) -->
+              <div class="tea-urn-station" data-tea="taro">
+                <div class="urn-tank taro">
+                  <span class="urn-icon">🍠</span>
+                  <span class="urn-name kaiti-font">芋泥</span>
+                </div>
+                <button type="button" class="btn-spout-lever" data-tea="taro">
+                  <i class="fa-solid fa-faucet-drip"></i> Rót Khoai Môn
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- MIDDLE: POUR CUP & LIQUID LEVEL METER -->
+          <div class="pour-cup-section">
+            <div class="cup-glass-holder">
+              <!-- Stream of liquid flowing down when pouring -->
+              <div class="liquid-stream-flow" id="liquid-stream-flow"></div>
+
+              <!-- Transparent Cup Glass with Liquid Fill -->
+              <div class="boba-cup-glass" id="pour-cup-glass">
+                <div class="cup-liquid-content" id="pour-cup-liquid" style="height: 0%;"></div>
+                <div class="cup-ice-layer" id="pour-cup-ice"></div>
+                <div class="cup-target-marker" style="bottom: 70%;" title="Vạch chuẩn 70%">
+                  <span>🎯 Chuẩn 70%</span>
+                </div>
+                <div class="cup-brand-stamp">🐻</div>
+              </div>
+            </div>
+
+            <!-- Meter Status -->
+            <div class="pour-meter-status">
+              <span class="meter-label">Mực nước trong ly:</span>
+              <strong class="meter-val" id="pour-meter-val">0%</strong>
+              <span class="meter-badge" id="pour-meter-badge">Chưa rót</span>
+            </div>
+          </div>
+
+          <!-- RIGHT: SUGAR & ICE CONTROLS -->
+          <div class="sugar-ice-section">
+            <!-- Sugar Selector -->
+            <div class="ingredient-box sugar-box">
+              <div class="box-title kaiti-font">🍬 糖度选择 (Chọn Lượng Đường)</div>
+              <div class="options-btn-grid">
+                <button type="button" class="btn-opt-sugar" data-sugar="extra_sugar">多糖 (100%)</button>
+                <button type="button" class="btn-opt-sugar" data-sugar="less_sugar">少糖 (70%)</button>
+                <button type="button" class="btn-opt-sugar" data-sugar="half_sugar">半糖 (50%)</button>
+                <button type="button" class="btn-opt-sugar" data-sugar="micro_sugar">微糖 (30%)</button>
+                <button type="button" class="btn-opt-sugar" data-sugar="no_sugar">无糖 (0%)</button>
+              </div>
+            </div>
+
+            <!-- Ice Selector -->
+            <div class="ingredient-box ice-box">
+              <div class="box-title kaiti-font">❄️ 冰量选择 (Chọn Lượng Đá)</div>
+              <div class="options-btn-grid">
+                <button type="button" class="btn-opt-ice" data-ice="extra_ice">多冰 (Nhiều đá)</button>
+                <button type="button" class="btn-opt-ice" data-ice="regular_ice">正常冰 (Đá vừa)</button>
+                <button type="button" class="btn-opt-ice" data-ice="less_ice">少冰 (Ít đá)</button>
+                <button type="button" class="btn-opt-ice" data-ice="no_ice">去冰 (Không đá)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Station Footer Navigation -->
+        <div class="station-nav-footer">
+          <button type="button" class="btn-step-nav prev" id="btn-back-to-order">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại Đón Khách
+          </button>
+          <button type="button" class="btn-step-nav next" id="btn-goto-shake">
+            <span>👉 前往摇匀台 (Đến Máy Lắc Shaker)</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           STATION 3: MIX / SHAKE STATION (摇匀台 · MÁY LẮC SHAKER PAPA'S)
+           ================================================================== -->
+      <section class="station-view station-shake-view" id="view-shake-station">
+        <div class="station-stage-header">
+          <div class="stage-title-wrap">
+            <h2 class="stage-title kaiti-font">🌪️ 摇匀台 (Mix & Shake Station)</h2>
+            <p class="stage-desc">Đặt ly vào bình shaker, khởi động máy lắc và bấm dừng đúng vạch xanh hoàn hảo</p>
+          </div>
+        </div>
+
+        <div class="shake-machine-container">
+          <!-- Industrial Boba Shaker Machine Graphic -->
+          <div class="shaker-machine-unit" id="shaker-machine-unit">
+            <div class="shaker-motor-head">
+              <div class="motor-light" id="shaker-motor-light"></div>
+            </div>
+            <div class="shaker-cup-slot">
+              <!-- Shaker Cup vibrating when active -->
+              <div class="stainless-shaker-cup" id="stainless-shaker-cup">
+                <div class="shaker-lid"></div>
+                <div class="shaker-body">
+                  <span class="shaker-brand-text kaiti-font">摇摇茶</span>
+                </div>
+              </div>
+            </div>
+            <div class="shaker-base"></div>
+          </div>
+
+          <!-- Shaker Control Console & Meter Gauge -->
+          <div class="shaker-console-card">
+            <div class="console-title kaiti-font">摇匀仪表盘 (Đồng Hồ Đo Độ Lắc)</div>
+
+            <!-- Dial Meter Gauge -->
+            <div class="gauge-meter-wrapper">
+              <div class="gauge-dial">
+                <div class="gauge-zone zone-yellow" title="Chưa đủ độ (Lắc nhẹ)"></div>
+                <div class="gauge-zone zone-green" title="Vùng Xanh Hoàn Hảo (Perfect Zone)"></div>
+                <div class="gauge-zone zone-red" title="Lắc quá tay (Over-shaken)"></div>
+                <!-- Needle Pointer -->
+                <div class="gauge-needle" id="gauge-needle" style="transform: rotate(-70deg);"></div>
+              </div>
+              <div class="gauge-center-cap"></div>
+            </div>
+
+            <div class="gauge-status-text" id="gauge-status-text">
+              Chưa khởi động máy lắc
+            </div>
+
+            <!-- Start / Stop Button -->
+            <button type="button" class="btn-shaker-trigger" id="btn-shaker-trigger">
+              <i class="fa-solid fa-play"></i> <span>启动摇匀 (Bắt Đầu Lắc)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Station Footer Navigation -->
+        <div class="station-nav-footer">
+          <button type="button" class="btn-step-nav prev" id="btn-back-to-pour">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại Rót Trà
+          </button>
+          <button type="button" class="btn-step-nav next" id="btn-goto-top">
+            <span>👉 前往配料台 (Đến Trạm Topping)</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           STATION 4: TOP STATION (配料台 · TOPPING, ĐÓNG NẮP & CẮM ỐNG HÚT)
+           ================================================================== -->
+      <section class="station-view station-top-view" id="view-top-station">
+        <div class="station-stage-header">
+          <div class="stage-title-wrap">
+            <h2 class="stage-title kaiti-font">🧋 配料台 (Top & Finish Station)</h2>
+            <p class="stage-desc">Múc topping theo yêu cầu, đóng màng nắp ly và cắm ống hút hoàn thiện</p>
+          </div>
+          <div class="top-target-hint">
+            Topping khách cần: <strong class="kaiti-font" id="top-target-topping-name">珍珠 (Trân châu đen)</strong>
+          </div>
+        </div>
+
+        <div class="top-workbench-grid">
+          <!-- 6 TOPPING TRAYS (6 KHAY TOPPING KÍNH SÁNG BÓNG) -->
+          <div class="toppings-selection-case">
+            <div class="case-header kaiti-font">配料区 · 点击添加加料 (Chạm để múc vào ly)</div>
+            <div class="toppings-cells-6">
+              <!-- 1: Boba (珍珠) -->
+              <div class="topping-tub-card" data-topping="boba">
+                <span class="tub-icon">🧋</span>
+                <span class="tub-name kaiti-font">珍珠</span>
+                <span class="tub-sub">Trân châu đen</span>
+              </div>
+              <!-- 2: Mango (芒果) -->
+              <div class="topping-tub-card" data-topping="mango">
+                <span class="tub-icon">🥭</span>
+                <span class="tub-name kaiti-font">芒果布丁</span>
+                <span class="tub-sub">Pudding xoài</span>
+              </div>
+              <!-- 3: Red bean (红豆) -->
+              <div class="topping-tub-card" data-topping="redbean">
+                <span class="tub-icon">🫘</span>
+                <span class="tub-name kaiti-font">红豆</span>
+                <span class="tub-sub">Đậu đỏ bùi</span>
+              </div>
+              <!-- 4: Matcha (抹茶) -->
+              <div class="topping-tub-card" data-topping="matcha">
+                <span class="tub-icon">🍵</span>
+                <span class="tub-name kaiti-font">抹茶冻</span>
+                <span class="tub-sub">Thạch matcha</span>
+              </div>
+              <!-- 5: Coconut (椰果) -->
+              <div class="topping-tub-card" data-topping="coconut">
+                <span class="tub-icon">🥥</span>
+                <span class="tub-name kaiti-font">椰果</span>
+                <span class="tub-sub">Thạch dừa giòn</span>
+              </div>
+              <!-- 6: Taro ball (芋圆) -->
+              <div class="topping-tub-card" data-topping="taroball">
+                <span class="tub-icon">🍠</span>
+                <span class="tub-name kaiti-font">芋圆</span>
+                <span class="tub-sub">Khoai dẻo thơm</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- MIDDLE: ASSEMBLED CUP PREVIEW -->
+          <div class="top-cup-preview-section">
+            <div class="final-cup-showcase">
+              <!-- Cup with layered toppings, lid, straw -->
+              <div class="finished-boba-cup" id="final-boba-cup">
+                <!-- Straw -->
+                <div class="final-straw" id="final-cup-straw" style="display: none;"></div>
+                <!-- Lid -->
+                <div class="final-lid" id="final-cup-lid" style="display: none;">
+                  <span class="lid-bear-stamp">🐻</span>
+                </div>
+                <!-- Cup body with liquid and toppings -->
+                <div class="final-glass-body">
+                  <div class="final-liquid-layer" id="final-cup-liquid"></div>
+                  <div class="final-toppings-layer" id="final-cup-toppings"></div>
+                </div>
+              </div>
+            </div>
+            <div class="final-cup-desc" id="final-cup-status-desc">
+              Chưa thêm topping
+            </div>
+          </div>
+
+          <!-- RIGHT: LID SEALER & STRAW MACHINE -->
+          <div class="sealer-straw-section">
+            <!-- Lid Sealing Press Button -->
+            <div class="sealer-box">
+              <div class="box-title kaiti-font">🐻 封口机 (Máy Dán Nắp)</div>
+              <button type="button" class="btn-action-lid" id="btn-action-lid">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>盖上杯盖 · 封口 (Đóng Nắp Ly)</span>
+              </button>
+            </div>
+
+            <!-- Straw Dispenser -->
+            <div class="straw-box">
+              <div class="box-title kaiti-font">🥤 吸管 (Cắm Ống Hút)</div>
+              <div class="straw-colors-row">
+                <button type="button" class="btn-color-straw pink" data-color="#f43f5e" title="Ống hút hồng"></button>
+                <button type="button" class="btn-color-straw blue" data-color="#0284c7" title="Ống hút xanh"></button>
+                <button type="button" class="btn-color-straw yellow" data-color="#eab308" title="Ống hút vàng"></button>
+                <button type="button" class="btn-color-straw brown" data-color="#78350f" title="Ống hút socola"></button>
+              </div>
+            </div>
+
+            <!-- Finish Drink & Serve Button -->
+            <button type="button" class="btn-finish-and-serve" id="btn-finish-and-serve">
+              <i class="fa-solid fa-bell-concierge"></i>
+              <span>制作完成 · 提交出餐 (Hoàn Tất & Trả Món)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Station Footer Navigation -->
+        <div class="station-nav-footer">
+          <button type="button" class="btn-step-nav prev" id="btn-back-to-shake">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại Máy Lắc
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ====================================================================
+         4. BOTTOM STATION BAR (THANH CHUYỂN TRẠM PAPA'S STYLE)
+         ==================================================================== -->
+    <nav class="boba-bottom-station-bar">
+      <button type="button" class="station-tab-btn active" data-target="view-order-station" id="tab-order">
+        <span class="tab-icon">🛎️</span>
+        <div class="tab-labels">
+          <span class="tab-title-chn kaiti-font">点单台</span>
+          <span class="tab-title-vi">1. Đón Khách</span>
+        </div>
+      </button>
+
+      <button type="button" class="station-tab-btn" data-target="view-pour-station" id="tab-pour">
+        <span class="tab-icon">🍵</span>
+        <div class="tab-labels">
+          <span class="tab-title-chn kaiti-font">调制台</span>
+          <span class="tab-title-vi">2. Rót Trà</span>
+        </div>
+        <span class="tab-badge-dot" id="dot-pour" style="display: none;"></span>
+      </button>
+
+      <button type="button" class="station-tab-btn" data-target="view-shake-station" id="tab-shake">
+        <span class="tab-icon">🌪️</span>
+        <div class="tab-labels">
+          <span class="tab-title-chn kaiti-font">摇匀台</span>
+          <span class="tab-title-vi">3. Lắc Shaker</span>
+        </div>
+        <span class="tab-badge-dot" id="dot-shake" style="display: none;"></span>
+      </button>
+
+      <button type="button" class="station-tab-btn" data-target="view-top-station" id="tab-top">
+        <span class="tab-icon">🧋</span>
+        <div class="tab-labels">
+          <span class="tab-title-chn kaiti-font">配料台</span>
+          <span class="tab-title-vi">4. Topping & Nắp</span>
+        </div>
+        <span class="tab-badge-dot" id="dot-top" style="display: none;"></span>
+      </button>
+    </nav>
+
+    <!-- ====================================================================
+         5. PAPA'S SCORE CARD MODAL (BẢNG ĐIỂM 4 TIÊU CHÍ & TIỀN TIP PAPA'S STYLE)
+         ==================================================================== -->
+    <div class="boba-modal-backdrop" id="modal-papa-score" style="display: none;">
+      <div class="papa-scorecard-sheet">
+        <div class="scorecard-pin"></div>
+        <div class="scorecard-header">
+          <span class="scorecard-brand kaiti-font">我的奶茶店 · 出餐评分卡</span>
+          <h3 class="scorecard-title">PAPA'S SERVICE SCORE</h3>
+        </div>
+
+        <!-- 4 Criteria Percentage Bars -->
+        <div class="scorecard-criteria-list">
+          <!-- 1. Order Match -->
+          <div class="criteria-row">
+            <span class="c-label">📋 点单匹配 (Đúng Yêu Cầu):</span>
+            <div class="c-bar-bg"><div class="c-bar-fill fill-blue" id="score-bar-order" style="width: 100%;"></div></div>
+            <span class="c-percent" id="score-val-order">100%</span>
+          </div>
+
+          <!-- 2. Pour Station -->
+          <div class="criteria-row">
+            <span class="c-label">🍵 调制倒茶 (Tỉ Lệ Rót Trà & Đường Đá):</span>
+            <div class="c-bar-bg"><div class="c-bar-fill fill-teal" id="score-bar-pour" style="width: 98%;"></div></div>
+            <span class="c-percent" id="score-val-pour">98%</span>
+          </div>
+
+          <!-- 3. Shake Station -->
+          <div class="criteria-row">
+            <span class="c-label">🌪️ 摇匀火候 (Độ Lắc Máy Shaker):</span>
+            <div class="c-bar-bg"><div class="c-bar-fill fill-amber" id="score-bar-shake" style="width: 95%;"></div></div>
+            <span class="c-percent" id="score-val-shake">95%</span>
+          </div>
+
+          <!-- 4. Top Station -->
+          <div class="criteria-row">
+            <span class="c-label">🧋 配料封口 (Topping & Đóng Nắp Ống Hút):</span>
+            <div class="c-bar-bg"><div class="c-bar-fill fill-pink" id="score-bar-top" style="width: 100%;"></div></div>
+            <span class="c-percent" id="score-val-top">100%</span>
+          </div>
+        </div>
+
+        <!-- Overall Score & Tips Calculation -->
+        <div class="scorecard-total-box">
+          <div class="total-score-badge">
+            <span class="badge-title">总评分 (Overall)</span>
+            <span class="badge-big-score" id="score-val-total">98%</span>
+          </div>
+          <div class="tips-money-breakdown">
+            <div class="breakdown-line">
+              <span>饮品价格 (Giá ly trà):</span>
+              <strong id="score-base-price">18.00 ¥</strong>
+            </div>
+            <div class="breakdown-line">
+              <span>小费奖励 (Tiền Tip Thưởng):</span>
+              <strong class="text-emerald" id="score-tip-price">+6.50 ¥</strong>
+            </div>
+            <div class="breakdown-divider"></div>
+            <div class="breakdown-line total-line">
+              <span>实收金额 (Tổng Nhận):</span>
+              <strong class="text-orange" id="score-final-receive">24.50 ¥</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Reaction Speech in Chinese -->
+        <div class="customer-reaction-card">
+          <div class="reaction-avatar">🥰</div>
+          <div class="reaction-text">
+            <div class="reaction-chn kaiti-font" id="score-reaction-chn">
+              “太好喝了！味道完全符合我的要求，谢谢老板！”
+            </div>
+            <div class="reaction-vi" id="score-reaction-vi">
+              (Ngon tuyệt cú mèo! Đúng chuẩn vị em thích, cảm ơn chủ quán!)
+            </div>
+          </div>
+        </div>
+
+        <!-- Next Customer Button -->
+        <button type="button" class="btn-scorecard-continue" id="btn-next-customer-papa">
+          <i class="fa-solid fa-user-plus"></i>
+          <span>接待下一位顾客 (Đón Khách Tiếp Theo)</span>
         </button>
       </div>
     </div>
 
-    <!-- 6. FIVE INTERACTIVE COUNTER STATIONS -->
-    <div class="boba-stations-shelf">
-
-      <!-- STATION 1: CUP DISPENSER (FAR LEFT) -->
-      <div class="station-cup-dispenser" id="station-cup-stack" title="Lấy 1 cốc mới đặt lên bàn pha chế">
-        <div class="cup-stack-visual">
-          <div class="single-stack-cup" style="bottom: 0px;"><span class="cup-bear-logo">🐻</span></div>
-          <div class="single-stack-cup" style="bottom: 24px;"><span class="cup-bear-logo">🐻</span></div>
-          <div class="single-stack-cup" style="bottom: 48px;"><span class="cup-bear-logo">🐻</span></div>
+    <!-- ====================================================================
+         6. COOKBOOK VOCAB MODAL (SỔ TAY TỪ VỰNG TRÀ SỮA)
+         ==================================================================== -->
+    <div class="boba-modal-backdrop" id="boba-cookbook-modal" style="display: none;">
+      <div class="boba-modal-card cookbook-modal-card">
+        <div class="boba-modal-header">
+          <div class="boba-modal-title">
+            <i class="fa-solid fa-book-open" style="color: #ea580c;"></i>
+            <span>Sổ Tay Từ Vựng Trà Sữa (奶茶词典)</span>
+          </div>
+          <button type="button" class="boba-modal-close" onclick="document.getElementById('boba-cookbook-modal').style.display='none'">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="cookbook-categories-scroll" id="cookbook-categories-scroll">
+          <!-- Populated dynamically via JS -->
         </div>
       </div>
-
-      <!-- STATION 2: DRINKS / TEAS AREA (饮料区 · 各种茶饮) -->
-      <div class="station-wooden-box station-drinks-area">
-        <div class="drinks-dispensers-grid">
-          <!-- Urn 1: Milk (鲜奶 - 🐮) -->
-          <div class="tea-dispenser-urn" data-tea="milk" title="Sữa tươi (鲜奶 - xiānnǎi)">
-            <div class="tea-urn-cap"></div>
-            <div class="tea-urn-body">
-              <div class="tea-liquid-layer milk"></div>
-              <div class="tea-urn-badge">🐮</div>
-              <div class="tea-urn-spout"></div>
-            </div>
-          </div>
-          <!-- Urn 2: Black Tea (红茶 - 🍂) -->
-          <div class="tea-dispenser-urn" data-tea="blacktea" title="Hồng trà (红茶 - hóngchá)">
-            <div class="tea-urn-cap"></div>
-            <div class="tea-urn-body">
-              <div class="tea-liquid-layer black-tea"></div>
-              <div class="tea-urn-badge">🍂</div>
-              <div class="tea-urn-spout"></div>
-            </div>
-          </div>
-          <!-- Urn 3: Milk Tea (奶茶 - 🍃) -->
-          <div class="tea-dispenser-urn" data-tea="milktea" title="Trà sữa truyền thống (奶茶 - nǎichá)">
-            <div class="tea-urn-cap"></div>
-            <div class="tea-urn-body">
-              <div class="tea-liquid-layer milk-tea"></div>
-              <div class="tea-urn-badge">🍃</div>
-              <div class="tea-urn-spout"></div>
-            </div>
-          </div>
-          <!-- Urn 4: Taro Tea (芋泥 - 🍠) -->
-          <div class="tea-dispenser-urn" data-tea="taro" title="Trà khoai môn (芋泥奶茶 - yùní nǎichá)">
-            <div class="tea-urn-cap"></div>
-            <div class="tea-urn-body">
-              <div class="tea-liquid-layer taro"></div>
-              <div class="tea-urn-badge">🍠</div>
-              <div class="tea-urn-spout"></div>
-            </div>
-          </div>
-        </div>
-        <div class="station-label-pill">饮料区 · 各种茶饮</div>
-      </div>
-
-      <!-- STATION 3: TOPPINGS AREA (配料区 - 6 NGĂN) -->
-      <div class="station-wooden-box station-toppings-area">
-        <div class="toppings-grid-6">
-          <!-- 1: Boba (珍珠) -->
-          <div class="topping-slot-cell" data-topping="boba" title="Trân châu đen (珍珠 - zhēnzhū)">
-            <span class="topping-icon-visual">🧋</span>
-            <span class="topping-name-sub">珍珠</span>
-          </div>
-          <!-- 2: Mango Pudding (芒果布丁) -->
-          <div class="topping-slot-cell" data-topping="mango" title="Pudding xoài (芒果布丁 - mángguǒ bùdīng)">
-            <span class="topping-icon-visual">🥭</span>
-            <span class="topping-name-sub">芒果</span>
-          </div>
-          <!-- 3: Red Bean (红豆) -->
-          <div class="topping-slot-cell" data-topping="redbean" title="Đậu đỏ (红豆 - hóngdòu)">
-            <span class="topping-icon-visual">🫘</span>
-            <span class="topping-name-sub">红豆</span>
-          </div>
-          <!-- 4: Matcha (抹茶冻) -->
-          <div class="topping-slot-cell" data-topping="matcha" title="Thạch matcha (抹茶冻 - mǒchádòng)">
-            <span class="topping-icon-visual">🍵</span>
-            <span class="topping-name-sub">抹茶</span>
-          </div>
-          <!-- 5: Coconut (椰果) -->
-          <div class="topping-slot-cell" data-topping="coconut" title="Thạch dừa (椰果 - yēguǒ)">
-            <span class="topping-icon-visual">🥥</span>
-            <span class="topping-name-sub">椰果</span>
-          </div>
-          <!-- 6: Taro Balls (芋圆) -->
-          <div class="topping-slot-cell" data-topping="taroballs" title="Khoai dẻo ngũ sắc (芋圆 - yùyuán)">
-            <span class="topping-icon-visual">🍠</span>
-            <span class="topping-name-sub">芋圆</span>
-          </div>
-        </div>
-        <div class="station-label-pill">配料区</div>
-      </div>
-
-      <!-- STATION 4: SUGAR & ICE AREA (糖冰区) -->
-      <div class="station-wooden-box station-sugar-ice-area">
-        <div class="sugar-ice-containers-row">
-          <div class="sugar-box-tub" title="Đường trắng">
-            <span>🍬</span>
-            <span class="scoop-spoon-visual">🥄</span>
-          </div>
-          <div class="ice-box-tub" title="Đá viên">
-            <span>🧊</span>
-            <span class="scoop-spoon-visual">🥄</span>
-          </div>
-        </div>
-
-        <div class="sugar-ice-buttons-grid">
-          <!-- Sugar Row -->
-          <div class="preset-btn-row">
-            <button type="button" class="boba-preset-btn sugar-btn" data-sugar="less_sugar"
-              title="Ít đường (30%)">少糖</button>
-            <button type="button" class="boba-preset-btn sugar-btn" data-sugar="half_sugar"
-              title="Nửa đường (50%)">半糖</button>
-            <button type="button" class="boba-preset-btn sugar-btn" data-sugar="full_sugar"
-              title="Nhiều đường (100%)">多糖</button>
-          </div>
-          <!-- Ice Row -->
-          <div class="preset-btn-row">
-            <button type="button" class="boba-preset-btn ice-btn" data-ice="no_ice" title="Không đá (0%)">去冰</button>
-            <button type="button" class="boba-preset-btn ice-btn" data-ice="less_ice" title="Ít đá (30%)">少冰</button>
-            <button type="button" class="boba-preset-btn ice-btn" data-ice="normal_ice" title="Đá vừa (70%)">正常</button>
-            <button type="button" class="boba-preset-btn ice-btn" data-ice="more_ice"
-              title="Nhiều đá (100%)">多冰</button>
-          </div>
-        </div>
-        <div class="station-label-pill">糖冰区</div>
-      </div>
-
-      <!-- STATION 5: SHAKER (FAR RIGHT) -->
-      <div class="station-shaker-wrap">
-        <div class="shaker-metal-cup" id="shaker-cup-visual" title="Bình lắc Shaker (Bấm để lắc đều đồ uống)">
-          <span style="font-size: 1.1rem; opacity: 0.85;">🐻</span>
-        </div>
-      </div>
-
     </div>
 
-    <!-- 7. BOTTOM WORKSPACE: CUP LID, WORKBENCH & COMPLETE BUTTON -->
-    <div class="boba-bottom-workbench">
-
-      <!-- Bottom Left: Cup Lid Tray (杯子区 · 盖子) -->
-      <div class="lid-tray-box" id="lid-tray-box" title="Đậy nắp cốc & cắm ống hút">
-        <div class="dome-lid-visual"></div>
-        <div class="station-label-pill">杯子区</div>
-      </div>
-
-      <!-- Bottom Center: Workbench Drip Tray with Live Interactive Cup -->
-      <div class="workbench-drip-tray">
-        <div class="live-crafting-cup" id="live-crafting-cup">
-          <!-- Lid & Straw -->
-          <div class="live-cup-lid" id="live-cup-lid"></div>
-          <div class="live-cup-straw" id="live-cup-straw"></div>
-
-          <!-- Bear Face Emblem -->
-          <div class="live-cup-bear-emblem">🐻</div>
-
-          <!-- Ice Layer -->
-          <div class="cup-ice-layer" id="cup-ice-layer"></div>
-
-          <!-- Tea Liquid Layer -->
-          <div class="cup-tea-layer" id="cup-tea-layer"></div>
-
-          <!-- Toppings Bottom Layer -->
-          <div class="cup-toppings-layer" id="cup-toppings-layer"></div>
-        </div>
-      </div>
-
-      <!-- Bottom Right: Finish Button (完成制作 >) -->
-      <div class="workbench-finish-btn-wrap">
-        <button type="button" class="boba-finish-btn" id="boba-finish-btn" title="Hoàn thành & Giao cho khách">
-          <span>🧋</span> <span class="chinese-text">完成制作</span> <i class="fa-solid fa-chevron-right" style="font-size: 1rem;"></i>
-        </button>
-      </div>
-
-    </div>
-
-    <!-- MODAL 1: FEEDBACK & EVALUATION (Khách Đánh Giá) -->
-    <div class="boba-modal-backdrop" id="boba-feedback-modal">
+    <!-- ====================================================================
+         7. PAUSE / SETTINGS MODAL
+         ==================================================================== -->
+    <div class="boba-modal-backdrop" id="boba-pause-modal" style="display: none;">
       <div class="boba-modal-card">
-        <div class="boba-modal-title" id="feedback-modal-title">🎉 Đánh Giá Của Khách</div>
-
-        <div
-          style="text-align: center; font-size: 1.25rem; font-weight: 800; color: #1e293b;"
-          class="chinese-text"
-          id="feedback-modal-chn">
-          “哇！珍珠好Q弹，味道正好，太感谢你啦！”
-        </div>
-        <div style="text-align: center; font-size: 0.88rem; color: #64748b; font-weight: 600; font-family: var(--boba-font-main) !important;" id="feedback-modal-vi">
-          “Oa! Trân châu dai dẻo vừa miệng, đúng ý mình dặn luôn, cảm ơn bạn nhiều nha!”
-        </div>
-
-        <div style="display: flex; justify-content: center; gap: 16px; margin: 8px 0;">
-          <div
-            style="background: #fef3c7; border: 1.5px solid #fde68a; border-radius: 12px; padding: 6px 14px; font-weight: 800; color: #b45309; font-family: var(--boba-font-main);">
-            🪙 <span id="feedback-reward-coin">+120 ¥</span>
+        <div class="boba-modal-header">
+          <div class="boba-modal-title">
+            <i class="fa-solid fa-gear" style="color: #ea580c;"></i>
+            <span>Cài Đặt & Hướng Dẫn Pha Chế</span>
           </div>
-          <div
-            style="background: #dbeafe; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 6px 14px; font-weight: 800; color: #1d4ed8; font-family: var(--boba-font-main);">
-            ⭐️ <span id="feedback-reward-exp">+25 EXP</span>
+          <button type="button" class="boba-modal-close" onclick="document.getElementById('boba-pause-modal').style.display='none'">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="boba-modal-body" style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+            <div>
+              <strong style="font-size: 0.95rem; color: #1e293b;">Hiệu ứng âm thanh (SFX)</strong>
+              <div style="font-size: 0.75rem; color: #64748b;">Tiếng rót nước, máy lắc shaker, leng keng tiền tip</div>
+            </div>
+            <input type="checkbox" id="toggle-sfx" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+            <div>
+              <strong style="font-size: 0.95rem; color: #1e293b;">Giọng đọc tiếng Trung (AI Voice)</strong>
+              <div style="font-size: 0.75rem; color: #64748b;">Phát âm câu gọi món và lời nhận xét của khách</div>
+            </div>
+            <input type="checkbox" id="toggle-voice" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+            <div>
+              <strong style="font-size: 0.95rem; color: #1e293b;">Hiện phiên âm Pinyin</strong>
+              <div style="font-size: 0.75rem; color: #64748b;">Hỗ trợ phát âm chữ Hán có dấu thanh điệu</div>
+            </div>
+            <input type="checkbox" id="toggle-pinyin" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+            <div>
+              <strong style="font-size: 0.95rem; color: #1e293b;">Hiện dịch nghĩa Tiếng Việt</strong>
+              <div style="font-size: 0.75rem; color: #64748b;">Gợi ý câu dịch tiếng Việt dưới câu gọi món</div>
+            </div>
+            <input type="checkbox" id="toggle-vi" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
           </div>
         </div>
 
-        <div class="boba-modal-actions">
-          <button type="button" class="boba-modal-btn primary"
-            onclick="window.bobaGame && window.bobaGame.closeFeedbackModal()">
-            <i class="fa-solid fa-arrow-right"></i> Đón Khách Tiếp Theo
+        <div class="boba-modal-footer" style="padding: 14px 20px; display: flex; justify-content: space-between; background: #fff7ed;">
+          <button type="button" class="btn btn-secondary" id="btn-reset-boba-save" style="color: #e11d48; border: 1.5px solid #fda4af; background: #fff; padding: 6px 14px; border-radius: 10px; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-trash"></i> Chơi lại từ đầu
           </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- MODAL 2: VOCABULARY COOKBOOK (Sổ Tay Từ Vựng Trà Sữa) -->
-    <div class="boba-modal-backdrop" id="boba-cookbook-modal">
-      <div class="boba-modal-card" style="max-width: 600px; max-height: 85vh; overflow-y: auto;">
-        <div class="boba-modal-title">
-          📖 Sổ Tay Từ Vựng Trà Sữa <span class="chinese-text" style="margin-left: 6px;">(奶茶词典)</span>
-        </div>
-        <p style="text-align: center; font-size: 0.85rem; color: #64748b; font-family: var(--boba-font-main) !important;">
-          Chạm vào biểu tượng 🔊 để nghe phát âm chuẩn giọng bản xứ.
-        </p>
-
-        <div id="cookbook-cards-grid"></div>
-
-        <div class="boba-modal-actions">
-          <button type="button" class="boba-modal-btn primary"
-            onclick="document.getElementById('boba-cookbook-modal').style.display='none';">
-            Đóng Sổ Tay
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- MODAL 3: PAUSE & SETTINGS -->
-    <div class="boba-modal-backdrop" id="boba-pause-modal">
-      <div class="boba-modal-card" style="max-width: 420px;">
-        <div class="boba-modal-title">
-          ⚙️ Cài Đặt Trò Chơi
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-          <label
-            style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
-            <span>🔊 Âm thanh hiệu ứng (SFX)</span>
-            <input type="checkbox" id="setting-sfx" checked onchange="window.bobaGame.audio.sfxEnabled = this.checked;">
-          </label>
-          <label
-            style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
-            <span>🗣️ Giọng đọc tiếng Trung</span>
-            <input type="checkbox" id="setting-voice" checked
-              onchange="window.bobaGame.audio.voiceEnabled = this.checked;">
-          </label>
-          <label
-            style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
-            <span>🔤 Hiển thị phiên âm Pinyin</span>
-            <input type="checkbox" id="setting-pinyin" checked
-              onchange="window.bobaGame.showPinyin = this.checked; window.bobaGame.renderCustomerBalloon();">
-          </label>
-          <label
-            style="display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: #334155; font-size: 0.95rem;">
-            <span>🇻🇳 Hiển thị gợi ý Tiếng Việt</span>
-            <input type="checkbox" id="setting-vi" checked
-              onchange="window.bobaGame.showVietnamese = this.checked; window.bobaGame.renderCustomerBalloon();">
-          </label>
-        </div>
-
-        <div class="boba-modal-actions">
-          <button type="button" class="boba-modal-btn secondary" onclick="window.location.href='/quiz-game.html'">
-            <i class="fa-solid fa-arrow-left"></i> Về Đấu Trường Game
-          </button>
-          <button type="button" class="boba-modal-btn primary"
-            onclick="document.getElementById('boba-pause-modal').style.display='none';">
-            Tiếp Tục Pha Chế
+          <button type="button" class="btn btn-primary" onclick="document.getElementById('boba-pause-modal').style.display='none'" style="background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; border: none; padding: 8px 20px; border-radius: 10px; font-weight: 800; cursor: pointer;">
+            Tiếp tục chơi
           </button>
         </div>
       </div>
