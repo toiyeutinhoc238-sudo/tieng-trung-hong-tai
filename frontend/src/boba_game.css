@@ -3275,10 +3275,10 @@ body:not(.mode-master) .boba-bottom-station-bar {
 }
 
 .sugar-ice-buttons-grid {
-  display: flex;
-  flex-wrap: wrap;
+  /* Hàng 1: 5 mức đường · Hàng 2: 4 mức đá */
+  display: grid;
+  grid-template-columns: repeat(5, auto);
   gap: 4px;
-  max-width: 140px;
   justify-content: center;
 }
 

@@ -265,6 +265,22 @@ const PAPA_CUSTOMERS = [
   { id: 'grandma', nameChn: '李奶奶', nameVi: 'Bà Lý', role: 'Bà lão hiền từ phúc hậu', emoji: '👵', image: customerGrandmaImg }
 ];
 
+// Tổng số từ vựng trong sổ tay (trà + đường + đá + topping)
+const BOBA_TOTAL_WORDS = BOBA_VOCAB.teas.length + BOBA_VOCAB.sugars.length + BOBA_VOCAB.ices.length + BOBA_VOCAB.toppings.length;
+
+// Các key localStorage thuộc riêng game này (chơi lại chỉ xóa những key này)
+const BOBA_SAVE_KEYS = ['boba_coins', 'boba_level', 'boba_exp', 'boba_orders', 'boba_words'];
+
+// Chỉ ra đơn với loại trà có vòi rót ở CẢ Quầy Toàn Cảnh lẫn Trạm Rót Trà
+// (vd 绿茶 chưa có vòi -> không ra đơn, nhưng vẫn có trong Sổ Từ)
+function getOrderableTeas() {
+  const list = BOBA_VOCAB.teas.filter(t =>
+    document.querySelector(`.m-dispenser-urn[data-tea="${t.id}"]`) &&
+    document.querySelector(`.btn-spout-lever[data-tea="${t.id}"]`)
+  );
+  return list.length > 0 ? list : BOBA_VOCAB.teas;
+}
+
 // ============================================================================
 // 3. PAPA'S BOBA ENGINE CLASS
 // ============================================================================
@@ -332,7 +348,14 @@ class PapaBobaGame {
       if (ex !== null) this.exp = parseInt(ex, 10);
       const ord = localStorage.getItem('boba_orders');
       if (ord !== null) this.completedOrders = parseInt(ord, 10);
+      const words = JSON.parse(localStorage.getItem('boba_words') || 'null');
+      if (Array.isArray(words)) words.forEach(w => this.learnedWords.add(w));
     } catch (e) {}
+    // Chống dữ liệu hỏng (NaN) làm vỡ HUD
+    if (!Number.isFinite(this.coins)) this.coins = 120;
+    if (!Number.isFinite(this.level) || this.level < 1) this.level = 1;
+    if (!Number.isFinite(this.exp) || this.exp < 0) this.exp = 0;
+    if (!Number.isFinite(this.completedOrders) || this.completedOrders < 0) this.completedOrders = 0;
   }
 
   saveGame() {
@@ -341,6 +364,7 @@ class PapaBobaGame {
       localStorage.setItem('boba_level', this.level.toString());
       localStorage.setItem('boba_exp', this.exp.toString());
       localStorage.setItem('boba_orders', this.completedOrders.toString());
+      localStorage.setItem('boba_words', JSON.stringify([...this.learnedWords]));
     } catch (e) {}
   }
 
@@ -552,10 +576,26 @@ class PapaBobaGame {
       this.openCookbookModal();
     });
 
-    // Reset save
+    // Pause / Settings modal
+    document.getElementById('btn-pause-boba')?.addEventListener('click', () => {
+      this.stopPouring();
+      const modal = document.getElementById('boba-pause-modal');
+      if (modal) modal.style.display = 'flex';
+      this.audio.playPop();
+    });
+
+    // Mascot encouragement
+    document.getElementById('hud-mascot-dragon')?.addEventListener('click', () => {
+      this.audio.speak('加油！');
+      this.showToast('🐲', '加油！Cố lên nhé, chủ quán!');
+    });
+
+    // Reset save (chỉ xóa dữ liệu của game trà sữa, không đụng tới dữ liệu các trang khác)
     document.getElementById('btn-reset-boba-save')?.addEventListener('click', () => {
       if (confirm('Bạn có muốn chơi lại từ đầu không?')) {
-        localStorage.clear();
+        try {
+          BOBA_SAVE_KEYS.forEach(k => localStorage.removeItem(k));
+        } catch (e) {}
         location.reload();
       }
     });
@@ -614,60 +654,40 @@ class PapaBobaGame {
     // 6 Topping Boxes in Master Counter
     document.querySelectorAll('.m-topping-box').forEach(box => {
       box.addEventListener('click', () => {
-        const topId = box.dataset.topping;
-        const top = BOBA_VOCAB.toppings.find(t => t.id === topId);
-        if (!top) return;
-        this.cup.toppings.push(top);
-        this.audio.playPlop();
-        this.updateAllCupVisuals();
-        this.showToast(top.icon, `Đã thêm ${top.hanzi} (${top.vi})!`);
+        this.addTopping(box.dataset.topping);
       });
     });
 
-    // Sugar buttons in Master Counter
+    // Sugar buttons in Master Counter (bấm lại để bỏ chọn, giống trạm Rót Trà)
     document.querySelectorAll('.btn-m-sugar').forEach(btn => {
       btn.addEventListener('click', () => {
-        const sId = btn.dataset.sugar;
-        const sugar = BOBA_VOCAB.sugars.find(s => s.id === sId);
-        if (!sugar) return;
-        this.cup.sugar = sugar;
-        this.audio.playPop();
-        document.querySelectorAll('.btn-m-sugar').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this.updateAllCupVisuals();
-        this.showToast('🍬', `Chọn đường: ${sugar.hanzi} (${sugar.vi})`);
+        this.toggleSugar(btn.dataset.sugar);
       });
     });
 
     // Ice buttons in Master Counter
     document.querySelectorAll('.btn-m-ice').forEach(btn => {
       btn.addEventListener('click', () => {
-        const iId = btn.dataset.ice;
-        const ice = BOBA_VOCAB.ices.find(i => i.id === iId);
-        if (!ice) return;
-        this.cup.ice = ice;
-        this.audio.playPop();
-        document.querySelectorAll('.btn-m-ice').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this.updateAllCupVisuals();
-        this.showToast('🧊', `Chọn đá: ${ice.hanzi} (${ice.vi})`);
+        this.toggleIce(btn.dataset.ice);
       });
     });
 
-    // Shaker in Master Counter
+    // Shaker in Master Counter (chế độ quầy: bấm là lắc chuẩn)
     document.getElementById('master-shaker-wrap')?.addEventListener('click', () => {
       this.audio.playShakerSound();
       const shakerBody = document.getElementById('master-shaker-body');
       shakerBody?.classList.add('shakerShakeAnim');
       setTimeout(() => shakerBody?.classList.remove('shakerShakeAnim'), 700);
       this.cup.isShaken = true;
+      this.cup.shakeScore = 100;
+      this.updateAllCupVisuals();
       this.showToast('🌪️', 'Đã lắc đều ly trà sữa thơm ngon!');
     });
 
     // Lids box in Master Counter
     document.getElementById('master-lids-box')?.addEventListener('click', () => {
       this.cup.hasLid = true;
-      this.cup.strawColor = '#f43f5e';
+      if (!this.cup.strawColor) this.cup.strawColor = '#f43f5e';
       this.audio.playPop();
       this.updateAllCupVisuals();
       this.showToast('🐻', 'Đã đóng nắp và cắm ống hút!');
@@ -683,14 +703,7 @@ class PapaBobaGame {
 
     // Undo topping in Master Counter
     document.getElementById('btn-master-undo')?.addEventListener('click', () => {
-      if (this.cup.toppings.length > 0) {
-        const removed = this.cup.toppings.pop();
-        this.audio.playUndo();
-        this.updateAllCupVisuals();
-        this.showToast('↩️', `Đã bớt 1 phần ${removed.hanzi}!`);
-      } else {
-        this.showToast('⚠️', 'Chưa có topping để bớt!');
-      }
+      this.undoLastTopping();
     });
 
     // Speech audio in Master Counter
@@ -704,10 +717,6 @@ class PapaBobaGame {
 
     // Finish & Serve button in Master Counter
     document.getElementById('btn-master-finish-drink')?.addEventListener('click', () => {
-      if (!this.cup.hasLid) {
-        this.cup.hasLid = true;
-        this.cup.strawColor = '#f43f5e';
-      }
       this.serveDrinkToCustomer();
     });
 
@@ -731,6 +740,12 @@ class PapaBobaGame {
 
   // Switch Station smoothly
   switchStation(stationId) {
+    // Rời trạm Lắc khi máy đang chạy -> tắt máy (tránh tiếng kêu liên tục ở trạm khác)
+    if (this.shakerRunning && stationId !== 'view-shake-station') {
+      this.stopShakerLoop();
+      this.resetShakerUI();
+    }
+    this.stopPouring();
     this.currentStation = stationId;
 
     if (stationId === 'view-master-counter') {
@@ -808,6 +823,11 @@ class PapaBobaGame {
     if (masterLid) {
       masterLid.style.display = this.cup.hasLid ? 'flex' : 'none';
     }
+    const masterStraw = document.getElementById('master-cup-straw');
+    if (masterStraw) {
+      masterStraw.style.display = this.cup.strawColor ? '' : 'none';
+      if (this.cup.strawColor) masterStraw.style.background = this.cup.strawColor;
+    }
 
     if (masterPills) {
       const parts = [];
@@ -819,12 +839,8 @@ class PapaBobaGame {
       masterPills.innerHTML = parts.length > 0 ? parts.join(' ') : '<span class="m-pill empty">Ly Trống</span>';
     }
 
-    // 2. STATIONS CUP SYNC
-    const pourLiq = document.getElementById('pour-cup-liquid');
-    if (pourLiq) {
-      pourLiq.style.height = `${this.cup.pourLevel}%`;
-      if (this.cup.tea) pourLiq.style.background = this.cup.tea.color;
-    }
+    // 2. STATIONS CUP SYNC (để 2 chế độ luôn hiển thị cùng 1 ly)
+    this.updatePourCupUI();
     const finalLiq = document.getElementById('final-cup-liquid');
     if (finalLiq) {
       if (this.cup.tea) {
@@ -836,9 +852,22 @@ class PapaBobaGame {
       }
     }
     const finalLid = document.getElementById('final-cup-lid');
-    if (finalLid) finalLid.style.display = this.cup.hasLid ? 'block' : 'none';
+    if (finalLid) finalLid.style.display = this.cup.hasLid ? 'flex' : 'none';
     const finalStraw = document.getElementById('final-cup-straw');
-    if (finalStraw) finalStraw.style.display = this.cup.strawColor ? 'block' : 'none';
+    if (finalStraw) {
+      finalStraw.style.display = this.cup.strawColor ? 'block' : 'none';
+      if (this.cup.strawColor) finalStraw.style.background = this.cup.strawColor;
+    }
+    document.getElementById('btn-action-lid')?.style.setProperty('display', this.cup.hasLid ? 'none' : 'inline-flex');
+    document.getElementById('btn-remove-lid')?.style.setProperty('display', this.cup.hasLid ? 'inline-flex' : 'none');
+
+    // Nút đường / đá đang chọn (cả Quầy Toàn Cảnh lẫn Trạm Rót)
+    const sugarId = this.cup.sugar ? this.cup.sugar.id : null;
+    const iceId = this.cup.ice ? this.cup.ice.id : null;
+    document.querySelectorAll('.btn-opt-sugar, .btn-m-sugar').forEach(b => b.classList.toggle('active', b.dataset.sugar === sugarId));
+    document.querySelectorAll('.btn-opt-ice, .btn-m-ice').forEach(b => b.classList.toggle('active', b.dataset.ice === iceId));
+
+    this.updateToppingsUI();
 
     // 3. LEFT BOARD STATS SYNC
     const mRev = document.getElementById('m-rev-val');
@@ -856,7 +885,9 @@ class PapaBobaGame {
     const ord = this.currentOrder;
 
     const nameEl = document.getElementById('zoom-cust-name');
-    const orderIdEl = document.getElementById('zoom-order-id');
+    const orderIdEl = document.getElementById('zoom-order-code');
+    const avatarEl = document.getElementById('zoom-cust-avatar');
+    if (avatarEl) avatarEl.textContent = this.currentCustomer.emoji || '🙂';
     const teaChn = document.getElementById('zoom-tea-chn');
     const teaVi = document.getElementById('zoom-tea-vi');
     const sugChn = document.getElementById('zoom-sugar-chn');
@@ -867,7 +898,7 @@ class PapaBobaGame {
     const topVi = document.getElementById('zoom-top-vi');
 
     if (nameEl) nameEl.textContent = `${this.currentCustomer.nameChn} (${this.currentCustomer.nameVi})`;
-    if (orderIdEl) orderIdEl.textContent = `ORDER #${100 + this.completedOrders}`;
+    if (orderIdEl) orderIdEl.textContent = `订单编号: #${100 + this.completedOrders}`;
 
     if (teaChn) teaChn.textContent = `${ord.topping.hanzi}${ord.tea.hanzi}`;
     if (teaVi) teaVi.textContent = ord.tea.vi;
@@ -905,7 +936,7 @@ class PapaBobaGame {
     if (textEl) textEl.textContent = `${this.exp}/100`;
 
     const bookVal = document.getElementById('hud-book-val');
-    if (bookVal) bookVal.textContent = `${this.learnedWords.size}/15`;
+    if (bookVal) bookVal.textContent = `${this.learnedWords.size}/${BOBA_TOTAL_WORDS}`;
 
     const revEl = document.getElementById('clipboard-rev-val');
     if (revEl) revEl.textContent = `${this.coins} ¥`;
@@ -946,7 +977,8 @@ class PapaBobaGame {
       };
     } else {
       this.currentCustomer = this.getNextCustomer();
-      const tea = BOBA_VOCAB.teas[Math.floor(Math.random() * BOBA_VOCAB.teas.length)];
+      const teas = getOrderableTeas();
+      const tea = teas[Math.floor(Math.random() * teas.length)];
       const topping = BOBA_VOCAB.toppings[Math.floor(Math.random() * BOBA_VOCAB.toppings.length)];
       const sugar = BOBA_VOCAB.sugars[Math.floor(Math.random() * BOBA_VOCAB.sugars.length)];
       const ice = BOBA_VOCAB.ices[Math.floor(Math.random() * BOBA_VOCAB.ices.length)];
@@ -1148,7 +1180,10 @@ class PapaBobaGame {
     if (meterVal) meterVal.textContent = `${this.cup.pourLevel}%`;
 
     if (badge) {
-      if (this.cup.pourLevel >= 65 && this.cup.pourLevel <= 75) {
+      if (this.cup.pourLevel === 0) {
+        badge.textContent = 'Chưa rót';
+        badge.style.color = '#64748b';
+      } else if (this.cup.pourLevel >= 65 && this.cup.pourLevel <= 75) {
         badge.textContent = '🌟 Hoàn hảo (70%)';
         badge.style.color = '#10b981';
       } else if (this.cup.pourLevel < 65) {
@@ -1198,9 +1233,7 @@ class PapaBobaGame {
 
     } else {
       // STOP SHAKER
-      this.shakerRunning = false;
-      if (this.shakerTimer) clearInterval(this.shakerTimer);
-      if (this.shakerSfxTimer) clearInterval(this.shakerSfxTimer);
+      this.stopShakerLoop();
 
       if (triggerBtn) {
         triggerBtn.classList.remove('running');
@@ -1256,45 +1289,45 @@ class PapaBobaGame {
     if (this.cup.pourLevel === 0 && !this.cup.tea) return;
     this.cup.pourLevel = 0;
     this.cup.tea = null;
-    this.updatePourCupUI();
+    this.updateAllCupVisuals();
     this.audio.playDrain();
     this.showToast('💧', '已倒空水杯！请按住龙头重新倒茶。(Đã đổ hết nước đi! Hãy rót lại.)');
   }
 
   toggleSugar(sId) {
+    const sugar = BOBA_VOCAB.sugars.find(s => s.id === sId);
+    if (!sugar) return;
     if (this.cup.sugar && this.cup.sugar.id === sId) {
       this.cup.sugar = null;
-      document.querySelectorAll('.btn-opt-sugar').forEach(b => b.classList.remove('active'));
       this.audio.playUndo();
       this.showToast('🍬', '已取消选择糖度 (Đã bỏ chọn đường)');
     } else {
-      this.cup.sugar = BOBA_VOCAB.sugars.find(s => s.id === sId);
-      document.querySelectorAll('.btn-opt-sugar').forEach(b => {
-        b.classList.toggle('active', b.dataset.sugar === sId);
-      });
+      this.cup.sugar = sugar;
       this.audio.playPop();
+      this.showToast('🍬', `Chọn đường: ${sugar.hanzi} (${sugar.vi})`);
     }
+    this.updateAllCupVisuals();
   }
 
   toggleIce(iId) {
+    const ice = BOBA_VOCAB.ices.find(i => i.id === iId);
+    if (!ice) return;
     if (this.cup.ice && this.cup.ice.id === iId) {
       this.cup.ice = null;
-      document.querySelectorAll('.btn-opt-ice').forEach(b => b.classList.remove('active'));
       this.audio.playUndo();
       this.showToast('❄️', '已取消选择冰量 (Đã bỏ chọn đá)');
     } else {
-      this.cup.ice = BOBA_VOCAB.ices.find(i => i.id === iId);
-      document.querySelectorAll('.btn-opt-ice').forEach(b => {
-        b.classList.toggle('active', b.dataset.ice === iId);
-      });
+      this.cup.ice = ice;
       this.audio.playPop();
+      this.showToast('🧊', `Chọn đá: ${ice.hanzi} (${ice.vi})`);
     }
+    this.updateAllCupVisuals();
   }
 
   clearSugarIce() {
     this.cup.sugar = null;
     this.cup.ice = null;
-    document.querySelectorAll('.btn-opt-sugar, .btn-opt-ice').forEach(b => b.classList.remove('active'));
+    this.updateAllCupVisuals();
     this.audio.playUndo();
     this.showToast('✨', '重置糖度与冰量 (Đã xóa chọn đường và đá)');
   }
@@ -1302,14 +1335,27 @@ class PapaBobaGame {
   // ==========================================================================
   // STATION 3 ACTIONS: SHAKER RESET
   // ==========================================================================
-  resetShaker() {
+  // Dừng hẳn vòng lặp kim đồng hồ + âm thanh máy lắc
+  stopShakerLoop() {
     if (this.shakerTimer) clearInterval(this.shakerTimer);
     if (this.shakerSfxTimer) clearInterval(this.shakerSfxTimer);
+    this.shakerTimer = null;
+    this.shakerSfxTimer = null;
     this.shakerRunning = false;
+  }
+
+  resetShaker() {
+    this.stopShakerLoop();
     this.cup.isShaken = false;
     this.cup.shakeScore = 0;
-    this.shakerAngle = -70;
+    this.resetShakerUI();
+    this.audio.playPop();
+    this.showToast('🌪️', '重新安装摇杯，请看准绿区停机！(Đã reset máy lắc!)');
+  }
 
+  // Đưa máy lắc về trạng thái chờ (không phát âm thanh)
+  resetShakerUI() {
+    this.shakerAngle = -70;
     const triggerBtn = document.getElementById('btn-shaker-trigger');
     if (triggerBtn) {
       triggerBtn.disabled = false;
@@ -1327,17 +1373,20 @@ class PapaBobaGame {
     if (motorLight) motorLight.classList.remove('active');
     const cupSlot = document.querySelector('.shaker-cup-slot');
     if (cupSlot) cupSlot.classList.remove('vibrating');
-
-    this.audio.playPop();
-    this.showToast('🌪️', '重新安装摇杯，请看准绿区停机！(Đã reset máy lắc!)');
   }
 
   // ==========================================================================
   // STATION 4: TOP STATION (ADD / REMOVE TOPPINGS, LID, STRAW)
   // ==========================================================================
+  // Báo ly đã đóng nắp (toast thay cho alert để không chặn màn hình)
+  warnLidClosed() {
+    this.audio.playUndo();
+    this.showToast('🔒', '杯子已封口！请先【取下杯盖】。(Ly đã đóng nắp! Hãy tháo nắp trước khi sửa topping)');
+  }
+
   addTopping(topId) {
     if (this.cup.hasLid) {
-      alert('杯子已封口！如需添加或更改配料，请先点击【取下杯盖】。(Ly đã đóng nắp kín! Vui lòng bấm [取下杯盖 (Tháo nắp)] trước khi thêm topping)');
+      this.warnLidClosed();
       return;
     }
     if (this.cup.toppings.length >= 6) {
@@ -1349,27 +1398,27 @@ class PapaBobaGame {
     if (topObj) {
       this.cup.toppings.push(topObj);
       this.audio.playPlop();
-      this.updateToppingsUI();
+      this.updateAllCupVisuals();
       this.showToast(topObj.icon, `已添加配料: ${topObj.hanzi} (Đã thêm ${topObj.vi})`);
     }
   }
 
   removeTopping(index) {
     if (this.cup.hasLid) {
-      alert('杯子已封口！请先点击【取下杯盖】后再调整配料。(Ly đã đóng nắp! Vui lòng bấm [取下杯盖 (Tháo nắp)] trước)');
+      this.warnLidClosed();
       return;
     }
     if (index >= 0 && index < this.cup.toppings.length) {
       const removed = this.cup.toppings.splice(index, 1)[0];
       this.audio.playUndo();
-      this.updateToppingsUI();
+      this.updateAllCupVisuals();
       this.showToast('↩️', `已撤下: ${removed.hanzi} (Đã bớt ${removed.vi})`);
     }
   }
 
   undoLastTopping() {
     if (this.cup.hasLid) {
-      alert('杯子已封口！请先点击【取下杯盖】。(Ly đã đóng nắp!)');
+      this.warnLidClosed();
       return;
     }
     if (this.cup.toppings.length > 0) {
@@ -1381,13 +1430,13 @@ class PapaBobaGame {
 
   clearAllToppings() {
     if (this.cup.hasLid) {
-      alert('杯子已封口！请先点击【取下杯盖】。(Ly đã đóng nắp!)');
+      this.warnLidClosed();
       return;
     }
     if (this.cup.toppings.length === 0) return;
     this.cup.toppings = [];
     this.audio.playDrain();
-    this.updateToppingsUI();
+    this.updateAllCupVisuals();
     this.showToast('🗑️', '已清空所有配料！(Đã xóa hết topping)');
   }
 
@@ -1439,12 +1488,7 @@ class PapaBobaGame {
   sealLid() {
     this.cup.hasLid = true;
     this.audio.playPop();
-
-    const lid = document.getElementById('final-cup-lid');
-    if (lid) lid.style.display = 'flex';
-
-    document.getElementById('btn-action-lid')?.style.setProperty('display', 'none');
-    document.getElementById('btn-remove-lid')?.style.setProperty('display', 'inline-flex');
+    this.updateAllCupVisuals();
 
     const desc = document.getElementById('final-cup-status-desc');
     if (desc) desc.textContent = '✅ 已盖上杯盖封口！(Đã dập màng nắp ly chắc chắn)';
@@ -1454,12 +1498,7 @@ class PapaBobaGame {
   removeLid() {
     this.cup.hasLid = false;
     this.audio.playUndo();
-
-    const lid = document.getElementById('final-cup-lid');
-    if (lid) lid.style.display = 'none';
-
-    document.getElementById('btn-action-lid')?.style.setProperty('display', 'inline-flex');
-    document.getElementById('btn-remove-lid')?.style.setProperty('display', 'none');
+    this.updateAllCupVisuals();
 
     const desc = document.getElementById('final-cup-status-desc');
     if (desc) desc.textContent = '🔓 已取下杯盖，可自由加减配料！';
@@ -1469,12 +1508,7 @@ class PapaBobaGame {
   insertStraw(color) {
     this.cup.strawColor = color;
     this.audio.playPop();
-
-    const straw = document.getElementById('final-cup-straw');
-    if (straw) {
-      straw.style.display = 'block';
-      straw.style.background = color;
-    }
+    this.updateAllCupVisuals();
 
     const desc = document.getElementById('final-cup-status-desc');
     if (desc) desc.textContent = '✨ 插入吸管完毕！(Đã cắm ống hút)';
@@ -1485,9 +1519,7 @@ class PapaBobaGame {
     if (!this.cup.strawColor) return;
     this.cup.strawColor = null;
     this.audio.playUndo();
-
-    const straw = document.getElementById('final-cup-straw');
-    if (straw) straw.style.display = 'none';
+    this.updateAllCupVisuals();
 
     const desc = document.getElementById('final-cup-status-desc');
     if (desc) desc.textContent = '已拔出吸管 (Đã rút ống hút ra)';
@@ -1665,6 +1697,10 @@ class PapaBobaGame {
   }
 
   resetCup() {
+    // Ly mới -> tắt vòi rót & máy lắc đang chạy (nếu có)
+    this.stopPouring();
+    this.stopShakerLoop();
+
     this.cup = {
       tea: null,
       pourLevel: 0,
