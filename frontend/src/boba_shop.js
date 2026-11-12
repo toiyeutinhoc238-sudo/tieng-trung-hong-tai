@@ -481,6 +481,11 @@ class BobaShop {
     on('btn-goto-make-from-order', 'click', () => this.switchStation('view-make-station'));
     on('btn-goto-pay', 'click', () => this.switchStation('view-change-station'));
     on('btn-take-order-action', 'click', () => this.takeOrder());
+    on('btn-take-order-footer', 'click', () => this.takeOrder());
+    on('speech-bubble', 'click', (e) => {
+      if (e.target.closest('#btn-replay-order-audio')) return;
+      if (this.current && !this.current.takenAt) this.takeOrder();
+    });
     on('btn-replay-order-audio', 'click', () => this.speakOrder());
     on('btn-cat', 'click', () => this.petCat());
 
@@ -1467,6 +1472,8 @@ class BobaShop {
       bubble?.classList.add('hidden');
       tag?.classList.add('hidden');
       if (nextBtn) nextBtn.style.display = 'none';
+      const takeBtnFooter = this.$('btn-take-order-footer');
+      if (takeBtnFooter) takeBtnFooter.style.display = 'none';
       this.setText('door-empty-text', !this.dayStarted ? 'Quán chưa mở cửa' : this.closed ? 'Hết giờ bán hôm nay' : 'Đang chờ khách...');
       this.setText('door-empty-chn', this.closed ? '打烊' : '欢迎光临');
       if (hint) hint.innerHTML = !this.dayStarted ? '💡 Bấm <b>Mở cửa bán hàng</b> để bắt đầu ngày mới.'
@@ -1488,6 +1495,13 @@ class BobaShop {
     bubble?.classList.remove('hidden');
     bubble?.classList.toggle('taken', !!c.takenAt);
     this.renderSpeech();
+
+    const takeBtnBubble = this.$('btn-take-order-action');
+    if (takeBtnBubble) takeBtnBubble.style.display = c.takenAt ? 'none' : 'inline-flex';
+
+    const takeBtnFooter = this.$('btn-take-order-footer');
+    if (takeBtnFooter) takeBtnFooter.style.display = c.takenAt ? 'none' : 'inline-flex';
+
     if (nextBtn) nextBtn.style.display = c.takenAt ? 'inline-flex' : 'none';
     if (hint) hint.innerHTML = c.takenAt
       ? `✅ Đã nhận đơn <b>#B-${c.id}</b>. Sang <b>调制台</b> pha chế → <b>收银台</b> tính tiền.`

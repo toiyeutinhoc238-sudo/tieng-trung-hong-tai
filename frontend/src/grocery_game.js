@@ -520,6 +520,11 @@ class GroceryGame {
     on('btn-goto-change', 'click', () => this.switchStation('view-change-station'));
 
     on('btn-take-order-action', 'click', () => this.takeOrder());
+    on('btn-take-order-footer', 'click', () => this.takeOrder());
+    on('speech-bubble', 'click', (e) => {
+      if (e.target.closest('#btn-replay-order-audio')) return;
+      if (this.current && !this.current.takenAt) this.takeOrder();
+    });
     on('btn-replay-order-audio', 'click', () => this.speakOrder());
     on('btn-cat', 'click', () => this.petCat());
     on('btn-clear-basket-station', 'click', () => this.clearBasket());
@@ -1651,6 +1656,8 @@ class GroceryGame {
         : this.closed ? '🌙 Đã đóng cửa. Đang tổng kết ngày…'
           : '💡 Chờ khách bước vào… Nhân lúc rảnh hãy vào <b>批发市场</b> nhập hàng hoặc mở hàng mới.';
       if (reg) reg.textContent = '0.00';
+      const takeBtnFooter = this.$('btn-take-order-footer');
+      if (takeBtnFooter) takeBtnFooter.style.display = 'none';
       return;
     }
 
@@ -1667,6 +1674,7 @@ class GroceryGame {
     this.setText('customer-name-vi', c.profile.nameVi);
 
     const btn = this.$('btn-take-order-action');
+    const takeBtnFooter = this.$('btn-take-order-footer');
     if (!c.order) {
       bubble?.classList.remove('hidden', 'taken');
       const chn = this.$('order-chn-text');
@@ -1674,9 +1682,11 @@ class GroceryGame {
       this.setText('order-pin-text', 'Lǎobǎn, huòjià shàng zěnme dōu kōng le?');
       this.setText('order-vi-text', '(Ông chủ ơi, sao kệ hàng trống trơn vậy?)');
       if (btn) btn.style.display = 'none';
+      if (takeBtnFooter) takeBtnFooter.style.display = 'none';
       return;
     }
-    if (btn) btn.style.display = '';
+    if (btn) btn.style.display = c.takenAt ? 'none' : 'inline-flex';
+    if (takeBtnFooter) takeBtnFooter.style.display = c.takenAt ? 'none' : 'inline-flex';
     bubble?.classList.remove('hidden');
     bubble?.classList.toggle('taken', !!c.takenAt);
     this.renderSpeech();
