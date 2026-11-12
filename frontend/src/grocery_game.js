@@ -148,6 +148,8 @@ const GROCERY_ITEMS = [
 
 const SHELF_COLS = 4;
 const SHELF_ROWS = 2;
+const PORTRAIT_W = 480;       // bề rộng sân khấu khi cầm điện thoại dọc
+const PORTRAIT_MIN_H = 760;
 const STARTER_STOCK = 6;    // hàng có sẵn lúc mới mở tiệm
 const ZONE_GIFT_STOCK = 4;  // tặng kèm khi mở khu mới
 
@@ -448,7 +450,7 @@ class GroceryGame {
     t.className = `g-toast ${kind}`;
     t.innerHTML = `<span class="t-icon">${icon}</span><span>${escapeHtml(text)}</span>`;
     box.appendChild(t);
-    while (box.children.length > 2) box.firstChild.remove();
+    while (box.children.length > (this.isPortrait ? 1 : 2)) box.firstChild.remove();
     setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 320); }, 2800);
   }
 
@@ -563,14 +565,34 @@ class GroceryGame {
     on('btn-reset-save', 'click', () => this.resetGame());
   }
 
+  // Màn ngang: sân khấu 1280×720. Màn dọc (điện thoại cầm dọc): sân khấu rộng 480, cao theo tỉ lệ máy,
+  // các khối xếp chồng theo chiều dọc (body.g-portrait). Cả hai đều co giãn vừa khít màn hình.
   fitStage() {
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const scale = Math.min(w / STAGE_W, h / STAGE_H);
+    const portrait = h > w * 1.05;
+    let sw = STAGE_W;
+    let sh = STAGE_H;
+    if (portrait) {
+      sw = PORTRAIT_W;
+      sh = Math.max(PORTRAIT_MIN_H, Math.round((PORTRAIT_W * h) / Math.max(1, w)));
+    }
+    const scale = Math.min(w / sw, h / sh);
     this.stageScale = scale > 0 ? scale : 1;
-    document.documentElement.style.setProperty('--stage-scale', this.stageScale.toFixed(4));
-    const flush = (w - STAGE_W * this.stageScale < 24 && h - STAGE_H * this.stageScale < 24) || w < 900;
+    const root = document.documentElement.style;
+    root.setProperty('--stage-scale', this.stageScale.toFixed(4));
+    root.setProperty('--stage-w', `${sw}px`);
+    root.setProperty('--stage-h', `${sh}px`);
+    const flush = portrait || (w - sw * this.stageScale < 24 && h - sh * this.stageScale < 24) || w < 900;
     document.body.classList.toggle('stage-flush', flush);
+    const changed = this.isPortrait !== portrait;
+    this.isPortrait = portrait;
+    document.body.classList.toggle('g-portrait', portrait);
+    if (changed && this.shelves) this.renderShelves();
+  }
+
+  shelfGrid() {
+    return this.isPortrait ? { cols: 3, rows: 3 } : { cols: SHELF_COLS, rows: SHELF_ROWS };
   }
 
   toggleFullscreen() {
@@ -1719,10 +1741,13 @@ class GroceryGame {
     const c = this.current;
     const wanted = new Set(c && c.takenAt && c.order ? c.order.items.map(x => x.item.id) : []);
     const items = this.shelves.filter(s => s.zone === this.shelfZone);
+    const { cols, rows: rowCount } = this.shelfGrid();
+    rack.style.setProperty('--shelf-cols', cols);
+    rack.style.setProperty('--shelf-rows', rowCount);
     const slots = [];
-    for (let i = 0; i < SHELF_COLS * SHELF_ROWS; i++) slots.push(items[i] || null);
+    for (let i = 0; i < cols * rowCount; i++) slots.push(items[i] || null);
     const rows = [];
-    for (let r = 0; r < SHELF_ROWS; r++) rows.push(slots.slice(r * SHELF_COLS, (r + 1) * SHELF_COLS));
+    for (let r = 0; r < rowCount; r++) rows.push(slots.slice(r * cols, (r + 1) * cols));
     rack.innerHTML = rows.map(row => `<div class="shelf-row">${row.map(it => {
       if (!it) return '<div class="prod empty-slot"></div>';
       if (!it.unlocked) {

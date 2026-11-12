@@ -2805,8 +2805,8 @@ function registerMiniGameRoutes({ key, field, limits }) {
   });
 }
 
-// Tiệm Trà Sữa: tối đa 8 khách/ngày (chừa biên 12); 1 ly 18 ¥ + tip tối đa 7.5 ¥
-registerMiniGameRoutes({ key: 'boba', field: 'bobaGame', limits: { maxGuestsPerDay: 12, maxPerGuest: 25.5 } });
+// Tiệm Trà Sữa: ngày tính theo giờ (chừa biên 40 khách/ngày); 1 ly tối đa 14 + 4 + 3 = 21 ¥ + 6 ¥ tip
+registerMiniGameRoutes({ key: 'boba', field: 'bobaGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 35 } });
 // Tiệm Tạp Hóa: ngày tính theo giờ mở cửa (khách đến liên tục, chừa biên 40/ngày); 1 khách tối đa ~50 ¥ hàng + 5.5 ¥ tip
 registerMiniGameRoutes({ key: 'grocery', field: 'groceryGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 70 } });
 

@@ -2458,3 +2458,319 @@ body.on-title .g-viewport { visibility: hidden; }
 .g-toast { padding: 6px 14px; font-size: 0.82rem; border-radius: 12px; max-width: 600px; box-shadow: 0 3px 0 rgba(90, 50, 22, 0.3), 0 6px 14px rgba(74, 42, 20, 0.2); }
 .g-toast .t-icon { font-size: 1rem; }
 body.on-title .g-toasts { bottom: 20px; }
+
+/* ==========================================================================
+   16. MÀN DỌC (ĐIỆN THOẠI CẦM DỌC) — body.g-portrait
+   JS đặt sân khấu rộng 480px, cao theo tỉ lệ máy (--stage-w / --stage-h) rồi co giãn vừa màn hình.
+   Mọi khối xếp chồng theo chiều dọc, chữ & nút giữ cỡ to dễ bấm.
+   ========================================================================== */
+.g-stage { width: var(--stage-w, 1280px); height: var(--stage-h, 720px); }
+.g-rotate { display: none !important; } /* không còn bắt xoay ngang */
+
+body.g-portrait .g-stage { grid-template-rows: auto 40px 1fr 58px; border-radius: 0; }
+
+/* ---- HUD: 2 hàng ---- */
+body.g-portrait .g-hud {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "left left" "center right";
+  gap: 6px;
+  padding: 6px 8px;
+}
+body.g-portrait .g-hud-left { grid-area: left; gap: 6px; }
+body.g-portrait .g-hud-center { grid-area: center; gap: 6px; min-width: 0; }
+body.g-portrait .g-hud-right { grid-area: right; gap: 6px; }
+body.g-portrait .g-hud-circle { width: 36px; height: 36px; flex: 0 0 36px; }
+body.g-portrait .g-pill { height: 40px; padding: 0 10px 0 5px; gap: 6px; }
+body.g-portrait .g-pill .pill-icon { width: 28px; height: 28px; font-size: 0.9rem; }
+body.g-portrait .g-hud-left .g-pill.money { flex: 1 1 auto; min-width: 0; }
+body.g-portrait .g-goal { flex: 1 1 auto; width: auto; min-width: 0; padding: 3px 10px 5px; }
+body.g-portrait .g-goal-top { font-size: 0.72rem; gap: 4px; }
+body.g-portrait .g-goal-label { white-space: nowrap; }
+body.g-portrait .g-pill.clock { min-width: 0; padding-right: 10px; }
+body.g-portrait .g-pill.clock small { display: none; }
+body.g-portrait .g-hud-right .g-pill small { display: none; }
+
+/* ---- Thanh ray ---- */
+body.g-portrait .g-rail { gap: 8px; padding: 0 8px; }
+body.g-portrait .g-rail-label { font-size: 0.72rem; }
+body.g-portrait .g-rail-info { display: none; }
+body.g-portrait .q-chip { height: 30px; font-size: 0.72rem; padding-right: 8px; }
+body.g-portrait .q-chip img { width: 24px; height: 24px; }
+body.g-portrait .q-chip .mini-pat { width: 30px; }
+
+/* ---- Thanh chuyển trạm ---- */
+body.g-portrait .g-tab { flex-direction: column; gap: 0; padding: 4px 2px; }
+body.g-portrait .tab-icon { font-size: 1.25rem; line-height: 1.1; }
+body.g-portrait .tab-txt { align-items: center; }
+body.g-portrait .tab-txt b { font-size: 0.9rem; }
+body.g-portrait .tab-txt small { font-size: 0.62rem; }
+body.g-portrait .g-tab.attention::after { top: 6px; right: 14%; }
+
+/* ---- Chân trạm ---- */
+body.g-portrait .g-station { grid-template-rows: 1fr auto; }
+body.g-portrait .g-station-footer { min-height: 56px; padding: 6px 10px; gap: 8px; }
+body.g-portrait .g-hint { font-size: 0.72rem; line-height: 1.3; }
+body.g-portrait .g-btn-next { height: 38px; padding: 0 12px; font-size: 0.8rem; flex: 0 0 auto; }
+
+/* ---- Trạm 1: quầy đón khách ---- */
+body.g-portrait .shop-scene { background: var(--tex-brick); background-size: 64px 40px; }
+body.g-portrait .shop-scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 20%, rgba(255, 226, 170, 0.55), transparent 70%);
+  pointer-events: none;
+}
+body.g-portrait .shop-awning { height: 40px; }
+body.g-portrait .shop-awning::after { bottom: -14px; height: 14px; }
+body.g-portrait .shop-wall,
+body.g-portrait .counter-register,
+body.g-portrait .counter-jars { display: none; }
+
+body.g-portrait .shop-door {
+  left: 50%;
+  top: 58px;
+  width: 230px;
+  height: 250px;
+  transform: translateX(-50%);
+  border-width: 12px;
+}
+body.g-portrait .door-customer { width: 200px; height: 200px; }
+
+body.g-portrait .customer-tag {
+  left: 50%;
+  top: 316px;
+  width: 230px;
+  transform: translateX(-50%);
+}
+
+body.g-portrait .speech-bubble {
+  left: 12px;
+  right: 12px;
+  top: 384px;
+  width: auto;
+  padding: 12px 14px 14px;
+}
+body.g-portrait .speech-bubble::before {
+  left: calc(50% - 10px);
+  top: -24px;
+  border: 10px solid transparent;
+  border-bottom: 14px solid var(--honey);
+}
+body.g-portrait .speech-chn { font-size: 1.3rem; }
+body.g-portrait .speech-pin,
+body.g-portrait .speech-vi { font-size: 0.78rem; }
+
+body.g-portrait .today-board {
+  left: 8px;
+  top: 60px;
+  width: 104px;
+  padding: 6px 8px 8px;
+  transform: rotate(-1.5deg);
+}
+body.g-portrait .tb-head { font-size: 0.8rem; }
+body.g-portrait .tb-revenue { font-size: 1rem; }
+body.g-portrait .tb-row { font-size: 0.62rem; }
+
+body.g-portrait .shop-counter { height: 96px; }
+body.g-portrait .counter-sign { left: 50%; top: 12px; padding: 6px 18px; transform: translateX(-50%); }
+body.g-portrait .counter-sign span { font-size: 1.15rem; letter-spacing: 2px; }
+body.g-portrait .counter-sign small { font-size: 0.6rem; }
+body.g-portrait .counter-cat { left: auto; right: 8px; top: -40px; }
+
+/* ---- Trạm 2: kệ hàng ---- */
+body.g-portrait .shelves-room { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) 176px; gap: 8px; padding: 8px; }
+body.g-portrait .shelf-unit { border-width: 0 8px 8px; }
+body.g-portrait .shelf-unit-top { height: auto; padding: 6px; }
+body.g-portrait #btn-quick-restock-header { display: none; }
+body.g-portrait .aisle-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; padding-top: 4px; }
+body.g-portrait .aisle-tab { height: 38px; padding: 0 6px; border-radius: 10px; justify-content: center; }
+body.g-portrait .aisle-tab.active { transform: none; }
+body.g-portrait .aisle-tab .a-txt small { display: none; }
+body.g-portrait .aisle-tab .a-txt b { font-size: 0.95rem; }
+body.g-portrait .aisle-tab .a-icon { font-size: 1.15rem; }
+
+.shelf-rows { grid-template-rows: repeat(var(--shelf-rows, 2), minmax(0, 1fr)); }
+.shelf-row { grid-template-columns: repeat(var(--shelf-cols, 4), minmax(0, 1fr)); }
+body.g-portrait .shelf-row { gap: 6px; padding: 6px 8px 16px; }
+body.g-portrait .shelf-row::after { height: 14px; }
+body.g-portrait .prod { padding: 4px 2px 2px; gap: 1px; max-height: none; }
+body.g-portrait .prod-stack { height: 52px; }
+body.g-portrait .prod-stack span { font-size: 2.2rem; }
+body.g-portrait .prod-stack span + span { margin-left: -20px; }
+body.g-portrait .prod-name { font-size: 1.05rem; }
+body.g-portrait .prod-pin { font-size: 0.6rem; }
+body.g-portrait .prod-tag { font-size: 0.7rem; padding: 2px 5px; right: 2px; }
+body.g-portrait .prod-stock { font-size: 0.6rem; left: 2px; }
+body.g-portrait .prod.locked .lock-emoji { font-size: 1.8rem; }
+body.g-portrait .prod.locked .lock-name { font-size: 0.9rem; }
+body.g-portrait .prod.locked .lock-price { font-size: 0.58rem; padding: 2px 4px; text-align: center; }
+
+body.g-portrait .basket-panel { flex-direction: row; gap: 8px; min-height: 0; }
+body.g-portrait .order-check { flex: 1 1 0; min-width: 0; overflow-y: auto; transform: none; padding: 8px; }
+body.g-portrait .basket-card { flex: 1 1 0; min-width: 0; padding: 8px; }
+body.g-portrait .oc-head,
+body.g-portrait .basket-head { font-size: 0.74rem; }
+body.g-portrait .basket-head .g-btn-chip { height: 26px; padding: 0 8px; font-size: 0.66rem; }
+body.g-portrait .oc-item { font-size: 0.76rem; gap: 4px; padding: 2px 4px; }
+body.g-portrait .oc-item .zh { font-size: 0.9rem; }
+body.g-portrait .basket-row { font-size: 0.7rem; gap: 4px; padding: 3px 6px; }
+body.g-portrait .basket-row .zh { font-size: 0.85rem; }
+body.g-portrait .basket-row button { width: 22px; height: 22px; }
+
+/* ---- Trạm 3: quét mã ---- */
+body.g-portrait .scan-room { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) 220px; gap: 10px; padding: 10px; }
+body.g-portrait .conveyor-area { padding: 10px; gap: 8px; }
+body.g-portrait .conveyor-title { font-size: 0.78rem; }
+body.g-portrait .scanner-window { top: auto; bottom: 8px; right: 8px; width: 72px; height: 56px; transform: none; }
+body.g-portrait .belt-items { padding: 10px 10px 70px; gap: 8px; }
+body.g-portrait .belt-item { width: 96px; height: 112px; }
+body.g-portrait .g-btn-scan { height: 44px; font-size: 0.9rem; }
+body.g-portrait .pos-area { flex-direction: row; gap: 8px; }
+body.g-portrait .pos-screen { flex: 1 1 0; min-width: 0; border-width: 4px; padding: 10px; display: flex; flex-direction: column; justify-content: center; }
+body.g-portrait .pos-row { font-size: 0.78rem; }
+body.g-portrait .pos-row.total strong { font-size: 1.3rem; }
+body.g-portrait .receipt { flex: 1 1 0; min-width: 0; padding: 10px 10px 16px; }
+body.g-portrait .receipt-lines { font-size: 0.76rem; }
+
+/* ---- Trạm 4: thu tiền & thối tiền ---- */
+body.g-portrait .change-room { grid-template-columns: 1fr; grid-template-rows: auto auto minmax(0, 1fr); gap: 8px; padding: 8px; }
+body.g-portrait .cash-left { flex-direction: row; gap: 8px; }
+body.g-portrait .paid-card { flex: 1 1 0; min-width: 0; padding: 8px 10px; gap: 4px; }
+body.g-portrait .paid-row { font-size: 0.74rem; }
+body.g-portrait .paid-row strong { font-size: 0.95rem; }
+body.g-portrait .paid-row.need strong { font-size: 1.1rem; }
+body.g-portrait .paid-card .g-btn-chip { height: 26px; font-size: 0.66rem; padding: 0 8px; }
+body.g-portrait .paid-bill-wrap { flex: 1 1 0; min-width: 0; padding: 8px; }
+body.g-portrait .paid-label { font-size: 0.7rem; }
+body.g-portrait .paid-bills .rmb.note { width: 86px !important; height: 50px !important; }
+body.g-portrait .paid-bills .rmb.coin { width: 44px !important; height: 44px !important; }
+body.g-portrait .cash-drawer { padding: 8px 10px; gap: 6px; border-width: 4px; }
+body.g-portrait .drawer-head { font-size: 0.76rem; }
+body.g-portrait .drawer-grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, auto); gap: 8px; }
+body.g-portrait .rmb.note { height: 56px; }
+body.g-portrait .rmb.note::before { font-size: 0.45rem; }
+body.g-portrait .rmb b { font-size: 1.25rem; }
+body.g-portrait .rmb.coin { width: 56px; height: 56px; }
+body.g-portrait .change-tray { padding: 8px 10px; gap: 6px; }
+body.g-portrait .tray-head { font-size: 0.78rem; }
+body.g-portrait .tray-tokens { padding: 8px; }
+body.g-portrait .token { height: 34px; min-width: 52px; font-size: 0.78rem; }
+body.g-portrait .token.coin { width: 34px; min-width: 34px; }
+body.g-portrait .change-tray .g-btn-primary.big { height: 44px; font-size: 0.86rem; }
+
+/* ---- Thông báo nổi ---- */
+body.g-portrait .g-toasts { bottom: 122px; width: calc(100% - 24px); }
+body.g-portrait .g-toast { max-width: 100%; font-size: 0.76rem; }
+
+/* ---- Hộp thoại ---- */
+body.g-portrait .g-card { max-width: calc(100% - 20px); max-height: calc(var(--stage-h, 720px) - 30px); }
+body.g-portrait .g-card-head { padding: 10px 12px; }
+body.g-portrait .g-card-head h3 { font-size: 0.95rem; }
+body.g-portrait .g-card-foot { flex-wrap: wrap; padding: 10px 12px; gap: 8px; }
+body.g-portrait .g-card-foot > button { flex: 1 1 auto; }
+
+body.g-portrait .score-card { width: 100%; padding: 22px 14px 14px; gap: 10px; }
+body.g-portrait .score-head .zh { font-size: 1.2rem; }
+body.g-portrait .score-row { grid-template-columns: minmax(0, 1fr) 90px 40px; gap: 6px; font-size: 0.74rem; }
+body.g-portrait .score-total { grid-template-columns: 116px minmax(0, 1fr); gap: 8px; }
+body.g-portrait .score-badge b { font-size: 1.6rem; }
+body.g-portrait .score-money div { font-size: 0.78rem; }
+body.g-portrait .rc-chn { font-size: 0.95rem; }
+body.g-portrait .rc-vi { font-size: 0.72rem; }
+
+body.g-portrait .mission-card { width: 100%; }
+body.g-portrait .mission-head { padding: 18px 14px 6px; }
+body.g-portrait .mission-goals { padding: 6px 12px 12px; }
+body.g-portrait .mgoal { font-size: 0.82rem; padding: 8px 10px; gap: 8px; }
+body.g-portrait .mission-actions { flex-direction: column-reverse; padding: 0 12px; gap: 8px; }
+body.g-portrait .mission-actions > button { width: 100%; justify-content: center; }
+
+body.g-portrait .summary-card { width: 100%; padding: 14px 12px; gap: 8px; overflow-y: auto; }
+body.g-portrait .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+body.g-portrait .mr-row { font-size: 0.76rem; }
+
+body.g-portrait .market-card { width: 100%; height: calc(var(--stage-h, 720px) - 30px); max-height: none; }
+body.g-portrait .market-body { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+body.g-portrait .market-zones { flex-direction: row; overflow-x: auto; overflow-y: hidden; border-right: none; border-bottom: 3px solid #ecd2a6; padding: 8px; gap: 6px; }
+body.g-portrait .mz { flex: 0 0 auto; grid-template-columns: 28px auto; grid-template-rows: auto auto; padding: 6px 10px; gap: 0 6px; }
+body.g-portrait .mz .mz-icon { grid-row: span 2; font-size: 1.4rem; }
+body.g-portrait .mz .mz-txt small { display: none; }
+body.g-portrait .mz .mz-state { grid-column: 2; }
+body.g-portrait .mz:hover { transform: none; }
+body.g-portrait .market-main { padding: 8px; gap: 8px; }
+body.g-portrait .market-zone-head { flex-wrap: wrap; gap: 8px; padding: 8px 10px; }
+body.g-portrait .market-zone-head b.zh { font-size: 1.25rem; }
+body.g-portrait .market-zone-head small { font-size: 0.68rem; }
+body.g-portrait .market-zone-head .g-btn-primary { margin-left: 0; width: 100%; height: 38px; }
+body.g-portrait .market-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; gap: 8px; }
+body.g-portrait .mk-card { padding: 10px 6px; }
+body.g-portrait .mk-emoji { font-size: 2.1rem; }
+body.g-portrait .mk-name { font-size: 1.15rem; }
+body.g-portrait .mk-price { font-size: 0.68rem; }
+body.g-portrait .market-foot { flex-wrap: wrap; padding: 8px 10px; gap: 6px; }
+body.g-portrait .market-foot .restock-balance { flex: 1 1 100%; gap: 6px; }
+body.g-portrait .market-foot .restock-balance small { font-size: 0.62rem; }
+body.g-portrait .market-foot .restock-balance b { font-size: 0.95rem; }
+body.g-portrait .market-foot > button { flex: 1 1 0; justify-content: center; height: 42px; padding: 0 8px; font-size: 0.82rem; }
+
+body.g-portrait .vocab-card,
+body.g-portrait .guide-card,
+body.g-portrait .rank-card,
+body.g-portrait .settings-card { width: 100%; }
+body.g-portrait .vocab-tabs { flex-wrap: wrap; padding: 8px 10px 2px; gap: 6px; }
+body.g-portrait .vocab-tab { flex: 1 1 30%; height: 32px; font-size: 0.72rem; }
+body.g-portrait .vocab-grid { grid-template-columns: repeat(2, 1fr); padding: 8px 10px 12px; max-height: none; overflow-y: auto; }
+body.g-portrait .guide-steps { grid-template-columns: 1fr; padding: 14px 12px; gap: 10px; }
+body.g-portrait .rank-tabs { padding: 10px 10px 0; gap: 6px; }
+body.g-portrait .rank-tab { font-size: 0.74rem; height: 36px; }
+body.g-portrait .rank-summary { grid-template-columns: repeat(2, 1fr); padding: 10px 10px 4px; gap: 6px; }
+body.g-portrait .rank-list { padding: 6px 10px; max-height: none; }
+body.g-portrait .rank-row { grid-template-columns: 30px minmax(0, 1fr) auto auto; gap: 6px; padding: 6px 8px; font-size: 0.76rem; }
+body.g-portrait .rank-row > span:nth-child(4),
+body.g-portrait .rank-row > span:nth-child(5) { display: none; }
+body.g-portrait .rr-earn { font-size: 0.86rem; }
+body.g-portrait .rr-stars { font-size: 0.66rem; letter-spacing: 0; }
+body.g-portrait .rank-cta { flex-wrap: wrap; font-size: 0.74rem; }
+body.g-portrait .settings-list { padding: 8px 10px; }
+body.g-portrait .setting { padding: 8px 10px; }
+
+/* ---- Màn hình chờ ---- */
+body.g-portrait .g-title { padding: 70px 0 34px; }
+body.g-portrait .g-title-bg { background-position: 42% 40%; }
+body.g-portrait .g-title-home { top: 14px; left: 12px; padding: 6px 12px; font-size: 0.8rem; }
+body.g-portrait .g-account { top: 12px; right: 12px; max-width: 250px; padding-right: 10px; }
+body.g-portrait .g-account-text small { white-space: normal; font-size: 0.64rem; }
+body.g-portrait .g-title-logo { margin-top: 0; }
+body.g-portrait .g-logo-awning { width: 400px; height: 34px; }
+body.g-portrait .g-logo-board { width: 440px; padding: 20px 14px 14px; }
+body.g-portrait .g-logo-chn { font-size: 3.4rem; letter-spacing: 4px; }
+body.g-portrait .g-logo-pin { font-size: 0.9rem; }
+body.g-portrait .g-logo-ribbon { font-size: 1.1rem; padding: 7px 30px; }
+body.g-portrait .g-title-progress span { font-size: 0.76rem; }
+body.g-portrait .g-title-menu { gap: 12px; width: 100%; padding: 0 20px; }
+body.g-portrait .g-btn-play { width: 100%; height: 80px; padding: 0 20px; gap: 12px; justify-content: center; }
+body.g-portrait .g-btn-play .play-chn { font-size: 2.1rem; letter-spacing: 2px; }
+body.g-portrait .g-btn-play .play-vi { font-size: 1.1rem; }
+body.g-portrait .g-btn-play i { font-size: 1.5rem; }
+body.g-portrait .g-title-sub { width: 100%; gap: 10px; }
+body.g-portrait .g-btn-sub { flex: 1 1 0; justify-content: center; padding: 0 10px; font-size: 0.92rem; gap: 6px; }
+body.g-portrait .g-btn-sub .zh { font-size: 0.95rem; margin-right: 2px; }
+body.g-portrait .g-title-cat { left: 14px; bottom: 6px; font-size: 2.4rem; }
+
+/* Chợ đầu mối màn dọc: 6 khu hiện đủ trên lưới 3×2 (không phải cuộn) */
+body.g-portrait .market-zones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
+body.g-portrait .mz { min-width: 0; padding: 5px 6px; }
+body.g-portrait .mz .mz-txt b { font-size: 0.95rem; }
+body.g-portrait .mz .mz-state { font-size: 0.62rem; }
+
+/* HUD màn dọc: ô mục tiêu đủ rộng, nút nhập hàng gọn */
+body.g-portrait .g-hud-right .g-pill.stock small { display: block; font-size: 0.86rem; color: var(--ink); font-weight: 900; }
+body.g-portrait .g-hud-right .g-pill.stock strong { display: none; }
+body.g-portrait .g-goal { min-width: 150px; }
+body.g-portrait .g-goal-val { white-space: nowrap; }
+/* Thông báo màn dọc: nằm trên thanh xếp hàng, không che phiếu/giỏ/nút */
+body.g-portrait .g-toasts { top: 102px; bottom: auto; flex-direction: column; }
+body.g-portrait .g-toast { padding: 5px 12px; }
+body.g-portrait.on-title .g-toasts { top: auto; bottom: 20px; }
