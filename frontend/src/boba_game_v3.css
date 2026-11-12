@@ -1,0 +1,630 @@
+/**
+ * Tiệm Trà Sữa Của Tôi · V3 (nạp SAU boba_game.css và boba_game_v2.css)
+ *  1. Lời gọi món gọn trên 1 dòng (không xuống dòng từng cụm)
+ *  2. Vẽ lại đồ uống: bình trà thủy tinh, khay topping có kết cấu thật, ly nhựa trong, hũ đường & thùng đá
+ *  3. MÀN HÌNH DỌC cho điện thoại: sân khấu rộng 480, cao tự giãn theo máy → lấp kín màn hình
+ */
+
+/* ==========================================================================
+   1. LỜI GỌI MÓN GỌN GÀNG
+   ========================================================================== */
+.bubble-chn-order {
+  line-height: 1.35 !important;
+  font-size: 1.12rem !important;
+}
+
+.bubble-chn-order strong,
+.bubble-chn-order .highlight-spec { white-space: nowrap; }
+
+.bubble-pin-order { line-height: 1.35 !important; margin-top: 2px; }
+.bubble-vi-order { line-height: 1.35 !important; }
+
+/* ==========================================================================
+   2. ĐỒ UỐNG VẼ LẠI
+   ========================================================================== */
+
+/* ---- 2a. Bình trà thủy tinh có nắp inox, vòi rót và chân đế ---- */
+.m-dispenser-urn {
+  width: 56px;
+  height: 104px;
+  border: none !important;
+  border-radius: 0;
+  background: none !important;
+  overflow: visible !important;
+  justify-content: flex-end;
+}
+
+.m-dispenser-urn:hover { transform: translateY(-4px); box-shadow: none; }
+.m-dispenser-urn:hover .urn-glass { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 0 3px rgba(249, 115, 22, 0.55), 0 8px 16px rgba(120, 53, 15, 0.3); }
+.m-dispenser-urn:active { transform: translateY(1px); }
+
+/* bỏ vệt sáng cũ */
+.m-dispenser-urn::before { display: none; }
+
+/* Chân đế inox */
+.m-dispenser-urn::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 14px;
+  height: 8px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #f8fafc 0%, #94a3b8 60%, #64748b 100%);
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.25);
+  z-index: 1;
+}
+
+.urn-lid {
+  top: 2px;
+  left: 6px;
+  width: calc(100% - 12px);
+  height: 11px;
+  border-radius: 12px 12px 3px 3px;
+  background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 45%, #7c8796 100%);
+  border: none;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+}
+
+.urn-lid::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 10px;
+  height: 6px;
+  transform: translateX(-50%);
+  border-radius: 5px 5px 1px 1px;
+  background: linear-gradient(180deg, #f1f5f9, #94a3b8);
+}
+
+.urn-glass {
+  top: 12px;
+  left: 3px;
+  width: calc(100% - 6px);
+  bottom: 22px;
+  border-radius: 8px 8px 16px 16px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.18) 35%, rgba(255, 255, 255, 0.12) 70%, rgba(255, 255, 255, 0.45) 100%);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.85), inset 0 -6px 10px rgba(0, 0, 0, 0.08), 0 6px 12px rgba(120, 53, 15, 0.22);
+  transition: box-shadow 0.15s;
+  z-index: 2;
+}
+
+/* vệt sáng phản chiếu trên thủy tinh */
+.urn-glass::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 6px;
+  height: 70%;
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.05));
+  z-index: 4;
+}
+
+.urn-liquid {
+  height: 78%;
+  border-radius: 0 0 14px 14px;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* bọt li ti trong nước */
+.urn-liquid::after {
+  content: '';
+  position: absolute;
+  inset: 4px 6px 6px;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.45) 0 1.2px, transparent 1.8px) 0 0 / 11px 13px,
+    radial-gradient(circle, rgba(255, 255, 255, 0.3) 0 1px, transparent 1.6px) 5px 6px / 13px 11px;
+  opacity: 0.8;
+}
+
+.urn-liquid.liquid-milk, .m-cup-liquid.liquid-milk { background: linear-gradient(180deg, #ffffff 0%, #f1ece4 60%, #e2d9cc 100%) !important; }
+.urn-liquid.liquid-blacktea, .m-cup-liquid.liquid-blacktea { background: linear-gradient(180deg, #c2410c 0%, #8a2c0c 55%, #5c1a06 100%) !important; }
+.urn-liquid.liquid-milktea, .m-cup-liquid.liquid-milktea { background: linear-gradient(180deg, #f2c48e 0%, #d89a5c 55%, #b2733a 100%) !important; }
+.urn-liquid.liquid-taro, .m-cup-liquid.liquid-taro { background: linear-gradient(180deg, #e3c4ff 0%, #b98ae8 55%, #8b56c4 100%) !important; }
+
+.urn-badge {
+  top: 46%;
+  width: 26px;
+  height: 26px;
+  border: 2px solid #ffffff;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Vòi rót inox nhô ra phía trước */
+.urn-spigot {
+  bottom: 20px;
+  width: 16px;
+  height: 9px;
+  border: none;
+  border-radius: 3px 3px 5px 5px;
+  background: linear-gradient(180deg, #f8fafc 0%, #94a3b8 70%, #475569 100%);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.spigot-handle {
+  top: -6px;
+  width: 6px;
+  height: 8px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #ef4444, #991b1b);
+}
+
+.urn-label {
+  position: relative;
+  z-index: 3;
+  margin-bottom: 0;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: #7c2d12;
+}
+
+/* ---- 2b. Khay topping inox với kết cấu thật ---- */
+.m-topping-box {
+  width: 50px;
+  height: 52px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+  box-shadow: inset 0 0 0 1.5px #cbd5e1, 0 3px 6px rgba(120, 53, 15, 0.18);
+  overflow: visible;
+}
+
+.m-topping-box:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 2px #f97316, 0 6px 12px rgba(234, 88, 12, 0.3); }
+.m-topping-box:active { transform: translateY(1px); }
+
+.topping-cell-content {
+  width: 38px;
+  height: 27px;
+  border-radius: 7px 7px 10px 10px;
+  border: none !important;
+  box-shadow: inset 0 0 0 2px rgba(148, 163, 184, 0.9), inset 0 4px 5px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+/* lớp bóng phía trên cho cảm giác ướt, mọng */
+.topping-cell-content::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(170deg, rgba(255, 255, 255, 0.35) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.topping-dot-cluster { display: none !important; }
+
+/* Trân châu đen bóng ngâm đường nâu */
+.cell-boba {
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255, 220, 190, 0.55) 0 1px, transparent 1.6px) 0 0 / 8px 8px,
+    radial-gradient(circle, #241510 0 3.1px, transparent 3.5px) 0 0 / 8px 8px,
+    radial-gradient(circle at 35% 35%, rgba(255, 220, 190, 0.45) 0 1px, transparent 1.6px) 4px 4px / 8px 8px,
+    radial-gradient(circle, #3a2318 0 3.1px, transparent 3.5px) 4px 4px / 8px 8px,
+    linear-gradient(180deg, #8a5a32, #5b3418) !important;
+}
+
+/* Pudding xoài cắt hạt lựu */
+.cell-mango {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0 1.5px, transparent 1.5px) 0 0 / 7px 7px,
+    conic-gradient(from 0deg, #ffd45a 0 25%, #f7a928 0 50%, #ffc93c 0 75%, #f29a17 0) 0 0 / 7px 7px !important;
+}
+
+/* Đậu đỏ hạt nhỏ */
+.cell-redbean {
+  background:
+    radial-gradient(ellipse 2.6px 1.9px at 50% 50%, #8e1b1b 90%, transparent 100%) 0 0 / 6px 5px,
+    radial-gradient(ellipse 2.6px 1.9px at 50% 50%, #6d1212 90%, transparent 100%) 3px 2.5px / 6px 5px,
+    radial-gradient(circle at 40% 35%, rgba(255, 200, 200, 0.4) 0 0.8px, transparent 1.2px) 0 0 / 6px 5px,
+    #4a0d0d !important;
+}
+
+/* Thạch matcha khối trong */
+.cell-matcha {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0 1.5px, transparent 1.5px) 0 0 / 8px 8px,
+    conic-gradient(#7cb83a 0 25%, #4f8a1c 0 50%, #93cc4f 0 75%, #5f9a26 0) 0 0 / 8px 8px !important;
+}
+
+/* Thạch dừa trắng trong */
+.cell-coconut {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0 1.5px, transparent 1.5px) 0 0 / 7px 7px,
+    conic-gradient(#f8fafc 0 25%, #d7ecf7 0 50%, #ffffff 0 75%, #c9e3f2 0) 0 0 / 7px 7px !important;
+}
+
+/* Khoai dẻo nhiều màu */
+.cell-taroball {
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.55) 0 0.9px, transparent 1.4px) 0 0 / 9px 9px,
+    radial-gradient(circle, #a66bd6 0 3px, transparent 3.4px) 0 0 / 9px 9px,
+    radial-gradient(circle, #f2b45a 0 3px, transparent 3.4px) 4.5px 4.5px / 9px 9px,
+    linear-gradient(180deg, #f3e8ff, #e0cdf7) !important;
+}
+
+.topping-label { margin-top: 2px; font-size: 0.66rem; color: #7c2d12; }
+
+/* ---- 2c. Hũ đường & thùng đá ---- */
+.tub-sugar, .tub-ice {
+  width: 52px;
+  height: 30px;
+  border: none;
+  border-radius: 6px 6px 10px 10px;
+  box-shadow: inset 0 0 0 2px #cbd5e1, inset 0 4px 6px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.tub-sugar {
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 0.8px, transparent 1.2px) 0 0 / 4px 4px,
+    radial-gradient(circle, rgba(214, 196, 160, 0.9) 0 0.8px, transparent 1.2px) 2px 2px / 4px 4px,
+    linear-gradient(180deg, #fffdf7, #f1e6cf);
+}
+
+.tub-ice {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0 2px, transparent 2px) 0 0 / 10px 10px,
+    conic-gradient(#e0f2fe 0 25%, #bae6fd 0 50%, #f0f9ff 0 75%, #a5d8f3 0) 0 0 / 10px 10px;
+}
+
+.tub-scoop { filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3)); }
+
+/* ---- 2d. Ly nhựa trong thon đáy, viền miệng ly & đá/topping thật ---- */
+.m-cup-shell {
+  border: none !important;
+  border-radius: 0 0 10px 10px;
+  clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.2) 22%, rgba(255, 255, 255, 0.1) 70%, rgba(255, 255, 255, 0.5) 100%);
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.m-cup-shell::before {
+  left: 9px;
+  width: 4px;
+  height: 85%;
+  top: 6%;
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.1));
+}
+
+/* viền miệng ly */
+.master-cup-station::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 68px;
+  height: 7px;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  background: linear-gradient(180deg, #ffffff, #dbe4ee);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  z-index: 9;
+}
+
+.m-cup-liquid {
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.28);
+}
+
+.m-ice-cube {
+  display: inline-block;
+  width: 15px;
+  height: 14px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(224, 242, 254, 0.75) 45%, rgba(186, 230, 253, 0.55) 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9), 0 1px 2px rgba(0, 0, 0, 0.12);
+  transform: rotate(var(--r, 8deg));
+}
+
+.m-top-dot {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.m-top-dot.t-boba { background: radial-gradient(circle at 35% 30%, #9a7460 0 1.5px, #2a1810 2.5px 100%); }
+.m-top-dot.t-mango { border-radius: 3px; background: linear-gradient(135deg, #ffe08a, #f5a623); }
+.m-top-dot.t-redbean { width: 9px; height: 7px; margin: 2px 1px; background: radial-gradient(circle at 35% 30%, #d45c5c 0 1px, #7a1414 2px 100%); }
+.m-top-dot.t-matcha { border-radius: 3px; background: linear-gradient(135deg, #a3d65c, #4f8a1c); }
+.m-top-dot.t-coconut { border-radius: 3px; background: linear-gradient(135deg, #ffffff, #cfe6f3); }
+.m-top-dot.t-taroball { background: radial-gradient(circle at 35% 30%, #e9d0ff 0 1.5px, #9d5fd0 3px 100%); }
+.m-top-dot.t-taroball:nth-child(even) { background: radial-gradient(circle at 35% 30%, #ffe2b0 0 1.5px, #e8992f 3px 100%); }
+
+/* ==========================================================================
+   3. MÀN HÌNH DỌC (ĐIỆN THOẠI)
+   JS bật body.portrait, đặt --stage-w (480) và --stage-h (tự giãn theo tỉ lệ máy).
+   Chỉ dùng Quầy Toàn Cảnh; các khối xếp chồng theo chiều dọc, nút to dễ bấm.
+   ========================================================================== */
+.rotate-device-overlay { display: none !important; }
+
+/* Nút chuyển đổi Màn hình Dọc / Ngang */
+#btn-toggle-orientation {
+  background: #fef08a;
+  color: #854d0e;
+  border-color: #fde047;
+  transition: transform 0.2s, background 0.2s;
+}
+#btn-toggle-orientation:hover {
+  transform: scale(1.08);
+}
+body.portrait #btn-toggle-orientation {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #93c5fd;
+}
+
+body.portrait {
+  overflow: hidden !important;
+  touch-action: manipulation;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}
+
+body.portrait .boba-game-container {
+  width: var(--stage-w, 100vw) !important;
+  height: var(--stage-h, 100vh) !important;
+  max-width: 480px !important;
+  max-height: 100dvh !important;
+  aspect-ratio: auto !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+body.portrait.stage-flush .boba-game-container { box-shadow: none; }
+
+/* ---- HUD gọn ---- */
+body.portrait .boba-top-hud {
+  height: 48px;
+  padding: 0 8px;
+  gap: 5px;
+  flex: 0 0 48px;
+}
+
+body.portrait .hud-left,
+body.portrait .hud-center,
+body.portrait .hud-right { gap: 5px; }
+
+body.portrait .hud-fullscreen-btn,
+body.portrait #btn-toggle-game-mode,
+body.portrait .hud-mascot-wrap,
+body.portrait .hud-level-progress-text,
+body.portrait #btn-open-cookbook .text,
+body.portrait #btn-hud-trash span,
+body.portrait #btn-add-coin { display: none !important; }
+
+body.portrait .hud-btn-circle { width: 34px; height: 34px; font-size: 0.85rem; }
+body.portrait .hud-level-progress-bar { width: 50px; }
+body.portrait .hud-stat-pill { padding-right: 8px; font-size: 0.82rem; }
+body.portrait .hud-trash-pill { padding: 0 8px; height: 34px; font-size: 0.82rem; }
+
+/* ---- Thanh ray ---- */
+body.portrait .boba-ticket-rail { height: 38px; padding: 0 6px; flex: 0 0 38px; }
+body.portrait .rail-line-count,
+body.portrait .btn-quick-zoom-ticket,
+body.portrait .rail-title-label { display: none !important; }
+body.portrait .rail-right-info { gap: 4px; font-size: 0.78rem; }
+body.portrait .rail-goal-info { padding: 2px 6px; font-size: 0.75rem; }
+
+/* ---- Chỉ dùng Quầy Toàn Cảnh ---- */
+body.portrait .boba-bottom-station-bar { display: none !important; }
+
+body.portrait .station-master-view.active {
+  display: flex;
+  flex-direction: column;
+  background-position: center top;
+  background-size: auto 62%;
+  background-color: #f6d8b2;
+}
+
+body.portrait .master-board-left,
+body.portrait .master-board-right,
+body.portrait .master-cup-stack { display: none !important; }
+
+/* Khu khách: avatar + lời gọi món */
+body.portrait .master-customer-stage {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  height: auto;
+  min-height: 214px;
+  flex: 0 0 auto;
+  padding: 12px 10px 10px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+body.portrait .master-avatar-frame { width: 112px; height: 132px; border-radius: 18px; }
+body.portrait .master-customer-name-tag { font-size: 0.74rem; padding: 2px 10px; }
+body.portrait .master-customer-avatar-wrap .patience-meter { width: 74px; }
+
+body.portrait .master-speech-bubble {
+  flex: 1;
+  max-width: none;
+  padding: 10px 12px 10px 10px;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+body.portrait .bubble-cup-preview { display: none; }
+body.portrait .bubble-chn-order { font-size: 1.22rem !important; }
+body.portrait .bubble-pin-order { font-size: 0.72rem; }
+body.portrait .bubble-vi-order { font-size: 0.76rem; }
+body.portrait .btn-master-take-order { width: 100%; justify-content: center; padding: 9px 12px; font-size: 0.95rem; }
+body.portrait .btn-master-speech-audio { flex: 0 0 34px; width: 34px; height: 34px; }
+
+body.portrait .master-empty-hint { top: 70px; }
+
+/* Bàn pha chế: bình trà (hàng 1) · topping | đường-đá + máy lắc (hàng 2) */
+body.portrait .master-counter-surface {
+  position: relative;
+  top: auto;
+  height: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "disp disp"
+    "top  sug"
+    "top  shk";
+  gap: 8px;
+  padding: 10px 10px 8px;
+  align-items: stretch;
+}
+
+body.portrait .master-dispensers-rack { grid-area: disp; padding: 6px 8px 8px; }
+body.portrait .master-toppings-rack { grid-area: top; justify-content: center; }
+body.portrait .master-sugar-ice-rack { grid-area: sug; justify-content: center; }
+
+body.portrait .m-rack-title { font-size: 0.8rem; margin-bottom: 6px; }
+
+body.portrait .m-dispensers-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+  gap: 4px;
+}
+
+body.portrait .m-dispenser-urn {
+  width: 100%;
+  max-width: 78px;
+  height: 114px;
+}
+body.portrait .urn-badge { width: 28px; height: 28px; font-size: 1rem; }
+body.portrait .urn-label { font-size: 0.78rem; }
+body.portrait .urn-glass::after { width: 6px; left: 7px; }
+
+body.portrait .m-toppings-grid {
+  gap: 6px;
+  grid-template-columns: repeat(2, 1fr);
+}
+body.portrait .m-topping-box {
+  width: 100%;
+  max-width: 66px;
+  height: 58px;
+}
+body.portrait .topping-cell-content { width: 44px; height: 28px; }
+body.portrait .topping-label { font-size: 0.76rem; }
+
+body.portrait .sugar-ice-tubs-row { gap: 10px; }
+body.portrait .sugar-ice-buttons-grid {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+}
+
+body.portrait .btn-m-sugar,
+body.portrait .btn-m-ice {
+  font-size: 0.8rem;
+  padding: 6px 0;
+  min-width: 0;
+}
+
+/* Máy lắc thành 1 nút ngang to */
+body.portrait .master-shaker-wrap {
+  grid-area: shk;
+  width: auto;
+  height: auto;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 24px rgba(180, 83, 9, 0.14);
+}
+
+body.portrait .shaker-body-metal { transform: scale(0.82); transform-origin: center; height: 76px; }
+body.portrait .shaker-label { font-size: 0.95rem; color: #7c2d12; text-shadow: none; margin-top: 0; }
+
+/* Khu làm ly phía dưới */
+body.portrait .master-bottom-workstation {
+  position: relative;
+  bottom: auto;
+  height: auto;
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "lids cup finish";
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px 12px;
+}
+
+body.portrait .master-lids-box { grid-area: lids; padding: 8px 10px; }
+body.portrait .master-drip-tray-grid { grid-area: cup; gap: 8px; justify-content: center; }
+body.portrait .master-finish-action-wrap { grid-area: finish; }
+
+body.portrait .drip-metal-plate { width: 124px; height: 118px; }
+body.portrait .master-workstation-tools { gap: 6px; }
+body.portrait .btn-m-trash span,
+body.portrait .btn-m-undo span { display: none; }
+body.portrait .btn-m-trash,
+body.portrait .btn-m-undo { width: 38px; height: 38px; padding: 0; justify-content: center; font-size: 0.95rem; }
+
+body.portrait .btn-master-finish-pink {
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 16px;
+  font-size: 1.1rem;
+  border-radius: 22px;
+}
+
+body.portrait .btn-master-finish-pink .btn-arrow { display: none; }
+
+/* ---- Màn hình chờ dọc ---- */
+body.portrait .title-version { display: none; }
+body.portrait .title-logo { margin-top: 86px; }
+body.portrait .title-logo-plate { padding: 12px 22px 14px 70px; border-width: 4px; }
+body.portrait .title-logo-chn { font-size: 54px; letter-spacing: 2px !important; -webkit-text-stroke-width: 2px; }
+body.portrait .title-logo-cup { transform: scale(0.62); left: -6px; }
+body.portrait .title-logo-ribbon { font-size: 1.05rem; padding-left: 24px; padding-right: 24px; }
+body.portrait .title-progress { max-width: 440px; }
+
+body.portrait .title-guest { width: 120px; height: 120px; bottom: 300px; }
+body.portrait .guest-left { left: 30px; }
+body.portrait .guest-right { right: 30px; }
+body.portrait .guest-left2 { left: 70px; bottom: 440px; width: 84px; height: 84px; }
+body.portrait .guest-right2 { right: 70px; bottom: 440px; width: 84px; height: 84px; }
+body.portrait .guest-bubble { font-size: 0.9rem; top: -28px; }
+
+body.portrait .title-counter { height: 250px; gap: 12px; padding: 0 16px; }
+body.portrait .title-play-btn { min-width: 0; width: 100%; height: 76px; padding: 0 20px; }
+body.portrait .title-sub-buttons { width: 100%; flex-direction: column; gap: 10px; }
+body.portrait .title-sub-btn { width: 100%; justify-content: center; }
+body.portrait .title-account { max-width: 230px; }
+
+/* ---- Hộp thoại vừa màn hình hẹp ---- */
+body.portrait .boba-modal-backdrop > * {
+  max-width: calc(var(--stage-w, 480px) - 20px) !important;
+  max-height: calc(var(--stage-h, 860px) - 30px) !important;
+  overflow-y: auto;
+}
+
+body.portrait .guide-steps { grid-template-columns: 1fr; }
+body.portrait .rank-summary { grid-template-columns: repeat(2, 1fr); }
+body.portrait .rank-row,
+body.portrait .rank-row.global { grid-template-columns: 32px minmax(0, 1.6fr) 1fr 48px; gap: 6px; padding: 6px 8px; }
+body.portrait .rank-row .rr-served,
+body.portrait .rank-row .rr-avg { display: none; }
+body.portrait .rank-tab { font-size: 0.78rem; }

@@ -569,14 +569,28 @@ class PapaBobaGame {
   initDOM() {
     this.updateHUD();
 
-    // Sân khấu 1280×720 tự co giãn vừa màn hình
+    // Sân khấu 1280×720 tự co giãn vừa màn hình (hỗ trợ Màn hình Dọc trên điện thoại)
     this.fitStage();
     window.addEventListener('resize', () => {
       this.fitStage();
       this.positionGuideTag();
     });
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        this.fitStage();
+        this.positionGuideTag();
+      }, 150);
+    });
 
-    // Toàn màn hình (+ cố khóa xoay ngang trên điện thoại)
+    // Nút chuyển đổi chế độ Màn hình Dọc (Portrait) / Ngang (Landscape)
+    document.getElementById('btn-toggle-orientation')?.addEventListener('click', () => {
+      const isCurrentlyPortrait = document.body.classList.contains('portrait');
+      this.forcePortrait = !isCurrentlyPortrait;
+      this.fitStage();
+      this.showToast('📱', this.forcePortrait ? 'Đã bật Màn hình Dọc (Mobile Portrait)' : 'Đã chuyển về Màn hình Ngang (Landscape)');
+    });
+
+    // Toàn màn hình
     ['btn-fullscreen-boba', 'btn-rotate-fullscreen'].forEach(id => {
       document.getElementById(id)?.addEventListener('click', () => this.toggleFullscreen());
     });
@@ -1065,9 +1079,11 @@ class PapaBobaGame {
 
     if (masterLiquid) {
       if (this.cup.tea) {
-        masterLiquid.style.background = this.cup.tea.color;
+        masterLiquid.className = `m-cup-liquid liquid-${this.cup.tea.id}`;
+        masterLiquid.style.background = '';
         masterLiquid.style.height = `${Math.min(85, Math.max(30, this.cup.pourLevel))}%`;
       } else {
+        masterLiquid.className = 'm-cup-liquid';
         masterLiquid.style.background = 'transparent';
         masterLiquid.style.height = '0%';
       }
@@ -1079,7 +1095,8 @@ class PapaBobaGame {
         const count = this.cup.ice.id === 'extra_ice' ? 4 : (this.cup.ice.id === 'less_ice' ? 2 : 3);
         for (let i = 0; i < count; i++) {
           const cube = document.createElement('span');
-          cube.style.cssText = 'width: 14px; height: 14px; background: rgba(255, 255, 255, 0.75); border: 1.5px solid rgba(255, 255, 255, 0.95); border-radius: 3px; display: inline-block; box-shadow: 0 1px 3px rgba(0,0,0,0.1);';
+          cube.className = 'm-ice-cube';
+          cube.style.setProperty('--r', `${(i % 2 === 0 ? 1 : -1) * (6 + i * 4)}deg`);
           masterIce.appendChild(cube);
         }
       }
@@ -1088,15 +1105,12 @@ class PapaBobaGame {
     if (masterTop) {
       masterTop.innerHTML = '';
       this.cup.toppings.forEach(top => {
-        const dot = document.createElement('span');
-        let color = '#1e293b';
-        if (top.id === 'mango') color = '#fbbf24';
-        else if (top.id === 'redbean') color = '#991b1b';
-        else if (top.id === 'matcha') color = '#65a30d';
-        else if (top.id === 'coconut') color = '#e0f2fe';
-        else if (top.id === 'taroball') color = '#a855f7';
-        dot.style.cssText = `width: 12px; height: 12px; border-radius: 50%; background: ${color}; display: inline-block; box-shadow: 0 1px 2px rgba(0,0,0,0.25);`;
-        masterTop.appendChild(dot);
+        const count = (top.id === 'boba' || top.id === 'redbean') ? 4 : 2;
+        for (let k = 0; k < count; k++) {
+          const dot = document.createElement('span');
+          dot.className = `m-top-dot t-${top.id}`;
+          masterTop.appendChild(dot);
+        }
       });
     }
 
@@ -1166,12 +1180,34 @@ class PapaBobaGame {
   fitStage() {
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const scale = Math.min(w / STAGE_W, h / STAGE_H);
-    this.stageScale = scale > 0 ? scale : 1;
-    document.documentElement.style.setProperty('--stage-scale', this.stageScale.toFixed(4));
-    // Gần đúng tỉ lệ 16:9 hoặc màn hình nhỏ -> bỏ bo góc, lấp kín màn hình
-    const flush = (w - STAGE_W * this.stageScale < 24 && h - STAGE_H * this.stageScale < 24) || w < 900;
-    document.body?.classList.toggle('stage-flush', flush);
+    
+    // Tự động phát hiện hoặc thủ công Màn hình Dọc (Portrait)
+    const isPortrait = (this.forcePortrait !== undefined)
+      ? this.forcePortrait
+      : (h > w || (w <= 640 && h >= w));
+
+    document.body?.classList.toggle('portrait', isPortrait);
+
+    if (isPortrait) {
+      this.stageScale = 1;
+      const stageW = Math.min(w, 480);
+      document.documentElement.style.setProperty('--stage-w', stageW + 'px');
+      document.documentElement.style.setProperty('--stage-h', h + 'px');
+      document.documentElement.style.setProperty('--stage-scale', '1');
+      document.body?.classList.add('stage-flush');
+      // Ở chế độ dọc, ưu tiên chuyển về Quầy Toàn Cảnh để điều khiển trọn vẹn
+      if (this.currentStation !== 'view-master-counter') {
+        this.switchStation('view-master-counter');
+      }
+    } else {
+      const scale = Math.min(w / STAGE_W, h / STAGE_H);
+      this.stageScale = scale > 0 ? scale : 1;
+      document.documentElement.style.setProperty('--stage-scale', this.stageScale.toFixed(4));
+      document.documentElement.style.removeProperty('--stage-w');
+      document.documentElement.style.removeProperty('--stage-h');
+      const flush = (w - STAGE_W * this.stageScale < 24 && h - STAGE_H * this.stageScale < 24) || w < 900;
+      document.body?.classList.toggle('stage-flush', flush);
+    }
   }
 
   toggleFullscreen() {
@@ -1179,9 +1215,7 @@ class PapaBobaGame {
     const el = document.documentElement;
     try {
       if (!doc.fullscreenElement && el.requestFullscreen) {
-        el.requestFullscreen()
-          .then(() => screen.orientation?.lock?.('landscape').catch(() => {}))
-          .catch(() => {});
+        el.requestFullscreen().catch(() => {});
       } else if (doc.exitFullscreen) {
         doc.exitFullscreen().catch(() => {});
       }
@@ -1258,6 +1292,13 @@ class PapaBobaGame {
 
     target.classList.add('guide-glow');
     this.guideTarget = target;
+
+    // Nút ghi phiếu đã có chữ rõ ràng -> nút tự phát sáng (guide-glow), không hiện thêm tag xanh đè bên dưới gây hiểu lầm là 2 nút
+    if (step[0] === '#btn-master-take-order' || step[0] === '#btn-take-order-action') {
+      if (tag) tag.style.display = 'none';
+      return;
+    }
+
     this.guidePlacement = step[3] || 'above';
     if (tag) {
       tag.innerHTML = `<span class="kaiti-font">${step[1]}</span>${step[2]}`;
@@ -2166,11 +2207,7 @@ class PapaBobaGame {
     const viEl = document.getElementById('order-vietnamese-sentence');
 
     if (chnEl) {
-      chnEl.innerHTML = `
-        我要一杯<br>
-        <strong>${ord.topping.hanzi}${ord.tea.hanzi}</strong>，<br>
-        <span class="highlight-accent">${ord.sugar.hanzi}，${ord.ice.hanzi}</span>。
-      `;
+      chnEl.innerHTML = `我要一杯<strong>${ord.topping.hanzi}${ord.tea.hanzi}</strong>，<span class="highlight-accent">${ord.sugar.hanzi} · ${ord.ice.hanzi}</span>。`;
     }
 
     if (pinEl) {
@@ -2190,7 +2227,7 @@ class PapaBobaGame {
     const mVi = document.getElementById('master-speech-vi');
 
     if (mTea) mTea.textContent = `${ord.topping.hanzi}${ord.tea.hanzi}`;
-    if (mSugIce) mSugIce.textContent = `${ord.sugar.hanzi}，${ord.ice.hanzi}`;
+    if (mSugIce) mSugIce.textContent = `${ord.sugar.hanzi} · ${ord.ice.hanzi}`;
     if (mPin) {
       mPin.style.display = this.showPinyin ? '' : 'none';
       mPin.textContent = `Wǒ yào yībēi ${ord.topping.pinyin} ${ord.tea.pinyin}, ${ord.sugar.pinyin}, ${ord.ice.pinyin}.`;
