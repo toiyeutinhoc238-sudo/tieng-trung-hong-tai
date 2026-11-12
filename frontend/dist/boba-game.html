@@ -16,9 +16,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
   <!-- Dùng chung phong cách với Tiệm Tạp Hóa, rồi thêm phần riêng của tiệm trà sữa -->
-  <script type="module" crossorigin src="/assets/bobaGame-cJEmFSSa.js"></script>
+  <script type="module" crossorigin src="/assets/bobaGame-C5AOJ5jy.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/bobaGame-IPZ6wyOJ.css">
+  <link rel="stylesheet" crossorigin href="/assets/bobaGame-gG4NpQLD.css">
   <link rel="stylesheet" crossorigin href="/assets/grocery_game-BxE4NPdc.css">
 </head>
 
@@ -111,6 +111,10 @@
       </div>
 
       <div class="g-hud-right">
+        <button type="button" class="g-pill action reviews" id="btn-open-reviews" title="Sổ đánh giá của khách hàng">
+          <span class="pill-icon">⭐</span>
+          <span class="pill-text"><small class="zh">评价</small><strong id="hud-reviews-val">5.0★ (0)</strong></span>
+        </button>
         <button type="button" class="g-pill action" id="btn-open-vocab" title="Sổ từ vựng trà sữa">
           <span class="pill-icon">📖</span>
           <span class="pill-text"><small class="zh">生词本</small><strong id="hud-vocab-val">0/0</strong></span>
@@ -132,180 +136,166 @@
     </div>
 
     <!-- ====================================================================
-         3. CÁC TRẠM
+         3. QUẦY BÁN TRÀ SỮA THỐNG NHẤT (THEO THIẾT KẾ BẢN VẼ CỦA BẠN)
          ==================================================================== -->
     <main class="g-viewport">
+      <section class="g-station active unified-shop" id="view-order-station">
+        <div class="shop-unified-layout">
 
-      <!-- TRẠM 1: ĐÓN KHÁCH (点单台) -->
-      <section class="g-station active" id="view-order-station">
-        <div class="shop-scene">
-          <div class="shop-awning" aria-hidden="true"></div>
-          <div class="shop-wall left" aria-hidden="true">
-            <div class="wall-chalkboard">
-              <span class="zh cb-title">菜单 · 奶茶</span>
-              <ul id="chalk-specials"></ul>
-            </div>
-          </div>
-          <div class="shop-wall right" aria-hidden="true">
-            <div class="wall-shelf-mini">
-              <span>🧋</span><span>🍵</span><span>🥛</span><span>🧋</span><span>🍯</span><span>🧊</span>
-            </div>
-            <div class="wall-lantern">🏮</div>
-          </div>
+          <!-- NỬA TRÊN: KHÁCH HÀNG (TRÁI) & ĐƠN HÀNG + LY TRÀ + CHECKLIST (PHẢI) -->
+          <div class="shop-main-top">
 
-          <div class="shop-door" id="shop-door">
-            <div class="door-street" aria-hidden="true">
-              <div class="street-sky"></div>
-              <div class="street-tree t1"></div>
-              <div class="street-tree t2"></div>
-              <div class="street-house"></div>
-              <div class="street-walker w1">🚲</div>
-              <div class="street-walker w2">🐕</div>
-            </div>
-            <div class="door-customer" id="door-customer">
-              <img id="customer-img" src="/assets/boba_customer_girl-zmXCu5fB.jpg" alt="">
-            </div>
-            <div class="door-glare" aria-hidden="true"></div>
-            <div class="door-bell" aria-hidden="true">🔔</div>
-            <div class="door-empty" id="door-empty">
-              <span class="zh" id="door-empty-chn">欢迎光临</span>
-              <small id="door-empty-text">Đang chờ khách...</small>
-            </div>
-          </div>
-
-          <div class="customer-tag" id="customer-tag">
-            <span class="zh" id="customer-name-chn">小雨</span>
-            <span id="customer-name-vi">Bé Mưa</span>
-            <div class="patience" id="counter-patience"><div class="patience-fill"></div><span class="patience-mood">😊</span></div>
-          </div>
-
-          <div class="speech-bubble" id="speech-bubble">
-            <div class="speech-head">
-              <span class="speech-tag">🗣️ Khách gọi món</span>
-              <button type="button" class="speech-audio" id="btn-replay-order-audio" title="Nghe lại"><i class="fa-solid fa-volume-high"></i></button>
-            </div>
-            <div class="speech-chn zh" id="order-chn-text">老板，我要中杯珍珠奶茶！</div>
-            <div class="speech-pin" id="order-pin-text"></div>
-            <div class="speech-vi" id="order-vi-text"></div>
-            <button type="button" class="g-btn-primary" id="btn-take-order-action">
-              <i class="fa-solid fa-receipt"></i> <span class="zh">接单</span> Nhận đơn
-            </button>
-          </div>
-
-          <div class="shop-counter">
-            <div class="counter-top"></div>
-            <div class="counter-front">
-              <div class="counter-sign">
-                <span class="zh">我的奶茶店</span>
-                <small>好喝的奶茶 · 热情服务</small>
-              </div>
-            </div>
-            <div class="counter-register" aria-hidden="true">
-              <div class="reg-screen" id="reg-screen">0.00</div>
-              <div class="reg-keys"></div>
-            </div>
-            <div class="counter-jars" aria-hidden="true">
-              <span class="jar j1"></span><span class="jar j2"></span><span class="jar j3"></span>
-            </div>
-            <button type="button" class="counter-cat" id="btn-cat" title="Con mèo · 猫 (māo)">
-              <span class="cat-sun" aria-hidden="true"></span>
-              <span class="cat-emoji">🐈</span>
-            </button>
-          </div>
-
-          <div class="today-board">
-            <div class="tb-head zh">今日营收</div>
-            <div class="tb-revenue" id="stats-rev-val">0.00 ¥</div>
-            <div class="tb-row"><span>✅ Đã phục vụ</span><strong id="stats-cust-val">0</strong></div>
-            <div class="tb-row"><span>😠 Bỏ về</span><strong id="stats-lost-val">0</strong></div>
-          </div>
-        </div>
-
-        <div class="g-station-footer">
-          <div class="g-hint" id="order-footer-hint">💡 Bấm <b>Nhận đơn</b> khi khách đến quầy.</div>
-          <button type="button" class="g-btn-primary btn-take-order-footer" id="btn-take-order-footer" style="display:none;">
-            <i class="fa-solid fa-receipt"></i> <span class="zh">接单</span> Nhận đơn
-          </button>
-          <button type="button" class="g-btn-next" id="btn-goto-make-from-order" style="display:none;">
-            <span class="zh">调制台</span> Sang pha chế <i class="fa-solid fa-arrow-right"></i>
-          </button>
-        </div>
-      </section>
-
-      <!-- TRẠM 2: PHA CHẾ (调制台) -->
-      <section class="g-station" id="view-make-station">
-        <div class="make-room">
-          <!-- Phiếu order -->
-          <aside class="make-ticket" id="make-ticket">
-            <div class="mt-head"><span class="zh">点单</span> Phiếu order <span class="mt-id" id="mt-id"></span></div>
-            <div class="mt-cust" id="mt-cust"></div>
-            <ul class="mt-list" id="mt-list"></ul>
-          </aside>
-
-          <!-- Ly đang pha -->
-          <div class="make-cup-area">
-            <div class="cup-stage" id="cup-stage">
-              <div class="cup-target-label" id="cup-target-label">Vạch rót 80%</div>
-              <div class="cup" id="cup">
-                <div class="cup-lid" id="cup-lid"></div>
-                <div class="cup-body">
-                  <div class="cup-liquid" id="cup-liquid"></div>
-                  <div class="cup-ice" id="cup-ice"></div>
-                  <div class="cup-toppings" id="cup-toppings"></div>
-                  <div class="cup-target" aria-hidden="true"></div>
-                  <div class="cup-sugar-tag" id="cup-sugar-tag"></div>
+            <!-- KHÁCH HÀNG & LỜI THOẠI (BÊN TRÁI) -->
+            <div class="main-customer-box">
+              <div class="cust-card">
+                <div class="cust-window">
+                  <div class="cust-avatar-frame" id="door-customer">
+                    <img id="customer-img" src="/assets/boba_customer_girl-zmXCu5fB.jpg" alt="Khách hàng">
+                  </div>
+                  <div class="cust-empty" id="door-empty">
+                    <span class="zh" id="door-empty-chn">欢迎光临</span>
+                    <small id="door-empty-text">Đang chờ khách...</small>
+                  </div>
                 </div>
-                <div class="cup-size-tag" id="cup-size-tag"></div>
+                <div class="cust-info" id="customer-tag">
+                  <div class="cust-name-row">
+                    <span class="zh cust-name-chn" id="customer-name-chn">小雨</span>
+                    <span class="cust-name-vi" id="customer-name-vi">Bé Mưa</span>
+                  </div>
+                  <div class="patience" id="counter-patience">
+                    <div class="patience-fill"></div>
+                    <span class="patience-mood">😊</span>
+                  </div>
+                </div>
               </div>
-              <div class="cup-empty" id="cup-empty">🥤<br>Chọn cỡ ly để bắt đầu</div>
+
+              <!-- LỜI GỌI MÓN (YÊU CẦU CỦA KHÁCH) -->
+              <div class="speech-bubble" id="speech-bubble">
+                <div class="speech-head">
+                  <span class="speech-tag">🗣️ Khách gọi món:</span>
+                  <button type="button" class="speech-audio" id="btn-replay-order-audio" title="Nghe lại phát âm"><i class="fa-solid fa-volume-high"></i></button>
+                </div>
+                <div class="speech-chn zh" id="order-chn-text">老板，我要中杯珍珠奶茶！</div>
+                <div class="speech-pin" id="order-pin-text">Lǎobǎn, wǒ yào zhōng bēi zhēnzhū nǎichá!</div>
+                <div class="speech-vi" id="order-vi-text">(Ông chủ, cho tôi 1 ly trà sữa trân châu ly vừa!)</div>
+                <button type="button" class="g-btn-primary btn-take-order-bubble" id="btn-take-order-action">
+                  <i class="fa-solid fa-receipt"></i> <span class="zh">接单</span> Nhận đơn
+                </button>
+              </div>
             </div>
-            <div class="cup-fill-readout"><span>Đã rót</span><b id="cup-fill-val">0%</b></div>
+
+            <!-- ĐƠN HÀNG & LY TRÀ & CHECKLIST (BÊN PHẢI) -->
+            <div class="main-order-box">
+              <div class="order-box-header">
+                <span class="ob-title"><i class="fa-solid fa-mug-hot"></i> <b>Đơn hàng &amp; Ly trà</b></span>
+                <button type="button" class="g-btn-ghost danger mini" id="btn-trash-cup" title="Đổ ly cũ làm lại">
+                  <i class="fa-solid fa-trash"></i> <span class="zh">倒掉</span> Đổ đi
+                </button>
+              </div>
+
+              <div class="order-box-content">
+                <!-- Ly trà trực quan -->
+                <div class="cup-display-area">
+                  <div class="cup-stage" id="cup-stage">
+                    <div class="cup-target-label" id="cup-target-label">Vạch rót 80%</div>
+                    <div class="cup" id="cup">
+                      <div class="cup-lid" id="cup-lid"></div>
+                      <div class="cup-body">
+                        <div class="cup-liquid" id="cup-liquid"></div>
+                        <div class="cup-ice" id="cup-ice"></div>
+                        <div class="cup-toppings" id="cup-toppings"></div>
+                        <div class="cup-target" aria-hidden="true"></div>
+                        <div class="cup-sugar-tag" id="cup-sugar-tag"></div>
+                      </div>
+                      <div class="cup-size-tag" id="cup-size-tag"></div>
+                    </div>
+                    <div class="cup-empty" id="cup-empty">🥤<br>Chọn cỡ ly bên dưới</div>
+                  </div>
+                  <div class="cup-fill-readout"><span>Đã rót:</span><b id="cup-fill-val">0%</b></div>
+                  <button type="button" class="g-btn-primary btn-seal-main" id="btn-seal-lid">
+                    <i class="fa-solid fa-circle-check"></i> <span class="zh">封口</span> Đóng nắp
+                  </button>
+                </div>
+
+                <!-- Bảng Checklist đơn hàng -->
+                <div class="order-checklist" id="order-checklist">
+                  <div class="cl-head">
+                    <span><i class="fa-solid fa-list-check"></i> Checklist đơn</span>
+                    <span class="cl-id" id="mt-id"></span>
+                  </div>
+                  <ul class="cl-list" id="checklist-items">
+                    <li class="cl-item" id="cl-size"><span class="cl-icon">🥤</span><span class="cl-txt">Cỡ ly</span><span class="cl-val">—</span><i class="cl-check"></i></li>
+                    <li class="cl-item" id="cl-tea"><span class="cl-icon">🍵</span><span class="cl-txt">Loại trà</span><span class="cl-val">—</span><i class="cl-check"></i></li>
+                    <li class="cl-item" id="cl-sugar"><span class="cl-icon">🍬</span><span class="cl-txt">Đường</span><span class="cl-val">—</span><i class="cl-check"></i></li>
+                    <li class="cl-item" id="cl-ice"><span class="cl-icon">🧊</span><span class="cl-txt">Lượng đá</span><span class="cl-val">—</span><i class="cl-check"></i></li>
+                    <li class="cl-item" id="cl-topping"><span class="cl-icon">🧋</span><span class="cl-txt">Topping</span><span class="cl-val">—</span><i class="cl-check"></i></li>
+                  </ul>
+                  <div class="cl-tip">✨ Hoàn thành bấm <b>Đóng nắp</b> sẽ hiện giao diện thanh toán!</div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
-          <!-- Các bước pha chế -->
-          <div class="make-steps">
-            <div class="step-tabs" id="step-tabs">
-              <button type="button" class="step-tab active" data-step="1"><b>1</b><span><span class="zh">杯 · 茶</span> Ly &amp; trà</span></button>
-              <button type="button" class="step-tab" data-step="2"><b>2</b><span><span class="zh">糖 · 冰</span> Đường &amp; đá</span></button>
-              <button type="button" class="step-tab" data-step="3"><b>3</b><span><span class="zh">配料 · 封口</span> Topping &amp; nắp</span></button>
-            </div>
-
-            <div class="step-panel active" id="step-1">
-              <div class="sp-title"><span class="zh">选杯子</span> Chọn cỡ ly</div>
+          <!-- THANH DẢI RỦ: SIZE | ĐƯỜNG | ĐÁ -->
+          <div class="shop-main-ribbon">
+            <div class="ribbon-group ribbon-size">
+              <span class="rb-label">🥤 Cỡ ly (Size):</span>
               <div class="size-row" id="size-row"></div>
-              <div class="sp-title"><span class="zh">倒茶</span> Rót trà — <b>nhấn giữ</b> vòi, thả tay khi tới vạch</div>
+            </div>
+            <div class="ribbon-group ribbon-sugar">
+              <span class="rb-label">🍬 Đường:</span>
+              <div class="opt-row sugar" id="sugar-row"></div>
+            </div>
+            <div class="ribbon-group ribbon-ice">
+              <span class="rb-label">🧊 Lượng đá:</span>
+              <div class="opt-row ice" id="ice-row"></div>
+            </div>
+          </div>
+
+          <!-- NỬA DƯỚI: LOẠI NƯỚC (BÌNH TRÀ) & TOPPING (KHAY TOPPING) -->
+          <div class="shop-main-bottom">
+            <!-- CỘT TRÁI: LOẠI NƯỚC -->
+            <div class="station-pane tea-pane">
+              <div class="pane-header">
+                <span class="ph-title"><i class="fa-solid fa-mug-saucer"></i> <b>Loại nước</b> <small class="zh">(茶底)</small></span>
+                <span class="ph-desc">Nhấn giữ để rót trà tới vạch 80%</span>
+              </div>
               <div class="tea-grid" id="tea-grid"></div>
             </div>
 
-            <div class="step-panel" id="step-2">
-              <div class="sp-title"><span class="zh">甜度</span> Độ ngọt</div>
-              <div class="opt-row sugar" id="sugar-row"></div>
-              <div class="sp-title"><span class="zh">冰量</span> Lượng đá</div>
-              <div class="opt-row ice" id="ice-row"></div>
-            </div>
-
-            <div class="step-panel" id="step-3">
-              <div class="sp-title"><span class="zh">加料</span> Topping <small>(đơn không có topping thì bỏ qua)</small></div>
-              <div class="topping-grid" id="topping-grid"></div>
-              <div class="lid-row">
-                <button type="button" class="g-btn-chip" id="btn-undo-topping"><i class="fa-solid fa-rotate-left"></i> Bớt topping</button>
-                <button type="button" class="g-btn-primary lid-btn" id="btn-seal-lid"><i class="fa-solid fa-circle-check"></i> <span class="zh">封口</span> Đóng nắp</button>
+            <!-- CỘT PHẢI: TOPPING -->
+            <div class="station-pane topping-pane">
+              <div class="pane-header">
+                <span class="ph-title"><i class="fa-solid fa-cookie-bite"></i> <b>Topping</b> <small class="zh">(配料)</small></span>
+                <button type="button" class="g-btn-chip mini" id="btn-undo-topping"><i class="fa-solid fa-rotate-left"></i> Bớt topping</button>
               </div>
+              <div class="topping-grid" id="topping-grid"></div>
             </div>
           </div>
+
         </div>
 
         <div class="g-station-footer">
-          <button type="button" class="g-btn-ghost danger small" id="btn-trash-cup"><i class="fa-solid fa-trash"></i> <span class="zh">倒掉</span> Đổ đi</button>
-          <div class="g-hint" id="make-hint">💡 Làm theo 3 bước: chọn ly &amp; rót trà → đường &amp; đá → topping &amp; đóng nắp.</div>
-          <button type="button" class="g-btn-next" id="btn-goto-pay" disabled>
+          <div class="g-hint" id="order-footer-hint">💡 Bấm <b>Nhận đơn</b> khi khách gọi món → chọn ly, rót trà, chọn đường/đá, thêm topping → bấm <b>Đóng nắp</b> để tính tiền!</div>
+          <button type="button" class="g-btn-primary btn-take-order-footer" id="btn-take-order-footer" style="display:none;">
+            <i class="fa-solid fa-receipt"></i> <span class="zh">接单</span> Nhận đơn
+          </button>
+          <button type="button" class="g-btn-next" id="btn-goto-pay" style="display:none;">
             <span class="zh">收银台</span> Sang tính tiền <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
       </section>
+    </main>
 
-      <!-- TRẠM 3: TÍNH TIỀN & THỐI TIỀN (收银台) -->
-      <section class="g-station" id="view-change-station">
+    <!-- GIAO DIỆN THANH TOÁN (MODAL CHECKOUT) -->
+    <div class="g-modal" id="modal-checkout" style="display:none;">
+      <div class="g-card checkout-card">
+        <div class="checkout-awning" aria-hidden="true"></div>
+        <div class="g-card-head">
+          <h3>💴 <span class="zh">收银台</span> · Tính tiền cho khách</h3>
+          <button type="button" class="g-close" data-close="modal-checkout" title="Trở lại quầy"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="change-room">
           <div class="cash-left">
             <div class="paid-card">
@@ -319,7 +309,7 @@
               <button type="button" class="g-btn-chip" id="btn-change-hint"><i class="fa-solid fa-lightbulb"></i> Gợi ý (−20 điểm)</button>
             </div>
             <div class="paid-bill-wrap">
-              <span class="paid-label">Tiền khách đặt trên quầy</span>
+              <span class="paid-label">Tiền khách đặt trên quầy:</span>
               <div class="paid-bills" id="customer-bill-render"></div>
             </div>
           </div>
@@ -348,27 +338,8 @@
             </button>
           </div>
         </div>
-
-        <div class="g-station-footer">
-          <div class="g-hint" id="change-hint-text">💡 Tự tính: <b>Khách đưa − Tổng tiền = Tiền thối</b>. Thối sai sẽ bị trừ điểm.</div>
-        </div>
-      </section>
-    </main>
-
-    <!-- ====================================================================
-         4. THANH CHUYỂN TRẠM (3 GIAI ĐOẠN)
-         ==================================================================== -->
-    <nav class="g-tabs three">
-      <button type="button" class="g-tab active" data-target="view-order-station" id="tab-boba-order">
-        <span class="tab-icon">🛎️</span><span class="tab-txt"><b class="zh">点单台</b><small>1. Đón khách</small></span>
-      </button>
-      <button type="button" class="g-tab" data-target="view-make-station" id="tab-boba-make">
-        <span class="tab-icon">🧋</span><span class="tab-txt"><b class="zh">调制台</b><small>2. Pha chế</small></span>
-      </button>
-      <button type="button" class="g-tab" data-target="view-change-station" id="tab-boba-pay">
-        <span class="tab-icon">💴</span><span class="tab-txt"><b class="zh">收银台</b><small>3. Tính tiền</small></span>
-      </button>
-    </nav>
+      </div>
+    </div>
 
     <div class="g-toasts" id="g-toasts"></div>
 
@@ -397,11 +368,18 @@
             <div class="sum"><span>Thực nhận</span><b id="score-final-receive">0.00 ¥</b></div>
           </div>
         </div>
-        <div class="score-reaction">
-          <img id="score-reaction-img" src="/assets/boba_customer_girl-zmXCu5fB.jpg" alt="">
-          <div>
-            <div class="zh rc-chn" id="score-reaction-chn">“谢谢老板！”</div>
-            <div class="rc-vi" id="score-reaction-vi">(Cảm ơn chủ quán!)</div>
+        <!-- KHÁCH HÀNG ĐÁNH GIÁ (REVIEW) -->
+        <div class="score-customer-review" id="score-customer-review">
+          <div class="scr-avatar-wrap">
+            <img id="score-reaction-img" src="/assets/boba_customer_girl-zmXCu5fB.jpg" alt="">
+          </div>
+          <div class="scr-content">
+            <div class="scr-header">
+              <strong id="score-customer-name">小雨 (Bé Mưa)</strong>
+              <div class="scr-stars" id="scr-stars">⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="scr-quote zh" id="score-reaction-chn">“太好喝了！谢谢老板！”</div>
+            <div class="scr-quote-vi" id="score-reaction-vi">(Ngon quá! Cảm ơn chủ quán!)</div>
           </div>
         </div>
         <button type="button" class="g-btn-primary big" id="btn-next-customer">
@@ -410,16 +388,38 @@
       </div>
     </div>
 
-    <!-- NHIỆM VỤ ĐẦU NGÀY -->
+    <!-- NHIỆM VỤ ĐẦU NGÀY & CHUẨN BỊ NGUYÊN LIỆU TRƯỚC KHI MỞ CỬA -->
     <div class="g-modal" id="modal-day-mission" style="display:none;">
       <div class="g-card mission-card">
         <div class="mission-awning" aria-hidden="true"></div>
         <div class="mission-head">
           <span class="zh mission-day" id="mission-day-chn">第1天</span>
           <h3><span class="zh">今日任务</span> · Nhiệm vụ hôm nay</h3>
-          <p id="mission-sub">Quán mở cửa 08:00 → 20:00.</p>
+          <p id="mission-sub">Quán mở cửa 08:00 → 20:00 (khoảng 2 phút). Khách đến liên tục — hãy chuẩn bị nguyên liệu trước!</p>
         </div>
         <div class="mission-goals" id="mission-goals"></div>
+
+        <!-- KHU CHUẨN BỊ NGUYÊN LIỆU (NẤU TRÀ & NẤU TOPPING TRƯỚC KHI MỞ CỬA) -->
+        <div class="mission-prep-section">
+          <div class="prep-header">
+            <h4><i class="fa-solid fa-kitchen-set"></i> <span class="zh">原料准备</span> · Nấu nguyên liệu trước khi mở cửa</h4>
+            <button type="button" class="g-btn-chip" id="btn-prep-all"><i class="fa-solid fa-wand-magic-sparkles"></i> Nấu nhanh tất cả (+5)</button>
+          </div>
+          <div class="prep-notice">
+            ⚠️ <b>Quy tắc bảo quản:</b> Nước trà và topping qua ngày sẽ <b>bị hủy hết</b> (đổ bỏ cuối ngày). Ly, đá và đường được giữ lại. Hãy tính toán nấu lượng vừa đủ để không bị lãng phí!
+          </div>
+          <div class="prep-grids">
+            <div class="prep-block">
+              <div class="pb-title"><span>🍵 Nấu trà (茶底)</span> <small>5.00 ¥ / lần (5 phần)</small></div>
+              <div class="prep-grid" id="prep-tea-grid"></div>
+            </div>
+            <div class="prep-block">
+              <div class="pb-title"><span>🧋 Nấu topping (配料)</span> <small>4.00 ¥ / lần (5 phần)</small></div>
+              <div class="prep-grid" id="prep-topping-grid"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="mission-actions">
           <button type="button" class="g-btn-ghost" id="btn-mission-restock"><i class="fa-solid fa-basket-shopping"></i> <span class="zh">进货</span> Mở món mới</button>
           <button type="button" class="g-btn-primary big" id="btn-mission-start"><span class="zh">开门营业</span> Mở cửa bán hàng <i class="fa-solid fa-store"></i></button>
@@ -444,7 +444,46 @@
           <div class="sg"><small>Thối đúng ngay</small><b id="summary-accuracy-val">100%</b></div>
         </div>
         <div class="mission-results" id="day-mission-results"></div>
+
+        <!-- BÁO CÁO NGUYÊN LIỆU THỪA QUA ĐÊM ĐÃ HỦY -->
+        <div class="summary-spoilage-card" id="summary-spoilage-card">
+          <div class="spoilage-head">
+            <span>🗑️ <span class="zh">过夜损耗</span> · Nguyên liệu thừa qua ngày đã huỷ</span>
+          </div>
+          <div class="spoilage-body" id="summary-spoilage-details">
+            <!-- Discarded counts and cost -->
+          </div>
+        </div>
+
+        <!-- NHẬN XÉT CỦA KHÁCH HÀNG HÔM NAY -->
+        <div class="summary-reviews-card">
+          <div class="reviews-head">
+            <span>⭐ <span class="zh">今日顾客评价</span> · Đánh giá của khách hôm nay</span>
+            <span class="rh-stars" id="summary-reviews-stars">5.0★</span>
+          </div>
+          <div class="summary-reviews-list" id="summary-today-reviews-list"></div>
+        </div>
+
         <button type="button" class="g-btn-primary big" id="btn-next-day-start"><span class="zh">进入下一天</span> Sang ngày mới <i class="fa-solid fa-sun"></i></button>
+      </div>
+    </div>
+
+    <!-- SỔ ĐÁNH GIÁ CỦA KHÁCH HÀNG (顾客评价) -->
+    <div class="g-modal over-title" id="modal-reviews" style="display:none;">
+      <div class="g-card reviews-book-card">
+        <div class="g-card-head">
+          <h3>⭐ <span class="zh">顾客评价</span> · Đánh giá tiệm trà sữa</h3>
+          <button type="button" class="g-close" data-close="modal-reviews"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="rb-overview" id="rb-overview">
+          <div class="rb-big-star">
+            <strong id="rb-avg-score">5.0</strong>
+            <div class="rb-stars-icon" id="rb-stars-icon">⭐⭐⭐⭐⭐</div>
+            <small id="rb-total-count">0 đánh giá</small>
+          </div>
+          <div class="rb-breakdown" id="rb-breakdown"></div>
+        </div>
+        <div class="rb-list" id="rb-reviews-list"></div>
       </div>
     </div>
 

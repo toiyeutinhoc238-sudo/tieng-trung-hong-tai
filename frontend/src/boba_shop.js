@@ -200,17 +200,51 @@ const VOCAB_TOTAL = VOCAB_TABS.reduce((s, t) => s + t.words.length, 0);
 // ============================================================================
 // 3. LUẬT CHƠI
 // ============================================================================
-const DAY_RULES = { lengthMs: 300000, openMin: 8 * 60, closeMin: 20 * 60 }; // 1 ngày = 5 phút thật
+const DAY_RULES = { lengthMs: 120000, openMin: 8 * 60, closeMin: 20 * 60 }; // 1 ngày = 2 phút thật
 
 const QUEUE_RULES = {
   maxLine: 3,
-  patienceMs: 60000,       // chờ quá 60s mà chưa được nhận đơn → bỏ về
-  firstArrivalMs: 700,
-  arriveBaseMs: 40000,
-  arrivePerDayMs: 1500,
-  arriveMinMs: 20000,
-  arriveJitterMs: 6000
+  patienceMs: 42000,       // chờ quá 42s mà chưa được nhận đơn → bỏ về
+  firstArrivalMs: 800,
+  arriveBaseMs: 15000,
+  arrivePerDayMs: 500,
+  arriveMinMs: 10000,
+  arriveJitterMs: 3000
 };
+
+const INGREDIENT_RULES = {
+  batchPortions: 5,       // mỗi lần nấu ra 5 phần
+  teaBatchCost: 5.0,      // chi phí 1 mẻ trà (5 phần) = 5.00 ¥
+  toppingBatchCost: 4.0   // chi phí 1 mẻ topping (5 phần) = 4.00 ¥
+};
+
+const PRAISE_REVIEWS = [
+  { zh: '太好喝了！珍珠很Q弹，甜度也刚刚好，老板手艺真绝！', vi: 'Ngon tuyệt cú mèo! Trân châu dẻo dai vừa miệng, vị ngọt đúng chuẩn, chủ quán pha siêu đỉnh!' },
+  { zh: '出餐速度很快，茶香浓郁，冰块给得正合适，满分好评！', vi: 'Phục vụ siêu nhanh, trà thơm lừng, lượng đá chuẩn chỉnh không chê vào đâu được! 5 sao!' },
+  { zh: '非常满意！这家奶茶店已经成了我的每日必备！', vi: 'Cực kỳ hài lòng! Tiệm trà sữa này chính là quán ruột mỗi ngày của mình!' },
+  { zh: '老板很热情，算账找零又快又准，奶茶清甜爽口！', vi: 'Chủ quán niềm nở, tính tiền chuẩn xác, trà thanh mát uống đã cơn khát!' },
+  { zh: '茶底很正宗，配料给得很足，喝到见底还想再来一杯！', vi: 'Vị trà chuẩn đét, topping đầy đặn, uống hết ly mà vẫn thòm thèm muốn uống thêm!' }
+];
+
+const GOOD_REVIEWS = [
+  { zh: '味道挺不错的，就是排队等得有点久，总体很满意！', vi: 'Trà khá ngon, chỉ là phải xếp hàng chờ hơi lâu chút xíu, nhìn chung rất hài lòng!' },
+  { zh: '茶味很浓，配料很新鲜，下次还会来！', vi: 'Vị trà đậm đà, nguyên liệu tươi mới, lần sau nhất định ghé lại!' },
+  { zh: '杯子包装很好看，甜度合适，性价比高！', vi: 'Ly đóng nắp đẹp, độ ngọt vừa phải, giá cả rất hợp lý!' },
+  { zh: '服务态度很好，奶茶味道纯正！', vi: 'Thái độ phục vụ rất tốt, hương vị trà sữa thanh khiết!' }
+];
+
+const OK_REVIEWS = [
+  { zh: '味道一般般，冰块化了之后茶味有点淡。', vi: 'Uống tạm được, nhưng đá tan ra làm trà hơi nhạt một chút.' },
+  { zh: '速度稍微有点慢，希望人多的时候能再快点。', vi: 'Làm hơi chậm một xíu, hy vọng lúc đông khách quán đẩy nhanh tốc độ hơn.' },
+  { zh: '感觉甜度比我平时喝的偏甜了一点点。', vi: 'Cảm giác độ ngọt hơi đậm hơn so với khẩu vị thường ngày của mình.' }
+];
+
+const BAD_REVIEWS = [
+  { zh: '做错了配方，完全不是我想要的味道，很失望！', vi: 'Pha sai công thức rồi, hoàn toàn không đúng vị tôi dặn, rất thất vọng!' },
+  { zh: '太甜了，跟点了全糖一样，根本喝不下去！', vi: 'Ngọt quá, như cho 100% đường vậy, không uống nổi luôn!' },
+  { zh: '等了大半天，找零还算错了好几次，服务太粗心了！', vi: 'Chờ cả buổi mà thối tiền còn sai tới sai lui, làm ăn quá bất cẩn!' },
+  { zh: '忘加我最喜欢的配料了，太难过了！', vi: 'Quên cho topping ruột của tôi rồi, buồn quá!' }
+];
 
 const MISSION_RULES = { baseTarget: 70, targetPerDay: 15, maxTarget: 300, roundTo: 5, baseMaxLost: 2, minAvgScore: 80, bonusPerStar: 10 };
 
@@ -377,6 +411,11 @@ class BobaShop {
     this.learnedVocab = new Set(['奶茶店', '老板', '奶茶', '珍珠']);
     this.records = [];
     this.savedAt = 0;
+    this.teaStock = {};
+    this.toppingStock = {};
+    this.reviews = [];
+    this.todayReviews = [];
+    this.spoiledStats = { teas: 0, toppings: 0, cost: 0 };
   }
 
   // --------------------------------------------------------------------------
@@ -391,6 +430,7 @@ class BobaShop {
       toppings: [...this.toppingsOwned],
       vocab: [...this.learnedVocab].slice(0, 300),
       records: this.records.slice(-30),
+      reviews: this.reviews.slice(-50),
       relaxed: !!this.relaxedMode,
       updatedAt: Date.now()
     };
@@ -407,6 +447,8 @@ class BobaShop {
     (Array.isArray(s.toppings) ? s.toppings : []).forEach(id => { if (byId(TOPPINGS, id)) this.toppingsOwned.add(id); });
     (Array.isArray(s.vocab) ? s.vocab : []).forEach(w => { if (typeof w === 'string') this.learnedVocab.add(w); });
     this.records = Array.isArray(s.records) ? s.records.filter(r => r && Number.isFinite(Number(r.earnings))) : [];
+    this.reviews = Array.isArray(s.reviews) ? s.reviews : [];
+    this.todayReviews = [];
     this.relaxedMode = !!s.relaxed;
     const relaxed = document.getElementById('setting-relaxed');
     if (relaxed) relaxed.checked = this.relaxedMode;
@@ -476,6 +518,26 @@ class BobaShop {
     on('btn-fullscreen', 'click', () => this.toggleFullscreen());
     on('btn-open-vocab', 'click', () => { this.audio.pop(); this.openVocabModal(); });
     on('btn-open-restock', 'click', () => this.openMarket());
+    on('btn-open-reviews', 'click', () => { this.audio.pop(); this.openReviewsModal(); });
+    on('btn-prep-all', 'click', () => this.brewAll());
+
+    // Nấu trà và topping trực tiếp từ nút "+5 Nấu"
+    document.addEventListener('click', (e) => {
+      const cookTea = e.target.closest('[data-cook-tea]');
+      if (cookTea) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.brewTeaBatch(cookTea.dataset.cookTea);
+        return;
+      }
+      const cookTop = e.target.closest('[data-cook-top]');
+      if (cookTop) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.cookToppingBatch(cookTop.dataset.cookTop);
+        return;
+      }
+    });
 
     document.querySelectorAll('.g-tab').forEach(btn => btn.addEventListener('click', () => this.switchStation(btn.dataset.target)));
     on('btn-goto-make-from-order', 'click', () => this.switchStation('view-make-station'));
@@ -625,7 +687,7 @@ class BobaShop {
     this.setText('mission-day-chn', `第${this.day}天`);
     const sub = this.$('mission-sub');
     if (sub) {
-      sub.innerHTML = `Quán mở cửa <b>08:00 → 20:00</b> (khoảng ${Math.round(DAY_RULES.lengthMs / 60000)} phút). Khách đến liên tục — pha được bao nhiêu ly thì bán bấy nhiêu!<br>Thực đơn hôm nay: <b>${this.teasOwned.size}</b> loại trà · <b>${this.toppingsOwned.size}</b> topping.`;
+      sub.innerHTML = `Quán mở cửa <b>08:00 → 20:00</b> (khoảng ${Math.round(DAY_RULES.lengthMs / 60000)} phút). Khách đến liên tục — hãy chuẩn bị nguyên liệu trước!<br>Thực đơn hôm nay: <b>${this.teasOwned.size}</b> loại trà · <b>${this.toppingsOwned.size}</b> topping.`;
     }
     const goals = this.$('mission-goals');
     if (goals) {
@@ -635,6 +697,7 @@ class BobaShop {
         <div class="mgoal"><span class="mg-icon">⭐</span><span>Điểm phục vụ trung bình từ <b>${m.minAvg}%</b></span><span class="mg-star">⭐</span></div>`;
     }
     this.renderHUDGoal();
+    this.renderPrepModal();
     this.openModal('modal-day-mission');
   }
 
@@ -926,6 +989,11 @@ class BobaShop {
       this.showToast('🥤', 'Chọn cỡ ly (小杯 / 中杯 / 大杯) trước khi rót trà!', 'warn');
       return;
     }
+    if ((this.teaStock[teaId] || 0) <= 0) {
+      this.audio.error();
+      this.showToast('⚠️', `Đã hết trà ${tea.chn}! Bấm "+5 Nấu" để chuẩn bị thêm 5 phần.`, 'warn');
+      return;
+    }
     if (this.cup.spilled) return;
     this.stopPour();
     if (this.cup.tea && this.cup.tea !== teaId && this.cup.fill > 0) this.cup.mixed = true;
@@ -939,6 +1007,11 @@ class BobaShop {
     const step = (POUR_RULES.ratePerSec * POUR_RULES.tickMs) / 1000;
     this.pourTimer = setInterval(() => {
       this.cup.fill = Math.round((this.cup.fill + step) * 10) / 10;
+      if (this.cup.fill >= 20 && !this.cup.teaDeducted) {
+        this.teaStock[teaId] = Math.max(0, (this.teaStock[teaId] || 0) - 1);
+        this.cup.teaDeducted = true;
+        this.renderMakeStation();
+      }
       if (this.cup.fill >= 100) {
         this.cup.fill = 100;
         this.cup.spilled = true;
@@ -947,6 +1020,7 @@ class BobaShop {
         this.showToast('💦', 'Tràn ly rồi! Bấm 倒掉 Đổ đi để làm lại.', 'warn');
       }
       this.renderCup();
+      this.renderChecklist();
     }, POUR_RULES.tickMs);
   }
 
@@ -970,6 +1044,10 @@ class BobaShop {
     clearInterval(this.pourTimer);
     this.pourTimer = null;
     this.cup.fill = Math.min(100, Math.round((this.cup.fill + amount) * 10) / 10);
+    if (this.cup.fill >= 20 && !this.cup.teaDeducted) {
+      this.teaStock[teaId] = Math.max(0, (this.teaStock[teaId] || 0) - 1);
+      this.cup.teaDeducted = true;
+    }
     if (this.cup.fill >= 100) this.cup.spilled = true;
     this.pourTimer = -1;
     this.stopPour();
@@ -1007,8 +1085,14 @@ class BobaShop {
     if (!t) return;
     if (!this.toppingsOwned.has(id)) { this.openMarket('toppings'); return; }
     if (!this.cup.size) { this.audio.error(); this.showToast('🥤', 'Chọn cỡ ly trước đã!', 'warn'); return; }
+    if ((this.toppingStock[id] || 0) <= 0) {
+      this.audio.error();
+      this.showToast('⚠️', `Đã hết topping ${t.chn}! Bấm "+5 Nấu" để chuẩn bị thêm 5 phần.`, 'warn');
+      return;
+    }
     if (this.cup.toppings.length >= 2) { this.audio.error(); this.showToast('🧋', 'Ly đầy topping rồi! Bấm "Bớt topping" nếu thêm nhầm.', 'warn'); return; }
     this.cup.toppings.push(id);
+    this.toppingStock[id] = Math.max(0, (this.toppingStock[id] || 0) - 1);
     this.learn(t.chn);
     this.audio.plop();
     this.renderMakeStation();
@@ -1017,7 +1101,10 @@ class BobaShop {
   undoTopping() {
     if (!this.canMake()) return;
     if (!this.cup.toppings.length) return;
-    this.cup.toppings.pop();
+    const popped = this.cup.toppings.pop();
+    if (popped) {
+      this.toppingStock[popped] = (this.toppingStock[popped] || 0) + 1;
+    }
     this.audio.pop();
     this.renderMakeStation();
   }
@@ -1034,8 +1121,17 @@ class BobaShop {
     this.learn('封口');
     this.audio.seal();
     this.renderMakeStation();
-    this.setAttention('view-change-station');
-    this.showToast('✅', 'Đã đóng nắp! Sang 收银台 tính tiền cho khách.');
+    this.openCheckoutModal();
+    this.showToast('✅', 'Đã đóng nắp! Khách đưa tiền, hãy thối tiền nhé.');
+  }
+
+  openCheckoutModal() {
+    this.renderChange();
+    this.openModal('modal-checkout');
+    if (this.current && this.current.order) {
+      this.learn('一共');
+      this.learn('找零');
+    }
   }
 
   trashCup() {
@@ -1052,7 +1148,7 @@ class BobaShop {
     this.setMakeStep(1);
     this.renderMakeStation();
     this.renderChange();
-    this.showToast('🗑️', 'Đã đổ ly cũ. Làm lại ly mới nhé!');
+    this.showToast('🗑️', 'Đã đổ ly cũ (nguyên liệu trong ly đã bị huỷ). Làm lại ly mới nhé!');
   }
 
   // Chấm "pha đúng món"
@@ -1081,7 +1177,7 @@ class BobaShop {
   addToTray(val) {
     if (!this.isReadyToCharge()) {
       this.audio.error();
-      this.showToast('🧋', 'Chưa pha xong ly! Hoàn tất 调制台 (đóng nắp) trước khi tính tiền.', 'warn');
+      this.showToast('🧋', 'Chưa pha xong ly! Hoàn tất pha chế & đóng nắp trước khi tính tiền.', 'warn');
       return;
     }
     this.changeTray.push(val);
@@ -1116,6 +1212,7 @@ class BobaShop {
       this.showToast('💢', diff > 0 ? `Thối THỪA ${fmt(diff)} ¥ rồi! Đếm lại nhé.` : `Thối THIẾU ${fmt(-diff)} ¥ rồi! Đếm lại nhé.`, 'warn');
       return;
     }
+    this.closeModal('modal-checkout');
     this.completeOrder();
   }
 
@@ -1124,7 +1221,7 @@ class BobaShop {
     const o = c.order;
     const evalCup = this.evaluateCup(o, this.cup);
     const elapsed = this.gameTime - c.takenAt;
-    const target = SCORE_RULES.speedBaseMs; // làm lại ly (đổ đi) tự nhiên tốn thêm thời gian → điểm tốc độ giảm
+    const target = SCORE_RULES.speedBaseMs;
     const scores = {
       pick: evalCup.score,
       speed: elapsed <= target ? 100 : Math.max(40, Math.round(100 - 60 * ((elapsed - target) / (2 * target)))),
@@ -1143,14 +1240,226 @@ class BobaShop {
     if (evalCup.score === 100) this.stats.perfect += 1;
     if (c.changeWrong === 0 && !c.hintUsed) this.stats.changeFirstTry += 1;
 
+    // Sinh đánh giá của khách (Review)
+    const review = this.generateCustomerReview(c, o, evalCup, total, scores, tip);
+    this.reviews.unshift(review);
+    this.todayReviews.unshift(review);
+    this.updateHUDReviews();
+
     this.audio.register();
     this.floatCoins();
-    this.showScorecard(c, scores, total, tip, earned, evalCup.mistakes);
+    this.showScorecard(c, scores, total, tip, earned, evalCup.mistakes, review);
 
     this.current = null;
     this.cup = freshCup();
     this.changeTray = [];
     this.renderAll();
+  }
+
+  generateCustomerReview(customer, order, evalCup, totalScore, scores, tip) {
+    let stars = 5;
+    let commentZh = '';
+    let commentVi = '';
+
+    if (totalScore >= 95) {
+      stars = 5;
+      const q = pickOne(PRAISE_REVIEWS);
+      commentZh = q.zh;
+      commentVi = q.vi;
+    } else if (totalScore >= 80) {
+      stars = 4;
+      const q = pickOne(GOOD_REVIEWS);
+      commentZh = q.zh;
+      commentVi = q.vi;
+    } else if (totalScore >= 65) {
+      stars = 3;
+      const q = pickOne(OK_REVIEWS);
+      commentZh = q.zh;
+      commentVi = q.vi;
+    } else {
+      stars = totalScore >= 45 ? 2 : 1;
+      if (evalCup.mistakes.some(m => m.includes('Loại trà') || m.includes('pha lẫn'))) {
+        commentZh = '做错了茶底，完全不是我想要的味道，很失望！';
+        commentVi = 'Pha sai loại trà rồi, không đúng vị tôi gọi, rất thất vọng!';
+      } else if (evalCup.mistakes.some(m => m.includes('Độ ngọt') || m.includes('đường'))) {
+        commentZh = '甜度完全不对，我说了少糖结果很甜，喝不下去！';
+        commentVi = 'Độ ngọt sai rồi, tôi dặn ít đường mà quá ngọt, không uống nổi!';
+      } else if (evalCup.mistakes.some(m => m.includes('Topping') || m.includes('topping'))) {
+        commentZh = '忘加我选的配料了，做奶茶太粗心了！';
+        commentVi = 'Quên cho topping tôi gọi rồi, làm ăn bất cẩn quá!';
+      } else if (scores.change < 70) {
+        commentZh = '找零钱算错了好几次，老板算账不行啊！';
+        commentVi = 'Thối tiền sai mấy lần, chủ quán tính nhẩm kém quá!';
+      } else if (scores.speed < 60) {
+        commentZh = '等得花儿都谢了，出餐速度实在太慢了！';
+        commentVi = 'Chờ dài cả cổ, quán làm nước quá chậm!';
+      } else {
+        const q = pickOne(BAD_REVIEWS);
+        commentZh = q.zh;
+        commentVi = q.vi;
+      }
+    }
+
+    const now = new Date();
+    const dateStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    return {
+      id: Date.now() + Math.random(),
+      customerNameChn: customer.profile.nameChn,
+      customerNameVi: customer.profile.nameVi,
+      customerImg: customer.profile.img,
+      orderText: `${order.size.chn} ${order.tea.chn}${order.topping ? ' + ' + order.topping.chn : ''}`,
+      stars,
+      score: totalScore,
+      commentZh,
+      commentVi,
+      day: this.day,
+      time: dateStr
+    };
+  }
+
+  brewTeaBatch(teaId) {
+    const tea = byId(TEAS, teaId);
+    if (!tea) return;
+    const cost = INGREDIENT_RULES.teaBatchCost;
+    if (this.money < cost - 1e-9) {
+      this.audio.error();
+      this.showToast('🪙', `Không đủ tiền nấu trà ${tea.chn}! Cần ${fmt(cost)} ¥.`, 'warn');
+      return;
+    }
+    this.money = Math.round((this.money - cost) * 100) / 100;
+    this.teaStock[teaId] = (this.teaStock[teaId] || 0) + INGREDIENT_RULES.batchPortions;
+    this.audio.pop();
+    this.showToast('🍵', `Đã nấu xong 5 phần ${tea.chn} (${tea.vi})! Còn: ${this.teaStock[teaId]} phần.`);
+    this.updateHUD();
+    this.renderMakeStation();
+    this.renderPrepModal();
+  }
+
+  cookToppingBatch(topId) {
+    const top = byId(TOPPINGS, topId);
+    if (!top) return;
+    const cost = INGREDIENT_RULES.toppingBatchCost;
+    if (this.money < cost - 1e-9) {
+      this.audio.error();
+      this.showToast('🪙', `Không đủ tiền nấu topping ${top.chn}! Cần ${fmt(cost)} ¥.`, 'warn');
+      return;
+    }
+    this.money = Math.round((this.money - cost) * 100) / 100;
+    this.toppingStock[topId] = (this.toppingStock[topId] || 0) + INGREDIENT_RULES.batchPortions;
+    this.audio.plop();
+    this.showToast('🧋', `Đã nấu xong 5 phần ${top.chn} (${top.vi})! Còn: ${this.toppingStock[topId]} phần.`);
+    this.updateHUD();
+    this.renderMakeStation();
+    this.renderPrepModal();
+  }
+
+  brewAll() {
+    const teas = TEAS.filter(t => this.teasOwned.has(t.id));
+    const tops = TOPPINGS.filter(t => this.toppingsOwned.has(t.id));
+    let brewedCount = 0;
+    for (const t of teas) {
+      if (this.money >= INGREDIENT_RULES.teaBatchCost) {
+        this.money = Math.round((this.money - INGREDIENT_RULES.teaBatchCost) * 100) / 100;
+        this.teaStock[t.id] = (this.teaStock[t.id] || 0) + INGREDIENT_RULES.batchPortions;
+        brewedCount += 1;
+      }
+    }
+    for (const top of tops) {
+      if (this.money >= INGREDIENT_RULES.toppingBatchCost) {
+        this.money = Math.round((this.money - INGREDIENT_RULES.toppingBatchCost) * 100) / 100;
+        this.toppingStock[top.id] = (this.toppingStock[top.id] || 0) + INGREDIENT_RULES.batchPortions;
+        brewedCount += 1;
+      }
+    }
+    if (brewedCount > 0) {
+      this.audio.register();
+      this.showToast('✨', `Đã nấu nhanh ${brewedCount} mẻ nguyên liệu (+5 mỗi loại)!`);
+      this.updateHUD();
+      this.renderMakeStation();
+      this.renderPrepModal();
+    } else {
+      this.audio.error();
+      this.showToast('🪙', 'Không đủ tiền để nấu nhanh nguyên liệu!', 'warn');
+    }
+  }
+
+  renderPrepModal() {
+    const teaBox = this.$('prep-tea-grid');
+    const topBox = this.$('prep-topping-grid');
+    if (teaBox) {
+      const teas = TEAS.filter(t => this.teasOwned.has(t.id));
+      teaBox.innerHTML = teas.map(t => {
+        const stock = this.teaStock[t.id] || 0;
+        return `
+          <div class="prep-item">
+            <div class="prep-item-info">
+              <b class="zh">${t.chn}</b>
+              <small>${escapeHtml(t.vi)} · Còn: <b>${stock}</b></small>
+            </div>
+            <button type="button" class="btn-cook-batch" data-cook-tea="${t.id}"><i class="fa-solid fa-fire"></i> +5 Nấu (5¥)</button>
+          </div>`;
+      }).join('');
+    }
+    if (topBox) {
+      const tops = TOPPINGS.filter(t => this.toppingsOwned.has(t.id));
+      topBox.innerHTML = tops.map(t => {
+        const stock = this.toppingStock[t.id] || 0;
+        return `
+          <div class="prep-item">
+            <div class="prep-item-info">
+              <b class="zh">${t.icon} ${t.chn}</b>
+              <small>${escapeHtml(t.vi)} · Còn: <b>${stock}</b></small>
+            </div>
+            <button type="button" class="btn-cook-batch" data-cook-top="${t.id}"><i class="fa-solid fa-fire"></i> +5 Nấu (4¥)</button>
+          </div>`;
+      }).join('');
+    }
+  }
+
+  updateHUDReviews() {
+    const box = this.$('hud-reviews-val');
+    if (!box) return;
+    if (!this.reviews.length) {
+      box.textContent = '5.0★ (0)';
+      return;
+    }
+    const avg = this.reviews.reduce((s, r) => s + r.stars, 0) / this.reviews.length;
+    box.textContent = `${avg.toFixed(1)}★ (${this.reviews.length})`;
+  }
+
+  openReviewsModal() {
+    const avgEl = this.$('rb-avg-score');
+    const starsEl = this.$('rb-stars-icon');
+    const totalEl = this.$('rb-total-count');
+    const listEl = this.$('rb-reviews-list');
+    if (!listEl) return;
+
+    const count = this.reviews.length;
+    const avg = count ? (this.reviews.reduce((s, r) => s + r.stars, 0) / count) : 5.0;
+    const roundedStars = Math.round(avg);
+
+    if (avgEl) avgEl.textContent = avg.toFixed(1);
+    if (starsEl) starsEl.textContent = '⭐'.repeat(roundedStars) + '☆'.repeat(5 - roundedStars);
+    if (totalEl) totalEl.textContent = `${count} đánh giá của khách`;
+
+    if (!count) {
+      listEl.innerHTML = '<div class="rank-empty">🧋 Chưa có đánh giá nào.<br>Phục vụ khách để nhận những đánh giá đầu tiên!</div>';
+    } else {
+      listEl.innerHTML = this.reviews.map(r => `
+        <div class="rb-item">
+          <img src="${ASSET(r.customerImg)}" alt="">
+          <div class="rb-item-main">
+            <div class="rb-item-head">
+              <b>${escapeHtml(r.customerNameChn)} (${escapeHtml(r.customerNameVi)}) <small style="color:#a08670;font-weight:normal">· Ngày ${r.day}</small></b>
+              <span class="rb-item-stars">${'⭐'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</span>
+            </div>
+            <div style="font-size:0.72rem;color:#8a6d57">Đơn: ${escapeHtml(r.orderText)}</div>
+            <div class="rb-item-vi">"${escapeHtml(r.commentVi)}"</div>
+            <div class="rb-item-zh zh">“${escapeHtml(r.commentZh)}”</div>
+          </div>
+        </div>`).join('');
+    }
+    this.openModal('modal-reviews');
   }
 
   floatCoins() {
@@ -1177,7 +1486,7 @@ class BobaShop {
     setTimeout(() => { to.classList.remove('bump'); void to.offsetWidth; to.classList.add('bump'); }, 700);
   }
 
-  showScorecard(c, scores, total, tip, earned, mistakes) {
+  showScorecard(c, scores, total, tip, earned, mistakes, review = null) {
     const set = (bar, val, v) => {
       const b = this.$(bar);
       if (b) { b.style.width = '0%'; setTimeout(() => { b.style.width = `${v}%`; }, 60); }
@@ -1197,16 +1506,27 @@ class BobaShop {
     const mk = this.$('score-mistakes');
     if (mk) mk.innerHTML = mistakes.length ? `<b>Cần sửa:</b> ${mistakes.join(' · ')}` : '✨ Pha chuẩn 100% đúng món!';
     if (mk) mk.classList.toggle('perfect', !mistakes.length);
-    const img = this.$('score-reaction-img');
-    if (img) img.src = ASSET(c.profile.img);
-    let zh, vi;
-    if (total >= 90) { zh = '太好喝了！谢谢老板！'; vi = '(Ngon quá! Cảm ơn chủ quán!)'; }
-    else if (total >= 70) { zh = '还不错，下次再来！'; vi = '(Cũng ngon, lần sau tôi lại đến!)'; }
-    else { zh = '嗯……跟我点的不太一样。'; vi = '(Ừm… không giống món tôi gọi lắm.)'; }
-    this.setText('score-reaction-chn', `“${zh}”`);
-    this.setText('score-reaction-vi', vi);
+
+    const rev = review || (this.todayReviews && this.todayReviews[0]);
+    if (rev) {
+      this.setText('score-customer-name', `${rev.customerNameChn} (${rev.customerNameVi})`);
+      this.setText('scr-stars', '⭐'.repeat(rev.stars) + '☆'.repeat(5 - rev.stars));
+      this.setText('score-reaction-chn', `“${rev.commentZh}”`);
+      this.setText('score-reaction-vi', `"${rev.commentVi}"`);
+      const img = this.$('score-reaction-img');
+      if (img) img.src = ASSET(rev.customerImg);
+      setTimeout(() => this.audio.speak(rev.commentZh), 500);
+    } else {
+      const img = this.$('score-reaction-img');
+      if (img) img.src = ASSET(c.profile.img);
+      let zh = total >= 90 ? '太好喝了！谢谢老板！' : total >= 70 ? '还不错，下次再来！' : '嗯……跟我点的不太一样。';
+      let vi = total >= 90 ? '(Ngon quá! Cảm ơn chủ quán!)' : total >= 70 ? '(Cũng ngon, lần sau tôi lại đến!)' : '(Ừm… không giống món tôi gọi lắm.)';
+      this.setText('score-reaction-chn', `“${zh}”`);
+      this.setText('score-reaction-vi', vi);
+      setTimeout(() => this.audio.speak(zh), 500);
+    }
+
     this.openModal('modal-score');
-    setTimeout(() => this.audio.speak(zh), 500);
   }
 
   closeScorecard() {
@@ -1262,6 +1582,43 @@ class BobaShop {
         ${goals.map(g => `<div class="mr-row ${g.done ? 'done' : 'fail'}"><span>${g.done ? '✅' : '❌'}</span><span>${g.icon} ${g.text}</span><span class="mr-val">${g.value}</span></div>`).join('')}
         ${bonus > 0 ? `<div class="mr-bonus">🎁 Thưởng nhiệm vụ: +${bonus} ¥</div>` : ''}`;
     }
+
+    // Báo cáo nguyên liệu qua đêm đã hủy (Overnight Spoilage)
+    const spoiledTeas = Object.values(this.teaStock).reduce((sum, v) => sum + (v || 0), 0);
+    const spoiledToppings = Object.values(this.toppingStock).reduce((sum, v) => sum + (v || 0), 0);
+    const spoiledCost = Math.round((spoiledTeas * 1.0 + spoiledToppings * 0.8) * 100) / 100;
+    this.spoiledStats = { teas: spoiledTeas, toppings: spoiledToppings, cost: spoiledCost };
+    this.teaStock = {};
+    this.toppingStock = {};
+
+    const spoilBox = this.$('summary-spoilage-details');
+    if (spoilBox) {
+      if (spoiledTeas > 0 || spoiledToppings > 0) {
+        spoilBox.innerHTML = `⚠️ Đã huỷ bỏ <b>${spoiledTeas}</b> phần nước trà và <b>${spoiledToppings}</b> phần topping thừa qua đêm (thiệt hại ước tính: <b>${fmt(spoiledCost)} ¥</b>).<br><small style="color:#881337">💡 Ly, đá và đường không bị hỏng, vẫn được giữ lại nguyên vẹn!</small>`;
+      } else {
+        spoilBox.innerHTML = `✨ Quán dùng hết nguyên liệu đã chuẩn bị trong ngày, không bị lãng phí phần nào!`;
+      }
+    }
+
+    // Nhận xét của khách hàng hôm nay
+    const todayList = this.$('summary-today-reviews-list');
+    const starsHead = this.$('summary-reviews-stars');
+    if (todayList) {
+      if (!this.todayReviews.length) {
+        todayList.innerHTML = '<div style="font-size:0.75rem;color:#6b7280;text-align:center;padding:6px">Hôm nay chưa có đánh giá nào.</div>';
+        if (starsHead) starsHead.textContent = '—';
+      } else {
+        const todayAvg = this.todayReviews.reduce((sum, r) => sum + r.stars, 0) / this.todayReviews.length;
+        if (starsHead) starsHead.textContent = `${todayAvg.toFixed(1)}★ (${this.todayReviews.length} khách)`;
+        todayList.innerHTML = this.todayReviews.slice(0, 6).map(r => `
+          <div class="summary-rev-row">
+            <img src="${ASSET(r.customerImg)}" alt="">
+            <span>${'⭐'.repeat(r.stars)}</span>
+            <div class="summary-rev-text"><b>${escapeHtml(r.customerNameChn)}:</b> "${escapeHtml(r.commentVi)}"</div>
+          </div>`).join('');
+      }
+    }
+
     const now = new Date();
     const record = {
       day: this.day, earnings: Math.round(s.revenue * 100) / 100, served: s.served, total: Math.max(1, s.spawned),
@@ -1294,6 +1651,7 @@ class BobaShop {
     this.current = null;
     this.cup = freshCup();
     this.changeTray = [];
+    this.todayReviews = [];
     this.stats = this.freshStats();
     this.saveProgress();
     this.renderAll();
@@ -1389,6 +1747,7 @@ class BobaShop {
     this.setText('stats-lost-val', String(this.stats.lost));
     this.updateClockUI();
     this.renderHUDGoal();
+    this.updateHUDReviews();
   }
 
   updateClockUI() {
@@ -1532,29 +1891,96 @@ class BobaShop {
 
   // ---------------- Trạm pha chế
   renderTicket() {
+    this.renderChecklist();
+  }
+
+  renderChecklist() {
     const c = this.current;
-    const list = this.$('mt-list');
-    if (!list) return;
+    const cup = this.cup;
     this.setText('mt-id', c ? `#B-${c.id}` : '');
-    const cust = this.$('mt-cust');
+    const items = ['cl-size', 'cl-tea', 'cl-sugar', 'cl-ice', 'cl-topping'];
     if (!c || !c.takenAt || !c.order) {
-      if (cust) cust.innerHTML = '';
-      list.innerHTML = '<li class="mt-none">Chưa có đơn.<br>Về <b class="zh">点单台</b> nhận đơn của khách.</li>';
+      items.forEach(id => {
+        const el = this.$(id);
+        if (el) {
+          el.classList.remove('done', 'wrong');
+          const val = el.querySelector('.cl-val');
+          if (val) val.textContent = '—';
+        }
+      });
+      this.$('btn-seal-lid')?.classList.remove('ready-pulse');
       return;
     }
-    if (cust) cust.innerHTML = `<img src="${ASSET(c.profile.img)}" alt=""><span class="zh">${c.profile.nameChn}</span>`;
     const o = c.order;
-    const cup = this.cup;
-    const v = (t) => (this.showVietnamese ? `<small>${escapeHtml(t)}</small>` : '');
-    const now = (val) => `<span class="mt-now ${val ? 'set' : ''}">${val || '—'}</span>`;
-    const top = cup.toppings.map(id => byId(TOPPINGS, id).chn).join(' + ');
-    list.innerHTML = `
-      <li><span class="mt-k">🥤 Ly</span><span class="mt-v"><b class="zh">${o.size.chn}</b>${v(o.size.vi)}</span>${now(cup.size ? byId(SIZES, cup.size).chn : '')}</li>
-      <li><span class="mt-k">🍵 Trà</span><span class="mt-v"><b class="zh">${o.tea.chn}</b>${v(o.tea.vi)}</span>${now(cup.mixed ? 'lẫn' : cup.tea ? `${byId(TEAS, cup.tea).chn} ${Math.round(cup.fill)}%` : '')}</li>
-      <li><span class="mt-k">🍬 Đường</span><span class="mt-v"><b class="zh">${o.sugar.chn}</b>${v(o.sugar.vi)}</span>${now(cup.sugar ? byId(SUGARS, cup.sugar).chn : '')}</li>
-      <li><span class="mt-k">🧊 Đá</span><span class="mt-v"><b class="zh">${o.ice.chn}</b>${v(o.ice.vi)}</span>${now(cup.ice ? byId(ICES, cup.ice).chn : '')}</li>
-      <li><span class="mt-k">🧋 Topping</span><span class="mt-v"><b class="zh">${o.topping ? o.topping.chn : '不加料'}</b>${v(o.topping ? o.topping.vi : 'không topping')}</span>${now(top)}</li>
-      <li><span class="mt-k">🔒 Nắp</span><span class="mt-v"><b class="zh">封口</b>${v('đóng nắp')}</span>${now(cup.lid ? '✓' : '')}</li>`;
+
+    // 1. Cỡ ly (Size)
+    const elSize = this.$('cl-size');
+    if (elSize) {
+      const match = cup.size === o.size.id;
+      elSize.classList.toggle('done', match);
+      elSize.classList.toggle('wrong', !!cup.size && !match);
+      const val = elSize.querySelector('.cl-val');
+      if (val) val.innerHTML = cup.size ? `<b>${byId(SIZES, cup.size).chn}</b>` : `cần: ${o.size.chn}`;
+    }
+
+    // 2. Loại trà (Tea)
+    const elTea = this.$('cl-tea');
+    if (elTea) {
+      const match = cup.tea === o.tea.id && !cup.mixed && cup.fill >= 70 && cup.fill <= 90;
+      elTea.classList.toggle('done', match);
+      elTea.classList.toggle('wrong', cup.fill > 0 && (!match || cup.mixed));
+      const val = elTea.querySelector('.cl-val');
+      if (val) val.innerHTML = cup.tea ? `<b>${byId(TEAS, cup.tea).chn} ${Math.round(cup.fill)}%</b>` : `cần: ${o.tea.chn}`;
+    }
+
+    // 3. Đường (Sugar)
+    const elSugar = this.$('cl-sugar');
+    if (elSugar) {
+      const match = cup.sugar === o.sugar.id;
+      elSugar.classList.toggle('done', match);
+      elSugar.classList.toggle('wrong', !!cup.sugar && !match);
+      const val = elSugar.querySelector('.cl-val');
+      if (val) val.innerHTML = cup.sugar ? `<b>${byId(SUGARS, cup.sugar).chn}</b>` : `cần: ${o.sugar.chn}`;
+    }
+
+    // 4. Lượng đá (Ice)
+    const elIce = this.$('cl-ice');
+    if (elIce) {
+      const match = cup.ice === o.ice.id;
+      elIce.classList.toggle('done', match);
+      elIce.classList.toggle('wrong', !!cup.ice && !match);
+      const val = elIce.querySelector('.cl-val');
+      if (val) val.innerHTML = cup.ice ? `<b>${byId(ICES, cup.ice).chn}</b>` : `cần: ${o.ice.chn}`;
+    }
+
+    // 5. Topping
+    const elTop = this.$('cl-topping');
+    if (elTop) {
+      const neededTop = o.topping ? o.topping.id : null;
+      let match = false;
+      if (!neededTop) {
+        match = cup.toppings.length === 0;
+      } else {
+        match = cup.toppings.length === 1 && cup.toppings[0] === neededTop;
+      }
+      elTop.classList.toggle('done', match);
+      elTop.classList.toggle('wrong', cup.toppings.length > 0 && !match);
+      const val = elTop.querySelector('.cl-val');
+      if (val) {
+        if (cup.toppings.length) {
+          val.innerHTML = cup.toppings.map(id => `<b>${byId(TOPPINGS, id).chn}</b>`).join('+');
+        } else {
+          val.textContent = neededTop ? `cần: ${o.topping.chn}` : 'không topping (✓)';
+        }
+      }
+    }
+
+    // Nút đóng nắp sáng nhịp khi đủ điều kiện
+    const btnSeal = this.$('btn-seal-lid');
+    if (btnSeal && !cup.lid) {
+      const allReady = cup.size && cup.tea && cup.sugar && cup.ice && cup.fill >= 60;
+      btnSeal.classList.toggle('ready-pulse', allReady);
+    }
   }
 
   renderCup() {
@@ -1613,18 +2039,23 @@ class BobaShop {
     if (teaGrid && !this.pourTimer) {
       teaGrid.innerHTML = TEAS.map(t => {
         const own = this.teasOwned.has(t.id);
-        return `<button type="button" class="tea-tap ${own ? '' : 'locked'} ${cup.tea === t.id ? 'on' : ''}" data-tea="${t.id}" ${locked ? 'disabled' : ''} style="--tea:${t.color}">
-          <span class="tap-nozzle" aria-hidden="true"></span>
-          <span class="tap-drop" aria-hidden="true"></span>
-          <b class="zh">${t.chn}</b>
-          <small>${own ? escapeHtml(t.pin) : `<i class="fa-solid fa-lock"></i> ${fmt(t.unlockCost)}¥`}</small>
-        </button>`;
+        const stock = this.teaStock[t.id] || 0;
+        const out = own && stock <= 0;
+        return `<div class="tea-tap-item">
+          <button type="button" class="tea-tap ${own ? '' : 'locked'} ${out ? 'out-of-stock' : ''} ${cup.tea === t.id ? 'on' : ''}" data-tea="${t.id}" ${locked || out ? 'disabled' : ''} style="--tea:${t.color}">
+            <span class="tap-nozzle" aria-hidden="true"></span>
+            <span class="tap-drop" aria-hidden="true"></span>
+            <b class="zh">${t.chn}</b>
+            <small>${own ? escapeHtml(t.pin) : `<i class="fa-solid fa-lock"></i> ${fmt(t.unlockCost)}¥`}</small>
+            ${own ? `<span class="batch-stock ${out ? 'empty' : ''}">${out ? 'Hết' : `Còn ${stock}`}</span>` : ''}
+          </button>
+          ${own ? `<button type="button" class="btn-cook-batch" data-cook-tea="${t.id}" title="Nấu thêm 5 phần (5¥)">+5 Nấu (5¥)</button>` : ''}
+        </div>`;
       }).join('');
       teaGrid.querySelectorAll('[data-tea]').forEach(b => {
         b.addEventListener('pointerdown', (e) => { e.preventDefault(); this.startPour(b.dataset.tea); });
         b.addEventListener('pointerleave', () => this.stopPour());
         b.addEventListener('contextmenu', (e) => e.preventDefault());
-        // Bàn phím (Enter/Space): mỗi lần nhấn rót 10%
         b.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); this.pourAmount(b.dataset.tea, 10); } });
       });
     }
@@ -1651,10 +2082,19 @@ class BobaShop {
     if (topGrid) {
       topGrid.innerHTML = TOPPINGS.map(t => {
         const own = this.toppingsOwned.has(t.id);
+        const stock = this.toppingStock[t.id] || 0;
+        const out = own && stock <= 0;
         const n = cup.toppings.filter(x => x === t.id).length;
-        return `<button type="button" class="opt-btn top-btn ${own ? '' : 'locked'} ${n ? 'on' : ''}" data-top="${t.id}" ${locked ? 'disabled' : ''}>
-          <span class="ob-icon">${t.icon}</span><b class="zh">${t.chn}</b><small>${own ? escapeHtml(t.pin) : `<i class="fa-solid fa-lock"></i> ${fmt(t.unlockCost)}¥`}</small>${n ? `<em class="cnt">×${n}</em>` : ''}
-        </button>`;
+        return `<div class="topping-bin-item">
+          <button type="button" class="opt-btn top-btn ${own ? '' : 'locked'} ${out ? 'out-of-stock' : ''} ${n ? 'on' : ''}" data-top="${t.id}" ${locked || out ? 'disabled' : ''}>
+            <span class="ob-icon">${t.icon}</span>
+            <b class="zh">${t.chn}</b>
+            <small>${own ? escapeHtml(t.pin) : `<i class="fa-solid fa-lock"></i> ${fmt(t.unlockCost)}¥`}</small>
+            ${own ? `<span class="batch-stock ${out ? 'empty' : ''}">${out ? 'Hết' : `Còn ${stock}`}</span>` : ''}
+            ${n ? `<em class="cnt">×${n}</em>` : ''}
+          </button>
+          ${own ? `<button type="button" class="btn-cook-batch" data-cook-top="${t.id}" title="Nấu thêm 5 phần (4¥)">+5 Nấu (4¥)</button>` : ''}
+        </div>`;
       }).join('');
       topGrid.querySelectorAll('[data-top]').forEach(b => b.addEventListener('click', () => this.addTopping(b.dataset.top)));
     }
@@ -1677,14 +2117,14 @@ class BobaShop {
     this.setMakeStep(this.makeStep);
     this.$('view-make-station')?.classList.toggle('no-order', !has);
 
-    const hint = this.$('make-hint');
+    const hint = this.$('order-footer-hint');
     if (hint) {
-      if (!has) hint.innerHTML = '💡 Chưa có đơn. Về <b>点单台</b> nhận đơn trước.';
-      else if (locked) hint.innerHTML = '✅ Ly đã đóng nắp! Bấm <b>Sang tính tiền</b>.';
-      else if (!cup.size) hint.innerHTML = '💡 Bước 1: chọn <b>cỡ ly</b> theo phiếu (小杯 / 中杯 / 大杯).';
-      else if (!cup.fill) hint.innerHTML = '💡 <b>Nhấn giữ</b> vòi trà đúng loại, thả tay khi tới <b>vạch 80%</b>.';
-      else if (!cup.sugar || !cup.ice) hint.innerHTML = '💡 Bước 2: chọn <b>độ ngọt</b> và <b>lượng đá</b> theo phiếu.';
-      else hint.innerHTML = '💡 Bước 3: thêm <b>topping</b> (nếu khách gọi) rồi <b>đóng nắp</b>.';
+      if (!has) hint.innerHTML = '💡 Nghe khách gọi món rồi bấm <b>Nhận đơn</b>.';
+      else if (locked) hint.innerHTML = '✅ Ly đã đóng nắp! Khách đưa tiền trên quầy, hãy thối tiền.';
+      else if (!cup.size) hint.innerHTML = '💡 Bước 1: chọn <b>cỡ ly</b> (小杯 / 中杯 / 大杯) ở dải giữa.';
+      else if (!cup.fill) hint.innerHTML = '💡 <b>Nhấn giữ</b> vòi trà tương ứng, thả tay khi tới <b>vạch 80%</b>.';
+      else if (!cup.sugar || !cup.ice) hint.innerHTML = '💡 Bước 2: chọn <b>độ ngọt</b> và <b>lượng đá</b> ở dải giữa.';
+      else hint.innerHTML = '💡 Bước 3: thêm <b>topping</b> (nếu có) rồi bấm <b>Đóng nắp</b> để tính tiền.';
     }
   }
 
