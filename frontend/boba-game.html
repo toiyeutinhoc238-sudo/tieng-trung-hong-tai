@@ -10,10 +10,15 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous">
-  <!-- Google Fonts: Be Vietnam Pro (Đầy đủ dấu Tiếng Việt sắc nét) + LXGW WenKai Lite (Chuẩn Khải Thể / 楷体) -->
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Google Fonts: Be Vietnam Pro (Đầy đủ dấu Tiếng Việt sắc nét, chuẩn 100%) -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=LXGW+WenKai+Lite:wght@400;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet">
+  <!-- Kaiti Chinese Handwriting Font (Chuẩn Khải Thể / 楷体) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
   <link rel="stylesheet" href="./src/boba_game.css">
 </head>
@@ -59,7 +64,7 @@
         <!-- Book Pill (Sổ từ vựng trà sữa) -->
         <button type="button" class="hud-action-pill" id="btn-open-cookbook" title="Mở Sổ tay Từ Vựng Trà Sữa">
           <span class="icon">📖</span>
-          <span class="text">奶茶词典 (Sổ Từ)</span>
+          <span class="text"><span class="kaiti-font">奶茶词典</span> <span class="vi-sub">(Sổ Từ)</span></span>
           <span class="badge" id="hud-book-val">3/15</span>
         </button>
       </div>
@@ -152,6 +157,13 @@
            MASTER COUNTER VIEW (QUẦY TOÀN CẢNH · THEO ĐÚNG TRANH MẪU GỐC)
            ================================================================== -->
       <section class="station-view station-master-view active" id="view-master-counter">
+        <!-- 1. Ambient Warm Lighting Glow & Street Window Passersby (Sinh Động & Lung Linh) -->
+        <div class="master-ambient-glow" aria-hidden="true"></div>
+        <div class="master-window-passersby" aria-hidden="true">
+          <div class="window-walker walker-anime-1">👧 🧋</div>
+          <div class="window-walker walker-anime-2">🐶 👦</div>
+        </div>
+
         <!-- 2. Left Wooden Signboard (今日营收) -->
         <div class="master-board-left">
           <div class="m-board-title kaiti-font">今日营收</div>

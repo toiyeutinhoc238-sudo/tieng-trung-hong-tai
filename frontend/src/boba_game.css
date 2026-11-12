@@ -50,7 +50,29 @@ body.boba-game-body {
   justify-content: center;
 }
 
-/* FONT SEGREGATION */
+/* FONT SEGREGATION: CHUẨN 100% TIẾNG VIỆT & CHỮ HÁN KHẢI THỂ */
+*,
+body,
+button,
+input,
+select,
+textarea,
+div,
+span,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+em,
+b,
+i {
+  font-family: var(--boba-font-main);
+}
+
 .kaiti-font,
 .chinese-text,
 [lang="zh"] {
@@ -58,15 +80,39 @@ body.boba-game-body {
   letter-spacing: 0.5px;
 }
 
+/* KHẮC PHỤC TRIỆT ĐỂ LỖI DẤU TIẾNG VIỆT & PINYIN (KHÔNG BỊ LỖI CHỮ TO NHỎ HOẶC SAI DẤU) */
 .vietnamese-text,
+.bubble-vi-order,
+.bubble-pin-order,
 .speech-vi,
 .speech-pin,
+.m-crole,
+.c-role,
+.item-sub-vi,
 .tab-title-vi,
 .stage-desc,
 .c-label,
-.c-role,
-.ticket-order-id {
+.ticket-order-id,
+.reaction-vi,
+.btn-text,
+.hud-mascot-sub,
+.summary-text,
+.wb-title,
+.z-label,
+.z-vi,
+.z-pin,
+.vi-sub,
+.box-label,
+.m-num,
+.c-percent,
+.toast-msg,
+.clipboard-stat-row span,
+.hud-stat-val,
+.hud-level-tag,
+.hud-level-progress-text {
   font-family: var(--boba-font-main) !important;
+  font-style: normal !important;
+  letter-spacing: 0px !important;
 }
 
 /* 16:9 GAME CONTAINER */
@@ -2566,19 +2612,89 @@ body:not(.mode-master) .boba-bottom-station-bar {
   color: #ffffff;
 }
 
-/* 2. Left Wooden Signboard (今日营收) */
+/* ==========================================================================
+   MASTER COUNTER VIEW (QUẦY TOÀN CẢNH · GLASSMORPHISM & SINH ĐỘNG)
+   ========================================================================== */
+
+/* 1. Ambient Warm Lighting Glow & Street Window Walkers */
+.master-ambient-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: radial-gradient(circle at 50% 12%, rgba(254, 240, 138, 0.35) 0%, rgba(251, 146, 60, 0.15) 45%, transparent 75%);
+  pointer-events: none;
+  z-index: 4;
+  animation: warmPendantPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes warmPendantPulse {
+  0% { opacity: 0.75; }
+  100% { opacity: 1; }
+}
+
+.master-window-passersby {
+  position: absolute;
+  top: 18%;
+  right: 17%;
+  width: 160px;
+  height: 55px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.9;
+}
+
+.window-walker {
+  position: absolute;
+  bottom: 2px;
+  font-size: 1.6rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.walker-anime-1 {
+  animation: windowWalkAcross 16s linear infinite;
+}
+
+.walker-anime-2 {
+  animation: windowWalkAcrossRev 22s linear infinite 6s;
+}
+
+@keyframes windowWalkAcross {
+  0% { transform: translateX(-40px); opacity: 0; }
+  10% { opacity: 0.9; }
+  90% { opacity: 0.9; }
+  100% { transform: translateX(180px); opacity: 0; }
+}
+
+@keyframes windowWalkAcrossRev {
+  0% { transform: translateX(180px) scaleX(-1); opacity: 0; }
+  10% { opacity: 0.9; }
+  90% { opacity: 0.9; }
+  100% { transform: translateX(-40px) scaleX(-1); opacity: 0; }
+}
+
+/* 2. Left Translucent Status Board (今日营收) */
 .master-board-left {
   position: absolute;
-  top: 10px;
+  top: 12px;
   left: 14px;
-  width: 135px;
-  background: #fff8ef;
-  border: 2.5px solid #d97706;
-  border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+  width: 138px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(120, 53, 15, 0.16), inset 0 1px 2px rgba(255, 255, 255, 0.9);
   z-index: 8;
   padding: 8px 10px;
   text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.master-board-left:hover {
+  transform: translateY(-2px);
 }
 
 .master-board-left::before {
@@ -2589,16 +2705,16 @@ body:not(.mode-master) .boba-bottom-station-bar {
   transform: translateX(-50%);
   width: 32px;
   height: 8px;
-  background: #78350f;
+  background: linear-gradient(90deg, #b45309, #d97706);
   border-radius: 4px;
 }
 
 .m-board-title {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 900;
   color: #78350f;
   border-bottom: 1.5px dashed #fed7aa;
-  padding-bottom: 2px;
+  padding-bottom: 3px;
 }
 
 .m-board-coin {
@@ -2606,6 +2722,7 @@ body:not(.mode-master) .boba-bottom-station-bar {
   font-weight: 900;
   color: #b45309;
   margin: 4px 0;
+  font-family: var(--boba-font-main) !important;
 }
 
 .m-board-row {
@@ -2621,31 +2738,40 @@ body:not(.mode-master) .boba-bottom-station-bar {
 .m-board-row .m-num {
   font-weight: 900;
   color: #ea580c;
+  font-family: var(--boba-font-main) !important;
 }
 
-/* 3. Right Blackboard (奶茶店) */
+/* 3. Right Translucent Blackboard (奶茶店) */
 .master-board-right {
   position: absolute;
-  top: 10px;
+  top: 12px;
   right: 14px;
   width: 120px;
-  height: 125px;
-  background: #1e293b;
-  border: 3.5px solid #b45309;
-  border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  height: 120px;
+  background: rgba(30, 41, 59, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(254, 215, 170, 0.45);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   z-index: 8;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4px;
+  transition: transform 0.2s ease;
+}
+
+.master-board-right:hover {
+  transform: translateY(-2px);
 }
 
 .m-blackboard-title {
   color: #fef08a;
   font-size: 1.25rem;
   font-weight: 900;
+  letter-spacing: 1px;
 }
 
 .m-blackboard-doodle {
@@ -2674,16 +2800,23 @@ body:not(.mode-master) .boba-bottom-station-bar {
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
+  animation: customerBreathing 3.6s ease-in-out infinite;
+}
+
+@keyframes customerBreathing {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
 }
 
 .master-avatar-frame {
   width: 115px;
   height: 135px;
-  border-radius: 18px;
-  border: 3px solid #ffffff;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
   background: #fef3c7;
   overflow: hidden;
+  position: relative;
 }
 
 .master-customer-img {
@@ -2691,32 +2824,48 @@ body:not(.mode-master) .boba-bottom-station-bar {
   height: 100%;
   object-fit: cover;
   object-position: top center;
-  animation: customerBob 3.5s ease-in-out infinite;
+  display: block;
 }
 
 .master-customer-name-tag {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   border: 1.5px solid #f97316;
-  border-radius: 14px;
-  padding: 2px 10px;
-  font-size: 0.72rem;
+  border-radius: 99px;
+  padding: 3px 12px;
+  font-size: 0.76rem;
   font-weight: 800;
-  color: #9a3412;
   margin-top: -10px;
   z-index: 7;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.m-cname {
+  color: #7c2d12;
+  font-size: 0.85rem;
+}
+
+.m-crole {
+  color: #ea580c;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--boba-font-main) !important;
 }
 
 .master-speech-bubble {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 2.5px solid #f97316;
-  border-radius: 18px;
-  padding: 10px 14px;
-  max-width: 370px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  border-radius: 20px;
+  padding: 10px 16px;
+  max-width: 380px;
+  box-shadow: 0 10px 28px rgba(249, 115, 22, 0.2), 0 3px 10px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   position: relative;
 }
 
@@ -2739,12 +2888,18 @@ body:not(.mode-master) .boba-bottom-station-bar {
   transform: translateY(-50%);
   border-width: 6px 9px 6px 0;
   border-style: solid;
-  border-color: transparent #ffffff transparent transparent;
+  border-color: transparent rgba(255, 255, 255, 0.94) transparent transparent;
 }
 
 .bubble-cup-preview {
   font-size: 2rem;
   flex-shrink: 0;
+  animation: cupFloat 2.8s ease-in-out infinite;
+}
+
+@keyframes cupFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
 
 .bubble-text-content {
@@ -2768,16 +2923,22 @@ body:not(.mode-master) .boba-bottom-station-bar {
 }
 
 .bubble-pin-order {
-  font-size: 0.7rem;
+  font-family: var(--boba-font-main) !important;
+  font-size: 0.72rem;
   color: #ea580c;
-  font-weight: 600;
-  margin-top: 2px;
+  font-weight: 700;
+  margin-top: 3px;
+  line-height: 1.3;
 }
 
 .bubble-vi-order {
-  font-size: 0.68rem;
-  color: #64748b;
-  font-style: italic;
+  font-family: var(--boba-font-main) !important;
+  font-size: 0.75rem;
+  color: #334155;
+  font-weight: 600;
+  font-style: normal !important;
+  margin-top: 3px;
+  line-height: 1.35;
 }
 
 .btn-master-speech-audio {
@@ -2785,14 +2946,15 @@ body:not(.mode-master) .boba-bottom-station-bar {
   border: 1.5px solid #f43f5e;
   color: #e11d48;
   border-radius: 50%;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
   transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(225, 29, 72, 0.2);
 }
 
 .btn-master-speech-audio:hover {
@@ -2801,10 +2963,10 @@ body:not(.mode-master) .boba-bottom-station-bar {
   transform: scale(1.1);
 }
 
-/* 5. Counter Surface Equipment */
+/* 5. Counter Surface Equipment (Translucent Polished Glassy Shelf) */
 .master-counter-surface {
   position: absolute;
-  top: 40%;
+  top: 41%;
   left: 0;
   width: 100%;
   height: 32%;
@@ -2812,10 +2974,12 @@ body:not(.mode-master) .boba-bottom-station-bar {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  padding: 0 14px 6px;
-  background: linear-gradient(180deg, rgba(254, 215, 170, 0.45) 0%, rgba(184, 122, 65, 0.95) 25%, #7c2d12 100%);
-  border-top: 4px solid #fde0b9;
-  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+  padding: 0 16px 8px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(254, 215, 170, 0.32) 20%, rgba(180, 83, 9, 0.42) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 /* Cup Stack Left */
@@ -2858,13 +3022,15 @@ body:not(.mode-master) .boba-bottom-station-bar {
   font-size: 1.1rem;
 }
 
-/* Dispensers Rack */
+/* Dispensers Rack (Translucent Glass Rack) */
 .master-dispensers-rack {
-  background: #fff8ef;
-  border: 2.5px solid #d97706;
-  border-radius: 12px;
-  padding: 5px 8px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  padding: 6px 10px 8px;
+  box-shadow: 0 8px 24px rgba(180, 83, 9, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.9);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2875,7 +3041,10 @@ body:not(.mode-master) .boba-bottom-station-bar {
   font-weight: 900;
   color: #78350f;
   text-align: center;
-  margin-bottom: 4px;
+  background: rgba(254, 215, 170, 0.85);
+  padding: 2px 10px;
+  border-radius: 99px;
+  margin-bottom: 6px;
 }
 
 .m-dispensers-grid {
@@ -2999,13 +3168,15 @@ body:not(.mode-master) .boba-bottom-station-bar {
   margin-bottom: 2px;
 }
 
-/* Toppings Rack */
+/* Toppings Rack (Translucent Glass Rack) */
 .master-toppings-rack {
-  background: #fff8ef;
-  border: 2.5px solid #d97706;
-  border-radius: 12px;
-  padding: 5px 8px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  padding: 6px 10px 8px;
+  box-shadow: 0 8px 24px rgba(180, 83, 9, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.9);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3063,16 +3234,18 @@ body:not(.mode-master) .boba-bottom-station-bar {
   margin-top: 1px;
 }
 
-/* Sugar & Ice Rack */
+/* Sugar & Ice Rack (Translucent Glass Rack) */
 .master-sugar-ice-rack {
-  background: #fff8ef;
-  border: 2.5px solid #d97706;
-  border-radius: 12px;
-  padding: 5px 8px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  padding: 6px 10px 8px;
+  box-shadow: 0 8px 24px rgba(180, 83, 9, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.9);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
 
 .sugar-ice-tubs-row {
@@ -3210,34 +3383,38 @@ body:not(.mode-master) .boba-bottom-station-bar {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-/* 6. Bottom Workstation Stage */
+/* 6. Bottom Workstation Stage (Translucent Warm Ambient Wood Grid) */
 .master-bottom-workstation {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 28%;
+  height: 27%;
   z-index: 15;
-  background: linear-gradient(180deg, #f5cca0 0%, #deb07c 40%, #b87a41 100%);
-  border-top: 5px solid #fff5eb;
+  background: linear-gradient(180deg, rgba(255, 247, 237, 0.65) 0%, rgba(253, 186, 116, 0.72) 40%, rgba(194, 65, 12, 0.8) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 2.5px solid rgba(255, 255, 255, 0.85);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 18px 8px;
-  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.25);
+  padding: 0 20px 8px;
+  box-shadow: 0 -8px 25px rgba(120, 53, 15, 0.25);
 }
 
 .master-lids-box {
-  background: #fff8ef;
-  border: 2px solid #d97706;
-  border-radius: 10px;
-  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-radius: 14px;
+  padding: 8px 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
   transition: all 0.15s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 16px rgba(180, 83, 9, 0.15);
 }
 
 .master-lids-box:hover {

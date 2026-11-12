@@ -225,9 +225,9 @@ class PapaBobaAudio {
 // ============================================================================
 const BOBA_VOCAB = {
   teas: [
-    { id: 'milktea', hanzi: '奶茶', pinyin: 'nǎichá', vi: 'Trà sữa truyền thống', color: '#df9b58' },
-    { id: 'blacktea', hanzi: '红茶', pinyin: 'hóngchá', vi: 'Hồng trà thơm', color: '#853713' },
-    { id: 'greentea', hanzi: '绿茶', pinyin: 'lǜchá', vi: 'Trà xanh nhài', color: '#84cc16' },
+    { id: 'milktea', hanzi: '奶茶', pinyin: 'nǎichá', vi: 'Trà sữa', color: '#df9b58' },
+    { id: 'blacktea', hanzi: '红茶', pinyin: 'hóngchá', vi: 'Hồng trà', color: '#853713' },
+    { id: 'greentea', hanzi: '绿茶', pinyin: 'lǜchá', vi: 'Trà xanh', color: '#84cc16' },
     { id: 'taro', hanzi: '芋泥奶茶', pinyin: 'yùní nǎichá', vi: 'Trà khoai môn', color: '#b58bc4' },
     { id: 'milk', hanzi: '鲜奶', pinyin: 'xiānnǎi', vi: 'Sữa tươi', color: '#f8fafc' }
   ],
@@ -245,11 +245,11 @@ const BOBA_VOCAB = {
     { id: 'no_ice', hanzi: '去冰', pinyin: 'qù bīng', vi: 'Không đá' }
   ],
   toppings: [
-    { id: 'boba', hanzi: '珍珠', pinyin: 'zhēnzhū', vi: 'Trân châu đen', icon: '🧋' },
+    { id: 'boba', hanzi: '珍珠', pinyin: 'zhēnzhū', vi: 'Trân châu', icon: '🧋' },
     { id: 'mango', hanzi: '芒果布丁', pinyin: 'mángguǒ bùdīng', vi: 'Pudding xoài', icon: '🥭' },
-    { id: 'redbean', hanzi: '红豆', pinyin: 'hóngdòu', vi: 'Đậu đỏ bùi', icon: '🫘' },
+    { id: 'redbean', hanzi: '红豆', pinyin: 'hóngdòu', vi: 'Đậu đỏ', icon: '🫘' },
     { id: 'matcha', hanzi: '抹茶冻', pinyin: 'mǒchádòng', vi: 'Thạch matcha', icon: '🍵' },
-    { id: 'coconut', hanzi: '椰果', pinyin: 'yēguǒ', vi: 'Thạch dừa giòn', icon: '🥥' },
+    { id: 'coconut', hanzi: '椰果', pinyin: 'yēguǒ', vi: 'Thạch dừa', icon: '🥥' },
     { id: 'taroball', hanzi: '芋圆', pinyin: 'yùyuán', vi: 'Khoai dẻo', icon: '🍠' }
   ]
 };
