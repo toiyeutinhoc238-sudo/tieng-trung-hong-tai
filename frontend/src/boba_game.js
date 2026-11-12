@@ -1190,7 +1190,8 @@ class PapaBobaGame {
 
     if (isPortrait) {
       this.stageScale = 1;
-      const stageW = Math.min(w, 480);
+      // Trên máy tính bảng / iPad (w >= 768), cho phép độ rộng co giãn tới 560px
+      const stageW = (w >= 768) ? Math.min(w * 0.85, 560) : Math.min(w, 480);
       document.documentElement.style.setProperty('--stage-w', stageW + 'px');
       document.documentElement.style.setProperty('--stage-h', h + 'px');
       document.documentElement.style.setProperty('--stage-scale', '1');
