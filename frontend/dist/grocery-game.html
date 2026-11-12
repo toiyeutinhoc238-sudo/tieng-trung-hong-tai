@@ -19,9 +19,9 @@
   <!-- LXGW WenKai Lite: chữ Hán chuẩn Khải thể (楷体) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
-  <script type="module" crossorigin src="/assets/groceryGame-BthNQqN_.js"></script>
+  <script type="module" crossorigin src="/assets/groceryGame-BaHNMN8x.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/groceryGame-MOG3AcsW.css">
+  <link rel="stylesheet" crossorigin href="/assets/groceryGame-nH3ceLMp.css">
 </head>
 
 <body class="grocery-body on-title">
@@ -105,9 +105,10 @@
           </div>
           <div class="g-goal-bar"><div class="g-goal-fill" id="hud-goal-fill"></div></div>
         </div>
-        <div class="g-pill guests" title="Khách trong ngày">
-          <span class="pill-icon">🧑‍🤝‍🧑</span>
-          <span class="pill-text"><small>Khách hôm nay</small><strong id="hud-guest-val">0 / 0</strong></span>
+        <div class="g-pill clock" id="hud-clock" title="Giờ mở cửa: 08:00 → 20:00">
+          <span class="pill-icon">🕗</span>
+          <span class="pill-text"><small id="hud-clock-label">Chưa mở cửa</small><strong id="hud-clock-val">08:00</strong></span>
+          <span class="g-clock-bar"><i id="hud-clock-fill"></i></span>
         </div>
       </div>
 
@@ -170,7 +171,7 @@
             <div class="door-glare" aria-hidden="true"></div>
             <div class="door-bell" aria-hidden="true">🔔</div>
             <div class="door-empty" id="door-empty">
-              <span class="zh">欢迎光临</span>
+              <span class="zh" id="door-empty-chn">欢迎光临</span>
               <small id="door-empty-text">Đang chờ khách...</small>
             </div>
           </div>
@@ -238,11 +239,8 @@
         <div class="shelves-room">
           <div class="shelf-unit">
             <div class="shelf-unit-top">
-              <span class="zh">货架</span> Kệ hàng
-              <div class="shelf-actions">
-                <button type="button" class="g-btn-chip" id="btn-unlock-shelf-header"><i class="fa-solid fa-unlock"></i> Mở kệ mới</button>
-                <button type="button" class="g-btn-chip" id="btn-quick-restock-header"><i class="fa-solid fa-boxes-packing"></i> Nhập hàng</button>
-              </div>
+              <div class="aisle-tabs" id="aisle-tabs"></div>
+              <button type="button" class="g-btn-chip" id="btn-quick-restock-header"><i class="fa-solid fa-boxes-packing"></i> <span class="zh">批发市场</span></button>
             </div>
             <div class="shelf-rows" id="shelves-display-rack"></div>
           </div>
@@ -423,11 +421,11 @@
         <div class="mission-head">
           <span class="zh mission-day" id="mission-day-chn">第1天</span>
           <h3><span class="zh">今日任务</span> · Nhiệm vụ hôm nay</h3>
-          <p id="mission-sub">Hôm nay có 4 khách ghé tiệm.</p>
+          <p id="mission-sub">Tiệm mở cửa 08:00 → 20:00.</p>
         </div>
         <div class="mission-goals" id="mission-goals"></div>
         <div class="mission-actions">
-          <button type="button" class="g-btn-ghost" id="btn-mission-restock"><i class="fa-solid fa-boxes-packing"></i> Nhập hàng trước</button>
+          <button type="button" class="g-btn-ghost" id="btn-mission-restock"><i class="fa-solid fa-boxes-packing"></i> <span class="zh">批发市场</span> Nhập hàng</button>
           <button type="button" class="g-btn-primary big" id="btn-mission-start"><span class="zh">开门营业</span> Mở cửa bán hàng <i class="fa-solid fa-store"></i></button>
         </div>
       </div>
@@ -454,34 +452,30 @@
       </div>
     </div>
 
-    <!-- NHẬP HÀNG -->
+    <!-- 批发市场 · CHỢ ĐẦU MỐI: nhập hàng, mở món mới, mở khu kệ mới -->
     <div class="g-modal" id="modal-restock" style="display:none;">
-      <div class="g-card restock-card">
+      <div class="g-card market-card">
+        <div class="market-awning" aria-hidden="true"></div>
         <div class="g-card-head">
-          <h3>📦 <span class="zh">进货</span> · Nhập hàng lên kệ</h3>
+          <h3>📦 <span class="zh">批发市场</span> · Chợ đầu mối — nhập hàng &amp; mở hàng mới</h3>
           <button type="button" class="g-close" data-close="modal-restock"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="restock-balance">
-          <div><small>Vốn hiện có</small><b id="modal-stock-current-bal">0.00 ¥</b></div>
-          <div><small>Chi phí nhập</small><b class="rose" id="modal-stock-total-cost">0.00 ¥</b></div>
-          <div><small>Còn lại</small><b class="green" id="modal-stock-remaining-bal">0.00 ¥</b></div>
+        <div class="market-body">
+          <nav class="market-zones" id="market-zones"></nav>
+          <section class="market-main">
+            <div class="market-zone-head" id="market-zone-head"></div>
+            <div class="market-grid" id="stock-table-body"></div>
+          </section>
         </div>
-        <div class="restock-list" id="stock-table-body"></div>
-        <div class="g-card-foot">
+        <div class="market-foot">
+          <div class="restock-balance">
+            <div><small>Vốn hiện có</small><b id="modal-stock-current-bal">0.00 ¥</b></div>
+            <div><small>Tiền nhập hàng</small><b class="rose" id="modal-stock-total-cost">0.00 ¥</b></div>
+            <div><small>Còn lại</small><b class="green" id="modal-stock-remaining-bal">0.00 ¥</b></div>
+          </div>
           <button type="button" class="g-btn-ghost" id="btn-autofill-all-stock"><i class="fa-solid fa-wand-magic-sparkles"></i> <span class="zh">一键补齐</span> Nhập đầy</button>
-          <button type="button" class="g-btn-primary" id="btn-confirm-restock-open"><i class="fa-solid fa-check"></i> Xác nhận nhập hàng</button>
+          <button type="button" class="g-btn-primary big" id="btn-confirm-restock-open"><i class="fa-solid fa-check"></i> Xác nhận nhập hàng</button>
         </div>
-      </div>
-    </div>
-
-    <!-- MỞ KỆ MỚI -->
-    <div class="g-modal" id="modal-unlock-shelf" style="display:none;">
-      <div class="g-card unlock-card">
-        <div class="g-card-head">
-          <h3>🏪 <span class="zh">解锁新货架</span> · Mở kệ hàng mới</h3>
-          <button type="button" class="g-close" data-close="modal-unlock-shelf"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="unlock-list" id="unlock-shelves-list"></div>
       </div>
     </div>
 
@@ -492,12 +486,7 @@
           <h3>📖 <span class="zh">生词本</span> · Từ vựng tạp hóa</h3>
           <button type="button" class="g-close" data-close="modal-vocab"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="vocab-tabs">
-          <button type="button" class="vocab-tab active" data-tab="snacks">🍬 Đồ ăn vặt</button>
-          <button type="button" class="vocab-tab" data-tab="drinks">🧃 Đồ uống</button>
-          <button type="button" class="vocab-tab" data-tab="quantifiers">🔢 Lượng từ</button>
-          <button type="button" class="vocab-tab" data-tab="business">🏪 Mua bán</button>
-        </div>
+        <div class="vocab-tabs" id="vocab-tabs"></div>
         <div class="vocab-grid" id="vocab-items-grid"></div>
       </div>
     </div>
@@ -510,13 +499,13 @@
           <button type="button" class="g-close" data-close="modal-guide"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="guide-steps">
-          <div class="gstep"><i>1</i><span>📋</span><div><b>Nhận nhiệm vụ</b><p>Mỗi ngày có mục tiêu doanh thu, số khách được phép bỏ về và độ chính xác khi thối tiền.</p></div></div>
-          <div class="gstep"><i>2</i><span>🛎️</span><div><b>Đón khách</b><p>Khách đến lần lượt và xếp hàng. Chờ quá lâu khách sẽ bỏ về. Nghe câu gọi hàng tiếng Trung rồi bấm <b>Nhận đơn</b>.</p></div></div>
-          <div class="gstep"><i>3</i><span>🏪</span><div><b>Nhặt hàng</b><p>Chọn đúng món và đúng số lượng (一包, 两瓶…). Nhặt nhầm sẽ bị trừ điểm.</p></div></div>
+          <div class="gstep"><i>1</i><span>🕗</span><div><b>Mở cửa 08:00 → 20:00</b><p>Mỗi ngày bán trong khoảng 4 phút. Khách đến liên tục — phục vụ được bao nhiêu thì phục vụ. Có mục tiêu doanh thu, số khách được bỏ về và độ chính xác thối tiền.</p></div></div>
+          <div class="gstep"><i>2</i><span>🛎️</span><div><b>Đón khách</b><p>Khách xếp hàng; chờ quá lâu sẽ bỏ về. Nghe câu gọi hàng tiếng Trung rồi bấm <b>Nhận đơn</b>.</p></div></div>
+          <div class="gstep"><i>3</i><span>🏪</span><div><b>Nhặt hàng theo khu</b><p>Hàng chia khu: 饮料 đồ uống, 糖果饼干 bánh kẹo, 零食 đồ ăn vặt… Chọn đúng khu (tab có chấm đỏ), đúng món và số lượng (一包, 两瓶…).</p></div></div>
           <div class="gstep"><i>4</i><span>📠</span><div><b>Quét mã</b><p>Chạm từng món trên băng chuyền để quét và in hóa đơn.</p></div></div>
           <div class="gstep"><i>5</i><span>💴</span><div><b>Thối tiền</b><p>Tự tính <b>khách đưa − tổng tiền</b>, lấy đúng tờ tiền và đồng xu. Dùng gợi ý sẽ bị trừ điểm.</p></div></div>
-          <div class="gstep"><i>6</i><span>📦</span><div><b>Nhập hàng &amp; mở kệ</b><p>Dùng vốn để nhập thêm hàng. Tích tiền để mở kệ mới với món đắt hơn.</p></div></div>
-          <div class="guide-tip">⭐ Điểm cao thì được tip nhiều. Đăng nhập để ghi kỷ lục doanh thu ngày lên <b>Bảng xếp hạng</b>.</div>
+          <div class="gstep"><i>6</i><span>📦</span><div><b>批发市场 · Chợ đầu mối</b><p>Nhập hàng lên kệ, <b>mở bán món mới</b> và <b>mở khu kệ mới</b> — tất cả đều trả bằng tiền tiệm kiếm được.</p></div></div>
+          <div class="guide-tip">💾 Tiến trình được lưu: thoát ra vào lại vẫn ở đúng ngày (thoát giữa ngày thì chơi lại ngày đó). Đăng nhập để lưu vào tài khoản và ghi kỷ lục lên <b>Bảng xếp hạng</b>.</div>
         </div>
       </div>
     </div>
@@ -554,7 +543,7 @@
         </div>
         <div class="g-card-foot">
           <button type="button" class="g-btn-ghost" id="btn-back-to-title"><i class="fa-solid fa-house"></i> Màn hình chính</button>
-          <button type="button" class="g-btn-ghost danger" id="btn-reset-save"><i class="fa-solid fa-rotate"></i> Chơi lại</button>
+          <button type="button" class="g-btn-ghost danger" id="btn-reset-save"><i class="fa-solid fa-rotate"></i> Chơi lại từ đầu</button>
           <button type="button" class="g-btn-primary" data-close="modal-settings"><i class="fa-solid fa-play"></i> Tiếp tục</button>
         </div>
       </div>

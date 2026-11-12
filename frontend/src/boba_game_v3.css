@@ -2274,3 +2274,53 @@ body.portrait .rank-tab { font-size: 0.78rem; }
     font-size: 1.25rem;
   }
 }
+
+/* HUD màn dọc: luôn vừa 1 hàng trên điện thoại (không tràn/cắt) */
+body.portrait .boba-top-hud { padding: 0 6px; gap: 4px; }
+body.portrait .boba-top-hud .hud-left,
+body.portrait .boba-top-hud .hud-center,
+body.portrait .boba-top-hud .hud-right { gap: 4px; min-width: 0; }
+body.portrait .boba-top-hud .hud-stat-pill { white-space: nowrap; padding-left: 4px; padding-right: 8px; gap: 4px; }
+body.portrait .boba-top-hud .hud-level-pill { padding: 0 8px; gap: 4px; min-width: 0; }
+body.portrait .boba-top-hud .hud-level-progress-bar { width: 32px; }
+body.portrait .boba-top-hud .hud-action-pill { padding: 0 8px; gap: 4px; min-width: 0; }
+body.portrait .boba-top-hud .hud-btn-circle { width: 32px; height: 32px; flex: 0 0 32px; }
+body.portrait .boba-top-hud .hud-stat-pill,
+body.portrait .boba-top-hud .hud-level-tag { flex-shrink: 0; white-space: nowrap; }
+@media (max-width: 400px) {
+  body.portrait .boba-top-hud .hud-level-progress-bar { display: none; }
+  body.portrait .boba-top-hud .hud-level-pill { padding: 0 6px; }
+}
+@media (max-width: 400px) {
+  body.portrait .boba-top-hud .hud-level-tag i,
+  body.portrait .boba-top-hud #btn-open-cookbook .icon { display: none; }
+}
+@media (max-width: 340px) {
+  /* Màn rất hẹp: nút Đổ đi vẫn có trong khu Loại nước */
+  body.portrait .boba-top-hud #btn-hud-trash { display: none !important; }
+}
+
+/* Màn dọc: hàng nút Size / Đường / Đá chia đều bề ngang, không nút nào bị đẩy ra ngoài màn hình */
+@media (max-width: 768px), (orientation: portrait) {
+  body.portrait .sketch-middle-strip .strip-section { gap: 6px; }
+  body.portrait .sketch-middle-strip .strip-label { flex: 0 0 auto; }
+  body.portrait .sketch-middle-strip .strip-buttons-group {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  body.portrait .btn-strip-size,
+  body.portrait .sketch-middle-strip .btn-m-sugar,
+  body.portrait .sketch-middle-strip .btn-m-ice {
+    min-width: 0;
+    padding: 4px 2px;
+    flex-direction: column;
+    gap: 0;
+    line-height: 1.1;
+  }
+  /* Danh sách kiểm tra: xuống dòng thay vì bị cắt chữ */
+  body.portrait .sketch-checklist-card .check-item { white-space: normal; overflow: visible; }
+}

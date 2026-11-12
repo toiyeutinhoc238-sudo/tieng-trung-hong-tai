@@ -2195,3 +2195,266 @@ body.on-title .g-viewport { visibility: hidden; }
 /* Tờ tiền khách đưa (cỡ nhỏ): bỏ dòng chữ ngân hàng cho rõ mệnh giá */
 .paid-bills .rmb.note::before { display: none; }
 .paid-bills .rmb { animation: chipIn 0.35s ease; }
+
+/* ==========================================================================
+   15. ĐỢT 2: ĐỒNG HỒ NGÀY · KHU KỆ · CHỢ ĐẦU MỐI (to, rõ ràng)
+   ========================================================================== */
+/* Đồng hồ giờ mở cửa trên HUD */
+.g-pill.clock { position: relative; padding-right: 16px; min-width: 150px; overflow: hidden; }
+.g-pill.clock .pill-icon { background: var(--sky-l); }
+.g-pill.clock strong { font-family: 'Courier New', var(--font-main); font-size: 1.1rem; }
+.g-clock-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: #f6e6cc; }
+.g-clock-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--sky), var(--honey), var(--orange)); transition: width 0.4s linear; }
+.g-pill.clock.closing { border-color: var(--orange); animation: clockWarn 1.2s ease-in-out infinite; }
+.g-pill.clock.closed { border-color: #94a3b8; background: #f1f5f9; }
+.g-pill.clock.closed .pill-icon { background: #e2e8f0; }
+@keyframes clockWarn { 50% { box-shadow: 0 2px 0 #ecc58a, 0 0 0 5px rgba(239, 125, 45, 0.25); } }
+
+/* Kệ hàng: tab khu + 2 tầng lớn */
+.shelf-unit-top { height: 60px; gap: 8px; padding: 0 10px; }
+.aisle-tabs { flex: 1; display: flex; gap: 6px; min-width: 0; overflow-x: auto; scrollbar-width: none; padding-top: 8px; }
+.aisle-tabs::-webkit-scrollbar { display: none; }
+
+.aisle-tab {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 46px;
+  padding: 0 12px 0 8px;
+  border-radius: 12px 12px 4px 4px;
+  background: rgba(255, 244, 221, 0.18);
+  border: 2px solid rgba(255, 244, 221, 0.35);
+  color: #fff4dd;
+  transition: background 0.15s, transform 0.12s;
+}
+
+.aisle-tab:hover { background: rgba(255, 244, 221, 0.3); }
+.aisle-tab .a-icon { font-size: 1.5rem; }
+.aisle-tab .a-txt { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
+.aisle-tab .a-txt b { font-size: 1.1rem; font-weight: 700; }
+.aisle-tab .a-txt small { font-size: 0.66rem; font-weight: 700; opacity: 0.9; }
+.aisle-tab.active { background: linear-gradient(180deg, #fff7e6, #fde3b3); border-color: var(--honey); color: var(--ink); transform: translateY(2px); }
+.aisle-tab.locked { opacity: 0.7; border-style: dashed; }
+.aisle-tab.need:not(.active) { border-color: var(--rose); }
+
+.aisle-tab .a-need {
+  position: absolute;
+  top: -7px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 99px;
+  background: var(--rose);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: dotPing 1.2s infinite;
+}
+
+.shelf-rows { grid-template-rows: repeat(2, 1fr); }
+.shelf-row { gap: 12px; padding: 10px 14px 22px; }
+.shelf-row::after { height: 20px; }
+.prod { max-height: 190px; gap: 4px; }
+.prod-stack { height: 78px; }
+.prod-stack span { font-size: 3.2rem; }
+.prod-stack span + span { margin-left: -28px; }
+.prod-name { font-size: 1.35rem; }
+.prod-pin { font-size: 0.74rem; text-align: center; line-height: 1.2; }
+.prod-tag { font-size: 0.86rem; padding: 3px 8px; }
+.prod-stock { font-size: 0.74rem; }
+.prod.empty-slot { visibility: hidden; }
+
+.prod.locked { gap: 4px; border-width: 2px; }
+.prod.locked .lock-emoji { font-size: 2.6rem; filter: grayscale(1); opacity: 0.45; }
+.prod.locked .lock-name { font-size: 1.1rem; opacity: 0.6; }
+.prod.locked .lock-price { font-size: 0.72rem; font-weight: 800; color: var(--orange-d); background: rgba(255, 255, 255, 0.7); padding: 2px 8px; border-radius: 99px; }
+
+/* Phiếu: món nào ở khu nào (bấm để tới khu đó) */
+.oc-item { width: 100%; text-align: left; padding: 4px 6px; border-radius: 10px; transition: background 0.15s; }
+.oc-item:hover { background: #fff3d9; }
+.oc-txt { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.oc-txt small { font-size: 0.68rem; color: #a16a3a; font-weight: 700; }
+
+/* ---------- 批发市场 · Chợ đầu mối ---------- */
+.market-card { width: 1220px; height: 680px; max-height: 680px; }
+
+.market-awning {
+  height: 26px;
+  flex: 0 0 26px;
+  background: repeating-linear-gradient(90deg, var(--rose) 0 40px, #fdf6e6 40px 80px);
+}
+
+.market-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  background:
+    linear-gradient(180deg, rgba(255, 246, 228, 0.94), rgba(250, 232, 200, 0.94)),
+    var(--tex-brick);
+  background-size: auto, 64px 40px;
+}
+
+.market-zones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-right: 3px solid #ecd2a6;
+  overflow-y: auto;
+}
+
+.mz {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: #fff;
+  border: 2px solid #f0d6ad;
+  text-align: left;
+  transition: transform 0.12s, border-color 0.15s;
+}
+
+.mz:hover { transform: translateX(3px); }
+.mz .mz-icon { font-size: 1.8rem; text-align: center; }
+.mz .mz-txt { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.mz .mz-txt b { font-size: 1.15rem; font-weight: 700; }
+.mz .mz-txt small { font-size: 0.72rem; font-weight: 700; color: #a16a3a; }
+.mz .mz-state { font-size: 0.74rem; font-weight: 900; color: var(--mint-d); white-space: nowrap; }
+.mz.locked { background: #f8f1e6; border-style: dashed; }
+.mz.locked .mz-icon { filter: grayscale(1); opacity: 0.6; }
+.mz.locked .mz-state { color: var(--orange-d); }
+.mz.active { border-color: var(--orange); background: linear-gradient(90deg, #fff1dc, #fff); box-shadow: 0 4px 0 #f0b67a; }
+
+.market-main { display: flex; flex-direction: column; min-height: 0; padding: 12px 16px; gap: 10px; }
+
+.market-zone-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: var(--tex-wood);
+  border: 3px solid var(--wood-dd);
+  color: #fff4dd;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.market-zone-head .mzh-icon { font-size: 2.2rem; }
+.market-zone-head b.zh { font-size: 1.6rem; font-weight: 700; }
+.market-zone-head .mzh-pin { font-size: 0.9rem; font-weight: 800; opacity: 0.9; }
+.market-zone-head small { display: block; font-size: 0.8rem; font-weight: 600; opacity: 0.95; }
+.market-zone-head .g-btn-primary { margin-left: auto; text-shadow: none; }
+
+.market-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.mk-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 10px 8px;
+  border-radius: 16px;
+  background: #fff;
+  border: 2px solid #f0d6ad;
+  box-shadow: 0 4px 0 #ecd2a6;
+  text-align: center;
+}
+
+.mk-card.low { border-color: #f4a4a4; }
+.mk-emoji { font-size: 2.5rem; line-height: 1.1; }
+.mk-name { font-size: 1.3rem; font-weight: 700; }
+.mk-pin { font-size: 0.74rem; font-weight: 700; color: var(--orange-d); }
+.mk-vi { font-size: 0.74rem; font-weight: 600; color: #6b5444; }
+.mk-price { font-size: 0.74rem; font-weight: 700; color: var(--ink-soft); margin-top: 2px; }
+.mk-price .cost { color: var(--rose-d); }
+.mk-price .sell { color: var(--mint-d); }
+
+.mk-stock {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+  background: #fff6e4;
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+
+.mk-stock b { color: var(--mint-d); }
+.mk-bar { width: 80%; height: 7px; border-radius: 99px; background: #f1e3cc; overflow: hidden; margin: 3px 0; }
+.mk-bar i { display: block; height: 100%; background: var(--mint); }
+
+.mk-qty { display: flex; align-items: center; gap: 10px; }
+.mk-qty button { width: 34px; height: 34px; border-radius: 10px; background: #fff3d9; border: 2px solid #f0cf98; color: var(--orange-d); font-weight: 900; font-size: 1.1rem; }
+.mk-qty button:disabled { opacity: 0.35; cursor: not-allowed; }
+.mk-qty b { min-width: 26px; font-size: 1.2rem; font-weight: 900; }
+
+.mk-card.locked { background: #fbf6ee; border-style: dashed; box-shadow: none; }
+.mk-card.locked .mk-emoji { filter: grayscale(0.85); opacity: 0.6; }
+.mk-card.zone-locked { opacity: 0.6; }
+
+.mk-unlock {
+  margin-top: 4px;
+  padding: 6px 12px;
+  border-radius: 99px;
+  background: linear-gradient(180deg, #ffa24f, var(--orange));
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.8rem;
+  box-shadow: 0 3px 0 var(--orange-dd);
+}
+
+.mk-unlock:disabled { filter: grayscale(0.9) opacity(0.55); cursor: not-allowed; }
+
+.market-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-top: 2px solid #f6e4c4;
+  background: #fffaf0;
+}
+
+.market-foot .restock-balance { flex: 1; padding: 0; }
+.market-foot .restock-balance div { padding: 4px 8px; }
+
+/* Cột khu trong chợ: tên khu luôn 1 dòng */
+.mz { grid-template-columns: 34px minmax(0, 1fr) auto; gap: 6px; }
+.mz .mz-icon { font-size: 1.6rem; }
+.mz .mz-txt b { font-size: 1.08rem; white-space: nowrap; }
+.mz .mz-txt small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mz .mz-state { font-size: 0.7rem; }
+
+/* 6 tab khu luôn vừa 1 hàng (chia đều, không bị khuất) */
+.aisle-tabs { overflow: visible; }
+.aisle-tab { flex: 1 1 0; min-width: 0; padding: 0 8px 0 6px; gap: 4px; }
+.aisle-tab .a-icon { font-size: 1.35rem; flex: 0 0 auto; }
+.aisle-tab .a-txt { min-width: 0; }
+.aisle-tab .a-txt b { font-size: 1.02rem; white-space: nowrap; }
+.aisle-tab .a-txt small { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Thông báo nổi: nằm gọn trên thanh gợi ý ở đáy, không che nút/hàng hóa */
+.g-toasts { bottom: 70px; gap: 4px; }
+.g-toast { padding: 6px 14px; font-size: 0.82rem; border-radius: 12px; max-width: 600px; box-shadow: 0 3px 0 rgba(90, 50, 22, 0.3), 0 6px 14px rgba(74, 42, 20, 0.2); }
+.g-toast .t-icon { font-size: 1rem; }
+body.on-title .g-toasts { bottom: 20px; }

@@ -2548,16 +2548,31 @@ app.get('/api/leaderboard', async (req, res) => {
 
 // ============================================================
 // MINI GAME (Tiệm Trà Sữa · Tiệm Tạp Hóa): thành tích theo tài khoản + bảng xếp hạng
-// Mỗi game lưu trong users[email][field] = { best, history, totals, updatedAt }.
-// KHÔNG lưu tiến trình ván chơi (mỗi lần tải trang là ván mới) — chỉ lưu kết quả từng ngày bán hàng.
+// Mỗi game lưu trong users[email][field] = { save, best, history, totals, updatedAt }.
+//   save    : tiến trình ván chơi (ngày, tiền, kệ/hàng đã mở…) — thoát ra vào lại vẫn tiếp tục
+//   best    : thành tích cao nhất (doanh thu 1 ngày) → bảng xếp hạng
 // Bảng xếp hạng chỉ lấy THÀNH TÍCH CAO NHẤT (doanh thu 1 ngày) của mỗi người.
 //
 // API cho mỗi game (key = 'boba' | 'grocery'):
 //   GET  /api/<key>/progress      → kỷ lục + 30 ngày bán gần nhất của người đang đăng nhập
-//   POST /api/<key>/progress      → { dayResult } gửi kết quả 1 ngày bán hàng
+//   POST /api/<key>/progress      → { save?, dayResult?, resetSave? } lưu tiến trình và/hoặc kết quả 1 ngày
 //   GET  /api/<key>/leaderboard   → mỗi người 1 dòng, không lộ email
 // ============================================================
 const MINIGAME_MAX_HISTORY = 60;
+const MINIGAME_MAX_SAVE_BYTES = 64 * 1024;
+
+// Tiến trình ván chơi: chỉ nhận object JSON nhỏ, có số ngày hợp lệ (dữ liệu chỉ dùng để chơi tiếp,
+// bảng xếp hạng không đọc từ đây nên không cần kiểm tra sâu).
+function sanitizeMiniGameSave(save) {
+  if (!save || typeof save !== 'object' || Array.isArray(save)) return null;
+  let json;
+  try { json = JSON.stringify(save); } catch (e) { return null; }
+  if (!json || json.length > MINIGAME_MAX_SAVE_BYTES) return null;
+  const clean = JSON.parse(json);
+  clean.day = mgInt(clean.day, 1, 1000000, 1);
+  clean.updatedAt = Number.isFinite(Number(clean.updatedAt)) ? Number(clean.updatedAt) : Date.now();
+  return clean;
+}
 
 const mgNum = (v, min, max, def = min) => {
   const n = Number(v);
@@ -2640,7 +2655,8 @@ function registerMiniGameRoutes({ key, field, limits }) {
         user: { name: u.name || email.split('@')[0], picture: u.picture || '' },
         best: g.best || null,
         totals: g.totals || null,
-        history: getMiniGameRecentHistory(g)
+        history: getMiniGameRecentHistory(g),
+        save: g.save || null
       });
     } catch (err) {
       console.error(`GET /api/${key}/progress error:`, err);
@@ -2648,28 +2664,34 @@ function registerMiniGameRoutes({ key, field, limits }) {
     }
   });
 
-  // POST: gửi kết quả 1 ngày bán hàng → cập nhật lịch sử + thành tích cao nhất
+  // POST: lưu tiến trình và/hoặc kết quả 1 ngày bán hàng (→ lịch sử + thành tích cao nhất)
   app.post(`/api/${key}/progress`, async (req, res) => {
     const email = getLoggedInUserEmail(req);
     if (!email) return res.status(401).json({ error: 'Unauthorized' });
-    const dayResult = sanitizeMiniGameDayResult(req.body && req.body.dayResult, limits);
-    if (!dayResult) return res.status(400).json({ error: 'Thiếu kết quả ngày bán hàng' });
+    const body = req.body || {};
+    const dayResult = body.dayResult ? sanitizeMiniGameDayResult(body.dayResult, limits) : null;
+    const save = body.save ? sanitizeMiniGameSave(body.save) : null;
+    const resetSave = body.resetSave === true;
+    if (!dayResult && !save && !resetSave) return res.status(400).json({ error: 'Thiếu dữ liệu' });
 
     try {
       const result = await withMiniGameLock(`${key}:${email}`, async () => {
         const current = await loadMiniGameUser(email, field);
         const prev = current && current.game && typeof current.game === 'object' ? current.game : {};
         const g = {
+          save: prev.save || null,
           best: prev.best || null,
           history: Array.isArray(prev.history) ? [...prev.history] : [],
           totals: prev.totals || { daysPlayed: 0, earnings: 0, served: 0 }
         };
+        if (resetSave) g.save = null;
+        if (save) g.save = save;
 
         const playedAt = new Date().toISOString();
         // Chống gửi lặp cùng 1 kết quả trong vòng 2 phút (mạng chập chờn / bấm 2 lần)
-        const recentDup = g.history.find(h => h.day === dayResult.day && h.earnings === dayResult.earnings && h.served === dayResult.served
+        const recentDup = dayResult && g.history.find(h => h.day === dayResult.day && h.earnings === dayResult.earnings && h.served === dayResult.served
           && Date.now() - new Date(h.playedAt || 0).getTime() < 2 * 60 * 1000);
-        if (!recentDup) {
+        if (dayResult && !recentDup) {
           g.history = [...g.history, { ...dayResult, playedAt }].slice(-MINIGAME_MAX_HISTORY);
           g.totals = {
             daysPlayed: (g.totals.daysPlayed || 0) + 1,
@@ -2678,7 +2700,7 @@ function registerMiniGameRoutes({ key, field, limits }) {
           };
         }
         let newBest = false;
-        if (isBetterMiniGameResult(dayResult, g.best)) {
+        if (dayResult && isBetterMiniGameResult(dayResult, g.best)) {
           g.best = { ...dayResult, achievedAt: playedAt };
           newBest = true;
         }
@@ -2785,8 +2807,8 @@ function registerMiniGameRoutes({ key, field, limits }) {
 
 // Tiệm Trà Sữa: tối đa 8 khách/ngày (chừa biên 12); 1 ly 18 ¥ + tip tối đa 7.5 ¥
 registerMiniGameRoutes({ key: 'boba', field: 'bobaGame', limits: { maxGuestsPerDay: 12, maxPerGuest: 25.5 } });
-// Tiệm Tạp Hóa: tối đa 8 khách/ngày (chừa biên 12); đơn lớn nhất 2 món × 3 × 8.5 ¥ = 51 ¥ + tip tối đa 5.5 ¥
-registerMiniGameRoutes({ key: 'grocery', field: 'groceryGame', limits: { maxGuestsPerDay: 12, maxPerGuest: 57 } });
+// Tiệm Tạp Hóa: ngày tính theo giờ mở cửa (khách đến liên tục, chừa biên 40/ngày); 1 khách tối đa ~50 ¥ hàng + 5.5 ¥ tip
+registerMiniGameRoutes({ key: 'grocery', field: 'groceryGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 70 } });
 
 // Admin: Reset toàn bộ dữ liệu người dùng (xóa MongoDB + RAM cache) - Cần secret header
 app.delete('/api/admin/reset-all', async (req, res) => {
