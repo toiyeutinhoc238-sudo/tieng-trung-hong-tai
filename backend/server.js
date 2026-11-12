@@ -496,10 +496,12 @@ async function readUserData(forceRefresh = false) {
     if (!fileData.chats) fileData.chats = {};
     if (!fileData.quizHistory) fileData.quizHistory = {};
 
-    if (!cachedUserData || Object.keys(fileData.users || {}).length >= Object.keys(cachedUserData.users || {}).length) {
+    // File chỉ là bản sao lưu được ghi TỪ cache (trễ ~10s) → cache trong RAM luôn mới hơn.
+    // Chỉ nạp file khi chưa có cache, tránh ghi đè mất những thay đổi chưa kịp lưu xuống đĩa.
+    if (!cachedUserData) {
       cachedUserData = fileData;
-      lastUserDataRefreshTime = Date.now();
     }
+    lastUserDataRefreshTime = Date.now();
     cachedTotalUsersCount = Math.max(Object.keys(cachedUserData.users || {}).length, cachedTotalUsersCount, 231);
     return cachedUserData || fileData;
   })().finally(() => {
@@ -608,13 +610,14 @@ async function processMongoPersistenceQueue() {
             customWords: (data.customWords && data.customWords[email]) || [],
             chats: (data.chats && data.chats[email]) || [],
             accessLogs: (data.users && data.users[email] && data.users[email].accessLogs) || (u.accessLogs || []),
-            bobaGame: u.bobaGame || null,
             isVip: !!u.isVip,
             vipStatus: u.vipStatus || (u.isVip ? 'vip' : 'normal'),
             vipActivatedAt: u.vipActivatedAt || null,
             vipExpiresAt: u.vipExpiresAt || null,
             vipPackage: u.vipPackage || null
           };
+          // bobaGame được ghi thẳng bởi /api/boba/progress; chỉ đồng bộ khi cache có dữ liệu (không bao giờ xoá)
+          if (u.bobaGame) updateDoc.bobaGame = u.bobaGame;
           await User.updateOne({ _id: email }, { $set: updateDoc }, { upsert: true });
           failedEmailRetries.delete(email);
         } catch (err) {
@@ -2542,15 +2545,13 @@ app.get('/api/leaderboard', async (req, res) => {
 
 // ============================================================
 // GAME TIỆM TRÀ SỮA (boba-game.html): lưu tiến trình theo tài khoản + bảng xếp hạng
-// Lưu trong users[email].bobaGame = { save, best, history, totals, updatedAt }
+// Lưu trong users[email].bobaGame = { best, history, totals, updatedAt } (KHÔNG lưu tiến trình: mỗi lần tải trang là ván mới)
 // Bảng xếp hạng chỉ lấy THÀNH TÍCH CAO NHẤT (doanh thu 1 ngày) của mỗi người.
 // ============================================================
 const BOBA_LIMITS = {
   maxGuestsPerDay: 12,      // game hiện tối đa 8 khách/ngày, chừa biên an toàn
   maxPerCup: 25.5,          // 18 ¥ giá ly + tối đa 7.5 ¥ tiền tip
-  maxHistory: 60,
-  maxRecords: 30,
-  maxWords: 300
+  maxHistory: 60
 };
 
 const bobaNum = (v, min, max, def = min) => {
@@ -2579,33 +2580,6 @@ function sanitizeBobaDayResult(r) {
   };
 }
 
-function sanitizeBobaSave(s) {
-  if (!s || typeof s !== 'object') return null;
-  const words = Array.isArray(s.words)
-    ? [...new Set(s.words.filter(w => typeof w === 'string' && w.length > 0 && w.length <= 20))].slice(0, BOBA_LIMITS.maxWords)
-    : [];
-  const records = Array.isArray(s.records)
-    ? s.records.map(r => {
-      const clean = sanitizeBobaDayResult(r);
-      if (!clean) return null;
-      clean.date = typeof r.date === 'string' ? r.date.slice(0, 20) : '';
-      return clean;
-    }).filter(Boolean).slice(0, BOBA_LIMITS.maxRecords)
-    : [];
-  return {
-    coins: Math.round(bobaNum(s.coins, -1000000, 100000000, 120) * 100) / 100,
-    level: bobaInt(s.level, 1, 9999, 1),
-    exp: bobaInt(s.exp, 0, 100000000, 0),
-    completedOrders: bobaInt(s.completedOrders, 0, 100000000, 0),
-    words,
-    day: bobaInt(s.day, 1, 1000000, 1),
-    tickets: bobaInt(s.tickets, 0, 100000000, 0),
-    relaxed: !!s.relaxed,
-    records,
-    updatedAt: Number.isFinite(Number(s.updatedAt)) ? Number(s.updatedAt) : Date.now()
-  };
-}
-
 // So sánh 2 thành tích: doanh thu → số sao → điểm trung bình
 function isBetterBobaResult(a, b) {
   if (!b) return true;
@@ -2618,57 +2592,83 @@ function getBobaPublicBest(bg) {
   return bg && bg.best ? bg.best : null;
 }
 
-// GET: tiến trình đã lưu + kỷ lục của người đang đăng nhập
+// 30 ngày bán gần nhất (mới nhất trước)
+function getBobaRecentHistory(bg) {
+  const h = bg && Array.isArray(bg.history) ? bg.history : [];
+  return h.slice(-30).reverse();
+}
+
+// Đọc/ghi bobaGame: ưu tiên MongoDB (nguồn dữ liệu thật), tránh cache RAM có thể bị làm mới & ghi đè.
+const isBobaMongoReady = () => mongoose.connection.readyState === 1;
+
+// Ghi tuần tự theo từng tài khoản (2 request đến cùng lúc không đè nhau)
+const bobaLocks = new Map();
+function withBobaLock(email, fn) {
+  const prev = bobaLocks.get(email) || Promise.resolve();
+  const run = prev.catch(() => {}).then(fn);
+  const tail = run.catch(() => {});
+  bobaLocks.set(email, tail);
+  tail.then(() => { if (bobaLocks.get(email) === tail) bobaLocks.delete(email); });
+  return run;
+}
+
+async function loadBobaUser(email) {
+  if (isBobaMongoReady()) {
+    try {
+      const doc = await User.findById(email, { name: 1, picture: 1, bobaGame: 1 }).lean();
+      if (doc) return { name: doc.name, picture: doc.picture, bobaGame: doc.bobaGame || null, inMongo: true };
+    } catch (e) {
+      console.warn('[boba] Mongo read failed, using cache:', e.message);
+    }
+  }
+  const userData = await readUserData();
+  const u = (userData.users || {})[email];
+  return u ? { name: u.name, picture: u.picture, bobaGame: u.bobaGame || null, inMongo: false } : null;
+}
+
+// GET: kỷ lục + lịch sử ngày bán của người đang đăng nhập
 app.get('/api/boba/progress', async (req, res) => {
   const email = getLoggedInUserEmail(req);
   if (!email) return res.json({ loggedIn: false });
   try {
-    const userData = await readUserData();
-    const u = (userData.users || {})[email] || {};
+    const u = (await loadBobaUser(email)) || {};
     const bg = u.bobaGame || {};
     res.json({
       loggedIn: true,
       user: { name: u.name || email.split('@')[0], picture: u.picture || '' },
-      save: bg.save || null,
       best: getBobaPublicBest(bg),
-      totals: bg.totals || null
+      totals: bg.totals || null,
+      history: getBobaRecentHistory(bg)
     });
   } catch (err) {
     console.error('GET /api/boba/progress error:', err);
-    res.status(500).json({ error: 'Không đọc được tiến trình game' });
+    res.status(500).json({ error: 'Không đọc được thành tích game' });
   }
 });
 
-// POST: lưu tiến trình; kèm dayResult khi vừa kết thúc 1 ngày bán hàng
+// POST: gửi kết quả 1 ngày bán hàng → cập nhật lịch sử + thành tích cao nhất
+// (Game không lưu tiến trình: mỗi lần tải trang là ván mới)
 app.post('/api/boba/progress', async (req, res) => {
   const email = getLoggedInUserEmail(req);
   if (!email) return res.status(401).json({ error: 'Unauthorized' });
+  const dayResult = sanitizeBobaDayResult(req.body && req.body.dayResult);
+  if (!dayResult) return res.status(400).json({ error: 'Thiếu kết quả ngày bán hàng' });
+
   try {
-    const save = sanitizeBobaSave(req.body && req.body.save);
-    const dayResult = sanitizeBobaDayResult(req.body && req.body.dayResult);
-    if (!save && !dayResult) return res.status(400).json({ error: 'Thiếu dữ liệu' });
+    const result = await withBobaLock(email, async () => {
+      const current = await loadBobaUser(email);
+      const prev = current && current.bobaGame && typeof current.bobaGame === 'object' ? current.bobaGame : {};
+      const bg = {
+        best: prev.best || null,
+        history: Array.isArray(prev.history) ? [...prev.history] : [],
+        totals: prev.totals || { daysPlayed: 0, earnings: 0, served: 0 }
+      };
 
-    const userData = await readUserData();
-    if (!userData.users) userData.users = {};
-    let userRecord = userData.users[email];
-    if (!userRecord) {
-      userRecord = { name: email.split('@')[0], picture: '', stats: { streak: 0, studyTime: 0, lastActiveDate: '' }, gameHistory: [] };
-      userData.users[email] = userRecord;
-    }
-    const bg = userRecord.bobaGame && typeof userRecord.bobaGame === 'object'
-      ? { ...userRecord.bobaGame }
-      : { save: null, best: null, history: [], totals: { daysPlayed: 0, earnings: 0, served: 0 } };
-    if (!Array.isArray(bg.history)) bg.history = [];
-    if (!bg.totals) bg.totals = { daysPlayed: 0, earnings: 0, served: 0 };
-
-    if (save) bg.save = save;
-
-    let newBest = false;
-    if (dayResult) {
       const playedAt = new Date().toISOString();
-      // 1 kết quả cho mỗi ngày trong game (tránh gửi lặp làm cộng dồn)
-      const dup = bg.history.find(h => h.day === dayResult.day && h.earnings === dayResult.earnings && h.served === dayResult.served);
-      if (!dup) {
+      // Chống gửi lặp cùng 1 kết quả trong vòng 2 phút (mạng chập chờn / bấm 2 lần)
+      const recentDup = bg.history.find(h => h.day === dayResult.day && h.earnings === dayResult.earnings && h.served === dayResult.served
+        && Date.now() - new Date(h.playedAt || 0).getTime() < 2 * 60 * 1000);
+      if (!recentDup) {
         bg.history = [...bg.history, { ...dayResult, playedAt }].slice(-BOBA_LIMITS.maxHistory);
         bg.totals = {
           daysPlayed: (bg.totals.daysPlayed || 0) + 1,
@@ -2676,19 +2676,38 @@ app.post('/api/boba/progress', async (req, res) => {
           served: (bg.totals.served || 0) + dayResult.served
         };
       }
+      let newBest = false;
       if (isBetterBobaResult(dayResult, bg.best)) {
         bg.best = { ...dayResult, achievedAt: playedAt };
         newBest = true;
       }
-    }
-    bg.updatedAt = new Date().toISOString();
-    userRecord.bobaGame = bg;
+      bg.updatedAt = playedAt;
 
-    await writeUserData(userData, email);
-    res.json({ success: true, best: bg.best, newBest, totals: bg.totals });
+      // 1) Ghi thẳng vào MongoDB và CHỜ ghi xong
+      let savedToMongo = false;
+      if (isBobaMongoReady() && current && current.inMongo) {
+        const r = await User.updateOne({ _id: email }, { $set: { bobaGame: bg } });
+        savedToMongo = r.matchedCount > 0;
+      }
+      // 2) Cập nhật cache RAM (+ bản sao lưu file). Nếu chưa ghi được Mongo thì để hàng đợi đồng bộ lo.
+      const userData = await readUserData();
+      if (!userData.users) userData.users = {};
+      if (!userData.users[email]) {
+        userData.users[email] = { name: (current && current.name) || email.split('@')[0], picture: (current && current.picture) || '', stats: { streak: 0, studyTime: 0, lastActiveDate: '' }, gameHistory: [] };
+      }
+      userData.users[email].bobaGame = bg;
+      if (savedToMongo) {
+        scheduleDiskWrite();
+      } else {
+        await writeUserData(userData, email);
+      }
+      return { bg, newBest };
+    });
+
+    res.json({ success: true, best: result.bg.best, newBest: result.newBest, totals: result.bg.totals, history: getBobaRecentHistory(result.bg) });
   } catch (err) {
     console.error('POST /api/boba/progress error:', err);
-    res.status(500).json({ error: 'Không lưu được tiến trình game' });
+    res.status(500).json({ error: 'Không lưu được kết quả game' });
   }
 });
 
@@ -2697,15 +2716,32 @@ app.get('/api/boba/leaderboard', async (req, res) => {
   try {
     const me = getLoggedInUserEmail(req);
     const limit = bobaInt(req.query.limit, 1, 100, 50);
-    const userData = await readUserData();
-    const rows = Object.entries(userData.users || {})
-      .filter(([, u]) => u && u.bobaGame && u.bobaGame.best && Number.isFinite(Number(u.bobaGame.best.earnings)))
-      .map(([email, u]) => ({
-        email,
-        name: u.name || email.split('@')[0],
-        picture: u.picture || '',
-        ...u.bobaGame.best,
-        daysPlayed: (u.bobaGame.totals && u.bobaGame.totals.daysPlayed) || 0
+
+    let players = null;
+    if (isBobaMongoReady()) {
+      try {
+        const docs = await User.find(
+          { 'bobaGame.best.earnings': { $exists: true } },
+          { name: 1, picture: 1, 'bobaGame.best': 1, 'bobaGame.totals': 1 }
+        ).lean();
+        players = docs.map(d => ({ email: d._id, name: d.name, picture: d.picture, bobaGame: d.bobaGame }));
+      } catch (e) {
+        console.warn('[boba] Mongo leaderboard failed, using cache:', e.message);
+      }
+    }
+    if (!players) {
+      const userData = await readUserData();
+      players = Object.entries(userData.users || {}).map(([email, u]) => ({ email, name: u && u.name, picture: u && u.picture, bobaGame: u && u.bobaGame }));
+    }
+
+    const rows = players
+      .filter(p => p.bobaGame && p.bobaGame.best && Number.isFinite(Number(p.bobaGame.best.earnings)))
+      .map(p => ({
+        email: p.email,
+        name: p.name || String(p.email).split('@')[0],
+        picture: p.picture || '',
+        ...p.bobaGame.best,
+        daysPlayed: (p.bobaGame.totals && p.bobaGame.totals.daysPlayed) || 0
       }));
 
     rows.sort((a, b) => {

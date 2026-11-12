@@ -20,14 +20,136 @@
   <!-- Kaiti Chinese Handwriting Font (Chuẩn Khải Thể / 楷体) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
-  <script type="module" crossorigin src="/assets/bobaGame-Jl3CxdAU.js"></script>
+  <script type="module" crossorigin src="/assets/bobaGame-DXkPmV5N.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/bobaGame-CWggsVJ8.css">
+  <link rel="stylesheet" crossorigin href="/assets/bobaGame-De8G__H3.css">
 </head>
 
 <body class="boba-game-body mode-master">
 
   <div class="boba-game-container" id="boba-game-container">
+
+    <!-- ====================================================================
+         0. TITLE SCREEN (MÀN HÌNH CHỜ: BẮT ĐẦU · HƯỚNG DẪN · XẾP HẠNG)
+         ==================================================================== -->
+    <section class="title-screen" id="title-screen">
+      <div class="title-bg" aria-hidden="true"></div>
+      <div class="title-sunrays" aria-hidden="true"></div>
+      <div class="title-pearls" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <a href="index.html" class="title-home-link" title="Về trang chủ Tiếng Trung HongTai">
+        <i class="fa-solid fa-arrow-left"></i> Trang chủ
+      </a>
+      <span class="title-version">v2.0</span>
+      <!-- Tài khoản: đồng bộ tiến trình & bảng xếp hạng với hệ thống -->
+      <a href="index.html" class="title-account guest" id="title-account" title="Đăng nhập để lưu thành tích">
+        <span class="ta-avatar" id="title-account-avatar"><i class="fa-solid fa-user"></i></span>
+        <span class="ta-text">
+          <strong id="title-account-name">Khách</strong>
+          <small id="title-account-status">Đăng nhập để lưu thành tích</small>
+        </span>
+      </a>
+
+      <!-- Logo -->
+      <div class="title-logo">
+        <div class="title-logo-plate">
+          <span class="title-logo-cup" aria-hidden="true">🧋</span>
+          <h1 class="title-logo-chn kaiti-font">我的奶茶店</h1>
+          <span class="title-logo-pin">Wǒ de nǎichá diàn</span>
+        </div>
+        <div class="title-logo-ribbon">Tiệm Trà Sữa Của Tôi</div>
+        <div class="title-progress" id="title-progress"></div>
+      </div>
+
+      <!-- Khách hàng ló đầu chào -->
+      <div class="title-guest guest-left" aria-hidden="true">
+        <img src="/assets/boba_customer_girl-zmXCu5fB.jpg" alt="">
+        <span class="guest-bubble kaiti-font">你好！</span>
+      </div>
+      <div class="title-guest guest-left2" aria-hidden="true">
+        <img src="/assets/boba_customer_abao-D5nK8rts.jpg" alt="">
+      </div>
+      <div class="title-guest guest-right" aria-hidden="true">
+        <img src="/assets/boba_customer_boy-DMT29U_c.jpg" alt="">
+        <span class="guest-bubble kaiti-font">我要奶茶！</span>
+      </div>
+      <div class="title-guest guest-right2" aria-hidden="true">
+        <img src="/assets/boba_customer_grandma-CTBJt2M6.jpg" alt="">
+      </div>
+
+      <!-- Quầy gỗ + nút -->
+      <div class="title-counter">
+        <button type="button" class="title-play-btn" id="btn-title-play">
+          <span class="play-chn kaiti-font" id="title-play-chn">开始营业</span>
+          <span class="play-vi" id="title-play-vi">Bắt đầu</span>
+          <i class="fa-solid fa-play"></i>
+        </button>
+        <div class="title-sub-buttons">
+          <button type="button" class="title-sub-btn" id="btn-title-guide">
+            <span class="sub-icon">📖</span>
+            <span class="sub-text"><span class="kaiti-font">玩法说明</span> Hướng dẫn</span>
+          </button>
+          <button type="button" class="title-sub-btn" id="btn-title-rank">
+            <span class="sub-icon">🏆</span>
+            <span class="sub-text"><span class="kaiti-font">排行榜</span> Xếp hạng</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HƯỚNG DẪN CHƠI -->
+    <div class="boba-modal-backdrop over-title" id="modal-guide" style="display: none;">
+      <div class="boba-modal-card guide-modal-card">
+        <div class="boba-modal-header">
+          <div class="boba-modal-title">
+            <span>📖</span>
+            <span><span class="kaiti-font">玩法说明</span> · Hướng Dẫn Chơi</span>
+          </div>
+          <button type="button" class="boba-modal-close" data-close="modal-guide"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="guide-steps">
+          <div class="guide-step"><span class="gs-num">1</span><span class="gs-icon">🎯</span>
+            <div><strong>Nhận nhiệm vụ ngày</strong><p>Mỗi ngày có mục tiêu <b>doanh thu</b>, số khách được phép bỏ về và điểm trung bình. Đạt mục nào được 1 ⭐ và thưởng thêm tiền.</p></div></div>
+          <div class="guide-step"><span class="gs-num">2</span><span class="gs-icon">🛎️</span>
+            <div><strong>Khách đến xếp hàng → <span class="kaiti-font">接单</span> Ghi phiếu</strong><p>Đọc câu gọi món tiếng Trung (bấm 🔊 để nghe). Bấm <b>接单</b> để kẹp phiếu lên thanh ray phía trên.</p></div></div>
+          <div class="guide-step"><span class="gs-num">3</span><span class="gs-icon">🧾</span>
+            <div><strong>Nhiều phiếu cùng lúc</strong><p>Bấm vào phiếu trên thanh ray để chọn phiếu đang làm. <b>Mỗi phiếu có ly riêng</b> — đổi phiếu không mất ly đang làm dở.</p></div></div>
+          <div class="guide-step"><span class="gs-num">4</span><span class="gs-icon">🍵</span>
+            <div><strong>Pha chế đúng công thức</strong><p><b>Rót trà</b> (nhấn giữ vòi tới vạch 70%) → chọn <b>đường</b> &amp; <b>đá</b> → <b>lắc</b> dừng ở vùng xanh → thêm <b>topping</b> → <b>đóng nắp</b> &amp; cắm ống hút.</p></div></div>
+          <div class="guide-step"><span class="gs-num">5</span><span class="gs-icon">⏱️</span>
+            <div><strong>Đừng để khách chờ lâu!</strong><p>Thanh kiên nhẫn 😊→😐→😠 chạy khi khách chờ <b>ghi phiếu</b> (45 giây) và chờ <b>nhận món</b>. Hết thanh là khách <b>bỏ về</b>.</p></div></div>
+          <div class="guide-step"><span class="gs-num">6</span><span class="gs-icon">🗑️</span>
+            <div><strong>Làm sai? Hủy ly bất cứ lúc nào</strong><p>Bấm <b>Hủy ly</b> trên thanh trên cùng để đổ ly đi làm lại — phiếu vẫn giữ nguyên.</p></div></div>
+          <div class="guide-step"><span class="gs-num">7</span><span class="gs-icon">🧋</span>
+            <div><strong><span class="kaiti-font">出餐</span> Giao món &amp; chấm điểm</strong><p>Chấm 5 tiêu chí: đúng món, tỉ lệ rót, độ lắc, topping &amp; nắp, thời gian chờ. Điểm cao → tiền tip nhiều.</p></div></div>
+          <div class="guide-step"><span class="gs-num">8</span><span class="gs-icon">🔀</span>
+            <div><strong>2 chế độ chơi</strong><p><b>Quầy Toàn Cảnh</b>: mọi thứ trên 1 màn hình, chơi nhanh. <b>Chế độ Trạm</b>: 4 trạm riêng (Đón khách · Rót · Lắc · Topping) như tiệm thật.</p></div></div>
+          <div class="guide-tip">💡 Mẹo: bật <b>Gợi ý bước tiếp theo</b> (viền xanh) hoặc <b>Chế độ thư giãn</b> 🍃 trong ⚙️ Cài đặt nếu bạn mới học.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BẢNG XẾP HẠNG -->
+    <div class="boba-modal-backdrop over-title" id="modal-rank" style="display: none;">
+      <div class="boba-modal-card rank-modal-card">
+        <div class="boba-modal-header">
+          <div class="boba-modal-title">
+            <span>🏆</span>
+            <span><span class="kaiti-font">排行榜</span> · Bảng Xếp Hạng</span>
+          </div>
+          <button type="button" class="boba-modal-close" data-close="modal-rank"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="rank-tabs" role="tablist">
+          <button type="button" class="rank-tab active" data-rank-tab="global" role="tab">🌏 <span class="kaiti-font">全服</span> Toàn hệ thống</button>
+          <button type="button" class="rank-tab" data-rank-tab="mine" role="tab">📒 <span class="kaiti-font">我的</span> Ngày bán của tôi</button>
+        </div>
+        <div class="rank-summary" id="rank-summary"></div>
+        <div class="rank-list" id="rank-list"></div>
+        <div class="rank-note" id="rank-note">Mỗi người chỉ tính thành tích cao nhất · Xếp theo doanh thu 1 ngày</div>
+      </div>
+    </div>
 
     <!-- ====================================================================
          1. TOP HUD BAR (TRẠNG THÁI QUÁN, TIỀN VÀNG & CỔ VŨ)
@@ -41,6 +163,10 @@
         <!-- Pause / Settings Button -->
         <button type="button" class="hud-btn-circle" id="btn-pause-boba" title="Tạm dừng & Cài đặt">
           <i class="fa-solid fa-pause"></i>
+        </button>
+        <!-- Fullscreen toggle -->
+        <button type="button" class="hud-btn-circle hud-fullscreen-btn" id="btn-fullscreen-boba" title="Toàn màn hình">
+          <i class="fa-solid fa-expand"></i>
         </button>
 
         <!-- Coin Pill -->
@@ -72,6 +198,11 @@
       </div>
 
       <div class="hud-right">
+        <!-- Hủy ly bất cứ lúc nào -->
+        <button type="button" class="hud-trash-pill" id="btn-hud-trash" title="Hủy ly đang làm (dùng được ở mọi trạm)">
+          <i class="fa-solid fa-trash-can"></i> <span>Hủy ly</span>
+        </button>
+
         <!-- Mode Switcher Pill -->
         <button type="button" class="hud-mode-pill" id="btn-toggle-game-mode" title="Chuyển đổi Quầy Toàn Cảnh (Ảnh Gốc) / Chế Độ 4 Trạm">
           <i class="fa-solid fa-shapes"></i>
@@ -94,59 +225,17 @@
          ==================================================================== -->
     <div class="boba-ticket-rail" id="boba-ticket-rail">
       <div class="rail-bar-metal">
-        <span class="rail-title-label"><i class="fa-solid fa-receipt"></i> ORDER TICKETS (点单夹)</span>
-        <div class="rail-order-summary" id="rail-order-summary">
-          <span class="summary-text kaiti-font" id="rail-order-summary-text">#101 小雨: 珍珠奶茶 · 少糖 (70%) · 去冰</span>
-          <button type="button" class="btn-rail-quick-zoom btn-quick-zoom-ticket" title="Xem đầy đủ phiếu order">
-            <i class="fa-solid fa-magnifying-glass-plus"></i> Xem Phiếu
-          </button>
-        </div>
+        <span class="rail-title-label"><i class="fa-solid fa-receipt"></i> 点单夹</span>
       </div>
-      <div class="tickets-clip-area" id="tickets-clip-area">
-        <!-- Ticket Card Papa's Style (Click to zoom/inspect, clear high-contrast typography) -->
-        <div class="papa-order-ticket" id="active-order-ticket" draggable="true"
-          title="Bấm để phóng to xem chi tiết phiếu gọi món">
-          <div class="ticket-clip-pin">
-            <span class="pin-rivet"></span>
-          </div>
-          <div class="ticket-header">
-            <span class="ticket-cust-name kaiti-font" id="ticket-header-name">小雨 (Bé Mưa)</span>
-            <span class="ticket-order-id" id="ticket-order-id">#101</span>
-          </div>
-          <div class="ticket-body">
-            <div class="ticket-line-item tea">
-              <span class="tag-badge tea">茶</span>
-              <div class="item-text-group">
-                <strong class="kaiti-font" id="ticket-tea-text">珍珠奶茶</strong>
-                <span class="item-sub-vi" id="ticket-tea-vi">Trà sữa</span>
-              </div>
-            </div>
-            <div class="ticket-line-item sugar">
-              <span class="tag-badge sugar">糖</span>
-              <div class="item-text-group">
-                <strong class="kaiti-font" id="ticket-sugar-text">少糖 (70%)</strong>
-                <span class="item-sub-vi" id="ticket-sugar-vi">Ít đường</span>
-              </div>
-            </div>
-            <div class="ticket-line-item ice">
-              <span class="tag-badge ice">冰</span>
-              <div class="item-text-group">
-                <strong class="kaiti-font" id="ticket-ice-text">去冰 (0%)</strong>
-                <span class="item-sub-vi" id="ticket-ice-vi">Không đá</span>
-              </div>
-            </div>
-            <div class="ticket-line-item topping">
-              <span class="tag-badge topping">料</span>
-              <div class="item-text-group">
-                <strong class="kaiti-font" id="ticket-topping-text">珍珠</strong>
-                <span class="item-sub-vi" id="ticket-topping-vi">Trân châu đen</span>
-              </div>
-            </div>
-          </div>
-          <div class="ticket-footer-zoom-hint">
-            <i class="fa-solid fa-magnifying-glass-plus"></i> Bấm để phóng to
-          </div>
-        </div>
+      <!-- Các phiếu đã ghi (mỗi phiếu = 1 khách đang chờ món, có thanh kiên nhẫn). Bấm để chọn phiếu đang làm. -->
+      <div class="rail-tickets" id="rail-tickets"></div>
+      <div class="rail-right-info">
+        <span class="rail-line-count" id="rail-line-count">👥 Xếp hàng: 0</span>
+        <span class="rail-goal-info" id="rail-goal-info" style="display: none;" title="Tiến độ nhiệm vụ doanh thu hôm nay"></span>
+        <span class="rail-day-info" id="rail-day-info">第1天</span>
+        <button type="button" class="btn-rail-quick-zoom btn-quick-zoom-ticket" title="Xem đầy đủ phiếu đang làm">
+          <i class="fa-solid fa-magnifying-glass-plus"></i> Xem Phiếu
+        </button>
       </div>
     </div>
 
@@ -183,6 +272,9 @@
           </div>
         </div>
 
+        <!-- Quầy trống: đếm ngược khách tiếp theo -->
+        <div class="counter-empty-hint master-empty-hint"></div>
+
         <!-- 4. Center Customer Area Behind Counter -->
         <div class="master-customer-stage">
           <!-- 3D Anime Character Avatar -->
@@ -194,6 +286,11 @@
               <span class="m-cname kaiti-font" id="master-customer-name">小雨</span>
               <span class="m-crole" id="master-customer-role">(Bé Mưa)</span>
             </div>
+            <!-- Thanh kiên nhẫn của khách đang ở quầy -->
+            <div class="counter-patience" title="Độ kiên nhẫn của khách">
+              <span class="patience-mood">😊</span>
+              <span class="patience-meter"><span class="patience-fill"></span></span>
+            </div>
           </div>
 
           <!-- Speech Order Balloon (matching Image 1 speech bubble with preview cup) -->
@@ -202,6 +299,7 @@
               <span class="preview-cup-icon">🧋</span>
             </div>
             <div class="bubble-text-content">
+              <span class="counter-status-tag">顾客点单 (Khách gọi món)</span>
               <div class="bubble-chn-order kaiti-font" id="master-speech-chn">
                 我要一杯<br>
                 <strong id="master-order-tea">珍珠奶茶</strong>，<br>
@@ -213,6 +311,9 @@
               <div class="bubble-vi-order" id="master-speech-vi">
                 Cho tôi 1 ly trà sữa trân châu, ít đường (70%), không đá
               </div>
+              <button type="button" class="btn-master-take-order" id="btn-master-take-order" style="display: none;">
+                <i class="fa-solid fa-pencil"></i> 接单 · Ghi phiếu
+              </button>
             </div>
             <button type="button" class="btn-master-speech-audio" id="btn-master-speech-audio" title="Nghe phát âm chuẩn tiếng Trung">
               <i class="fa-solid fa-volume-high"></i>
@@ -362,9 +463,11 @@
             <!-- Tactile Buttons Grid -->
             <div class="sugar-ice-buttons-grid">
               <!-- Sugar Row -->
-              <button type="button" class="btn-m-sugar" data-sugar="less_sugar">少糖</button>
-              <button type="button" class="btn-m-sugar" data-sugar="half_sugar">半糖</button>
-              <button type="button" class="btn-m-sugar" data-sugar="extra_sugar">多糖</button>
+              <button type="button" class="btn-m-sugar" data-sugar="extra_sugar" title="Nhiều đường (100%)">多糖</button>
+              <button type="button" class="btn-m-sugar" data-sugar="less_sugar" title="Ít đường (70%)">少糖</button>
+              <button type="button" class="btn-m-sugar" data-sugar="half_sugar" title="Nửa đường (50%)">半糖</button>
+              <button type="button" class="btn-m-sugar" data-sugar="micro_sugar" title="Hơi ngọt (30%)">微糖</button>
+              <button type="button" class="btn-m-sugar" data-sugar="no_sugar" title="Không đường (0%)">无糖</button>
               <!-- Ice Row -->
               <button type="button" class="btn-m-ice" data-ice="no_ice">去冰</button>
               <button type="button" class="btn-m-ice" data-ice="less_ice">少冰</button>
@@ -500,6 +603,9 @@
           </div>
         </div>
 
+        <!-- Quầy trống: đếm ngược khách tiếp theo -->
+        <div class="counter-empty-hint order-empty-hint"></div>
+
         <!-- Customer Stage -->
         <div class="order-customer-stage">
           <!-- Anime 3D Chibi Customer Visual (Gemini 3D Anime Render) -->
@@ -514,6 +620,10 @@
                 <div class="customer-chibi-badge-wrap">
                   <span class="c-name kaiti-font" id="customer-name-label">小雨</span>
                   <span class="c-role" id="customer-role-label">(Bé Mưa)</span>
+                  <span class="counter-patience" title="Độ kiên nhẫn của khách">
+                    <span class="patience-mood">😊</span>
+                    <span class="patience-meter"><span class="patience-fill"></span></span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -522,7 +632,7 @@
           <!-- Customer Speech Order Balloon -->
           <div class="order-speech-balloon" id="order-speech-balloon">
             <div class="balloon-header">
-              <span class="balloon-tag">顾客点单 (Khách gọi món)</span>
+              <span class="balloon-tag counter-status-tag">顾客点单 (Khách gọi món)</span>
               <button type="button" class="btn-audio-listen" id="btn-listen-order-speech"
                 title="Nghe giọng đọc tiếng Trung">
                 <i class="fa-solid fa-volume-high"></i> Nghe phát âm
@@ -1017,6 +1127,9 @@
         </div>
       </section>
 
+      <!-- Next-step guide tag (positioned by JS above the element to use next) -->
+      <div class="guide-tag" id="guide-tag" style="display: none;" aria-live="polite"></div>
+
       <!-- Floating Papa Toast Banner Notification -->
       <div class="papa-toast-banner" id="papa-toast-banner" style="display: none;">
         <span class="toast-icon" id="toast-icon">🗑️</span>
@@ -1156,6 +1269,7 @@
         <div class="scorecard-header">
           <span class="scorecard-brand kaiti-font">我的奶茶店 · 出餐评分卡</span>
           <h3 class="scorecard-title">PAPA'S SERVICE SCORE</h3>
+          <div class="scorecard-ticket-title" id="score-ticket-title">#101</div>
         </div>
 
         <!-- 4 Criteria Percentage Bars -->
@@ -1194,6 +1308,15 @@
               <div class="c-bar-fill fill-pink" id="score-bar-top" style="width: 100%;"></div>
             </div>
             <span class="c-percent" id="score-val-top">100%</span>
+          </div>
+
+          <!-- 5. Waiting time (Papa's Waiting score) -->
+          <div class="criteria-row">
+            <span class="c-label">⏱️ 等待时间 (Thời Gian Chờ Món):</span>
+            <div class="c-bar-bg">
+              <div class="c-bar-fill fill-violet" id="score-bar-wait" style="width: 100%;"></div>
+            </div>
+            <span class="c-percent" id="score-val-wait">100%</span>
           </div>
         </div>
 
@@ -1235,8 +1358,52 @@
 
         <!-- Next Customer Button -->
         <button type="button" class="btn-scorecard-continue" id="btn-next-customer-papa">
-          <i class="fa-solid fa-user-plus"></i>
-          <span>接待下一位顾客 (Đón Khách Tiếp Theo)</span>
+          <i class="fa-solid fa-store"></i>
+          <span>继续营业 (Tiếp Tục Bán Hàng)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         6b. DAY SUMMARY MODAL (TỔNG KẾT CUỐI NGÀY - PAPA'S STYLE)
+         ==================================================================== -->
+    <div class="boba-modal-backdrop" id="modal-day-summary" style="display: none;">
+      <div class="papa-scorecard-sheet day-summary-sheet">
+        <div class="scorecard-pin"></div>
+        <div class="scorecard-header">
+          <span class="scorecard-brand kaiti-font">我的奶茶店 · 今日总结</span>
+          <h3 class="scorecard-title" id="day-summary-title">第1天 · Tổng kết ngày 1</h3>
+        </div>
+        <div class="day-summary-grid">
+          <div class="day-stat"><span class="ds-icon">🧋</span><span class="ds-label">Đã phục vụ</span><strong id="day-sum-served">0/0</strong></div>
+          <div class="day-stat lost"><span class="ds-icon">😠</span><span class="ds-label">Khách bỏ về</span><strong id="day-sum-lost">0</strong></div>
+          <div class="day-stat"><span class="ds-icon">🪙</span><span class="ds-label">Doanh thu</span><strong id="day-sum-earn">0 ¥</strong></div>
+          <div class="day-stat"><span class="ds-icon">⭐</span><span class="ds-label">Điểm TB</span><strong id="day-sum-avg">—</strong></div>
+        </div>
+        <div class="mission-results" id="day-mission-results"></div>
+        <div class="day-summary-msg" id="day-sum-msg"></div>
+        <button type="button" class="btn-scorecard-continue" id="btn-start-next-day">
+          <i class="fa-solid fa-sun"></i>
+          <span>进入下一天 (Sang Ngày Tiếp Theo)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         6c. DAY MISSION BRIEFING (NHIỆM VỤ ĐẦU NGÀY)
+         ==================================================================== -->
+    <div class="boba-modal-backdrop" id="modal-day-mission" style="display: none;">
+      <div class="mission-card">
+        <div class="mission-header">
+          <span class="mission-day kaiti-font" id="mission-day-chn">第1天</span>
+          <h3 class="mission-title"><span class="kaiti-font">今日任务</span> · Nhiệm Vụ Hôm Nay</h3>
+          <p class="mission-sub" id="mission-sub">Hôm nay tiệm sẽ đón 4 vị khách</p>
+        </div>
+        <ul class="mission-goals" id="mission-goals"></ul>
+        <div class="mission-reward">🎁 Mỗi nhiệm vụ hoàn thành = <b>1 ⭐</b> + <b>10 ¥</b> thưởng · Đủ 3 ⭐ = ngày hoàn hảo!</div>
+        <button type="button" class="btn-mission-start" id="btn-mission-start">
+          <i class="fa-solid fa-store"></i>
+          <span><span class="kaiti-font">开始营业</span> · Mở cửa bán hàng!</span>
         </button>
       </div>
     </div>
@@ -1314,10 +1481,32 @@
             </div>
             <input type="checkbox" id="toggle-vi" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
           </div>
+
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+            <div>
+              <strong style="font-size: 0.95rem; color: #1e293b;">Gợi ý bước tiếp theo</strong>
+              <div style="font-size: 0.75rem; color: #64748b;">Viền xanh nhấp nháy chỉ chỗ cần thao tác tiếp</div>
+            </div>
+            <input type="checkbox" id="toggle-guide" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
+          </div>
+
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+            <div>
+              <strong style="font-size: 0.95rem; color: #1e293b;">Chế độ thư giãn 🍃</strong>
+              <div style="font-size: 0.75rem; color: #64748b;">Khách chờ bao lâu cũng được, không bỏ về (dành cho người mới học)</div>
+            </div>
+            <input type="checkbox" id="toggle-relaxed" style="width: 20px; height: 20px; accent-color: #ea580c;">
+          </div>
         </div>
 
         <div class="boba-modal-footer"
           style="padding: 14px 20px; display: flex; justify-content: space-between; background: #fff7ed;">
+          <button type="button" class="btn btn-secondary" id="btn-back-to-title"
+            style="color: #9a3412; border: 1.5px solid #fdba74; background: #fff; padding: 6px 14px; border-radius: 10px; font-weight: 700; cursor: pointer;">
+            <i class="fa-solid fa-house"></i> Màn hình chính
+          </button>
           <button type="button" class="btn btn-secondary" id="btn-reset-boba-save"
             style="color: #e11d48; border: 1.5px solid #fda4af; background: #fff; padding: 6px 14px; border-radius: 10px; font-weight: 700; cursor: pointer;">
             <i class="fa-solid fa-trash"></i> Chơi lại từ đầu
@@ -1331,6 +1520,16 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Portrait phone: ask to rotate to landscape -->
+  <div class="rotate-device-overlay" id="rotate-device-overlay">
+    <div class="rotate-icon">📱</div>
+    <strong>Xoay ngang điện thoại để chơi nhé!</strong>
+    <p>Tiệm trà sữa được thiết kế cho màn hình ngang để nhìn rõ quầy và các trạm pha chế.</p>
+    <button type="button" id="btn-rotate-fullscreen">
+      <i class="fa-solid fa-expand"></i> Chơi toàn màn hình
+    </button>
   </div>
 
   <script>

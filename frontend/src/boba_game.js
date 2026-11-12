@@ -472,46 +472,9 @@ class PapaBobaGame {
       .finally(() => { this.cloud.checked = true; this.renderAccountChip(); });
   }
 
-  // ---------------------------------------------------------------- Đồng bộ tài khoản
-  getSaveSnapshot() {
-    return {
-      coins: this.coins,
-      level: this.level,
-      exp: this.exp,
-      completedOrders: this.completedOrders,
-      words: [...this.learnedWords],
-      day: this.day,
-      tickets: this.ticketSeq,
-      relaxed: !!this.relaxedMode,
-      records: this.records || [],
-      updatedAt: this.savedAt || Date.now()
-    };
-  }
-
-  applySaveSnapshot(s) {
-    const num = (v, def) => (Number.isFinite(Number(v)) && v !== null && v !== '' ? Number(v) : def);
-    this.coins = num(s.coins, 120);
-    this.level = Math.max(1, num(s.level, 1));
-    this.exp = Math.max(0, num(s.exp, 0));
-    this.completedOrders = Math.max(0, num(s.completedOrders, 0));
-    this.learnedWords = new Set(['珍珠', '奶茶', '少糖', '去冰']);
-    if (Array.isArray(s.words)) s.words.forEach(w => this.learnedWords.add(w));
-    this.day = Math.max(1, num(s.day, 1));
-    this.ticketSeq = Math.max(0, num(s.tickets, 0));
-    this.relaxedMode = !!s.relaxed;
-    this.records = Array.isArray(s.records) ? s.records.filter(r => r && Number.isFinite(r.earnings)) : [];
-    this.savedAt = num(s.updatedAt, Date.now());
-    const relaxedToggle = document.getElementById('toggle-relaxed');
-    if (relaxedToggle) relaxedToggle.checked = this.relaxedMode;
-    this.saveGame({ skipCloud: true, keepTime: true });
-    this.updateHUD();
-    this.renderRail();
-  }
-
-  hasMeaningfulProgress() {
-    return this.day > 1 || this.completedOrders > 0 || (this.records && this.records.length > 0);
-  }
-
+  // ---------------------------------------------------------------- Tài khoản & bảng xếp hạng
+  // QUY TẮC: mỗi lần tải trang = 1 ván mới (không lưu tiến trình ở máy hay server).
+  // Chỉ KẾT QUẢ mỗi ngày bán hàng được gửi lên tài khoản → server giữ thành tích cao nhất.
   async initCloud() {
     if (!BobaCloud.token()) {
       this.cloud.checked = true;
@@ -522,7 +485,6 @@ class PapaBobaGame {
     try {
       data = await BobaCloud.getProgress();
     } catch (e) {
-      // Mất mạng / server lỗi: vẫn chơi bình thường với dữ liệu trên máy
       this.cloud.checked = true;
       this.cloud.offline = true;
       const lu = BobaCloud.localUser();
@@ -537,34 +499,11 @@ class PapaBobaGame {
     }
     const lu = BobaCloud.localUser();
     this.cloud.loggedIn = true;
-    this.cloud.email = lu && lu.email ? String(lu.email).toLowerCase().trim() : '(account)';
     this.cloud.name = (data.user && data.user.name) || (lu && lu.name) || 'Bạn';
     this.cloud.picture = (data.user && data.user.picture) || (lu && lu.picture) || '';
     this.cloud.best = data.best || null;
-
-    let owner = '';
-    try { owner = localStorage.getItem('boba_owner') || ''; } catch (e) {}
-    const localIsMine = !owner || owner === this.cloud.email;
-    const server = data.save;
-    const dayBusy = !!this.dayStats && !this.dayEnded;
-    const serverTime = Number((server && server.updatedAt) || 0);
-    const localTime = Number(this.savedAt || 0);
-
-    if (server && !dayBusy && (!localIsMine || !this.hasMeaningfulProgress() || serverTime >= localTime)) {
-      // Tiến trình trên tài khoản mới hơn (hoặc dữ liệu máy này thuộc tài khoản khác)
-      this.applySaveSnapshot(server);
-    } else if (!localIsMine && !server && !dayBusy) {
-      // Dữ liệu trên máy là của tài khoản khác → tài khoản này bắt đầu mới
-      this.applySaveSnapshot({});
-    }
-    try { localStorage.setItem('boba_owner', this.cloud.email); } catch (e) {}
-
-    // Máy này có tiến trình mới hơn tài khoản (vd: chơi lúc chưa đăng nhập) → đẩy lên
-    const needPush = localIsMine && (!server || localTime > serverTime);
-    if (needPush && this.hasMeaningfulProgress()) {
-      const bestLocal = (this.records || []).reduce((b, r) => (!b || r.earnings > b.earnings ? r : b), null);
-      await this.pushCloud(bestLocal, { silent: true });
-    }
+    this.cloud.history = Array.isArray(data.history) ? data.history : [];
+    this.cloud.totals = data.totals || null;
     this.renderAccountChip();
     if (this.isTitleVisible()) this.showTitleScreen();
   }
@@ -579,16 +518,16 @@ class PapaBobaGame {
     if (c.loggedIn) {
       chip.classList.remove('guest');
       chip.removeAttribute('href');
-      chip.title = 'Tiến trình được lưu vào tài khoản';
+      chip.title = 'Thành tích cao nhất được lưu vào tài khoản';
       if (nameEl) nameEl.textContent = c.name;
-      if (statusEl) statusEl.textContent = c.best ? `☁️ Đã đồng bộ · Kỷ lục ${Number(c.best.earnings).toFixed(1)} ¥` : '☁️ Đã đồng bộ tài khoản';
+      if (statusEl) statusEl.textContent = c.best ? `🏆 Kỷ lục ${Number(c.best.earnings).toFixed(1)} ¥` : '☁️ Chưa có kỷ lục · Chơi để lên bảng!';
       if (avatarEl) avatarEl.innerHTML = c.picture ? `<img src="${escapeHtml(c.picture)}" alt="" referrerpolicy="no-referrer">` : '<i class="fa-solid fa-user"></i>';
     } else {
       chip.classList.add('guest');
       chip.setAttribute('href', 'index.html');
       if (c.offline && c.name) {
         if (nameEl) nameEl.textContent = c.name;
-        if (statusEl) statusEl.textContent = '⚠️ Mất kết nối · Lưu tạm trên máy';
+        if (statusEl) statusEl.textContent = '⚠️ Mất kết nối máy chủ';
       } else {
         if (nameEl) nameEl.textContent = 'Khách';
         if (statusEl) statusEl.textContent = 'Đăng nhập để lưu thành tích';
@@ -597,87 +536,35 @@ class PapaBobaGame {
     }
   }
 
-  // Lưu lên tài khoản ngay. dayResult: kết quả 1 ngày bán → server cập nhật kỷ lục cao nhất
-  async pushCloud(dayResult = null, { silent = false, keepalive = false } = {}) {
-    if (!this.cloud.loggedIn) return null;
-    if (this.cloud.timer) { clearTimeout(this.cloud.timer); this.cloud.timer = null; }
+  // Gửi kết quả 1 ngày bán hàng → server cập nhật thành tích cao nhất của tài khoản
+  async pushDayResult(dayResult) {
+    if (!this.cloud.loggedIn || !dayResult) return null;
     try {
-      const body = { save: this.getSaveSnapshot() };
-      if (dayResult) body.dayResult = dayResult;
-      const r = await BobaCloud.saveProgress(body, keepalive);
-      this.cloud.pending = false;
+      // keepalive: vẫn gửi xong kể cả khi người chơi tải lại / đóng trang ngay sau khi tổng kết
+      const r = await BobaCloud.saveProgress({ dayResult }, true);
       if (r && r.best) this.cloud.best = r.best;
-      if (r && r.newBest && !silent) {
+      if (r && Array.isArray(r.history)) this.cloud.history = r.history;
+      if (r && r.totals) this.cloud.totals = r.totals;
+      if (r && r.newBest) {
         this.showToast('🏆', `Kỷ lục mới của bạn: ${Number(r.best.earnings).toFixed(1)} ¥ — đã cập nhật bảng xếp hạng!`);
       }
       this.renderAccountChip();
       return r;
     } catch (e) {
-      this.cloud.pending = true; // sẽ thử lại ở lần lưu sau
-      if (!silent) this.showToast('⚠️', 'Chưa lưu được lên tài khoản (mất kết nối). Tiến trình vẫn giữ trên máy.');
+      this.showToast('⚠️', 'Chưa gửi được kết quả lên bảng xếp hạng (mất kết nối).');
       return null;
     }
   }
 
-  // Lưu trễ: gom nhiều thay đổi nhỏ trong lúc chơi thành 1 lần gửi
-  scheduleCloudSave() {
-    if (!this.cloud.loggedIn) return;
-    this.cloud.pending = true;
-    if (this.cloud.timer) clearTimeout(this.cloud.timer);
-    this.cloud.timer = setTimeout(() => { this.cloud.timer = null; this.pushCloud(null, { silent: true }); }, 4000);
-  }
-
-  // Rời trang khi còn thay đổi chưa gửi → gửi nốt (keepalive)
-  flushCloudOnExit() {
-    if (this.cloud.loggedIn && this.cloud.pending) this.pushCloud(null, { silent: true, keepalive: true });
-  }
-
+  // Không khôi phục gì: dọn sạch dữ liệu cũ mà các phiên bản trước đã lưu trên trình duyệt
   loadSave() {
     try {
-      const c = localStorage.getItem('boba_coins');
-      if (c !== null) this.coins = parseInt(c, 10);
-      const lv = localStorage.getItem('boba_level');
-      if (lv !== null) this.level = parseInt(lv, 10);
-      const ex = localStorage.getItem('boba_exp');
-      if (ex !== null) this.exp = parseInt(ex, 10);
-      const ord = localStorage.getItem('boba_orders');
-      if (ord !== null) this.completedOrders = parseInt(ord, 10);
-      const words = JSON.parse(localStorage.getItem('boba_words') || 'null');
-      if (Array.isArray(words)) words.forEach(w => this.learnedWords.add(w));
-      const day = localStorage.getItem('boba_day');
-      if (day !== null) this.day = parseInt(day, 10);
-      const seq = localStorage.getItem('boba_tickets');
-      if (seq !== null) this.ticketSeq = parseInt(seq, 10);
-      this.relaxedMode = localStorage.getItem('boba_relaxed') === '1';
-      const recs = JSON.parse(localStorage.getItem('boba_records') || '[]');
-      if (Array.isArray(recs)) this.records = recs.filter(r => r && Number.isFinite(r.earnings));
-      this.savedAt = parseInt(localStorage.getItem('boba_saved_at') || '0', 10) || 0;
+      BOBA_SAVE_KEYS.forEach(k => localStorage.removeItem(k));
     } catch (e) {}
-    if (!Number.isFinite(this.day) || this.day < 1) this.day = 1;
-    if (!Number.isFinite(this.ticketSeq) || this.ticketSeq < 0) this.ticketSeq = 0;
-    // Chống dữ liệu hỏng (NaN) làm vỡ HUD
-    if (!Number.isFinite(this.coins)) this.coins = 120;
-    if (!Number.isFinite(this.level) || this.level < 1) this.level = 1;
-    if (!Number.isFinite(this.exp) || this.exp < 0) this.exp = 0;
-    if (!Number.isFinite(this.completedOrders) || this.completedOrders < 0) this.completedOrders = 0;
   }
 
-  saveGame({ skipCloud = false, keepTime = false } = {}) {
-    if (!keepTime) this.savedAt = Date.now();
-    try {
-      localStorage.setItem('boba_saved_at', String(this.savedAt || Date.now()));
-      localStorage.setItem('boba_coins', this.coins.toString());
-      localStorage.setItem('boba_level', this.level.toString());
-      localStorage.setItem('boba_exp', this.exp.toString());
-      localStorage.setItem('boba_orders', this.completedOrders.toString());
-      localStorage.setItem('boba_words', JSON.stringify([...this.learnedWords]));
-      localStorage.setItem('boba_day', this.day.toString());
-      localStorage.setItem('boba_tickets', this.ticketSeq.toString());
-      localStorage.setItem('boba_relaxed', this.relaxedMode ? '1' : '0');
-      localStorage.setItem('boba_records', JSON.stringify(this.records || []));
-    } catch (e) {}
-    if (!skipCloud) this.scheduleCloudSave();
-  }
+  // Ván chơi chỉ sống trong phiên hiện tại → không ghi gì xuống trình duyệt
+  saveGame() {}
 
   initDOM() {
     this.updateHUD();
@@ -777,9 +664,6 @@ class PapaBobaGame {
     document.querySelectorAll('#modal-rank .rank-tab').forEach(btn => {
       btn.addEventListener('click', () => { this.audio.playPop(); this.switchRankTab(btn.dataset.rankTab); });
     });
-    // Rời trang khi còn thay đổi chưa gửi lên tài khoản → gửi nốt
-    window.addEventListener('pagehide', () => this.flushCloudOnExit());
-    document.addEventListener('visibilitychange', () => { if (document.hidden) this.flushCloudOnExit(); });
     document.querySelectorAll('[data-close]').forEach(btn => {
       btn.addEventListener('click', () => {
         const m = document.getElementById(btn.dataset.close);
@@ -979,23 +863,10 @@ class PapaBobaGame {
       this.showToast('🐲', '加油！Cố lên nhé, chủ quán!');
     });
 
-    // Reset save (chỉ xóa dữ liệu của game trà sữa, không đụng tới dữ liệu các trang khác)
+    // Chơi lại từ đầu: ván mới (kỷ lục trên bảng xếp hạng vẫn giữ trong tài khoản)
     document.getElementById('btn-reset-boba-save')?.addEventListener('click', () => {
-      if (confirm('Bạn có muốn chơi lại từ đầu không?')) {
-        try {
-          BOBA_SAVE_KEYS.forEach(k => localStorage.removeItem(k));
-        } catch (e) {}
-        // Đã đăng nhập: xoá tiến trình trên tài khoản (kỷ lục trên bảng xếp hạng vẫn giữ)
-        const done = () => location.reload();
-        if (this.cloud.loggedIn) {
-          if (this.cloud.timer) clearTimeout(this.cloud.timer);
-          this.cloud.pending = false;
-          this.cloud.loggedIn = false; // chặn mọi lần lưu tự động trước khi tải lại trang
-          BobaCloud.saveProgress({ save: { day: 1, coins: 120, level: 1, exp: 0, completedOrders: 0, words: [], tickets: 0, relaxed: false, records: [], updatedAt: Date.now() } })
-            .catch(() => {}).finally(done);
-        } else {
-          done();
-        }
+      if (confirm('Bạn có muốn chơi lại từ đầu không? (Kỷ lục trên bảng xếp hạng vẫn được giữ)')) {
+        location.reload();
       }
     });
 
@@ -1644,17 +1515,6 @@ class PapaBobaGame {
   onTitlePlay() {
     this.audio.init();
     this.audio.playPop();
-    // Chờ tải xong tiến trình từ tài khoản (tối đa ~8s) để không ghi đè dữ liệu cũ hơn lên server
-    if (!this.cloud.checked && this.cloudReady) {
-      const btn = document.getElementById('btn-title-play');
-      if (btn) btn.disabled = true;
-      this.showToast('☁️', 'Đang tải tiến trình từ tài khoản...');
-      this.cloudReady.finally(() => {
-        if (btn) btn.disabled = false;
-        if (this.isTitleVisible()) this.onTitlePlay();
-      });
-      return;
-    }
     this.hideTitleScreen();
     if (this.isDayInProgress()) {
       this.showToast('▶️', `Tiếp tục ngày ${this.day}!`);
@@ -1746,16 +1606,21 @@ class PapaBobaGame {
     const list = document.getElementById('rank-list');
     const summary = document.getElementById('rank-summary');
     const note = document.getElementById('rank-note');
+    // Đã đăng nhập: lịch sử các ngày bán lưu trong tài khoản; khách: chỉ ván đang chơi
+    const fmtDate = (iso) => { const d = new Date(iso); return Number.isNaN(d.getTime()) ? '' : d.toLocaleDateString('vi-VN'); };
+    const source = this.cloud.loggedIn && Array.isArray(this.cloud.history)
+      ? this.cloud.history.map(h => ({ ...h, date: h.date || fmtDate(h.playedAt) }))
+      : this.records;
     if (note) note.textContent = this.cloud.loggedIn
-      ? '☁️ Đã đồng bộ với tài khoản · Xếp theo doanh thu trong ngày'
-      : 'Đang lưu trên thiết bị này · Đăng nhập để đồng bộ & lên bảng xếp hạng chung';
-    const recs = [...this.records].sort((a, b) => b.earnings - a.earnings);
+      ? '☁️ Các ngày bán đã lưu trong tài khoản · Xếp theo doanh thu trong ngày'
+      : 'Chỉ tính ván đang chơi (tải lại trang là ván mới) · Đăng nhập để lưu thành tích';
+    const recs = [...source].filter(r => r && Number.isFinite(Number(r.earnings))).sort((a, b) => b.earnings - a.earnings);
     if (summary) {
-      const totalEarn = this.records.reduce((s, r) => s + r.earnings, 0);
-      const totalServed = this.records.reduce((s, r) => s + r.served, 0);
-      const totalStars = this.records.reduce((s, r) => s + (r.stars || 0), 0);
+      const totalEarn = recs.reduce((s, r) => s + Number(r.earnings), 0);
+      const totalServed = recs.reduce((s, r) => s + (r.served || 0), 0);
+      const totalStars = recs.reduce((s, r) => s + (r.stars || 0), 0);
       summary.innerHTML = `
-        <div class="rs-item"><span>📅</span><strong>${this.records.length}</strong><small>Ngày đã bán</small></div>
+        <div class="rs-item"><span>📅</span><strong>${recs.length}</strong><small>Ngày đã bán</small></div>
         <div class="rs-item"><span>🧋</span><strong>${totalServed}</strong><small>Ly đã giao</small></div>
         <div class="rs-item"><span>🪙</span><strong>${totalEarn.toFixed(0)} ¥</strong><small>Tổng doanh thu</small></div>
         <div class="rs-item"><span>⭐</span><strong>${totalStars}</strong><small>Tổng sao</small></div>`;
@@ -1769,7 +1634,7 @@ class PapaBobaGame {
           <div class="rank-row${i < 3 ? ' top' : ''}">
             <span class="rr-pos">${medals[i] || i + 1}</span>
             <span class="rr-day"><span class="kaiti-font">第${r.day}天</span><small>${r.date || ''}</small></span>
-            <span class="rr-earn">${r.earnings.toFixed(1)} ¥</span>
+            <span class="rr-earn">${Number(r.earnings).toFixed(1)} ¥</span>
             <span class="rr-served">🧋 ${r.served}/${r.total}${r.lost ? ` · 😠 ${r.lost}` : ''}</span>
             <span class="rr-avg">${r.served > 0 ? `${r.avg}%` : '—'}</span>
             <span class="rr-stars">${'⭐'.repeat(r.stars || 0)}${'☆'.repeat(3 - (r.stars || 0))}</span>
@@ -2203,10 +2068,9 @@ class PapaBobaGame {
       date: `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`
     });
     this.records = this.records.sort((a, b) => b.earnings - a.earnings).slice(0, MISSION_RULES.maxRecords);
-    this.saveGame({ skipCloud: true });
     const dayRecord = this.records.find(r => r.day === this.day);
     if (this.cloud.loggedIn) {
-      this.pushCloud(dayRecord);
+      this.pushDayResult(dayRecord);
     } else if (this.cloud.checked) {
       setTimeout(() => this.showToast('🔐', 'Đăng nhập ở trang chủ để lưu thành tích lên bảng xếp hạng toàn hệ thống!'), 1500);
     }
