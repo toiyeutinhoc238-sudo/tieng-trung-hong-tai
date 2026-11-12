@@ -1825,3 +1825,277 @@ body.boba-game-body {
   border-color: #ea580c;
   background: #ffedd5;
 }
+
+/* ==========================================================================
+   PAPA'S TACTILE CONTROLS: TRASH CAN, UNDO/REMOVE, DRAIN LIQUID, DRAG & DROP
+   ========================================================================== */
+.cup-tactile-toolbar {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-sub-action {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
+  background: #f8fafc;
+  color: #475569;
+  font-family: var(--boba-font-main);
+  font-size: 0.74rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.btn-sub-action:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+}
+
+.btn-sub-action.warning {
+  border-color: #fdba74;
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.btn-sub-action.warning:hover {
+  background: #fed7aa;
+  border-color: #ea580c;
+}
+
+.btn-sub-action.danger {
+  border-color: #fecdd3;
+  background: #fff1f2;
+  color: #e11d48;
+}
+
+.btn-sub-action.danger:hover {
+  background: #ffe4e6;
+  border-color: #f43f5e;
+}
+
+/* Papa's Iconic Trash Can Unit */
+.papa-trash-bin-unit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.trash-lid-anim {
+  width: 36px;
+  height: 8px;
+  background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+  border-radius: 4px 4px 0 0;
+  border: 1.5px solid #334155;
+  border-bottom: none;
+  transform-origin: left bottom;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.trash-body-anim {
+  width: 44px;
+  height: 48px;
+  background: linear-gradient(180deg, #64748b 0%, #475569 50%, #334155 100%);
+  border-radius: 0 0 10px 10px;
+  border: 2px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #f8fafc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.trash-body-anim .trash-text {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #fed7aa;
+  margin-top: 1px;
+}
+
+.papa-trash-bin-unit:hover .trash-lid-anim,
+.papa-trash-bin-unit.drag-over .trash-lid-anim {
+  transform: rotate(-38deg) translateY(-2px);
+}
+
+.papa-trash-bin-unit:hover .trash-body-anim,
+.papa-trash-bin-unit.drag-over .trash-body-anim {
+  background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+  border-color: #7f1d1d;
+  box-shadow: 0 6px 14px rgba(220, 38, 38, 0.35);
+  transform: scale(1.05);
+}
+
+.btn-trash-action {
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #dc2626;
+  font-size: 0.68rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.15s ease;
+}
+
+.btn-trash-action:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+}
+
+.papa-trash-bin-unit.mini {
+  flex-direction: row;
+  gap: 8px;
+}
+
+.papa-trash-bin-unit.mini .trash-body-anim {
+  width: 34px;
+  height: 36px;
+  font-size: 0.8rem;
+}
+
+.papa-trash-bin-unit.mini .trash-lid-anim {
+  width: 28px;
+  height: 6px;
+}
+
+/* Added Toppings Tray & Interactive Pills */
+.added-toppings-tray {
+  width: 100%;
+  min-height: 38px;
+  max-height: 80px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1.5px dashed #fed7aa;
+  border-radius: 12px;
+  padding: 4px 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.empty-toppings-hint {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.topping-in-cup-pill {
+  background: #fff7ed;
+  border: 1.5px solid #fdba74;
+  border-radius: 99px;
+  padding: 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #9a3412;
+  animation: popIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-remove-this-top {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: none;
+  background: #fed7aa;
+  color: #7c2d12;
+  font-size: 0.62rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-remove-this-top:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.topping-tactile-tools {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  justify-content: center;
+}
+
+.shaker-tactile-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.box-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggle-hint {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* Floating Toast Notification Banner */
+.papa-toast-banner {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background: #1e293b;
+  color: #ffffff;
+  border: 2px solid #fdba74;
+  border-radius: 99px;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  animation: toastBounce 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.papa-toast-banner .toast-icon {
+  font-size: 1.2rem;
+}
+
+.papa-toast-banner .toast-text {
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+@keyframes toastBounce {
+  0% { transform: translate(-50%, -20px) scale(0.9); opacity: 0; }
+  100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}

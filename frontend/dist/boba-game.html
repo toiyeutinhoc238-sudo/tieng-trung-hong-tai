@@ -15,9 +15,9 @@
     href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=LXGW+WenKai+Lite:wght@400;600;700&display=swap"
     rel="stylesheet">
 
-  <script type="module" crossorigin src="/assets/bobaGame-BMpOje-S.js"></script>
+  <script type="module" crossorigin src="/assets/bobaGame-BHxxtZwx.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/bobaGame-BCma-0yw.css">
+  <link rel="stylesheet" crossorigin href="/assets/bobaGame-CpmNtPa1.css">
 </head>
 
 <body class="boba-game-body">
@@ -86,8 +86,8 @@
         <span class="rail-title-label">📋 ORDER TICKETS (点单夹)</span>
       </div>
       <div class="tickets-clip-area" id="tickets-clip-area">
-        <!-- Ticket Card Papa's Style (Click to zoom/inspect) -->
-        <div class="papa-order-ticket" id="active-order-ticket" title="Bấm để phóng to xem phiếu gọi món">
+        <!-- Ticket Card Papa's Style (Click to zoom/inspect, drag to workbench clip) -->
+        <div class="papa-order-ticket" id="active-order-ticket" draggable="true" title="Bấm để phóng to hoặc Kéo xuống bàn làm việc">
           <div class="ticket-clip-pin"></div>
           <div class="ticket-header">
             <span class="ticket-cust-name kaiti-font" id="ticket-header-name">小雨</span>
@@ -129,9 +129,15 @@
         <div class="order-outdoor-street">
           <!-- Animated Pedestrians walking by -->
           <div class="street-passersby-container" aria-hidden="true">
-            <div class="passerby-walker walker-track-1"><div class="walker-sprite">🧋 👧</div></div>
-            <div class="passerby-walker walker-track-2"><div class="walker-sprite">🐶 👦</div></div>
-            <div class="passerby-walker walker-track-3"><div class="walker-sprite">🎒 🧑‍🎓</div></div>
+            <div class="passerby-walker walker-track-1">
+              <div class="walker-sprite">🧋 👧</div>
+            </div>
+            <div class="passerby-walker walker-track-2">
+              <div class="walker-sprite">🐶 👦</div>
+            </div>
+            <div class="passerby-walker walker-track-3">
+              <div class="walker-sprite">🎒 🧑‍🎓</div>
+            </div>
           </div>
         </div>
 
@@ -180,7 +186,8 @@
           <div class="order-speech-balloon" id="order-speech-balloon">
             <div class="balloon-header">
               <span class="balloon-tag">顾客点单 (Khách gọi món)</span>
-              <button type="button" class="btn-audio-listen" id="btn-listen-order-speech" title="Nghe giọng đọc tiếng Trung">
+              <button type="button" class="btn-audio-listen" id="btn-listen-order-speech"
+                title="Nghe giọng đọc tiếng Trung">
                 <i class="fa-solid fa-volume-high"></i> Nghe phát âm
               </button>
             </div>
@@ -283,14 +290,14 @@
             </div>
           </div>
 
-          <!-- MIDDLE: POUR CUP & LIQUID LEVEL METER -->
+          <!-- MIDDLE: POUR CUP, DISCARD TRASH & LIQUID LEVEL METER -->
           <div class="pour-cup-section">
-            <div class="cup-glass-holder">
+            <div class="cup-glass-holder" id="pour-cup-holder">
               <!-- Stream of liquid flowing down when pouring -->
               <div class="liquid-stream-flow" id="liquid-stream-flow"></div>
 
               <!-- Transparent Cup Glass with Liquid Fill -->
-              <div class="boba-cup-glass" id="pour-cup-glass">
+              <div class="boba-cup-glass" id="pour-cup-glass" draggable="true" title="Kéo ly vào thùng rác nếu muốn làm lại">
                 <div class="cup-liquid-content" id="pour-cup-liquid" style="height: 0%;"></div>
                 <div class="cup-ice-layer" id="pour-cup-ice"></div>
                 <div class="cup-target-marker" style="bottom: 70%;" title="Vạch chuẩn 70%">
@@ -306,13 +313,35 @@
               <strong class="meter-val" id="pour-meter-val">0%</strong>
               <span class="meter-badge" id="pour-meter-badge">Chưa rót</span>
             </div>
+
+            <!-- Papa's Cup Controls: Drain Liquid & Discard Trash Can -->
+            <div class="cup-tactile-toolbar">
+              <button type="button" class="btn-sub-action warning" id="btn-drain-liquid-pour" title="Đổ hết nước trong ly ra để rót lại">
+                <i class="fa-solid fa-rotate-left"></i> <span>倒空杯子 (Đổ Hết Nước)</span>
+              </button>
+
+              <!-- Papa's Trash Can Unit -->
+              <div class="papa-trash-bin-unit" id="trash-bin-pour" data-station="pour" title="Bấm hoặc Kéo ly vào đây để vứt ly làm lại">
+                <div class="trash-lid-anim"></div>
+                <div class="trash-body-anim">
+                  <i class="fa-solid fa-trash-can"></i>
+                  <span class="trash-text kaiti-font">垃圾桶</span>
+                </div>
+                <button type="button" class="btn-trash-action" id="btn-trash-pour-btn">
+                  <i class="fa-solid fa-trash-can"></i> <span>丢弃重做 (Vứt Rác)</span>
+                </button>
+              </div>
+            </div>
           </div>
 
           <!-- RIGHT: SUGAR & ICE CONTROLS -->
           <div class="sugar-ice-section">
             <!-- Sugar Selector -->
             <div class="ingredient-box sugar-box">
-              <div class="box-title kaiti-font">🍬 糖度选择 (Chọn Lượng Đường)</div>
+              <div class="box-title-bar">
+                <span class="box-title kaiti-font">🍬 糖度选择 (Chọn Lượng Đường)</span>
+                <span class="toggle-hint">(Bấm lại để bỏ chọn)</span>
+              </div>
               <div class="options-btn-grid">
                 <button type="button" class="btn-opt-sugar" data-sugar="extra_sugar">多糖 (100%)</button>
                 <button type="button" class="btn-opt-sugar" data-sugar="less_sugar">少糖 (70%)</button>
@@ -324,7 +353,10 @@
 
             <!-- Ice Selector -->
             <div class="ingredient-box ice-box">
-              <div class="box-title kaiti-font">❄️ 冰量选择 (Chọn Lượng Đá)</div>
+              <div class="box-title-bar">
+                <span class="box-title kaiti-font">❄️ 冰量选择 (Chọn Lượng Đá)</span>
+                <span class="toggle-hint">(Bấm lại để bỏ chọn)</span>
+              </div>
               <div class="options-btn-grid">
                 <button type="button" class="btn-opt-ice" data-ice="extra_ice">多冰 (Nhiều đá)</button>
                 <button type="button" class="btn-opt-ice" data-ice="regular_ice">正常冰 (Đá vừa)</button>
@@ -332,6 +364,11 @@
                 <button type="button" class="btn-opt-ice" data-ice="no_ice">去冰 (Không đá)</button>
               </div>
             </div>
+
+            <!-- Clear Sugar & Ice Button -->
+            <button type="button" class="btn-sub-action" id="btn-clear-sugar-ice" title="Xóa bỏ lượng đường và đá đã chọn">
+              <i class="fa-solid fa-xmark"></i> <span>重置糖冰 (Xóa Chọn Đường & Đá)</span>
+            </button>
           </div>
         </div>
 
@@ -399,6 +436,24 @@
             <button type="button" class="btn-shaker-trigger" id="btn-shaker-trigger">
               <i class="fa-solid fa-play"></i> <span>启动摇匀 (Bắt Đầu Lắc)</span>
             </button>
+
+            <!-- Tactile Shaker Options: Re-shake and Papa Trash Can -->
+            <div class="shaker-tactile-tools">
+              <button type="button" class="btn-sub-action" id="btn-reset-shaker" title="Đặt lại đồng hồ lắc để canh lại vùng xanh">
+                <i class="fa-solid fa-rotate-left"></i> <span>重新摇匀 (Lắc Lại)</span>
+              </button>
+
+              <div class="papa-trash-bin-unit mini" id="trash-bin-shake" data-station="shake" title="Lắc hỏng hoặc pha sai? Vứt ly làm lại">
+                <div class="trash-lid-anim"></div>
+                <div class="trash-body-anim">
+                  <i class="fa-solid fa-trash-can"></i>
+                  <span class="trash-text kaiti-font">垃圾桶</span>
+                </div>
+                <button type="button" class="btn-trash-action" id="btn-trash-shake-btn">
+                  <i class="fa-solid fa-trash-can"></i> <span>丢弃重做 (Vứt Rác)</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -474,8 +529,8 @@
           <!-- MIDDLE: ASSEMBLED CUP PREVIEW -->
           <div class="top-cup-preview-section">
             <div class="final-cup-showcase">
-              <!-- Cup with layered toppings, lid, straw -->
-              <div class="finished-boba-cup" id="final-boba-cup">
+              <!-- Cup with layered toppings, lid, straw (Draggable into Trash Can) -->
+              <div class="finished-boba-cup" id="final-boba-cup" draggable="true" title="Kéo ly vào thùng rác nếu muốn làm lại">
                 <!-- Straw -->
                 <div class="final-straw" id="final-cup-straw" style="display: none;"></div>
                 <!-- Lid -->
@@ -492,28 +547,68 @@
             <div class="final-cup-desc" id="final-cup-status-desc">
               Chưa thêm topping
             </div>
+
+            <!-- Dynamic Pill List of Added Toppings with [✖] to remove any topping -->
+            <div class="added-toppings-tray" id="added-toppings-tray">
+              <span class="empty-toppings-hint">Chưa có topping trong ly</span>
+            </div>
+
+            <!-- Undo Last Topping & Clear All Toppings buttons -->
+            <div class="topping-tactile-tools">
+              <button type="button" class="btn-sub-action" id="btn-undo-topping" title="Bớt topping vừa thêm">
+                <i class="fa-solid fa-arrow-rotate-left"></i> <span>撤销加料 (Bớt Topping)</span>
+              </button>
+              <button type="button" class="btn-sub-action danger" id="btn-clear-toppings" title="Xóa toàn bộ topping khỏi ly">
+                <i class="fa-solid fa-eraser"></i> <span>清空 (Xóa Hết)</span>
+              </button>
+            </div>
           </div>
 
           <!-- RIGHT: LID SEALER & STRAW MACHINE -->
           <div class="sealer-straw-section">
             <!-- Lid Sealing Press Button -->
             <div class="sealer-box">
-              <div class="box-title kaiti-font">🐻 封口机 (Máy Dán Nắp)</div>
-              <button type="button" class="btn-action-lid" id="btn-action-lid">
-                <i class="fa-solid fa-circle-check"></i>
-                <span>盖上杯盖 · 封口 (Đóng Nắp Ly)</span>
-              </button>
+              <div class="box-title-bar">
+                <span class="box-title kaiti-font">🐻 封口机 (Máy Dán Nắp)</span>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn-action-lid" id="btn-action-lid">
+                  <i class="fa-solid fa-circle-check"></i>
+                  <span>盖上杯盖 · 封口 (Đóng Nắp Ly)</span>
+                </button>
+                <button type="button" class="btn-sub-action warning" id="btn-remove-lid" style="display: none;" title="Mở nắp ra để sửa topping">
+                  <i class="fa-solid fa-lock-open"></i> <span>取下杯盖 (Tháo Nắp)</span>
+                </button>
+              </div>
             </div>
 
             <!-- Straw Dispenser -->
             <div class="straw-box">
-              <div class="box-title kaiti-font">🥤 吸管 (Cắm Ống Hút)</div>
+              <div class="box-title-bar">
+                <span class="box-title kaiti-font">🥤 吸管 (Cắm Ống Hút)</span>
+                <button type="button" class="btn-sub-action" id="btn-remove-straw" title="Rút ống hút ra" style="padding: 2px 8px; font-size: 0.72rem;">
+                  <i class="fa-solid fa-xmark"></i> <span>拔出吸管 (Rút Ống Hút)</span>
+                </button>
+              </div>
               <div class="straw-colors-row">
                 <button type="button" class="btn-color-straw pink" data-color="#f43f5e" title="Ống hút hồng"></button>
                 <button type="button" class="btn-color-straw blue" data-color="#0284c7" title="Ống hút xanh"></button>
                 <button type="button" class="btn-color-straw yellow" data-color="#eab308" title="Ống hút vàng"></button>
-                <button type="button" class="btn-color-straw brown" data-color="#78350f" title="Ống hút socola"></button>
+                <button type="button" class="btn-color-straw brown" data-color="#78350f"
+                  title="Ống hút socola"></button>
               </div>
+            </div>
+
+            <!-- Papa Trash Can in Top Station -->
+            <div class="papa-trash-bin-unit mini" id="trash-bin-top" data-station="top" title="Làm hỏng trà sữa? Vứt ly làm lại">
+              <div class="trash-lid-anim"></div>
+              <div class="trash-body-anim">
+                <i class="fa-solid fa-trash-can"></i>
+                <span class="trash-text kaiti-font">垃圾桶</span>
+              </div>
+              <button type="button" class="btn-trash-action" id="btn-trash-top-btn">
+                <i class="fa-solid fa-trash-can"></i> <span>丢弃重做 (Vứt Rác)</span>
+              </button>
             </div>
 
             <!-- Finish Drink & Serve Button -->
@@ -531,6 +626,12 @@
           </button>
         </div>
       </section>
+
+      <!-- Floating Papa Toast Banner Notification -->
+      <div class="papa-toast-banner" id="papa-toast-banner" style="display: none;">
+        <span class="toast-icon" id="toast-icon">🗑️</span>
+        <span class="toast-text" id="toast-text">Đã vứt ly hỏng vào thùng rác!</span>
+      </div>
 
     </main>
 
@@ -590,28 +691,36 @@
           <!-- 1. Order Match -->
           <div class="criteria-row">
             <span class="c-label">📋 点单匹配 (Đúng Yêu Cầu):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-blue" id="score-bar-order" style="width: 100%;"></div></div>
+            <div class="c-bar-bg">
+              <div class="c-bar-fill fill-blue" id="score-bar-order" style="width: 100%;"></div>
+            </div>
             <span class="c-percent" id="score-val-order">100%</span>
           </div>
 
           <!-- 2. Pour Station -->
           <div class="criteria-row">
             <span class="c-label">🍵 调制倒茶 (Tỉ Lệ Rót Trà & Đường Đá):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-teal" id="score-bar-pour" style="width: 98%;"></div></div>
+            <div class="c-bar-bg">
+              <div class="c-bar-fill fill-teal" id="score-bar-pour" style="width: 98%;"></div>
+            </div>
             <span class="c-percent" id="score-val-pour">98%</span>
           </div>
 
           <!-- 3. Shake Station -->
           <div class="criteria-row">
             <span class="c-label">🌪️ 摇匀火候 (Độ Lắc Máy Shaker):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-amber" id="score-bar-shake" style="width: 95%;"></div></div>
+            <div class="c-bar-bg">
+              <div class="c-bar-fill fill-amber" id="score-bar-shake" style="width: 95%;"></div>
+            </div>
             <span class="c-percent" id="score-val-shake">95%</span>
           </div>
 
           <!-- 4. Top Station -->
           <div class="criteria-row">
             <span class="c-label">🧋 配料封口 (Topping & Đóng Nắp Ống Hút):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-pink" id="score-bar-top" style="width: 100%;"></div></div>
+            <div class="c-bar-bg">
+              <div class="c-bar-fill fill-pink" id="score-bar-top" style="width: 100%;"></div>
+            </div>
             <span class="c-percent" id="score-val-top">100%</span>
           </div>
         </div>
@@ -670,7 +779,8 @@
             <i class="fa-solid fa-book-open" style="color: #ea580c;"></i>
             <span>Sổ Tay Từ Vựng Trà Sữa (奶茶词典)</span>
           </div>
-          <button type="button" class="boba-modal-close" onclick="document.getElementById('boba-cookbook-modal').style.display='none'">
+          <button type="button" class="boba-modal-close"
+            onclick="document.getElementById('boba-cookbook-modal').style.display='none'">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
@@ -690,13 +800,15 @@
             <i class="fa-solid fa-gear" style="color: #ea580c;"></i>
             <span>Cài Đặt & Hướng Dẫn Pha Chế</span>
           </div>
-          <button type="button" class="boba-modal-close" onclick="document.getElementById('boba-pause-modal').style.display='none'">
+          <button type="button" class="boba-modal-close"
+            onclick="document.getElementById('boba-pause-modal').style.display='none'">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
 
         <div class="boba-modal-body" style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
             <div>
               <strong style="font-size: 0.95rem; color: #1e293b;">Hiệu ứng âm thanh (SFX)</strong>
               <div style="font-size: 0.75rem; color: #64748b;">Tiếng rót nước, máy lắc shaker, leng keng tiền tip</div>
@@ -704,7 +816,8 @@
             <input type="checkbox" id="toggle-sfx" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
             <div>
               <strong style="font-size: 0.95rem; color: #1e293b;">Giọng đọc tiếng Trung (AI Voice)</strong>
               <div style="font-size: 0.75rem; color: #64748b;">Phát âm câu gọi món và lời nhận xét của khách</div>
@@ -712,7 +825,8 @@
             <input type="checkbox" id="toggle-voice" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
             <div>
               <strong style="font-size: 0.95rem; color: #1e293b;">Hiện phiên âm Pinyin</strong>
               <div style="font-size: 0.75rem; color: #64748b;">Hỗ trợ phát âm chữ Hán có dấu thanh điệu</div>
@@ -720,7 +834,8 @@
             <input type="checkbox" id="toggle-pinyin" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
             <div>
               <strong style="font-size: 0.95rem; color: #1e293b;">Hiện dịch nghĩa Tiếng Việt</strong>
               <div style="font-size: 0.75rem; color: #64748b;">Gợi ý câu dịch tiếng Việt dưới câu gọi món</div>
@@ -729,11 +844,15 @@
           </div>
         </div>
 
-        <div class="boba-modal-footer" style="padding: 14px 20px; display: flex; justify-content: space-between; background: #fff7ed;">
-          <button type="button" class="btn btn-secondary" id="btn-reset-boba-save" style="color: #e11d48; border: 1.5px solid #fda4af; background: #fff; padding: 6px 14px; border-radius: 10px; font-weight: 700; cursor: pointer;">
+        <div class="boba-modal-footer"
+          style="padding: 14px 20px; display: flex; justify-content: space-between; background: #fff7ed;">
+          <button type="button" class="btn btn-secondary" id="btn-reset-boba-save"
+            style="color: #e11d48; border: 1.5px solid #fda4af; background: #fff; padding: 6px 14px; border-radius: 10px; font-weight: 700; cursor: pointer;">
             <i class="fa-solid fa-trash"></i> Chơi lại từ đầu
           </button>
-          <button type="button" class="btn btn-primary" onclick="document.getElementById('boba-pause-modal').style.display='none'" style="background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; border: none; padding: 8px 20px; border-radius: 10px; font-weight: 800; cursor: pointer;">
+          <button type="button" class="btn btn-primary"
+            onclick="document.getElementById('boba-pause-modal').style.display='none'"
+            style="background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; border: none; padding: 8px 20px; border-radius: 10px; font-weight: 800; cursor: pointer;">
             Tiếp tục chơi
           </button>
         </div>

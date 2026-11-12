@@ -123,6 +123,73 @@ class PapaBobaAudio {
     osc.stop(now + 0.17);
   }
 
+  playTrash() {
+    if (!this.sfxEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    // Metallic trash can clank + dump thud
+    const osc1 = this.ctx.createOscillator();
+    const gain1 = this.ctx.createGain();
+    osc1.type = 'square';
+    osc1.frequency.setValueAtTime(140, now);
+    osc1.frequency.exponentialRampToValueAtTime(40, now + 0.22);
+    gain1.gain.setValueAtTime(0.35, now);
+    gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.23);
+    osc1.connect(gain1);
+    gain1.connect(this.ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.24);
+
+    const osc2 = this.ctx.createOscillator();
+    const gain2 = this.ctx.createGain();
+    osc2.type = 'triangle';
+    osc2.frequency.setValueAtTime(320, now + 0.04);
+    osc2.frequency.exponentialRampToValueAtTime(70, now + 0.28);
+    gain2.gain.setValueAtTime(0.3, now + 0.04);
+    gain2.gain.linearRampToValueAtTime(0.01, now + 0.29);
+    osc2.connect(gain2);
+    gain2.connect(this.ctx.destination);
+    osc2.start(now + 0.04);
+    osc2.stop(now + 0.3);
+  }
+
+  playDrain() {
+    if (!this.sfxEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(380, now);
+    osc.frequency.linearRampToValueAtTime(160, now + 0.22);
+    gain.gain.setValueAtTime(0.28, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.23);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.24);
+  }
+
+  playUndo() {
+    if (!this.sfxEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(560, now);
+    osc.frequency.linearRampToValueAtTime(280, now + 0.12);
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.13);
+  }
+
   speak(text) {
     if (!this.voiceEnabled || !('speechSynthesis' in window)) return;
     try {
@@ -211,7 +278,7 @@ class PapaBobaGame {
     this.currentOrder = null;
     this.isOrderTaken = false;
 
-    // Cup Crafting State in Stations
+    // Cup Crafting State in Stations (Papa's tactile state)
     this.cup = {
       tea: null,
       pourLevel: 0, // 0 to 100
@@ -219,7 +286,7 @@ class PapaBobaGame {
       ice: null,
       isShaken: false,
       shakeScore: 0,
-      topping: null,
+      toppings: [], // Array of toppings added (can add, remove, undo)
       hasLid: false,
       strawColor: null
     };
@@ -234,6 +301,7 @@ class PapaBobaGame {
     // Pour holding timer
     this.pourInterval = null;
     this.currentPouringTea = null;
+    this.toastTimeout = null;
 
     // Settings
     this.showPinyin = true;
@@ -307,7 +375,7 @@ class PapaBobaGame {
       this.speakOrder();
     });
 
-    // Ticket Rail zoom
+    // Ticket Rail zoom & toggle
     document.getElementById('active-order-ticket')?.addEventListener('click', (e) => {
       e.currentTarget.classList.toggle('zoomed');
     });
@@ -324,26 +392,30 @@ class PapaBobaGame {
       btn.addEventListener('touchend', (e) => { e.preventDefault(); this.stopPouring(); });
     });
 
-    // Sugar buttons
+    // Drain Liquid button in Pour Station
+    document.getElementById('btn-drain-liquid-pour')?.addEventListener('click', () => {
+      this.drainLiquid();
+    });
+
+    // Sugar buttons (Toggle select/deselect)
     document.querySelectorAll('.btn-opt-sugar').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.btn-opt-sugar').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
         const sId = btn.dataset.sugar;
-        this.cup.sugar = BOBA_VOCAB.sugars.find(s => s.id === sId);
-        this.audio.playPop();
+        this.toggleSugar(sId);
       });
     });
 
-    // Ice buttons
+    // Ice buttons (Toggle select/deselect)
     document.querySelectorAll('.btn-opt-ice').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.btn-opt-ice').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
         const iId = btn.dataset.ice;
-        this.cup.ice = BOBA_VOCAB.ices.find(i => i.id === iId);
-        this.audio.playPop();
+        this.toggleIce(iId);
       });
+    });
+
+    // Clear Sugar & Ice button
+    document.getElementById('btn-clear-sugar-ice')?.addEventListener('click', () => {
+      this.clearSugarIce();
     });
 
     // Shake Station Trigger
@@ -351,14 +423,27 @@ class PapaBobaGame {
       this.toggleShaker();
     });
 
-    // Top Station Topping selection
+    // Reset Shaker button
+    document.getElementById('btn-reset-shaker')?.addEventListener('click', () => {
+      this.resetShaker();
+    });
+
+    // Top Station Topping selection (Add Topping)
     document.querySelectorAll('.topping-tub-card').forEach(card => {
       card.addEventListener('click', () => {
-        document.querySelectorAll('.topping-tub-card').forEach(c => c.classList.remove('selected'));
-        card.classList.add('selected');
         const topId = card.dataset.topping;
-        this.selectTopping(topId);
+        this.addTopping(topId);
       });
+    });
+
+    // Undo Last Topping button
+    document.getElementById('btn-undo-topping')?.addEventListener('click', () => {
+      this.undoLastTopping();
+    });
+
+    // Clear All Toppings button
+    document.getElementById('btn-clear-toppings')?.addEventListener('click', () => {
+      this.clearAllToppings();
     });
 
     // Seal Lid Button
@@ -366,11 +451,73 @@ class PapaBobaGame {
       this.sealLid();
     });
 
+    // Remove Lid Button
+    document.getElementById('btn-remove-lid')?.addEventListener('click', () => {
+      this.removeLid();
+    });
+
     // Straw selection
     document.querySelectorAll('.btn-color-straw').forEach(btn => {
       btn.addEventListener('click', () => {
         const color = btn.dataset.color;
         this.insertStraw(color);
+      });
+    });
+
+    // Remove Straw Button
+    document.getElementById('btn-remove-straw')?.addEventListener('click', () => {
+      this.removeStraw();
+    });
+
+    // Trash Can actions across stations
+    document.getElementById('btn-trash-pour-btn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.trashCup('pour');
+    });
+    document.getElementById('trash-bin-pour')?.addEventListener('click', () => {
+      this.trashCup('pour');
+    });
+
+    document.getElementById('btn-trash-shake-btn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.trashCup('shake');
+    });
+    document.getElementById('trash-bin-shake')?.addEventListener('click', () => {
+      this.trashCup('shake');
+    });
+
+    document.getElementById('btn-trash-top-btn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.trashCup('top');
+    });
+    document.getElementById('trash-bin-top')?.addEventListener('click', () => {
+      this.trashCup('top');
+    });
+
+    // Drag and drop cups into Trash Can
+    ['pour-cup-glass', 'final-boba-cup'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', 'boba-cup');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+      }
+    });
+
+    document.querySelectorAll('.papa-trash-bin-unit').forEach(unit => {
+      unit.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        unit.classList.add('drag-over');
+      });
+      unit.addEventListener('dragleave', () => {
+        unit.classList.remove('drag-over');
+      });
+      unit.addEventListener('drop', (e) => {
+        e.preventDefault();
+        unit.classList.remove('drag-over');
+        this.trashCup(unit.dataset.station);
       });
     });
 
@@ -439,6 +586,20 @@ class PapaBobaGame {
     document.querySelectorAll('.station-tab-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.target === stationId);
     });
+
+    // Sync visual cup state into Top Station
+    if (stationId === 'view-top-station') {
+      const finalLiq = document.getElementById('final-cup-liquid');
+      if (finalLiq) {
+        if (this.cup.tea) {
+          finalLiq.style.background = this.cup.tea.color;
+          finalLiq.style.height = `${Math.min(85, Math.max(25, this.cup.pourLevel))}%`;
+        } else {
+          finalLiq.style.background = 'transparent';
+          finalLiq.style.height = '0%';
+        }
+      }
+    }
 
     this.audio.playPop();
   }
@@ -740,24 +901,189 @@ class PapaBobaGame {
   }
 
   // ==========================================================================
-  // STATION 4: TOP STATION (TOPPING, LID, STRAW)
+  // STATION 2 ACTIONS: DRAIN LIQUID, SUGAR & ICE TOGGLES
   // ==========================================================================
-  selectTopping(topId) {
-    this.cup.topping = BOBA_VOCAB.toppings.find(t => t.id === topId);
-    this.audio.playPlop();
+  drainLiquid() {
+    if (this.cup.pourLevel === 0 && !this.cup.tea) return;
+    this.cup.pourLevel = 0;
+    this.cup.tea = null;
+    this.updatePourCupUI();
+    this.audio.playDrain();
+    this.showToast('💧', '已倒空水杯！请按住龙头重新倒茶。(Đã đổ hết nước đi! Hãy rót lại.)');
+  }
 
-    // Render topping in final cup
-    const topLayer = document.getElementById('final-cup-toppings');
-    const desc = document.getElementById('final-cup-status-desc');
-    if (topLayer && this.cup.topping) {
-      topLayer.innerHTML = `
-        <span style="font-size:1.6rem;">${this.cup.topping.icon}</span>
-        <span style="font-size:1.4rem;">${this.cup.topping.icon}</span>
-        <span style="font-size:1.2rem;">${this.cup.topping.icon}</span>
-      `;
+  toggleSugar(sId) {
+    if (this.cup.sugar && this.cup.sugar.id === sId) {
+      this.cup.sugar = null;
+      document.querySelectorAll('.btn-opt-sugar').forEach(b => b.classList.remove('active'));
+      this.audio.playUndo();
+      this.showToast('🍬', '已取消选择糖度 (Đã bỏ chọn đường)');
+    } else {
+      this.cup.sugar = BOBA_VOCAB.sugars.find(s => s.id === sId);
+      document.querySelectorAll('.btn-opt-sugar').forEach(b => {
+        b.classList.toggle('active', b.dataset.sugar === sId);
+      });
+      this.audio.playPop();
     }
+  }
+
+  toggleIce(iId) {
+    if (this.cup.ice && this.cup.ice.id === iId) {
+      this.cup.ice = null;
+      document.querySelectorAll('.btn-opt-ice').forEach(b => b.classList.remove('active'));
+      this.audio.playUndo();
+      this.showToast('❄️', '已取消选择冰量 (Đã bỏ chọn đá)');
+    } else {
+      this.cup.ice = BOBA_VOCAB.ices.find(i => i.id === iId);
+      document.querySelectorAll('.btn-opt-ice').forEach(b => {
+        b.classList.toggle('active', b.dataset.ice === iId);
+      });
+      this.audio.playPop();
+    }
+  }
+
+  clearSugarIce() {
+    this.cup.sugar = null;
+    this.cup.ice = null;
+    document.querySelectorAll('.btn-opt-sugar, .btn-opt-ice').forEach(b => b.classList.remove('active'));
+    this.audio.playUndo();
+    this.showToast('✨', '重置糖度与冰量 (Đã xóa chọn đường và đá)');
+  }
+
+  // ==========================================================================
+  // STATION 3 ACTIONS: SHAKER RESET
+  // ==========================================================================
+  resetShaker() {
+    if (this.shakerTimer) clearInterval(this.shakerTimer);
+    if (this.shakerSfxTimer) clearInterval(this.shakerSfxTimer);
+    this.shakerRunning = false;
+    this.cup.isShaken = false;
+    this.cup.shakeScore = 0;
+    this.shakerAngle = -70;
+
+    const triggerBtn = document.getElementById('btn-shaker-trigger');
+    if (triggerBtn) {
+      triggerBtn.disabled = false;
+      triggerBtn.classList.remove('running');
+      triggerBtn.innerHTML = '<i class="fa-solid fa-play"></i> <span>启动摇匀 (Bắt Đầu Lắc)</span>';
+    }
+    const needle = document.getElementById('gauge-needle');
+    if (needle) needle.style.transform = 'rotate(-70deg)';
+    const statusText = document.getElementById('gauge-status-text');
+    if (statusText) {
+      statusText.textContent = 'Chưa khởi động máy lắc';
+      statusText.style.color = '#64748b';
+    }
+    const motorLight = document.getElementById('shaker-motor-light');
+    if (motorLight) motorLight.classList.remove('active');
+    const cupSlot = document.querySelector('.shaker-cup-slot');
+    if (cupSlot) cupSlot.classList.remove('vibrating');
+
+    this.audio.playPop();
+    this.showToast('🌪️', '重新安装摇杯，请看准绿区停机！(Đã reset máy lắc!)');
+  }
+
+  // ==========================================================================
+  // STATION 4: TOP STATION (ADD / REMOVE TOPPINGS, LID, STRAW)
+  // ==========================================================================
+  addTopping(topId) {
+    if (this.cup.hasLid) {
+      alert('杯子已封口！如需添加或更改配料，请先点击【取下杯盖】。(Ly đã đóng nắp kín! Vui lòng bấm [取下杯盖 (Tháo nắp)] trước khi thêm topping)');
+      return;
+    }
+    if (this.cup.toppings.length >= 6) {
+      this.showToast('⚠️', '杯子配料已满，无法再加！(Ly đã đầy topping!)');
+      return;
+    }
+
+    const topObj = BOBA_VOCAB.toppings.find(t => t.id === topId);
+    if (topObj) {
+      this.cup.toppings.push(topObj);
+      this.audio.playPlop();
+      this.updateToppingsUI();
+      this.showToast(topObj.icon, `已添加配料: ${topObj.hanzi} (Đã thêm ${topObj.vi})`);
+    }
+  }
+
+  removeTopping(index) {
+    if (this.cup.hasLid) {
+      alert('杯子已封口！请先点击【取下杯盖】后再调整配料。(Ly đã đóng nắp! Vui lòng bấm [取下杯盖 (Tháo nắp)] trước)');
+      return;
+    }
+    if (index >= 0 && index < this.cup.toppings.length) {
+      const removed = this.cup.toppings.splice(index, 1)[0];
+      this.audio.playUndo();
+      this.updateToppingsUI();
+      this.showToast('↩️', `已撤下: ${removed.hanzi} (Đã bớt ${removed.vi})`);
+    }
+  }
+
+  undoLastTopping() {
+    if (this.cup.hasLid) {
+      alert('杯子已封口！请先点击【取下杯盖】。(Ly đã đóng nắp!)');
+      return;
+    }
+    if (this.cup.toppings.length > 0) {
+      this.removeTopping(this.cup.toppings.length - 1);
+    } else {
+      this.showToast('ℹ️', '杯中暂无配料可撤销 (Không có topping để bớt)');
+    }
+  }
+
+  clearAllToppings() {
+    if (this.cup.hasLid) {
+      alert('杯子已封口！请先点击【取下杯盖】。(Ly đã đóng nắp!)');
+      return;
+    }
+    if (this.cup.toppings.length === 0) return;
+    this.cup.toppings = [];
+    this.audio.playDrain();
+    this.updateToppingsUI();
+    this.showToast('🗑️', '已清空所有配料！(Đã xóa hết topping)');
+  }
+
+  updateToppingsUI() {
+    // 1. Visual floating icons in cup preview
+    const topLayer = document.getElementById('final-cup-toppings');
+    if (topLayer) {
+      topLayer.innerHTML = this.cup.toppings.map(t => `<span style="font-size:1.3rem;">${t.icon}</span>`).join(' ');
+    }
+
+    // 2. Interactive chips tray
+    const tray = document.getElementById('added-toppings-tray');
+    if (tray) {
+      if (this.cup.toppings.length === 0) {
+        tray.innerHTML = '<span class="empty-toppings-hint">Chưa có topping trong ly</span>';
+      } else {
+        tray.innerHTML = this.cup.toppings.map((t, idx) => `
+          <div class="topping-in-cup-pill">
+            <span>${t.icon}</span>
+            <span class="kaiti-font">${t.hanzi}</span>
+            <button type="button" class="btn-remove-this-top" data-idx="${idx}" title="Bớt topping này">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        `).join('');
+
+        // Wire individual remove buttons
+        tray.querySelectorAll('.btn-remove-this-top').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(btn.dataset.idx, 10);
+            this.removeTopping(idx);
+          });
+        });
+      }
+    }
+
+    // 3. Status description
+    const desc = document.getElementById('final-cup-status-desc');
     if (desc) {
-      desc.textContent = `Đã thêm: ${this.cup.topping.hanzi} (${this.cup.topping.vi})`;
+      if (this.cup.toppings.length === 0) {
+        desc.textContent = 'Chưa thêm topping';
+      } else {
+        desc.textContent = `Topping trong ly: ${this.cup.toppings.map(t => t.hanzi).join(' + ')}`;
+      }
     }
   }
 
@@ -768,8 +1094,27 @@ class PapaBobaGame {
     const lid = document.getElementById('final-cup-lid');
     if (lid) lid.style.display = 'flex';
 
+    document.getElementById('btn-action-lid')?.style.setProperty('display', 'none');
+    document.getElementById('btn-remove-lid')?.style.setProperty('display', 'inline-flex');
+
     const desc = document.getElementById('final-cup-status-desc');
-    if (desc) desc.textContent = '✅ Đã dập màng nắp ly chắc chắn!';
+    if (desc) desc.textContent = '✅ 已盖上杯盖封口！(Đã dập màng nắp ly chắc chắn)';
+    this.showToast('🐻', '已封口杯盖！(Đã đóng nắp ly)');
+  }
+
+  removeLid() {
+    this.cup.hasLid = false;
+    this.audio.playUndo();
+
+    const lid = document.getElementById('final-cup-lid');
+    if (lid) lid.style.display = 'none';
+
+    document.getElementById('btn-action-lid')?.style.setProperty('display', 'inline-flex');
+    document.getElementById('btn-remove-lid')?.style.setProperty('display', 'none');
+
+    const desc = document.getElementById('final-cup-status-desc');
+    if (desc) desc.textContent = '🔓 已取下杯盖，可自由加减配料！';
+    this.showToast('🔓', '已取下杯盖，可自由修改配料！(Đã tháo nắp ra)');
   }
 
   insertStraw(color) {
@@ -783,7 +1128,59 @@ class PapaBobaGame {
     }
 
     const desc = document.getElementById('final-cup-status-desc');
-    if (desc) desc.textContent = '✨ Cắm ống hút hoàn tất!';
+    if (desc) desc.textContent = '✨ 插入吸管完毕！(Đã cắm ống hút)';
+    this.showToast('🥤', '已插入吸管！(Đã cắm ống hút)');
+  }
+
+  removeStraw() {
+    if (!this.cup.strawColor) return;
+    this.cup.strawColor = null;
+    this.audio.playUndo();
+
+    const straw = document.getElementById('final-cup-straw');
+    if (straw) straw.style.display = 'none';
+
+    const desc = document.getElementById('final-cup-status-desc');
+    if (desc) desc.textContent = '已拔出吸管 (Đã rút ống hút ra)';
+    this.showToast('🥤', '已拔出吸管 (Đã rút ống hút)');
+  }
+
+  // ==========================================================================
+  // PAPA'S TRASH CAN: DISCARD RUINED CUP AND START FRESH
+  // ==========================================================================
+  trashCup(stationOrigin = 'pour') {
+    this.audio.playTrash();
+    this.resetCup();
+
+    // Trigger open lid animation visual
+    const trashUnit = document.getElementById(`trash-bin-${stationOrigin}`);
+    if (trashUnit) {
+      trashUnit.classList.add('drag-over');
+      setTimeout(() => trashUnit.classList.remove('drag-over'), 600);
+    }
+
+    this.showToast('🗑️', '已将做错的奶茶丢进垃圾桶！已拿取全新空杯重新制作。(Đã vứt ly hỏng vào thùng rác! Lấy ly mới làm lại)');
+
+    // If trashed from shaker or top station, guide back to pour station
+    if (stationOrigin === 'shake' || stationOrigin === 'top') {
+      setTimeout(() => {
+        this.switchStation('view-pour-station');
+      }, 700);
+    }
+  }
+
+  showToast(icon, text) {
+    const banner = document.getElementById('papa-toast-banner');
+    const ic = document.getElementById('toast-icon');
+    const tx = document.getElementById('toast-text');
+    if (!banner || !ic || !tx) return;
+    ic.textContent = icon;
+    tx.textContent = text;
+    banner.style.display = 'flex';
+    if (this.toastTimeout) clearTimeout(this.toastTimeout);
+    this.toastTimeout = setTimeout(() => {
+      banner.style.display = 'none';
+    }, 2400);
   }
 
   // ==========================================================================
@@ -808,7 +1205,20 @@ class PapaBobaGame {
     // 1. Order Match Accuracy (40%)
     let orderMatch = 100;
     if (!this.cup.tea || this.cup.tea.id !== ord.tea.id) orderMatch -= 40;
-    if (!this.cup.topping || this.cup.topping.id !== ord.topping.id) orderMatch -= 30;
+
+    // Check multi-toppings
+    const reqTopId = ord.topping.id;
+    const hasReqTop = this.cup.toppings.some(t => t.id === reqTopId);
+    if (!hasReqTop) {
+      orderMatch -= 30; // Missing requested topping
+    } else {
+      // Check for extraneous toppings
+      const extraTops = this.cup.toppings.filter(t => t.id !== reqTopId);
+      if (extraTops.length > 0) {
+        orderMatch -= Math.min(15, extraTops.length * 5);
+      }
+    }
+
     if (!this.cup.sugar || this.cup.sugar.id !== ord.sugar.id) orderMatch -= 15;
     if (!this.cup.ice || this.cup.ice.id !== ord.ice.id) orderMatch -= 15;
     orderMatch = Math.max(30, orderMatch);
@@ -823,9 +1233,10 @@ class PapaBobaGame {
 
     // 4. Top Station Accuracy
     let topScore = 100;
-    if (!this.cup.topping) topScore -= 40;
+    if (this.cup.toppings.length === 0) topScore -= 40;
     if (!this.cup.hasLid) topScore -= 30;
     if (!this.cup.strawColor) topScore -= 30;
+    topScore = Math.max(40, topScore);
 
     // Overall Score
     const totalScore = Math.round((orderMatch * 0.4) + (pourScore * 0.25) + (mixScore * 0.2) + (topScore * 0.15));
@@ -914,14 +1325,17 @@ class PapaBobaGame {
       ice: null,
       isShaken: false,
       shakeScore: 0,
-      topping: null,
+      toppings: [],
       hasLid: false,
       strawColor: null
     };
 
     // Reset UI in Pour Station
     const liquid = document.getElementById('pour-cup-liquid');
-    if (liquid) liquid.style.height = '0%';
+    if (liquid) {
+      liquid.style.height = '0%';
+      liquid.style.background = 'linear-gradient(180deg, #e5a468 0%, #c47c38 100%)';
+    }
     const meterVal = document.getElementById('pour-meter-val');
     if (meterVal) meterVal.textContent = '0%';
     const badge = document.getElementById('pour-meter-badge');
@@ -945,17 +1359,26 @@ class PapaBobaGame {
       statusText.textContent = 'Chưa khởi động máy lắc';
       statusText.style.color = '#64748b';
     }
+    const motorLight = document.getElementById('shaker-motor-light');
+    if (motorLight) motorLight.classList.remove('active');
+    const cupSlot = document.querySelector('.shaker-cup-slot');
+    if (cupSlot) cupSlot.classList.remove('vibrating');
 
     // Reset UI in Top Station
     document.querySelectorAll('.topping-tub-card').forEach(c => c.classList.remove('selected'));
     const finalTop = document.getElementById('final-cup-toppings');
     if (finalTop) finalTop.innerHTML = '';
+    const tray = document.getElementById('added-toppings-tray');
+    if (tray) tray.innerHTML = '<span class="empty-toppings-hint">Chưa có topping trong ly</span>';
     const finalLid = document.getElementById('final-cup-lid');
     if (finalLid) finalLid.style.display = 'none';
     const finalStraw = document.getElementById('final-cup-straw');
     if (finalStraw) finalStraw.style.display = 'none';
     const desc = document.getElementById('final-cup-status-desc');
     if (desc) desc.textContent = 'Chưa thêm topping';
+
+    document.getElementById('btn-action-lid')?.style.setProperty('display', 'inline-flex');
+    document.getElementById('btn-remove-lid')?.style.setProperty('display', 'none');
   }
 
   // ==========================================================================
