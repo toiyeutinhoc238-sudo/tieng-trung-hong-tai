@@ -3,6 +3,9 @@
  * Core Game Engine: Papa's Freezeria Station-Based Simulation System
  */
 
+import customerGirlImg from './assets/boba_customer_girl.jpg';
+import customerBoyImg from './assets/boba_customer_boy.jpg';
+
 // ============================================================================
 // 1. AUDIO SYNTHESIZER (WEB AUDIO API & TTS)
 // ============================================================================
@@ -248,12 +251,12 @@ const BOBA_VOCAB = {
 
 // Customer Roster
 const PAPA_CUSTOMERS = [
-  { id: 'xiaoyu', nameChn: '小雨', nameVi: 'Bé Mưa', role: 'Bé gái dễ thương', emoji: '👧' },
-  { id: 'xiaohao', nameChn: '小浩', nameVi: 'Tiểu Hạo', role: 'Học sinh tiểu học', emoji: '👦' },
-  { id: 'xiaotong', nameChn: '晓彤', nameVi: 'Hiểu Đồng', role: 'Nữ sinh trung học', emoji: '👩‍🎓' },
-  { id: 'linjie', nameChn: '林姐', nameVi: 'Chị Lâm', role: 'Chị gái văn phòng', emoji: '👩‍💼' },
-  { id: 'wangshu', nameChn: '王叔', nameVi: 'Chú Vương', role: 'Bác hàng xóm', emoji: '👨' },
-  { id: 'abao', nameChn: '阿宝', nameVi: 'Gấu A Bảo', role: 'Linh vật đáng yêu', emoji: '🐼' }
+  { id: 'xiaoyu', nameChn: '小雨', nameVi: 'Bé Mưa', role: 'Bé gái dễ thương', emoji: '👧', image: customerGirlImg },
+  { id: 'xiaohao', nameChn: '小浩', nameVi: 'Tiểu Hạo', role: 'Học sinh tiểu học', emoji: '👦', image: customerBoyImg },
+  { id: 'xiaotong', nameChn: '晓彤', nameVi: 'Hiểu Đồng', role: 'Nữ sinh trung học', emoji: '👩‍🎓', image: customerGirlImg },
+  { id: 'linjie', nameChn: '林姐', nameVi: 'Chị Lâm', role: 'Chị gái văn phòng', emoji: '👩‍💼', image: customerGirlImg },
+  { id: 'wangshu', nameChn: '王叔', nameVi: 'Chú Vương', role: 'Bác hàng xóm', emoji: '👨', image: customerBoyImg },
+  { id: 'abao', nameChn: '阿宝', nameVi: 'Gấu A Bảo', role: 'Linh vật đáng yêu', emoji: '🐼', image: customerBoyImg }
 ];
 
 // ============================================================================
@@ -271,7 +274,7 @@ class PapaBobaGame {
     this.learnedWords = new Set(['珍珠', '奶茶', '少糖', '去冰']);
 
     // Stations
-    this.currentStation = 'view-order-station';
+    this.currentStation = 'view-master-counter';
 
     // Order State
     this.currentCustomer = null;
@@ -530,7 +533,11 @@ class PapaBobaGame {
     document.getElementById('btn-next-customer-papa')?.addEventListener('click', () => {
       document.getElementById('modal-papa-score').style.display = 'none';
       this.spawnNewCustomer();
-      this.switchStation('view-order-station');
+      if (this.currentStation !== 'view-master-counter') {
+        this.switchStation('view-order-station');
+      } else {
+        this.switchStation('view-master-counter');
+      }
     });
 
     // Open cookbook
@@ -569,6 +576,150 @@ class PapaBobaGame {
       this.updateHUD();
       this.saveGame();
     });
+
+    // ========================================================================
+    // MASTER COUNTER CONTROLS (QUẦY TOÀN CẢNH THEO MẪU TRANH GỐC)
+    // ========================================================================
+    // Mode Switcher Button in HUD
+    document.getElementById('btn-toggle-game-mode')?.addEventListener('click', () => {
+      this.audio.playPop();
+      if (this.currentStation === 'view-master-counter') {
+        this.switchStation('view-order-station');
+      } else {
+        this.switchStation('view-master-counter');
+      }
+    });
+
+    // 4 Tea Dispensers in Master Counter
+    document.querySelectorAll('.m-dispenser-urn').forEach(urn => {
+      urn.addEventListener('click', () => {
+        const teaId = urn.dataset.tea;
+        const tea = BOBA_VOCAB.teas.find(t => t.id === teaId);
+        if (!tea) return;
+        this.cup.tea = tea;
+        this.cup.pourLevel = 70;
+        this.audio.playPour();
+        this.updateAllCupVisuals();
+        this.showToast('🍵', `Đã rót ${tea.hanzi} (${tea.vi}) vào ly!`);
+      });
+    });
+
+    // 6 Topping Boxes in Master Counter
+    document.querySelectorAll('.m-topping-box').forEach(box => {
+      box.addEventListener('click', () => {
+        const topId = box.dataset.topping;
+        const top = BOBA_VOCAB.toppings.find(t => t.id === topId);
+        if (!top) return;
+        this.cup.toppings.push(top);
+        this.audio.playPlop();
+        this.updateAllCupVisuals();
+        this.showToast(top.icon, `Đã thêm ${top.hanzi} (${top.vi})!`);
+      });
+    });
+
+    // Sugar buttons in Master Counter
+    document.querySelectorAll('.btn-m-sugar').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sId = btn.dataset.sugar;
+        const sugar = BOBA_VOCAB.sugars.find(s => s.id === sId);
+        if (!sugar) return;
+        this.cup.sugar = sugar;
+        this.audio.playPop();
+        document.querySelectorAll('.btn-m-sugar').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.updateAllCupVisuals();
+        this.showToast('🍬', `Chọn đường: ${sugar.hanzi} (${sugar.vi})`);
+      });
+    });
+
+    // Ice buttons in Master Counter
+    document.querySelectorAll('.btn-m-ice').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const iId = btn.dataset.ice;
+        const ice = BOBA_VOCAB.ices.find(i => i.id === iId);
+        if (!ice) return;
+        this.cup.ice = ice;
+        this.audio.playPop();
+        document.querySelectorAll('.btn-m-ice').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.updateAllCupVisuals();
+        this.showToast('🧊', `Chọn đá: ${ice.hanzi} (${ice.vi})`);
+      });
+    });
+
+    // Shaker in Master Counter
+    document.getElementById('master-shaker-wrap')?.addEventListener('click', () => {
+      this.audio.playShakerSound();
+      const shakerBody = document.getElementById('master-shaker-body');
+      shakerBody?.classList.add('shakerShakeAnim');
+      setTimeout(() => shakerBody?.classList.remove('shakerShakeAnim'), 700);
+      this.cup.isShaken = true;
+      this.showToast('🌪️', 'Đã lắc đều ly trà sữa thơm ngon!');
+    });
+
+    // Lids box in Master Counter
+    document.getElementById('master-lids-box')?.addEventListener('click', () => {
+      this.cup.hasLid = true;
+      this.cup.strawColor = '#f43f5e';
+      this.audio.playPop();
+      this.updateAllCupVisuals();
+      this.showToast('🐻', 'Đã đóng nắp và cắm ống hút!');
+    });
+
+    // Trash in Master Counter
+    document.getElementById('btn-master-trash')?.addEventListener('click', () => {
+      this.audio.playTrash();
+      this.resetCup();
+      this.updateAllCupVisuals();
+      this.showToast('🗑️', 'Đã vứt ly hỏng vào thùng rác!');
+    });
+
+    // Undo topping in Master Counter
+    document.getElementById('btn-master-undo')?.addEventListener('click', () => {
+      if (this.cup.toppings.length > 0) {
+        const removed = this.cup.toppings.pop();
+        this.audio.playUndo();
+        this.updateAllCupVisuals();
+        this.showToast('↩️', `Đã bớt 1 phần ${removed.hanzi}!`);
+      } else {
+        this.showToast('⚠️', 'Chưa có topping để bớt!');
+      }
+    });
+
+    // Speech audio in Master Counter
+    document.getElementById('btn-master-speech-audio')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.speakOrder();
+    });
+    document.getElementById('master-speech-bubble')?.addEventListener('click', () => {
+      this.speakOrder();
+    });
+
+    // Finish & Serve button in Master Counter
+    document.getElementById('btn-master-finish-drink')?.addEventListener('click', () => {
+      if (!this.cup.hasLid) {
+        this.cup.hasLid = true;
+        this.cup.strawColor = '#f43f5e';
+      }
+      this.serveDrinkToCustomer();
+    });
+
+    // Full-screen Ticket Zoom Modal Handlers
+    document.getElementById('active-order-ticket')?.addEventListener('click', () => {
+      this.openTicketZoomModal();
+    });
+    document.querySelectorAll('.btn-quick-zoom-ticket').forEach(b => {
+      b.addEventListener('click', () => this.openTicketZoomModal());
+    });
+    document.getElementById('btn-close-zoom-ticket')?.addEventListener('click', () => {
+      this.closeTicketZoomModal();
+    });
+    document.getElementById('btn-zoom-back-to-work')?.addEventListener('click', () => {
+      this.closeTicketZoomModal();
+    });
+    document.getElementById('btn-zoom-listen')?.addEventListener('click', () => {
+      this.speakOrder();
+    });
   }
 
   // Switch Station smoothly
@@ -587,20 +738,145 @@ class PapaBobaGame {
       btn.classList.toggle('active', btn.dataset.target === stationId);
     });
 
-    // Sync visual cup state into Top Station
-    if (stationId === 'view-top-station') {
-      const finalLiq = document.getElementById('final-cup-liquid');
-      if (finalLiq) {
-        if (this.cup.tea) {
-          finalLiq.style.background = this.cup.tea.color;
-          finalLiq.style.height = `${Math.min(85, Math.max(25, this.cup.pourLevel))}%`;
-        } else {
-          finalLiq.style.background = 'transparent';
-          finalLiq.style.height = '0%';
+    // Update HUD Mode text
+    const modeText = document.getElementById('hud-mode-text');
+    if (modeText) {
+      modeText.textContent = (stationId === 'view-master-counter') ? 'Chế độ Trạm' : 'Quầy Toàn Cảnh (Gốc)';
+    }
+
+    this.updateAllCupVisuals();
+    this.audio.playPop();
+  }
+
+  // Synchronize cup visual representation across Master Counter & Stations
+  updateAllCupVisuals() {
+    // 1. MASTER COUNTER CUP
+    const masterLiquid = document.getElementById('master-cup-liquid');
+    const masterIce = document.getElementById('master-cup-ice-layer');
+    const masterTop = document.getElementById('master-cup-toppings-layer');
+    const masterLid = document.getElementById('master-cup-lid');
+    const masterPills = document.getElementById('master-cup-pills');
+
+    if (masterLiquid) {
+      if (this.cup.tea) {
+        masterLiquid.style.background = this.cup.tea.color;
+        masterLiquid.style.height = `${Math.min(85, Math.max(30, this.cup.pourLevel))}%`;
+      } else {
+        masterLiquid.style.background = 'transparent';
+        masterLiquid.style.height = '0%';
+      }
+    }
+
+    if (masterIce) {
+      masterIce.innerHTML = '';
+      if (this.cup.ice && this.cup.ice.id !== 'no_ice') {
+        const count = this.cup.ice.id === 'extra_ice' ? 4 : (this.cup.ice.id === 'less_ice' ? 2 : 3);
+        for (let i = 0; i < count; i++) {
+          const cube = document.createElement('span');
+          cube.style.cssText = 'width: 14px; height: 14px; background: rgba(255, 255, 255, 0.75); border: 1.5px solid rgba(255, 255, 255, 0.95); border-radius: 3px; display: inline-block; box-shadow: 0 1px 3px rgba(0,0,0,0.1);';
+          masterIce.appendChild(cube);
         }
       }
     }
 
+    if (masterTop) {
+      masterTop.innerHTML = '';
+      this.cup.toppings.forEach(top => {
+        const dot = document.createElement('span');
+        let color = '#1e293b';
+        if (top.id === 'mango') color = '#fbbf24';
+        else if (top.id === 'redbean') color = '#991b1b';
+        else if (top.id === 'matcha') color = '#65a30d';
+        else if (top.id === 'coconut') color = '#e0f2fe';
+        else if (top.id === 'taroball') color = '#a855f7';
+        dot.style.cssText = `width: 12px; height: 12px; border-radius: 50%; background: ${color}; display: inline-block; box-shadow: 0 1px 2px rgba(0,0,0,0.25);`;
+        masterTop.appendChild(dot);
+      });
+    }
+
+    if (masterLid) {
+      masterLid.style.display = this.cup.hasLid ? 'flex' : 'none';
+    }
+
+    if (masterPills) {
+      const parts = [];
+      if (this.cup.tea) parts.push(`<span class="m-pill" style="background:#fef3c7; color:#92400e;">${this.cup.tea.hanzi}</span>`);
+      if (this.cup.sugar) parts.push(`<span class="m-pill" style="background:#ffedd5; color:#9a3412;">${this.cup.sugar.hanzi}</span>`);
+      if (this.cup.ice) parts.push(`<span class="m-pill" style="background:#e0f2fe; color:#0369a1;">${this.cup.ice.hanzi}</span>`);
+      if (this.cup.toppings.length > 0) parts.push(`<span class="m-pill" style="background:#fce7f3; color:#9d174d;">${this.cup.toppings.map(t => t.hanzi).join('+')}</span>`);
+
+      masterPills.innerHTML = parts.length > 0 ? parts.join(' ') : '<span class="m-pill empty">Ly Trống</span>';
+    }
+
+    // 2. STATIONS CUP SYNC
+    const pourLiq = document.getElementById('pour-cup-liquid');
+    if (pourLiq) {
+      pourLiq.style.height = `${this.cup.pourLevel}%`;
+      if (this.cup.tea) pourLiq.style.background = this.cup.tea.color;
+    }
+    const finalLiq = document.getElementById('final-cup-liquid');
+    if (finalLiq) {
+      if (this.cup.tea) {
+        finalLiq.style.background = this.cup.tea.color;
+        finalLiq.style.height = `${Math.min(85, Math.max(25, this.cup.pourLevel))}%`;
+      } else {
+        finalLiq.style.background = 'transparent';
+        finalLiq.style.height = '0%';
+      }
+    }
+    const finalLid = document.getElementById('final-cup-lid');
+    if (finalLid) finalLid.style.display = this.cup.hasLid ? 'block' : 'none';
+    const finalStraw = document.getElementById('final-cup-straw');
+    if (finalStraw) finalStraw.style.display = this.cup.strawColor ? 'block' : 'none';
+
+    // 3. LEFT BOARD STATS SYNC
+    const mRev = document.getElementById('m-rev-val');
+    if (mRev) mRev.textContent = `${this.coins} ¥`;
+    const mOrd = document.getElementById('m-order-val');
+    if (mOrd) mOrd.textContent = this.completedOrders.toString();
+    const mWords = document.getElementById('m-words-val');
+    if (mWords) mWords.textContent = this.learnedWords.size.toString();
+  }
+
+  // Full-screen Ticket Zoom Modal
+  openTicketZoomModal() {
+    const modal = document.getElementById('boba-ticket-zoom-modal');
+    if (!modal || !this.currentCustomer || !this.currentOrder) return;
+    const ord = this.currentOrder;
+
+    const nameEl = document.getElementById('zoom-cust-name');
+    const orderIdEl = document.getElementById('zoom-order-id');
+    const teaChn = document.getElementById('zoom-tea-chn');
+    const teaVi = document.getElementById('zoom-tea-vi');
+    const sugChn = document.getElementById('zoom-sugar-chn');
+    const sugVi = document.getElementById('zoom-sugar-vi');
+    const iceChn = document.getElementById('zoom-ice-chn');
+    const iceVi = document.getElementById('zoom-ice-vi');
+    const topChn = document.getElementById('zoom-top-chn');
+    const topVi = document.getElementById('zoom-top-vi');
+
+    if (nameEl) nameEl.textContent = `${this.currentCustomer.nameChn} (${this.currentCustomer.nameVi})`;
+    if (orderIdEl) orderIdEl.textContent = `ORDER #${100 + this.completedOrders}`;
+
+    if (teaChn) teaChn.textContent = `${ord.topping.hanzi}${ord.tea.hanzi}`;
+    if (teaVi) teaVi.textContent = ord.tea.vi;
+
+    if (sugChn) sugChn.textContent = `${ord.sugar.hanzi} (${ord.sugar.percent}%)`;
+    if (sugVi) sugVi.textContent = ord.sugar.vi;
+
+    if (iceChn) iceChn.textContent = ord.ice.hanzi;
+    if (iceVi) iceVi.textContent = ord.ice.vi;
+
+    if (topChn) topChn.textContent = ord.topping.hanzi;
+    if (topVi) topVi.textContent = ord.topping.vi;
+
+    modal.style.display = 'flex';
+    this.audio.playPop();
+  }
+
+  closeTicketZoomModal() {
+    const modal = document.getElementById('boba-ticket-zoom-modal');
+    if (modal) modal.style.display = 'none';
     this.audio.playPop();
   }
 
@@ -631,7 +907,7 @@ class PapaBobaGame {
   }
 
   // ==========================================================================
-  // STATION 1: ORDER STATION
+  // STATION 1: ORDER STATION & MASTER COUNTER SPAWN
   // ==========================================================================
   spawnNewCustomer(isFirst = false) {
     this.resetCup();
@@ -655,29 +931,60 @@ class PapaBobaGame {
 
     this.isOrderTaken = false;
 
-    // Render customer avatar
-    const nameLabel = document.getElementById('customer-name-label');
-    const roleLabel = document.getElementById('customer-role-label');
-    const emojiSpan = document.querySelector('.customer-chibi-emoji');
-    if (nameLabel) nameLabel.textContent = this.currentCustomer.nameChn;
-    if (roleLabel) roleLabel.textContent = `(${this.currentCustomer.nameVi})`;
-    if (emojiSpan) emojiSpan.textContent = this.currentCustomer.emoji;
+    // 1. Render customer avatars (3D Anime Chibi Render)
+    const masterCustImg = document.getElementById('master-customer-img');
+    const stationCustImg = document.getElementById('customer-avatar-img');
+    if (masterCustImg && this.currentCustomer.image) masterCustImg.src = this.currentCustomer.image;
+    if (stationCustImg && this.currentCustomer.image) stationCustImg.src = this.currentCustomer.image;
 
-    // Reset order ticket
+    // Names & roles
+    const masterName = document.getElementById('master-customer-name');
+    const masterRole = document.getElementById('master-customer-role');
+    const stationName = document.getElementById('customer-name-label');
+    const stationRole = document.getElementById('customer-role-label');
+    if (masterName) masterName.textContent = this.currentCustomer.nameChn;
+    if (masterRole) masterRole.textContent = `(${this.currentCustomer.nameVi})`;
+    if (stationName) stationName.textContent = this.currentCustomer.nameChn;
+    if (stationRole) stationRole.textContent = `(${this.currentCustomer.nameVi})`;
+
+    // 2. Reset and populate Ticket Rail
     const ticketHeader = document.getElementById('ticket-header-name');
-    if (ticketHeader) ticketHeader.textContent = this.currentCustomer.nameChn;
+    const ticketId = document.getElementById('ticket-order-id');
+    if (ticketHeader) ticketHeader.textContent = `${this.currentCustomer.nameChn} (${this.currentCustomer.nameVi})`;
+    if (ticketId) ticketId.textContent = `#${100 + this.completedOrders}`;
 
     const teaText = document.getElementById('ticket-tea-text');
+    const teaVi = document.getElementById('ticket-tea-vi');
     const sugText = document.getElementById('ticket-sugar-text');
+    const sugVi = document.getElementById('ticket-sugar-vi');
     const iceText = document.getElementById('ticket-ice-text');
+    const iceVi = document.getElementById('ticket-ice-vi');
     const topText = document.getElementById('ticket-topping-text');
+    const topVi = document.getElementById('ticket-topping-vi');
 
-    if (teaText) teaText.textContent = this.currentOrder.tea.hanzi;
-    if (sugText) sugText.textContent = this.currentOrder.sugar.hanzi;
+    if (teaText) teaText.textContent = `${this.currentOrder.topping.hanzi}${this.currentOrder.tea.hanzi}`;
+    if (teaVi) teaVi.textContent = this.currentOrder.tea.vi;
+    if (sugText) sugText.textContent = `${this.currentOrder.sugar.hanzi} (${this.currentOrder.sugar.percent}%)`;
+    if (sugVi) sugVi.textContent = this.currentOrder.sugar.vi;
     if (iceText) iceText.textContent = this.currentOrder.ice.hanzi;
+    if (iceVi) iceVi.textContent = this.currentOrder.ice.vi;
     if (topText) topText.textContent = this.currentOrder.topping.hanzi;
+    if (topVi) topVi.textContent = this.currentOrder.topping.vi;
+
+    // 3. Populate Eyeline Recipe Cards in Stations 2, 3, 4
+    ['pour', 'shake', 'top'].forEach(s => {
+      const t = document.getElementById(`wb-tea-${s}`);
+      const sug = document.getElementById(`wb-sugar-${s}`);
+      const ic = document.getElementById(`wb-ice-${s}`);
+      const tp = document.getElementById(`wb-top-${s}`);
+      if (t) t.textContent = `${this.currentOrder.topping.hanzi}${this.currentOrder.tea.hanzi}`;
+      if (sug) sug.textContent = `${this.currentOrder.sugar.hanzi}(${this.currentOrder.sugar.percent}%)`;
+      if (ic) ic.textContent = this.currentOrder.ice.hanzi;
+      if (tp) tp.textContent = this.currentOrder.topping.hanzi;
+    });
 
     this.updateSpeechBalloonUI();
+    this.updateAllCupVisuals();
 
     // Hide next station prompt until order is taken
     const nextBtn = document.getElementById('btn-goto-pour-from-order');
@@ -693,6 +1000,7 @@ class PapaBobaGame {
     if (!this.currentOrder) return;
     const ord = this.currentOrder;
 
+    // 1. Order Station Balloon
     const chnEl = document.getElementById('order-chinese-sentence');
     const pinEl = document.getElementById('order-pinyin-sentence');
     const viEl = document.getElementById('order-vietnamese-sentence');
@@ -714,6 +1022,17 @@ class PapaBobaGame {
       viEl.style.display = this.showVietnamese ? 'block' : 'none';
       viEl.textContent = `(Cho tôi 1 ly ${ord.tea.vi.toLowerCase()} ${ord.topping.vi.toLowerCase()}, ${ord.sugar.vi.toLowerCase()}, ${ord.ice.vi.toLowerCase()})`;
     }
+
+    // 2. Master Counter Balloon
+    const mTea = document.getElementById('master-order-tea');
+    const mSugIce = document.getElementById('master-order-sugar-ice');
+    const mPin = document.getElementById('master-speech-pin');
+    const mVi = document.getElementById('master-speech-vi');
+
+    if (mTea) mTea.textContent = `${ord.topping.hanzi}${ord.tea.hanzi}`;
+    if (mSugIce) mSugIce.textContent = `${ord.sugar.hanzi}，${ord.ice.hanzi}`;
+    if (mPin) mPin.textContent = `Wǒ yào yībēi ${ord.topping.pinyin} ${ord.tea.pinyin}, ${ord.sugar.pinyin}, ${ord.ice.pinyin}.`;
+    if (mVi) mVi.textContent = `Cho tôi 1 ly ${ord.tea.vi.toLowerCase()} ${ord.topping.vi.toLowerCase()}, ${ord.sugar.vi.toLowerCase()}, ${ord.ice.vi.toLowerCase()}`;
   }
 
   speakOrder() {
@@ -1188,16 +1507,14 @@ class PapaBobaGame {
   // ==========================================================================
   serveDrinkToCustomer() {
     if (!this.cup.hasLid) {
-      alert('Vui lòng dập nắp ly trước khi trả món cho khách!');
-      return;
-    }
-    if (!this.cup.strawColor) {
-      alert('Vui lòng cắm ống hút cho ly trà sữa!');
-      return;
+      this.cup.hasLid = true;
+      this.cup.strawColor = '#f43f5e';
     }
 
-    // Switch to Order Station
-    this.switchStation('view-order-station');
+    const wasMaster = (this.currentStation === 'view-master-counter');
+    if (!wasMaster) {
+      this.switchStation('view-order-station');
+    }
 
     // Calculate 4 Papa's Freezeria Criteria
     const ord = this.currentOrder;
@@ -1379,6 +1696,8 @@ class PapaBobaGame {
 
     document.getElementById('btn-action-lid')?.style.setProperty('display', 'inline-flex');
     document.getElementById('btn-remove-lid')?.style.setProperty('display', 'none');
+    document.querySelectorAll('.btn-m-sugar, .btn-m-ice').forEach(b => b.classList.remove('active'));
+    this.updateAllCupVisuals();
   }
 
   // ==========================================================================

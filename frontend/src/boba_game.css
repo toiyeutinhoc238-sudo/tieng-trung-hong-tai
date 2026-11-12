@@ -293,14 +293,15 @@ body.boba-game-body {
    ========================================================================== */
 .boba-ticket-rail {
   position: relative;
-  z-index: 40;
-  height: 48px;
-  background: linear-gradient(180deg, #475569 0%, #334155 100%);
-  border-bottom: 3px solid #1e293b;
+  z-index: 50;
+  height: 52px;
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+  border-bottom: 4px solid #0f172a;
   display: flex;
   align-items: center;
   padding: 0 16px;
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), 0 4px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), 0 4px 12px rgba(0, 0, 0, 0.3);
+  overflow: visible !important;
 }
 
 .rail-bar-metal {
@@ -310,10 +311,13 @@ body.boba-game-body {
 }
 
 .rail-title-label {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 900;
   color: #94a3b8;
   letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .tickets-clip-area {
@@ -322,89 +326,141 @@ body.boba-game-body {
   gap: 16px;
   margin-left: 18px;
   height: 100%;
+  position: relative;
+  overflow: visible !important;
 }
 
 /* Tấm vé Order Ticket phong cách Papa's Gameria */
 .papa-order-ticket {
-  position: relative;
-  width: 140px;
-  background: #fefce8;
-  border: 2px solid #ca8a04;
-  border-radius: 0 0 12px 12px;
-  padding: 6px 10px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  top: 42px; /* Treo hoàn toàn BÊN DƯỚI thanh ray kim loại */
+  left: 10px;
+  width: 175px;
+  background: #fffdf5;
+  border: 2.5px solid #d97706;
+  border-radius: 4px 4px 14px 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  top: 18px;
-  z-index: 45;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  z-index: 60;
+  user-select: none;
+  overflow: hidden;
 }
 
-.papa-order-ticket:hover,
-.papa-order-ticket.zoomed {
-  transform: translateY(14px) scale(1.15);
-  z-index: 60;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+.papa-order-ticket:hover {
+  transform: translateY(6px) scale(1.04);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
   border-color: #ea580c;
 }
 
 .ticket-clip-pin {
   position: absolute;
-  top: -10px;
+  top: -14px;
   left: 50%;
   transform: translateX(-50%);
-  width: 24px;
-  height: 12px;
-  background: linear-gradient(180deg, #cbd5e1 0%, #64748b 100%);
-  border-radius: 3px;
-  border: 1px solid #334155;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  width: 28px;
+  height: 16px;
+  background: linear-gradient(180deg, #fef08a 0%, #ca8a04 100%);
+  border: 2px solid #78350f;
+  border-radius: 4px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 62;
+}
+
+.pin-rivet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #78350f;
 }
 
 .ticket-header {
+  background: linear-gradient(135deg, #b45309 0%, #78350f 100%);
+  color: #ffffff;
+  padding: 6px 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1.5px dashed #eab308;
-  padding-bottom: 3px;
-  margin-bottom: 4px;
+  border-bottom: 2px solid #ca8a04;
 }
 
 .ticket-cust-name {
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: #a16207;
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: #fef08a;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .ticket-order-id {
-  font-size: 0.68rem;
-  font-weight: 800;
-  color: #ca8a04;
+  font-size: 0.72rem;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 1px 7px;
+  border-radius: 99px;
 }
 
 .ticket-body {
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-}
-
-.ticket-tea-icon {
-  font-size: 1.25rem;
-  text-align: center;
-  margin: 1px 0;
+  gap: 6px;
 }
 
 .ticket-line-item {
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-size: 0.72rem;
-  color: #451a03;
-  line-height: 1.2;
+  gap: 8px;
+  font-size: 0.8rem;
 }
 
-.ticket-line-item .tag {
-  color: #ca8a04;
+.tag-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.tag-badge.tea { background: #b45309; }
+.tag-badge.sugar { background: #ea580c; }
+.tag-badge.ice { background: #0284c7; }
+.tag-badge.topping { background: #be185d; }
+
+.item-text-group {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.item-text-group strong {
+  font-size: 0.88rem;
+  color: #1e293b;
+}
+
+.item-sub-vi {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.ticket-footer-zoom-hint {
+  border-top: 1.5px dashed #fed7aa;
+  padding: 4px 0;
+  text-align: center;
+  font-size: 0.68rem;
   font-weight: 800;
+  color: #ea580c;
+  background: #fff7ed;
+  border-radius: 0 0 12px 12px;
 }
 
 /* ==========================================================================
@@ -507,7 +563,7 @@ body.boba-game-body {
    STATION 1: ORDER STATION (点单台)
    ========================================================================== */
 .station-order-view {
-  background: linear-gradient(180deg, #fed7aa 0%, #fde68a 35%, #fff7ed 60%, #e2b485 100%);
+  background: #fff7ed;
   position: relative;
 }
 
@@ -516,10 +572,12 @@ body.boba-game-body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 48%;
-  background: linear-gradient(180deg, #fef3c7 0%, #fed7aa 100%);
+  height: 52%;
+  background-image: url('./assets/boba_shop_interior_bg.jpg');
+  background-size: cover;
+  background-position: center top;
   overflow: hidden;
-  border-bottom: 6px solid #e2b485;
+  border-bottom: 6px solid #b45309;
 }
 
 .street-passersby-container {
@@ -654,10 +712,40 @@ body.boba-game-body {
   justify-content: flex-end;
 }
 
-.customer-chibi-emoji {
-  font-size: 6.5rem;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
-  animation: customerBob 2.5s infinite ease-in-out;
+.customer-avatar-box {
+  width: 175px;
+  height: 185px;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+  border: 3.5px solid #ffffff;
+  background: #ffffff;
+  animation: customerBob 2.8s infinite ease-in-out;
+}
+
+.customer-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.customer-sprite-char {
+  width: 100%;
+  height: 100%;
+  background-image: url('./assets/chibi_customers_pack.jpg');
+  background-repeat: no-repeat;
+  background-size: 400% auto;
+}
+
+.customer-sprite-char.char-linjie {
+  background-position: 68% center;
+}
+
+.customer-sprite-char.char-abao {
+  background-position: 98% center;
 }
 
 @keyframes customerBob {
@@ -2098,4 +2186,1301 @@ body.boba-game-body {
 @keyframes popIn {
   0% { transform: scale(0.6); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
+}
+
+/* ==========================================================================
+   WORKBENCH RECIPE TICKETS & FULL SCREEN TICKET ZOOM MODAL
+   ========================================================================== */
+.workbench-recipe-card {
+  background: #ffffff;
+  border: 2px solid #fed7aa;
+  border-radius: 14px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.wb-recipe-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-right: 2px dashed #fed7aa;
+  padding-right: 12px;
+  flex-shrink: 0;
+}
+
+.wb-title {
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: #7c2d12;
+}
+
+.btn-quick-zoom-ticket {
+  margin-left: 4px;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ea580c;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.btn-quick-zoom-ticket:hover {
+  background: #ea580c;
+  color: #ffffff;
+  border-color: #ea580c;
+}
+
+.wb-recipe-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.wb-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.wb-pill.tea { background: #fef3c7; color: #92400e; border: 1.5px solid #fde68a; }
+.wb-pill.sugar { background: #ffedd5; color: #9a3412; border: 1.5px solid #fed7aa; }
+.wb-pill.ice { background: #e0f2fe; color: #0369a1; border: 1.5px solid #bae6fd; }
+.wb-pill.topping { background: #fce7f3; color: #9d174d; border: 1.5px solid #fbcfe8; }
+
+/* Full-Screen Zoom Modal Dialog */
+.ticket-zoom-dialog {
+  position: relative;
+  max-width: 440px;
+  width: 90%;
+  animation: zoomModalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes zoomModalPop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.zoom-ticket-paper {
+  background: #fffdf5;
+  border: 3.5px solid #d97706;
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  position: relative;
+}
+
+.zoom-ticket-clip {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 14px;
+  background: linear-gradient(180deg, #fef08a 0%, #ca8a04 100%);
+  border: 2px solid #78350f;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+}
+
+.zoom-ticket-header {
+  background: linear-gradient(135deg, #b45309 0%, #78350f 100%);
+  color: #ffffff;
+  padding: 18px 18px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cust-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chibi-avatar-badge {
+  font-size: 2rem;
+}
+
+.cust-name {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #fef08a;
+  margin: 0;
+}
+
+.order-code {
+  font-size: 0.75rem;
+  color: #fed7aa;
+  font-weight: 700;
+}
+
+.btn-close-zoom-ticket {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.15s ease;
+}
+
+.btn-close-zoom-ticket:hover {
+  background: #ef4444;
+  transform: rotate(90deg);
+}
+
+.zoom-ticket-body {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.zoom-section-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #78350f;
+  border-bottom: 2px dashed #fed7aa;
+  padding-bottom: 4px;
+}
+
+.zoom-recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.zoom-item-card {
+  background: #ffffff;
+  border: 2px solid #fed7aa;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.zoom-item-card .z-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.zoom-item-card .z-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.zoom-item-card .z-label {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.zoom-item-card .z-chn {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #1e293b;
+}
+
+.zoom-item-card .z-pin {
+  font-size: 0.72rem;
+  color: #ea580c;
+  font-weight: 700;
+}
+
+.zoom-item-card .z-vi {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.zoom-audio-box {
+  margin-top: 4px;
+}
+
+.btn-zoom-listen {
+  width: 100%;
+  padding: 9px 0;
+  background: #fff1f2;
+  border: 1.5px solid #fda4af;
+  border-radius: 10px;
+  color: #e11d48;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.btn-zoom-listen:hover {
+  background: #ffe4e6;
+  border-color: #f43f5e;
+}
+
+.zoom-ticket-footer {
+  background: #fff7ed;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: center;
+  border-top: 1.5px solid #fed7aa;
+}
+
+.btn-back-to-work {
+  width: 100%;
+  height: 42px;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.btn-back-to-work:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(234, 88, 12, 0.45);
+}
+
+/* ==========================================================================
+   8. MASTER COUNTER VIEW (QUẦY TOÀN CẢNH · THEO ĐÚNG TRANH MẪU GỐC)
+   ========================================================================== */
+.hud-mode-pill {
+  background: #fff7ed;
+  border: 1.5px solid #fdba74;
+  color: #ea580c;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.15);
+}
+
+.hud-mode-pill:hover {
+  background: #ea580c;
+  color: #ffffff;
+  border-color: #ea580c;
+}
+
+.station-master-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #fff5eb;
+  display: none;
+}
+
+.station-master-view.active {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background Layer */
+.master-bg-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.master-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(1.1) brightness(1.02);
+}
+
+/* 2. Left Wooden Signboard (今日营收) */
+.master-board-left {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  width: 135px;
+  background: #fff8ef;
+  border: 2.5px solid #d97706;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+  z-index: 8;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.master-board-left::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 8px;
+  background: #78350f;
+  border-radius: 4px;
+}
+
+.m-board-title {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #78350f;
+  border-bottom: 1.5px dashed #fed7aa;
+  padding-bottom: 2px;
+}
+
+.m-board-coin {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #b45309;
+  margin: 4px 0;
+}
+
+.m-board-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: #475569;
+  font-weight: 700;
+  margin-top: 3px;
+}
+
+.m-board-row .m-num {
+  font-weight: 900;
+  color: #ea580c;
+}
+
+/* 3. Right Blackboard (奶茶店) */
+.master-board-right {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  width: 120px;
+  height: 125px;
+  background: #1e293b;
+  border: 3.5px solid #b45309;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.m-blackboard-title {
+  color: #fef08a;
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+.m-blackboard-doodle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.2rem;
+}
+
+/* 4. Customer Stage Behind Counter */
+.master-customer-stage {
+  position: absolute;
+  top: 6px;
+  left: 155px;
+  right: 140px;
+  height: 38%;
+  z-index: 6;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 14px;
+}
+
+.master-customer-avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.master-avatar-frame {
+  width: 115px;
+  height: 135px;
+  border-radius: 18px;
+  border: 3px solid #ffffff;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+  background: #fef3c7;
+  overflow: hidden;
+}
+
+.master-customer-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  animation: customerBob 3.5s ease-in-out infinite;
+}
+
+.master-customer-name-tag {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid #f97316;
+  border-radius: 14px;
+  padding: 2px 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #9a3412;
+  margin-top: -10px;
+  z-index: 7;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.master-speech-bubble {
+  background: #ffffff;
+  border: 2.5px solid #f97316;
+  border-radius: 18px;
+  padding: 10px 14px;
+  max-width: 370px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.master-speech-bubble::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 8px 12px 8px 0;
+  border-style: solid;
+  border-color: transparent #f97316 transparent transparent;
+}
+
+.master-speech-bubble::after {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 6px 9px 6px 0;
+  border-style: solid;
+  border-color: transparent #ffffff transparent transparent;
+}
+
+.bubble-cup-preview {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.bubble-text-content {
+  flex: 1;
+}
+
+.bubble-chn-order {
+  font-size: 1.05rem;
+  font-weight: 900;
+  line-height: 1.35;
+  color: #1e293b;
+}
+
+.bubble-chn-order strong {
+  color: #b45309;
+}
+
+.bubble-chn-order .highlight-spec {
+  color: #e11d48;
+  font-weight: 800;
+}
+
+.bubble-pin-order {
+  font-size: 0.7rem;
+  color: #ea580c;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.bubble-vi-order {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+.btn-master-speech-audio {
+  background: #fff1f2;
+  border: 1.5px solid #f43f5e;
+  color: #e11d48;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.btn-master-speech-audio:hover {
+  background: #e11d48;
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+/* 5. Counter Surface Equipment */
+.master-counter-surface {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  width: 100%;
+  height: 32%;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 14px 6px;
+  background: linear-gradient(180deg, rgba(254, 215, 170, 0.45) 0%, rgba(184, 122, 65, 0.95) 25%, #7c2d12 100%);
+  border-top: 4px solid #fde0b9;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Cup Stack Left */
+.master-cup-stack {
+  width: 52px;
+  height: 105px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.cup-stack-visual {
+  width: 44px;
+  height: 95px;
+  position: relative;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stack-rim {
+  position: absolute;
+  width: 48px;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.stack-rim.rim-1 { top: 0; }
+.stack-rim.rim-2 { top: 10px; }
+.stack-rim.rim-3 { top: 20px; }
+
+.stack-bear-logo {
+  font-size: 1.1rem;
+}
+
+/* Dispensers Rack */
+.master-dispensers-rack {
+  background: #fff8ef;
+  border: 2.5px solid #d97706;
+  border-radius: 12px;
+  padding: 5px 8px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.m-rack-title {
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #78350f;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.m-dispensers-grid {
+  display: flex;
+  gap: 7px;
+}
+
+.m-dispenser-urn {
+  width: 50px;
+  height: 96px;
+  border-radius: 12px;
+  border: 2.5px solid #334155;
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.m-dispenser-urn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(234, 88, 12, 0.35);
+}
+
+.m-dispenser-urn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 4px;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.7), transparent);
+  z-index: 4;
+}
+
+.urn-lid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(180deg, #475569 0%, #0f172a 100%);
+  border-bottom: 1.5px solid #94a3b8;
+  z-index: 5;
+}
+
+.urn-glass {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  bottom: 24px;
+  overflow: hidden;
+}
+
+.urn-liquid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 82%;
+  transition: height 0.3s ease;
+}
+
+.urn-liquid.liquid-milk { background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%); }
+.urn-liquid.liquid-blacktea { background: linear-gradient(180deg, #9a3412 0%, #6e270e 100%); }
+.urn-liquid.liquid-milktea { background: linear-gradient(180deg, #e8a760 0%, #b87a41 100%); }
+.urn-liquid.liquid-taro { background: linear-gradient(180deg, #c084fc 0%, #86198f 100%); }
+
+.urn-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #fdba74;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  z-index: 3;
+}
+
+.urn-spigot {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 10px;
+  background: linear-gradient(180deg, #cbd5e1 0%, #64748b 100%);
+  border: 1.5px solid #1e293b;
+  border-radius: 2px;
+  z-index: 6;
+}
+
+.spigot-handle {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 4px;
+  background: #0f172a;
+  border-radius: 2px;
+}
+
+.urn-label {
+  position: relative;
+  z-index: 6;
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+/* Toppings Rack */
+.master-toppings-rack {
+  background: #fff8ef;
+  border: 2.5px solid #d97706;
+  border-radius: 12px;
+  padding: 5px 8px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.m-toppings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.m-topping-box {
+  width: 44px;
+  height: 46px;
+  background: #ffffff;
+  border: 1.5px solid #fdba74;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.m-topping-box:hover {
+  transform: scale(1.08);
+  border-color: #ea580c;
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.3);
+}
+
+.topping-cell-content {
+  width: 26px;
+  height: 22px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.cell-boba { background: #1e293b; }
+.cell-mango { background: #fbbf24; }
+.cell-redbean { background: #991b1b; }
+.cell-matcha { background: #65a30d; }
+.cell-coconut { background: #e0f2fe; border: 1px solid #bae6fd; }
+.cell-taroball { background: #a855f7; }
+
+.topping-label {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #1e293b;
+  margin-top: 1px;
+}
+
+/* Sugar & Ice Rack */
+.master-sugar-ice-rack {
+  background: #fff8ef;
+  border: 2.5px solid #d97706;
+  border-radius: 12px;
+  padding: 5px 8px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sugar-ice-tubs-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.tub-sugar,
+.tub-ice {
+  width: 46px;
+  height: 28px;
+  border: 1.5px solid #94a3b8;
+  border-radius: 6px;
+  background: #f1f5f9;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tub-sugar { background: #fffbeb; }
+.tub-ice { background: #e0f2fe; }
+
+.tub-scoop {
+  font-size: 0.9rem;
+}
+
+.sugar-ice-buttons-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 140px;
+  justify-content: center;
+}
+
+.btn-m-sugar,
+.btn-m-ice {
+  font-family: var(--boba-font-chinese);
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: #fffbeb;
+  border: 1.5px solid #d97706;
+  border-radius: 6px;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: #78350f;
+  transition: all 0.15s ease;
+}
+
+.btn-m-sugar:hover,
+.btn-m-ice:hover {
+  background: #fef08a;
+  transform: scale(1.05);
+}
+
+.btn-m-sugar.active {
+  background: #ea580c;
+  color: #ffffff;
+  border-color: #c2410c;
+}
+
+.btn-m-ice.active {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0369a1;
+}
+
+/* Shaker Wrap Right */
+.master-shaker-wrap {
+  width: 55px;
+  height: 105px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.master-shaker-wrap:hover {
+  transform: scale(1.05);
+}
+
+.shaker-body-metal {
+  width: 42px;
+  height: 82px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.shakerShakeAnim {
+  animation: shakeMasterJitter 0.4s ease-in-out infinite;
+}
+
+@keyframes shakeMasterJitter {
+  0% { transform: rotate(0deg) translate(0, 0); }
+  25% { transform: rotate(-12deg) translate(-3px, -4px); }
+  50% { transform: rotate(0deg) translate(0, 0); }
+  75% { transform: rotate(12deg) translate(3px, -4px); }
+  100% { transform: rotate(0deg) translate(0, 0); }
+}
+
+.shaker-cap {
+  width: 22px;
+  height: 12px;
+  background: linear-gradient(180deg, #f1f5f9 0%, #94a3b8 100%);
+  border: 1.5px solid #475569;
+  border-radius: 4px 4px 0 0;
+}
+
+.shaker-cylinder {
+  width: 42px;
+  height: 60px;
+  background: linear-gradient(90deg, #cbd5e1 0%, #f8fafc 40%, #94a3b8 100%);
+  border: 2px solid #475569;
+  border-radius: 0 0 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.shaker-bear-logo {
+  font-size: 1.1rem;
+}
+
+.shaker-label {
+  font-size: 0.68rem;
+  font-weight: 900;
+  color: #fef08a;
+  margin-top: 3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* 6. Bottom Workstation Stage */
+.master-bottom-workstation {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 28%;
+  z-index: 15;
+  background: linear-gradient(180deg, #f5cca0 0%, #deb07c 40%, #b87a41 100%);
+  border-top: 5px solid #fff5eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px 8px;
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.master-lids-box {
+  background: #fff8ef;
+  border: 2px solid #d97706;
+  border-radius: 10px;
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.master-lids-box:hover {
+  transform: translateY(-2px);
+  background: #fef3c7;
+}
+
+.lid-dome-visual {
+  width: 38px;
+  height: 20px;
+  border: 2px solid #94a3b8;
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.box-label {
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: #78350f;
+  margin-top: 2px;
+}
+
+/* Metallic Perforated Drip Tray with Active Cup */
+.master-drip-tray-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drip-metal-plate {
+  width: 290px;
+  height: 110px;
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+  border: 3px solid #94a3b8;
+  border-radius: 14px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.plate-perforations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(#0f172a 18%, transparent 20%);
+  background-size: 10px 10px;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Master Active Boba Cup */
+.master-cup-station {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.m-cup-shell {
+  width: 62px;
+  height: 84px;
+  border: 2.5px solid rgba(255, 255, 255, 0.85);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.28);
+  overflow: hidden;
+  backdrop-filter: blur(2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.m-cup-shell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 4px;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.6), transparent);
+  z-index: 6;
+}
+
+.m-cup-lid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 2px solid #cbd5e1;
+  border-radius: 6px 6px 0 0;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.m-straw {
+  width: 5px;
+  height: 35px;
+  background: #f43f5e;
+  position: absolute;
+  top: -12px;
+  border-radius: 2px;
+  transform: rotate(8deg);
+}
+
+.m-cup-liquid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: #df9b58;
+  transition: height 0.3s ease, background 0.3s ease;
+  z-index: 2;
+}
+
+.m-cup-ice-container {
+  position: absolute;
+  top: 15%;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 4px;
+  pointer-events: none;
+}
+
+.m-cup-toppings-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-end;
+  gap: 2px;
+  padding: 3px;
+  pointer-events: none;
+}
+
+.m-cup-bear-logo {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  z-index: 5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.m-cup-pills-bar {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.m-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+}
+
+.m-pill.empty {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+/* Master Workstation Tools (Trash & Undo) */
+.master-workstation-tools {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn-m-trash {
+  background: #fee2e2;
+  border: 1.5px solid #f87171;
+  color: #b91c1c;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.btn-m-trash:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.btn-m-undo {
+  background: #fef3c7;
+  border: 1.5px solid #f59e0b;
+  color: #92400e;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.btn-m-undo:hover {
+  background: #f59e0b;
+  color: #ffffff;
+}
+
+/* Big Glowing Pink Finish Button */
+.master-finish-action-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.btn-master-finish-pink {
+  background: linear-gradient(135deg, #fb7185 0%, #f43f5e 50%, #e11d48 100%);
+  color: #ffffff;
+  border: 3px solid #ffe4e6;
+  border-radius: 28px;
+  padding: 12px 26px;
+  font-size: 1.22rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 25px rgba(244, 63, 94, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-master-finish-pink:hover {
+  transform: scale(1.06);
+  box-shadow: 0 12px 30px rgba(244, 63, 94, 0.65);
+}
+
+.btn-master-finish-pink:active {
+  transform: scale(0.96);
+}
+
+.btn-master-finish-pink .btn-cup-icon {
+  font-size: 1.4rem;
+}
+
+.btn-master-finish-pink .btn-arrow {
+  font-size: 1.1rem;
+  margin-left: 2px;
 }
