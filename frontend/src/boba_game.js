@@ -361,6 +361,7 @@ const QUEUE_RULES = {
 // Ly trống mới (không cần bước lắc)
 function freshCup() {
   return {
+    size: 'M',
     tea: null,
     pourLevel: 0, // 0 to 100
     sugar: null,
@@ -971,38 +972,40 @@ class PapaBobaGame {
       this.showToast('🌪️', 'Đã lắc đều ly trà sữa thơm ngon!');
     });
 
-    // Lids box & Sealer Machine in Master Counter
+    // Lids box & Sealer Machine in Master Counter (theo bản vẽ Hình 3)
     const sealCupFn = () => {
+      if (this.cup.hasLid) {
+        this.cup.hasLid = false;
+        this.cup.strawColor = null;
+        this.audio.playUndo();
+        this.updateAllCupVisuals();
+        this.showToast('🔓', 'Đã mở nắp ly (có thể thêm bớt topping)!');
+        return;
+      }
       this.cup.hasLid = true;
       if (!this.cup.strawColor) this.cup.strawColor = '#f43f5e';
       this.audio.playPop();
       this.updateAllCupVisuals();
-      const lamp = document.querySelector('.sealer-lamp');
-      if (lamp) {
-        lamp.classList.remove('ready');
-        lamp.classList.add('sealing');
-        setTimeout(() => {
-          lamp.classList.remove('sealing');
-          lamp.classList.add('ready');
-        }, 400);
-      }
-      this.showToast('🧋', 'Đã dập nắp và cắm ống hút!');
+      this.showToast('🧋', 'Đã đóng nắp và cắm ống hút!');
     };
     document.getElementById('master-lids-box')?.addEventListener('click', sealCupFn);
     document.getElementById('master-sealer-machine')?.addEventListener('click', sealCupFn);
-
-    // Cup Stacks (M & L) Size Selection
-    document.getElementById('cup-stack-m')?.addEventListener('click', () => {
-      document.getElementById('cup-stack-m')?.classList.add('active');
-      document.getElementById('cup-stack-l')?.classList.remove('active');
-      this.audio.playPop();
-      this.showToast('🥤', 'Đã chọn ly size M (Vừa)');
+    document.querySelector('.btn-sketch-seal-lid')?.addEventListener('click', sealCupFn);
+    document.getElementById('master-active-cup')?.addEventListener('click', () => {
+      if (!this.cup.hasLid && this.cup.tea) {
+        sealCupFn();
+      }
     });
-    document.getElementById('cup-stack-l')?.addEventListener('click', () => {
-      document.getElementById('cup-stack-l')?.classList.add('active');
-      document.getElementById('cup-stack-m')?.classList.remove('active');
-      this.audio.playPop();
-      this.showToast('🥤', 'Đã chọn ly size L (Lớn)');
+
+    // Size Selector Buttons (S | M | L - theo bản vẽ phác thảo Hình 3)
+    document.querySelectorAll('.btn-strip-size').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sz = btn.dataset.size || 'M';
+        this.cup.size = sz;
+        this.audio.playPop();
+        this.updateAllCupVisuals();
+        this.showToast('🥤', `Đã chọn cỡ ly: Size ${sz}`);
+      });
     });
 
     // Trash in Master Counter
@@ -1219,7 +1222,102 @@ class PapaBobaGame {
     const mWords = document.getElementById('m-words-val');
     if (mWords) mWords.textContent = this.learnedWords.size.toString();
 
+    this.updateChecklistUI();
     this.updateGuide();
+  }
+
+  // Cập nhật Checklist tiến độ đơn hàng (theo bản vẽ phác thảo Hình 3)
+  updateChecklistUI() {
+    const chkSize = document.getElementById('chk-size');
+    const chkSizeVal = document.getElementById('chk-size-val');
+    const chkTea = document.getElementById('chk-tea');
+    const chkTeaVal = document.getElementById('chk-tea-val');
+    const chkSugarIce = document.getElementById('chk-sugar-ice');
+    const chkSugarIceVal = document.getElementById('chk-sugar-ice-val');
+    const chkToppings = document.getElementById('chk-toppings');
+    const chkToppingsVal = document.getElementById('chk-toppings-val');
+    const chkLid = document.getElementById('chk-lid');
+    const chkLidVal = document.getElementById('chk-lid-val');
+
+    // 1. Size ly
+    const sz = this.cup.size || 'M';
+    if (chkSize && chkSizeVal) {
+      chkSize.classList.add('done');
+      const box = chkSize.querySelector('.chk-box');
+      if (box) box.textContent = '✅';
+      chkSizeVal.textContent = `Size ${sz}`;
+    }
+    document.querySelectorAll('.btn-strip-size').forEach(b => {
+      b.classList.toggle('active', b.dataset.size === sz);
+    });
+
+    const activeCupBox = document.getElementById('master-active-cup');
+    if (activeCupBox) {
+      activeCupBox.classList.remove('cup-size-s', 'cup-size-m', 'cup-size-l');
+      activeCupBox.classList.add(`cup-size-${sz.toLowerCase()}`);
+    }
+
+    // 2. Loại nước (Trà)
+    if (chkTea && chkTeaVal) {
+      const hasTea = !!this.cup.tea;
+      chkTea.classList.toggle('done', hasTea);
+      const box = chkTea.querySelector('.chk-box');
+      if (box) box.textContent = hasTea ? '✅' : '⬜';
+      chkTeaVal.textContent = hasTea ? `${this.cup.tea.hanzi} (${this.cup.tea.vi})` : 'Chưa rót';
+    }
+    const currentTeaId = this.cup.tea ? this.cup.tea.id : null;
+    document.querySelectorAll('.sketch-drinks-grid .sketch-circle-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tea === currentTeaId);
+    });
+
+    // 3. Mức Đường & Đá
+    if (chkSugarIce && chkSugarIceVal) {
+      const hasSugar = !!this.cup.sugar;
+      const hasIce = !!this.cup.ice;
+      const isDone = hasSugar && hasIce;
+      chkSugarIce.classList.toggle('done', isDone);
+      const box = chkSugarIce.querySelector('.chk-box');
+      if (box) box.textContent = isDone ? '✅' : '⬜';
+      const sTxt = hasSugar ? this.cup.sugar.hanzi : '—';
+      const iTxt = hasIce ? this.cup.ice.hanzi : '—';
+      chkSugarIceVal.textContent = isDone ? `${sTxt} · ${iTxt}` : (hasSugar ? `${sTxt} (chờ đá)` : (hasIce ? `${iTxt} (chờ đường)` : 'Chưa chọn'));
+    }
+
+    // 4. Topping
+    if (chkToppings && chkToppingsVal) {
+      const hasTop = this.cup.toppings && this.cup.toppings.length > 0;
+      chkToppings.classList.toggle('done', hasTop);
+      const box = chkToppings.querySelector('.chk-box');
+      if (box) box.textContent = hasTop ? '✅' : '⬜';
+      chkToppingsVal.textContent = hasTop ? this.cup.toppings.map(t => t.hanzi).join('+') : 'Chưa thêm';
+    }
+    const currentTopIds = (this.cup.toppings || []).map(t => t.id);
+    document.querySelectorAll('.sketch-toppings-grid .sketch-circle-btn').forEach(btn => {
+      btn.classList.toggle('active', currentTopIds.includes(btn.dataset.topping));
+    });
+
+    // 5. Đóng nắp
+    const hasLid = !!this.cup.hasLid;
+    if (chkLid && chkLidVal) {
+      chkLid.classList.toggle('done', hasLid);
+      const box = chkLid.querySelector('.chk-box');
+      if (box) box.textContent = hasLid ? '✅' : '⬜';
+      chkLidVal.textContent = hasLid ? 'Đã đóng nắp & cắm ống hút' : 'Chưa đóng';
+    }
+    const sealBtn = document.querySelector('.btn-sketch-seal-lid');
+    if (sealBtn) {
+      sealBtn.classList.toggle('sealed', hasLid);
+      sealBtn.innerHTML = hasLid
+        ? '<i class="fa-solid fa-circle-check"></i> <span>Đã đóng nắp (Mở lại)</span>'
+        : '<i class="fa-solid fa-circle"></i> <span>Đóng nắp (封口)</span>';
+    }
+
+    // Hiệu ứng nút Hoàn thành / Thanh toán khi đã sẵn sàng
+    const finishBtn = document.getElementById('btn-master-finish-drink');
+    if (finishBtn) {
+      const ready = !!(this.cup.tea && this.cup.sugar && this.cup.ice && this.cup.hasLid);
+      finishBtn.classList.toggle('ready-pulse', ready);
+    }
   }
 
   // ==========================================================================
