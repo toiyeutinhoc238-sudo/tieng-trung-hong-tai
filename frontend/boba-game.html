@@ -345,41 +345,59 @@
          5. BẢNG ĐIỂM
          ==================================================================== -->
     <div class="g-modal" id="modal-score" style="display:none;">
-      <div class="g-card score-card">
+      <div class="g-card score-card score-card-clean">
         <div class="score-pin" aria-hidden="true"></div>
         <div class="score-head">
-          <span class="zh">出餐评分卡</span>
+          <span class="zh">🧾 出餐小票</span>
           <strong id="score-ticket-title">Phiếu #B-1 · 小雨</strong>
         </div>
-        <div class="score-rows">
-          <div class="score-row"><span>🧋 <span class="zh">口味</span> Pha đúng món</span><div class="bar"><i id="score-bar-pick"></i></div><b id="score-val-pick">100%</b></div>
-          <div class="score-row"><span>⚡ <span class="zh">速度</span> Tốc độ phục vụ</span><div class="bar"><i id="score-bar-speed"></i></div><b id="score-val-speed">100%</b></div>
-          <div class="score-row"><span>💴 <span class="zh">找零</span> Thối tiền</span><div class="bar"><i id="score-bar-change"></i></div><b id="score-val-change">100%</b></div>
-          <div class="score-row"><span>⏳ <span class="zh">等待</span> Thời gian chờ</span><div class="bar"><i id="score-bar-wait"></i></div><b id="score-val-wait">100%</b></div>
-        </div>
-        <div class="score-mistakes" id="score-mistakes"></div>
-        <div class="score-total">
-          <div class="score-badge"><small>Tổng điểm</small><b id="score-val-total">100%</b><span id="score-stars">⭐⭐⭐</span></div>
-          <div class="score-money">
-            <div><span>Tiền món</span><b id="score-base-price">0.00 ¥</b></div>
-            <div><span>Tiền tip</span><b class="tip" id="score-tip-price">+0.00 ¥</b></div>
-            <div class="sum"><span>Thực nhận</span><b id="score-final-receive">0.00 ¥</b></div>
+
+        <!-- KHÁCH HÀNG NÓI LỜI CẢM ƠN & ĐÁNH GIÁ (REVIEW) -->
+        <div class="score-customer-box">
+          <div class="sc-avatar-wrap">
+            <img id="score-reaction-img" src="./assets/boba_customer_girl.jpg" alt="Khách hàng">
           </div>
-        </div>
-        <!-- KHÁCH HÀNG ĐÁNH GIÁ (REVIEW) -->
-        <div class="score-customer-review" id="score-customer-review">
-          <div class="scr-avatar-wrap">
-            <img id="score-reaction-img" src="./assets/boba_customer_girl.jpg" alt="">
-          </div>
-          <div class="scr-content">
-            <div class="scr-header">
+          <div class="sc-bubble">
+            <div class="sc-bubble-top">
               <strong id="score-customer-name">小雨 (Bé Mưa)</strong>
-              <div class="scr-stars" id="scr-stars">⭐⭐⭐⭐⭐</div>
+              <span class="sc-stars" id="scr-stars">⭐⭐⭐⭐⭐</span>
+              <button type="button" class="btn-say-review" id="btn-replay-boba-speech" title="Nghe lại phát âm"><i class="fa-solid fa-volume-high"></i></button>
             </div>
-            <div class="scr-quote zh" id="score-reaction-chn">“太好喝了！谢谢老板！”</div>
-            <div class="scr-quote-vi" id="score-reaction-vi">(Ngon quá! Cảm ơn chủ quán!)</div>
+            <div class="zh rc-chn" id="score-reaction-chn">“太好喝了！谢谢老板！”</div>
+            <div class="rc-vi" id="score-reaction-vi">(Ngon quá! Cảm ơn chủ quán!)</div>
           </div>
         </div>
+
+        <!-- CHI TIẾT TIỀN GỌN GÀNG -->
+        <div class="score-money-card">
+          <div class="sm-row">
+            <span>Tiền món</span>
+            <b id="score-base-price">0.00 ¥</b>
+          </div>
+          <div class="sm-row sm-tip-row">
+            <span>Tiền tip <small id="score-tip-badge" class="tip-badge normal">Bình thường không tip</small></span>
+            <b class="tip" id="score-tip-price">0.00 ¥</b>
+          </div>
+          <div class="sm-row sum">
+            <span>Thực nhận</span>
+            <b id="score-final-receive">0.00 ¥</b>
+          </div>
+        </div>
+
+        <!-- MỤC MẪU CÂU GIAO TIẾP TÍNH TIỀN THÔNG DỤNG -->
+        <div class="score-phrases-card">
+          <div class="sp-head">
+            <span><i class="fa-solid fa-graduation-cap"></i> <b>Mẫu câu tính tiền thông dụng</b> <small class="zh">(实用结账口语)</small></span>
+          </div>
+          <div class="sp-tabs" id="sp-tabs-boba">
+            <button type="button" class="sp-tab active" data-sptab="ask">问价 Hỏi giá</button>
+            <button type="button" class="sp-tab" data-sptab="pay">结账 Tính tiền</button>
+            <button type="button" class="sp-tab" data-sptab="change">找零 Thối tiền</button>
+            <button type="button" class="sp-tab" data-sptab="thanks">道谢 Cảm ơn</button>
+          </div>
+          <div class="sp-phrase-list" id="sp-phrase-list-boba"></div>
+        </div>
+
         <button type="button" class="g-btn-primary big" id="btn-next-customer">
           <span class="zh">继续营业</span> Tiếp tục bán hàng <i class="fa-solid fa-arrow-right"></i>
         </button>

@@ -19,9 +19,9 @@
   <!-- LXGW WenKai Lite: chữ Hán chuẩn Khải thể (楷体) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
-  <script type="module" crossorigin src="/assets/groceryGame-C6jUflXc.js"></script>
+  <script type="module" crossorigin src="/assets/groceryGame-DoSuScEb.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/grocery_game-BxE4NPdc.css">
+  <link rel="stylesheet" crossorigin href="/assets/grocery_game-CzzzPwd8.css">
 </head>
 
 <body class="grocery-body on-title">
@@ -381,36 +381,62 @@
     <div class="g-toasts" id="g-toasts"></div>
 
     <!-- ====================================================================
-         5. BẢNG ĐIỂM PHỤC VỤ
+         5. BẢNG ĐIỂM PHỤC VỤ (PHIẾU THANH TOÁN TỐI GIẢN & MẪU CÂU TÍNH TIỀN)
          ==================================================================== -->
     <div class="g-modal" id="modal-grocery-score" style="display:none;">
-      <div class="g-card score-card">
+      <div class="g-card score-card score-card-clean">
         <div class="score-pin" aria-hidden="true"></div>
         <div class="score-head">
-          <span class="zh">结账评分卡</span>
+          <span class="zh">🧾 结账小票</span>
           <strong id="score-ticket-title">Phiếu #G-1 · 小雨</strong>
         </div>
-        <div class="score-rows">
-          <div class="score-row"><span>🧺 <span class="zh">拣货</span> Nhặt đúng hàng</span><div class="bar"><i id="score-bar-pick"></i></div><b id="score-val-pick">100%</b></div>
-          <div class="score-row"><span>⚡ <span class="zh">速度</span> Tốc độ phục vụ</span><div class="bar"><i id="score-bar-speed"></i></div><b id="score-val-speed">100%</b></div>
-          <div class="score-row"><span>💴 <span class="zh">找零</span> Thối tiền</span><div class="bar"><i id="score-bar-change"></i></div><b id="score-val-change">100%</b></div>
-          <div class="score-row"><span>⏳ <span class="zh">等待</span> Thời gian chờ</span><div class="bar"><i id="score-bar-wait"></i></div><b id="score-val-wait">100%</b></div>
-        </div>
-        <div class="score-total">
-          <div class="score-badge"><small>Tổng điểm</small><b id="score-val-total">100%</b><span id="score-stars">⭐⭐⭐</span></div>
-          <div class="score-money">
-            <div><span>Tiền hàng</span><b id="score-base-price">0.00 ¥</b></div>
-            <div><span>Tiền tip</span><b class="tip" id="score-tip-price">+0.00 ¥</b></div>
-            <div class="sum"><span>Thực nhận</span><b id="score-final-receive">0.00 ¥</b></div>
+
+        <!-- KHÁCH HÀNG NÓI LỜI CẢM ƠN & ĐÁNH GIÁ -->
+        <div class="score-customer-box">
+          <div class="sc-avatar-wrap">
+            <img id="score-reaction-img" src="/assets/boba_customer_girl-zmXCu5fB.jpg" alt="Khách hàng">
+          </div>
+          <div class="sc-bubble">
+            <div class="sc-bubble-top">
+              <strong id="score-cust-name-text">小雨 (Bé Mưa)</strong>
+              <span class="sc-stars" id="score-stars">⭐⭐⭐⭐⭐</span>
+              <button type="button" class="btn-say-review" id="btn-replay-score-speech" title="Nghe lại phát âm"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="zh rc-chn" id="score-reaction-chn">“老板服务真好，谢谢您！”</div>
+            <div class="rc-vi" id="score-reaction-vi">(Chủ tiệm phục vụ tốt quá, cảm ơn nhé!)</div>
           </div>
         </div>
-        <div class="score-reaction">
-          <img id="score-reaction-img" src="/assets/boba_customer_girl-zmXCu5fB.jpg" alt="">
-          <div>
-            <div class="zh rc-chn" id="score-reaction-chn">“谢谢老板！”</div>
-            <div class="rc-vi" id="score-reaction-vi">(Cảm ơn chủ tiệm!)</div>
+
+        <!-- CHI TIẾT TIỀN GỌN GÀNG -->
+        <div class="score-money-card">
+          <div class="sm-row">
+            <span>Tiền hàng</span>
+            <b id="score-base-price">0.00 ¥</b>
+          </div>
+          <div class="sm-row sm-tip-row">
+            <span>Tiền tip <small id="score-tip-badge" class="tip-badge normal">Bình thường không tip</small></span>
+            <b class="tip" id="score-tip-price">0.00 ¥</b>
+          </div>
+          <div class="sm-row sum">
+            <span>Thực nhận</span>
+            <b id="score-final-receive">0.00 ¥</b>
           </div>
         </div>
+
+        <!-- MỤC MẪU CÂU GIAO TIẾP TÍNH TIỀN THÔNG DỤNG -->
+        <div class="score-phrases-card">
+          <div class="sp-head">
+            <span><i class="fa-solid fa-graduation-cap"></i> <b>Mẫu câu tính tiền thông dụng</b> <small class="zh">(实用结账口语)</small></span>
+          </div>
+          <div class="sp-tabs" id="sp-tabs-grocery">
+            <button type="button" class="sp-tab active" data-sptab="ask">问价 Hỏi giá</button>
+            <button type="button" class="sp-tab" data-sptab="pay">结账 Tính tiền</button>
+            <button type="button" class="sp-tab" data-sptab="change">找零 Thối tiền</button>
+            <button type="button" class="sp-tab" data-sptab="thanks">道谢 Cảm ơn</button>
+          </div>
+          <div class="sp-phrase-list" id="sp-phrase-list-grocery"></div>
+        </div>
+
         <button type="button" class="g-btn-primary big" id="btn-next-customer-grocery">
           <span class="zh">继续营业</span> Tiếp tục bán hàng <i class="fa-solid fa-arrow-right"></i>
         </button>

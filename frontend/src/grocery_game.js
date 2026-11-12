@@ -232,6 +232,31 @@ const SCORE_RULES = {
   weights: { pick: 0.3, speed: 0.2, change: 0.3, wait: 0.2 }
 };
 
+// Mẫu câu giao tiếp tính tiền thực tế (Hỏi giá, Tính tiền, Thối tiền, Cảm ơn)
+const CHECKOUT_PHRASES = {
+  ask: [
+    { role: 'Khách', roleZh: '顾客', chn: '老板，一共多少钱？', pin: 'Lǎobǎn, yīgòng duōshao qián?', vi: 'Ông chủ, tổng cộng bao nhiêu tiền?' },
+    { role: 'Khách', roleZh: '顾客', chn: '请问这个怎么卖？', pin: 'Qǐngwèn zhège zěnme mài?', vi: 'Xin hỏi món này bán thế nào?' },
+    { role: 'Khách', roleZh: '顾客', chn: '总共多少钱？', pin: 'Zǒnggòng duōshao qián?', vi: 'Tất cả hết bao nhiêu tiền?' }
+  ],
+  pay: [
+    { role: 'Chủ tiệm', roleZh: '店家', chn: '一共是二十块钱。', pin: 'Yīgòng shì èrshí kuài qián.', vi: 'Tổng cộng là hai mươi đồng ạ.' },
+    { role: 'Khách', roleZh: '顾客', chn: '微信还是现金支付？', pin: 'Wēixìn háishì xiànjīn zhīfù?', vi: 'Quét WeChat hay trả tiền mặt vậy?' },
+    { role: 'Chủ tiệm', roleZh: '店家', chn: '都可以，扫这里就行。', pin: 'Dōu kěyǐ, sǎo zhèlǐ jiù xíng.', vi: 'Đều được ạ, quét ở đây là được.' },
+    { role: 'Khách', roleZh: '顾客', chn: '给您钱，正好不用找。', pin: 'Gěi nín qián, zhènghǎo bú yòng zhǎo.', vi: 'Gửi bạn tiền, vừa đủ không cần thối.' }
+  ],
+  change: [
+    { role: 'Chủ tiệm', roleZh: '店家', chn: '收您五十，找您二十块。', pin: 'Shōu nín wǔshí, zhǎo nín èrshí kuài.', vi: 'Nhận của bạn 50, thối lại bạn 20 đồng.' },
+    { role: 'Chủ tiệm', roleZh: '店家', chn: '找您零钱，请数一数。', pin: 'Zhǎo nín língqián, qǐng shǔ yi shǔ.', vi: 'Thối bạn tiền thừa, bạn đếm lại nhé.' },
+    { role: 'Khách', roleZh: '顾客', chn: '找零一分不差，谢谢！', pin: 'Zhǎolíng yì fēn bù chà, xièxie!', vi: 'Thối tiền chuẩn từng xu, cảm ơn bạn!' }
+  ],
+  thanks: [
+    { role: 'Khách', roleZh: '顾客', chn: '谢谢老板，东西真好！', pin: 'Xièxie lǎobǎn, dōngxi zhēn hǎo!', vi: 'Cảm ơn ông chủ, đồ tốt lắm!' },
+    { role: 'Khách', roleZh: '顾客', chn: '太划算了，下次我还来！', pin: 'Tài huásuàn le, xià cì wǒ hái lái!', vi: 'Giá tốt quá, lần sau tôi lại đến!' },
+    { role: 'Chủ tiệm', roleZh: '店家', chn: '慢走，欢迎下次光临！', pin: 'Màn zǒu, huānyíng xià cì guānglín!', vi: 'Đi thong thả, hoan nghênh lần sau lại ghé!' }
+  ]
+};
+
 const STAGE_W = 1280;
 const STAGE_H = 720;
 const STATION_ORDER = ['view-order-station', 'view-shelves-station', 'view-scan-station', 'view-change-station'];
@@ -537,6 +562,16 @@ class GroceryGame {
 
     // Bảng điểm, nhiệm vụ, tổng kết
     on('btn-next-customer-grocery', 'click', () => this.closeScorecard());
+    on('btn-replay-score-speech', 'click', () => {
+      if (this.lastScoreReactionZh) this.audio.speak(this.lastScoreReactionZh);
+    });
+    document.querySelectorAll('#sp-tabs-grocery .sp-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('#sp-tabs-grocery .sp-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        this.renderCheckoutPhrases(tab.dataset.sptab);
+      });
+    });
     on('btn-mission-start', 'click', () => this.startDay());
     on('btn-mission-restock', 'click', () => this.openMarket());
     on('btn-next-day-start', 'click', () => this.startNextDay());
@@ -1193,7 +1228,14 @@ class GroceryGame {
     };
     const w = SCORE_RULES.weights;
     const total = Math.round(scores.pick * w.pick + scores.speed * w.speed + scores.change * w.change + scores.wait * w.wait);
-    const tip = Math.round((total / 100) * SCORE_RULES.tipMax * 100) / 100;
+    
+    // Đông khách mới có tip, bình thường không cần tip
+    const isBusy = (this.line && this.line.length >= 1);
+    let tip = 0;
+    if (isBusy && total >= 80 && c.changeWrong === 0) {
+      const bonus = (total >= 95 ? 1.5 : 0.8) + (this.line.length >= 2 ? 0.7 : 0.2);
+      tip = Math.round(Math.min(3.5, bonus) * 100) / 100;
+    }
     const earned = Math.round((o.due + tip) * 100) / 100;
 
     this.money = Math.round((this.money + earned) * 100) / 100;
@@ -1238,32 +1280,67 @@ class GroceryGame {
   }
 
   showScorecard(c, scores, total, tip, earned) {
-    const set = (bar, val, v) => {
-      const b = this.$(bar);
-      if (b) { b.style.width = '0%'; setTimeout(() => { b.style.width = `${v}%`; }, 60); }
-      this.setText(val, `${v}%`);
-    };
-    set('score-bar-pick', 'score-val-pick', scores.pick);
-    set('score-bar-speed', 'score-val-speed', scores.speed);
-    set('score-bar-change', 'score-val-change', scores.change);
-    set('score-bar-wait', 'score-val-wait', scores.wait);
-    this.setText('score-val-total', `${total}%`);
-    const stars = total >= 90 ? 3 : total >= 75 ? 2 : total >= 50 ? 1 : 0;
-    this.setText('score-stars', '⭐'.repeat(stars) + '☆'.repeat(3 - stars));
-    this.setText('score-base-price', `${fmt(c.order.due)} ¥`);
-    this.setText('score-tip-price', `+${fmt(tip)} ¥`);
-    this.setText('score-final-receive', `${fmt(earned)} ¥`);
     this.setText('score-ticket-title', `Phiếu #G-${c.id} · ${c.profile.nameChn} (${c.profile.nameVi})`);
+    this.setText('score-cust-name-text', `${c.profile.nameChn} (${c.profile.nameVi})`);
+    const stars = total >= 90 ? 5 : total >= 75 ? 4 : total >= 50 ? 3 : 2;
+    this.setText('score-stars', '⭐'.repeat(stars) + '☆'.repeat(5 - stars));
+    this.setText('score-base-price', `${fmt(c.order.due)} ¥`);
+    this.setText('score-tip-price', tip > 0 ? `+${fmt(tip)} ¥` : '0.00 ¥');
+    const badge = this.$('score-tip-badge');
+    if (badge) {
+      badge.textContent = tip > 0 ? `🔥 Đông khách thưởng (+${fmt(tip)}¥)` : 'Bình thường không tip';
+      badge.className = `tip-badge ${tip > 0 ? 'busy' : 'normal'}`;
+    }
+    this.setText('score-final-receive', `${fmt(earned)} ¥`);
+
     const img = this.$('score-reaction-img');
     if (img) img.src = ASSET(c.profile.img);
+
     let zh, vi;
-    if (total >= 90) { zh = '老板服务真好，找零一分不差，谢谢您！'; vi = '(Chủ tiệm phục vụ tốt quá, thối tiền chuẩn từng xu, cảm ơn nhé!)'; }
-    else if (total >= 70) { zh = '谢谢老板，下次再来！'; vi = '(Cảm ơn chủ tiệm, lần sau tôi lại đến!)'; }
-    else { zh = '嗯……下次快一点吧。'; vi = '(Ừm… lần sau nhanh hơn chút nhé.)'; }
+    if (total >= 90) {
+      zh = '老板服务真好，找零一分不差，谢谢您！';
+      vi = '(Chủ tiệm phục vụ tốt quá, thối tiền chuẩn từng xu, cảm ơn nhé!)';
+    } else if (total >= 70) {
+      zh = '谢谢老板，下次再来！';
+      vi = '(Cảm ơn chủ tiệm, lần sau tôi lại đến!)';
+    } else {
+      zh = '嗯……下次快一点吧。';
+      vi = '(Ừm… lần sau nhanh hơn chút nhé.)';
+    }
+    this.lastScoreReactionZh = zh;
     this.setText('score-reaction-chn', `“${zh}”`);
     this.setText('score-reaction-vi', vi);
+
+    // Mẫu câu tính tiền thông dụng
+    this.renderCheckoutPhrases('ask');
+    document.querySelectorAll('#sp-tabs-grocery .sp-tab').forEach(t => t.classList.toggle('active', t.dataset.sptab === 'ask'));
+
     this.openModal('modal-grocery-score');
     setTimeout(() => this.audio.speak(zh), 500);
+  }
+
+  renderCheckoutPhrases(tabKey = 'ask') {
+    const list = CHECKOUT_PHRASES[tabKey] || CHECKOUT_PHRASES.ask;
+    const box = this.$('sp-phrase-list-grocery');
+    if (!box) return;
+    box.innerHTML = list.map(item => `
+      <div class="sp-phrase-item">
+        <span class="sp-role-badge ${item.role === 'Chủ tiệm' ? 'owner' : 'cust'}">${item.role} <small class="zh">${item.roleZh}</small></span>
+        <div class="sp-content">
+          <div class="sp-chn zh">${item.chn}</div>
+          <div class="sp-pin">${item.pin}</div>
+          <div class="sp-vi">${item.vi}</div>
+        </div>
+        <button type="button" class="sp-audio-btn" data-say-chn="${escapeHtml(item.chn)}" title="Nghe phát âm">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+      </div>`).join('');
+    box.querySelectorAll('[data-say-chn]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.audio.speak(btn.dataset.sayChn);
+      });
+    });
   }
 
   closeScorecard() {

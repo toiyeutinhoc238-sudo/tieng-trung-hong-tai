@@ -259,6 +259,31 @@ const SCORE_RULES = {
   weights: { pick: 0.4, speed: 0.15, change: 0.25, wait: 0.2 }
 };
 
+// Mẫu câu giao tiếp tính tiền thực tế (Hỏi giá, Tính tiền, Thối tiền, Cảm ơn)
+const CHECKOUT_PHRASES = {
+  ask: [
+    { role: 'Khách', roleZh: '顾客', chn: '老板，一共多少钱？', pin: 'Lǎobǎn, yīgòng duōshao qián?', vi: 'Ông chủ, tổng cộng bao nhiêu tiền?' },
+    { role: 'Khách', roleZh: '顾客', chn: '请问一杯多少钱？', pin: 'Qǐngwèn yì bēi duōshao qián?', vi: 'Xin hỏi một ly bao nhiêu tiền?' },
+    { role: 'Khách', roleZh: '顾客', chn: '大杯和中杯差多少钱？', pin: 'Dà bēi hé zhōng bēi chà duōshao qián?', vi: 'Ly lớn và ly vừa chênh bao nhiêu tiền?' }
+  ],
+  pay: [
+    { role: 'Chủ quán', roleZh: '店家', chn: '一共是十五块钱。', pin: 'Yīgòng shì shíwǔ kuài qián.', vi: 'Tổng cộng là mười lăm đồng ạ.' },
+    { role: 'Khách', roleZh: '顾客', chn: '微信还是现金支付？', pin: 'Wēixìn háishì xiànjīn zhīfù?', vi: 'Quét WeChat hay trả tiền mặt vậy?' },
+    { role: 'Chủ quán', roleZh: '店家', chn: '都可以，扫这里就行。', pin: 'Dōu kěyǐ, sǎo zhèlǐ jiù xíng.', vi: 'Đều được ạ, quét ở đây là được.' },
+    { role: 'Khách', roleZh: '顾客', chn: '给您钱，正好不用找。', pin: 'Gěi nín qián, zhènghǎo bú yòng zhǎo.', vi: 'Gửi bạn tiền, vừa đủ không cần thối.' }
+  ],
+  change: [
+    { role: 'Chủ quán', roleZh: '店家', chn: '收您五十，找您三十五块。', pin: 'Shōu nín wǔshí, zhǎo nín sānshíwǔ kuài.', vi: 'Nhận của bạn 50, thối lại bạn 35 đồng.' },
+    { role: 'Chủ quán', roleZh: '店家', chn: '找您零钱，请数一数。', pin: 'Zhǎo nín língqián, qǐng shǔ yi shǔ.', vi: 'Thối bạn tiền thừa, bạn đếm lại nhé.' },
+    { role: 'Khách', roleZh: '顾客', chn: '找零一分不差，谢谢！', pin: 'Zhǎolíng yì fēn bù chà, xièxie!', vi: 'Thối tiền chuẩn từng xu, cảm ơn bạn!' }
+  ],
+  thanks: [
+    { role: 'Khách', roleZh: '顾客', chn: '太好喝了！下次我还来！', pin: 'Tài hǎohē le! Xià cì wǒ hái lái!', vi: 'Ngon tuyệt cú mèo! Lần sau tôi lại đến!' },
+    { role: 'Khách', roleZh: '顾客', chn: '谢谢老板，服务真好！', pin: 'Xièxie lǎobǎn, fúwù zhēn hǎo!', vi: 'Cảm ơn chủ quán, phục vụ tốt quá!' },
+    { role: 'Chủ quán', roleZh: '店家', chn: '慢走，欢迎下次光临！', pin: 'Màn zǒu, huānyíng xià cì guānglín!', vi: 'Đi thong thả, hoan nghênh lần sau lại ghé!' }
+  ]
+};
+
 const START_MONEY = 80;
 const STAGE_W = 1280;
 const STAGE_H = 720;
@@ -566,6 +591,16 @@ class BobaShop {
     document.querySelectorAll('.drawer-grid .rmb').forEach(btn => btn.addEventListener('click', () => this.addToTray(parseFloat(btn.dataset.val))));
 
     on('btn-next-customer', 'click', () => this.closeScorecard());
+    on('btn-replay-boba-speech', 'click', () => {
+      if (this.lastScoreReactionZh) this.audio.speak(this.lastScoreReactionZh);
+    });
+    document.querySelectorAll('#sp-tabs-boba .sp-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('#sp-tabs-boba .sp-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        this.renderCheckoutPhrases(tab.dataset.sptab);
+      });
+    });
     on('btn-mission-start', 'click', () => this.startDay());
     on('btn-mission-restock', 'click', () => this.openMarket());
     on('btn-next-day-start', 'click', () => this.startNextDay());
@@ -1230,7 +1265,14 @@ class BobaShop {
     };
     const w = SCORE_RULES.weights;
     const total = Math.round(scores.pick * w.pick + scores.speed * w.speed + scores.change * w.change + scores.wait * w.wait);
-    const tip = Math.round((total / 100) * SCORE_RULES.tipMax * 100) / 100;
+    
+    // Đông khách mới có tip, bình thường không cần tip
+    const isBusy = (this.line && this.line.length >= 1);
+    let tip = 0;
+    if (isBusy && total >= 80 && c.changeWrong === 0) {
+      const bonus = (total >= 95 ? 2.0 : 1.0) + (this.line.length >= 2 ? 0.8 : 0.3);
+      tip = Math.round(Math.min(4.0, bonus) * 100) / 100;
+    }
     const earned = Math.round((o.due + tip) * 100) / 100;
 
     this.money = Math.round((this.money + earned) * 100) / 100;
@@ -1487,46 +1529,71 @@ class BobaShop {
   }
 
   showScorecard(c, scores, total, tip, earned, mistakes, review = null) {
-    const set = (bar, val, v) => {
-      const b = this.$(bar);
-      if (b) { b.style.width = '0%'; setTimeout(() => { b.style.width = `${v}%`; }, 60); }
-      this.setText(val, `${v}%`);
-    };
-    set('score-bar-pick', 'score-val-pick', scores.pick);
-    set('score-bar-speed', 'score-val-speed', scores.speed);
-    set('score-bar-change', 'score-val-change', scores.change);
-    set('score-bar-wait', 'score-val-wait', scores.wait);
-    this.setText('score-val-total', `${total}%`);
-    const stars = total >= 90 ? 3 : total >= 75 ? 2 : total >= 50 ? 1 : 0;
-    this.setText('score-stars', '⭐'.repeat(stars) + '☆'.repeat(3 - stars));
-    this.setText('score-base-price', `${fmt(c.order.due)} ¥`);
-    this.setText('score-tip-price', `+${fmt(tip)} ¥`);
-    this.setText('score-final-receive', `${fmt(earned)} ¥`);
     this.setText('score-ticket-title', `Phiếu #B-${c.id} · ${c.profile.nameChn} (${c.profile.nameVi})`);
-    const mk = this.$('score-mistakes');
-    if (mk) mk.innerHTML = mistakes.length ? `<b>Cần sửa:</b> ${mistakes.join(' · ')}` : '✨ Pha chuẩn 100% đúng món!';
-    if (mk) mk.classList.toggle('perfect', !mistakes.length);
+    this.setText('score-base-price', `${fmt(c.order.due)} ¥`);
+    this.setText('score-tip-price', tip > 0 ? `+${fmt(tip)} ¥` : '0.00 ¥');
+    const badge = this.$('score-tip-badge');
+    if (badge) {
+      badge.textContent = tip > 0 ? `🔥 Đông khách thưởng (+${fmt(tip)}¥)` : 'Bình thường không tip';
+      badge.className = `tip-badge ${tip > 0 ? 'busy' : 'normal'}`;
+    }
+    this.setText('score-final-receive', `${fmt(earned)} ¥`);
 
     const rev = review || (this.todayReviews && this.todayReviews[0]);
+    let sayZh = '';
     if (rev) {
       this.setText('score-customer-name', `${rev.customerNameChn} (${rev.customerNameVi})`);
       this.setText('scr-stars', '⭐'.repeat(rev.stars) + '☆'.repeat(5 - rev.stars));
       this.setText('score-reaction-chn', `“${rev.commentZh}”`);
-      this.setText('score-reaction-vi', `"${rev.commentVi}"`);
+      this.setText('score-reaction-vi', `(${rev.commentVi})`);
       const img = this.$('score-reaction-img');
       if (img) img.src = ASSET(rev.customerImg);
-      setTimeout(() => this.audio.speak(rev.commentZh), 500);
+      sayZh = rev.commentZh;
     } else {
       const img = this.$('score-reaction-img');
       if (img) img.src = ASSET(c.profile.img);
-      let zh = total >= 90 ? '太好喝了！谢谢老板！' : total >= 70 ? '还不错，下次再来！' : '嗯……跟我点的不太一样。';
-      let vi = total >= 90 ? '(Ngon quá! Cảm ơn chủ quán!)' : total >= 70 ? '(Cũng ngon, lần sau tôi lại đến!)' : '(Ừm… không giống món tôi gọi lắm.)';
-      this.setText('score-reaction-chn', `“${zh}”`);
+      const stars = total >= 90 ? 5 : total >= 75 ? 4 : total >= 50 ? 3 : 2;
+      this.setText('score-customer-name', `${c.profile.nameChn} (${c.profile.nameVi})`);
+      this.setText('scr-stars', '⭐'.repeat(stars) + '☆'.repeat(5 - stars));
+      sayZh = total >= 90 ? '太好喝了！谢谢老板！' : total >= 70 ? '还不错，下次再来！' : '嗯……下次快一点吧。';
+      let vi = total >= 90 ? '(Ngon quá! Cảm ơn chủ quán!)' : total >= 70 ? '(Cũng ngon, lần sau tôi lại đến!)' : '(Ừm… lần sau nhanh hơn chút nhé.)';
+      this.setText('score-reaction-chn', `“${sayZh}”`);
       this.setText('score-reaction-vi', vi);
-      setTimeout(() => this.audio.speak(zh), 500);
     }
+    this.lastScoreReactionZh = sayZh;
+
+    // Mẫu câu tính tiền thông dụng
+    this.renderCheckoutPhrases('ask');
+    document.querySelectorAll('#sp-tabs-boba .sp-tab').forEach(t => t.classList.toggle('active', t.dataset.sptab === 'ask'));
 
     this.openModal('modal-score');
+    if (sayZh) {
+      setTimeout(() => this.audio.speak(sayZh), 500);
+    }
+  }
+
+  renderCheckoutPhrases(tabKey = 'ask') {
+    const list = CHECKOUT_PHRASES[tabKey] || CHECKOUT_PHRASES.ask;
+    const box = this.$('sp-phrase-list-boba');
+    if (!box) return;
+    box.innerHTML = list.map(item => `
+      <div class="sp-phrase-item">
+        <span class="sp-role-badge ${item.role === 'Chủ quán' ? 'owner' : 'cust'}">${item.role} <small class="zh">${item.roleZh}</small></span>
+        <div class="sp-content">
+          <div class="sp-chn zh">${item.chn}</div>
+          <div class="sp-pin">${item.pin}</div>
+          <div class="sp-vi">${item.vi}</div>
+        </div>
+        <button type="button" class="sp-audio-btn" data-say-chn="${escapeHtml(item.chn)}" title="Nghe phát âm">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
+      </div>`).join('');
+    box.querySelectorAll('[data-say-chn]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.audio.speak(btn.dataset.sayChn);
+      });
+    });
   }
 
   closeScorecard() {
