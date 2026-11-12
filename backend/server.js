@@ -172,8 +172,9 @@ const userSchema = new mongoose.Schema({
   customWords: { type: Array, default: [] },
   chats: { type: Array, default: [] },
   accessLogs: { type: Array, default: [] },
-  // Game Tiệm Trà Sữa: tiến trình đã lưu + kỷ lục cao nhất + lịch sử ngày bán
+  // Mini game (Trà Sữa / Tạp Hóa): kỷ lục cao nhất + lịch sử ngày bán (không lưu tiến trình ván chơi)
   bobaGame: { type: Object, default: null },
+  groceryGame: { type: Object, default: null },
   // VIP Membership Fields
   isVip: { type: Boolean, default: false },
   vipStatus: { type: String, default: 'normal' }, // 'normal', 'vip', 'expired'
@@ -457,6 +458,7 @@ async function readUserData(forceRefresh = false) {
             gameHistory: u.gameHistory || [],
             accessLogs: u.accessLogs || [],
             bobaGame: u.bobaGame || null,
+            groceryGame: u.groceryGame || null,
             isVip: !!u.isVip,
             vipStatus: u.vipStatus || (u.isVip ? 'vip' : 'normal'),
             vipActivatedAt: u.vipActivatedAt || null,
@@ -618,6 +620,7 @@ async function processMongoPersistenceQueue() {
           };
           // bobaGame được ghi thẳng bởi /api/boba/progress; chỉ đồng bộ khi cache có dữ liệu (không bao giờ xoá)
           if (u.bobaGame) updateDoc.bobaGame = u.bobaGame;
+          if (u.groceryGame) updateDoc.groceryGame = u.groceryGame;
           await User.updateOne({ _id: email }, { $set: updateDoc }, { upsert: true });
           failedEmailRetries.delete(email);
         } catch (err) {
@@ -2544,243 +2547,246 @@ app.get('/api/leaderboard', async (req, res) => {
 });
 
 // ============================================================
-// GAME TIỆM TRÀ SỮA (boba-game.html): lưu tiến trình theo tài khoản + bảng xếp hạng
-// Lưu trong users[email].bobaGame = { best, history, totals, updatedAt } (KHÔNG lưu tiến trình: mỗi lần tải trang là ván mới)
+// MINI GAME (Tiệm Trà Sữa · Tiệm Tạp Hóa): thành tích theo tài khoản + bảng xếp hạng
+// Mỗi game lưu trong users[email][field] = { best, history, totals, updatedAt }.
+// KHÔNG lưu tiến trình ván chơi (mỗi lần tải trang là ván mới) — chỉ lưu kết quả từng ngày bán hàng.
 // Bảng xếp hạng chỉ lấy THÀNH TÍCH CAO NHẤT (doanh thu 1 ngày) của mỗi người.
+//
+// API cho mỗi game (key = 'boba' | 'grocery'):
+//   GET  /api/<key>/progress      → kỷ lục + 30 ngày bán gần nhất của người đang đăng nhập
+//   POST /api/<key>/progress      → { dayResult } gửi kết quả 1 ngày bán hàng
+//   GET  /api/<key>/leaderboard   → mỗi người 1 dòng, không lộ email
 // ============================================================
-const BOBA_LIMITS = {
-  maxGuestsPerDay: 12,      // game hiện tối đa 8 khách/ngày, chừa biên an toàn
-  maxPerCup: 25.5,          // 18 ¥ giá ly + tối đa 7.5 ¥ tiền tip
-  maxHistory: 60
-};
+const MINIGAME_MAX_HISTORY = 60;
 
-const bobaNum = (v, min, max, def = min) => {
+const mgNum = (v, min, max, def = min) => {
   const n = Number(v);
   if (!Number.isFinite(n)) return def;
   return Math.min(max, Math.max(min, n));
 };
-const bobaInt = (v, min, max, def = min) => Math.round(bobaNum(v, min, max, def));
+const mgInt = (v, min, max, def = min) => Math.round(mgNum(v, min, max, def));
 
 // Kiểm tra & chuẩn hoá kết quả 1 ngày bán hàng (chặn số liệu vô lý gửi từ client)
-function sanitizeBobaDayResult(r) {
+function sanitizeMiniGameDayResult(r, limits) {
   if (!r || typeof r !== 'object') return null;
-  const total = bobaInt(r.total, 1, BOBA_LIMITS.maxGuestsPerDay, 0);
+  const total = mgInt(r.total, 1, limits.maxGuestsPerDay, 0);
   if (!total) return null;
-  const served = bobaInt(r.served, 0, total, 0);
-  const lost = bobaInt(r.lost, 0, total - served, 0);
-  const earnings = Math.round(bobaNum(r.earnings, 0, served * BOBA_LIMITS.maxPerCup, 0) * 100) / 100;
+  const served = mgInt(r.served, 0, total, 0);
+  const lost = mgInt(r.lost, 0, total - served, 0);
+  const earnings = Math.round(mgNum(r.earnings, 0, served * limits.maxPerGuest, 0) * 100) / 100;
   return {
-    day: bobaInt(r.day, 1, 1000000, 1),
+    day: mgInt(r.day, 1, 1000000, 1),
     earnings,
     served,
     total,
     lost,
-    avg: served > 0 ? bobaInt(r.avg, 0, 100, 0) : 0,
-    stars: bobaInt(r.stars, 0, 3, 0)
+    avg: served > 0 ? mgInt(r.avg, 0, 100, 0) : 0,
+    stars: mgInt(r.stars, 0, 3, 0)
   };
 }
 
 // So sánh 2 thành tích: doanh thu → số sao → điểm trung bình
-function isBetterBobaResult(a, b) {
+function isBetterMiniGameResult(a, b) {
   if (!b) return true;
   if (a.earnings !== b.earnings) return a.earnings > b.earnings;
   if (a.stars !== b.stars) return a.stars > b.stars;
   return a.avg > b.avg;
 }
 
-function getBobaPublicBest(bg) {
-  return bg && bg.best ? bg.best : null;
-}
-
 // 30 ngày bán gần nhất (mới nhất trước)
-function getBobaRecentHistory(bg) {
-  const h = bg && Array.isArray(bg.history) ? bg.history : [];
+function getMiniGameRecentHistory(g) {
+  const h = g && Array.isArray(g.history) ? g.history : [];
   return h.slice(-30).reverse();
 }
 
-// Đọc/ghi bobaGame: ưu tiên MongoDB (nguồn dữ liệu thật), tránh cache RAM có thể bị làm mới & ghi đè.
-const isBobaMongoReady = () => mongoose.connection.readyState === 1;
+const isMiniGameMongoReady = () => mongoose.connection.readyState === 1;
 
-// Ghi tuần tự theo từng tài khoản (2 request đến cùng lúc không đè nhau)
-const bobaLocks = new Map();
-function withBobaLock(email, fn) {
-  const prev = bobaLocks.get(email) || Promise.resolve();
+// Ghi tuần tự theo từng tài khoản + từng game (2 request đến cùng lúc không đè nhau)
+const miniGameLocks = new Map();
+function withMiniGameLock(lockKey, fn) {
+  const prev = miniGameLocks.get(lockKey) || Promise.resolve();
   const run = prev.catch(() => {}).then(fn);
   const tail = run.catch(() => {});
-  bobaLocks.set(email, tail);
-  tail.then(() => { if (bobaLocks.get(email) === tail) bobaLocks.delete(email); });
+  miniGameLocks.set(lockKey, tail);
+  tail.then(() => { if (miniGameLocks.get(lockKey) === tail) miniGameLocks.delete(lockKey); });
   return run;
 }
 
-async function loadBobaUser(email) {
-  if (isBobaMongoReady()) {
+// Ưu tiên đọc MongoDB (nguồn dữ liệu thật) thay vì cache RAM có thể bị làm mới & ghi đè
+async function loadMiniGameUser(email, field) {
+  if (isMiniGameMongoReady()) {
     try {
-      const doc = await User.findById(email, { name: 1, picture: 1, bobaGame: 1 }).lean();
-      if (doc) return { name: doc.name, picture: doc.picture, bobaGame: doc.bobaGame || null, inMongo: true };
+      const doc = await User.findById(email, { name: 1, picture: 1, [field]: 1 }).lean();
+      if (doc) return { name: doc.name, picture: doc.picture, game: doc[field] || null, inMongo: true };
     } catch (e) {
-      console.warn('[boba] Mongo read failed, using cache:', e.message);
+      console.warn(`[minigame:${field}] Mongo read failed, using cache:`, e.message);
     }
   }
   const userData = await readUserData();
   const u = (userData.users || {})[email];
-  return u ? { name: u.name, picture: u.picture, bobaGame: u.bobaGame || null, inMongo: false } : null;
+  return u ? { name: u.name, picture: u.picture, game: u[field] || null, inMongo: false } : null;
 }
 
-// GET: kỷ lục + lịch sử ngày bán của người đang đăng nhập
-app.get('/api/boba/progress', async (req, res) => {
-  const email = getLoggedInUserEmail(req);
-  if (!email) return res.json({ loggedIn: false });
-  try {
-    const u = (await loadBobaUser(email)) || {};
-    const bg = u.bobaGame || {};
-    res.json({
-      loggedIn: true,
-      user: { name: u.name || email.split('@')[0], picture: u.picture || '' },
-      best: getBobaPublicBest(bg),
-      totals: bg.totals || null,
-      history: getBobaRecentHistory(bg)
-    });
-  } catch (err) {
-    console.error('GET /api/boba/progress error:', err);
-    res.status(500).json({ error: 'Không đọc được thành tích game' });
-  }
-});
+function registerMiniGameRoutes({ key, field, limits }) {
+  // GET: kỷ lục + lịch sử ngày bán của người đang đăng nhập
+  app.get(`/api/${key}/progress`, async (req, res) => {
+    const email = getLoggedInUserEmail(req);
+    if (!email) return res.json({ loggedIn: false });
+    try {
+      const u = (await loadMiniGameUser(email, field)) || {};
+      const g = u.game || {};
+      res.json({
+        loggedIn: true,
+        user: { name: u.name || email.split('@')[0], picture: u.picture || '' },
+        best: g.best || null,
+        totals: g.totals || null,
+        history: getMiniGameRecentHistory(g)
+      });
+    } catch (err) {
+      console.error(`GET /api/${key}/progress error:`, err);
+      res.status(500).json({ error: 'Không đọc được thành tích game' });
+    }
+  });
 
-// POST: gửi kết quả 1 ngày bán hàng → cập nhật lịch sử + thành tích cao nhất
-// (Game không lưu tiến trình: mỗi lần tải trang là ván mới)
-app.post('/api/boba/progress', async (req, res) => {
-  const email = getLoggedInUserEmail(req);
-  if (!email) return res.status(401).json({ error: 'Unauthorized' });
-  const dayResult = sanitizeBobaDayResult(req.body && req.body.dayResult);
-  if (!dayResult) return res.status(400).json({ error: 'Thiếu kết quả ngày bán hàng' });
+  // POST: gửi kết quả 1 ngày bán hàng → cập nhật lịch sử + thành tích cao nhất
+  app.post(`/api/${key}/progress`, async (req, res) => {
+    const email = getLoggedInUserEmail(req);
+    if (!email) return res.status(401).json({ error: 'Unauthorized' });
+    const dayResult = sanitizeMiniGameDayResult(req.body && req.body.dayResult, limits);
+    if (!dayResult) return res.status(400).json({ error: 'Thiếu kết quả ngày bán hàng' });
 
-  try {
-    const result = await withBobaLock(email, async () => {
-      const current = await loadBobaUser(email);
-      const prev = current && current.bobaGame && typeof current.bobaGame === 'object' ? current.bobaGame : {};
-      const bg = {
-        best: prev.best || null,
-        history: Array.isArray(prev.history) ? [...prev.history] : [],
-        totals: prev.totals || { daysPlayed: 0, earnings: 0, served: 0 }
-      };
-
-      const playedAt = new Date().toISOString();
-      // Chống gửi lặp cùng 1 kết quả trong vòng 2 phút (mạng chập chờn / bấm 2 lần)
-      const recentDup = bg.history.find(h => h.day === dayResult.day && h.earnings === dayResult.earnings && h.served === dayResult.served
-        && Date.now() - new Date(h.playedAt || 0).getTime() < 2 * 60 * 1000);
-      if (!recentDup) {
-        bg.history = [...bg.history, { ...dayResult, playedAt }].slice(-BOBA_LIMITS.maxHistory);
-        bg.totals = {
-          daysPlayed: (bg.totals.daysPlayed || 0) + 1,
-          earnings: Math.round(((bg.totals.earnings || 0) + dayResult.earnings) * 100) / 100,
-          served: (bg.totals.served || 0) + dayResult.served
+    try {
+      const result = await withMiniGameLock(`${key}:${email}`, async () => {
+        const current = await loadMiniGameUser(email, field);
+        const prev = current && current.game && typeof current.game === 'object' ? current.game : {};
+        const g = {
+          best: prev.best || null,
+          history: Array.isArray(prev.history) ? [...prev.history] : [],
+          totals: prev.totals || { daysPlayed: 0, earnings: 0, served: 0 }
         };
-      }
-      let newBest = false;
-      if (isBetterBobaResult(dayResult, bg.best)) {
-        bg.best = { ...dayResult, achievedAt: playedAt };
-        newBest = true;
-      }
-      bg.updatedAt = playedAt;
 
-      // 1) Ghi thẳng vào MongoDB và CHỜ ghi xong
-      let savedToMongo = false;
-      if (isBobaMongoReady() && current && current.inMongo) {
-        const r = await User.updateOne({ _id: email }, { $set: { bobaGame: bg } });
-        savedToMongo = r.matchedCount > 0;
-      }
-      // 2) Cập nhật cache RAM (+ bản sao lưu file). Nếu chưa ghi được Mongo thì để hàng đợi đồng bộ lo.
-      const userData = await readUserData();
-      if (!userData.users) userData.users = {};
-      if (!userData.users[email]) {
-        userData.users[email] = { name: (current && current.name) || email.split('@')[0], picture: (current && current.picture) || '', stats: { streak: 0, studyTime: 0, lastActiveDate: '' }, gameHistory: [] };
-      }
-      userData.users[email].bobaGame = bg;
-      if (savedToMongo) {
-        scheduleDiskWrite();
-      } else {
-        await writeUserData(userData, email);
-      }
-      return { bg, newBest };
-    });
+        const playedAt = new Date().toISOString();
+        // Chống gửi lặp cùng 1 kết quả trong vòng 2 phút (mạng chập chờn / bấm 2 lần)
+        const recentDup = g.history.find(h => h.day === dayResult.day && h.earnings === dayResult.earnings && h.served === dayResult.served
+          && Date.now() - new Date(h.playedAt || 0).getTime() < 2 * 60 * 1000);
+        if (!recentDup) {
+          g.history = [...g.history, { ...dayResult, playedAt }].slice(-MINIGAME_MAX_HISTORY);
+          g.totals = {
+            daysPlayed: (g.totals.daysPlayed || 0) + 1,
+            earnings: Math.round(((g.totals.earnings || 0) + dayResult.earnings) * 100) / 100,
+            served: (g.totals.served || 0) + dayResult.served
+          };
+        }
+        let newBest = false;
+        if (isBetterMiniGameResult(dayResult, g.best)) {
+          g.best = { ...dayResult, achievedAt: playedAt };
+          newBest = true;
+        }
+        g.updatedAt = playedAt;
 
-    res.json({ success: true, best: result.bg.best, newBest: result.newBest, totals: result.bg.totals, history: getBobaRecentHistory(result.bg) });
-  } catch (err) {
-    console.error('POST /api/boba/progress error:', err);
-    res.status(500).json({ error: 'Không lưu được kết quả game' });
-  }
-});
+        // 1) Ghi thẳng vào MongoDB và CHỜ ghi xong
+        let savedToMongo = false;
+        if (isMiniGameMongoReady() && current && current.inMongo) {
+          const r = await User.updateOne({ _id: email }, { $set: { [field]: g } });
+          savedToMongo = r.matchedCount > 0;
+        }
+        // 2) Cập nhật cache RAM (+ bản sao lưu file). Chưa ghi được Mongo thì để hàng đợi đồng bộ lo.
+        const userData = await readUserData();
+        if (!userData.users) userData.users = {};
+        if (!userData.users[email]) {
+          userData.users[email] = { name: (current && current.name) || email.split('@')[0], picture: (current && current.picture) || '', stats: { streak: 0, studyTime: 0, lastActiveDate: '' }, gameHistory: [] };
+        }
+        userData.users[email][field] = g;
+        if (savedToMongo) {
+          scheduleDiskWrite();
+        } else {
+          await writeUserData(userData, email);
+        }
+        return { g, newBest };
+      });
 
-// GET: bảng xếp hạng toàn hệ thống — mỗi người 1 dòng (thành tích cao nhất)
-app.get('/api/boba/leaderboard', async (req, res) => {
-  try {
-    const me = getLoggedInUserEmail(req);
-    const limit = bobaInt(req.query.limit, 1, 100, 50);
-
-    let players = null;
-    if (isBobaMongoReady()) {
-      try {
-        const docs = await User.find(
-          { 'bobaGame.best.earnings': { $exists: true } },
-          { name: 1, picture: 1, 'bobaGame.best': 1, 'bobaGame.totals': 1 }
-        ).lean();
-        players = docs.map(d => ({ email: d._id, name: d.name, picture: d.picture, bobaGame: d.bobaGame }));
-      } catch (e) {
-        console.warn('[boba] Mongo leaderboard failed, using cache:', e.message);
-      }
+      res.json({ success: true, best: result.g.best, newBest: result.newBest, totals: result.g.totals, history: getMiniGameRecentHistory(result.g) });
+    } catch (err) {
+      console.error(`POST /api/${key}/progress error:`, err);
+      res.status(500).json({ error: 'Không lưu được kết quả game' });
     }
-    if (!players) {
-      const userData = await readUserData();
-      players = Object.entries(userData.users || {}).map(([email, u]) => ({ email, name: u && u.name, picture: u && u.picture, bobaGame: u && u.bobaGame }));
+  });
+
+  // GET: bảng xếp hạng toàn hệ thống — mỗi người 1 dòng (thành tích cao nhất)
+  app.get(`/api/${key}/leaderboard`, async (req, res) => {
+    try {
+      const me = getLoggedInUserEmail(req);
+      const limit = mgInt(req.query.limit, 1, 100, 50);
+
+      let players = null;
+      if (isMiniGameMongoReady()) {
+        try {
+          const docs = await User.find(
+            { [`${field}.best.earnings`]: { $exists: true } },
+            { name: 1, picture: 1, [`${field}.best`]: 1, [`${field}.totals`]: 1 }
+          ).lean();
+          players = docs.map(d => ({ email: d._id, name: d.name, picture: d.picture, game: d[field] }));
+        } catch (e) {
+          console.warn(`[minigame:${field}] Mongo leaderboard failed, using cache:`, e.message);
+        }
+      }
+      if (!players) {
+        const userData = await readUserData();
+        players = Object.entries(userData.users || {}).map(([email, u]) => ({ email, name: u && u.name, picture: u && u.picture, game: u && u[field] }));
+      }
+
+      const rows = players
+        .filter(p => p.game && p.game.best && Number.isFinite(Number(p.game.best.earnings)))
+        .map(p => ({
+          email: p.email,
+          name: p.name || String(p.email).split('@')[0],
+          picture: p.picture || '',
+          ...p.game.best,
+          daysPlayed: (p.game.totals && p.game.totals.daysPlayed) || 0
+        }));
+
+      rows.sort((a, b) => {
+        if (b.earnings !== a.earnings) return b.earnings - a.earnings;
+        if ((b.stars || 0) !== (a.stars || 0)) return (b.stars || 0) - (a.stars || 0);
+        if ((b.avg || 0) !== (a.avg || 0)) return (b.avg || 0) - (a.avg || 0);
+        return new Date(a.achievedAt || 0) - new Date(b.achievedAt || 0); // ai đạt trước xếp trên
+      });
+
+      // Không trả email ra ngoài
+      const toPublic = (r, i) => ({
+        rank: i + 1,
+        name: r.name,
+        picture: r.picture,
+        earnings: r.earnings,
+        day: r.day,
+        served: r.served,
+        total: r.total,
+        lost: r.lost || 0,
+        avg: r.avg || 0,
+        stars: r.stars || 0,
+        achievedAt: r.achievedAt || null,
+        daysPlayed: r.daysPlayed,
+        isMe: !!me && r.email === me
+      });
+
+      const myIndex = me ? rows.findIndex(r => r.email === me) : -1;
+      res.json({
+        totalPlayers: rows.length,
+        top: rows.slice(0, limit).map(toPublic),
+        me: myIndex >= 0 ? toPublic(rows[myIndex], myIndex) : null,
+        loggedIn: !!me
+      });
+    } catch (err) {
+      console.error(`GET /api/${key}/leaderboard error:`, err);
+      res.status(500).json({ error: 'Không tải được bảng xếp hạng' });
     }
+  });
+}
 
-    const rows = players
-      .filter(p => p.bobaGame && p.bobaGame.best && Number.isFinite(Number(p.bobaGame.best.earnings)))
-      .map(p => ({
-        email: p.email,
-        name: p.name || String(p.email).split('@')[0],
-        picture: p.picture || '',
-        ...p.bobaGame.best,
-        daysPlayed: (p.bobaGame.totals && p.bobaGame.totals.daysPlayed) || 0
-      }));
-
-    rows.sort((a, b) => {
-      if (b.earnings !== a.earnings) return b.earnings - a.earnings;
-      if ((b.stars || 0) !== (a.stars || 0)) return (b.stars || 0) - (a.stars || 0);
-      if ((b.avg || 0) !== (a.avg || 0)) return (b.avg || 0) - (a.avg || 0);
-      // Ai đạt trước xếp trên
-      return new Date(a.achievedAt || 0) - new Date(b.achievedAt || 0);
-    });
-
-    // Không trả email ra ngoài
-    const toPublic = (r, i) => ({
-      rank: i + 1,
-      name: r.name,
-      picture: r.picture,
-      earnings: r.earnings,
-      day: r.day,
-      served: r.served,
-      total: r.total,
-      lost: r.lost || 0,
-      avg: r.avg || 0,
-      stars: r.stars || 0,
-      achievedAt: r.achievedAt || null,
-      daysPlayed: r.daysPlayed,
-      isMe: !!me && r.email === me
-    });
-
-    const myIndex = me ? rows.findIndex(r => r.email === me) : -1;
-    res.json({
-      totalPlayers: rows.length,
-      top: rows.slice(0, limit).map(toPublic),
-      me: myIndex >= 0 ? toPublic(rows[myIndex], myIndex) : null,
-      loggedIn: !!me
-    });
-  } catch (err) {
-    console.error('GET /api/boba/leaderboard error:', err);
-    res.status(500).json({ error: 'Không tải được bảng xếp hạng' });
-  }
-});
+// Tiệm Trà Sữa: tối đa 8 khách/ngày (chừa biên 12); 1 ly 18 ¥ + tip tối đa 7.5 ¥
+registerMiniGameRoutes({ key: 'boba', field: 'bobaGame', limits: { maxGuestsPerDay: 12, maxPerGuest: 25.5 } });
+// Tiệm Tạp Hóa: tối đa 8 khách/ngày (chừa biên 12); đơn lớn nhất 2 món × 3 × 8.5 ¥ = 51 ¥ + tip tối đa 5.5 ¥
+registerMiniGameRoutes({ key: 'grocery', field: 'groceryGame', limits: { maxGuestsPerDay: 12, maxPerGuest: 57 } });
 
 // Admin: Reset toàn bộ dữ liệu người dùng (xóa MongoDB + RAM cache) - Cần secret header
 app.delete('/api/admin/reset-all', async (req, res) => {

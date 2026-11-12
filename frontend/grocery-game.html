@@ -4,832 +4,578 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Tiệm Tạp Hóa Của Tôi (我的小卖部 - Papa's Grocery) | Tiếng Trung HongTai</title>
+  <title>Tiệm Tạp Hóa Của Tôi (我的小卖部) | Tiếng Trung HongTai</title>
   <link rel="icon" type="image/png" href="./src/assets/logo.png">
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous">
-  <!-- Google Fonts: Be Vietnam Pro (Đầy đủ dấu Tiếng Việt sắc nét) + LXGW WenKai Lite (Chuẩn Khải Thể / 楷体) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Be Vietnam Pro: tiếng Việt đầy đủ dấu -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=LXGW+WenKai+Lite:wght@400;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap"
     rel="stylesheet">
+  <!-- LXGW WenKai Lite: chữ Hán chuẩn Khải thể (楷体) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
   <link rel="stylesheet" href="./src/grocery_game.css">
 </head>
 
-<body class="grocery-body">
+<body class="grocery-body on-title">
 
-  <div class="grocery-container" id="grocery-container">
+  <div class="g-stage" id="g-stage">
 
     <!-- ====================================================================
-         1. TOP HUD (TRẠNG THÁI TIỆM, VỐN & THỜI GIAN)
+         0. MÀN HÌNH CHỜ (BẮT ĐẦU · HƯỚNG DẪN · XẾP HẠNG)
          ==================================================================== -->
-    <header class="grocery-top-hud">
-      <div class="hud-left">
-        <!-- Back to Hub -->
-        <a href="index.html" class="hud-circle-btn" title="Về Trang Chủ">
-          <i class="fa-solid fa-arrow-left"></i>
-        </a>
-        <!-- Pause / Settings -->
-        <button type="button" class="hud-circle-btn" id="btn-pause-game" title="Tạm dừng & Cài đặt">
-          <i class="fa-solid fa-pause"></i>
-        </button>
+    <section class="g-title" id="title-screen">
+      <div class="g-title-bg" aria-hidden="true"></div>
+      <div class="g-title-sun" aria-hidden="true"></div>
+      <div class="g-title-leaves" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
 
-        <!-- Money Pill (Vốn & Tiền Tiệm) -->
-        <div class="hud-stat-card money-card" title="Số vốn tiền mặt hiện có">
-          <div class="stat-icon">💰</div>
-          <div class="stat-info">
-            <span class="stat-label">Tiền Vốn / 资金</span>
-            <span class="stat-value" id="hud-money-val">50.00 ¥</span>
-          </div>
+      <a href="index.html" class="g-title-home"><i class="fa-solid fa-arrow-left"></i> Trang chủ</a>
+
+      <a href="index.html" class="g-account guest" id="title-account" title="Đăng nhập để lưu thành tích">
+        <span class="g-account-avatar" id="title-account-avatar"><i class="fa-solid fa-user"></i></span>
+        <span class="g-account-text">
+          <strong id="title-account-name">Khách</strong>
+          <small id="title-account-status">Đăng nhập để lưu thành tích</small>
+        </span>
+      </a>
+
+      <div class="g-title-logo">
+        <div class="g-logo-awning" aria-hidden="true"></div>
+        <div class="g-logo-board">
+          <span class="g-logo-chn">我的小卖部</span>
+          <span class="g-logo-pin">Wǒ de xiǎomàibù</span>
         </div>
+        <div class="g-logo-ribbon">Tiệm Tạp Hóa Của Tôi</div>
+        <div class="g-title-progress" id="title-progress"></div>
+      </div>
 
-        <!-- Day Pill (Ngày làm việc) -->
-        <div class="hud-stat-card day-card">
-          <div class="stat-icon">📅</div>
-          <div class="stat-info">
-            <span class="stat-label">Ngày / 天数</span>
-            <span class="stat-value kaiti-font" id="hud-day-val">第 1 天</span>
-          </div>
+      <div class="g-title-menu">
+        <button type="button" class="g-btn-play" id="btn-title-play">
+          <span class="play-chn" id="title-play-chn">开门营业</span>
+          <span class="play-vi" id="title-play-vi">Bắt đầu</span>
+          <i class="fa-solid fa-play"></i>
+        </button>
+        <div class="g-title-sub">
+          <button type="button" class="g-btn-sub" id="btn-title-guide">
+            <span class="sub-icon">📖</span><span><span class="zh">玩法说明</span> Hướng dẫn</span>
+          </button>
+          <button type="button" class="g-btn-sub" id="btn-title-rank">
+            <span class="sub-icon">🏆</span><span><span class="zh">排行榜</span> Xếp hạng</span>
+          </button>
         </div>
       </div>
 
-      <div class="hud-center">
-        <!-- Business Time Clock (Ca làm việc) -->
-        <div class="hud-time-panel">
-          <div class="time-header">
-            <span class="time-status" id="hud-status-badge">🟢 正在营业 (Đang mở cửa)</span>
-            <span class="time-clock" id="hud-clock-val">08:30</span>
-          </div>
-          <div class="time-progress-bar">
-            <div class="time-progress-fill" id="hud-time-fill" style="width: 15%;"></div>
-          </div>
-        </div>
+      <div class="g-title-cat" aria-hidden="true">
+        <span class="cat-body">🐈</span><span class="cat-zz">z z</span>
+      </div>
+    </section>
 
-        <!-- Early Close Button (Đóng cửa sớm qua ngày mới) -->
-        <button type="button" class="btn-early-close" id="btn-early-close" title="Bán hết hàng hoặc đóng cửa sớm để qua ngày mới">
-          <i class="fa-solid fa-door-closed"></i>
-          <span>提前打烊 (Đóng Cửa Sớm)</span>
-        </button>
+    <!-- ====================================================================
+         1. HUD
+         ==================================================================== -->
+    <header class="g-hud">
+      <div class="g-hud-left">
+        <button type="button" class="g-hud-circle" id="btn-hud-home" title="Về màn hình chính"><i class="fa-solid fa-house"></i></button>
+        <button type="button" class="g-hud-circle" id="btn-pause-game" title="Tạm dừng & Cài đặt"><i class="fa-solid fa-pause"></i></button>
+        <button type="button" class="g-hud-circle" id="btn-fullscreen" title="Toàn màn hình"><i class="fa-solid fa-expand"></i></button>
+        <div class="g-pill money" title="Tiền vốn hiện có">
+          <span class="pill-icon">🪙</span>
+          <span class="pill-text"><small>资金 · Vốn</small><strong id="hud-money-val">50.00 ¥</strong></span>
+        </div>
+        <div class="g-pill day">
+          <span class="pill-icon">📅</span>
+          <span class="pill-text"><small>Ngày</small><strong class="zh" id="hud-day-val">第1天</strong></span>
+        </div>
       </div>
 
-      <div class="hud-right">
-        <!-- Sách từ vựng Tạp hóa -->
-        <button type="button" class="hud-action-pill" id="btn-open-vocab" title="Sổ tay từ vựng tạp hóa & lượng từ">
-          <span class="icon">📖</span>
-          <span class="text">生词本 (Từ Vựng)</span>
-          <span class="badge" id="hud-vocab-badge">4/25</span>
-        </button>
-
-        <!-- Nhập hàng Modal Button -->
-        <button type="button" class="hud-action-pill stock-pill" id="btn-open-restock" title="Nhập hàng & Quản lý kệ">
-          <span class="icon">📦</span>
-          <span class="text">进货 (Nhập Hàng)</span>
-        </button>
-
-        <!-- Mascot HongTai Cheering -->
-        <div class="hud-mascot-cheer" id="hud-mascot-dragon" title="Bấm để nghe cổ vũ!">
-          <div class="mascot-speech">
-            <span class="mascot-title kaiti-font">生意兴隆！</span>
-            <span class="mascot-sub">(Mua may bán đắt!)</span>
+      <div class="g-hud-center">
+        <div class="g-goal" id="hud-goal">
+          <div class="g-goal-top">
+            <span class="g-goal-label">🎯 <span class="zh">今日目标</span></span>
+            <span class="g-goal-val" id="hud-goal-val">0 / 0 ¥</span>
           </div>
-          <div class="mascot-avatar">🐲</div>
+          <div class="g-goal-bar"><div class="g-goal-fill" id="hud-goal-fill"></div></div>
         </div>
+        <div class="g-pill guests" title="Khách trong ngày">
+          <span class="pill-icon">🧑‍🤝‍🧑</span>
+          <span class="pill-text"><small>Khách hôm nay</small><strong id="hud-guest-val">0 / 0</strong></span>
+        </div>
+      </div>
+
+      <div class="g-hud-right">
+        <button type="button" class="g-pill action" id="btn-open-vocab" title="Sổ từ vựng tạp hóa">
+          <span class="pill-icon">📖</span>
+          <span class="pill-text"><small class="zh">生词本</small><strong id="hud-vocab-val">0/0</strong></span>
+        </button>
+        <button type="button" class="g-pill action stock" id="btn-open-restock" title="Nhập hàng lên kệ">
+          <span class="pill-icon">📦</span>
+          <span class="pill-text"><small class="zh">进货</small><strong>Nhập hàng</strong></span>
+        </button>
       </div>
     </header>
 
     <!-- ====================================================================
-         2. TICKET RAIL (THANH RAY TRƯỢT KẸP PHIẾU MUA HÀNG PAPA'S STYLE)
+         2. THANH RAY: KHÁCH ĐANG XẾP HÀNG
          ==================================================================== -->
-    <div class="grocery-ticket-rail" id="grocery-ticket-rail">
-      <div class="rail-bar-metal">
-        <span class="rail-title-label">📋 SHOPPING TICKETS (购物单夹)</span>
-      </div>
-      <div class="tickets-clip-area" id="tickets-clip-area">
-        <!-- Shopping Ticket Papa's Style (Click to zoom/inspect) -->
-        <div class="papa-grocery-ticket" id="active-grocery-ticket" title="Bấm để phóng to xem phiếu mua hàng">
-          <div class="ticket-clip-pin"></div>
-          <div class="ticket-header">
-            <span class="ticket-cust-name kaiti-font" id="ticket-header-name">小浩</span>
-            <span class="ticket-order-id">#G-201</span>
-          </div>
-          <div class="ticket-items-list" id="ticket-items-list">
-            <div class="ticket-item-row">
-              <span class="t-emoji">🥢</span>
-              <strong class="t-name kaiti-font">两包 辣条</strong>
-            </div>
-            <div class="ticket-item-row">
-              <span class="t-emoji">🧃</span>
-              <strong class="t-name kaiti-font">一瓶 冰红茶</strong>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="g-rail">
+      <span class="g-rail-label">🧾 <span class="zh">排队</span> Xếp hàng</span>
+      <div class="g-rail-queue" id="rail-queue"></div>
+      <span class="g-rail-info" id="rail-info"></span>
     </div>
 
     <!-- ====================================================================
-         3. MAIN VIEWPORT (CHUYỂN ĐỔI 4 TRẠM - STATIONS CONTAINER)
+         3. KHUNG CÁC TRẠM
          ==================================================================== -->
-    <main class="grocery-main-viewport">
+    <main class="g-viewport">
 
-      <!-- ==================================================================
-           STATION 1: ORDER STATION (点单台 · ĐÓN KHÁCH & TIẾP NHẬN ĐƠN)
-           ================================================================== -->
-      <section class="grocery-station-view station-order-view active" id="view-order-station">
-        <!-- Outdoor Street Scene behind Counter -->
-        <div class="grocery-order-bg-street">
-          <div class="street-passersby-container" aria-hidden="true">
-            <div class="passerby-walker walker-track-1"><div class="walker-sprite">🎒 👧</div></div>
-            <div class="passerby-walker walker-track-2"><div class="walker-sprite">🐶 👦</div></div>
-            <div class="passerby-walker walker-track-3"><div class="walker-sprite">🚲 🧑‍🎓</div></div>
+      <!-- TRẠM 1: QUẦY ĐÓN KHÁCH (点单台) -->
+      <section class="g-station active" id="view-order-station">
+        <div class="shop-scene">
+          <div class="shop-awning" aria-hidden="true"></div>
+          <div class="shop-wall left" aria-hidden="true">
+            <div class="wall-chalkboard">
+              <span class="zh cb-title">今日推荐</span>
+              <ul id="chalk-specials"></ul>
+            </div>
+          </div>
+          <div class="shop-wall right" aria-hidden="true">
+            <div class="wall-shelf-mini">
+              <span>🥫</span><span>🍬</span><span>🧃</span><span>🍜</span><span>🥫</span><span>🍭</span>
+            </div>
+            <div class="wall-lantern">🏮</div>
+          </div>
+
+          <!-- Cửa kính: khách đứng trong khung cửa -->
+          <div class="shop-door" id="shop-door">
+            <div class="door-street" aria-hidden="true">
+              <div class="street-sky"></div>
+              <div class="street-tree t1"></div>
+              <div class="street-tree t2"></div>
+              <div class="street-house"></div>
+              <div class="street-walker w1">🚲</div>
+              <div class="street-walker w2">🐕</div>
+            </div>
+            <div class="door-customer" id="door-customer">
+              <img id="customer-img" src="./assets/boba_customer_girl.jpg" alt="">
+            </div>
+            <div class="door-glare" aria-hidden="true"></div>
+            <div class="door-bell" aria-hidden="true">🔔</div>
+            <div class="door-empty" id="door-empty">
+              <span class="zh">欢迎光临</span>
+              <small id="door-empty-text">Đang chờ khách...</small>
+            </div>
+          </div>
+
+          <div class="customer-tag" id="customer-tag">
+            <span class="zh" id="customer-name-chn">小雨</span>
+            <span id="customer-name-vi">Bé Mưa</span>
+            <div class="patience" id="counter-patience"><div class="patience-fill"></div><span class="patience-mood">😊</span></div>
+          </div>
+
+          <!-- Bong bóng lời thoại -->
+          <div class="speech-bubble" id="speech-bubble">
+            <div class="speech-head">
+              <span class="speech-tag">🗣️ Khách gọi hàng</span>
+              <button type="button" class="speech-audio" id="btn-replay-order-audio" title="Nghe lại"><i class="fa-solid fa-volume-high"></i></button>
+            </div>
+            <div class="speech-chn zh" id="order-chn-text">老板，我要一包辣条！</div>
+            <div class="speech-pin" id="order-pin-text">Lǎobǎn, wǒ yào yì bāo làtiáo!</div>
+            <div class="speech-vi" id="order-vi-text">(Ông chủ ơi, cho tôi 1 gói que cay!)</div>
+            <button type="button" class="g-btn-primary" id="btn-take-order-action">
+              <i class="fa-solid fa-basket-shopping"></i> <span class="zh">接单</span> Nhận đơn &amp; lấy giỏ
+            </button>
+          </div>
+
+          <!-- Quầy gỗ -->
+          <div class="shop-counter">
+            <div class="counter-top"></div>
+            <div class="counter-front">
+              <div class="counter-sign">
+                <span class="zh">我的小卖部</span>
+                <small>童年零食 · 热情服务</small>
+              </div>
+            </div>
+            <div class="counter-register" aria-hidden="true">
+              <div class="reg-screen" id="reg-screen">0.00</div>
+              <div class="reg-keys"></div>
+            </div>
+            <div class="counter-jars" aria-hidden="true">
+              <span class="jar j1"></span><span class="jar j2"></span><span class="jar j3"></span>
+            </div>
+            <button type="button" class="counter-cat" id="btn-cat" title="Con mèo · 猫 (māo)">
+              <span class="cat-sun" aria-hidden="true"></span>
+              <span class="cat-emoji">🐈</span>
+            </button>
+          </div>
+
+          <div class="today-board">
+            <div class="tb-head zh">今日营收</div>
+            <div class="tb-revenue" id="stats-rev-val">0.00 ¥</div>
+            <div class="tb-row"><span>✅ Đã phục vụ</span><strong id="stats-cust-val">0</strong></div>
+            <div class="tb-row"><span>😠 Bỏ về</span><strong id="stats-lost-val">0</strong></div>
           </div>
         </div>
 
-        <!-- Left Wooden Shop Sign -->
-        <div class="grocery-left-signboard">
-          <div class="sign-title kaiti-font">我的小卖部</div>
-          <div class="sign-sub">童年零食 · 热情服务</div>
-          <div class="sign-doodle">🏮 🥢 🍬</div>
-        </div>
-
-        <!-- Right Today Stats Board -->
-        <div class="grocery-right-statsboard">
-          <div class="stats-header kaiti-font">今日营收</div>
-          <div class="stats-revenue"><span id="stats-rev-val">0.00 ¥</span></div>
-          <div class="stats-row">
-            <span>✅ 服务顾客</span>
-            <strong id="stats-cust-val">0</strong>
-          </div>
-          <div class="stats-row">
-            <span>📖 掌握生词</span>
-            <strong id="stats-words-val">4</strong>
-          </div>
-        </div>
-
-        <!-- Customer Stage -->
-        <div class="grocery-customer-stage">
-          <!-- Anime Chibi Customer Visual -->
-          <div class="customer-avatar-box" id="customer-avatar-box">
-            <div class="customer-chibi-visual" id="customer-chibi-visual">
-              <span class="customer-emoji-avatar">👦</span>
-            </div>
-            <div class="customer-name-badge" id="customer-name-badge">
-              <span class="c-name kaiti-font">小浩</span>
-              <span class="c-role">(Học sinh tiểu học)</span>
-            </div>
-          </div>
-
-          <!-- Speech Balloon -->
-          <div class="customer-dialog-bubble" id="customer-dialog-bubble">
-            <div class="bubble-header">
-              <span class="bubble-tag">顾客选购要求 (Yêu cầu mua hàng)</span>
-              <button type="button" class="btn-bubble-audio" id="btn-replay-order-audio" title="Nghe lại câu thoại">
-                <i class="fa-solid fa-volume-high"></i> Nghe đọc
-              </button>
-            </div>
-            <div class="order-chn-text kaiti-font" id="order-chn-text">
-              老板，我要两包辣条和一瓶冰红茶！
-            </div>
-            <div class="order-pin-text" id="order-pin-text">
-              Lǎobǎn, wǒ yào liǎng bāo làtiáo hé yī píng bīnghóngchá!
-            </div>
-            <div class="order-vi-text" id="order-vi-text">
-              (Ông chủ, cho tôi 2 gói que cay và 1 chai trà xanh lạnh!)
-            </div>
-
-            <!-- Action: Take Order & Get Basket -->
-            <div class="bubble-actions">
-              <button type="button" class="btn-take-order-papa" id="btn-take-order-action">
-                <i class="fa-solid fa-basket-shopping"></i>
-                <span>接单 · 拿购物篮 (Nhận Đơn & Lấy Giỏ Hàng)</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Order Station Counter Footer -->
-        <div class="order-counter-footer">
-          <div class="footer-hint" id="order-footer-hint">
-            💡 Bấm <strong>"接单 · 拿购物篮 (Nhận Đơn & Lấy Giỏ Hàng)"</strong> để nhận phiếu và bắt đầu nhặt đồ trên kệ!
-          </div>
-          <!-- Next Station Button -->
-          <button type="button" class="btn-next-station-pulse" id="btn-goto-shelves-from-order" style="display: none;">
-            <span>👉 前往货架区 (Đến Kệ Hàng Nhặt Đồ)</span> <i class="fa-solid fa-arrow-right"></i>
+        <div class="g-station-footer">
+          <div class="g-hint" id="order-footer-hint">💡 Bấm <b>Nhận đơn</b> khi khách đến quầy.</div>
+          <button type="button" class="g-btn-next" id="btn-goto-shelves-from-order" style="display:none;">
+            <span class="zh">货架区</span> Đến kệ hàng <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
       </section>
 
-      <!-- ==================================================================
-           STATION 2: SHELF STATION (货架区 · NHẶT HÀNG LÊN KỆ VÀO GIỎ)
-           ================================================================== -->
-      <section class="grocery-station-view station-shelves-view" id="view-shelves-station">
-        <div class="station-stage-header">
-          <div class="stage-title-wrap">
-            <h2 class="stage-title kaiti-font">🏪 货架区 (Aisle & Shelf Station)</h2>
-            <p class="stage-desc">Chạm vào hàng hóa trên kệ để nhặt vào giỏ mây đúng theo số lượng phiếu yêu cầu</p>
+      <!-- TRẠM 2: KỆ HÀNG (货架区) -->
+      <section class="g-station" id="view-shelves-station">
+        <div class="shelves-room">
+          <div class="shelf-unit">
+            <div class="shelf-unit-top">
+              <span class="zh">货架</span> Kệ hàng
+              <div class="shelf-actions">
+                <button type="button" class="g-btn-chip" id="btn-unlock-shelf-header"><i class="fa-solid fa-unlock"></i> Mở kệ mới</button>
+                <button type="button" class="g-btn-chip" id="btn-quick-restock-header"><i class="fa-solid fa-boxes-packing"></i> Nhập hàng</button>
+              </div>
+            </div>
+            <div class="shelf-rows" id="shelves-display-rack"></div>
           </div>
-          <div class="shelf-header-actions">
-            <button type="button" class="btn-sm-action" id="btn-unlock-shelf-header">
-              <i class="fa-solid fa-store"></i> Mở Gian Hàng Mới
-            </button>
-            <button type="button" class="btn-sm-action" id="btn-quick-restock-header">
-              <i class="fa-solid fa-boxes-packing"></i> Bổ Sung Hàng
-            </button>
-          </div>
+
+          <aside class="basket-panel">
+            <div class="order-check" id="order-checklist">
+              <div class="oc-head"><span class="zh">购物单</span> Phiếu mua hàng <span class="oc-id" id="oc-ticket-id">#G-1</span></div>
+              <div class="oc-list" id="oc-list"></div>
+            </div>
+            <div class="basket-card">
+              <div class="basket-head">
+                <span>🧺 <span class="zh">购物篮</span> Giỏ của khách</span>
+                <button type="button" class="g-btn-chip danger" id="btn-clear-basket-station"><i class="fa-solid fa-rotate-left"></i> Trả lại kệ</button>
+              </div>
+              <div class="basket-items" id="basket-items-scroll"></div>
+              <div class="basket-foot">
+                <span>Tạm tính</span><strong id="basket-subtotal-val">0.00 ¥</strong>
+              </div>
+            </div>
+          </aside>
         </div>
 
-        <div class="shelves-workbench-grid">
-          <!-- LEFT: RACK OF STORE SHELVES (CÁC KỆ HÀNG GỖ) -->
-          <div class="shelves-display-rack" id="shelves-display-rack">
-            <!-- Dynamically populated shelves grid (1 -> 12) -->
-          </div>
-
-          <!-- RIGHT: WICKER SHOPPING BASKET (GIỎ MÂY NHẶT HÀNG) -->
-          <div class="shopping-basket-display">
-            <div class="basket-card-header">
-              <span class="basket-heading kaiti-font">
-                <i class="fa-solid fa-basket-shopping"></i> 顾客购物篮 (Giỏ Hàng Của Khách)
-              </span>
-              <button type="button" class="btn-clear-basket" id="btn-clear-basket-station" title="Làm rỗng giỏ">
-                <i class="fa-solid fa-trash-can"></i> Xóa
-              </button>
-            </div>
-
-            <!-- Basket Items Container -->
-            <div class="basket-items-scroll" id="basket-items-scroll">
-              <div class="basket-empty-hint">
-                <i class="fa-solid fa-basket-shopping" style="font-size:2.5rem;opacity:0.4;"></i>
-                <p>Chạm vào hàng hóa trên kệ gỗ để nhặt vào giỏ</p>
-              </div>
-            </div>
-
-            <!-- Basket Summary & Next -->
-            <div class="basket-footer-summary">
-              <div class="basket-calc-row">
-                <span>Số lượng món:</span>
-                <strong id="basket-items-count-badge">0 món</strong>
-              </div>
-              <div class="basket-calc-row">
-                <span>Tạm tính tiền hàng:</span>
-                <strong class="text-orange" id="basket-subtotal-val">0.00 ¥</strong>
-              </div>
-              <div class="basket-match-status" id="basket-match-status">
-                ⚠️ Chưa đủ hàng theo phiếu yêu cầu!
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Station Footer Navigation -->
-        <div class="station-nav-footer">
-          <button type="button" class="btn-step-nav prev" id="btn-back-to-order-from-shelves">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại Đón Khách
-          </button>
-          <button type="button" class="btn-step-nav next" id="btn-goto-scan" disabled>
-            <span>👉 前往扫码台 (Đến Quầy Quét Mã)</span> <i class="fa-solid fa-arrow-right"></i>
+        <div class="g-station-footer">
+          <div class="g-hint" id="shelves-hint">💡 Chạm vào món trên kệ để bỏ vào giỏ. Nhặt nhầm sẽ bị trừ điểm!</div>
+          <button type="button" class="g-btn-next" id="btn-goto-scan" disabled>
+            <span class="zh">扫码台</span> Sang quét mã <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
       </section>
 
-      <!-- ==================================================================
-           STATION 3: SCAN STATION (扫码台 · MÁY QUÉT MÃ VẠCH TÍNH TIỀN)
-           ================================================================== -->
-      <section class="grocery-station-view station-scan-view" id="view-scan-station">
-        <div class="station-stage-header">
-          <div class="stage-title-wrap">
-            <h2 class="stage-title kaiti-font">📠 扫码台 (Barcode Scanner Station)</h2>
-            <p class="stage-desc">Quét từng món hàng trên băng chuyền để tính tổng tiền và in hóa đơn</p>
-          </div>
-        </div>
-
-        <div class="scan-workbench-grid">
-          <!-- LEFT: CONVEYOR BELT OF ITEMS -->
-          <div class="conveyor-belt-section">
-            <div class="conveyor-title kaiti-font">收银传送带 (Băng Chuyền Hàng Hóa)</div>
-            <div class="conveyor-belt-track" id="conveyor-items-track">
-              <!-- Items queued for scanning -->
+      <!-- TRẠM 3: QUÉT MÃ (扫码台) -->
+      <section class="g-station" id="view-scan-station">
+        <div class="scan-room">
+          <div class="conveyor-area">
+            <div class="conveyor-title"><span class="zh">收银台</span> Băng chuyền thu ngân · chạm từng món để quét</div>
+            <div class="conveyor-belt">
+              <div class="belt-surface"></div>
+              <div class="belt-items" id="conveyor-items-track"></div>
+              <div class="scanner-window" aria-hidden="true"><div class="scanner-laser" id="scanner-laser"></div></div>
             </div>
-            <!-- Handheld Scanner Trigger Button -->
-            <button type="button" class="btn-trigger-scanner" id="btn-trigger-scanner">
-              <i class="fa-solid fa-barcode"></i>
-              <span>扫描当前商品 (Quét Mã Món Này - Tít!)</span>
+            <button type="button" class="g-btn-scan" id="btn-trigger-scanner">
+              <i class="fa-solid fa-barcode"></i> <span class="zh">扫描</span> Quét món tiếp theo
             </button>
           </div>
 
-          <!-- RIGHT: DIGITAL POS CASH REGISTER & PRINTED RECEIPT -->
-          <div class="pos-register-section">
-            <div class="pos-screen-digital">
-              <div class="digital-header">
-                <span>POS TERMINAL</span>
-                <span class="kaiti-font">小卖部收银系统</span>
-              </div>
-              <div class="digital-row">
-                <span class="d-label">商品总件数 (Số món đã quét):</span>
-                <strong class="d-val" id="scan-scanned-count">0 / 0</strong>
-              </div>
-              <div class="digital-divider"></div>
-              <div class="digital-row total-row">
-                <span class="d-label">应收总计 (TỔNG PHẢI THU):</span>
-                <strong class="d-val text-yellow" id="scan-total-due">0.00 ¥</strong>
-              </div>
+          <div class="pos-area">
+            <div class="pos-screen">
+              <div class="pos-row"><span>Đã quét</span><strong id="scan-scanned-count">0 / 0</strong></div>
+              <div class="pos-row total"><span class="zh">合计</span><strong id="scan-total-due">0.00 ¥</strong></div>
             </div>
-
-            <!-- Printed Receipt Tape Paper -->
-            <div class="receipt-tape-paper">
-              <div class="receipt-header kaiti-font">我的小卖部 · 购物小票</div>
-              <div class="receipt-items-lines" id="receipt-items-lines">
-                <!-- Lines printed as scanned -->
-              </div>
-              <div class="receipt-footer-total" id="receipt-footer-total">
-                <span>应付金额:</span>
-                <strong id="receipt-total-num">0.00 ¥</strong>
-              </div>
+            <div class="receipt">
+              <div class="receipt-head zh">我的小卖部 · 购物小票</div>
+              <div class="receipt-lines" id="receipt-items-lines"></div>
+              <div class="receipt-total"><span class="zh">应付</span><strong id="receipt-total-num">0.00 ¥</strong></div>
             </div>
           </div>
         </div>
 
-        <!-- Station Footer Navigation -->
-        <div class="station-nav-footer">
-          <button type="button" class="btn-step-nav prev" id="btn-back-to-shelves-from-scan">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại Kệ Hàng
-          </button>
-          <button type="button" class="btn-step-nav next" id="btn-goto-change" disabled>
-            <span>👉 前往收银找零 (Đến Quầy Thu Ngân & Thối Tiền)</span> <i class="fa-solid fa-arrow-right"></i>
+        <div class="g-station-footer">
+          <div class="g-hint" id="scan-hint">💡 Quét hết các món để in hóa đơn.</div>
+          <button type="button" class="g-btn-next" id="btn-goto-change" disabled>
+            <span class="zh">找零台</span> Sang thu tiền <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
       </section>
 
-      <!-- ==================================================================
-           STATION 4: CHANGE STATION (找零台 · QUẦY THU NGÂN & THỐI TIỀN)
-           ================================================================== -->
-      <section class="grocery-station-view station-change-view" id="view-change-station">
-        <div class="station-stage-header">
-          <div class="stage-title-wrap">
-            <h2 class="stage-title kaiti-font">💴 找零台 (Cash & Change Station)</h2>
-            <p class="stage-desc">Nhận tiền mặt khách đưa, tính và thối đúng số tiền thừa bằng tiền giấy & tiền xu RMB</p>
-          </div>
-        </div>
-
-        <div class="change-workbench-grid">
-          <!-- LEFT: CASH TRANSACTION STATUS SCREEN -->
-          <div class="cashier-monitor-column">
-            <div class="pos-screen-card">
-              <div class="pos-screen-top">
-                <div class="pos-line">
-                  <span class="lbl">应付金额 (Tổng tiền):</span>
-                  <strong class="val-primary" id="change-due-amount">0.00 ¥</strong>
-                </div>
-                <div class="pos-line customer-paid">
-                  <span class="lbl">顾客支付 (Khách đưa):</span>
-                  <strong class="val-paid" id="change-paid-amount">0.00 ¥</strong>
-                </div>
-                <div class="pos-divider"></div>
-                <div class="pos-line change-line">
-                  <span class="lbl highlight">需要找零 (Cần thối lại):</span>
-                  <strong class="val-change" id="change-needed-amount">0.00 ¥</strong>
-                </div>
+      <!-- TRẠM 4: THU TIỀN & THỐI TIỀN (找零台) -->
+      <section class="g-station" id="view-change-station">
+        <div class="change-room">
+          <div class="cash-left">
+            <div class="paid-card">
+              <div class="paid-row"><span><span class="zh">应付</span> Tổng tiền</span><strong id="change-due-amount">0.00 ¥</strong></div>
+              <div class="paid-row"><span><span class="zh">顾客付</span> Khách đưa</span><strong class="paid" id="change-paid-amount">0.00 ¥</strong></div>
+              <div class="paid-row need">
+                <span><span class="zh">找零</span> Cần thối</span>
+                <strong id="change-needed-amount">? ¥</strong>
               </div>
-              <div class="pos-hint-formula" id="change-formula-hint">
-                Công thức: Khách đưa - Tổng tiền = Tiền thối
-              </div>
+              <button type="button" class="g-btn-chip" id="btn-change-hint"><i class="fa-solid fa-lightbulb"></i> Gợi ý (−20 điểm)</button>
             </div>
-
-            <!-- Customer Given Bill on Counter -->
-            <div class="countertop-cash-preview">
-              <span class="countertop-label">Tiền mặt khách đưa tới quầy:</span>
-              <div class="customer-bill-render" id="customer-bill-render">
-                <span class="bill-large-badge">💵 10.00 元</span>
-              </div>
+            <div class="paid-bill-wrap">
+              <span class="paid-label">Tiền khách đặt trên quầy</span>
+              <div class="paid-bills" id="customer-bill-render"></div>
             </div>
           </div>
 
-          <!-- MIDDLE: CASH DRAWER (NGĂN KÉO TIỀN RMB) -->
-          <div class="cash-drawer-column">
-            <div class="drawer-header kaiti-font">
-              <i class="fa-solid fa-cash-register"></i> 人民币钱匣 (Chạm mệnh giá để nhặt tiền thối)
-            </div>
-            <div class="drawer-denominations-grid">
-              <button type="button" class="btn-money-bill bill-50" data-val="50">
-                <span class="b-rmb kaiti-font">50 元</span>
-                <span class="b-sub">Tờ 50¥</span>
-              </button>
-              <button type="button" class="btn-money-bill bill-20" data-val="20">
-                <span class="b-rmb kaiti-font">20 元</span>
-                <span class="b-sub">Tờ 20¥</span>
-              </button>
-              <button type="button" class="btn-money-bill bill-10" data-val="10">
-                <span class="b-rmb kaiti-font">10 元</span>
-                <span class="b-sub">Tờ 10¥</span>
-              </button>
-              <button type="button" class="btn-money-bill bill-5" data-val="5">
-                <span class="b-rmb kaiti-font">5 元</span>
-                <span class="b-sub">Tờ 5¥</span>
-              </button>
-              <button type="button" class="btn-money-bill bill-1" data-val="1">
-                <span class="b-rmb kaiti-font">1 元</span>
-                <span class="b-sub">Tờ 1¥</span>
-              </button>
-              <button type="button" class="btn-money-coin coin-50cent" data-val="0.5">
-                <span class="c-rmb kaiti-font">5 角</span>
-                <span class="c-sub">0.5¥</span>
-              </button>
-              <button type="button" class="btn-money-coin coin-10cent" data-val="0.1">
-                <span class="c-rmb kaiti-font">1 角</span>
-                <span class="c-sub">0.1¥</span>
-              </button>
+          <div class="cash-drawer">
+            <div class="drawer-head"><i class="fa-solid fa-cash-register"></i> <span class="zh">钱箱</span> Ngăn kéo tiền · chạm để lấy</div>
+            <div class="drawer-grid">
+              <button type="button" class="rmb note n20" data-val="20"><b>20</b><span class="zh">元</span></button>
+              <button type="button" class="rmb note n10" data-val="10"><b>10</b><span class="zh">元</span></button>
+              <button type="button" class="rmb note n5" data-val="5"><b>5</b><span class="zh">元</span></button>
+              <button type="button" class="rmb note n1" data-val="1"><b>1</b><span class="zh">元</span></button>
+              <button type="button" class="rmb coin c5" data-val="0.5"><b>5</b><span class="zh">角</span></button>
+              <button type="button" class="rmb coin c1" data-val="0.1"><b>1</b><span class="zh">角</span></button>
             </div>
           </div>
 
-          <!-- RIGHT: CHANGE TRAY & CONFIRMATION -->
-          <div class="change-tray-column">
-            <div class="tray-card-header">
-              <div class="tray-title-wrap">
-                <span class="tray-title kaiti-font"><i class="fa-solid fa-hand-holding-dollar"></i> 找零盘 (Khay Tiền Thối)</span>
-                <span class="tray-total-picked" id="tray-total-picked">Đã nhặt: 0.00 ¥</span>
-              </div>
-              <button type="button" class="btn-reset-tray" id="btn-reset-tray-action">
-                <i class="fa-solid fa-rotate-left"></i> Xếp lại
-              </button>
+          <div class="change-tray">
+            <div class="tray-head">
+              <span><span class="zh">找零盘</span> Khay tiền thối</span>
+              <button type="button" class="g-btn-chip" id="btn-reset-tray-action"><i class="fa-solid fa-rotate-left"></i> Xếp lại</button>
             </div>
-
-            <!-- Dropped Bills and Coins Container -->
-            <div class="tray-dropped-tokens" id="tray-dropped-tokens">
-              <span class="tray-placeholder">Chạm mệnh giá bên cạnh để nhặt tiền thối vào khay</span>
-            </div>
-
-            <!-- Confirm & Finish Transaction Button -->
-            <button type="button" class="btn-confirm-and-deliver" id="btn-confirm-and-deliver">
-              <i class="fa-solid fa-circle-check"></i>
-              <span>确认找零 · 交付商品 (Xác Nhận Thối Tiền & Hoàn Tất)</span>
+            <div class="tray-tokens" id="tray-dropped-tokens"></div>
+            <div class="tray-sum" id="tray-total-picked">Đã lấy: 0.00 ¥</div>
+            <button type="button" class="g-btn-primary big" id="btn-confirm-and-deliver">
+              <i class="fa-solid fa-circle-check"></i> <span class="zh">找零 · 交货</span> Thối tiền &amp; giao hàng
             </button>
           </div>
         </div>
 
-        <!-- Station Footer Navigation -->
-        <div class="station-nav-footer">
-          <button type="button" class="btn-step-nav prev" id="btn-back-to-scan">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại Quét Mã
-          </button>
+        <div class="g-station-footer">
+          <div class="g-hint" id="change-hint-text">💡 Tự tính: <b>Khách đưa − Tổng tiền = Tiền thối</b>. Thối sai sẽ bị trừ điểm.</div>
         </div>
       </section>
-
     </main>
 
     <!-- ====================================================================
-         4. BOTTOM STATION BAR (THANH CHUYỂN TRẠM PAPA'S STYLE)
+         4. THANH CHUYỂN TRẠM
          ==================================================================== -->
-    <nav class="grocery-bottom-station-bar">
-      <button type="button" class="station-tab-btn active" data-target="view-order-station" id="tab-grocery-order">
-        <span class="tab-icon">🛎️</span>
-        <div class="tab-labels">
-          <span class="tab-title-chn kaiti-font">点单台</span>
-          <span class="tab-title-vi">1. Đón Khách</span>
-        </div>
+    <nav class="g-tabs">
+      <button type="button" class="g-tab active" data-target="view-order-station" id="tab-grocery-order">
+        <span class="tab-icon">🛎️</span><span class="tab-txt"><b class="zh">点单台</b><small>1. Đón khách</small></span>
       </button>
-
-      <button type="button" class="station-tab-btn" data-target="view-shelves-station" id="tab-grocery-shelves">
-        <span class="tab-icon">🏪</span>
-        <div class="tab-labels">
-          <span class="tab-title-chn kaiti-font">货架区</span>
-          <span class="tab-title-vi">2. Nhặt Hàng</span>
-        </div>
-        <span class="tab-badge-dot" id="dot-grocery-shelves" style="display: none;"></span>
+      <button type="button" class="g-tab" data-target="view-shelves-station" id="tab-grocery-shelves">
+        <span class="tab-icon">🏪</span><span class="tab-txt"><b class="zh">货架区</b><small>2. Nhặt hàng</small></span>
       </button>
-
-      <button type="button" class="station-tab-btn" data-target="view-scan-station" id="tab-grocery-scan">
-        <span class="tab-icon">📠</span>
-        <div class="tab-labels">
-          <span class="tab-title-chn kaiti-font">扫码台</span>
-          <span class="tab-title-vi">3. Quét Mã</span>
-        </div>
-        <span class="tab-badge-dot" id="dot-grocery-scan" style="display: none;"></span>
+      <button type="button" class="g-tab" data-target="view-scan-station" id="tab-grocery-scan">
+        <span class="tab-icon">📠</span><span class="tab-txt"><b class="zh">扫码台</b><small>3. Quét mã</small></span>
       </button>
-
-      <button type="button" class="station-tab-btn" data-target="view-change-station" id="tab-grocery-change">
-        <span class="tab-icon">💴</span>
-        <div class="tab-labels">
-          <span class="tab-title-chn kaiti-font">找零台</span>
-          <span class="tab-title-vi">4. Thối Tiền</span>
-        </div>
-        <span class="tab-badge-dot" id="dot-grocery-change" style="display: none;"></span>
+      <button type="button" class="g-tab" data-target="view-change-station" id="tab-grocery-change">
+        <span class="tab-icon">💴</span><span class="tab-txt"><b class="zh">找零台</b><small>4. Thối tiền</small></span>
       </button>
     </nav>
 
+    <div class="g-toasts" id="g-toasts"></div>
+
     <!-- ====================================================================
-         5. PAPA'S GROCERY SERVICE SCORE CARD MODAL (出餐评分卡)
+         5. BẢNG ĐIỂM PHỤC VỤ
          ==================================================================== -->
-    <div class="grocery-modal-backdrop" id="modal-grocery-score" style="display: none;">
-      <div class="papa-scorecard-sheet">
-        <div class="scorecard-pin"></div>
-        <div class="scorecard-header">
-          <span class="scorecard-brand kaiti-font">我的小卖部 · 结账评分卡</span>
-          <h3 class="scorecard-title">PAPA'S GROCERY SERVICE SCORE</h3>
+    <div class="g-modal" id="modal-grocery-score" style="display:none;">
+      <div class="g-card score-card">
+        <div class="score-pin" aria-hidden="true"></div>
+        <div class="score-head">
+          <span class="zh">结账评分卡</span>
+          <strong id="score-ticket-title">Phiếu #G-1 · 小雨</strong>
         </div>
-
-        <!-- 4 Criteria Percentage Bars -->
-        <div class="scorecard-criteria-list">
-          <!-- 1. Order Match -->
-          <div class="criteria-row">
-            <span class="c-label">📋 商品匹配 (Nhặt Đúng Hàng):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-blue" id="score-bar-order" style="width: 100%;"></div></div>
-            <span class="c-percent" id="score-val-order">100%</span>
-          </div>
-
-          <!-- 2. Shelf Selection -->
-          <div class="criteria-row">
-            <span class="c-label">🏪 选品速度 (Chọn Món Vào Giỏ):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-teal" id="score-bar-shelves" style="width: 98%;"></div></div>
-            <span class="c-percent" id="score-val-shelves">98%</span>
-          </div>
-
-          <!-- 3. Scan Accuracy -->
-          <div class="criteria-row">
-            <span class="c-label">🏷️ 扫码计价 (Quét Mã Tính Tiền):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-amber" id="score-bar-scan" style="width: 95%;"></div></div>
-            <span class="c-percent" id="score-val-scan">95%</span>
-          </div>
-
-          <!-- 4. Change Accuracy -->
-          <div class="criteria-row">
-            <span class="c-label">💴 找零准确 (Thối Tiền Chuẩn Xác):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-pink" id="score-bar-change" style="width: 100%;"></div></div>
-            <span class="c-percent" id="score-val-change">100%</span>
+        <div class="score-rows">
+          <div class="score-row"><span>🧺 <span class="zh">拣货</span> Nhặt đúng hàng</span><div class="bar"><i id="score-bar-pick"></i></div><b id="score-val-pick">100%</b></div>
+          <div class="score-row"><span>⚡ <span class="zh">速度</span> Tốc độ phục vụ</span><div class="bar"><i id="score-bar-speed"></i></div><b id="score-val-speed">100%</b></div>
+          <div class="score-row"><span>💴 <span class="zh">找零</span> Thối tiền</span><div class="bar"><i id="score-bar-change"></i></div><b id="score-val-change">100%</b></div>
+          <div class="score-row"><span>⏳ <span class="zh">等待</span> Thời gian chờ</span><div class="bar"><i id="score-bar-wait"></i></div><b id="score-val-wait">100%</b></div>
+        </div>
+        <div class="score-total">
+          <div class="score-badge"><small>Tổng điểm</small><b id="score-val-total">100%</b><span id="score-stars">⭐⭐⭐</span></div>
+          <div class="score-money">
+            <div><span>Tiền hàng</span><b id="score-base-price">0.00 ¥</b></div>
+            <div><span>Tiền tip</span><b class="tip" id="score-tip-price">+0.00 ¥</b></div>
+            <div class="sum"><span>Thực nhận</span><b id="score-final-receive">0.00 ¥</b></div>
           </div>
         </div>
-
-        <!-- Overall Score & Tips Breakdown -->
-        <div class="scorecard-total-box">
-          <div class="total-score-badge">
-            <span class="badge-title">总评分 (Overall)</span>
-            <span class="badge-big-score" id="score-val-total">98%</span>
-          </div>
-          <div class="tips-money-breakdown">
-            <div class="breakdown-line">
-              <span>商品货款 (Tiền hàng):</span>
-              <strong id="score-base-price">12.00 ¥</strong>
-            </div>
-            <div class="breakdown-line">
-              <span>热情小费 (Tiền Tip Thưởng):</span>
-              <strong class="text-emerald" id="score-tip-price">+4.50 ¥</strong>
-            </div>
-            <div class="breakdown-divider"></div>
-            <div class="breakdown-line total-line">
-              <span>实收金额 (Tổng Nhận):</span>
-              <strong class="text-orange" id="score-final-receive">16.50 ¥</strong>
-            </div>
+        <div class="score-reaction">
+          <img id="score-reaction-img" src="./assets/boba_customer_girl.jpg" alt="">
+          <div>
+            <div class="zh rc-chn" id="score-reaction-chn">“谢谢老板！”</div>
+            <div class="rc-vi" id="score-reaction-vi">(Cảm ơn chủ tiệm!)</div>
           </div>
         </div>
-
-        <!-- Customer Reaction Speech in Chinese -->
-        <div class="customer-reaction-card">
-          <div class="reaction-avatar">🥰</div>
-          <div class="reaction-text">
-            <div class="reaction-chn kaiti-font" id="score-reaction-chn">
-              “老板服务真好，找零一分不差，谢谢您！”
-            </div>
-            <div class="reaction-vi" id="score-reaction-vi">
-              (Chủ tiệm phục vụ chu đáo quá, thối tiền chuẩn từng đồng, cảm ơn nhé!)
-            </div>
-          </div>
-        </div>
-
-        <!-- Next Customer Button -->
-        <button type="button" class="btn-scorecard-continue" id="btn-next-customer-grocery">
-          <i class="fa-solid fa-user-plus"></i>
-          <span>接待下一位顾客 (Đón Khách Tiếp Theo)</span>
+        <button type="button" class="g-btn-primary big" id="btn-next-customer-grocery">
+          <span class="zh">继续营业</span> Tiếp tục bán hàng <i class="fa-solid fa-arrow-right"></i>
         </button>
       </div>
     </div>
 
-    <!-- ====================================================================
-         6. MODALS: RESTOCK, SUMMARY, VOCAB, UNLOCK, SETTINGS
-         ==================================================================== -->
-
-    <!-- MODAL 1: NHẬP HÀNG TRƯỚC GIỜ MỞ CỬA (进货与准备营业) -->
-    <div class="grocery-modal-backdrop" id="modal-restock" style="display: none;">
-      <div class="grocery-modal-card stock-modal-card">
-        <div class="modal-card-header">
-          <div class="modal-title-wrap">
-            <span class="modal-tag">CHUẨN BỊ MỞ CỬA</span>
-            <h3 class="modal-title kaiti-font">📦 进货与上架 (Nhập Hàng & Trưng Bày)</h3>
-            <p class="modal-subtitle">Dùng số vốn hiện có để nhập hàng lên các kệ trước ca bán hàng</p>
-          </div>
-          <button type="button" class="btn-close-modal" onclick="window.groceryGame && window.groceryGame.closeRestockModal()">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+    <!-- NHIỆM VỤ ĐẦU NGÀY -->
+    <div class="g-modal" id="modal-day-mission" style="display:none;">
+      <div class="g-card mission-card">
+        <div class="mission-awning" aria-hidden="true"></div>
+        <div class="mission-head">
+          <span class="zh mission-day" id="mission-day-chn">第1天</span>
+          <h3><span class="zh">今日任务</span> · Nhiệm vụ hôm nay</h3>
+          <p id="mission-sub">Hôm nay có 4 khách ghé tiệm.</p>
         </div>
-
-        <div class="stock-balance-bar">
-          <div class="bal-item">
-            <span>Tiền vốn hiện có:</span>
-            <strong class="text-orange" id="modal-stock-current-bal">50.00 ¥</strong>
-          </div>
-          <div class="bal-item">
-            <span>Chi phí nhập dự kiến:</span>
-            <strong class="text-rose" id="modal-stock-total-cost">0.00 ¥</strong>
-          </div>
-          <div class="bal-item">
-            <span>Số dư sau khi nhập:</span>
-            <strong class="text-emerald" id="modal-stock-remaining-bal">50.00 ¥</strong>
-          </div>
-        </div>
-
-        <div class="stock-table-wrap">
-          <table class="stock-table">
-            <thead>
-              <tr>
-                <th>Hàng hóa</th>
-                <th>Tồn kệ</th>
-                <th>Giá vốn nhập</th>
-                <th>Giá bán lẻ</th>
-                <th>Số lượng nhập thêm</th>
-                <th>Thành tiền</th>
-              </tr>
-            </thead>
-            <tbody id="stock-table-body">
-              <!-- Dynamically populated rows -->
-            </tbody>
-          </table>
-        </div>
-
-        <div class="modal-card-footer">
-          <button type="button" class="btn-modal-secondary" id="btn-autofill-all-stock">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> Nhập đầy tất cả kệ (一键补齐)
-          </button>
-          <button type="button" class="btn-modal-primary" id="btn-confirm-restock-open">
-            <i class="fa-solid fa-store"></i> Xác Nhận Nhập & Mở Cửa Bán! (开门营业)
-          </button>
+        <div class="mission-goals" id="mission-goals"></div>
+        <div class="mission-actions">
+          <button type="button" class="g-btn-ghost" id="btn-mission-restock"><i class="fa-solid fa-boxes-packing"></i> Nhập hàng trước</button>
+          <button type="button" class="g-btn-primary big" id="btn-mission-start"><span class="zh">开门营业</span> Mở cửa bán hàng <i class="fa-solid fa-store"></i></button>
         </div>
       </div>
     </div>
 
-    <!-- MODAL 2: TỔNG KẾT NGÀY (每日营业结算) -->
-    <div class="grocery-modal-backdrop" id="modal-day-summary" style="display: none;">
-      <div class="grocery-modal-card summary-modal-card">
-        <div class="modal-card-header text-center">
-          <div class="summary-congrats-icon">🏮</div>
-          <h3 class="modal-title kaiti-font" id="summary-day-title">第 1 天 · 每日营业结算</h3>
-          <p class="modal-subtitle">Báo cáo kết quả kinh doanh và học tập trong ngày</p>
+    <!-- TỔNG KẾT NGÀY -->
+    <div class="g-modal" id="modal-day-summary" style="display:none;">
+      <div class="g-card summary-card">
+        <div class="summary-head">
+          <span class="summary-icon">🏮</span>
+          <h3 id="summary-day-title"><span class="zh">第1天</span> · Tổng kết ngày</h3>
+          <p id="summary-msg">Ngày bán hàng đã kết thúc!</p>
         </div>
-
-        <div class="summary-stats-grid">
-          <div class="stat-box">
-            <span class="label">今日营业额 (Tổng Doanh Thu):</span>
-            <span class="value text-orange" id="summary-revenue-val">0.00 ¥</span>
-          </div>
-          <div class="stat-box">
-            <span class="label">进货成本 (Chi Phí Nhập Hàng):</span>
-            <span class="value text-rose" id="summary-cost-val">0.00 ¥</span>
-          </div>
-          <div class="stat-box profit-box">
-            <span class="label">今日净利润 (Lợi Nhuận Ròng):</span>
-            <span class="value text-emerald" id="summary-profit-val">+0.00 ¥</span>
-          </div>
-          <div class="stat-box">
-            <span class="label">服务顾客 (Khách Đã Phục Vụ):</span>
-            <span class="value text-blue" id="summary-customers-val">0 người</span>
-          </div>
-          <div class="stat-box">
-            <span class="label">找零准确率 (Chính Xác Thối Tiền):</span>
-            <span class="value text-amber" id="summary-accuracy-val">100%</span>
-          </div>
-          <div class="stat-box">
-            <span class="label">新掌握生词 (Từ Vựng Đã Học):</span>
-            <span class="value text-purple" id="summary-words-val">5 từ</span>
-          </div>
+        <div class="summary-grid">
+          <div class="sg"><small>Doanh thu</small><b class="orange" id="summary-revenue-val">0.00 ¥</b></div>
+          <div class="sg"><small>Chi nhập hàng</small><b class="rose" id="summary-cost-val">0.00 ¥</b></div>
+          <div class="sg"><small>Lợi nhuận</small><b class="green" id="summary-profit-val">+0.00 ¥</b></div>
+          <div class="sg"><small>Khách phục vụ</small><b id="summary-customers-val">0/0</b></div>
+          <div class="sg"><small>Điểm trung bình</small><b id="summary-avg-val">0%</b></div>
+          <div class="sg"><small>Thối đúng ngay</small><b id="summary-accuracy-val">100%</b></div>
         </div>
+        <div class="mission-results" id="day-mission-results"></div>
+        <button type="button" class="g-btn-primary big" id="btn-next-day-start"><span class="zh">进入下一天</span> Sang ngày mới <i class="fa-solid fa-sun"></i></button>
+      </div>
+    </div>
 
-        <div class="summary-reward-box">
-          <div class="reward-title kaiti-font">🎉 恭喜获得经营奖励！</div>
-          <div class="reward-desc">Bạn làm rất tốt! Quán ngày càng phát đạt. Hãy dùng tiền tích lũy để mở thêm nhiều gian hàng mới!</div>
+    <!-- NHẬP HÀNG -->
+    <div class="g-modal" id="modal-restock" style="display:none;">
+      <div class="g-card restock-card">
+        <div class="g-card-head">
+          <h3>📦 <span class="zh">进货</span> · Nhập hàng lên kệ</h3>
+          <button type="button" class="g-close" data-close="modal-restock"><i class="fa-solid fa-xmark"></i></button>
         </div>
-
-        <div class="modal-card-footer justify-center">
-          <button type="button" class="btn-modal-primary btn-lg" id="btn-next-day-start">
-            <i class="fa-solid fa-sun"></i> 进入下一天 (Bắt Đầu Ngày Mới)
-          </button>
+        <div class="restock-balance">
+          <div><small>Vốn hiện có</small><b id="modal-stock-current-bal">0.00 ¥</b></div>
+          <div><small>Chi phí nhập</small><b class="rose" id="modal-stock-total-cost">0.00 ¥</b></div>
+          <div><small>Còn lại</small><b class="green" id="modal-stock-remaining-bal">0.00 ¥</b></div>
+        </div>
+        <div class="restock-list" id="stock-table-body"></div>
+        <div class="g-card-foot">
+          <button type="button" class="g-btn-ghost" id="btn-autofill-all-stock"><i class="fa-solid fa-wand-magic-sparkles"></i> <span class="zh">一键补齐</span> Nhập đầy</button>
+          <button type="button" class="g-btn-primary" id="btn-confirm-restock-open"><i class="fa-solid fa-check"></i> Xác nhận nhập hàng</button>
         </div>
       </div>
     </div>
 
-    <!-- MODAL 3: SỔ TAY TỪ VỰNG TẠP HÓA (生词本) -->
-    <div class="grocery-modal-backdrop" id="modal-vocab" style="display: none;">
-      <div class="grocery-modal-card vocab-modal-card">
-        <div class="modal-card-header">
-          <div class="modal-title-wrap">
-            <span class="modal-tag">SỔ TAY TỪ VỰNG</span>
-            <h3 class="modal-title kaiti-font">📖 小卖部实用词汇与量词 (Từ Vựng Tạp Hóa)</h3>
-            <p class="modal-subtitle">Chạm vào biểu tượng 🔊 để nghe phát âm chuẩn giọng bản xứ</p>
-          </div>
-          <button type="button" class="btn-close-modal" onclick="document.getElementById('modal-vocab').style.display='none'">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+    <!-- MỞ KỆ MỚI -->
+    <div class="g-modal" id="modal-unlock-shelf" style="display:none;">
+      <div class="g-card unlock-card">
+        <div class="g-card-head">
+          <h3>🏪 <span class="zh">解锁新货架</span> · Mở kệ hàng mới</h3>
+          <button type="button" class="g-close" data-close="modal-unlock-shelf"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        <div class="unlock-list" id="unlock-shelves-list"></div>
+      </div>
+    </div>
 
-        <div class="vocab-categories-tab">
-          <button type="button" class="vocab-tab-btn active" data-tab="snacks">Đồ Ăn Vặt (零食小吃)</button>
-          <button type="button" class="vocab-tab-btn" data-tab="drinks">Đồ Uống (饮料茶饮)</button>
-          <button type="button" class="vocab-tab-btn" data-tab="quantifiers">Lượng Từ (常用量词)</button>
-          <button type="button" class="vocab-tab-btn" data-tab="business">Thuật Ngữ Mua Bán (经营用语)</button>
+    <!-- SỔ TỪ VỰNG -->
+    <div class="g-modal over-title" id="modal-vocab" style="display:none;">
+      <div class="g-card vocab-card">
+        <div class="g-card-head">
+          <h3>📖 <span class="zh">生词本</span> · Từ vựng tạp hóa</h3>
+          <button type="button" class="g-close" data-close="modal-vocab"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        <div class="vocab-tabs">
+          <button type="button" class="vocab-tab active" data-tab="snacks">🍬 Đồ ăn vặt</button>
+          <button type="button" class="vocab-tab" data-tab="drinks">🧃 Đồ uống</button>
+          <button type="button" class="vocab-tab" data-tab="quantifiers">🔢 Lượng từ</button>
+          <button type="button" class="vocab-tab" data-tab="business">🏪 Mua bán</button>
+        </div>
+        <div class="vocab-grid" id="vocab-items-grid"></div>
+      </div>
+    </div>
 
-        <div class="vocab-list-scroll" id="vocab-items-grid">
-          <!-- Dynamically populated cards -->
+    <!-- HƯỚNG DẪN -->
+    <div class="g-modal over-title" id="modal-guide" style="display:none;">
+      <div class="g-card guide-card">
+        <div class="g-card-head">
+          <h3>📖 <span class="zh">玩法说明</span> · Hướng dẫn chơi</h3>
+          <button type="button" class="g-close" data-close="modal-guide"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="guide-steps">
+          <div class="gstep"><i>1</i><span>📋</span><div><b>Nhận nhiệm vụ</b><p>Mỗi ngày có mục tiêu doanh thu, số khách được phép bỏ về và độ chính xác khi thối tiền.</p></div></div>
+          <div class="gstep"><i>2</i><span>🛎️</span><div><b>Đón khách</b><p>Khách đến lần lượt và xếp hàng. Chờ quá lâu khách sẽ bỏ về. Nghe câu gọi hàng tiếng Trung rồi bấm <b>Nhận đơn</b>.</p></div></div>
+          <div class="gstep"><i>3</i><span>🏪</span><div><b>Nhặt hàng</b><p>Chọn đúng món và đúng số lượng (一包, 两瓶…). Nhặt nhầm sẽ bị trừ điểm.</p></div></div>
+          <div class="gstep"><i>4</i><span>📠</span><div><b>Quét mã</b><p>Chạm từng món trên băng chuyền để quét và in hóa đơn.</p></div></div>
+          <div class="gstep"><i>5</i><span>💴</span><div><b>Thối tiền</b><p>Tự tính <b>khách đưa − tổng tiền</b>, lấy đúng tờ tiền và đồng xu. Dùng gợi ý sẽ bị trừ điểm.</p></div></div>
+          <div class="gstep"><i>6</i><span>📦</span><div><b>Nhập hàng &amp; mở kệ</b><p>Dùng vốn để nhập thêm hàng. Tích tiền để mở kệ mới với món đắt hơn.</p></div></div>
+          <div class="guide-tip">⭐ Điểm cao thì được tip nhiều. Đăng nhập để ghi kỷ lục doanh thu ngày lên <b>Bảng xếp hạng</b>.</div>
         </div>
       </div>
     </div>
 
-    <!-- MODAL 4: MỞ GIAN HÀNG MỚI (解锁新货架) -->
-    <div class="grocery-modal-backdrop" id="modal-unlock-shelf" style="display: none;">
-      <div class="grocery-modal-card unlock-modal-card">
-        <div class="modal-card-header">
-          <div class="modal-title-wrap">
-            <span class="modal-tag">MỞ RỘNG TIỆM</span>
-            <h3 class="modal-title kaiti-font">🏪 解锁新货架 (Mở Gian Hàng Mới)</h3>
-            <p class="modal-subtitle">Tăng dung lượng và bày bán các mặt hàng giá trị cao hơn</p>
-          </div>
-          <button type="button" class="btn-close-modal" onclick="document.getElementById('modal-unlock-shelf').style.display='none'">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+    <!-- XẾP HẠNG -->
+    <div class="g-modal over-title" id="modal-rank" style="display:none;">
+      <div class="g-card rank-card">
+        <div class="g-card-head">
+          <h3>🏆 <span class="zh">排行榜</span> · Bảng xếp hạng</h3>
+          <button type="button" class="g-close" data-close="modal-rank"><i class="fa-solid fa-xmark"></i></button>
         </div>
-
-        <div class="unlock-shelves-list" id="unlock-shelves-list">
-          <!-- List of locked shelves with pricing & preview items -->
+        <div class="rank-tabs">
+          <button type="button" class="rank-tab active" data-rank-tab="global">🌏 <span class="zh">全服</span> Toàn hệ thống</button>
+          <button type="button" class="rank-tab" data-rank-tab="mine">📒 <span class="zh">我的</span> Ngày bán của tôi</button>
         </div>
+        <div class="rank-summary" id="rank-summary"></div>
+        <div class="rank-list" id="rank-list"></div>
+        <div class="rank-note" id="rank-note"></div>
       </div>
     </div>
 
-    <!-- MODAL 5: TẠM DỪNG & CÀI ĐẶT -->
-    <div class="grocery-modal-backdrop" id="modal-settings" style="display: none;">
-      <div class="grocery-modal-card settings-modal-card">
-        <div class="modal-card-header">
-          <h3 class="modal-title kaiti-font">⚙️ 游戏设置 (Cài Đặt & Hỗ Trợ)</h3>
-          <button type="button" class="btn-close-modal" onclick="document.getElementById('modal-settings').style.display='none'">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+    <!-- TẠM DỪNG & CÀI ĐẶT -->
+    <div class="g-modal" id="modal-settings" style="display:none;">
+      <div class="g-card settings-card">
+        <div class="g-card-head">
+          <h3>⏸️ <span class="zh">暂停</span> · Tạm dừng &amp; cài đặt</h3>
+          <button type="button" class="g-close" data-close="modal-settings"><i class="fa-solid fa-xmark"></i></button>
         </div>
-
-        <div class="settings-options-list">
-          <div class="setting-item">
-            <div class="setting-info">
-              <span class="setting-name">Hiệu ứng âm thanh (SFX)</span>
-              <span class="setting-desc">Tiếng quét mã tít tít, leng keng tiền thối, nhặt đồ</span>
-            </div>
-            <label class="switch">
-              <input type="checkbox" id="setting-sfx" checked>
-              <span class="slider round"></span>
-            </label>
-          </div>
-
-          <div class="setting-item">
-            <div class="setting-info">
-              <span class="setting-name">Giọng đọc tiếng Trung (AI Voice)</span>
-              <span class="setting-desc">Phát âm câu gọi món và từ vựng giọng bản xứ</span>
-            </div>
-            <label class="switch">
-              <input type="checkbox" id="setting-voice" checked>
-              <span class="slider round"></span>
-            </label>
-          </div>
-
-          <div class="setting-item">
-            <div class="setting-info">
-              <span class="setting-name">Hiện phiên âm Pinyin</span>
-              <span class="setting-desc">Hỗ trợ đọc chữ Hán chính xác kèm thanh điệu</span>
-            </div>
-            <label class="switch">
-              <input type="checkbox" id="setting-pinyin" checked>
-              <span class="slider round"></span>
-            </label>
-          </div>
-
-          <div class="setting-item">
-            <div class="setting-info">
-              <span class="setting-name">Hiện dịch nghĩa Tiếng Việt</span>
-              <span class="setting-desc">Hiển thị gợi ý nghĩa tiếng Việt khi cần</span>
-            </div>
-            <label class="switch">
-              <input type="checkbox" id="setting-vietnamese" checked>
-              <span class="slider round"></span>
-            </label>
-          </div>
+        <div class="settings-list">
+          <label class="setting"><span><b>Âm thanh</b><small>Tiếng quét mã, tiền xu, máy tính tiền</small></span><input type="checkbox" id="setting-sfx" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Giọng đọc tiếng Trung</b><small>Đọc câu gọi hàng của khách</small></span><input type="checkbox" id="setting-voice" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Hiện pinyin</b><small>Phiên âm dưới câu tiếng Trung</small></span><input type="checkbox" id="setting-pinyin" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Hiện nghĩa tiếng Việt</b><small>Dịch câu gọi hàng</small></span><input type="checkbox" id="setting-vietnamese" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Chế độ thư giãn</b><small>Khách chờ bao lâu cũng không bỏ về</small></span><input type="checkbox" id="setting-relaxed"><i class="sw"></i></label>
         </div>
-
-        <div class="modal-card-footer justify-between">
-          <button type="button" class="btn-modal-secondary text-rose" id="btn-reset-save">
-            <i class="fa-solid fa-trash"></i> Chơi lại từ đầu
-          </button>
-          <button type="button" class="btn-modal-primary" onclick="document.getElementById('modal-settings').style.display='none'">
-            Tiếp tục chơi
-          </button>
+        <div class="g-card-foot">
+          <button type="button" class="g-btn-ghost" id="btn-back-to-title"><i class="fa-solid fa-house"></i> Màn hình chính</button>
+          <button type="button" class="g-btn-ghost danger" id="btn-reset-save"><i class="fa-solid fa-rotate"></i> Chơi lại</button>
+          <button type="button" class="g-btn-primary" data-close="modal-settings"><i class="fa-solid fa-play"></i> Tiếp tục</button>
         </div>
       </div>
     </div>
+  </div>
 
+  <!-- Nhắc xoay ngang trên điện thoại dọc -->
+  <div class="g-rotate" id="rotate-device-overlay">
+    <div class="rotate-phone">📱</div>
+    <strong>Xoay ngang điện thoại để chơi nhé!</strong>
+    <p>Tiệm tạp hóa cần màn hình ngang để thấy rõ quầy và kệ hàng.</p>
+    <button type="button" id="btn-rotate-fullscreen"><i class="fa-solid fa-expand"></i> Chơi toàn màn hình</button>
   </div>
 
   <script type="module" src="./src/grocery_game.js"></script>
+  <script>
+    // Mở trực tiếp bằng file:/// (không qua máy chủ) → nạp script dạng thường
+    if (window.location.protocol === 'file:') {
+      const s = document.createElement('script');
+      s.src = './src/grocery_game.js';
+      document.body.appendChild(s);
+    }
+  </script>
 </body>
 
 </html>

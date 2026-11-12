@@ -23,16 +23,17 @@
   <meta name="apple-mobile-web-app-title" content="Hongtai Chinese">
   <link rel="apple-touch-icon" href="/assets/logo-CnsJJgQP.png">
   <script>
-    if ('serviceWorker' in navigator) {
+    // Gỡ Service Worker & cache cũ. Chỉ chạy trên http/https: mở file:/// (origin 'null') sẽ bị trình duyệt chặn.
+    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
         for (let registration of registrations) {
           registration.unregister();
         }
-      });
+      }).catch(() => {});
       if ('caches' in window) {
         caches.keys().then(names => {
           for (let name of names) caches.delete(name);
-        });
+        }).catch(() => {});
       }
     }
     (function () {
