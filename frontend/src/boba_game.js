@@ -3,13 +3,13 @@
  * Core Game Engine: Papa's Freezeria Station-Based Simulation System
  */
 
-import customerGirlImg from './assets/boba_customer_girl.jpg';
-import customerBoyImg from './assets/boba_customer_boy.jpg';
-import customerLinJieImg from './assets/boba_customer_linjie.jpg';
-import customerXiaoTongImg from './assets/boba_customer_xiaotong.jpg';
-import customerWangShuImg from './assets/boba_customer_wangshu.jpg';
-import customerABaoImg from './assets/boba_customer_abao.jpg';
-import customerGrandmaImg from './assets/boba_customer_grandma.jpg';
+const customerGirlImg = './assets/boba_customer_girl.jpg';
+const customerBoyImg = './assets/boba_customer_boy.jpg';
+const customerLinJieImg = './assets/boba_customer_linjie.jpg';
+const customerXiaoTongImg = './assets/boba_customer_xiaotong.jpg';
+const customerWangShuImg = './assets/boba_customer_wangshu.jpg';
+const customerABaoImg = './assets/boba_customer_abao.jpg';
+const customerGrandmaImg = './assets/boba_customer_grandma.jpg';
 
 // ============================================================================
 // 1. AUDIO SYNTHESIZER (WEB AUDIO API & TTS)
@@ -733,6 +733,16 @@ class PapaBobaGame {
   switchStation(stationId) {
     this.currentStation = stationId;
 
+    if (stationId === 'view-master-counter') {
+      document.body?.classList.add('mode-master');
+      const modeText = document.getElementById('hud-mode-text');
+      if (modeText) modeText.textContent = 'Chế độ Trạm';
+    } else {
+      document.body?.classList.remove('mode-master');
+      const modeText = document.getElementById('hud-mode-text');
+      if (modeText) modeText.textContent = 'Quầy Toàn Cảnh (Gốc)';
+    }
+
     // View visibility
     document.querySelectorAll('.station-view').forEach(view => {
       view.classList.remove('active');
@@ -744,12 +754,6 @@ class PapaBobaGame {
     document.querySelectorAll('.station-tab-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.target === stationId);
     });
-
-    // Update HUD Mode text
-    const modeText = document.getElementById('hud-mode-text');
-    if (modeText) {
-      modeText.textContent = (stationId === 'view-master-counter') ? 'Chế độ Trạm' : 'Quầy Toàn Cảnh (Gốc)';
-    }
 
     this.updateAllCupVisuals();
     this.audio.playPop();
@@ -1002,6 +1006,12 @@ class PapaBobaGame {
       if (ic) ic.textContent = this.currentOrder.ice.hanzi;
       if (tp) tp.textContent = this.currentOrder.topping.hanzi;
     });
+
+    // 4. Update Rail Order Summary on Master Counter
+    const railSumm = document.getElementById('rail-order-summary-text');
+    if (railSumm) {
+      railSumm.textContent = `#${100 + this.completedOrders} ${this.currentCustomer.nameChn}: ${this.currentOrder.topping.hanzi}${this.currentOrder.tea.hanzi} · ${this.currentOrder.sugar.hanzi} · ${this.currentOrder.ice.hanzi}`;
+    }
 
     this.updateSpeechBalloonUI();
     this.updateAllCupVisuals();
@@ -1792,7 +1802,15 @@ class PapaBobaGame {
   }
 }
 
-// Khởi tạo game khi load trang
-window.addEventListener('DOMContentLoaded', () => {
-  window.bobaGame = new PapaBobaGame();
-});
+// Khởi tạo game khi load trang (Hỗ trợ cả file:/// và server, chống duplicate run)
+function initPapaBobaGame() {
+  if (window.__boba_game_instance__) return;
+  window.__boba_game_instance__ = new PapaBobaGame();
+  window.bobaGame = window.__boba_game_instance__;
+}
+
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', initPapaBobaGame);
+} else {
+  initPapaBobaGame();
+}

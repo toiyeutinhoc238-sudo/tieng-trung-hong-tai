@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="./src/boba_game.css">
 </head>
 
-<body class="boba-game-body">
+<body class="boba-game-body mode-master">
 
   <div class="boba-game-container" id="boba-game-container">
 
@@ -88,6 +88,12 @@
     <div class="boba-ticket-rail" id="boba-ticket-rail">
       <div class="rail-bar-metal">
         <span class="rail-title-label"><i class="fa-solid fa-receipt"></i> ORDER TICKETS (点单夹)</span>
+        <div class="rail-order-summary" id="rail-order-summary">
+          <span class="summary-text kaiti-font" id="rail-order-summary-text">#101 小雨: 珍珠奶茶 · 少糖 (70%) · 去冰</span>
+          <button type="button" class="btn-rail-quick-zoom btn-quick-zoom-ticket" title="Xem đầy đủ phiếu order">
+            <i class="fa-solid fa-magnifying-glass-plus"></i> Xem Phiếu
+          </button>
+        </div>
       </div>
       <div class="tickets-clip-area" id="tickets-clip-area">
         <!-- Ticket Card Papa's Style (Click to zoom/inspect, clear high-contrast typography) -->
@@ -146,11 +152,6 @@
            MASTER COUNTER VIEW (QUẦY TOÀN CẢNH · THEO ĐÚNG TRANH MẪU GỐC)
            ================================================================== -->
       <section class="station-view station-master-view active" id="view-master-counter">
-        <!-- 1. Background image (Anime shop interior with sunny street view, caramel counter, awnings) -->
-        <div class="master-bg-layer">
-          <img src="./assets/boba_shop_interior_bg.jpg" class="master-bg-img" alt="Tiệm trà sữa anime" />
-        </div>
-
         <!-- 2. Left Wooden Signboard (今日营收) -->
         <div class="master-board-left">
           <div class="m-board-title kaiti-font">今日营收</div>
@@ -173,7 +174,7 @@
           <!-- 3D Anime Character Avatar -->
           <div class="master-customer-avatar-wrap">
             <div class="master-avatar-frame">
-              <img src="./assets/boba_customer_girl.jpg" id="master-customer-img" class="master-customer-img" alt="Khách hàng anime" />
+              <img src="./assets/boba_customer_girl.jpg" id="master-customer-img" class="master-customer-img" alt="" onerror="this.onerror=null; this.src='./assets/boba_customer_girl.jpg';" />
             </div>
             <div class="master-customer-name-tag">
               <span class="m-cname kaiti-font" id="master-customer-name">小雨</span>
@@ -382,8 +383,20 @@
             <span class="box-label kaiti-font">杯子区</span>
           </div>
 
-          <!-- Center: Metallic Perforated Drip Tray with Active Cup -->
+          <!-- Center: Metallic Perforated Drip Tray with Active Cup & Tactile Tools -->
           <div class="master-drip-tray-grid">
+            <!-- Tactile Workstation Buttons: Trash (Đổ đi) & Undo (Bớt topping) -->
+            <div class="master-workstation-tools">
+              <button type="button" class="btn-m-trash" id="btn-master-trash" title="Papa's Trash: Vứt bỏ ly làm sai để làm lại">
+                <i class="fa-solid fa-trash-can"></i>
+                <span>Đổ đi (重做)</span>
+              </button>
+              <button type="button" class="btn-m-undo" id="btn-master-undo" title="Papa's Undo: Bớt topping vừa thêm">
+                <i class="fa-solid fa-rotate-left"></i>
+                <span>Bớt topping</span>
+              </button>
+            </div>
+
             <!-- Metallic Grid Plate -->
             <div class="drip-metal-plate">
               <div class="plate-perforations"></div>
@@ -413,18 +426,6 @@
                 <div class="m-cup-pills-bar" id="master-cup-pills">
                   <span class="m-pill empty">Ly Trống</span>
                 </div>
-              </div>
-
-              <!-- Tactile Workstation Buttons: Trash (Đổ đi) & Undo (Bớt topping) -->
-              <div class="master-workstation-tools">
-                <button type="button" class="btn-m-trash" id="btn-master-trash" title="Papa's Trash: Vứt bỏ ly làm sai để làm lại">
-                  <i class="fa-solid fa-trash-can"></i>
-                  <span>Đổ Đi (重做)</span>
-                </button>
-                <button type="button" class="btn-m-undo" id="btn-master-undo" title="Papa's Undo: Bớt bớt topping vừa thêm">
-                  <i class="fa-solid fa-rotate-left"></i>
-                  <span>Bớt Topping</span>
-                </button>
               </div>
             </div>
           </div>
@@ -493,7 +494,7 @@
               <div class="anime-customer-card">
                 <!-- 3D Chibi Avatar Graphic -->
                 <div class="customer-avatar-box" id="customer-avatar-box">
-                  <img src="./assets/boba_customer_girl.jpg" alt="Khách hàng anime" id="customer-avatar-img" class="customer-avatar-img" />
+                  <img src="./assets/boba_customer_girl.jpg" alt="" id="customer-avatar-img" class="customer-avatar-img" onerror="this.onerror=null; this.src='./assets/boba_customer_girl.jpg';" />
                   <div class="customer-sprite-char" id="customer-sprite-char" style="display: none;"></div>
                 </div>
                 <div class="customer-chibi-badge-wrap">
@@ -1014,14 +1015,6 @@
          4. BOTTOM STATION BAR (THANH CHUYỂN TRẠM PAPA'S STYLE)
          ==================================================================== -->
     <nav class="boba-bottom-station-bar" id="boba-bottom-station-bar">
-      <button type="button" class="station-tab-btn active" data-target="view-master-counter" id="tab-master">
-        <span class="tab-icon">🏪</span>
-        <div class="tab-labels">
-          <span class="tab-title-chn kaiti-font">全景总台</span>
-          <span class="tab-title-vi">Quầy Toàn Cảnh</span>
-        </div>
-      </button>
-
       <button type="button" class="station-tab-btn" data-target="view-order-station" id="tab-order">
         <span class="tab-icon">🛎️</span>
         <div class="tab-labels">
@@ -1327,6 +1320,14 @@
   </div>
 
   <script type="module" src="./src/boba_game.js"></script>
+  <script>
+    // Tự động nạp script dự phòng khi người dùng nhấp đúp mở file:/// trực tiếp trên máy
+    if (window.location.protocol === 'file:') {
+      const s = document.createElement('script');
+      s.src = './src/boba_game.js';
+      document.body.appendChild(s);
+    }
+  </script>
 </body>
 
 </html>
