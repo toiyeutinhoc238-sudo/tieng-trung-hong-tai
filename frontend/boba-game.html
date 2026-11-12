@@ -42,6 +42,14 @@
         <i class="fa-solid fa-arrow-left"></i> Trang chủ
       </a>
       <span class="title-version">v2.0</span>
+      <!-- Tài khoản: đồng bộ tiến trình & bảng xếp hạng với hệ thống -->
+      <a href="index.html" class="title-account guest" id="title-account" title="Đăng nhập để lưu thành tích">
+        <span class="ta-avatar" id="title-account-avatar"><i class="fa-solid fa-user"></i></span>
+        <span class="ta-text">
+          <strong id="title-account-name">Khách</strong>
+          <small id="title-account-status">Đăng nhập để lưu thành tích</small>
+        </span>
+      </a>
 
       <!-- Logo -->
       <div class="title-logo">
@@ -128,13 +136,17 @@
         <div class="boba-modal-header">
           <div class="boba-modal-title">
             <span>🏆</span>
-            <span><span class="kaiti-font">排行榜</span> · Bảng Xếp Hạng Ngày Bán Hàng</span>
+            <span><span class="kaiti-font">排行榜</span> · Bảng Xếp Hạng</span>
           </div>
           <button type="button" class="boba-modal-close" data-close="modal-rank"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        <div class="rank-tabs" role="tablist">
+          <button type="button" class="rank-tab active" data-rank-tab="global" role="tab">🌏 <span class="kaiti-font">全服</span> Toàn hệ thống</button>
+          <button type="button" class="rank-tab" data-rank-tab="mine" role="tab">📒 <span class="kaiti-font">我的</span> Ngày bán của tôi</button>
+        </div>
         <div class="rank-summary" id="rank-summary"></div>
         <div class="rank-list" id="rank-list"></div>
-        <div class="rank-note">Kỷ lục được lưu trên thiết bị này · Xếp theo doanh thu trong ngày</div>
+        <div class="rank-note" id="rank-note">Mỗi người chỉ tính thành tích cao nhất · Xếp theo doanh thu 1 ngày</div>
       </div>
     </div>
 

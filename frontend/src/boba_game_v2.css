@@ -1733,3 +1733,147 @@ body.on-title .boba-bottom-station-bar {
     animation: none !important;
   }
 }
+
+/* ==========================================================================
+   14. TÀI KHOẢN & BẢNG XẾP HẠNG TOÀN HỆ THỐNG (đồng bộ server)
+   ========================================================================== */
+.title-version { top: 74px; }
+
+.title-account {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 300px;
+  padding: 5px 14px 5px 5px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #86efac;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  text-decoration: none;
+  color: #14532d;
+  pointer-events: none; /* đã đăng nhập: chỉ hiển thị */
+}
+
+.title-account.guest {
+  border-color: #fdba74;
+  color: #9a3412;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.title-account.guest:hover { background: #ffffff; }
+
+.ta-avatar {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fed7aa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+.ta-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.ta-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; }
+.ta-text strong { font-size: 0.85rem; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ta-text small { font-size: 0.7rem; font-weight: 700; opacity: 0.85; white-space: nowrap; }
+
+.rank-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 12px 18px 0;
+}
+
+.rank-tab {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 2px solid #fde68a;
+  background: #fffbeb;
+  color: #92400e;
+  font-weight: 800;
+  font-size: 0.88rem;
+  cursor: pointer;
+  font-family: var(--boba-font-main);
+}
+
+.rank-tab.active {
+  background: linear-gradient(180deg, #fb923c, #ea580c);
+  border-color: #c2410c;
+  color: #ffffff;
+  box-shadow: 0 3px 0 #9a3412;
+}
+
+.rank-row.global { grid-template-columns: 44px minmax(0, 1.8fr) 1fr 1fr 60px 76px; }
+
+.rank-row.me {
+  border-color: #fb923c;
+  background: linear-gradient(90deg, #fff7ed, #ffffff);
+  box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.25);
+}
+
+.rank-row.me-detached { margin-top: 6px; }
+
+.rank-gap {
+  text-align: center;
+  color: #cbd5e1;
+  font-weight: 900;
+  letter-spacing: 4px;
+  line-height: 0.6;
+}
+
+.rr-player { display: flex; align-items: center; gap: 8px; min-width: 0; }
+
+.rr-avatar {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fed7aa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #9a3412;
+}
+
+.rr-name { display: flex; flex-direction: column; min-width: 0; }
+.rr-name b { font-size: 0.92rem; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rr-name small { font-size: 0.7rem; color: #94a3b8; font-weight: 700; }
+.rr-me-tag { font-size: 0.65rem; background: #ea580c; color: #fff; border-radius: 6px; padding: 1px 6px; margin-left: 4px; vertical-align: middle; }
+
+.rank-login-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 4px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #fff7ed;
+  border: 2px dashed #fdba74;
+  color: #9a3412;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.rank-login-cta a {
+  flex: 0 0 auto;
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: #ea580c;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.rank-loading { text-align: center; padding: 30px; color: #92400e; font-weight: 700; }

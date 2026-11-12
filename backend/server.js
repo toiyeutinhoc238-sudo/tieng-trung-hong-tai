@@ -172,6 +172,8 @@ const userSchema = new mongoose.Schema({
   customWords: { type: Array, default: [] },
   chats: { type: Array, default: [] },
   accessLogs: { type: Array, default: [] },
+  // Game Tiệm Trà Sữa: tiến trình đã lưu + kỷ lục cao nhất + lịch sử ngày bán
+  bobaGame: { type: Object, default: null },
   // VIP Membership Fields
   isVip: { type: Boolean, default: false },
   vipStatus: { type: String, default: 'normal' }, // 'normal', 'vip', 'expired'
@@ -454,6 +456,7 @@ async function readUserData(forceRefresh = false) {
             stats: u.stats || { streak: 0, studyTime: 0, lastActiveDate: "" },
             gameHistory: u.gameHistory || [],
             accessLogs: u.accessLogs || [],
+            bobaGame: u.bobaGame || null,
             isVip: !!u.isVip,
             vipStatus: u.vipStatus || (u.isVip ? 'vip' : 'normal'),
             vipActivatedAt: u.vipActivatedAt || null,
@@ -605,6 +608,7 @@ async function processMongoPersistenceQueue() {
             customWords: (data.customWords && data.customWords[email]) || [],
             chats: (data.chats && data.chats[email]) || [],
             accessLogs: (data.users && data.users[email] && data.users[email].accessLogs) || (u.accessLogs || []),
+            bobaGame: u.bobaGame || null,
             isVip: !!u.isVip,
             vipStatus: u.vipStatus || (u.isVip ? 'vip' : 'normal'),
             vipActivatedAt: u.vipActivatedAt || null,
@@ -2533,6 +2537,212 @@ app.get('/api/leaderboard', async (req, res) => {
   } catch (error) {
     console.error("Leaderboard calculation error:", error);
     res.status(500).json({ error: "Failed to fetch real leaderboard" });
+  }
+});
+
+// ============================================================
+// GAME TIỆM TRÀ SỮA (boba-game.html): lưu tiến trình theo tài khoản + bảng xếp hạng
+// Lưu trong users[email].bobaGame = { save, best, history, totals, updatedAt }
+// Bảng xếp hạng chỉ lấy THÀNH TÍCH CAO NHẤT (doanh thu 1 ngày) của mỗi người.
+// ============================================================
+const BOBA_LIMITS = {
+  maxGuestsPerDay: 12,      // game hiện tối đa 8 khách/ngày, chừa biên an toàn
+  maxPerCup: 25.5,          // 18 ¥ giá ly + tối đa 7.5 ¥ tiền tip
+  maxHistory: 60,
+  maxRecords: 30,
+  maxWords: 300
+};
+
+const bobaNum = (v, min, max, def = min) => {
+  const n = Number(v);
+  if (!Number.isFinite(n)) return def;
+  return Math.min(max, Math.max(min, n));
+};
+const bobaInt = (v, min, max, def = min) => Math.round(bobaNum(v, min, max, def));
+
+// Kiểm tra & chuẩn hoá kết quả 1 ngày bán hàng (chặn số liệu vô lý gửi từ client)
+function sanitizeBobaDayResult(r) {
+  if (!r || typeof r !== 'object') return null;
+  const total = bobaInt(r.total, 1, BOBA_LIMITS.maxGuestsPerDay, 0);
+  if (!total) return null;
+  const served = bobaInt(r.served, 0, total, 0);
+  const lost = bobaInt(r.lost, 0, total - served, 0);
+  const earnings = Math.round(bobaNum(r.earnings, 0, served * BOBA_LIMITS.maxPerCup, 0) * 100) / 100;
+  return {
+    day: bobaInt(r.day, 1, 1000000, 1),
+    earnings,
+    served,
+    total,
+    lost,
+    avg: served > 0 ? bobaInt(r.avg, 0, 100, 0) : 0,
+    stars: bobaInt(r.stars, 0, 3, 0)
+  };
+}
+
+function sanitizeBobaSave(s) {
+  if (!s || typeof s !== 'object') return null;
+  const words = Array.isArray(s.words)
+    ? [...new Set(s.words.filter(w => typeof w === 'string' && w.length > 0 && w.length <= 20))].slice(0, BOBA_LIMITS.maxWords)
+    : [];
+  const records = Array.isArray(s.records)
+    ? s.records.map(r => {
+      const clean = sanitizeBobaDayResult(r);
+      if (!clean) return null;
+      clean.date = typeof r.date === 'string' ? r.date.slice(0, 20) : '';
+      return clean;
+    }).filter(Boolean).slice(0, BOBA_LIMITS.maxRecords)
+    : [];
+  return {
+    coins: Math.round(bobaNum(s.coins, -1000000, 100000000, 120) * 100) / 100,
+    level: bobaInt(s.level, 1, 9999, 1),
+    exp: bobaInt(s.exp, 0, 100000000, 0),
+    completedOrders: bobaInt(s.completedOrders, 0, 100000000, 0),
+    words,
+    day: bobaInt(s.day, 1, 1000000, 1),
+    tickets: bobaInt(s.tickets, 0, 100000000, 0),
+    relaxed: !!s.relaxed,
+    records,
+    updatedAt: Number.isFinite(Number(s.updatedAt)) ? Number(s.updatedAt) : Date.now()
+  };
+}
+
+// So sánh 2 thành tích: doanh thu → số sao → điểm trung bình
+function isBetterBobaResult(a, b) {
+  if (!b) return true;
+  if (a.earnings !== b.earnings) return a.earnings > b.earnings;
+  if (a.stars !== b.stars) return a.stars > b.stars;
+  return a.avg > b.avg;
+}
+
+function getBobaPublicBest(bg) {
+  return bg && bg.best ? bg.best : null;
+}
+
+// GET: tiến trình đã lưu + kỷ lục của người đang đăng nhập
+app.get('/api/boba/progress', async (req, res) => {
+  const email = getLoggedInUserEmail(req);
+  if (!email) return res.json({ loggedIn: false });
+  try {
+    const userData = await readUserData();
+    const u = (userData.users || {})[email] || {};
+    const bg = u.bobaGame || {};
+    res.json({
+      loggedIn: true,
+      user: { name: u.name || email.split('@')[0], picture: u.picture || '' },
+      save: bg.save || null,
+      best: getBobaPublicBest(bg),
+      totals: bg.totals || null
+    });
+  } catch (err) {
+    console.error('GET /api/boba/progress error:', err);
+    res.status(500).json({ error: 'Không đọc được tiến trình game' });
+  }
+});
+
+// POST: lưu tiến trình; kèm dayResult khi vừa kết thúc 1 ngày bán hàng
+app.post('/api/boba/progress', async (req, res) => {
+  const email = getLoggedInUserEmail(req);
+  if (!email) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const save = sanitizeBobaSave(req.body && req.body.save);
+    const dayResult = sanitizeBobaDayResult(req.body && req.body.dayResult);
+    if (!save && !dayResult) return res.status(400).json({ error: 'Thiếu dữ liệu' });
+
+    const userData = await readUserData();
+    if (!userData.users) userData.users = {};
+    let userRecord = userData.users[email];
+    if (!userRecord) {
+      userRecord = { name: email.split('@')[0], picture: '', stats: { streak: 0, studyTime: 0, lastActiveDate: '' }, gameHistory: [] };
+      userData.users[email] = userRecord;
+    }
+    const bg = userRecord.bobaGame && typeof userRecord.bobaGame === 'object'
+      ? { ...userRecord.bobaGame }
+      : { save: null, best: null, history: [], totals: { daysPlayed: 0, earnings: 0, served: 0 } };
+    if (!Array.isArray(bg.history)) bg.history = [];
+    if (!bg.totals) bg.totals = { daysPlayed: 0, earnings: 0, served: 0 };
+
+    if (save) bg.save = save;
+
+    let newBest = false;
+    if (dayResult) {
+      const playedAt = new Date().toISOString();
+      // 1 kết quả cho mỗi ngày trong game (tránh gửi lặp làm cộng dồn)
+      const dup = bg.history.find(h => h.day === dayResult.day && h.earnings === dayResult.earnings && h.served === dayResult.served);
+      if (!dup) {
+        bg.history = [...bg.history, { ...dayResult, playedAt }].slice(-BOBA_LIMITS.maxHistory);
+        bg.totals = {
+          daysPlayed: (bg.totals.daysPlayed || 0) + 1,
+          earnings: Math.round(((bg.totals.earnings || 0) + dayResult.earnings) * 100) / 100,
+          served: (bg.totals.served || 0) + dayResult.served
+        };
+      }
+      if (isBetterBobaResult(dayResult, bg.best)) {
+        bg.best = { ...dayResult, achievedAt: playedAt };
+        newBest = true;
+      }
+    }
+    bg.updatedAt = new Date().toISOString();
+    userRecord.bobaGame = bg;
+
+    await writeUserData(userData, email);
+    res.json({ success: true, best: bg.best, newBest, totals: bg.totals });
+  } catch (err) {
+    console.error('POST /api/boba/progress error:', err);
+    res.status(500).json({ error: 'Không lưu được tiến trình game' });
+  }
+});
+
+// GET: bảng xếp hạng toàn hệ thống — mỗi người 1 dòng (thành tích cao nhất)
+app.get('/api/boba/leaderboard', async (req, res) => {
+  try {
+    const me = getLoggedInUserEmail(req);
+    const limit = bobaInt(req.query.limit, 1, 100, 50);
+    const userData = await readUserData();
+    const rows = Object.entries(userData.users || {})
+      .filter(([, u]) => u && u.bobaGame && u.bobaGame.best && Number.isFinite(Number(u.bobaGame.best.earnings)))
+      .map(([email, u]) => ({
+        email,
+        name: u.name || email.split('@')[0],
+        picture: u.picture || '',
+        ...u.bobaGame.best,
+        daysPlayed: (u.bobaGame.totals && u.bobaGame.totals.daysPlayed) || 0
+      }));
+
+    rows.sort((a, b) => {
+      if (b.earnings !== a.earnings) return b.earnings - a.earnings;
+      if ((b.stars || 0) !== (a.stars || 0)) return (b.stars || 0) - (a.stars || 0);
+      if ((b.avg || 0) !== (a.avg || 0)) return (b.avg || 0) - (a.avg || 0);
+      // Ai đạt trước xếp trên
+      return new Date(a.achievedAt || 0) - new Date(b.achievedAt || 0);
+    });
+
+    // Không trả email ra ngoài
+    const toPublic = (r, i) => ({
+      rank: i + 1,
+      name: r.name,
+      picture: r.picture,
+      earnings: r.earnings,
+      day: r.day,
+      served: r.served,
+      total: r.total,
+      lost: r.lost || 0,
+      avg: r.avg || 0,
+      stars: r.stars || 0,
+      achievedAt: r.achievedAt || null,
+      daysPlayed: r.daysPlayed,
+      isMe: !!me && r.email === me
+    });
+
+    const myIndex = me ? rows.findIndex(r => r.email === me) : -1;
+    res.json({
+      totalPlayers: rows.length,
+      top: rows.slice(0, limit).map(toPublic),
+      me: myIndex >= 0 ? toPublic(rows[myIndex], myIndex) : null,
+      loggedIn: !!me
+    });
+  } catch (err) {
+    console.error('GET /api/boba/leaderboard error:', err);
+    res.status(500).json({ error: 'Không tải được bảng xếp hạng' });
   }
 });
 
