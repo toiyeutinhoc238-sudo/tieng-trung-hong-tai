@@ -5,8 +5,20 @@
  */
 
 :root {
-  --boba-font-main: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --boba-font-chinese: 'LXGW WenKai Lite', 'KaiTi', '楷体', 'STKaiti', 'BiauKai', 'Noto Serif SC', serif;
+  /*
+   * CHUỖI FONT THÔNG MINH (mỗi chữ tự chọn đúng font):
+   *  - 'Be Vietnam Pro' đứng đầu: có đủ dấu tiếng Việt + pinyin (ǎ ǐ ǚ...), KHÔNG có chữ Hán
+   *  - Gặp chữ Hán, trình duyệt tự rơi xuống font Khải thể kế tiếp (WenKai -> KaiTi -> STKaiti...)
+   *  => Tiếng Việt luôn là Be Vietnam Pro (không lỗi dấu), chữ Hán luôn là Khải thể,
+   *     kể cả khi trộn chung trong 1 nút như "启动摇匀 (Bắt Đầu Lắc)".
+   *  Tuyệt đối không đặt font Hán sans/serif (YaHei, SimSun, Noto Sans SC...) trước các font Khải.
+   */
+  --boba-font-kai: 'LXGW WenKai Lite', 'KaiTi', 'KaiTi_GB2312', '楷体', 'STKaiti', 'Kaiti SC', 'Kaiti TC', 'BiauKai', 'DFKai-SB', '標楷體', 'AR PL UKai CN';
+  /* Font Latin hệ thống dự phòng cho ký tự Be Vietnam Pro thiếu (dấu pinyin ǎ ǒ ǐ ǚ, mũi tên →)
+     — các font này KHÔNG có chữ Hán nên chữ Hán vẫn rơi xuống font Khải. */
+  --boba-font-latin-fallback: 'Segoe UI', 'Helvetica Neue', Arial, 'Roboto';
+  --boba-font-main: 'Be Vietnam Pro', var(--boba-font-latin-fallback), var(--boba-font-kai), sans-serif;
+  --boba-font-chinese: 'Be Vietnam Pro', var(--boba-font-latin-fallback), var(--boba-font-kai), serif;
 
   --boba-bg-warm: #fff5eb;
   --boba-wood-dark: #6e3617;

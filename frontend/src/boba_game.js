@@ -269,7 +269,63 @@ const PAPA_CUSTOMERS = [
 const BOBA_TOTAL_WORDS = BOBA_VOCAB.teas.length + BOBA_VOCAB.sugars.length + BOBA_VOCAB.ices.length + BOBA_VOCAB.toppings.length;
 
 // Các key localStorage thuộc riêng game này (chơi lại chỉ xóa những key này)
-const BOBA_SAVE_KEYS = ['boba_coins', 'boba_level', 'boba_exp', 'boba_orders', 'boba_words'];
+const BOBA_SAVE_KEYS = ['boba_coins', 'boba_level', 'boba_exp', 'boba_orders', 'boba_words', 'boba_day', 'boba_tickets', 'boba_relaxed', 'boba_records'];
+
+// ============================================================================
+// NHIỆM VỤ NGÀY (今日任务): mục tiêu doanh thu + giữ khách + chất lượng
+// ============================================================================
+const MISSION_RULES = {
+  revenuePerGuest: 18,     // mục tiêu doanh thu = số khách × 18 ¥ (giá 1 ly 18¥ + tip tối đa 7.5¥)
+  roundTo: 5,              // làm tròn mục tiêu lên bội số của 5
+  maxLostRatio: 0.25,      // được phép mất tối đa 25% số khách (ít nhất 1)
+  minAvgScore: 80,         // điểm trung bình tối thiểu
+  bonusPerStar: 10,        // thưởng mỗi nhiệm vụ hoàn thành
+  maxRecords: 30           // số kỷ lục ngày lưu lại
+};
+
+// ============================================================================
+// PAPA'S QUEUE RULES (khách đến theo lịch + giới hạn thời gian chờ)
+// ============================================================================
+const QUEUE_RULES = {
+  maxInShop: 4,            // tối đa số khách cùng lúc trong quán (xếp hàng + chờ món)
+  lineMaxMs: 45000,        // chờ được GHI PHIẾU tối đa 45 giây
+  drinkBaseMs: 150000,     // chờ NHẬN MÓN: 150 giây ở Lv.1 ...
+  drinkPerLevelMs: 10000,  // ... mỗi level bớt 10 giây ...
+  drinkMinMs: 80000,       // ... nhưng không dưới 80 giây
+  arriveBaseMs: 35000,     // khoảng cách giữa 2 khách: 35 giây ở Lv.1 ...
+  arrivePerLevelMs: 2500,  // ... mỗi level nhanh hơn 2.5 giây ...
+  arriveMinMs: 18000,      // ... nhưng không dưới 18 giây
+  arriveJitterMs: 6000,    // ± ngẫu nhiên cho tự nhiên
+  perDayBase: 3,           // số khách mỗi ngày = 3 + level ...
+  perDayMax: 8             // ... tối đa 8
+};
+
+// Ly trống mới
+function freshCup() {
+  return {
+    tea: null,
+    pourLevel: 0, // 0 to 100
+    sugar: null,
+    ice: null,
+    isShaken: false,
+    shakeScore: 0,
+    toppings: [], // Array of toppings added (can add, remove, undo)
+    hasLid: false,
+    strawColor: null
+  };
+}
+
+function isCupEmpty(cup) {
+  return !cup.tea && cup.pourLevel === 0 && !cup.sugar && !cup.ice && !cup.isShaken &&
+    cup.toppings.length === 0 && !cup.hasLid && !cup.strawColor;
+}
+
+// Thứ tự các trạm (để biết hướng lia máy quay khi chuyển trạm)
+const STATION_ORDER = ['view-order-station', 'view-pour-station', 'view-shake-station', 'view-top-station'];
+
+// Kích thước thiết kế của sân khấu game
+const STAGE_W = 1280;
+const STAGE_H = 720;
 
 // Chỉ ra đơn với loại trà có vòi rót ở CẢ Quầy Toàn Cảnh lẫn Trạm Rót Trà
 // (vd 绿茶 chưa có vòi -> không ra đơn, nhưng vẫn có trong Sổ Từ)
@@ -298,24 +354,27 @@ class PapaBobaGame {
     // Stations
     this.currentStation = 'view-master-counter';
 
-    // Order State
-    this.currentCustomer = null;
-    this.currentOrder = null;
+    // Customer queue (Papa's style): khách đến theo lịch, xếp hàng, ghi phiếu, chờ món
     this.customerDeck = []; // Shuffle bag to guarantee high variety without repetition
-    this.isOrderTaken = false;
+    this.tickets = [];      // khách đang trong quán: status 'line' (xếp hàng) | 'waiting' (chờ món)
+    this.activeTicketId = null;
+    this.ticketSeq = 0;     // số thứ tự phiếu (lưu lại)
+    this.day = 1;
+    this.dayStats = null;
+    this.dayEnded = false;
+    this.nextArrivalAt = 0;
+    this.servingTicket = null;
+    this.counterUid = null;
+    this.relaxedMode = false;
 
-    // Cup Crafting State in Stations (Papa's tactile state)
-    this.cup = {
-      tea: null,
-      pourLevel: 0, // 0 to 100
-      sugar: null,
-      ice: null,
-      isShaken: false,
-      shakeScore: 0,
-      toppings: [], // Array of toppings added (can add, remove, undo)
-      hasLid: false,
-      strawColor: null
-    };
+    // Đồng hồ game (chỉ chạy khi không tạm dừng)
+    this.gameTime = 0;
+    this.lastTickAt = performance.now();
+    this.tickTimer = null;
+
+    // Cup Crafting State: mỗi phiếu có 1 ly riêng; spareCup = ly khi chưa chọn phiếu nào
+    this.spareCup = freshCup();
+    this.cup = this.spareCup;
 
     // Shaker interactive loop
     this.shakerRunning = false;
@@ -332,10 +391,23 @@ class PapaBobaGame {
     // Settings
     this.showPinyin = true;
     this.showVietnamese = true;
+    this.showGuide = true;
+
+    // Stage / serve flow
+    this.stageScale = 1;
+    this.isServing = false;
+    this.guideTimer = null;
+
+    // Nhiệm vụ ngày & kỷ lục
+    this.mission = null;
+    this.records = [];
 
     this.loadSave();
     this.initDOM();
-    this.spawnNewCustomer(true);
+    this.renderCounter();
+    this.renderRail();
+    this.showTitleScreen();
+    this.tickTimer = setInterval(() => this.tick(), 200);
   }
 
   loadSave() {
@@ -350,7 +422,16 @@ class PapaBobaGame {
       if (ord !== null) this.completedOrders = parseInt(ord, 10);
       const words = JSON.parse(localStorage.getItem('boba_words') || 'null');
       if (Array.isArray(words)) words.forEach(w => this.learnedWords.add(w));
+      const day = localStorage.getItem('boba_day');
+      if (day !== null) this.day = parseInt(day, 10);
+      const seq = localStorage.getItem('boba_tickets');
+      if (seq !== null) this.ticketSeq = parseInt(seq, 10);
+      this.relaxedMode = localStorage.getItem('boba_relaxed') === '1';
+      const recs = JSON.parse(localStorage.getItem('boba_records') || '[]');
+      if (Array.isArray(recs)) this.records = recs.filter(r => r && Number.isFinite(r.earnings));
     } catch (e) {}
+    if (!Number.isFinite(this.day) || this.day < 1) this.day = 1;
+    if (!Number.isFinite(this.ticketSeq) || this.ticketSeq < 0) this.ticketSeq = 0;
     // Chống dữ liệu hỏng (NaN) làm vỡ HUD
     if (!Number.isFinite(this.coins)) this.coins = 120;
     if (!Number.isFinite(this.level) || this.level < 1) this.level = 1;
@@ -365,11 +446,33 @@ class PapaBobaGame {
       localStorage.setItem('boba_exp', this.exp.toString());
       localStorage.setItem('boba_orders', this.completedOrders.toString());
       localStorage.setItem('boba_words', JSON.stringify([...this.learnedWords]));
+      localStorage.setItem('boba_day', this.day.toString());
+      localStorage.setItem('boba_tickets', this.ticketSeq.toString());
+      localStorage.setItem('boba_relaxed', this.relaxedMode ? '1' : '0');
+      localStorage.setItem('boba_records', JSON.stringify(this.records || []));
     } catch (e) {}
   }
 
   initDOM() {
     this.updateHUD();
+
+    // Sân khấu 1280×720 tự co giãn vừa màn hình
+    this.fitStage();
+    window.addEventListener('resize', () => {
+      this.fitStage();
+      this.positionGuideTag();
+    });
+
+    // Toàn màn hình (+ cố khóa xoay ngang trên điện thoại)
+    ['btn-fullscreen-boba', 'btn-rotate-fullscreen'].forEach(id => {
+      document.getElementById(id)?.addEventListener('click', () => this.toggleFullscreen());
+    });
+
+    // Bật/tắt gợi ý bước tiếp theo
+    document.getElementById('toggle-guide')?.addEventListener('change', (e) => {
+      this.showGuide = e.target.checked;
+      this.updateGuide();
+    });
 
     // Bottom Station Tab Switching
     document.querySelectorAll('.station-tab-btn').forEach(btn => {
@@ -399,9 +502,12 @@ class PapaBobaGame {
       this.switchStation('view-shake-station');
     });
 
-    // Take Order Button
-    document.getElementById('btn-take-order-action')?.addEventListener('click', () => {
-      this.takeOrder();
+    // Take Order Buttons (Trạm Đón Khách + Quầy Toàn Cảnh)
+    ['btn-take-order-action', 'btn-master-take-order'].forEach(id => {
+      document.getElementById(id)?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.takeOrder();
+      });
     });
 
     // Listen to speech button
@@ -409,9 +515,54 @@ class PapaBobaGame {
       this.speakOrder();
     });
 
-    // Ticket Rail zoom & toggle
-    document.getElementById('active-order-ticket')?.addEventListener('click', (e) => {
-      e.currentTarget.classList.toggle('zoomed');
+    // Hủy ly bất cứ lúc nào (nút trên HUD, dùng được ở mọi trạm / chế độ)
+    document.getElementById('btn-hud-trash')?.addEventListener('click', () => {
+      const origin = {
+        'view-master-counter': 'master',
+        'view-order-station': 'order',
+        'view-pour-station': 'pour',
+        'view-shake-station': 'shake',
+        'view-top-station': 'top'
+      }[this.currentStation] || 'pour';
+      this.trashCup(origin);
+    });
+
+    // Chế độ thư giãn: không giới hạn thời gian chờ
+    const relaxedToggle = document.getElementById('toggle-relaxed');
+    if (relaxedToggle) relaxedToggle.checked = this.relaxedMode;
+    relaxedToggle?.addEventListener('change', (e) => {
+      this.relaxedMode = e.target.checked;
+      this.saveGame();
+      this.updatePatienceUI();
+      this.showToast(this.relaxedMode ? '🍃' : '⏱️', this.relaxedMode
+        ? 'Chế độ thư giãn: khách chờ bao lâu cũng được.'
+        : 'Chế độ thường: khách chờ quá lâu sẽ bỏ về!');
+    });
+
+    // Tổng kết ngày -> nhiệm vụ ngày mới
+    document.getElementById('btn-start-next-day')?.addEventListener('click', () => {
+      this.startNextDay();
+    });
+
+    // Màn hình chờ: Bắt đầu · Hướng dẫn · Xếp hạng
+    document.getElementById('btn-title-play')?.addEventListener('click', () => this.onTitlePlay());
+    document.getElementById('btn-title-guide')?.addEventListener('click', () => this.openModal('modal-guide'));
+    document.getElementById('btn-title-rank')?.addEventListener('click', () => this.openRankModal());
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const m = document.getElementById(btn.dataset.close);
+        if (m) m.style.display = 'none';
+      });
+    });
+
+    // Nhiệm vụ đầu ngày -> mở cửa
+    document.getElementById('btn-mission-start')?.addEventListener('click', () => this.startMissionDay());
+
+    // Cài đặt -> quay về màn hình chính (đồng hồ dừng, bấm Tiếp tục để chơi tiếp)
+    document.getElementById('btn-back-to-title')?.addEventListener('click', () => {
+      const pm = document.getElementById('boba-pause-modal');
+      if (pm) pm.style.display = 'none';
+      this.showTitleScreen();
     });
 
     // Pour Dispensers (Hold to pour)
@@ -560,14 +711,20 @@ class PapaBobaGame {
       this.serveDrinkToCustomer();
     });
 
-    // Scorecard next customer
+    // Scorecard -> tiếp tục bán (khách mới đến theo lịch, không tự sinh)
     document.getElementById('btn-next-customer-papa')?.addEventListener('click', () => {
       document.getElementById('modal-papa-score').style.display = 'none';
-      this.spawnNewCustomer();
+      this.isServing = false;
+      this.servingTicket = null;
+      this.activateNextWaiting(); // tự chuyển sang phiếu chờ lâu nhất
+      this.renderCounter();
+      this.renderRail();
       if (this.currentStation !== 'view-master-counter') {
-        this.switchStation('view-order-station');
+        // Còn khách xếp hàng -> về quầy ghi phiếu; còn phiếu chờ -> đi pha tiếp
+        const target = this.getLineTickets().length > 0 || !this.activeTicket ? 'view-order-station' : 'view-pour-station';
+        this.switchStation(target);
       } else {
-        this.switchStation('view-master-counter');
+        this.updateAllCupVisuals();
       }
     });
 
@@ -695,10 +852,7 @@ class PapaBobaGame {
 
     // Trash in Master Counter
     document.getElementById('btn-master-trash')?.addEventListener('click', () => {
-      this.audio.playTrash();
-      this.resetCup();
-      this.updateAllCupVisuals();
-      this.showToast('🗑️', 'Đã vứt ly hỏng vào thùng rác!');
+      this.trashCup('master');
     });
 
     // Undo topping in Master Counter
@@ -721,9 +875,6 @@ class PapaBobaGame {
     });
 
     // Full-screen Ticket Zoom Modal Handlers
-    document.getElementById('active-order-ticket')?.addEventListener('click', () => {
-      this.openTicketZoomModal();
-    });
     document.querySelectorAll('.btn-quick-zoom-ticket').forEach(b => {
       b.addEventListener('click', () => this.openTicketZoomModal());
     });
@@ -734,7 +885,12 @@ class PapaBobaGame {
       this.closeTicketZoomModal();
     });
     document.getElementById('btn-zoom-listen')?.addEventListener('click', () => {
-      this.speakOrder();
+      this.speakZoomTicket();
+    });
+
+    // Tab ẩn -> đồng hồ game dừng (khách không bỏ về khi bạn rời tab)
+    document.addEventListener('visibilitychange', () => {
+      this.lastTickAt = performance.now();
     });
   }
 
@@ -746,6 +902,7 @@ class PapaBobaGame {
       this.resetShakerUI();
     }
     this.stopPouring();
+    const prevStation = this.currentStation;
     this.currentStation = stationId;
 
     if (stationId === 'view-master-counter') {
@@ -763,7 +920,17 @@ class PapaBobaGame {
       view.classList.remove('active');
     });
     const targetView = document.getElementById(stationId);
-    if (targetView) targetView.classList.add('active');
+    if (targetView) {
+      targetView.classList.add('active');
+      // Lia máy quay theo thứ tự trạm: đi tới -> trượt từ phải, quay lại -> trượt từ trái
+      const from = STATION_ORDER.indexOf(prevStation);
+      const to = STATION_ORDER.indexOf(stationId);
+      targetView.classList.remove('pan-from-right', 'pan-from-left');
+      if (from !== -1 && to !== -1 && from !== to) {
+        void targetView.offsetWidth; // restart animation
+        targetView.classList.add(to > from ? 'pan-from-right' : 'pan-from-left');
+      }
+    }
 
     // Bottom tab active state
     document.querySelectorAll('.station-tab-btn').forEach(btn => {
@@ -876,42 +1043,884 @@ class PapaBobaGame {
     if (mOrd) mOrd.textContent = this.completedOrders.toString();
     const mWords = document.getElementById('m-words-val');
     if (mWords) mWords.textContent = this.learnedWords.size.toString();
+
+    this.updateGuide();
   }
 
-  // Full-screen Ticket Zoom Modal
+  // ==========================================================================
+  // STAGE SCALING & FULLSCREEN
+  // ==========================================================================
+  fitStage() {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const scale = Math.min(w / STAGE_W, h / STAGE_H);
+    this.stageScale = scale > 0 ? scale : 1;
+    document.documentElement.style.setProperty('--stage-scale', this.stageScale.toFixed(4));
+    // Gần đúng tỉ lệ 16:9 hoặc màn hình nhỏ -> bỏ bo góc, lấp kín màn hình
+    const flush = (w - STAGE_W * this.stageScale < 24 && h - STAGE_H * this.stageScale < 24) || w < 900;
+    document.body?.classList.toggle('stage-flush', flush);
+  }
+
+  toggleFullscreen() {
+    const doc = document;
+    const el = document.documentElement;
+    try {
+      if (!doc.fullscreenElement && el.requestFullscreen) {
+        el.requestFullscreen()
+          .then(() => screen.orientation?.lock?.('landscape').catch(() => {}))
+          .catch(() => {});
+      } else if (doc.exitFullscreen) {
+        doc.exitFullscreen().catch(() => {});
+      }
+    } catch (e) {}
+  }
+
+  // ==========================================================================
+  // NEXT-STEP GUIDE (viền xanh + nhãn chỉ chỗ cần thao tác tiếp)
+  // ==========================================================================
+  getGuideStep() {
+    const c = this.cup;
+    const hasLine = this.getLineTickets().length > 0;
+    // Chưa có phiếu đang làm: ưu tiên ghi phiếu cho khách đang xếp hàng
+    if (!this.activeTicket) {
+      if (this.currentStation === 'view-master-counter' && hasLine) return ['#btn-master-take-order', '接单', 'Ghi phiếu', 'below'];
+      if (this.currentStation === 'view-order-station' && hasLine) return ['#btn-take-order-action', '接单', 'Ghi phiếu', 'below'];
+      return null;
+    }
+    // Đang làm dở nhưng có khách mới xếp hàng quá nửa thời gian -> nhắc ghi phiếu kẻo mất khách
+    const urgent = this.getLineTickets()[0];
+    if (urgent && !this.relaxedMode && this.patienceUsed(urgent) > 0.5) {
+      if (this.currentStation === 'view-master-counter') return ['#btn-master-take-order', '接单', 'Khách đang chờ ghi phiếu!', 'below'];
+      if (this.currentStation === 'view-order-station') return ['#btn-take-order-action', '接单', 'Khách đang chờ ghi phiếu!', 'below'];
+    }
+    switch (this.currentStation) {
+      case 'view-master-counter':
+        if (!c.tea) return ['.master-dispensers-rack', '倒茶', 'Chọn loại trà'];
+        if (!c.sugar) return ['.master-sugar-ice-rack', '选糖', 'Chọn đường'];
+        if (!c.ice) return ['.master-sugar-ice-rack', '选冰', 'Chọn đá'];
+        if (c.toppings.length === 0) return ['.master-toppings-rack', '加料', 'Thêm topping'];
+        if (!c.isShaken) return ['#master-shaker-wrap', '摇匀', 'Lắc đều'];
+        if (!c.hasLid) return ['#master-lids-box', '封口', 'Đóng nắp'];
+        return ['#btn-master-finish-drink', '出餐', 'Giao món'];
+      case 'view-order-station':
+        if (hasLine) return ['#btn-take-order-action', '接单', 'Ghi phiếu', 'below'];
+        return ['#btn-goto-pour-from-order', '前往', 'Đi pha chế'];
+      case 'view-pour-station':
+        if (c.pourLevel > 75) return ['#btn-drain-liquid-pour', '倒掉', 'Quá vạch, đổ đi rót lại'];
+        if (!c.tea || c.pourLevel < 65) return ['.dispensers-row', '按住', 'Nhấn giữ vòi tới vạch 70%'];
+        if (!c.sugar) return ['.sugar-box', '选糖', 'Chọn đường'];
+        if (!c.ice) return ['.ice-box', '选冰', 'Chọn đá'];
+        return ['#btn-goto-shake', '下一步', 'Sang máy lắc'];
+      case 'view-shake-station':
+        if (this.shakerRunning) return ['#btn-shaker-trigger', '停', 'Dừng ở vùng xanh', 'left'];
+        if (!c.isShaken) return ['#btn-shaker-trigger', '启动', 'Bắt đầu lắc', 'left'];
+        return ['#btn-goto-top', '下一步', 'Sang trạm topping'];
+      case 'view-top-station':
+        if (c.toppings.length === 0) return ['.toppings-cells-6', '加料', 'Thêm topping'];
+        if (!c.hasLid) return ['#btn-action-lid', '封口', 'Đóng nắp'];
+        if (!c.strawColor) return ['.straw-colors-row', '吸管', 'Cắm ống hút', 'below'];
+        return ['#btn-finish-and-serve', '出餐', 'Giao món'];
+      default:
+        return null;
+    }
+  }
+
+  updateGuide() {
+    const tag = document.getElementById('guide-tag');
+    const step = this.showGuide && !this.isServing ? this.getGuideStep() : null;
+    const target = step ? document.querySelector(`#${this.currentStation} ${step[0]}`) : null;
+    const visible = !!target && target.offsetParent !== null;
+
+    // Không đổi gì -> giữ nguyên (tránh nhấp nháy vì gọi lại liên tục mỗi giây)
+    const key = visible ? `${this.currentStation}|${step[0]}|${step[2]}` : 'none';
+    if (key === this.guideKey && (!visible || target === this.guideTarget)) return;
+    this.guideKey = key;
+
+    document.querySelectorAll('.guide-glow').forEach(el => el.classList.remove('guide-glow'));
+    this.guideTarget = null;
+    if (!visible) {
+      if (tag) tag.style.display = 'none';
+      return;
+    }
+
+    target.classList.add('guide-glow');
+    this.guideTarget = target;
+    this.guidePlacement = step[3] || 'above';
+    if (tag) {
+      tag.innerHTML = `<span class="kaiti-font">${step[1]}</span>${step[2]}`;
+      tag.classList.toggle('place-below', this.guidePlacement === 'below');
+      tag.classList.toggle('place-left', this.guidePlacement === 'left');
+      tag.style.display = 'block';
+    }
+    this.positionGuideTag();
+    // Đợi hiệu ứng lia trạm xong rồi đặt lại vị trí cho chuẩn
+    if (this.guideTimer) clearTimeout(this.guideTimer);
+    this.guideTimer = setTimeout(() => this.positionGuideTag(), 420);
+  }
+
+  positionGuideTag() {
+    const tag = document.getElementById('guide-tag');
+    const viewport = document.querySelector('.boba-main-viewport');
+    const target = this.guideTarget;
+    if (!tag || !viewport || !target || tag.style.display === 'none') return;
+    const s = this.stageScale || 1;
+    const vr = viewport.getBoundingClientRect();
+    const tr = target.getBoundingClientRect();
+    let x;
+    let y;
+    if (this.guidePlacement === 'left') {
+      x = (tr.left - vr.left) / s;
+      y = (tr.top + tr.height / 2 - vr.top) / s;
+    } else {
+      x = (tr.left + tr.width / 2 - vr.left) / s;
+      y = ((this.guidePlacement === 'below' ? tr.bottom : tr.top) - vr.top) / s;
+      // Giữ nhãn trong khung hình
+      x = Math.max(110, Math.min(viewport.clientWidth - 110, x));
+      if (this.guidePlacement !== 'below') y = Math.max(46, y);
+    }
+    tag.style.left = `${x}px`;
+    tag.style.top = `${y}px`;
+  }
+
+  // ==========================================================================
+  // CUSTOMER ENTER / LEAVE & FLOATING COINS
+  // ==========================================================================
+  getCustomerEls() {
+    return [
+      document.querySelector('.master-customer-avatar-wrap'),
+      document.getElementById('customer-figure-wrap')
+    ].filter(Boolean);
+  }
+
+  playCustomerAnim(cls) {
+    this.getCustomerEls().forEach(el => {
+      el.classList.remove('customer-enter', 'customer-leave');
+      void el.offsetWidth;
+      el.classList.add(cls);
+      if (cls === 'customer-enter') {
+        el.addEventListener('animationend', () => el.classList.remove('customer-enter'), { once: true });
+      }
+    });
+  }
+
+  floatCoins(amountText) {
+    const viewport = document.querySelector('.boba-main-viewport');
+    const anchor = this.currentStation === 'view-master-counter'
+      ? document.querySelector('.master-customer-avatar-wrap')
+      : document.getElementById('customer-figure-wrap');
+    if (!viewport || !anchor) return;
+    const s = this.stageScale || 1;
+    const vr = viewport.getBoundingClientRect();
+    const ar = anchor.getBoundingClientRect();
+    const el = document.createElement('div');
+    el.className = 'coin-float';
+    el.textContent = `+${amountText} ¥ 🪙`;
+    el.style.left = `${(ar.left + ar.width / 2 - vr.left) / s}px`;
+    el.style.top = `${(ar.top + ar.height * 0.35 - vr.top) / s}px`;
+    viewport.appendChild(el);
+    setTimeout(() => el.remove(), 1300);
+
+    const coinPill = document.querySelector('.hud-stat-pill');
+    if (coinPill) {
+      coinPill.classList.remove('bump');
+      void coinPill.offsetWidth;
+      coinPill.classList.add('bump');
+    }
+  }
+
+  // ==========================================================================
+  // PAPA'S DAY & CUSTOMER QUEUE ENGINE
+  //  - Mỗi ngày có N khách, đến rải rác theo lịch (không đến cùng lúc)
+  //  - Khách mới XẾP HÀNG ở quầy -> người đứng đầu hàng được ghi phiếu
+  //  - Phiếu kẹp lên thanh ray; mỗi phiếu có 1 ly riêng, bấm phiếu để đổi ly đang làm
+  //  - 2 thanh kiên nhẫn: chờ ghi phiếu (lineMaxMs) + chờ nhận món (drinkMaxMs)
+  //    Hết kiên nhẫn -> khách bỏ về (mất khách). Còn kiên nhẫn -> tính điểm chờ.
+  // ==========================================================================
+  get activeTicket() {
+    return this.tickets.find(t => t.uid === this.activeTicketId) || null;
+  }
+
+  // Đơn đang được hiển thị cho các thẻ công thức (ưu tiên phiếu đang làm)
+  get currentOrder() {
+    const t = this.activeTicket || this.getCounterTicket();
+    return t ? t.order : null;
+  }
+
+  getLineTickets() {
+    return this.tickets.filter(t => t.status === 'line').sort((a, b) => a.arrivedAt - b.arrivedAt);
+  }
+
+  getWaitingTickets() {
+    return this.tickets.filter(t => t.status === 'waiting').sort((a, b) => a.orderTakenAt - b.orderTakenAt);
+  }
+
+  // Khách đang đứng ở quầy: đang giao món > đầu hàng chờ ghi phiếu > khách của phiếu đang làm
+  getCounterTicket() {
+    if (this.servingTicket) return this.servingTicket;
+    return this.getLineTickets()[0] || this.activeTicket || null;
+  }
+
+  getDrinkMaxMs() {
+    return Math.max(QUEUE_RULES.drinkMinMs, QUEUE_RULES.drinkBaseMs - (this.level - 1) * QUEUE_RULES.drinkPerLevelMs);
+  }
+
+  getArrivalGapMs() {
+    const base = Math.max(QUEUE_RULES.arriveMinMs, QUEUE_RULES.arriveBaseMs - (this.level - 1) * QUEUE_RULES.arrivePerLevelMs);
+    return base + (Math.random() * 2 - 1) * QUEUE_RULES.arriveJitterMs;
+  }
+
+  // Phần kiên nhẫn đã dùng (0 -> 1) của khách ở giai đoạn hiện tại
+  patienceUsed(t) {
+    if (t.status === 'line') return (this.gameTime - t.arrivedAt) / t.lineMaxMs;
+    return (this.gameTime - t.orderTakenAt) / t.drinkMaxMs;
+  }
+
+  // Điểm chờ kiểu Papa's: phục vụ trong 35% thời gian đầu = 100%, sau đó giảm dần tới 40%
+  waitPhaseScore(used) {
+    if (this.relaxedMode || used <= 0.35) return 100;
+    return Math.max(40, Math.round(100 - ((Math.min(1, used) - 0.35) / 0.65) * 60));
+  }
+
+  isClockPaused() {
+    if (document.hidden) return true;
+    if (this.isTitleVisible()) return true;
+    return ['boba-pause-modal', 'boba-cookbook-modal', 'modal-papa-score', 'modal-day-summary', 'modal-day-mission'].some(id => {
+      const el = document.getElementById(id);
+      return el && el.style.display !== 'none' && el.style.display !== '';
+    });
+  }
+
+  getCustomersPerDay() {
+    return Math.min(QUEUE_RULES.perDayMax, QUEUE_RULES.perDayBase + this.level);
+  }
+
+  // Nhiệm vụ của ngày: doanh thu, số khách được phép mất, điểm trung bình
+  buildMission() {
+    const total = this.getCustomersPerDay();
+    const step = MISSION_RULES.roundTo;
+    return {
+      day: this.day,
+      total,
+      target: Math.ceil((total * MISSION_RULES.revenuePerGuest) / step) * step,
+      maxLost: Math.max(1, Math.floor(total * MISSION_RULES.maxLostRatio)),
+      minAvg: MISSION_RULES.minAvgScore
+    };
+  }
+
+  // Chấm nhiệm vụ (dùng cả lúc đang chơi để hiện tiến độ)
+  evaluateMission() {
+    const m = this.mission;
+    const s = this.dayStats;
+    if (!m || !s) return [];
+    const avg = s.served > 0 ? Math.round(s.scoreSum / s.served) : 0;
+    return [
+      { key: 'revenue', icon: '💰', chn: '今日营业额', text: `Doanh thu đạt ít nhất ${m.target} ¥`, value: `${s.earnings.toFixed(1)} / ${m.target} ¥`, done: s.earnings >= m.target, main: true },
+      { key: 'lost', icon: '😊', chn: '留住顾客', text: `Không để quá ${m.maxLost} khách bỏ về`, value: `${s.lost} / ${m.maxLost} khách`, done: s.lost <= m.maxLost },
+      { key: 'avg', icon: '⭐', chn: '服务质量', text: `Điểm trung bình từ ${m.minAvg}% trở lên`, value: s.served > 0 ? `${avg}%` : '—', done: s.served > 0 && avg >= m.minAvg }
+    ];
+  }
+
+  showMissionBriefing() {
+    this.mission = this.buildMission();
+    const m = this.mission;
+    const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+    set('mission-day-chn', `第${m.day}天`);
+    set('mission-sub', `Ngày ${m.day} · Hôm nay tiệm sẽ đón ${m.total} vị khách. Hoàn thành nhiệm vụ để nhận ⭐!`);
+    const list = document.getElementById('mission-goals');
+    if (list) {
+      list.innerHTML = [
+        { icon: '💰', chn: '今日营业额', text: `Kiếm được ít nhất <b>${m.target} ¥</b> doanh thu`, tag: 'Nhiệm vụ chính' },
+        { icon: '😊', chn: '留住顾客', text: `Không để quá <b>${m.maxLost}</b> khách bỏ về vì chờ lâu` },
+        { icon: '⭐', chn: '服务质量', text: `Điểm phục vụ trung bình từ <b>${m.minAvg}%</b> trở lên` }
+      ].map(g => `
+        <li class="mission-goal${g.tag ? ' main' : ''}">
+          <span class="mg-icon">${g.icon}</span>
+          <span class="mg-body"><span class="mg-chn kaiti-font">${g.chn}</span><span class="mg-text">${g.text}</span></span>
+          ${g.tag ? `<span class="mg-tag">${g.tag}</span>` : ''}
+        </li>`).join('');
+    }
+    const modal = document.getElementById('modal-day-mission');
+    if (modal) modal.style.display = 'flex';
+    this.audio.playPop();
+  }
+
+  startMissionDay() {
+    const modal = document.getElementById('modal-day-mission');
+    if (modal) modal.style.display = 'none';
+    if (!this.mission || this.mission.day !== this.day) this.mission = this.buildMission();
+    this.lastTickAt = performance.now();
+    this.startDay();
+    this.audio.playCashRegister();
+  }
+
+  // ---------------------------------------------------------------------------
+  // TITLE SCREEN · HƯỚNG DẪN · XẾP HẠNG
+  // ---------------------------------------------------------------------------
+  isTitleVisible() {
+    const el = document.getElementById('title-screen');
+    return !!el && !el.classList.contains('hidden');
+  }
+
+  isDayInProgress() {
+    return !!this.dayStats && !this.dayEnded;
+  }
+
+  showTitleScreen() {
+    this.stopPouring();
+    if (this.shakerRunning) {
+      this.stopShakerLoop();
+      this.resetShakerUI();
+    }
+    const el = document.getElementById('title-screen');
+    if (el) el.classList.remove('hidden');
+    document.body.classList.add('on-title');
+
+    const inProgress = this.isDayInProgress();
+    const set = (id, text) => { const e = document.getElementById(id); if (e) e.textContent = text; };
+    set('title-play-chn', inProgress ? '继续营业' : '开始营业');
+    set('title-play-vi', inProgress ? `Tiếp tục ngày ${this.day}` : (this.day > 1 ? `Bắt đầu ngày ${this.day}` : 'Bắt đầu'));
+
+    const prog = document.getElementById('title-progress');
+    if (prog) {
+      const best = this.records.reduce((b, r) => (r.earnings > (b ? b.earnings : -1) ? r : b), null);
+      prog.innerHTML = this.day > 1 || this.records.length > 0
+        ? `<span>📅 Ngày ${this.day}</span><span>🏪 Lv.${this.level}</span><span>🪙 ${this.coins} ¥</span>${best ? `<span>🏆 Kỷ lục ${best.earnings.toFixed(1)} ¥</span>` : ''}`
+        : '<span>✨ Vừa bán trà sữa · vừa học tiếng Trung HSK1</span>';
+    }
+    const tag = document.getElementById('guide-tag');
+    if (tag) tag.style.display = 'none';
+    this.guideKey = null;
+  }
+
+  hideTitleScreen() {
+    const el = document.getElementById('title-screen');
+    if (el) el.classList.add('hidden');
+    document.body.classList.remove('on-title');
+    this.lastTickAt = performance.now();
+  }
+
+  onTitlePlay() {
+    this.audio.init();
+    this.audio.playPop();
+    this.hideTitleScreen();
+    if (this.isDayInProgress()) {
+      this.showToast('▶️', `Tiếp tục ngày ${this.day}!`);
+      this.updateGuide();
+    } else if (!this.dayEnded) {
+      this.showMissionBriefing();
+    }
+    // dayEnded: bảng tổng kết vẫn đang mở bên dưới
+  }
+
+  openModal(id) {
+    const m = document.getElementById(id);
+    if (m) m.style.display = 'flex';
+    this.audio.playPop();
+  }
+
+  openRankModal() {
+    const list = document.getElementById('rank-list');
+    const summary = document.getElementById('rank-summary');
+    const recs = [...this.records].sort((a, b) => b.earnings - a.earnings);
+    if (summary) {
+      const totalEarn = this.records.reduce((s, r) => s + r.earnings, 0);
+      const totalServed = this.records.reduce((s, r) => s + r.served, 0);
+      const totalStars = this.records.reduce((s, r) => s + (r.stars || 0), 0);
+      summary.innerHTML = `
+        <div class="rs-item"><span>📅</span><strong>${this.records.length}</strong><small>Ngày đã bán</small></div>
+        <div class="rs-item"><span>🧋</span><strong>${totalServed}</strong><small>Ly đã giao</small></div>
+        <div class="rs-item"><span>🪙</span><strong>${totalEarn.toFixed(0)} ¥</strong><small>Tổng doanh thu</small></div>
+        <div class="rs-item"><span>⭐</span><strong>${totalStars}</strong><small>Tổng sao</small></div>`;
+    }
+    if (list) {
+      if (recs.length === 0) {
+        list.innerHTML = '<div class="rank-empty">🏪 Chưa có kỷ lục nào.<br>Hoàn thành ngày bán hàng đầu tiên để ghi tên lên bảng!</div>';
+      } else {
+        const medals = ['🥇', '🥈', '🥉'];
+        list.innerHTML = recs.slice(0, 10).map((r, i) => `
+          <div class="rank-row${i < 3 ? ' top' : ''}">
+            <span class="rr-pos">${medals[i] || i + 1}</span>
+            <span class="rr-day"><span class="kaiti-font">第${r.day}天</span><small>${r.date || ''}</small></span>
+            <span class="rr-earn">${r.earnings.toFixed(1)} ¥</span>
+            <span class="rr-served">🧋 ${r.served}/${r.total}${r.lost ? ` · 😠 ${r.lost}` : ''}</span>
+            <span class="rr-avg">${r.served > 0 ? `${r.avg}%` : '—'}</span>
+            <span class="rr-stars">${'⭐'.repeat(r.stars || 0)}${'☆'.repeat(3 - (r.stars || 0))}</span>
+          </div>`).join('');
+      }
+    }
+    this.openModal('modal-rank');
+  }
+
+  startDay() {
+    const total = this.mission ? this.mission.total : this.getCustomersPerDay();
+    this.dayStats = { total, spawned: 0, served: 0, lost: 0, earnings: 0, scoreSum: 0 };
+    this.dayEnded = false;
+    this.nextArrivalAt = this.gameTime + 600; // khách đầu tiên đến gần như ngay lập tức
+    this.renderCounter();
+    this.renderRail();
+    this.showToast('🌅', `第${this.day}天 · Mở cửa! Mục tiêu hôm nay: ${this.mission ? this.mission.target : '?'} ¥ từ ${total} khách.`);
+  }
+
+  tick() {
+    const now = performance.now();
+    const dt = Math.min(1000, now - this.lastTickAt);
+    this.lastTickAt = now;
+    if (this.isClockPaused() || !this.dayStats) return;
+    this.gameTime += dt;
+
+    // 1. Khách đến theo lịch (quán đầy thì khách sau đợi)
+    if (this.dayStats.spawned < this.dayStats.total && this.gameTime >= this.nextArrivalAt) {
+      if (this.tickets.length < QUEUE_RULES.maxInShop) {
+        this.spawnArrival();
+      } else {
+        this.nextArrivalAt = this.gameTime + 3000;
+      }
+    }
+
+    // 2. Hết kiên nhẫn -> khách bỏ về
+    if (!this.relaxedMode) {
+      this.tickets.slice().forEach(t => {
+        if (this.patienceUsed(t) >= 1) this.loseCustomer(t);
+      });
+    }
+
+    // 3. Cập nhật thanh kiên nhẫn (+ gợi ý mỗi giây, vd nhắc ghi phiếu khi khách sắp bỏ về)
+    this.updatePatienceUI();
+    this.guideTickCount = (this.guideTickCount || 0) + 1;
+    if (this.guideTickCount % 5 === 0) this.updateGuide();
+
+    // 4. Hết khách trong ngày -> tổng kết
+    if (!this.dayEnded && !this.isServing && this.dayStats.spawned >= this.dayStats.total && this.tickets.length === 0) {
+      this.dayEnded = true;
+      this.showDaySummary();
+    }
+  }
+
+  // Bốc khách tiếp theo (không trùng người đang có mặt trong quán)
+  getNextCustomer() {
+    const present = new Set(this.tickets.map(t => t.customer.id));
+    for (let tries = 0; tries < PAPA_CUSTOMERS.length * 2; tries++) {
+      if (!this.customerDeck || this.customerDeck.length === 0) {
+        this.customerDeck = [...PAPA_CUSTOMERS].sort(() => Math.random() - 0.5);
+      }
+      const c = this.customerDeck.shift();
+      if (!present.has(c.id)) return c;
+    }
+    return PAPA_CUSTOMERS[Math.floor(Math.random() * PAPA_CUSTOMERS.length)];
+  }
+
+  makeRandomOrder() {
+    const teas = getOrderableTeas();
+    return {
+      tea: teas[Math.floor(Math.random() * teas.length)],
+      topping: BOBA_VOCAB.toppings[Math.floor(Math.random() * BOBA_VOCAB.toppings.length)],
+      sugar: BOBA_VOCAB.sugars[Math.floor(Math.random() * BOBA_VOCAB.sugars.length)],
+      ice: BOBA_VOCAB.ices[Math.floor(Math.random() * BOBA_VOCAB.ices.length)]
+    };
+  }
+
+  spawnArrival() {
+    const isVeryFirst = this.ticketSeq === 0 && this.day === 1 && this.dayStats.spawned === 0;
+    const customer = isVeryFirst ? PAPA_CUSTOMERS[0] : this.getNextCustomer();
+    const order = isVeryFirst
+      ? {
+        tea: BOBA_VOCAB.teas.find(t => t.id === 'milktea'),
+        topping: BOBA_VOCAB.toppings.find(t => t.id === 'boba'),
+        sugar: BOBA_VOCAB.sugars.find(s => s.id === 'less_sugar'),
+        ice: BOBA_VOCAB.ices.find(i => i.id === 'no_ice')
+      }
+      : this.makeRandomOrder();
+
+    this.ticketSeq += 1;
+    const ticket = {
+      uid: `t${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
+      no: 100 + this.ticketSeq,
+      customer,
+      order,
+      status: 'line',
+      arrivedAt: this.gameTime,
+      orderTakenAt: 0,
+      lineMaxMs: QUEUE_RULES.lineMaxMs,
+      drinkMaxMs: this.getDrinkMaxMs(),
+      lineScore: 100,
+      cup: null
+    };
+    this.tickets.push(ticket);
+    this.dayStats.spawned += 1;
+    this.nextArrivalAt = this.gameTime + this.getArrivalGapMs();
+    this.saveGame();
+
+    const lineLen = this.getLineTickets().length;
+    if (lineLen > 1) {
+      this.showToast('🛎️', `Khách mới: ${customer.nameChn} (${customer.nameVi}) đang xếp hàng (${lineLen} người)`);
+    }
+    this.renderCounter();
+    this.renderRail();
+    this.updateGuide();
+  }
+
+  // Ghi phiếu cho khách đứng đầu hàng
+  takeOrder() {
+    const t = this.getLineTickets()[0];
+    if (!t) {
+      this.showToast('ℹ️', 'Chưa có khách nào đang chờ ghi phiếu.');
+      return;
+    }
+    // Tính điểm chờ giai đoạn xếp hàng TRƯỚC khi đổi trạng thái (patienceUsed phụ thuộc status)
+    t.lineScore = this.waitPhaseScore(this.patienceUsed(t));
+    t.status = 'waiting';
+    t.orderTakenAt = this.gameTime;
+    this.audio.playPop();
+
+    // Chưa làm phiếu nào -> phiếu này thành phiếu đang làm (dùng luôn ly đang cầm)
+    if (!this.activeTicket) {
+      this.setActiveTicket(t.uid, { inheritSpare: true, silent: true });
+    }
+
+    this.showToast('📝', `已接单 #${t.no} ${t.customer.nameChn}: ${t.order.topping.hanzi}${t.order.tea.hanzi} · ${t.order.sugar.hanzi} · ${t.order.ice.hanzi}`);
+    this.renderCounter();
+    this.renderRail();
+    this.updateAllCupVisuals();
+  }
+
+  // Chọn phiếu để làm (mỗi phiếu giữ ly riêng của nó)
+  setActiveTicket(uid, opts = {}) {
+    const t = this.tickets.find(x => x.uid === uid && x.status === 'waiting');
+    if (!t) return;
+    if (this.activeTicketId === uid && !opts.inheritSpare) return;
+
+    this.stopPouring();
+    this.stopShakerLoop();
+
+    if (!t.cup) {
+      if (opts.inheritSpare && !this.activeTicket) {
+        t.cup = this.spareCup;
+        this.spareCup = freshCup();
+      } else {
+        t.cup = freshCup();
+      }
+    }
+    this.activeTicketId = uid;
+    this.cup = t.cup;
+    this.applyCupToUI();
+    this.renderRail();
+    this.renderCounter();
+    if (!opts.silent) {
+      this.audio.playPop();
+      this.showToast('📌', `Đang làm phiếu #${t.no} · ${t.customer.nameChn} (${t.customer.nameVi})`);
+    }
+  }
+
+  // Sau khi phiếu đang làm biến mất (giao xong / khách bỏ về): chuyển sang phiếu chờ lâu nhất
+  activateNextWaiting() {
+    const next = this.getWaitingTickets()[0];
+    if (next) {
+      this.setActiveTicket(next.uid, { silent: true });
+    } else {
+      this.activeTicketId = null;
+      this.cup = this.spareCup;
+      this.applyCupToUI();
+    }
+  }
+
+  loseCustomer(t) {
+    const wasActive = t.uid === this.activeTicketId;
+    const wasAtCounter = this.getCounterTicket() === t;
+    this.tickets = this.tickets.filter(x => x !== t);
+    this.dayStats.lost += 1;
+
+    this.audio.playTrash();
+    const phase = t.status === 'line' ? 'chờ ghi phiếu' : 'chờ món';
+    this.showToast('😠', `${t.customer.nameChn} (${t.customer.nameVi}) đã bỏ về vì ${phase} quá lâu! Mất khách.`);
+
+    if (wasActive) this.activateNextWaiting();
+    if (wasAtCounter) {
+      this.playCustomerAnim('customer-leave');
+      setTimeout(() => this.renderCounter(), 600);
+    } else {
+      this.renderCounter();
+    }
+    this.renderRail();
+    this.updateGuide();
+  }
+
+  // ---------------------------------------------------------------------------
+  // RENDER: khách ở quầy (cả Quầy Toàn Cảnh & Trạm Đón Khách)
+  // ---------------------------------------------------------------------------
+  renderCounter() {
+    const ct = this.getCounterTicket();
+    const views = [document.getElementById('view-master-counter'), document.getElementById('view-order-station')];
+    views.forEach(v => v?.classList.toggle('counter-empty', !ct));
+
+    // Khách trống quầy: báo thời gian khách tiếp theo
+    const emptyText = this.getEmptyCounterText();
+    document.querySelectorAll('.counter-empty-hint').forEach(el => { el.innerHTML = emptyText; });
+
+    const takeBtns = [document.getElementById('btn-take-order-action'), document.getElementById('btn-master-take-order')];
+    const nextBtn = document.getElementById('btn-goto-pour-from-order');
+    const hint = document.getElementById('order-footer-hint');
+
+    if (!ct) {
+      this.counterUid = null;
+      takeBtns.forEach(b => b && (b.style.display = 'none'));
+      if (nextBtn) nextBtn.style.display = this.activeTicket ? 'flex' : 'none';
+      if (hint) hint.innerHTML = emptyText;
+      this.renderRecipeCards();
+      return;
+    }
+
+    const changed = this.counterUid !== ct.uid;
+    this.counterUid = ct.uid;
+    const c = ct.customer;
+
+    const masterCustImg = document.getElementById('master-customer-img');
+    const stationCustImg = document.getElementById('customer-avatar-img');
+    if (masterCustImg && c.image) masterCustImg.src = c.image;
+    if (stationCustImg && c.image) stationCustImg.src = c.image;
+
+    const setText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+    setText('master-customer-name', c.nameChn);
+    setText('master-customer-role', `(${c.nameVi})`);
+    setText('customer-name-label', c.nameChn);
+    setText('customer-role-label', `(${c.nameVi})`);
+
+    const inLine = ct.status === 'line' && !this.servingTicket;
+    takeBtns.forEach(b => b && (b.style.display = inLine ? 'flex' : 'none'));
+    document.querySelectorAll('.counter-status-tag').forEach(el => {
+      el.textContent = this.servingTicket ? '🧋 Nhận món' : (inLine ? '顾客点单 (Khách gọi món)' : `⏳ Chờ món · #${ct.no}`);
+      el.classList.toggle('waiting', !inLine && !this.servingTicket);
+    });
+
+    if (nextBtn) nextBtn.style.display = !inLine && this.activeTicket ? 'flex' : 'none';
+    if (hint) {
+      const lineLen = this.getLineTickets().length;
+      hint.innerHTML = inLine
+        ? `💡 Bấm <strong>"接单 (Ghi Phiếu)"</strong> để nhận yêu cầu của khách.${lineLen > 1 ? ` <strong>Còn ${lineLen - 1} khách</strong> đang xếp hàng!` : ''}`
+        : '✅ <strong>Đã ghi phiếu!</strong> Sang <strong>调制台 (Trạm Rót Trà)</strong> để pha chế, hoặc bấm phiếu khác trên thanh ray.';
+    }
+
+    this.updateSpeechBalloonUI();
+    this.renderRecipeCards();
+    this.updatePatienceUI();
+
+    if (changed && !this.servingTicket) {
+      this.playCustomerAnim('customer-enter');
+      if (inLine) setTimeout(() => this.speakOrder(), 450);
+    }
+  }
+
+  getEmptyCounterText() {
+    if (!this.dayStats) return '🏪 Tiệm chưa mở cửa · Nhận nhiệm vụ rồi bấm <strong>开始营业</strong> để bắt đầu!';
+    const left = this.dayStats.total - this.dayStats.spawned;
+    if (left <= 0) {
+      return this.tickets.length > 0
+        ? '🧋 Hết khách mới hôm nay — hoàn thành nốt các phiếu đang chờ!'
+        : '🌙 Đã hết khách hôm nay!';
+    }
+    const secs = Math.max(1, Math.ceil((this.nextArrivalAt - this.gameTime) / 1000));
+    return `🚶 Chưa có khách ở quầy · Khách tiếp theo đến sau khoảng <strong>${secs}s</strong> (còn ${left} khách hôm nay)`;
+  }
+
+  // ---------------------------------------------------------------------------
+  // RENDER: thanh ray phiếu order (nhiều phiếu) + thông tin ngày
+  // ---------------------------------------------------------------------------
+  renderRail() {
+    const wrap = document.getElementById('rail-tickets');
+    if (wrap) {
+      const waiting = this.getWaitingTickets();
+      if (waiting.length === 0) {
+        wrap.innerHTML = '<span class="rail-empty">Chưa có phiếu · Ghi phiếu cho khách ở quầy trước nhé</span>';
+      } else {
+        wrap.innerHTML = waiting.map(t => `
+          <button type="button" class="rail-ticket-chip${t.uid === this.activeTicketId ? ' active' : ''}" data-uid="${t.uid}"
+            title="Bấm để làm phiếu này (mỗi phiếu có ly riêng)">
+            <span class="chip-top">
+              <span class="chip-no">#${t.no}</span>
+              <span class="chip-name kaiti-font">${t.customer.emoji} ${t.customer.nameChn}</span>
+              ${t.cup && !isCupEmpty(t.cup) ? '<span class="chip-cup" title="Ly đang làm dở">🧋</span>' : ''}
+            </span>
+            <span class="chip-order kaiti-font">${t.order.topping.hanzi}${t.order.tea.hanzi}·${t.order.sugar.hanzi}·${t.order.ice.hanzi}</span>
+            <span class="patience-meter mini" data-uid="${t.uid}"><span class="patience-fill"></span></span>
+          </button>
+        `).join('');
+        wrap.querySelectorAll('.rail-ticket-chip').forEach(chip => {
+          chip.addEventListener('click', () => this.setActiveTicket(chip.dataset.uid));
+        });
+      }
+    }
+
+    const lineEl = document.getElementById('rail-line-count');
+    if (lineEl) {
+      const n = this.getLineTickets().length;
+      lineEl.textContent = `👥 Xếp hàng: ${n}`;
+      lineEl.classList.toggle('has-line', n > 0);
+    }
+    const dayEl = document.getElementById('rail-day-info');
+    if (dayEl && this.dayStats) {
+      dayEl.innerHTML = `<span class="kaiti-font">第${this.day}天</span> · Khách ${this.dayStats.served + this.dayStats.lost}/${this.dayStats.total}`;
+    }
+    // Tiến độ nhiệm vụ doanh thu
+    const goalEl = document.getElementById('rail-goal-info');
+    if (goalEl) {
+      if (this.mission && this.dayStats) {
+        const pct = Math.min(100, Math.round((this.dayStats.earnings / this.mission.target) * 100));
+        goalEl.style.display = '';
+        goalEl.classList.toggle('reached', this.dayStats.earnings >= this.mission.target);
+        goalEl.innerHTML = `🎯 <span class="goal-val">${this.dayStats.earnings.toFixed(0)}/${this.mission.target} ¥</span><span class="goal-bar"><span style="width:${pct}%"></span></span>`;
+      } else {
+        goalEl.style.display = 'none';
+      }
+    }
+    this.updatePatienceUI();
+  }
+
+  updatePatienceUI() {
+    document.body.classList.toggle('relaxed-mode', this.relaxedMode);
+    const paint = (meter, t) => {
+      if (!meter || !t) return;
+      const left = Math.max(0, 1 - this.patienceUsed(t));
+      const fill = meter.querySelector('.patience-fill');
+      if (fill) fill.style.width = `${Math.round(left * 100)}%`;
+      meter.classList.toggle('mid', left <= 0.6 && left > 0.3);
+      meter.classList.toggle('low', left <= 0.3);
+      const mood = meter.parentElement?.querySelector('.patience-mood');
+      if (mood) mood.textContent = left > 0.6 ? '😊' : (left > 0.3 ? '😐' : '😠');
+    };
+
+    document.querySelectorAll('.patience-meter[data-uid]').forEach(m => {
+      paint(m, this.tickets.find(t => t.uid === m.dataset.uid));
+    });
+    const ct = this.getCounterTicket();
+    document.querySelectorAll('.counter-patience').forEach(wrap => {
+      const show = ct && !this.servingTicket && this.tickets.includes(ct);
+      wrap.style.display = show ? '' : 'none';
+      if (show) paint(wrap.querySelector('.patience-meter'), ct);
+    });
+
+    // Cập nhật đếm ngược khách tiếp theo khi quầy trống
+    if (!ct) {
+      const txt = this.getEmptyCounterText();
+      document.querySelectorAll('.counter-empty-hint').forEach(el => { el.innerHTML = txt; });
+      const hint = document.getElementById('order-footer-hint');
+      if (hint) hint.innerHTML = txt;
+    }
+  }
+
+  // Thẻ công thức ở trạm 2-4 + thanh ray: theo PHIẾU ĐANG LÀM
+  renderRecipeCards() {
+    const ord = this.activeTicket ? this.activeTicket.order : null;
+    ['pour', 'shake', 'top'].forEach(s => {
+      const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+      set(`wb-tea-${s}`, ord ? `${ord.topping.hanzi}${ord.tea.hanzi}` : '—');
+      set(`wb-sugar-${s}`, ord ? `${ord.sugar.hanzi}(${ord.sugar.percent}%)` : '—');
+      set(`wb-ice-${s}`, ord ? ord.ice.hanzi : '—');
+      set(`wb-top-${s}`, ord ? ord.topping.hanzi : '—');
+    });
+    document.querySelectorAll('.workbench-recipe-card').forEach(card => card.classList.toggle('no-ticket', !ord));
+  }
+
+  showDaySummary() {
+    const s = this.dayStats;
+    const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+    set('day-summary-title', `第${this.day}天 · Tổng kết ngày ${this.day}`);
+    set('day-sum-served', `${s.served}/${s.total}`);
+    set('day-sum-lost', `${s.lost}`);
+    set('day-sum-earn', `${s.earnings.toFixed(2)} ¥`);
+    set('day-sum-avg', s.served > 0 ? `${Math.round(s.scoreSum / s.served)}%` : '—');
+
+    // Chấm nhiệm vụ ngày -> sao & tiền thưởng
+    const goals = this.evaluateMission();
+    const stars = goals.filter(g => g.done).length;
+    const bonus = stars * MISSION_RULES.bonusPerStar;
+    const mainDone = goals.length > 0 && goals[0].done;
+    // Mỗi ngày chỉ thưởng 1 lần (chống cộng trùng nếu tổng kết bị gọi lại)
+    if (bonus > 0 && this.mission && this.mission.rewardedBonus === undefined) {
+      this.coins += bonus;
+      this.updateHUD();
+    }
+    if (this.mission) this.mission.rewardedBonus = bonus;
+    const box = document.getElementById('day-mission-results');
+    if (box) {
+      box.innerHTML = `
+        <div class="mr-head">
+          <span><span class="kaiti-font">今日任务</span> · Nhiệm vụ hôm nay</span>
+          <span class="mr-stars">${'⭐'.repeat(stars)}${'☆'.repeat(3 - stars)}</span>
+        </div>
+        ${goals.map(g => `
+          <div class="mr-row ${g.done ? 'done' : 'fail'}">
+            <span class="mr-check">${g.done ? '✅' : '❌'}</span>
+            <span class="mr-text">${g.icon} ${g.text}</span>
+            <span class="mr-val">${g.value}</span>
+          </div>`).join('')}
+        ${bonus > 0 ? `<div class="mr-bonus">🎁 Thưởng nhiệm vụ: <b>+${bonus} ¥</b></div>` : ''}`;
+    }
+
+    let msg;
+    if (stars === 3) msg = '🏆 Ngày hoàn hảo! Hoàn thành tất cả nhiệm vụ!';
+    else if (mainDone) msg = '🎉 Đạt mục tiêu doanh thu! Cố thêm để lấy đủ 3 ⭐ nhé!';
+    else if (s.lost >= s.total / 2) msg = '😥 Mất nhiều khách quá, ngày mai cố nhanh tay hơn nhé!';
+    else msg = '💪 Chưa đạt mục tiêu doanh thu, ngày mai cố gắng hơn nhé!';
+    set('day-sum-msg', msg);
+
+    // Lưu kỷ lục ngày vào bảng xếp hạng
+    const now = new Date();
+    this.records = this.records.filter(r => r.day !== this.day); // 1 kỷ lục / ngày
+    this.records.push({
+      day: this.day,
+      earnings: Math.round(s.earnings * 100) / 100,
+      served: s.served,
+      total: s.total,
+      lost: s.lost,
+      avg: s.served > 0 ? Math.round(s.scoreSum / s.served) : 0,
+      stars,
+      date: `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`
+    });
+    this.records = this.records.sort((a, b) => b.earnings - a.earnings).slice(0, MISSION_RULES.maxRecords);
+    this.saveGame();
+
+    const modal = document.getElementById('modal-day-summary');
+    if (modal) modal.style.display = 'flex';
+    this.audio.playCashRegister();
+  }
+
+  startNextDay() {
+    const modal = document.getElementById('modal-day-summary');
+    if (modal) modal.style.display = 'none';
+    this.day += 1;
+    this.dayStats = null;
+    this.dayEnded = false;
+    this.saveGame();
+    this.renderCounter();
+    this.renderRail();
+    this.showMissionBriefing();
+  }
+
+  // Full-screen Ticket Zoom Modal (phiếu đang làm, nếu chưa có thì khách ở quầy)
   openTicketZoomModal() {
     const modal = document.getElementById('boba-ticket-zoom-modal');
-    if (!modal || !this.currentCustomer || !this.currentOrder) return;
-    const ord = this.currentOrder;
-
-    const nameEl = document.getElementById('zoom-cust-name');
-    const orderIdEl = document.getElementById('zoom-order-code');
-    const avatarEl = document.getElementById('zoom-cust-avatar');
-    if (avatarEl) avatarEl.textContent = this.currentCustomer.emoji || '🙂';
-    const teaChn = document.getElementById('zoom-tea-chn');
-    const teaVi = document.getElementById('zoom-tea-vi');
-    const sugChn = document.getElementById('zoom-sugar-chn');
-    const sugVi = document.getElementById('zoom-sugar-vi');
-    const iceChn = document.getElementById('zoom-ice-chn');
-    const iceVi = document.getElementById('zoom-ice-vi');
-    const topChn = document.getElementById('zoom-top-chn');
-    const topVi = document.getElementById('zoom-top-vi');
-
-    if (nameEl) nameEl.textContent = `${this.currentCustomer.nameChn} (${this.currentCustomer.nameVi})`;
-    if (orderIdEl) orderIdEl.textContent = `订单编号: #${100 + this.completedOrders}`;
-
-    if (teaChn) teaChn.textContent = `${ord.topping.hanzi}${ord.tea.hanzi}`;
-    if (teaVi) teaVi.textContent = ord.tea.vi;
-
-    if (sugChn) sugChn.textContent = `${ord.sugar.hanzi} (${ord.sugar.percent}%)`;
-    if (sugVi) sugVi.textContent = ord.sugar.vi;
-
-    if (iceChn) iceChn.textContent = ord.ice.hanzi;
-    if (iceVi) iceVi.textContent = ord.ice.vi;
-
-    if (topChn) topChn.textContent = ord.topping.hanzi;
-    if (topVi) topVi.textContent = ord.topping.vi;
-
+    const t = this.activeTicket || this.getCounterTicket();
+    if (!modal || !t) {
+      this.showToast('ℹ️', 'Chưa có phiếu order nào.');
+      return;
+    }
+    const ord = t.order;
+    const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+    set('zoom-cust-avatar', t.customer.emoji || '🙂');
+    set('zoom-cust-name', `${t.customer.nameChn} (${t.customer.nameVi})`);
+    set('zoom-order-code', `订单编号: #${t.no}${t.status === 'line' ? ' · (chưa ghi phiếu)' : ''}`);
+    set('zoom-tea-chn', `${ord.topping.hanzi}${ord.tea.hanzi}`);
+    set('zoom-tea-pin', ord.tea.pinyin);
+    set('zoom-tea-vi', ord.tea.vi);
+    set('zoom-sugar-chn', `${ord.sugar.hanzi} (${ord.sugar.percent}%)`);
+    set('zoom-sugar-pin', ord.sugar.pinyin);
+    set('zoom-sugar-vi', ord.sugar.vi);
+    set('zoom-ice-chn', ord.ice.hanzi);
+    set('zoom-ice-pin', ord.ice.pinyin);
+    set('zoom-ice-vi', ord.ice.vi);
+    set('zoom-top-chn', ord.topping.hanzi);
+    set('zoom-top-pin', ord.topping.pinyin);
+    set('zoom-top-vi', ord.topping.vi);
+    this.zoomTicket = t;
     modal.style.display = 'flex';
     this.audio.playPop();
   }
@@ -948,119 +1957,11 @@ class PapaBobaGame {
     if (wordsEl) wordsEl.textContent = this.learnedWords.size.toString();
   }
 
-  // Pick next customer using a shuffle bag (guarantees all 7 characters cycle without repetitive back-to-back)
-  getNextCustomer() {
-    if (!this.customerDeck || this.customerDeck.length === 0) {
-      this.customerDeck = [...PAPA_CUSTOMERS].sort(() => Math.random() - 0.5);
-      if (this.currentCustomer && this.customerDeck.length > 1 && this.customerDeck[0].id === this.currentCustomer.id) {
-        const temp = this.customerDeck[0];
-        this.customerDeck[0] = this.customerDeck[1];
-        this.customerDeck[1] = temp;
-      }
-    }
-    return this.customerDeck.shift();
-  }
-
-  // ==========================================================================
-  // STATION 1: ORDER STATION & MASTER COUNTER SPAWN
-  // ==========================================================================
-  spawnNewCustomer(isFirst = false) {
-    this.resetCup();
-
-    if (isFirst) {
-      this.currentCustomer = PAPA_CUSTOMERS[0]; // Bé Mưa Tiểu Vũ
-      this.currentOrder = {
-        tea: BOBA_VOCAB.teas.find(t => t.id === 'milktea'),
-        topping: BOBA_VOCAB.toppings.find(t => t.id === 'boba'),
-        sugar: BOBA_VOCAB.sugars.find(s => s.id === 'less_sugar'),
-        ice: BOBA_VOCAB.ices.find(i => i.id === 'no_ice')
-      };
-    } else {
-      this.currentCustomer = this.getNextCustomer();
-      const teas = getOrderableTeas();
-      const tea = teas[Math.floor(Math.random() * teas.length)];
-      const topping = BOBA_VOCAB.toppings[Math.floor(Math.random() * BOBA_VOCAB.toppings.length)];
-      const sugar = BOBA_VOCAB.sugars[Math.floor(Math.random() * BOBA_VOCAB.sugars.length)];
-      const ice = BOBA_VOCAB.ices[Math.floor(Math.random() * BOBA_VOCAB.ices.length)];
-      this.currentOrder = { tea, topping, sugar, ice };
-    }
-
-    this.isOrderTaken = false;
-
-    // 1. Render customer avatars (3D Anime Chibi Render)
-    const masterCustImg = document.getElementById('master-customer-img');
-    const stationCustImg = document.getElementById('customer-avatar-img');
-    if (masterCustImg && this.currentCustomer.image) masterCustImg.src = this.currentCustomer.image;
-    if (stationCustImg && this.currentCustomer.image) stationCustImg.src = this.currentCustomer.image;
-
-    // Names & roles
-    const masterName = document.getElementById('master-customer-name');
-    const masterRole = document.getElementById('master-customer-role');
-    const stationName = document.getElementById('customer-name-label');
-    const stationRole = document.getElementById('customer-role-label');
-    if (masterName) masterName.textContent = this.currentCustomer.nameChn;
-    if (masterRole) masterRole.textContent = `(${this.currentCustomer.nameVi})`;
-    if (stationName) stationName.textContent = this.currentCustomer.nameChn;
-    if (stationRole) stationRole.textContent = `(${this.currentCustomer.nameVi})`;
-
-    // 2. Reset and populate Ticket Rail
-    const ticketHeader = document.getElementById('ticket-header-name');
-    const ticketId = document.getElementById('ticket-order-id');
-    if (ticketHeader) ticketHeader.textContent = `${this.currentCustomer.nameChn} (${this.currentCustomer.nameVi})`;
-    if (ticketId) ticketId.textContent = `#${100 + this.completedOrders}`;
-
-    const teaText = document.getElementById('ticket-tea-text');
-    const teaVi = document.getElementById('ticket-tea-vi');
-    const sugText = document.getElementById('ticket-sugar-text');
-    const sugVi = document.getElementById('ticket-sugar-vi');
-    const iceText = document.getElementById('ticket-ice-text');
-    const iceVi = document.getElementById('ticket-ice-vi');
-    const topText = document.getElementById('ticket-topping-text');
-    const topVi = document.getElementById('ticket-topping-vi');
-
-    if (teaText) teaText.textContent = `${this.currentOrder.topping.hanzi}${this.currentOrder.tea.hanzi}`;
-    if (teaVi) teaVi.textContent = this.currentOrder.tea.vi;
-    if (sugText) sugText.textContent = `${this.currentOrder.sugar.hanzi} (${this.currentOrder.sugar.percent}%)`;
-    if (sugVi) sugVi.textContent = this.currentOrder.sugar.vi;
-    if (iceText) iceText.textContent = this.currentOrder.ice.hanzi;
-    if (iceVi) iceVi.textContent = this.currentOrder.ice.vi;
-    if (topText) topText.textContent = this.currentOrder.topping.hanzi;
-    if (topVi) topVi.textContent = this.currentOrder.topping.vi;
-
-    // 3. Populate Eyeline Recipe Cards in Stations 2, 3, 4
-    ['pour', 'shake', 'top'].forEach(s => {
-      const t = document.getElementById(`wb-tea-${s}`);
-      const sug = document.getElementById(`wb-sugar-${s}`);
-      const ic = document.getElementById(`wb-ice-${s}`);
-      const tp = document.getElementById(`wb-top-${s}`);
-      if (t) t.textContent = `${this.currentOrder.topping.hanzi}${this.currentOrder.tea.hanzi}`;
-      if (sug) sug.textContent = `${this.currentOrder.sugar.hanzi}(${this.currentOrder.sugar.percent}%)`;
-      if (ic) ic.textContent = this.currentOrder.ice.hanzi;
-      if (tp) tp.textContent = this.currentOrder.topping.hanzi;
-    });
-
-    // 4. Update Rail Order Summary on Master Counter
-    const railSumm = document.getElementById('rail-order-summary-text');
-    if (railSumm) {
-      railSumm.textContent = `#${100 + this.completedOrders} ${this.currentCustomer.nameChn}: ${this.currentOrder.topping.hanzi}${this.currentOrder.tea.hanzi} · ${this.currentOrder.sugar.hanzi} · ${this.currentOrder.ice.hanzi}`;
-    }
-
-    this.updateSpeechBalloonUI();
-    this.updateAllCupVisuals();
-
-    // Hide next station prompt until order is taken
-    const nextBtn = document.getElementById('btn-goto-pour-from-order');
-    if (nextBtn) nextBtn.style.display = 'none';
-
-    // Speak customer request
-    setTimeout(() => {
-      this.speakOrder();
-    }, 500);
-  }
-
+  // Bong bóng lời gọi món: theo KHÁCH ĐANG Ở QUẦY
   updateSpeechBalloonUI() {
-    if (!this.currentOrder) return;
-    const ord = this.currentOrder;
+    const ct = this.getCounterTicket();
+    if (!ct) return;
+    const ord = ct.order;
 
     // 1. Order Station Balloon
     const chnEl = document.getElementById('order-chinese-sentence');
@@ -1093,42 +1994,30 @@ class PapaBobaGame {
 
     if (mTea) mTea.textContent = `${ord.topping.hanzi}${ord.tea.hanzi}`;
     if (mSugIce) mSugIce.textContent = `${ord.sugar.hanzi}，${ord.ice.hanzi}`;
-    if (mPin) mPin.textContent = `Wǒ yào yībēi ${ord.topping.pinyin} ${ord.tea.pinyin}, ${ord.sugar.pinyin}, ${ord.ice.pinyin}.`;
-    if (mVi) mVi.textContent = `Cho tôi 1 ly ${ord.tea.vi.toLowerCase()} ${ord.topping.vi.toLowerCase()}, ${ord.sugar.vi.toLowerCase()}, ${ord.ice.vi.toLowerCase()}`;
+    if (mPin) {
+      mPin.style.display = this.showPinyin ? '' : 'none';
+      mPin.textContent = `Wǒ yào yībēi ${ord.topping.pinyin} ${ord.tea.pinyin}, ${ord.sugar.pinyin}, ${ord.ice.pinyin}.`;
+    }
+    if (mVi) {
+      mVi.style.display = this.showVietnamese ? '' : 'none';
+      mVi.textContent = `Cho tôi 1 ly ${ord.tea.vi.toLowerCase()} ${ord.topping.vi.toLowerCase()}, ${ord.sugar.vi.toLowerCase()}, ${ord.ice.vi.toLowerCase()}`;
+    }
   }
 
   speakOrder() {
-    if (!this.currentOrder) return;
-    const ord = this.currentOrder;
+    const t = this.getCounterTicket() || this.activeTicket;
+    if (!t) return;
+    const ord = t.order;
     const sentence = `我要一杯${ord.topping.hanzi}${ord.tea.hanzi}，${ord.sugar.hanzi}，${ord.ice.hanzi}。`;
     this.audio.speak(sentence);
   }
 
-  takeOrder() {
-    this.isOrderTaken = true;
-    this.audio.playPop();
-
-    // Animate Ticket
-    const ticket = document.getElementById('active-order-ticket');
-    if (ticket) {
-      ticket.classList.add('zoomed');
-      setTimeout(() => ticket.classList.remove('zoomed'), 1200);
-    }
-
-    // Update hints & show button to Pour Station
-    const hint = document.getElementById('order-footer-hint');
-    if (hint) {
-      hint.innerHTML = '✅ <strong>Đã ghi phiếu!</strong> Hãy chuyển sang <strong>调制台 (Trạm Rót Trà)</strong> để bắt đầu pha chế!';
-    }
-    const nextBtn = document.getElementById('btn-goto-pour-from-order');
-    if (nextBtn) nextBtn.style.display = 'flex';
-
-    // Update Target hints in Pour and Top stations
-    const pourHint = document.getElementById('pour-target-tea-name');
-    if (pourHint) pourHint.textContent = `${this.currentOrder.tea.hanzi} · ${this.currentOrder.sugar.hanzi} · ${this.currentOrder.ice.hanzi}`;
-
-    const topHint = document.getElementById('top-target-topping-name');
-    if (topHint) topHint.textContent = `${this.currentOrder.topping.hanzi} (${this.currentOrder.topping.vi})`;
+  // Đọc phiếu trong cửa sổ phóng to
+  speakZoomTicket() {
+    const t = this.zoomTicket || this.activeTicket || this.getCounterTicket();
+    if (!t) return;
+    const ord = t.order;
+    this.audio.speak(`我要一杯${ord.topping.hanzi}${ord.tea.hanzi}，${ord.sugar.hanzi}，${ord.ice.hanzi}。`);
   }
 
   // ==========================================================================
@@ -1140,6 +2029,9 @@ class PapaBobaGame {
     this.cup.tea = this.currentPouringTea;
 
     // Visual liquid stream flow
+    if (!this.currentPouringTea) return;
+    document.querySelectorAll('.btn-spout-lever').forEach(b => b.classList.toggle('pouring', b.dataset.tea === teaKey));
+
     const stream = document.getElementById('liquid-stream-flow');
     if (stream) {
       stream.style.display = 'block';
@@ -1164,7 +2056,9 @@ class PapaBobaGame {
     const stream = document.getElementById('liquid-stream-flow');
     if (stream) stream.style.display = 'none';
 
+    const wasPouring = document.querySelector('.btn-spout-lever.pouring');
     document.querySelectorAll('.btn-spout-lever').forEach(b => b.classList.remove('pouring'));
+    if (wasPouring) this.updateGuide();
   }
 
   updatePourCupUI() {
@@ -1230,6 +2124,7 @@ class PapaBobaGame {
       this.shakerSfxTimer = setInterval(() => {
         this.audio.playShakerSound();
       }, 180);
+      this.updateGuide();
 
     } else {
       // STOP SHAKER
@@ -1262,6 +2157,7 @@ class PapaBobaGame {
       }
 
       this.audio.playPop();
+      this.updateGuide();
     }
   }
 
@@ -1350,6 +2246,7 @@ class PapaBobaGame {
     this.cup.shakeScore = 0;
     this.resetShakerUI();
     this.audio.playPop();
+    this.updateGuide();
     this.showToast('🌪️', '重新安装摇杯，请看准绿区停机！(Đã reset máy lắc!)');
   }
 
@@ -1529,7 +2426,13 @@ class PapaBobaGame {
   // ==========================================================================
   // PAPA'S TRASH CAN: DISCARD RUINED CUP AND START FRESH
   // ==========================================================================
+  // Hủy ly đang làm (bất cứ lúc nào, ở bất kỳ trạm/chế độ nào). Phiếu vẫn giữ, chỉ thay ly mới.
   trashCup(stationOrigin = 'pour') {
+    if (this.isServing) return;
+    if (isCupEmpty(this.cup)) {
+      this.showToast('🫙', 'Ly đang trống, chưa có gì để hủy.');
+      return;
+    }
     this.audio.playTrash();
     this.resetCup();
 
@@ -1539,10 +2442,18 @@ class PapaBobaGame {
       trashUnit.classList.add('drag-over');
       setTimeout(() => trashUnit.classList.remove('drag-over'), 600);
     }
+    const hudTrash = document.getElementById('btn-hud-trash');
+    if (hudTrash) {
+      hudTrash.classList.remove('trash-pop');
+      void hudTrash.offsetWidth;
+      hudTrash.classList.add('trash-pop');
+    }
 
-    this.showToast('🗑️', '已将做错的奶茶丢进垃圾桶！已拿取全新空杯重新制作。(Đã vứt ly hỏng vào thùng rác! Lấy ly mới làm lại)');
+    const t = this.activeTicket;
+    this.showToast('🗑️', `已丢弃！Đã hủy ly${t ? ` của phiếu #${t.no}` : ''}, lấy ly mới làm lại.`);
+    this.renderRail();
 
-    // If trashed from shaker or top station, guide back to pour station
+    // Hủy từ máy lắc / trạm topping -> quay về trạm rót để làm lại
     if (stationOrigin === 'shake' || stationOrigin === 'top') {
       setTimeout(() => {
         this.switchStation('view-pour-station');
@@ -1568,18 +2479,45 @@ class PapaBobaGame {
   // SERVE & PAPA'S FREEZERIA SCORE CARD
   // ==========================================================================
   serveDrinkToCustomer() {
+    if (this.isServing) return; // chống bấm giao món 2 lần
+    const ticket = this.activeTicket;
+    if (!ticket) {
+      this.showToast('📝', this.getLineTickets().length > 0
+        ? 'Chưa ghi phiếu! Bấm 接单 (Ghi phiếu) cho khách trước đã.'
+        : 'Chưa có phiếu order nào để giao món.');
+      return;
+    }
+    if (isCupEmpty(this.cup)) {
+      this.showToast('🫙', 'Ly còn trống trơn, pha trà trước khi giao nhé!');
+      return;
+    }
+    this.isServing = true;
+    this.stopPouring();
+    this.stopShakerLoop();
     if (!this.cup.hasLid) {
       this.cup.hasLid = true;
       this.cup.strawColor = '#f43f5e';
     }
+
+    // Điểm chờ (Papa's Waiting score): 30% lúc chờ ghi phiếu + 70% lúc chờ món
+    const drinkWaitScore = this.waitPhaseScore(this.patienceUsed(ticket));
+    const waitScore = Math.round(ticket.lineScore * 0.3 + drinkWaitScore * 0.7);
+
+    // Phiếu hoàn tất: rời thanh ray, khách ra quầy nhận món
+    this.tickets = this.tickets.filter(x => x !== ticket);
+    this.servingTicket = ticket;
+    this.activeTicketId = null;
+    this.spareCup = freshCup();
+    this.renderCounter();
+    this.renderRail();
 
     const wasMaster = (this.currentStation === 'view-master-counter');
     if (!wasMaster) {
       this.switchStation('view-order-station');
     }
 
-    // Calculate 4 Papa's Freezeria Criteria
-    const ord = this.currentOrder;
+    // Calculate Papa's Freezeria Criteria
+    const ord = ticket.order;
 
     // 1. Order Match Accuracy (40%)
     let orderMatch = 100;
@@ -1617,8 +2555,8 @@ class PapaBobaGame {
     if (!this.cup.strawColor) topScore -= 30;
     topScore = Math.max(40, topScore);
 
-    // Overall Score
-    const totalScore = Math.round((orderMatch * 0.4) + (pourScore * 0.25) + (mixScore * 0.2) + (topScore * 0.15));
+    // Overall Score (đúng món 35% · rót 20% · lắc 15% · topping 15% · thời gian chờ 15%)
+    const totalScore = Math.round((orderMatch * 0.35) + (pourScore * 0.2) + (mixScore * 0.15) + (topScore * 0.15) + (waitScore * 0.15));
 
     // Calculate Tip
     const basePrice = 18.00;
@@ -1637,9 +2575,22 @@ class PapaBobaGame {
     this.learnedWords.add(ord.topping.hanzi);
     this.learnedWords.add(ord.sugar.hanzi);
     this.learnedWords.add(ord.ice.hanzi);
+    if (this.dayStats) {
+      this.dayStats.served += 1;
+      this.dayStats.earnings += finalReceive;
+      this.dayStats.scoreSum += totalScore;
+    }
+    this.renderRail(); // cập nhật tiến độ nhiệm vụ doanh thu
 
     this.updateHUD();
     this.saveGame();
+
+    const barWait = document.getElementById('score-bar-wait');
+    const valWait = document.getElementById('score-val-wait');
+    if (barWait) barWait.style.width = `${waitScore}%`;
+    if (valWait) valWait.textContent = `${waitScore}%`;
+    const scoreTitle = document.getElementById('score-ticket-title');
+    if (scoreTitle) scoreTitle.textContent = `#${ticket.no} · ${ticket.customer.nameChn} (${ticket.customer.nameVi})`;
 
     // Render Papa's Scorecard
     const barOrder = document.getElementById('score-bar-order');
@@ -1681,37 +2632,47 @@ class PapaBobaGame {
     if (totalScore < 75) {
       reactionTextChn = '“嗯...味道有点奇怪，不过还是谢谢老板。”';
       reactionTextVi = '(Hơi lạ một chút, nhưng vẫn cảm ơn chủ quán nhé.)';
+    } else if (waitScore < 70) {
+      reactionTextChn = '“等了好久啊……不过很好喝，谢谢老板。”';
+      reactionTextVi = '(Chờ lâu quá à… nhưng ngon lắm, cảm ơn chủ quán.)';
     }
+    const reactAvatar = document.querySelector('.reaction-avatar');
+    if (reactAvatar) reactAvatar.textContent = totalScore >= 90 ? '🥰' : (totalScore >= 75 ? '🙂' : '😕');
 
     if (reactChn) reactChn.textContent = reactionTextChn;
     if (reactVi) reactVi.textContent = reactionTextVi;
 
-    // Show Scorecard Modal
-    const modal = document.getElementById('modal-papa-score');
-    if (modal) modal.style.display = 'flex';
-
+    // Khách nhận món: tiền bay lên -> khách rời quầy -> hiện bảng điểm
+    // (Từ trạm khác quay về quầy: đợi lia máy quay xong ~400ms rồi mới cho tiền bay)
+    this.updateGuide();
     this.audio.playCashRegister();
+    const panDelay = wasMaster ? 0 : 400;
+    setTimeout(() => this.floatCoins(finalReceive.toFixed(2)), panDelay);
     setTimeout(() => {
       this.audio.speak(reactionTextChn.replace(/“|”/g, ''));
     }, 600);
+    setTimeout(() => this.playCustomerAnim('customer-leave'), panDelay + 550);
+    setTimeout(() => {
+      const modal = document.getElementById('modal-papa-score');
+      if (modal) modal.style.display = 'flex';
+    }, panDelay + 1050);
   }
 
+  // Thay ly đang cầm bằng ly trống (ly thuộc phiếu đang làm, hoặc ly dự phòng)
   resetCup() {
+    const cup = freshCup();
+    const t = this.activeTicket;
+    if (t) t.cup = cup;
+    else this.spareCup = cup;
+    this.cup = cup;
+    this.applyCupToUI();
+  }
+
+  // Vẽ lại toàn bộ giao diện theo this.cup (dùng khi hủy ly hoặc đổi phiếu)
+  applyCupToUI() {
     // Ly mới -> tắt vòi rót & máy lắc đang chạy (nếu có)
     this.stopPouring();
     this.stopShakerLoop();
-
-    this.cup = {
-      tea: null,
-      pourLevel: 0,
-      sugar: null,
-      ice: null,
-      isShaken: false,
-      shakeScore: 0,
-      toppings: [],
-      hasLid: false,
-      strawColor: null
-    };
 
     // Reset UI in Pour Station
     const liquid = document.getElementById('pour-cup-liquid');
@@ -1763,6 +2724,18 @@ class PapaBobaGame {
     document.getElementById('btn-action-lid')?.style.setProperty('display', 'inline-flex');
     document.getElementById('btn-remove-lid')?.style.setProperty('display', 'none');
     document.querySelectorAll('.btn-m-sugar, .btn-m-ice').forEach(b => b.classList.remove('active'));
+
+    // Ly đã lắc rồi (đổi sang phiếu có ly làm dở) -> hiện trạng thái đã lắc xong
+    if (this.cup.isShaken) {
+      if (triggerBtn) {
+        triggerBtn.disabled = true;
+        triggerBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>摇匀完成 (Đã Lắc Xong!)</span>';
+      }
+      if (statusText) {
+        statusText.innerHTML = `🌟 Độ lắc: <strong>${this.cup.shakeScore}%</strong> (Đã lắc xong)`;
+        statusText.style.color = this.cup.shakeScore >= 100 ? '#10b981' : '#f59e0b';
+      }
+    }
     this.updateAllCupVisuals();
   }
 
