@@ -528,7 +528,22 @@ body.portrait .btn-master-speech-audio { flex: 0 0 34px; width: 34px; height: 34
 
 body.portrait .master-empty-hint { top: 70px; }
 
-/* Bàn pha chế: bình trà (hàng 1) · topping | đường-đá + máy lắc (hàng 2) */
+/* BỎ HOÀN TOÀN GHI PHIẾU VÀ MÁY LẮC SHAKER THEO YÊU CẦU */
+.boba-ticket-rail,
+#boba-ticket-rail,
+.btn-master-take-order,
+.btn-take-order-papa,
+#btn-master-take-order,
+#btn-take-order-action,
+.master-shaker-wrap,
+#master-shaker-wrap,
+#tab-shake,
+#view-shake-station,
+#score-row-shake {
+  display: none !important;
+}
+
+/* Bàn pha chế: bình trà (hàng 1) · topping (trái) | đường-đá (phải) (hàng 2) - KHÔNG CẦN LẮC */
 body.portrait .master-counter-surface {
   position: relative;
   top: auto;
@@ -537,13 +552,12 @@ body.portrait .master-counter-surface {
   min-height: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr;
   grid-template-areas:
     "disp disp"
-    "top  sug"
-    "top  shk";
+    "top  sug";
   gap: 8px;
-  padding: 10px 10px 8px;
+  padding: 8px 10px;
   align-items: stretch;
 }
 
@@ -595,23 +609,6 @@ body.portrait .btn-m-ice {
   min-width: 0;
 }
 
-/* Máy lắc thành 1 nút ngang to */
-body.portrait .master-shaker-wrap {
-  grid-area: shk;
-  width: auto;
-  height: auto;
-  flex-direction: row;
-  justify-content: center;
-  gap: 10px;
-  padding: 6px 10px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.78);
-  border: 2px solid rgba(255, 255, 255, 0.92);
-  box-shadow: 0 8px 24px rgba(180, 83, 9, 0.14);
-}
-
-body.portrait .shaker-body-metal { transform: scale(0.82); transform-origin: center; height: 76px; }
-body.portrait .shaker-label { font-size: 0.95rem; color: #7c2d12; text-shadow: none; margin-top: 0; }
 
 /* Khu làm ly phía dưới */
 body.portrait .master-bottom-workstation {

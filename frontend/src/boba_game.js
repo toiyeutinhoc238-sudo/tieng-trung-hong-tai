@@ -355,15 +355,15 @@ const QUEUE_RULES = {
   perDayMax: 8             // ... tối đa 8
 };
 
-// Ly trống mới
+// Ly trống mới (không cần bước lắc)
 function freshCup() {
   return {
     tea: null,
     pourLevel: 0, // 0 to 100
     sugar: null,
     ice: null,
-    isShaken: false,
-    shakeScore: 0,
+    isShaken: true,
+    shakeScore: 100,
     toppings: [], // Array of toppings added (can add, remove, undo)
     hasLid: false,
     strawColor: null
@@ -371,7 +371,7 @@ function freshCup() {
 }
 
 function isCupEmpty(cup) {
-  return !cup.tea && cup.pourLevel === 0 && !cup.sugar && !cup.ice && !cup.isShaken &&
+  return !cup.tea && cup.pourLevel === 0 && !cup.sugar && !cup.ice &&
     cup.toppings.length === 0 && !cup.hasLid && !cup.strawColor;
 }
 
@@ -1228,40 +1228,26 @@ class PapaBobaGame {
   // ==========================================================================
   getGuideStep() {
     const c = this.cup;
-    const hasLine = this.getLineTickets().length > 0;
-    // Chưa có phiếu đang làm: ưu tiên ghi phiếu cho khách đang xếp hàng
-    if (!this.activeTicket) {
-      if (this.currentStation === 'view-master-counter' && hasLine) return ['#btn-master-take-order', '接单', 'Ghi phiếu', 'below'];
-      if (this.currentStation === 'view-order-station' && hasLine) return ['#btn-take-order-action', '接单', 'Ghi phiếu', 'below'];
-      return null;
+    if (!this.activeTicket && this.tickets.length > 0) {
+      this.setActiveTicket(this.tickets[0].uid, { silent: true });
     }
-    // Đang làm dở nhưng có khách mới xếp hàng quá nửa thời gian -> nhắc ghi phiếu kẻo mất khách
-    const urgent = this.getLineTickets()[0];
-    if (urgent && !this.relaxedMode && this.patienceUsed(urgent) > 0.5) {
-      if (this.currentStation === 'view-master-counter') return ['#btn-master-take-order', '接单', 'Khách đang chờ ghi phiếu!', 'below'];
-      if (this.currentStation === 'view-order-station') return ['#btn-take-order-action', '接单', 'Khách đang chờ ghi phiếu!', 'below'];
-    }
+    if (!this.activeTicket) return null;
+
     switch (this.currentStation) {
       case 'view-master-counter':
         if (!c.tea) return ['.master-dispensers-rack', '倒茶', 'Chọn loại trà'];
-        if (!c.sugar) return ['.master-sugar-ice-rack', '选糖', 'Chọn đường'];
-        if (!c.ice) return ['.master-sugar-ice-rack', '选冰', 'Chọn đá'];
+        if (!c.sugar) return ['.master-sugar-ice-rack', '选糖', 'Chọn lượng đường'];
+        if (!c.ice) return ['.master-sugar-ice-rack', '选冰', 'Chọn mức đá'];
         if (c.toppings.length === 0) return ['.master-toppings-rack', '加料', 'Thêm topping'];
-        if (!c.isShaken) return ['#master-shaker-wrap', '摇匀', 'Lắc đều'];
-        if (!c.hasLid) return ['#master-lids-box', '封口', 'Đóng nắp'];
+        if (!c.hasLid) return ['#master-lids-box', '封口', 'Đóng nắp ly'];
         return ['#btn-master-finish-drink', '出餐', 'Giao món'];
       case 'view-order-station':
-        if (hasLine) return ['#btn-take-order-action', '接单', 'Ghi phiếu', 'below'];
         return ['#btn-goto-pour-from-order', '前往', 'Đi pha chế'];
       case 'view-pour-station':
         if (c.pourLevel > 75) return ['#btn-drain-liquid-pour', '倒掉', 'Quá vạch, đổ đi rót lại'];
         if (!c.tea || c.pourLevel < 65) return ['.dispensers-row', '按住', 'Nhấn giữ vòi tới vạch 70%'];
         if (!c.sugar) return ['.sugar-box', '选糖', 'Chọn đường'];
         if (!c.ice) return ['.ice-box', '选冰', 'Chọn đá'];
-        return ['#btn-goto-shake', '下一步', 'Sang máy lắc'];
-      case 'view-shake-station':
-        if (this.shakerRunning) return ['#btn-shaker-trigger', '停', 'Dừng ở vùng xanh', 'left'];
-        if (!c.isShaken) return ['#btn-shaker-trigger', '启动', 'Bắt đầu lắc', 'left'];
         return ['#btn-goto-top', '下一步', 'Sang trạm topping'];
       case 'view-top-station':
         if (c.toppings.length === 0) return ['.toppings-cells-6', '加料', 'Thêm topping'];
@@ -1771,23 +1757,24 @@ class PapaBobaGame {
       no: 100 + this.ticketSeq,
       customer,
       order,
-      status: 'line',
+      status: 'waiting', // Trực tiếp sẵn sàng pha chế, không qua bước ghi phiếu
       arrivedAt: this.gameTime,
-      orderTakenAt: 0,
+      orderTakenAt: this.gameTime,
       lineMaxMs: QUEUE_RULES.lineMaxMs,
       drinkMaxMs: this.getDrinkMaxMs(),
       lineScore: 100,
-      cup: null
+      cup: freshCup()
     };
     this.tickets.push(ticket);
     this.dayStats.spawned += 1;
     this.nextArrivalAt = this.gameTime + this.getArrivalGapMs();
     this.saveGame();
 
-    const lineLen = this.getLineTickets().length;
-    if (lineLen > 1) {
-      this.showToast('🛎️', `Khách mới: ${customer.nameChn} (${customer.nameVi}) đang xếp hàng (${lineLen} người)`);
+    // Nếu quầy đang trống -> kích hoạt khách này ngay lập tức
+    if (!this.activeTicket) {
+      this.setActiveTicket(ticket.uid, { inheritSpare: true, silent: true });
     }
+
     this.renderCounter();
     this.renderRail();
     this.updateGuide();
@@ -1921,16 +1908,13 @@ class PapaBobaGame {
     const inLine = ct.status === 'line' && !this.servingTicket;
     takeBtns.forEach(b => b && (b.style.display = inLine ? 'flex' : 'none'));
     document.querySelectorAll('.counter-status-tag').forEach(el => {
-      el.textContent = this.servingTicket ? '🧋 Nhận món' : (inLine ? '顾客点单 (Khách gọi món)' : `⏳ Chờ món · #${ct.no}`);
-      el.classList.toggle('waiting', !inLine && !this.servingTicket);
+      el.textContent = this.servingTicket ? '🧋 Nhận món' : '顾客点单 (Khách gọi món)';
+      el.classList.toggle('waiting', false);
     });
 
-    if (nextBtn) nextBtn.style.display = !inLine && this.activeTicket ? 'flex' : 'none';
+    if (nextBtn) nextBtn.style.display = this.activeTicket ? 'flex' : 'none';
     if (hint) {
-      const lineLen = this.getLineTickets().length;
-      hint.innerHTML = inLine
-        ? `💡 Bấm <strong>"接单 (Ghi Phiếu)"</strong> để nhận yêu cầu của khách.${lineLen > 1 ? ` <strong>Còn ${lineLen - 1} khách</strong> đang xếp hàng!` : ''}`
-        : '✅ <strong>Đã ghi phiếu!</strong> Sang <strong>调制台 (Trạm Rót Trà)</strong> để pha chế, hoặc bấm phiếu khác trên thanh ray.';
+      hint.innerHTML = '💡 Pha chế theo đúng yêu cầu của khách rồi bấm <strong>完成制作 (Hoàn thành)</strong>!';
     }
 
     this.updateSpeechBalloonUI();
@@ -1939,7 +1923,7 @@ class PapaBobaGame {
 
     if (changed && !this.servingTicket) {
       this.playCustomerAnim('customer-enter');
-      if (inLine) setTimeout(() => this.speakOrder(), 450);
+      setTimeout(() => this.speakOrder(), 450);
     }
   }
 
@@ -2715,11 +2699,9 @@ class PapaBobaGame {
   // ==========================================================================
   serveDrinkToCustomer() {
     if (this.isServing) return; // chống bấm giao món 2 lần
-    const ticket = this.activeTicket;
+    const ticket = this.activeTicket || this.getCounterTicket();
     if (!ticket) {
-      this.showToast('📝', this.getLineTickets().length > 0
-        ? 'Chưa ghi phiếu! Bấm 接单 (Ghi phiếu) cho khách trước đã.'
-        : 'Chưa có phiếu order nào để giao món.');
+      this.showToast('ℹ️', 'Chưa có khách nào ở quầy để giao món.');
       return;
     }
     if (isCupEmpty(this.cup)) {
@@ -2780,18 +2762,15 @@ class PapaBobaGame {
     const pourDiff = Math.abs(this.cup.pourLevel - 70);
     pourScore = Math.max(40, 100 - pourDiff * 2);
 
-    // 3. Mix Station Accuracy
-    const mixScore = this.cup.isShaken ? this.cup.shakeScore : 50;
-
-    // 4. Top Station Accuracy
+    // 3. Top Station Accuracy (Topping & Đóng nắp)
     let topScore = 100;
     if (this.cup.toppings.length === 0) topScore -= 40;
     if (!this.cup.hasLid) topScore -= 30;
     if (!this.cup.strawColor) topScore -= 30;
     topScore = Math.max(40, topScore);
 
-    // Overall Score (đúng món 35% · rót 20% · lắc 15% · topping 15% · thời gian chờ 15%)
-    const totalScore = Math.round((orderMatch * 0.35) + (pourScore * 0.2) + (mixScore * 0.15) + (topScore * 0.15) + (waitScore * 0.15));
+    // Overall Score (đúng món 40% · rót 25% · topping & nắp 15% · thời gian phục vụ 20% - không cần lắc)
+    const totalScore = Math.round((orderMatch * 0.40) + (pourScore * 0.25) + (topScore * 0.15) + (waitScore * 0.20));
 
     // Calculate Tip
     const basePrice = 18.00;
