@@ -5,6 +5,11 @@
 
 import customerGirlImg from './assets/boba_customer_girl.jpg';
 import customerBoyImg from './assets/boba_customer_boy.jpg';
+import customerLinJieImg from './assets/boba_customer_linjie.jpg';
+import customerXiaoTongImg from './assets/boba_customer_xiaotong.jpg';
+import customerWangShuImg from './assets/boba_customer_wangshu.jpg';
+import customerABaoImg from './assets/boba_customer_abao.jpg';
+import customerGrandmaImg from './assets/boba_customer_grandma.jpg';
 
 // ============================================================================
 // 1. AUDIO SYNTHESIZER (WEB AUDIO API & TTS)
@@ -249,14 +254,15 @@ const BOBA_VOCAB = {
   ]
 };
 
-// Customer Roster
+// Customer Roster (Đa dạng 7 nhân vật khách hàng anime 3D Chibi)
 const PAPA_CUSTOMERS = [
   { id: 'xiaoyu', nameChn: '小雨', nameVi: 'Bé Mưa', role: 'Bé gái dễ thương', emoji: '👧', image: customerGirlImg },
-  { id: 'xiaohao', nameChn: '小浩', nameVi: 'Tiểu Hạo', role: 'Học sinh tiểu học', emoji: '👦', image: customerBoyImg },
-  { id: 'xiaotong', nameChn: '晓彤', nameVi: 'Hiểu Đồng', role: 'Nữ sinh trung học', emoji: '👩‍🎓', image: customerGirlImg },
-  { id: 'linjie', nameChn: '林姐', nameVi: 'Chị Lâm', role: 'Chị gái văn phòng', emoji: '👩‍💼', image: customerGirlImg },
-  { id: 'wangshu', nameChn: '王叔', nameVi: 'Chú Vương', role: 'Bác hàng xóm', emoji: '👨', image: customerBoyImg },
-  { id: 'abao', nameChn: '阿宝', nameVi: 'Gấu A Bảo', role: 'Linh vật đáng yêu', emoji: '🐼', image: customerBoyImg }
+  { id: 'xiaohao', nameChn: '小浩', nameVi: 'Tiểu Hạo', role: 'Học sinh năng động', emoji: '👦', image: customerBoyImg },
+  { id: 'linjie', nameChn: '林姐', nameVi: 'Chị Lâm', role: 'Chị gái văn phòng thanh lịch', emoji: '👩‍💼', image: customerLinJieImg },
+  { id: 'xiaotong', nameChn: '晓彤', nameVi: 'Hiểu Đồng', role: 'Nữ sinh tóc 2 bên sành điệu', emoji: '👩‍🎓', image: customerXiaoTongImg },
+  { id: 'wangshu', nameChn: '王叔', nameVi: 'Chú Vương', role: 'Chú hàng xóm ấm áp', emoji: '👨', image: customerWangShuImg },
+  { id: 'abao', nameChn: '阿宝', nameVi: 'Gấu A Bảo', role: 'Gấu trúc linh vật kawaii', emoji: '🐼', image: customerABaoImg },
+  { id: 'grandma', nameChn: '李奶奶', nameVi: 'Bà Lý', role: 'Bà lão hiền từ phúc hậu', emoji: '👵', image: customerGrandmaImg }
 ];
 
 // ============================================================================
@@ -279,6 +285,7 @@ class PapaBobaGame {
     // Order State
     this.currentCustomer = null;
     this.currentOrder = null;
+    this.customerDeck = []; // Shuffle bag to guarantee high variety without repetition
     this.isOrderTaken = false;
 
     // Cup Crafting State in Stations (Papa's tactile state)
@@ -906,6 +913,19 @@ class PapaBobaGame {
     if (wordsEl) wordsEl.textContent = this.learnedWords.size.toString();
   }
 
+  // Pick next customer using a shuffle bag (guarantees all 7 characters cycle without repetitive back-to-back)
+  getNextCustomer() {
+    if (!this.customerDeck || this.customerDeck.length === 0) {
+      this.customerDeck = [...PAPA_CUSTOMERS].sort(() => Math.random() - 0.5);
+      if (this.currentCustomer && this.customerDeck.length > 1 && this.customerDeck[0].id === this.currentCustomer.id) {
+        const temp = this.customerDeck[0];
+        this.customerDeck[0] = this.customerDeck[1];
+        this.customerDeck[1] = temp;
+      }
+    }
+    return this.customerDeck.shift();
+  }
+
   // ==========================================================================
   // STATION 1: ORDER STATION & MASTER COUNTER SPAWN
   // ==========================================================================
@@ -921,7 +941,7 @@ class PapaBobaGame {
         ice: BOBA_VOCAB.ices.find(i => i.id === 'no_ice')
       };
     } else {
-      this.currentCustomer = PAPA_CUSTOMERS[Math.floor(Math.random() * PAPA_CUSTOMERS.length)];
+      this.currentCustomer = this.getNextCustomer();
       const tea = BOBA_VOCAB.teas[Math.floor(Math.random() * BOBA_VOCAB.teas.length)];
       const topping = BOBA_VOCAB.toppings[Math.floor(Math.random() * BOBA_VOCAB.toppings.length)];
       const sugar = BOBA_VOCAB.sugars[Math.floor(Math.random() * BOBA_VOCAB.sugars.length)];
