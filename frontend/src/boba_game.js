@@ -226,10 +226,12 @@ class PapaBobaAudio {
 const BOBA_VOCAB = {
   teas: [
     { id: 'milktea', hanzi: '奶茶', pinyin: 'nǎichá', vi: 'Trà sữa', color: '#df9b58' },
+    { id: 'matcha', hanzi: '抹茶', pinyin: 'mǒchá', vi: 'Trà Matcha', color: '#65a30d' },
     { id: 'blacktea', hanzi: '红茶', pinyin: 'hóngchá', vi: 'Hồng trà', color: '#853713' },
-    { id: 'greentea', hanzi: '绿茶', pinyin: 'lǜchá', vi: 'Trà xanh', color: '#84cc16' },
-    { id: 'taro', hanzi: '芋泥奶茶', pinyin: 'yùní nǎichá', vi: 'Trà khoai môn', color: '#b58bc4' },
-    { id: 'milk', hanzi: '鲜奶', pinyin: 'xiānnǎi', vi: 'Sữa tươi', color: '#f8fafc' }
+    { id: 'greentea', hanzi: '绿茶', pinyin: 'lǜchá', vi: 'Lục trà', color: '#84cc16' },
+    { id: 'oolong', hanzi: '乌龙茶', pinyin: 'wūlóngchá', vi: 'Ô long', color: '#d97706' },
+    { id: 'milk', hanzi: '鲜奶', pinyin: 'xiānnǎi', vi: 'Sữa tươi', color: '#f8fafc' },
+    { id: 'taro', hanzi: '芋泥奶茶', pinyin: 'yùní nǎichá', vi: 'Trà khoai môn', color: '#b58bc4' }
   ],
   sugars: [
     { id: 'extra_sugar', hanzi: '多糖', pinyin: 'duō táng', vi: 'Nhiều đường (100%)', percent: 100 },
@@ -245,10 +247,11 @@ const BOBA_VOCAB = {
     { id: 'no_ice', hanzi: '去冰', pinyin: 'qù bīng', vi: 'Không đá' }
   ],
   toppings: [
-    { id: 'boba', hanzi: '珍珠', pinyin: 'zhēnzhū', vi: 'Trân châu', icon: '🧋' },
+    { id: 'boba', hanzi: '珍珠', pinyin: 'zhēnzhū', vi: 'Trân châu đen', icon: '🧋' },
+    { id: 'whiteboba', hanzi: '白珍珠', pinyin: 'bái zhēnzhū', vi: 'Trân châu trắng', icon: '⚪' },
+    { id: 'matcha', hanzi: '抹茶冻', pinyin: 'mǒchádòng', vi: 'Thạch matcha', icon: '🍵' },
     { id: 'mango', hanzi: '芒果布丁', pinyin: 'mángguǒ bùdīng', vi: 'Pudding xoài', icon: '🥭' },
     { id: 'redbean', hanzi: '红豆', pinyin: 'hóngdòu', vi: 'Đậu đỏ', icon: '🫘' },
-    { id: 'matcha', hanzi: '抹茶冻', pinyin: 'mǒchádòng', vi: 'Thạch matcha', icon: '🍵' },
     { id: 'coconut', hanzi: '椰果', pinyin: 'yēguǒ', vi: 'Thạch dừa', icon: '🥥' },
     { id: 'taroball', hanzi: '芋圆', pinyin: 'yùyuán', vi: 'Khoai dẻo', icon: '🍠' }
   ]
@@ -386,7 +389,7 @@ const STAGE_H = 720;
 // (vd 绿茶 chưa có vòi -> không ra đơn, nhưng vẫn có trong Sổ Từ)
 function getOrderableTeas() {
   const list = BOBA_VOCAB.teas.filter(t =>
-    document.querySelector(`.m-dispenser-urn[data-tea="${t.id}"]`) &&
+    document.querySelector(`.m-dispenser-urn[data-tea="${t.id}"]`) ||
     document.querySelector(`.btn-spout-lever[data-tea="${t.id}"]`)
   );
   return list.length > 0 ? list : BOBA_VOCAB.teas;
@@ -968,13 +971,38 @@ class PapaBobaGame {
       this.showToast('🌪️', 'Đã lắc đều ly trà sữa thơm ngon!');
     });
 
-    // Lids box in Master Counter
-    document.getElementById('master-lids-box')?.addEventListener('click', () => {
+    // Lids box & Sealer Machine in Master Counter
+    const sealCupFn = () => {
       this.cup.hasLid = true;
       if (!this.cup.strawColor) this.cup.strawColor = '#f43f5e';
       this.audio.playPop();
       this.updateAllCupVisuals();
-      this.showToast('🐻', 'Đã đóng nắp và cắm ống hút!');
+      const lamp = document.querySelector('.sealer-lamp');
+      if (lamp) {
+        lamp.classList.remove('ready');
+        lamp.classList.add('sealing');
+        setTimeout(() => {
+          lamp.classList.remove('sealing');
+          lamp.classList.add('ready');
+        }, 400);
+      }
+      this.showToast('🧋', 'Đã dập nắp và cắm ống hút!');
+    };
+    document.getElementById('master-lids-box')?.addEventListener('click', sealCupFn);
+    document.getElementById('master-sealer-machine')?.addEventListener('click', sealCupFn);
+
+    // Cup Stacks (M & L) Size Selection
+    document.getElementById('cup-stack-m')?.addEventListener('click', () => {
+      document.getElementById('cup-stack-m')?.classList.add('active');
+      document.getElementById('cup-stack-l')?.classList.remove('active');
+      this.audio.playPop();
+      this.showToast('🥤', 'Đã chọn ly size M (Vừa)');
+    });
+    document.getElementById('cup-stack-l')?.addEventListener('click', () => {
+      document.getElementById('cup-stack-l')?.classList.add('active');
+      document.getElementById('cup-stack-m')?.classList.remove('active');
+      this.audio.playPop();
+      this.showToast('🥤', 'Đã chọn ly size L (Lớn)');
     });
 
     // Trash in Master Counter
@@ -1105,7 +1133,7 @@ class PapaBobaGame {
     if (masterTop) {
       masterTop.innerHTML = '';
       this.cup.toppings.forEach(top => {
-        const count = (top.id === 'boba' || top.id === 'redbean') ? 4 : 2;
+        const count = (top.id === 'boba' || top.id === 'whiteboba' || top.id === 'redbean') ? 4 : 2;
         for (let k = 0; k < count; k++) {
           const dot = document.createElement('span');
           dot.className = `m-top-dot t-${top.id}`;
@@ -1121,6 +1149,26 @@ class PapaBobaGame {
     if (masterStraw) {
       masterStraw.style.display = this.cup.strawColor ? '' : 'none';
       if (this.cup.strawColor) masterStraw.style.background = this.cup.strawColor;
+    }
+
+    // Coaster Precision Target Pour Gauge (Papa's Green Target Bar)
+    const coasterGauge = document.getElementById('coaster-gauge-fill');
+    if (coasterGauge) {
+      coasterGauge.style.width = `${Math.min(100, this.cup.pourLevel || 0)}%`;
+      coasterGauge.classList.toggle('good', this.cup.pourLevel >= 65 && this.cup.pourLevel <= 75);
+    }
+
+    // Coaster Spec Pill (e.g. Đường 50% · Ít đá)
+    const coasterSpec = document.getElementById('coaster-spec-pill');
+    if (coasterSpec) {
+      const parts = [];
+      if (this.cup.sugar) parts.push(this.cup.sugar.vi || this.cup.sugar.hanzi);
+      if (this.cup.ice) parts.push(this.cup.ice.vi || this.cup.ice.hanzi);
+      if (this.cup.toppings && this.cup.toppings.length > 0) {
+        parts.push(this.cup.toppings.map(t => t.vi || t.hanzi).join('+'));
+      }
+      coasterSpec.textContent = parts.length > 0 ? parts.join(' · ') : 'Chưa chọn đường đá';
+      coasterSpec.classList.toggle('has-spec', parts.length > 0);
     }
 
     if (masterPills) {
@@ -1921,6 +1969,22 @@ class PapaBobaGame {
     this.renderRecipeCards();
     this.updatePatienceUI();
 
+    // Cập nhật bong bóng hàng chờ (xN) giống video mẫu
+    const queueEl = document.getElementById('master-queue-pills');
+    if (queueEl) {
+      const lineTickets = this.tickets.filter(t => t.status === 'line' || t.status === 'waiting');
+      const otherTickets = lineTickets.filter(t => t !== ct);
+      if (otherTickets.length > 0) {
+        queueEl.innerHTML = `
+          <span class="queue-num-badge">👥 x${otherTickets.length}</span>
+          ${otherTickets.slice(0, 2).map(t => `<img src="${t.customer.image}" class="queue-avatar-dot" alt="" title="${t.customer.nameVi}" />`).join('')}
+        `;
+        queueEl.style.display = 'flex';
+      } else {
+        queueEl.style.display = 'none';
+      }
+    }
+
     if (changed && !this.servingTicket) {
       this.playCustomerAnim('customer-enter');
       setTimeout(() => this.speakOrder(), 450);
@@ -2014,6 +2078,19 @@ class PapaBobaGame {
       wrap.style.display = show ? '' : 'none';
       if (show) paint(wrap.querySelector('.patience-meter'), ct);
     });
+
+    // Cập nhật thanh kiên nhẫn tích hợp ngay bên trong bong bóng lời gọi món
+    const mPFill = document.getElementById('master-patience-fill');
+    const mPMood = document.getElementById('master-patience-mood');
+    if (mPFill && ct) {
+      const left = Math.max(0, 1 - this.patienceUsed(ct));
+      mPFill.style.width = `${Math.round(left * 100)}%`;
+      mPFill.classList.toggle('mid', left <= 0.6 && left > 0.3);
+      mPFill.classList.toggle('low', left <= 0.3);
+      if (mPMood) {
+        mPMood.textContent = left > 0.6 ? '😊' : (left > 0.3 ? '😐' : '😠');
+      }
+    }
 
     // Cập nhật đếm ngược khách tiếp theo khi quầy trống
     if (!ct) {
@@ -2221,6 +2298,46 @@ class PapaBobaGame {
       mVi.style.display = this.showVietnamese ? '' : 'none';
       mVi.textContent = `Cho tôi 1 ly ${ord.tea.vi.toLowerCase()} ${ord.topping.vi.toLowerCase()}, ${ord.sugar.vi.toLowerCase()}, ${ord.ice.vi.toLowerCase()}`;
     }
+
+    // Dynamic Mini Target Cup Preview
+    this.renderMiniCupPreview(ord);
+  }
+
+  // Vẽ hình ly trà sữa thu nhỏ trực quan trong bong bóng order
+  renderMiniCupPreview(ord) {
+    const el = document.getElementById('master-cup-preview');
+    if (!el || !ord) return;
+    const tea = ord.tea || {};
+    const teaColor = tea.color || '#df9b58';
+    const top = ord.topping || {};
+
+    let dotsHtml = '';
+    if (top.id === 'whiteboba') {
+      dotsHtml = '<span class="mini-dot white"></span><span class="mini-dot white"></span><span class="mini-dot white"></span>';
+    } else if (top.id === 'boba') {
+      dotsHtml = '<span class="mini-dot black"></span><span class="mini-dot black"></span><span class="mini-dot black"></span>';
+    } else if (top.id === 'matcha') {
+      dotsHtml = '<span class="mini-dot matcha"></span><span class="mini-dot matcha"></span>';
+    } else if (top.id === 'mango') {
+      dotsHtml = '<span class="mini-dot mango"></span><span class="mini-dot mango"></span>';
+    } else if (top.id === 'redbean') {
+      dotsHtml = '<span class="mini-dot redbean"></span><span class="mini-dot redbean"></span>';
+    } else {
+      dotsHtml = '<span class="mini-dot coconut"></span><span class="mini-dot coconut"></span>';
+    }
+
+    el.innerHTML = `
+      <div class="mini-target-cup-render" title="${tea.vi || ''} ${top.vi || ''}">
+        <div class="mini-cup-dome">
+          <div class="mini-cup-straw"></div>
+        </div>
+        <div class="mini-cup-glass">
+          <div class="mini-cup-fluid" style="background:${teaColor};"></div>
+          <div class="mini-cup-ice"><i></i><i></i></div>
+          <div class="mini-cup-dots">${dotsHtml}</div>
+        </div>
+      </div>
+    `;
   }
 
   speakOrder() {
