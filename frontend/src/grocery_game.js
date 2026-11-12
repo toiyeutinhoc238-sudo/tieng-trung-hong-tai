@@ -1,12 +1,12 @@
 /**
- * Tiệm Tạp Hóa Của Tôi (我的小卖部 - My Chinese Grocery Store)
- * Core Game Engine & Simulation System
+ * Tiệm Tạp Hóa Của Tôi (我的小卖部 - Papa's Chinese Grocery)
+ * Core Game Engine: Papa's Freezeria Station-Based Simulation System
  */
 
 // ============================================================================
-// 1. AUDIO SYNTHESIZER (ZERO-LATENCY WEB AUDIO API & TTS)
+// 1. AUDIO SYNTHESIZER (WEB AUDIO API & TTS)
 // ============================================================================
-class GroceryAudio {
+class PapaGroceryAudio {
   constructor() {
     this.ctx = null;
     this.sfxEnabled = true;
@@ -15,13 +15,9 @@ class GroceryAudio {
 
     if ('speechSynthesis' in window) {
       window.speechSynthesis.onvoiceschanged = () => {
-        try {
-          this.cachedVoices = window.speechSynthesis.getVoices();
-        } catch (e) {}
+        try { this.cachedVoices = window.speechSynthesis.getVoices(); } catch (e) {}
       };
-      try {
-        this.cachedVoices = window.speechSynthesis.getVoices();
-      } catch (e) {}
+      try { this.cachedVoices = window.speechSynthesis.getVoices(); } catch (e) {}
     }
   }
 
@@ -35,7 +31,6 @@ class GroceryAudio {
     }
   }
 
-  // Tiếng leng keng chuông thu ngân khi nhận tiền đúng
   playCashRegister() {
     if (!this.sfxEnabled) return;
     this.init();
@@ -56,7 +51,6 @@ class GroceryAudio {
     });
   }
 
-  // Tiếng nhặt món hàng vào giỏ
   playPickItem() {
     if (!this.sfxEnabled) return;
     this.init();
@@ -75,7 +69,23 @@ class GroceryAudio {
     osc.stop(now + 0.09);
   }
 
-  // Tiếng thả tiền vào khay thối
+  playScanBeep() {
+    if (!this.sfxEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1760, now); // A6 beep
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.11);
+  }
+
   playCoinClink() {
     if (!this.sfxEnabled) return;
     this.init();
@@ -96,7 +106,6 @@ class GroceryAudio {
     });
   }
 
-  // Tiếng sai tiền thối
   playErrorBuzz() {
     if (!this.sfxEnabled) return;
     this.init();
@@ -115,14 +124,13 @@ class GroceryAudio {
     osc.stop(now + 0.32);
   }
 
-  // Phát âm giọng đọc tiếng Trung
   speak(text) {
     if (!this.voiceEnabled || !('speechSynthesis' in window)) return;
     try {
       window.speechSynthesis.cancel();
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = 'zh-CN';
-      utter.rate = 0.88; // Tốc độ vừa phải cho người học
+      utter.rate = 0.88;
       utter.pitch = 1.05;
 
       if (!this.cachedVoices || this.cachedVoices.length === 0) {
@@ -139,10 +147,10 @@ class GroceryAudio {
 }
 
 // ============================================================================
-// 2. ITEMS DATABASE (DANH MỤC HÀNG HÓA TẠP HÓA TUỔI THƠ TRUNG HOA)
+// 2. ITEMS DATABASE
 // ============================================================================
 const GROCERY_ITEMS = [
-  // 5 Gian hàng ban đầu (Kệ 1 -> Kệ 5)
+  // 5 Gian hàng ban đầu
   {
     id: 'latiao',
     shelfIndex: 1,
@@ -223,8 +231,7 @@ const GROCERY_ITEMS = [
     unlocked: true,
     unlockCost: 0
   },
-
-  // Các Gian Hàng Mở Rộng Tiếp Theo (Kệ 6 -> Kệ 12)
+  // Gian hàng mở rộng
   {
     id: 'wangzai_milk',
     shelfIndex: 6,
@@ -339,17 +346,15 @@ const GROCERY_ITEMS = [
   }
 ];
 
-// Khách hàng Anime 3D
 const GROCERY_CUSTOMERS = [
-  { id: 'xiaohao', nameChn: '小浩', nameVi: 'Tiểu Hạo', role: 'Học sinh tiểu học', emoji: '👦', greeting: '老板好！我要买点零食。' },
-  { id: 'xiaoyu', nameChn: '小雨', nameVi: 'Bé Mưa', role: 'Bé gái hàng xóm', emoji: '👧', greeting: '老板，请给我拿这些！' },
-  { id: 'xiaotong', nameChn: '晓彤', nameVi: 'Hiểu Đồng', role: 'Nữ sinh trung học', emoji: '👩‍🎓', greeting: '你好老板，我想买这个。' },
-  { id: 'linjie', nameChn: '林姐', nameVi: 'Chị Lâm', role: 'Chị gái văn phòng', emoji: '👩‍💼', greeting: '下班了，买点喝的！' },
-  { id: 'wangshu', nameChn: '王叔', nameVi: 'Chú Vương', role: 'Bác hàng xóm', emoji: '👨', greeting: '老板，今天有什么新鲜好吃的？' },
-  { id: 'abao', nameChn: '阿宝', nameVi: 'Gấu A Bảo', role: 'Linh vật đáng yêu', emoji: '🐼', greeting: '我要好多好吃的，谢谢老板！' }
+  { id: 'xiaohao', nameChn: '小浩', nameVi: 'Tiểu Hạo', role: 'Học sinh tiểu học', emoji: '👦' },
+  { id: 'xiaoyu', nameChn: '小雨', nameVi: 'Bé Mưa', role: 'Bé gái hàng xóm', emoji: '👧' },
+  { id: 'xiaotong', nameChn: '晓彤', nameVi: 'Hiểu Đồng', role: 'Nữ sinh trung học', emoji: '👩‍🎓' },
+  { id: 'linjie', nameChn: '林姐', nameVi: 'Chị Lâm', role: 'Chị gái văn phòng', emoji: '👩‍💼' },
+  { id: 'wangshu', nameChn: '王叔', nameVi: 'Chú Vương', role: 'Bác hàng xóm', emoji: '👨' },
+  { id: 'abao', nameChn: '阿宝', nameVi: 'Gấu A Bảo', role: 'Linh vật đáng yêu', emoji: '🐼' }
 ];
 
-// Danh mục từ vựng tạp hóa
 const VOCAB_DATABASE = {
   snacks: [
     { chn: '辣条', pin: 'làtiáo', vi: 'Que cay Tứ Xuyên' },
@@ -357,63 +362,49 @@ const VOCAB_DATABASE = {
     { chn: '方便面', pin: 'fāngbiànmiàn', vi: 'Mì ăn liền' },
     { chn: '咪咪虾条', pin: 'mīmī xiātiáo', vi: 'Snack tôm MiMi' },
     { chn: '魔芋爽', pin: 'móyù shuǎng', vi: 'Mực chay ma dục sảng' },
-    { chn: '薯片', pin: 'shǔpiàn', vi: 'Khoai tây chiên' },
-    { chn: '果冻', pin: 'guǒdòng', vi: 'Thạch hoa quả' },
-    { chn: '瓜子', pin: 'guāzǐ', vi: 'Hạt hướng dương' },
-    { chn: '酸辣粉', pin: 'suānlàfěn', vi: 'Miến chua cay' }
+    { chn: '薯片', pin: 'shǔpiàn', vi: 'Khoai tây chiên' }
   ],
   drinks: [
     { chn: '冰红茶', pin: 'bīnghóngchá', vi: 'Trà đỏ chanh lạnh' },
     { chn: '旺仔牛奶', pin: 'wàngzǎi niúnǎi', vi: 'Sữa lon Vượng Tử' },
-    { chn: '可乐 / 肥宅水', pin: 'kělè / féizhǎishuǐ', vi: 'Nước ngọt Coca' },
-    { chn: '矿泉水', pin: 'kuàngquánshuǐ', vi: 'Nước khoáng' },
-    { chn: '绿茶', pin: 'lǜchá', vi: 'Trà xanh' }
+    { chn: '可乐 / 肥宅水', pin: 'kělè / féizhǎishuǐ', vi: 'Nước ngọt Coca' }
   ],
   quantifiers: [
     { chn: '包', pin: 'bāo', vi: 'Gói, túi (nhỏ)' },
     { chn: '瓶', pin: 'píng', vi: 'Chai (nước)' },
     { chn: '罐 / 听', pin: 'guàn / tīng', vi: 'Lon (nước ngọt, sữa)' },
-    { chn: '桶 / 碗', pin: 'tǒng / wǎn', vi: 'Tô, bát (mì)' },
-    { chn: '袋', pin: 'dài', vi: 'Bao, túi (lớn)' },
-    { chn: '根', pin: 'gēn', vi: 'Cây, que (kem, kẹo que)' },
-    { chn: '个', pin: 'gè', vi: 'Cái, chiếc (chung)' }
+    { chn: '桶 / 碗', pin: 'tǒng / wǎn', vi: 'Tô, bát (mì)' }
   ],
   business: [
     { chn: '小卖部', pin: 'xiǎomàibù', vi: 'Tiệm tạp hóa nhỏ' },
     { chn: '货架', pin: 'huòjià', vi: 'Kệ trưng bày hàng' },
     { chn: '进货', pin: 'jìnhuò', vi: 'Nhập hàng hóa' },
-    { chn: '标价 / 单价', pin: 'biāojià / dānjià', vi: 'Giá bán niêm yết' },
-    { chn: '应付 / 应收', pin: 'yìngfù / yìngshōu', vi: 'Số tiền phải thanh toán' },
-    { chn: '实付 / 实收', pin: 'shífù / shíshōu', vi: 'Số tiền khách thực trả' },
     { chn: '找零', pin: 'zhǎolíng', vi: 'Thối tiền thừa' },
-    { chn: '现金', pin: 'xiànjīn', vi: 'Tiền mặt' },
-    { chn: '零钱', pin: 'língqián', vi: 'Tiền lẻ' },
     { chn: '打烊', pin: 'dǎyàng', vi: 'Đóng cửa tiệm' }
   ]
 };
 
 // ============================================================================
-// 3. MAIN GROCERY GAME ENGINE
+// 3. MAIN PAPA'S GROCERY GAME ENGINE
 // ============================================================================
-class GroceryGameEngine {
+class PapaGroceryGame {
   constructor() {
-    this.audio = new GroceryAudio();
+    this.audio = new PapaGroceryAudio();
 
-    // Game State
-    this.money = 50.00; // Vốn tiền mặt khởi đầu
+    // Stats
+    this.money = 50.00;
     this.day = 1;
     this.dayTimeMinutes = 8 * 60 + 30; // 08:30 sáng
     this.isDayActive = true;
     this.timerInterval = null;
 
-    // Shelf items inventory
+    // Shelves
     this.shelves = JSON.parse(JSON.stringify(GROCERY_ITEMS));
-    // Default initial stocks
     this.shelves.forEach(item => {
       item.currentStock = item.unlocked ? 6 : 0;
     });
 
-    // Today's Stats
+    // Today stats
     this.todayRevenue = 0.00;
     this.todayCost = 0.00;
     this.todayCustomersServed = 0;
@@ -421,15 +412,20 @@ class GroceryGameEngine {
     this.changeCalculationsCorrect = 0;
     this.learnedVocab = new Set(['辣条', '大白兔奶糖', '冰红茶', '找零', '包', '瓶']);
 
-    // Current Customer & Order
+    // Stations: 'view-order-station', 'view-shelves-station', 'view-scan-station', 'view-change-station'
+    this.currentStation = 'view-order-station';
+
+    // Order & Shopping state
     this.currentCustomer = null;
-    this.currentOrder = null; // { items: [{ item, qty }], dueAmount, paidAmount, changeNeeded }
+    this.currentOrder = null;
+    this.isOrderTaken = false;
 
-    // Current Basket
+    // Basket & Scanning
     this.basket = []; // [{ item, qty }]
+    this.scannedItems = []; // queue of single items scanned
 
-    // Cashier Change Tray
-    this.changeTray = []; // [50, 20, 10, 5, 1, 0.5, 0.1...]
+    // Change tray
+    this.changeTray = [];
 
     // Settings
     this.showPinyin = true;
@@ -441,15 +437,12 @@ class GroceryGameEngine {
     this.spawnNewCustomer();
   }
 
-  // Khôi phục lưu trữ từ LocalStorage
   loadSave() {
     try {
       const savedMoney = localStorage.getItem('grocery_money');
       if (savedMoney !== null) this.money = parseFloat(savedMoney);
-
       const savedDay = localStorage.getItem('grocery_day');
       if (savedDay !== null) this.day = parseInt(savedDay, 10);
-
       const savedShelves = localStorage.getItem('grocery_shelves');
       if (savedShelves) {
         const parsed = JSON.parse(savedShelves);
@@ -461,9 +454,7 @@ class GroceryGameEngine {
           }
         });
       }
-    } catch (e) {
-      console.warn('Load save error:', e);
-    }
+    } catch (e) {}
   }
 
   saveGame() {
@@ -478,39 +469,87 @@ class GroceryGameEngine {
     } catch (e) {}
   }
 
-  // Khởi tạo các sự kiện DOM
   initDOM() {
     this.updateHUD();
-    this.renderShelvesGrid();
-    this.renderBasket();
-    this.renderChangeTray();
 
-    // Denominations buttons
+    // Bottom Station Tab Switching
+    document.querySelectorAll('.station-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.target;
+        this.switchStation(target);
+      });
+    });
+
+    // Navigation buttons
+    document.getElementById('btn-goto-shelves-from-order')?.addEventListener('click', () => {
+      this.switchStation('view-shelves-station');
+    });
+    document.getElementById('btn-back-to-order-from-shelves')?.addEventListener('click', () => {
+      this.switchStation('view-order-station');
+    });
+    document.getElementById('btn-goto-scan')?.addEventListener('click', () => {
+      this.prepareScanStation();
+      this.switchStation('view-scan-station');
+    });
+    document.getElementById('btn-back-to-shelves-from-scan')?.addEventListener('click', () => {
+      this.switchStation('view-shelves-station');
+    });
+    document.getElementById('btn-goto-change')?.addEventListener('click', () => {
+      this.prepareChangeStation();
+      this.switchStation('view-change-station');
+    });
+    document.getElementById('btn-back-to-scan')?.addEventListener('click', () => {
+      this.switchStation('view-scan-station');
+    });
+
+    // Take Order Button
+    document.getElementById('btn-take-order-action')?.addEventListener('click', () => {
+      this.takeOrder();
+    });
+
+    // Replay speech
+    document.getElementById('btn-replay-order-audio')?.addEventListener('click', () => {
+      this.speakOrder();
+    });
+
+    // Ticket zoom
+    document.getElementById('active-grocery-ticket')?.addEventListener('click', (e) => {
+      e.currentTarget.classList.toggle('zoomed');
+    });
+
+    // Clear basket
+    document.getElementById('btn-clear-basket-station')?.addEventListener('click', () => {
+      this.clearBasket();
+    });
+
+    // Scan Button
+    document.getElementById('btn-trigger-scanner')?.addEventListener('click', () => {
+      this.scanNextItem();
+    });
+
+    // Denominations buttons in Change Station
     document.querySelectorAll('.btn-money-bill, .btn-money-coin').forEach(btn => {
       btn.addEventListener('click', () => {
-        const val = parseFloat(btn.dataset.value);
+        const val = parseFloat(btn.dataset.val);
         this.addChangeToTray(val);
       });
     });
 
-    // Reset change tray
-    document.getElementById('btn-reset-tray')?.addEventListener('click', () => {
+    // Reset tray
+    document.getElementById('btn-reset-tray-action')?.addEventListener('click', () => {
       this.resetChangeTray();
     });
 
-    // Verify change checkout
-    document.getElementById('btn-verify-change')?.addEventListener('click', () => {
-      this.verifyAndCompleteTransaction();
+    // Confirm & Deliver in Change Station
+    document.getElementById('btn-confirm-and-deliver')?.addEventListener('click', () => {
+      this.verifyAndDeliverGoods();
     });
 
-    // Proceed to checkout button from basket
-    document.getElementById('btn-proceed-checkout')?.addEventListener('click', () => {
-      this.confirmBasketToCheckout();
-    });
-
-    // Clear basket
-    document.getElementById('btn-clear-basket')?.addEventListener('click', () => {
-      this.clearBasket();
+    // Scorecard continue
+    document.getElementById('btn-next-customer-grocery')?.addEventListener('click', () => {
+      document.getElementById('modal-grocery-score').style.display = 'none';
+      this.spawnNewCustomer();
+      this.switchStation('view-order-station');
     });
 
     // Early Close
@@ -518,51 +557,32 @@ class GroceryGameEngine {
       this.triggerEarlyClose();
     });
 
-    // Replay audio
-    document.getElementById('btn-replay-order-audio')?.addEventListener('click', () => {
-      this.speakOrder();
+    // Restock modal
+    document.getElementById('btn-open-restock')?.addEventListener('click', () => this.openRestockModal());
+    document.getElementById('btn-quick-restock-header')?.addEventListener('click', () => this.openRestockModal());
+    document.getElementById('btn-autofill-all-stock')?.addEventListener('click', () => this.autofillAllStockInModal());
+    document.getElementById('btn-confirm-restock-open')?.addEventListener('click', () => this.confirmRestockAndResume());
+
+    // Unlock shelf
+    document.getElementById('btn-unlock-shelf-header')?.addEventListener('click', () => this.openUnlockModal());
+
+    // Vocab modal
+    document.getElementById('btn-open-vocab')?.addEventListener('click', () => this.openVocabModal());
+    document.querySelectorAll('.vocab-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.vocab-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.renderVocabCategory(btn.dataset.tab);
+      });
     });
 
-    // Mascot
-    document.getElementById('hud-mascot-dragon')?.addEventListener('click', () => {
-      this.audio.speak('生意兴隆，财源广进！加油！');
-    });
+    // Day summary next day
+    document.getElementById('btn-next-day-start')?.addEventListener('click', () => this.startNextDay());
 
-    // Restock Modal Buttons
-    document.getElementById('btn-open-restock')?.addEventListener('click', () => {
-      this.openRestockModal();
-    });
-    document.getElementById('btn-quick-restock')?.addEventListener('click', () => {
-      this.openRestockModal();
-    });
-    document.getElementById('btn-autofill-all-stock')?.addEventListener('click', () => {
-      this.autofillAllStockInModal();
-    });
-    document.getElementById('btn-confirm-restock-open')?.addEventListener('click', () => {
-      this.confirmRestockAndResume();
-    });
-
-    // Unlock shelf button
-    document.getElementById('btn-unlock-next-shelf')?.addEventListener('click', () => {
-      this.openUnlockModal();
-    });
-
-    // Vocab Modal
-    document.getElementById('btn-open-vocab')?.addEventListener('click', () => {
-      this.openVocabModal();
-    });
-
-    // Day summary next day button
-    document.getElementById('btn-next-day-start')?.addEventListener('click', () => {
-      this.startNextDay();
-    });
-
-    // Settings
+    // Pause / Settings
     document.getElementById('btn-pause-game')?.addEventListener('click', () => {
       document.getElementById('modal-settings').style.display = 'flex';
     });
-
-    // Settings switches
     document.getElementById('setting-sfx')?.addEventListener('change', (e) => {
       this.audio.sfxEnabled = e.target.checked;
     });
@@ -571,32 +591,41 @@ class GroceryGameEngine {
     });
     document.getElementById('setting-pinyin')?.addEventListener('change', (e) => {
       this.showPinyin = e.target.checked;
-      this.updateCustomerBalloon();
+      this.updateSpeechBalloonUI();
     });
     document.getElementById('setting-vietnamese')?.addEventListener('change', (e) => {
       this.showVietnamese = e.target.checked;
-      this.updateCustomerBalloon();
+      this.updateSpeechBalloonUI();
     });
-
-    // Reset game data button
     document.getElementById('btn-reset-save')?.addEventListener('click', () => {
-      if (confirm('Bạn có chắc chắn muốn chơi lại từ đầu không? Toàn bộ số vốn và ngày chơi sẽ được làm mới.')) {
+      if (confirm('Bạn có chắc chắn muốn chơi lại từ đầu không?')) {
         localStorage.clear();
         location.reload();
       }
     });
 
-    // Vocab tabs
-    document.querySelectorAll('.vocab-tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.vocab-tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this.renderVocabCategory(btn.dataset.tab);
-      });
+    // Mascot
+    document.getElementById('hud-mascot-dragon')?.addEventListener('click', () => {
+      this.audio.speak('生意兴隆，财源广进！加油！');
     });
   }
 
-  // Cập nhật thanh trạng thái Top HUD
+  switchStation(stationId) {
+    this.currentStation = stationId;
+
+    document.querySelectorAll('.grocery-station-view').forEach(view => {
+      view.classList.remove('active');
+    });
+    const target = document.getElementById(stationId);
+    if (target) target.classList.add('active');
+
+    document.querySelectorAll('.station-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.target === stationId);
+    });
+
+    this.audio.playPickItem();
+  }
+
   updateHUD() {
     const moneyEl = document.getElementById('hud-money-val');
     if (moneyEl) moneyEl.textContent = `${this.money.toFixed(2)} ¥`;
@@ -607,21 +636,26 @@ class GroceryGameEngine {
     const vocabBadge = document.getElementById('hud-vocab-badge');
     if (vocabBadge) vocabBadge.textContent = `${this.learnedVocab.size}/25`;
 
+    const revEl = document.getElementById('stats-rev-val');
+    if (revEl) revEl.textContent = `${this.todayRevenue.toFixed(2)} ¥`;
+
+    const custEl = document.getElementById('stats-cust-val');
+    if (custEl) custEl.textContent = this.todayCustomersServed.toString();
+
+    const wordsEl = document.getElementById('stats-words-val');
+    if (wordsEl) wordsEl.textContent = this.learnedVocab.size.toString();
+
     this.updateClockUI();
   }
 
-  // Đồng hồ ca làm việc (08:00 -> 20:00)
   startDayClock() {
     if (this.timerInterval) clearInterval(this.timerInterval);
     this.isDayActive = true;
-
-    // Cứ 2.5 giây trôi qua 15 phút trong game (1 ngày kéo dài ~120 giây)
     this.timerInterval = setInterval(() => {
       if (!this.isDayActive) return;
       this.dayTimeMinutes += 10;
       this.updateClockUI();
-
-      if (this.dayTimeMinutes >= 20 * 60) { // 20:00 tối hết giờ làm việc
+      if (this.dayTimeMinutes >= 20 * 60) {
         this.finishDay(false);
       }
     }, 2500);
@@ -631,11 +665,9 @@ class GroceryGameEngine {
     const hours = Math.floor(this.dayTimeMinutes / 60);
     const mins = this.dayTimeMinutes % 60;
     const timeStr = `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-
     const clockEl = document.getElementById('hud-clock-val');
     if (clockEl) clockEl.textContent = timeStr;
 
-    // Progress bar from 08:00 to 20:00 (720 minutes total)
     const elapsed = Math.max(0, this.dayTimeMinutes - (8 * 60));
     const pct = Math.min(100, Math.round((elapsed / 720) * 100));
     const fillEl = document.getElementById('hud-time-fill');
@@ -643,71 +675,183 @@ class GroceryGameEngine {
   }
 
   // ==========================================================================
-  // CỘT 1: GIAN HÀNG / KỆ HÀNG (SHELVES)
+  // STATION 1: ORDER STATION
   // ==========================================================================
-  renderShelvesGrid() {
-    const container = document.getElementById('shelf-rack-container');
-    if (!container) return;
-    container.innerHTML = '';
+  spawnNewCustomer() {
+    this.basket = [];
+    this.scannedItems = [];
+    this.changeTray = [];
 
-    this.shelves.forEach((item, idx) => {
-      if (item.unlocked) {
-        const isOutOfStock = item.currentStock <= 0;
-        const card = document.createElement('div');
-        card.className = `shelf-item-card ${isOutOfStock ? 'out-of-stock' : ''}`;
-        card.innerHTML = `
-          <span class="shelf-badge-slot">Kệ ${item.shelfIndex}</span>
-          <span class="shelf-stock-pill ${item.currentStock <= 2 ? 'low-stock' : ''}">
-            ${item.currentStock > 0 ? `Còn: ${item.currentStock} ${item.quantifier}` : 'Hết hàng'}
-          </span>
-          <div class="shelf-item-visual">${item.emoji}</div>
-          <div class="shelf-item-details">
-            <span class="shelf-item-name-chn kaiti-font">${item.nameChn}</span>
-            <span class="shelf-item-pinyin">${item.pinyin}</span>
-            <span class="shelf-item-name-vi">(${item.nameVi})</span>
-          </div>
-          <div class="shelf-item-price-bar">
-            <span class="shelf-price-val">${item.price.toFixed(2)} ¥</span>
-            <button type="button" class="btn-pick-to-basket" ${isOutOfStock ? 'disabled' : ''}>
-              ${isOutOfStock ? 'Hết hàng' : '+ Nhặt giỏ'}
-            </button>
+    this.currentCustomer = GROCERY_CUSTOMERS[Math.floor(Math.random() * GROCERY_CUSTOMERS.length)];
+
+    // Avatar
+    const emojiVisual = document.querySelector('.customer-chibi-visual');
+    const nameLabel = document.querySelector('#customer-name-badge .c-name');
+    const roleLabel = document.querySelector('#customer-name-badge .c-role');
+    if (emojiVisual) emojiVisual.innerHTML = `<span class="customer-emoji-avatar">${this.currentCustomer.emoji}</span>`;
+    if (nameLabel) nameLabel.textContent = this.currentCustomer.nameChn;
+    if (roleLabel) roleLabel.textContent = `(${this.currentCustomer.role})`;
+
+    // Order items
+    const availableItems = this.shelves.filter(s => s.unlocked && s.currentStock > 0);
+    let chosen = [];
+
+    if (availableItems.length === 0) {
+      this.currentOrder = null;
+      const chnEl = document.getElementById('order-chn-text');
+      if (chnEl) chnEl.textContent = '老板，货架上没零食啦，快补货吧！';
+      return;
+    }
+
+    const count = Math.min(availableItems.length, Math.random() > 0.4 ? 2 : 1);
+    const shuffled = [...availableItems].sort(() => 0.5 - Math.random());
+    for (let i = 0; i < count; i++) {
+      const it = shuffled[i];
+      const maxCanBuy = Math.min(it.currentStock, 2);
+      const qty = Math.floor(Math.random() * maxCanBuy) + 1;
+      chosen.push({ item: it, qty });
+    }
+
+    const dueAmount = chosen.reduce((sum, ci) => sum + ci.item.price * ci.qty, 0);
+
+    // Paid Cash
+    let paidAmount = dueAmount;
+    const candidates = [1, 2, 5, 10, 20, 50, 100].filter(val => val >= dueAmount);
+    if (candidates.length > 0) {
+      paidAmount = candidates[Math.floor(Math.random() * Math.min(candidates.length, 3))];
+    } else {
+      paidAmount = Math.ceil(dueAmount / 10) * 10;
+    }
+    const changeNeeded = parseFloat((paidAmount - dueAmount).toFixed(2));
+
+    this.currentOrder = {
+      items: chosen,
+      dueAmount,
+      paidAmount,
+      changeNeeded
+    };
+
+    this.isOrderTaken = false;
+
+    // Reset ticket header
+    const ticketCust = document.getElementById('ticket-header-name');
+    if (ticketCust) ticketCust.textContent = this.currentCustomer.nameChn;
+
+    // Ticket items list
+    const ticketList = document.getElementById('ticket-items-list');
+    if (ticketList) {
+      ticketList.innerHTML = this.currentOrder.items.map(ci => {
+        const qStr = ci.qty === 2 ? '两' : (ci.qty === 1 ? '一' : ci.qty.toString());
+        return `
+          <div class="ticket-item-row">
+            <span class="t-emoji">${ci.item.emoji}</span>
+            <strong class="t-name kaiti-font">${qStr}${ci.item.quantifier} ${ci.item.nameChn}</strong>
           </div>
         `;
+      }).join('');
+    }
 
-        if (!isOutOfStock) {
+    this.updateSpeechBalloonUI();
+
+    const nextBtn = document.getElementById('btn-goto-shelves-from-order');
+    if (nextBtn) nextBtn.style.display = 'none';
+
+    setTimeout(() => {
+      this.speakOrder();
+    }, 400);
+
+    this.renderShelvesGrid();
+    this.renderBasketUI();
+  }
+
+  updateSpeechBalloonUI() {
+    if (!this.currentOrder) return;
+    const parts = this.currentOrder.items.map(ci => {
+      const qtyStr = ci.qty === 2 ? '两' : (ci.qty === 1 ? '一' : ci.qty.toString());
+      return `${qtyStr}${ci.item.quantifier}${ci.item.nameChn}`;
+    });
+
+    const chnEl = document.getElementById('order-chn-text');
+    const pinEl = document.getElementById('order-pin-text');
+    const viEl = document.getElementById('order-vi-text');
+
+    if (chnEl) chnEl.textContent = `老板，我要${parts.join('和')}！`;
+    if (pinEl) {
+      pinEl.style.display = this.showPinyin ? 'block' : 'none';
+      pinEl.textContent = `Lǎobǎn, wǒ yào ${this.currentOrder.items.map(ci => `${ci.qty === 2 ? 'liǎng' : 'yī'} ${ci.item.pinyin}`).join(' hé ')}!`;
+    }
+    if (viEl) {
+      viEl.style.display = this.showVietnamese ? 'block' : 'none';
+      viEl.textContent = `(Cho tôi ${this.currentOrder.items.map(ci => `${ci.qty} ${ci.item.quantifierVi} ${ci.item.nameVi.toLowerCase()}`).join(' và ')}!)`;
+    }
+  }
+
+  speakOrder() {
+    if (!this.currentOrder) return;
+    const parts = this.currentOrder.items.map(ci => {
+      const qtyStr = ci.qty === 2 ? '两' : (ci.qty === 1 ? '一' : ci.qty.toString());
+      return `${qtyStr}${ci.item.quantifier}${ci.item.nameChn}`;
+    });
+    this.audio.speak(`老板，我要${parts.join('和')}！`);
+  }
+
+  takeOrder() {
+    this.isOrderTaken = true;
+    this.audio.playPickItem();
+
+    const ticket = document.getElementById('active-grocery-ticket');
+    if (ticket) {
+      ticket.classList.add('zoomed');
+      setTimeout(() => ticket.classList.remove('zoomed'), 1200);
+    }
+
+    const hint = document.getElementById('order-footer-hint');
+    if (hint) {
+      hint.innerHTML = '✅ <strong>Đã ghi phiếu mua hàng!</strong> Hãy chuyển sang <strong>货架区 (Kệ Hàng)</strong> để nhặt đồ vào giỏ!';
+    }
+    const nextBtn = document.getElementById('btn-goto-shelves-from-order');
+    if (nextBtn) nextBtn.style.display = 'flex';
+  }
+
+  // ==========================================================================
+  // STATION 2: SHELF STATION
+  // ==========================================================================
+  renderShelvesGrid() {
+    const rack = document.getElementById('shelves-display-rack');
+    if (!rack) return;
+    rack.innerHTML = '';
+
+    this.shelves.forEach(item => {
+      if (item.unlocked) {
+        const isOut = item.currentStock <= 0;
+        const card = document.createElement('div');
+        card.className = `shelf-prod-card ${isOut ? 'out-of-stock' : ''}`;
+        card.innerHTML = `
+          <span class="stock-tag ${item.currentStock <= 2 ? 'low' : ''}">
+            ${item.currentStock > 0 ? `Còn ${item.currentStock}` : 'Hết'}
+          </span>
+          <div class="prod-visual">${item.emoji}</div>
+          <div class="prod-info">
+            <span class="prod-name-chn kaiti-font">${item.nameChn}</span>
+            <span class="prod-pinyin">${item.pinyin}</span>
+            <strong class="prod-price">${item.price.toFixed(2)} ¥</strong>
+          </div>
+        `;
+        if (!isOut) {
           card.addEventListener('click', () => {
             this.pickItemToBasket(item);
           });
         }
-        container.appendChild(card);
-      } else {
-        // Ô Kệ Đang Khóa
-        const lockedCard = document.createElement('div');
-        lockedCard.className = 'shelf-item-locked';
-        lockedCard.innerHTML = `
-          <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
-          <div class="lock-title">Kệ ${item.shelfIndex}: ${item.nameChn}</div>
-          <div class="lock-cost">Cần vốn: ${item.unlockCost.toFixed(2)} ¥</div>
-        `;
-        lockedCard.addEventListener('click', () => {
-          this.promptUnlockShelf(item);
-        });
-        container.appendChild(lockedCard);
+        rack.appendChild(card);
       }
     });
-
-    this.checkIfAllShelvesEmpty();
   }
 
-  // Nhặt hàng vào giỏ
   pickItemToBasket(item) {
     if (item.currentStock <= 0) return;
-
-    // Giảm tồn trên kệ
     item.currentStock -= 1;
     this.audio.playPickItem();
 
-    // Thêm vào giỏ
     const existing = this.basket.find(b => b.item.id === item.id);
     if (existing) {
       existing.qty += 1;
@@ -715,31 +859,26 @@ class GroceryGameEngine {
       this.basket.push({ item, qty: 1 });
     }
 
-    // Học từ vựng
     this.learnedVocab.add(item.nameChn);
     this.learnedVocab.add(item.quantifier);
 
     this.renderShelvesGrid();
-    this.renderBasket();
+    this.renderBasketUI();
   }
 
-  // Gỡ bớt hàng khỏi giỏ trả lại kệ
   removeItemFromBasket(itemId) {
     const idx = this.basket.findIndex(b => b.item.id === itemId);
     if (idx === -1) return;
-
-    const basketItem = this.basket[idx];
+    const bItem = this.basket[idx];
     const shelfItem = this.shelves.find(s => s.id === itemId);
     if (shelfItem) shelfItem.currentStock += 1;
 
-    basketItem.qty -= 1;
-    if (basketItem.qty <= 0) {
-      this.basket.splice(idx, 1);
-    }
+    bItem.qty -= 1;
+    if (bItem.qty <= 0) this.basket.splice(idx, 1);
 
     this.audio.playPickItem();
     this.renderShelvesGrid();
-    this.renderBasket();
+    this.renderBasketUI();
   }
 
   clearBasket() {
@@ -749,406 +888,336 @@ class GroceryGameEngine {
     });
     this.basket = [];
     this.renderShelvesGrid();
-    this.renderBasket();
+    this.renderBasketUI();
   }
 
-  // Kiểm tra nếu tất cả kệ đã hết sạch hàng
-  checkIfAllShelvesEmpty() {
-    const totalRemaining = this.shelves
-      .filter(s => s.unlocked)
-      .reduce((sum, item) => sum + item.currentStock, 0);
+  renderBasketUI() {
+    const scroll = document.getElementById('basket-items-scroll');
+    const countBadge = document.getElementById('basket-items-count-badge');
+    const subtotalEl = document.getElementById('basket-subtotal-val');
+    const statusEl = document.getElementById('basket-match-status');
+    const gotoScanBtn = document.getElementById('btn-goto-scan');
 
-    if (totalRemaining === 0 && this.isDayActive) {
-      const statusBadge = document.getElementById('hud-status-badge');
-      if (statusBadge) {
-        statusBadge.innerHTML = '🔴 货架已售罄 (Hàng trên kệ đã hết sạch!)';
-        statusBadge.style.color = '#e11d48';
-      }
-    }
-  }
-
-  // ==========================================================================
-  // CỘT 2: GIỎ HÀNG & KHÁCH HÀNG (CUSTOMER & BASKET)
-  // ==========================================================================
-  spawnNewCustomer() {
-    // Chọn ngẫu nhiên khách hàng anime
-    this.currentCustomer = GROCERY_CUSTOMERS[Math.floor(Math.random() * GROCERY_CUSTOMERS.length)];
-
-    // Cập nhật avatar khách
-    const visualEl = document.getElementById('customer-chibi-visual');
-    const badgeEl = document.getElementById('customer-name-badge');
-    if (visualEl) visualEl.innerHTML = `<span class="customer-emoji-avatar">${this.currentCustomer.emoji}</span>`;
-    if (badgeEl) {
-      badgeEl.innerHTML = `
-        <span class="c-name kaiti-font">${this.currentCustomer.nameChn}</span>
-        <span class="c-role">(${this.currentCustomer.role})</span>
-      `;
-    }
-
-    // Tạo đơn hàng ngẫu nhiên dựa trên các kệ ĐÃ MỞ KHÓA
-    const availableItems = this.shelves.filter(s => s.unlocked && s.currentStock > 0);
-    let chosenItems = [];
-
-    if (availableItems.length === 0) {
-      // Hết hàng toàn tiệm
-      this.currentOrder = null;
-      const chnEl = document.getElementById('order-chn-text');
-      const pinEl = document.getElementById('order-pin-text');
-      const viEl = document.getElementById('order-vi-text');
-      if (chnEl) chnEl.textContent = '老板，货架上没东西啦，快补货吧！';
-      if (pinEl) pinEl.textContent = 'Lǎobǎn, huòjià shàng méi dōngxi la, kuài bǔhuò ba!';
-      if (viEl) viEl.textContent = '(Ông chủ ơi, trên kệ hết sạch đồ rồi, hãy đóng cửa hoặc nhập hàng nhé!)';
-      return;
-    }
-
-    // Chọn từ 1 đến 2 món khác nhau
-    const itemCount = Math.min(availableItems.length, Math.random() > 0.4 ? 2 : 1);
-    const shuffled = [...availableItems].sort(() => 0.5 - Math.random());
-    for (let i = 0; i < itemCount; i++) {
-      const it = shuffled[i];
-      const maxCanBuy = Math.min(it.currentStock, 2);
-      const qty = Math.floor(Math.random() * maxCanBuy) + 1;
-      chosenItems.push({ item: it, qty });
-    }
-
-    // Tính tổng tiền đơn hàng
-    const dueAmount = chosenItems.reduce((sum, ci) => sum + ci.item.price * ci.qty, 0);
-
-    // Xác định số tiền khách đưa (lớn hơn hoặc bằng dueAmount)
-    let paidAmount = dueAmount;
-    const candidates = [1, 2, 5, 10, 20, 50, 100].filter(val => val >= dueAmount);
-    if (candidates.length > 0) {
-      paidAmount = candidates[Math.floor(Math.random() * Math.min(candidates.length, 3))];
-    } else {
-      paidAmount = Math.ceil(dueAmount / 10) * 10;
-    }
-
-    const changeNeeded = parseFloat((paidAmount - dueAmount).toFixed(2));
-
-    this.currentOrder = {
-      items: chosenItems,
-      dueAmount,
-      paidAmount,
-      changeNeeded
-    };
-
-    this.updateCustomerBalloon();
-    this.renderPosTerminalReady();
-
-    // Tự động phát âm lời gọi món sau 400ms
-    setTimeout(() => {
-      this.speakOrder();
-    }, 400);
-  }
-
-  // Cập nhật bóng thoại yêu cầu của khách
-  updateCustomerBalloon() {
-    if (!this.currentOrder) return;
-
-    const parts = this.currentOrder.items.map(ci => {
-      const qtyStr = ci.qty === 2 ? '两' : (ci.qty === 1 ? '一' : ci.qty.toString());
-      return `${qtyStr}${ci.item.quantifier}${ci.item.nameChn}`;
-    });
-
-    const sentenceChn = `老板，我要${parts.join('和')}！`;
-    const sentencePin = this.generateOrderPinyin(this.currentOrder.items);
-    const sentenceVi = `(Ông chủ, cho tôi ${this.currentOrder.items.map(ci => `${ci.qty} ${ci.item.quantifierVi} ${ci.item.nameVi.toLowerCase()}`).join(' và ')}!)`;
-
-    const chnEl = document.getElementById('order-chn-text');
-    const pinEl = document.getElementById('order-pin-text');
-    const viEl = document.getElementById('order-vi-text');
-
-    if (chnEl) chnEl.textContent = sentenceChn;
-    if (pinEl) {
-      pinEl.style.display = this.showPinyin ? 'block' : 'none';
-      pinEl.textContent = sentencePin;
-    }
-    if (viEl) {
-      viEl.style.display = this.showVietnamese ? 'block' : 'none';
-      viEl.textContent = sentenceVi;
-    }
-  }
-
-  generateOrderPinyin(items) {
-    const parts = items.map(ci => {
-      const q = ci.qty === 2 ? 'liǎng' : (ci.qty === 1 ? 'yī' : ci.qty.toString());
-      return `${q} ${ci.item.pinyin}`;
-    });
-    return `Lǎobǎn, wǒ yào ${parts.join(' hé ')}!`;
-  }
-
-  speakOrder() {
-    if (!this.currentOrder) return;
-    const parts = this.currentOrder.items.map(ci => {
-      const qtyStr = ci.qty === 2 ? '两' : (ci.qty === 1 ? '一' : ci.qty.toString());
-      return `${qtyStr}${ci.item.quantifier}${ci.item.nameChn}`;
-    });
-    const sentence = `老板，我要${parts.join('和')}！`;
-    this.audio.speak(sentence);
-  }
-
-  // Render Giỏ Hàng
-  renderBasket() {
-    const listEl = document.getElementById('basket-item-list');
-    const countBadge = document.getElementById('basket-count-badge');
-    const totalEl = document.getElementById('basket-total-amount');
-    const proceedBtn = document.getElementById('btn-proceed-checkout');
-
-    if (!listEl) return;
+    if (!scroll) return;
 
     if (this.basket.length === 0) {
-      listEl.innerHTML = `
-        <div class="basket-empty-state">
-          <i class="fa-solid fa-cart-arrow-down"></i>
-          <p>Chưa có món hàng nào. Hãy bấm vào các món ở Cột 1 (Gian Hàng) để nhặt cho khách!</p>
+      scroll.innerHTML = `
+        <div class="basket-empty-hint">
+          <i class="fa-solid fa-basket-shopping" style="font-size:2.5rem;opacity:0.4;"></i>
+          <p>Chạm vào hàng hóa trên kệ gỗ để nhặt vào giỏ</p>
         </div>
       `;
-      if (countBadge) countBadge.textContent = '0';
-      if (totalEl) totalEl.textContent = '0.00 ¥';
-      if (proceedBtn) proceedBtn.disabled = true;
+      if (countBadge) countBadge.textContent = '0 món';
+      if (subtotalEl) subtotalEl.textContent = '0.00 ¥';
+      if (statusEl) {
+        statusEl.className = 'basket-match-status';
+        statusEl.textContent = '⚠️ Giỏ hàng đang rỗng!';
+      }
+      if (gotoScanBtn) gotoScanBtn.disabled = true;
       return;
     }
 
-    let total = 0;
     let totalCount = 0;
-    listEl.innerHTML = '';
+    let subtotal = 0;
+    scroll.innerHTML = '';
 
     this.basket.forEach(b => {
-      const subtotal = b.item.price * b.qty;
-      total += subtotal;
       totalCount += b.qty;
+      subtotal += b.item.price * b.qty;
 
-      const row = document.createElement('div');
-      row.className = 'basket-row-item';
-      row.innerHTML = `
+      const pill = document.createElement('div');
+      pill.className = 'basket-row-pill';
+      pill.innerHTML = `
         <div class="basket-row-left">
-          <span class="basket-item-emoji">${b.item.emoji}</span>
-          <div class="basket-row-info">
-            <span class="basket-item-title kaiti-font">${b.item.nameChn}</span>
-            <span class="basket-item-sub">${b.item.price.toFixed(2)}¥ × ${b.qty}</span>
-          </div>
+          <span class="em">${b.item.emoji}</span>
+          <span class="txt kaiti-font">${b.item.nameChn}</span>
         </div>
         <div class="basket-row-right">
-          <div class="basket-item-qty-control">
-            <button type="button" class="btn-qty btn-minus">-</button>
-            <span class="basket-qty-val">${b.qty}</span>
-            <button type="button" class="btn-qty btn-plus">+</button>
-          </div>
-          <span class="basket-item-subtotal">${subtotal.toFixed(2)} ¥</span>
+          <span class="qty">${b.item.price.toFixed(2)}¥ × ${b.qty}</span>
+          <button type="button" class="btn-del-item" title="Bớt 1 món"><i class="fa-solid fa-circle-minus"></i></button>
         </div>
       `;
-
-      row.querySelector('.btn-minus')?.addEventListener('click', () => {
+      pill.querySelector('.btn-del-item')?.addEventListener('click', () => {
         this.removeItemFromBasket(b.item.id);
       });
-      row.querySelector('.btn-plus')?.addEventListener('click', () => {
-        this.pickItemToBasket(b.item);
-      });
-
-      listEl.appendChild(row);
+      scroll.appendChild(pill);
     });
 
-    if (countBadge) countBadge.textContent = totalCount.toString();
-    if (totalEl) totalEl.textContent = `${total.toFixed(2)} ¥`;
+    if (countBadge) countBadge.textContent = `${totalCount} món`;
+    if (subtotalEl) subtotalEl.textContent = `${subtotal.toFixed(2)} ¥`;
 
-    // So khớp với đơn hàng của khách
-    const isMatching = this.isBasketMatchingOrder();
-    if (proceedBtn) {
-      proceedBtn.disabled = !isMatching;
-      if (isMatching) {
-        proceedBtn.innerHTML = '<span>👉 Đã Nhặt Đủ! Chuyển Sang Thanh Toán</span>';
+    const isMatch = this.isBasketMatchingOrder();
+    if (statusEl) {
+      if (isMatch) {
+        statusEl.className = 'basket-match-status ready';
+        statusEl.textContent = '✨ Đã nhặt đủ theo đơn! Có thể sang Quét Mã!';
       } else {
-        proceedBtn.innerHTML = '<span>⚠️ Nhặt chưa đúng yêu cầu khách!</span>';
+        statusEl.className = 'basket-match-status';
+        statusEl.textContent = '⚠️ Nhặt chưa đúng món hoặc chưa đủ số lượng!';
       }
     }
+    if (gotoScanBtn) gotoScanBtn.disabled = !isMatch;
   }
 
-  // Kiểm tra giỏ hàng có trùng khớp 100% với yêu cầu khách
   isBasketMatchingOrder() {
     if (!this.currentOrder) return false;
-    const orderItems = this.currentOrder.items;
-
-    if (this.basket.length !== orderItems.length) return false;
-
-    for (const oi of orderItems) {
-      const inBasket = this.basket.find(b => b.item.id === oi.item.id);
-      if (!inBasket || inBasket.qty !== oi.qty) return false;
+    const ordItems = this.currentOrder.items;
+    if (this.basket.length !== ordItems.length) return false;
+    for (const oi of ordItems) {
+      const inB = this.basket.find(b => b.item.id === oi.item.id);
+      if (!inB || inB.qty !== oi.qty) return false;
     }
     return true;
   }
 
-  // Xác nhận giỏ hàng và chuyển sang Quầy Thu Ngân
-  confirmBasketToCheckout() {
-    if (!this.isBasketMatchingOrder()) {
-      alert('Vui lòng nhặt đúng và đủ các món đồ khách yêu cầu trong bóng thoại!');
+  // ==========================================================================
+  // STATION 3: SCAN STATION
+  // ==========================================================================
+  prepareScanStation() {
+    // Flatten basket into individual items queue
+    this.scannedItems = [];
+    this.basket.forEach(b => {
+      for (let i = 0; i < b.qty; i++) {
+        this.scannedItems.push({
+          item: b.item,
+          scanned: false,
+          instanceId: `${b.item.id}_${i}`
+        });
+      }
+    });
+
+    this.renderConveyorBelt();
+    this.updateScanPOS();
+  }
+
+  renderConveyorBelt() {
+    const track = document.getElementById('conveyor-items-track');
+    if (!track) return;
+    track.innerHTML = '';
+
+    this.scannedItems.forEach(si => {
+      const card = document.createElement('div');
+      card.className = `conveyor-item-card ${si.scanned ? 'scanned' : ''}`;
+      card.innerHTML = `
+        ${si.scanned ? '<span class="scanned-stamp">ĐÃ QUÉT</span>' : ''}
+        <span style="font-size:2.2rem;">${si.item.emoji}</span>
+        <strong class="kaiti-font" style="font-size:0.85rem;color:#7c2d12;margin-top:4px;">${si.item.nameChn}</strong>
+        <span style="font-size:0.75rem;color:#ea580c;font-weight:800;">${si.item.price.toFixed(2)}¥</span>
+      `;
+      track.appendChild(card);
+    });
+  }
+
+  scanNextItem() {
+    const nextUnscanned = this.scannedItems.find(si => !si.scanned);
+    if (!nextUnscanned) {
+      alert('Tất cả sản phẩm đã được quét mã hoàn tất!');
       return;
     }
-    this.renderPosTerminalActive();
-    this.audio.playPickItem();
+
+    nextUnscanned.scanned = true;
+    this.audio.playScanBeep();
+
+    this.renderConveyorBelt();
+    this.updateScanPOS();
+  }
+
+  updateScanPOS() {
+    const totalCount = this.scannedItems.length;
+    const scannedCount = this.scannedItems.filter(si => si.scanned).length;
+
+    const countEl = document.getElementById('scan-scanned-count');
+    if (countEl) countEl.textContent = `${scannedCount} / ${totalCount}`;
+
+    // Total due
+    const scannedTotal = this.scannedItems
+      .filter(si => si.scanned)
+      .reduce((sum, si) => sum + si.item.price, 0);
+
+    const dueEl = document.getElementById('scan-total-due');
+    if (dueEl) dueEl.textContent = `${scannedTotal.toFixed(2)} ¥`;
+
+    // Receipt Tape
+    const linesEl = document.getElementById('receipt-items-lines');
+    if (linesEl) {
+      linesEl.innerHTML = this.scannedItems.filter(si => si.scanned).map(si => `
+        <div style="display:flex;justify-content:space-between;">
+          <span class="kaiti-font">${si.item.nameChn}</span>
+          <strong>${si.item.price.toFixed(2)}¥</strong>
+        </div>
+      `).join('');
+    }
+
+    const receiptTotal = document.getElementById('receipt-total-num');
+    if (receiptTotal) receiptTotal.textContent = `${scannedTotal.toFixed(2)} ¥`;
+
+    const gotoChangeBtn = document.getElementById('btn-goto-change');
+    if (gotoChangeBtn) {
+      gotoChangeBtn.disabled = scannedCount < totalCount;
+    }
   }
 
   // ==========================================================================
-  // CỘT 3: QUẦY THU NGÂN & TÍNH TIỀN THỐI (CASHIER & CHANGE)
+  // STATION 4: CHANGE STATION
   // ==========================================================================
-  renderPosTerminalReady() {
-    const dueEl = document.getElementById('pos-due-amount');
-    const paidEl = document.getElementById('pos-paid-amount');
-    const changeEl = document.getElementById('pos-change-needed');
-    const cashPreview = document.getElementById('given-cash-display');
-
-    if (!this.currentOrder) {
-      if (dueEl) dueEl.textContent = '0.00 ¥';
-      if (paidEl) paidEl.textContent = '0.00 ¥';
-      if (changeEl) changeEl.textContent = '0.00 ¥';
-      if (cashPreview) cashPreview.innerHTML = '<span style="color:#94a3b8;font-size:0.75rem;">Đang chờ khách...</span>';
-      return;
-    }
+  prepareChangeStation() {
+    if (!this.currentOrder) return;
+    const dueEl = document.getElementById('change-due-amount');
+    const paidEl = document.getElementById('change-paid-amount');
+    const neededEl = document.getElementById('change-needed-amount');
+    const billRender = document.getElementById('customer-bill-render');
 
     if (dueEl) dueEl.textContent = `${this.currentOrder.dueAmount.toFixed(2)} ¥`;
     if (paidEl) paidEl.textContent = `${this.currentOrder.paidAmount.toFixed(2)} ¥`;
-    if (changeEl) changeEl.textContent = `${this.currentOrder.changeNeeded.toFixed(2)} ¥`;
+    if (neededEl) neededEl.textContent = `${this.currentOrder.changeNeeded.toFixed(2)} ¥`;
 
-    if (cashPreview) {
-      cashPreview.innerHTML = `
-        <span class="cash-bill-badge">💵 ${this.currentOrder.paidAmount.toFixed(2)} 元</span>
-      `;
+    if (billRender) {
+      billRender.innerHTML = `<span class="bill-large-badge">💵 ${this.currentOrder.paidAmount.toFixed(2)} 元</span>`;
     }
 
     this.resetChangeTray();
   }
 
-  renderPosTerminalActive() {
-    // Highlight POS screen
-    const screen = document.querySelector('.pos-screen');
-    if (screen) {
-      screen.style.borderColor = '#38bdf8';
-      screen.style.boxShadow = '0 0 15px rgba(56, 189, 248, 0.3)';
-    }
-  }
-
-  // Thêm mệnh giá tiền vào khay thối
-  addChangeToTray(value) {
-    this.changeTray.push(value);
+  addChangeToTray(val) {
+    this.changeTray.push(val);
     this.audio.playCoinClink();
-    this.renderChangeTray();
+    this.renderChangeTrayUI();
   }
 
-  // Gỡ 1 tờ/xu khỏi khay
   removeChangeFromTray(index) {
     this.changeTray.splice(index, 1);
     this.audio.playCoinClink();
-    this.renderChangeTray();
+    this.renderChangeTrayUI();
   }
 
   resetChangeTray() {
     this.changeTray = [];
-    this.renderChangeTray();
+    this.renderChangeTrayUI();
   }
 
-  renderChangeTray() {
-    const container = document.getElementById('tray-coins-container');
-    const sumEl = document.getElementById('tray-current-sum');
+  renderChangeTrayUI() {
+    const container = document.getElementById('tray-dropped-tokens');
+    const sumEl = document.getElementById('tray-total-picked');
     if (!container) return;
 
     if (this.changeTray.length === 0) {
-      container.innerHTML = `<span class="tray-placeholder">Chạm các mệnh giá tiền ở trên để nhặt tiền thối vào đây</span>`;
+      container.innerHTML = '<span class="tray-placeholder">Chạm mệnh giá bên cạnh để nhặt tiền thối vào khay</span>';
       if (sumEl) sumEl.textContent = 'Đã nhặt: 0.00 ¥';
       return;
     }
 
-    const currentSum = this.changeTray.reduce((sum, v) => sum + v, 0);
-    if (sumEl) sumEl.textContent = `Đã nhặt: ${currentSum.toFixed(2)} ¥`;
+    const sum = this.changeTray.reduce((s, v) => s + v, 0);
+    if (sumEl) sumEl.textContent = `Đã nhặt: ${sum.toFixed(2)} ¥`;
 
     container.innerHTML = '';
     this.changeTray.forEach((val, idx) => {
       const token = document.createElement('div');
       if (val >= 1) {
-        token.className = 'tray-bill-token';
+        token.className = 'token-bill';
         token.innerHTML = `💵 ${val}元 <i class="fa-solid fa-xmark" style="font-size:0.6rem;opacity:0.6;"></i>`;
       } else {
-        token.className = 'tray-coin-token';
+        token.className = 'token-coin';
         token.innerHTML = `${val === 0.5 ? '5角' : '1角'}`;
       }
-      token.title = 'Bấm để gỡ bỏ tờ này';
-      token.addEventListener('click', () => {
-        this.removeChangeFromTray(idx);
-      });
+      token.title = 'Bấm để gỡ tờ này';
+      token.addEventListener('click', () => this.removeChangeFromTray(idx));
       container.appendChild(token);
     });
   }
 
-  // Xác nhận và kiểm tra tiền thối
-  verifyAndCompleteTransaction() {
+  verifyAndDeliverGoods() {
     if (!this.currentOrder) return;
 
-    if (!this.isBasketMatchingOrder()) {
-      alert('Vui lòng nhặt đúng đơn hàng vào giỏ trước khi hoàn tất giao dịch!');
-      return;
-    }
-
-    const currentTraySum = parseFloat(this.changeTray.reduce((sum, v) => sum + v, 0).toFixed(2));
+    const traySum = parseFloat(this.changeTray.reduce((s, v) => s + v, 0).toFixed(2));
     const targetChange = this.currentOrder.changeNeeded;
 
     this.changeCalculationsCount += 1;
 
-    // Kiểm tra sai số số thực
-    if (Math.abs(currentTraySum - targetChange) < 0.01) {
-      // CHÍNH XÁC 100%!
+    if (Math.abs(traySum - targetChange) < 0.01) {
+      // 100% CORRECT CHANGE!
       this.changeCalculationsCorrect += 1;
-      this.audio.playCashRegister();
 
-      // Cộng doanh thu vào tiền vốn
-      const due = this.currentOrder.dueAmount;
-      this.money += due;
-      this.todayRevenue += due;
+      // Calculate Scores
+      const orderMatch = 100;
+      const shelfScore = 98;
+      const scanScore = 96;
+      const changeScore = 100;
+      const totalScore = Math.round((orderMatch + shelfScore + scanScore + changeScore) / 4);
+
+      // Money & Tip
+      const basePrice = this.currentOrder.dueAmount;
+      const tip = parseFloat(((totalScore / 100) * 5.50).toFixed(2));
+      const totalEarned = basePrice + tip;
+
+      this.money += totalEarned;
+      this.todayRevenue += basePrice;
       this.todayCustomersServed += 1;
 
-      this.audio.speak('谢谢老板！祝您生意兴隆！');
-
-      // Reset giỏ hàng và khay thối
-      this.basket = [];
-      this.resetChangeTray();
       this.updateHUD();
       this.saveGame();
 
-      // Hiện thông báo chúc mừng
-      const statusBadge = document.getElementById('hud-status-badge');
-      if (statusBadge) {
-        statusBadge.innerHTML = '🎉 找零正确！交易成功！(Thối tiền chuẩn xác!)';
-        statusBadge.style.color = '#15803d';
-        setTimeout(() => {
-          if (this.isDayActive) {
-            statusBadge.innerHTML = '🟢 正在营业 (Đang mở cửa)';
-            statusBadge.style.color = '#15803d';
-          }
-        }, 2000);
-      }
+      // Render Scorecard
+      const barOrd = document.getElementById('score-bar-order');
+      const valOrd = document.getElementById('score-val-order');
+      if (barOrd) barOrd.style.width = `${orderMatch}%`;
+      if (valOrd) valOrd.textContent = `${orderMatch}%`;
 
-      // Khách tiếp theo bước vào tiệm sau 800ms
+      const barShelves = document.getElementById('score-bar-shelves');
+      const valShelves = document.getElementById('score-val-shelves');
+      if (barShelves) barShelves.style.width = `${shelfScore}%`;
+      if (valShelves) valShelves.textContent = `${shelfScore}%`;
+
+      const barScan = document.getElementById('score-bar-scan');
+      const valScan = document.getElementById('score-val-scan');
+      if (barScan) barScan.style.width = `${scanScore}%`;
+      if (valScan) valScan.textContent = `${scanScore}%`;
+
+      const barChange = document.getElementById('score-bar-change');
+      const valChange = document.getElementById('score-val-change');
+      if (barChange) barChange.style.width = `${changeScore}%`;
+      if (valChange) valChange.textContent = `${changeScore}%`;
+
+      const valTotal = document.getElementById('score-val-total');
+      if (valTotal) valTotal.textContent = `${totalScore}%`;
+
+      const baseEl = document.getElementById('score-base-price');
+      const tipEl = document.getElementById('score-tip-price');
+      const finalEl = document.getElementById('score-final-receive');
+      if (baseEl) baseEl.textContent = `${basePrice.toFixed(2)} ¥`;
+      if (tipEl) tipEl.textContent = `+${tip.toFixed(2)} ¥`;
+      if (finalEl) finalEl.textContent = `${totalEarned.toFixed(2)} ¥`;
+
+      const reactChn = document.getElementById('score-reaction-chn');
+      const reactVi = document.getElementById('score-reaction-vi');
+      const speechText = '老板服务真好，找零一分不差，谢谢您！';
+      if (reactChn) reactChn.textContent = `“${speechText}”`;
+      if (reactVi) reactVi.textContent = '(Chủ tiệm phục vụ chu đáo quá, thối tiền chuẩn từng đồng, cảm ơn nhé!)';
+
+      const modal = document.getElementById('modal-grocery-score');
+      if (modal) modal.style.display = 'flex';
+
+      this.audio.playCashRegister();
       setTimeout(() => {
-        this.renderBasket();
-        this.spawnNewCustomer();
-      }, 800);
+        this.audio.speak(speechText);
+      }, 500);
 
     } else {
-      // SAI TIỀN THỐI
       this.audio.playErrorBuzz();
       this.audio.speak('老板，钱找错啦！');
 
-      const diff = currentTraySum - targetChange;
+      const diff = traySum - targetChange;
       let msg = '';
       if (diff > 0) {
-        msg = `Thối THỪA tiền cho khách rồi! Khách chỉ cần thối ${targetChange.toFixed(2)}¥, bạn đang thối ${currentTraySum.toFixed(2)}¥ (Thừa +${diff.toFixed(2)}¥).`;
+        msg = `Thối THỪA tiền cho khách rồi! Khách chỉ cần thối ${targetChange.toFixed(2)}¥, bạn đang thối ${traySum.toFixed(2)}¥ (Thừa +${diff.toFixed(2)}¥).`;
       } else {
-        msg = `Thối THIẾU tiền cho khách rồi! Khách cần thối ${targetChange.toFixed(2)}¥, bạn mới thối ${currentTraySum.toFixed(2)}¥ (Thiếu ${Math.abs(diff).toFixed(2)}¥).`;
+        msg = `Thối THIẾU tiền cho khách rồi! Khách cần thối ${targetChange.toFixed(2)}¥, bạn mới thối ${traySum.toFixed(2)}¥ (Thiếu ${Math.abs(diff).toFixed(2)}¥).`;
       }
-
-      alert(`⚠️ ${msg}\nHãy xếp lại tiền cho đúng nhé!`);
+      alert(`⚠️ ${msg}\nHãy xếp lại tiền cho chuẩn xác nhé!`);
     }
   }
 
   // ==========================================================================
-  // CHU KỲ NGÀY & ĐÓNG CỬA SỚM (DAY CYCLE & EARLY CLOSE)
+  // DAY CYCLE & MODALS
   // ==========================================================================
   triggerEarlyClose() {
     if (!this.isDayActive) return;
@@ -1161,13 +1230,11 @@ class GroceryGameEngine {
     this.isDayActive = false;
     if (this.timerInterval) clearInterval(this.timerInterval);
 
-    // Tính lợi nhuận ròng
     const profit = this.todayRevenue - this.todayCost;
     const accuracy = this.changeCalculationsCount > 0
       ? Math.round((this.changeCalculationsCorrect / this.changeCalculationsCount) * 100)
       : 100;
 
-    // Cập nhật Modal Tổng Kết Ngày
     const titleEl = document.getElementById('summary-day-title');
     if (titleEl) titleEl.textContent = `第 ${this.day} 天 · 每日营业结算`;
 
@@ -1192,7 +1259,6 @@ class GroceryGameEngine {
     const wordsEl = document.getElementById('summary-words-val');
     if (wordsEl) wordsEl.textContent = `${this.learnedVocab.size} từ`;
 
-    // Mở Modal
     const modal = document.getElementById('modal-day-summary');
     if (modal) modal.style.display = 'flex';
 
@@ -1200,13 +1266,9 @@ class GroceryGameEngine {
   }
 
   startNextDay() {
-    // Đóng modal tổng kết
-    const modal = document.getElementById('modal-day-summary');
-    if (modal) modal.style.display = 'none';
-
-    // Sang ngày mới
+    document.getElementById('modal-day-summary').style.display = 'none';
     this.day += 1;
-    this.dayTimeMinutes = 8 * 60 + 30; // 08:30 sáng
+    this.dayTimeMinutes = 8 * 60 + 30;
     this.todayRevenue = 0.00;
     this.todayCost = 0.00;
     this.todayCustomersServed = 0;
@@ -1215,18 +1277,13 @@ class GroceryGameEngine {
 
     this.updateHUD();
     this.saveGame();
-
-    // Mở ngay Modal Nhập Hàng trước giờ mở cửa
     this.openRestockModal();
   }
 
-  // ==========================================================================
-  // MODAL 1: NHẬP HÀNG TRƯỚC GIỜ MỞ CỬA (进货与上架)
-  // ==========================================================================
+  // RESTOCK MODAL
   openRestockModal() {
     const modal = document.getElementById('modal-restock');
     if (!modal) return;
-
     this.renderRestockTable();
     this.updateRestockModalCalculations();
     modal.style.display = 'flex';
@@ -1251,8 +1308,8 @@ class GroceryGameEngine {
           <div style="display:flex;align-items:center;gap:8px;">
             <span style="font-size:1.4rem;">${item.emoji}</span>
             <div>
-              <strong class="kaiti-font" style="font-size:1rem;color:#7c2d12;">${item.nameChn}</strong>
-              <div style="font-size:0.7rem;color:#64748b;">${item.pinyin} (${item.nameVi})</div>
+              <strong class="kaiti-font" style="font-size:0.95rem;color:#7c2d12;">${item.nameChn}</strong>
+              <div style="font-size:0.68rem;color:#64748b;">${item.pinyin} (${item.nameVi})</div>
             </div>
           </div>
         </td>
@@ -1261,7 +1318,7 @@ class GroceryGameEngine {
         <td style="color:#059669;font-weight:700;">${item.price.toFixed(2)} ¥</td>
         <td>
           <input type="number" class="stock-input-qty" id="stock-in-${item.id}"
-            min="0" max="${maxCanAdd}" value="0" data-item-id="${item.id}">
+            min="0" max="${maxCanAdd}" value="0">
         </td>
         <td id="stock-row-cost-${item.id}" style="font-weight:800;color:#ea580c;">0.00 ¥</td>
       `;
@@ -1285,22 +1342,20 @@ class GroceryGameEngine {
   }
 
   autofillAllStockInModal() {
-    let availableMoney = this.money;
+    let avail = this.money;
     this.shelves.filter(s => s.unlocked).forEach(item => {
       const input = document.getElementById(`stock-in-${item.id}`);
       if (!input) return;
-
       const needed = item.maxStock - item.currentStock;
-      const affordable = Math.floor(availableMoney / item.cost);
+      const affordable = Math.floor(avail / item.cost);
       const toAdd = Math.min(needed, affordable);
 
       input.value = toAdd;
-      availableMoney -= toAdd * item.cost;
+      avail -= toAdd * item.cost;
 
       const cell = document.getElementById(`stock-row-cost-${item.id}`);
       if (cell) cell.textContent = `${(toAdd * item.cost).toFixed(2)} ¥`;
     });
-
     this.updateRestockModalCalculations();
   }
 
@@ -1312,22 +1367,20 @@ class GroceryGameEngine {
       totalCost += qty * item.cost;
     });
 
-    const curBalEl = document.getElementById('modal-stock-current-bal');
+    const curBal = document.getElementById('modal-stock-current-bal');
     const costEl = document.getElementById('modal-stock-total-cost');
-    const remBalEl = document.getElementById('modal-stock-remaining-bal');
+    const remBal = document.getElementById('modal-stock-remaining-bal');
 
-    if (curBalEl) curBalEl.textContent = `${this.money.toFixed(2)} ¥`;
+    if (curBal) curBal.textContent = `${this.money.toFixed(2)} ¥`;
     if (costEl) costEl.textContent = `${totalCost.toFixed(2)} ¥`;
-    if (remBalEl) {
+    if (remBal) {
       const rem = this.money - totalCost;
-      remBalEl.textContent = `${rem.toFixed(2)} ¥`;
-      remBalEl.className = rem >= 0 ? 'text-emerald' : 'text-rose';
+      remBal.textContent = `${rem.toFixed(2)} ¥`;
+      remBal.className = rem >= 0 ? 'text-emerald' : 'text-rose';
     }
 
     const confirmBtn = document.getElementById('btn-confirm-restock-open');
-    if (confirmBtn) {
-      confirmBtn.disabled = (this.money - totalCost) < 0;
-    }
+    if (confirmBtn) confirmBtn.disabled = (this.money - totalCost) < 0;
   }
 
   confirmRestockAndResume() {
@@ -1344,112 +1397,82 @@ class GroceryGameEngine {
     });
 
     if (totalCost > this.money) {
-      alert('Vốn không đủ để nhập số lượng này! Vui lòng giảm bớt.');
+      alert('Vốn không đủ để nhập số lượng này!');
       return;
     }
 
-    // Trừ tiền vốn và cập nhật kệ
     this.money -= totalCost;
     this.todayCost += totalCost;
-    additions.forEach(add => {
-      add.item.currentStock += add.qty;
-    });
+    additions.forEach(add => { add.item.currentStock += add.qty; });
 
     this.closeRestockModal();
     this.updateHUD();
     this.renderShelvesGrid();
     this.saveGame();
-
     this.audio.playCashRegister();
 
-    // Mở cửa và tiếp tục ngày
     this.startDayClock();
     this.spawnNewCustomer();
   }
 
-  // ==========================================================================
-  // MODAL 4: MỞ GIAN HÀNG MỚI (解锁新货架)
-  // ==========================================================================
+  // UNLOCK SHELF MODAL
   openUnlockModal() {
     const modal = document.getElementById('modal-unlock-shelf');
     const list = document.getElementById('unlock-shelves-list');
     if (!modal || !list) return;
 
     list.innerHTML = '';
-    const lockedShelves = this.shelves.filter(s => !s.unlocked);
+    const locked = this.shelves.filter(s => !s.unlocked);
 
-    if (lockedShelves.length === 0) {
+    if (locked.length === 0) {
       list.innerHTML = `
-        <div style="text-align:center;padding:30px;color:#059669;font-weight:800;">
-          <i class="fa-solid fa-crown" style="font-size:2.5rem;margin-bottom:10px;"></i>
-          <p>Chúc mừng! Bạn đã mở khóa toàn bộ gian hàng của tiệm tạp hóa!</p>
+        <div style="text-align:center;padding:24px;color:#059669;font-weight:800;">
+          <i class="fa-solid fa-crown" style="font-size:2rem;margin-bottom:8px;"></i>
+          <p>Chúc mừng! Toàn bộ gian hàng đã được mở khóa!</p>
         </div>
       `;
       modal.style.display = 'flex';
       return;
     }
 
-    lockedShelves.forEach(item => {
+    locked.forEach(item => {
       const canAfford = this.money >= item.unlockCost;
       const row = document.createElement('div');
       row.className = 'unlock-shelf-row';
       row.innerHTML = `
         <div class="unlock-shelf-info">
           <span class="shelf-preview-icon">${item.emoji}</span>
-          <div class="shelf-text-wrap">
-            <span class="shelf-title-chn kaiti-font">Kệ ${item.shelfIndex}: ${item.nameChn} (${item.nameVi})</span>
-            <span class="shelf-desc-vi">Giá bán: ${item.price.toFixed(2)}¥/ ${item.quantifierVi} · Lợi nhuận cao!</span>
+          <div>
+            <strong class="shelf-title-chn kaiti-font">Kệ ${item.shelfIndex}: ${item.nameChn}</strong>
+            <div class="shelf-desc-vi">Giá bán: ${item.price.toFixed(2)}¥ · Lợi nhuận cao</div>
           </div>
         </div>
         <button type="button" class="btn-modal-primary" ${canAfford ? '' : 'disabled'}
           style="${canAfford ? '' : 'background:#cbd5e1;cursor:not-allowed;'}">
-          ${canAfford ? `Mở Khóa (${item.unlockCost.toFixed(2)} ¥)` : `Thiếu vốn (${item.unlockCost.toFixed(2)} ¥)`}
+          ${canAfford ? `Mở Khóa (${item.unlockCost.toFixed(2)} ¥)` : `Thiếu (${item.unlockCost.toFixed(2)} ¥)`}
         </button>
       `;
-
       row.querySelector('button')?.addEventListener('click', () => {
         if (canAfford) {
-          this.unlockShelfItem(item);
+          this.money -= item.unlockCost;
+          item.unlocked = true;
+          item.currentStock = 4;
+          this.learnedVocab.add(item.nameChn);
+          this.updateHUD();
+          this.renderShelvesGrid();
+          this.saveGame();
           modal.style.display = 'none';
+          this.audio.playCashRegister();
+          alert(`🎉 Chúc mừng! Đã mở khóa Kệ ${item.shelfIndex}: ${item.nameChn}!`);
         }
       });
-
       list.appendChild(row);
     });
 
     modal.style.display = 'flex';
   }
 
-  promptUnlockShelf(item) {
-    if (this.money >= item.unlockCost) {
-      if (confirm(`Bạn có muốn dùng ${item.unlockCost.toFixed(2)} ¥ để mở khóa Gian hàng Kệ ${item.shelfIndex} (${item.nameChn}) không?`)) {
-        this.unlockShelfItem(item);
-      }
-    } else {
-      alert(`Bạn cần tích lũy đủ ${item.unlockCost.toFixed(2)} ¥ để mở khóa Kệ ${item.shelfIndex} (${item.nameChn}). Hiện bạn đang có ${this.money.toFixed(2)} ¥.`);
-    }
-  }
-
-  unlockShelfItem(item) {
-    this.money -= item.unlockCost;
-    item.unlocked = true;
-    item.currentStock = 4; // Tặng sẵn 4 sản phẩm mẫu khi mở kệ mới
-    this.learnedVocab.add(item.nameChn);
-    this.learnedVocab.add(item.quantifier);
-
-    this.audio.playCashRegister();
-    this.audio.speak(`恭喜解锁${item.nameChn}！`);
-
-    this.updateHUD();
-    this.renderShelvesGrid();
-    this.saveGame();
-
-    alert(`🎉 Chúc mừng! Bạn đã mở khóa thành công Kệ ${item.shelfIndex}: ${item.nameChn}!`);
-  }
-
-  // ==========================================================================
-  // MODAL 3: SỔ TAY TỪ VỰNG TẠP HÓA (生词本)
-  // ==========================================================================
+  // VOCAB MODAL
   openVocabModal() {
     const modal = document.getElementById('modal-vocab');
     if (!modal) return;
@@ -1457,30 +1480,27 @@ class GroceryGameEngine {
     modal.style.display = 'flex';
   }
 
-  renderVocabCategory(catKey) {
+  renderVocabCategory(cat) {
     const grid = document.getElementById('vocab-items-grid');
     if (!grid) return;
     grid.innerHTML = '';
-
-    const list = VOCAB_DATABASE[catKey] || [];
+    const list = VOCAB_DATABASE[cat] || [];
     list.forEach(v => {
       const card = document.createElement('div');
       card.className = 'vocab-card';
       card.innerHTML = `
-        <div class="vocab-card-left">
+        <div>
           <span class="vocab-chn kaiti-font">${v.chn}</span>
-          <span class="vocab-pin">${v.pin}</span>
-          <span class="vocab-vi">${v.vi}</span>
+          <div class="vocab-pin">${v.pin}</div>
+          <div class="vocab-vi">${v.vi}</div>
         </div>
         <button type="button" class="btn-vocab-audio" title="Nghe phát âm">
           <i class="fa-solid fa-volume-high"></i>
         </button>
       `;
-
       card.querySelector('.btn-vocab-audio')?.addEventListener('click', () => {
         this.audio.speak(v.chn);
       });
-
       grid.appendChild(card);
     });
   }
@@ -1488,6 +1508,5 @@ class GroceryGameEngine {
 
 // Khởi tạo game khi load trang
 window.addEventListener('DOMContentLoaded', () => {
-  window.groceryGame = new GroceryGameEngine();
+  window.groceryGame = new PapaGroceryGame();
 });
-

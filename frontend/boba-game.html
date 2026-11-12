@@ -127,9 +127,15 @@
         <div class="order-outdoor-street">
           <!-- Animated Pedestrians walking by -->
           <div class="street-passersby-container" aria-hidden="true">
-            <div class="passerby-walker walker-track-1"><div class="walker-sprite">🧋 👧</div></div>
-            <div class="passerby-walker walker-track-2"><div class="walker-sprite">🐶 👦</div></div>
-            <div class="passerby-walker walker-track-3"><div class="walker-sprite">🎒 🧑‍🎓</div></div>
+            <div class="passerby-walker walker-track-1">
+              <div class="walker-sprite">🧋 👧</div>
+            </div>
+            <div class="passerby-walker walker-track-2">
+              <div class="walker-sprite">🐶 👦</div>
+            </div>
+            <div class="passerby-walker walker-track-3">
+              <div class="walker-sprite">🎒 🧑‍🎓</div>
+            </div>
           </div>
         </div>
 
@@ -178,7 +184,8 @@
           <div class="order-speech-balloon" id="order-speech-balloon">
             <div class="balloon-header">
               <span class="balloon-tag">顾客点单 (Khách gọi món)</span>
-              <button type="button" class="btn-audio-listen" id="btn-listen-order-speech" title="Nghe giọng đọc tiếng Trung">
+              <button type="button" class="btn-audio-listen" id="btn-listen-order-speech"
+                title="Nghe giọng đọc tiếng Trung">
                 <i class="fa-solid fa-volume-high"></i> Nghe phát âm
               </button>
             </div>
@@ -510,7 +517,8 @@
                 <button type="button" class="btn-color-straw pink" data-color="#f43f5e" title="Ống hút hồng"></button>
                 <button type="button" class="btn-color-straw blue" data-color="#0284c7" title="Ống hút xanh"></button>
                 <button type="button" class="btn-color-straw yellow" data-color="#eab308" title="Ống hút vàng"></button>
-                <button type="button" class="btn-color-straw brown" data-color="#78350f" title="Ống hút socola"></button>
+                <button type="button" class="btn-color-straw brown" data-color="#78350f"
+                  title="Ống hút socola"></button>
               </div>
             </div>
 
@@ -588,28 +596,36 @@
           <!-- 1. Order Match -->
           <div class="criteria-row">
             <span class="c-label">📋 点单匹配 (Đúng Yêu Cầu):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-blue" id="score-bar-order" style="width: 100%;"></div></div>
+            <div class="c-bar-bg">
+              <div class="c-bar-fill fill-blue" id="score-bar-order" style="width: 100%;"></div>
+            </div>
             <span class="c-percent" id="score-val-order">100%</span>
           </div>
 
           <!-- 2. Pour Station -->
           <div class="criteria-row">
             <span class="c-label">🍵 调制倒茶 (Tỉ Lệ Rót Trà & Đường Đá):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-teal" id="score-bar-pour" style="width: 98%;"></div></div>
+            <div class="c-bar-bg">
+              <div class="c-bar-fill fill-teal" id="score-bar-pour" style="width: 98%;"></div>
+            </div>
             <span class="c-percent" id="score-val-pour">98%</span>
           </div>
 
           <!-- 3. Shake Station -->
           <div class="criteria-row">
             <span class="c-label">🌪️ 摇匀火候 (Độ Lắc Máy Shaker):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-amber" id="score-bar-shake" style="width: 95%;"></div></div>
+            <div class="c-bar-bg">
+              <div class="c-bar-fill fill-amber" id="score-bar-shake" style="width: 95%;"></div>
+            </div>
             <span class="c-percent" id="score-val-shake">95%</span>
           </div>
 
           <!-- 4. Top Station -->
           <div class="criteria-row">
             <span class="c-label">🧋 配料封口 (Topping & Đóng Nắp Ống Hút):</span>
-            <div class="c-bar-bg"><div class="c-bar-fill fill-pink" id="score-bar-top" style="width: 100%;"></div></div>
+            <div class="c-bar-bg">
+              <div class="c-bar-fill fill-pink" id="score-bar-top" style="width: 100%;"></div>
+            </div>
             <span class="c-percent" id="score-val-top">100%</span>
           </div>
         </div>
@@ -668,7 +684,8 @@
             <i class="fa-solid fa-book-open" style="color: #ea580c;"></i>
             <span>Sổ Tay Từ Vựng Trà Sữa (奶茶词典)</span>
           </div>
-          <button type="button" class="boba-modal-close" onclick="document.getElementById('boba-cookbook-modal').style.display='none'">
+          <button type="button" class="boba-modal-close"
+            onclick="document.getElementById('boba-cookbook-modal').style.display='none'">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
@@ -688,13 +705,15 @@
             <i class="fa-solid fa-gear" style="color: #ea580c;"></i>
             <span>Cài Đặt & Hướng Dẫn Pha Chế</span>
           </div>
-          <button type="button" class="boba-modal-close" onclick="document.getElementById('boba-pause-modal').style.display='none'">
+          <button type="button" class="boba-modal-close"
+            onclick="document.getElementById('boba-pause-modal').style.display='none'">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
 
         <div class="boba-modal-body" style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
             <div>
               <strong style="font-size: 0.95rem; color: #1e293b;">Hiệu ứng âm thanh (SFX)</strong>
               <div style="font-size: 0.75rem; color: #64748b;">Tiếng rót nước, máy lắc shaker, leng keng tiền tip</div>
@@ -702,7 +721,8 @@
             <input type="checkbox" id="toggle-sfx" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
             <div>
               <strong style="font-size: 0.95rem; color: #1e293b;">Giọng đọc tiếng Trung (AI Voice)</strong>
               <div style="font-size: 0.75rem; color: #64748b;">Phát âm câu gọi món và lời nhận xét của khách</div>
@@ -710,7 +730,8 @@
             <input type="checkbox" id="toggle-voice" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
             <div>
               <strong style="font-size: 0.95rem; color: #1e293b;">Hiện phiên âm Pinyin</strong>
               <div style="font-size: 0.75rem; color: #64748b;">Hỗ trợ phát âm chữ Hán có dấu thanh điệu</div>
@@ -718,7 +739,8 @@
             <input type="checkbox" id="toggle-pinyin" checked style="width: 20px; height: 20px; accent-color: #ea580c;">
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fee2e2; padding-bottom: 10px;">
             <div>
               <strong style="font-size: 0.95rem; color: #1e293b;">Hiện dịch nghĩa Tiếng Việt</strong>
               <div style="font-size: 0.75rem; color: #64748b;">Gợi ý câu dịch tiếng Việt dưới câu gọi món</div>
@@ -727,11 +749,15 @@
           </div>
         </div>
 
-        <div class="boba-modal-footer" style="padding: 14px 20px; display: flex; justify-content: space-between; background: #fff7ed;">
-          <button type="button" class="btn btn-secondary" id="btn-reset-boba-save" style="color: #e11d48; border: 1.5px solid #fda4af; background: #fff; padding: 6px 14px; border-radius: 10px; font-weight: 700; cursor: pointer;">
+        <div class="boba-modal-footer"
+          style="padding: 14px 20px; display: flex; justify-content: space-between; background: #fff7ed;">
+          <button type="button" class="btn btn-secondary" id="btn-reset-boba-save"
+            style="color: #e11d48; border: 1.5px solid #fda4af; background: #fff; padding: 6px 14px; border-radius: 10px; font-weight: 700; cursor: pointer;">
             <i class="fa-solid fa-trash"></i> Chơi lại từ đầu
           </button>
-          <button type="button" class="btn btn-primary" onclick="document.getElementById('boba-pause-modal').style.display='none'" style="background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; border: none; padding: 8px 20px; border-radius: 10px; font-weight: 800; cursor: pointer;">
+          <button type="button" class="btn btn-primary"
+            onclick="document.getElementById('boba-pause-modal').style.display='none'"
+            style="background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; border: none; padding: 8px 20px; border-radius: 10px; font-weight: 800; cursor: pointer;">
             Tiếp tục chơi
           </button>
         </div>
