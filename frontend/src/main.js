@@ -18749,6 +18749,7 @@ window.openAdminVipModal = function (targetEmail) {
 
   const pkgNameMap = {
     'trial_30d': '🎁 Trải nghiệm 30 ngày VIP (Miễn phí)',
+    'free_2026': '🎉 VIP miễn phí cho mọi người (đến 31/12/2026)',
     '3_months': '⚡ Gói 3 Tháng',
     '6_months': '🚀 Gói 6 Tháng',
     '1_year': '👑 Gói 1 Năm',

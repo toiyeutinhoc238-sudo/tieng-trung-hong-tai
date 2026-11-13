@@ -98,6 +98,8 @@ import './quick_dict_widget.js';
       if (!u) return false;
       const email = (u.email || '').toLowerCase().trim();
       if (!email || email === 'guest' || email.startsWith('guest')) return false;
+      // KHUYẾN MÃI: mọi tài khoản đã đăng nhập đều là VIP miễn phí tới hết 23:59:59 ngày 31/12/2026 (giờ Việt Nam)
+      if (Date.now() <= Date.parse('2026-12-31T23:59:59.999+07:00')) return true;
       if (isUserAdmin(email)) return true;
       if (u.role === 'admin' || u.role === 'teacher' || u.role === 'superadmin' || u.isSuperAdmin) return true;
 
@@ -761,6 +763,8 @@ import './quick_dict_widget.js';
       if (!user) return false;
       const email = (user.email || '').toLowerCase().trim();
       if (!email || email === 'guest' || email.startsWith('guest')) return false;
+      // KHUYẾN MÃI: mọi tài khoản đã đăng nhập đều là VIP miễn phí tới hết 23:59:59 ngày 31/12/2026 (giờ Việt Nam)
+      if (Date.now() <= Date.parse('2026-12-31T23:59:59.999+07:00')) return true;
       if (typeof isUserAdmin === 'function' && isUserAdmin(email)) return true;
       if (user.role === 'super_admin' || user.role === 'superadmin' || user.isSuperAdmin) return true;
       if (user.role === 'teacher' || email.includes('hongtai') || email.includes('teacher')) return true;

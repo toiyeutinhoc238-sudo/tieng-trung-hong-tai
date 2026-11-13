@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+    <path d="M16 17 Q14 34 16 51 L48 51 Q50 34 48 17 z" fill="#ffffff" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M16 17 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2" fill="none" stroke="#5a3418" stroke-width="1.6"/>
+    <path d="M16 51 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2" fill="none" stroke="#5a3418" stroke-width="1.6"/>
+    <g fill="#fff" stroke="#5a3418" stroke-width="1.2"><rect x="21" y="20" width="7" height="7" rx="1"/><rect x="29" y="22" width="7" height="7" rx="1"/><rect x="37" y="20" width="7" height="7" rx="1"/></g>
+    <rect x="19" y="28" width="26" height="12" rx="2" fill="#f57c00" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <text x="32" y="34" font-family="'PingFang SC','Microsoft YaHei','Noto Sans CJK SC','Hiragino Sans GB',sans-serif" font-size="11.0" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="central">糖</text></svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+    <path d="M18 14q14 -6 28 0l3 40q0 4 -4 4H19q-4 0 -4 -4z" fill="#f3ead2" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M18 14q14 5 28 0" fill="none" stroke="#5a3418" stroke-width="1.6"/>
+    <path d="M27 10q5 -6 10 0" fill="none" stroke="#5a3418" stroke-width="2.4" stroke-linecap="round"/>
+    <g fill="#fff" stroke="#5a3418" stroke-width="1"><ellipse cx="26" cy="25" rx="2" ry="3"/><ellipse cx="32" cy="23" rx="2" ry="3"/><ellipse cx="38" cy="25" rx="2" ry="3"/><ellipse cx="29" cy="29" rx="2" ry="3"/><ellipse cx="35" cy="29" rx="2" ry="3"/></g>
+    <rect x="20" y="34" width="24" height="14" rx="2" fill="#d64545" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <text x="32" y="41" font-family="'PingFang SC','Microsoft YaHei','Noto Sans CJK SC','Hiragino Sans GB',sans-serif" font-size="10.1" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="central">大米</text></svg>

@@ -100,65 +100,65 @@ const I = (zone, id, nameChn, pinyin, nameVi, quantifier, qPin, quantifierVi, co
 
 const GROCERY_ITEMS = [
   // 食品调料 · Đồ ăn & gia vị
-  I('food', 'tp001', '大米', 'dàmǐ', 'gạo', '袋', 'dài', 'túi', 15, 25, 8, '🌾', 75),
-  I('food', 'tp002', '方便面', 'fāngbiànmiàn', 'mì ăn liền / mì gói', '包', 'bāo', 'gói', 2, 3, 12, '🍜', 0),
-  I('food', 'tp003', '面包', 'miànbāo', 'bánh mì', '个', 'gè', 'ổ/chiếc', 3, 5, 12, '🍞', 0),
-  I('food', 'tp004', '鸡蛋', 'jīdàn', 'trứng gà', '盒', 'hé', 'hộp', 7, 12, 10, '🥚', 40),
-  I('food', 'tp005', '香肠', 'xiāngcháng', 'xúc xích', '根', 'gēn', 'cây', 2.5, 4, 12, '🌭', 0),
-  I('food', 'tp006', '火腿', 'huǒtuǐ', 'giăm bông', '包', 'bāo', 'gói', 9, 15, 8, '🥓', 45),
-  I('food', 'tp007', '罐头鱼', 'guàntóuyú', 'cá hộp', '罐', 'guàn', 'hộp', 6, 10, 10, '🐟', 30),
-  I('food', 'tp008', '饼干', 'bǐnggān', 'bánh quy', '包', 'bāo', 'gói', 5, 8, 10, '🍪', 25),
-  I('food', 'tp009', '薯片', 'shǔpiàn', 'khoai tây chiên lát / snack khoai tây', '包', 'bāo', 'gói', 6, 10, 10, '🥔', 30),
-  I('food', 'tp010', '糖果', 'tángguǒ', 'kẹo', '包', 'bāo', 'gói', 4, 7, 10, '🍭', 25),
-  I('food', 'tp011', '巧克力', 'qiǎokèlì', 'sô-cô-la', '块', 'kuài', 'thanh/miếng', 7, 12, 10, '🍫', 40),
-  I('food', 'tp012', '花生', 'huāshēng', 'đậu phộng', '包', 'bāo', 'gói', 5, 8, 10, '🥜', 25),
-  I('food', 'tp013', '盐', 'yán', 'muối', '包', 'bāo', 'gói', 3, 5, 12, '🧂', 15),
-  I('food', 'tp014', '糖', 'táng', 'đường', '包', 'bāo', 'túi', 4, 7, 10, '🧊', 25),
-  I('food', 'tp015', '鱼露', 'yúlù', 'nước mắm', '瓶', 'píng', 'chai', 11, 18, 8, '🫗', 55),
-  I('food', 'tp016', '酱油', 'jiàngyóu', 'nước tương', '瓶', 'píng', 'chai', 9, 15, 8, '🍶', 45),
-  I('food', 'tp017', '食用油', 'shíyòngyóu', 'dầu ăn', '瓶', 'píng', 'chai', 21, 35, 6, '🫒', 105),
+  I('food', 'tp001', '大米', 'dàmǐ', 'gạo', '袋', 'dài', 'túi', 15, 25, 8, '', 75),
+  I('food', 'tp002', '方便面', 'fāngbiànmiàn', 'mì ăn liền / mì gói', '包', 'bāo', 'gói', 2, 3, 12, '', 0),
+  I('food', 'tp003', '面包', 'miànbāo', 'bánh mì', '个', 'gè', 'ổ/chiếc', 3, 5, 12, '', 0),
+  I('food', 'tp004', '鸡蛋', 'jīdàn', 'trứng gà', '盒', 'hé', 'hộp', 7, 12, 10, '', 40),
+  I('food', 'tp005', '香肠', 'xiāngcháng', 'xúc xích', '根', 'gēn', 'cây', 2.5, 4, 12, '', 0),
+  I('food', 'tp006', '火腿', 'huǒtuǐ', 'giăm bông', '包', 'bāo', 'gói', 9, 15, 8, '', 45),
+  I('food', 'tp007', '罐头鱼', 'guàntóuyú', 'cá hộp', '罐', 'guàn', 'hộp', 6, 10, 10, '', 30),
+  I('food', 'tp008', '饼干', 'bǐnggān', 'bánh quy', '包', 'bāo', 'gói', 5, 8, 10, '', 25),
+  I('food', 'tp009', '薯片', 'shǔpiàn', 'khoai tây chiên lát / snack khoai tây', '包', 'bāo', 'gói', 6, 10, 10, '', 30),
+  I('food', 'tp010', '糖果', 'tángguǒ', 'kẹo', '包', 'bāo', 'gói', 4, 7, 10, '', 25),
+  I('food', 'tp011', '巧克力', 'qiǎokèlì', 'sô-cô-la', '块', 'kuài', 'thanh/miếng', 7, 12, 10, '', 40),
+  I('food', 'tp012', '花生', 'huāshēng', 'đậu phộng', '包', 'bāo', 'gói', 5, 8, 10, '', 25),
+  I('food', 'tp013', '盐', 'yán', 'muối', '包', 'bāo', 'gói', 3, 5, 12, '', 15),
+  I('food', 'tp014', '糖', 'táng', 'đường', '包', 'bāo', 'túi', 4, 7, 10, '', 25),
+  I('food', 'tp015', '鱼露', 'yúlù', 'nước mắm', '瓶', 'píng', 'chai', 11, 18, 8, '', 55),
+  I('food', 'tp016', '酱油', 'jiàngyóu', 'nước tương', '瓶', 'píng', 'chai', 9, 15, 8, '', 45),
+  I('food', 'tp017', '食用油', 'shíyòngyóu', 'dầu ăn', '瓶', 'píng', 'chai', 21, 35, 6, '', 105),
   // 饮料 · Đồ uống
-  I('drinks', 'du001', '矿泉水', 'kuàngquánshuǐ', 'nước suối', '瓶', 'píng', 'chai', 3, 5, 12, '💧', 0),
-  I('drinks', 'du002', '纯净水', 'chúnjìngshuǐ', 'nước tinh khiết', '瓶', 'píng', 'chai', 2.5, 4, 12, '🚰', 0),
-  I('drinks', 'du003', '可乐', 'kělè', 'nước cola', '瓶', 'píng', 'chai', 6, 10, 10, '🥤', 30),
-  I('drinks', 'du004', '汽水', 'qìshuǐ', 'nước ngọt có ga', '罐', 'guàn', 'lon', 5.5, 9, 10, '🥫', 30),
-  I('drinks', 'du005', '橙汁', 'chéngzhī', 'nước cam', '盒', 'hé', 'hộp', 7, 12, 10, '🍊', 40),
-  I('drinks', 'du006', '牛奶', 'niúnǎi', 'sữa tươi', '盒', 'hé', 'hộp', 5.5, 9, 10, '🥛', 30),
-  I('drinks', 'du007', '豆浆', 'dòujiāng', 'sữa đậu nành', '瓶', 'píng', 'chai', 5, 8, 10, '🫘', 25),
-  I('drinks', 'du008', '咖啡', 'kāfēi', 'cà phê', '包', 'bāo', 'gói', 2, 3, 12, '☕', 0),
-  I('drinks', 'du009', '茶', 'chá', 'trà', '盒', 'hé', 'hộp', 12, 20, 8, '🍵', 60),
+  I('drinks', 'du001', '矿泉水', 'kuàngquánshuǐ', 'nước suối', '瓶', 'píng', 'chai', 3, 5, 12, '', 0),
+  I('drinks', 'du002', '纯净水', 'chúnjìngshuǐ', 'nước tinh khiết', '瓶', 'píng', 'chai', 2.5, 4, 12, '', 0),
+  I('drinks', 'du003', '可乐', 'kělè', 'nước cola', '瓶', 'píng', 'chai', 6, 10, 10, '', 30),
+  I('drinks', 'du004', '汽水', 'qìshuǐ', 'nước ngọt có ga', '罐', 'guàn', 'lon', 5.5, 9, 10, '', 30),
+  I('drinks', 'du005', '橙汁', 'chéngzhī', 'nước cam', '盒', 'hé', 'hộp', 7, 12, 10, '', 40),
+  I('drinks', 'du006', '牛奶', 'niúnǎi', 'sữa tươi', '盒', 'hé', 'hộp', 5.5, 9, 10, '', 30),
+  I('drinks', 'du007', '豆浆', 'dòujiāng', 'sữa đậu nành', '瓶', 'píng', 'chai', 5, 8, 10, '', 25),
+  I('drinks', 'du008', '咖啡', 'kāfēi', 'cà phê', '包', 'bāo', 'gói', 2, 3, 12, '', 0),
+  I('drinks', 'du009', '茶', 'chá', 'trà', '盒', 'hé', 'hộp', 12, 20, 8, '', 60),
   // 冷藏食品 · Sữa & thực phẩm lạnh
-  I('dairy', 'sl001', '酸奶', 'suānnǎi', 'sữa chua', '杯', 'bēi', 'hũ', 5, 8, 10, '🥣', 0),
-  I('dairy', 'sl002', '奶酪', 'nǎilào', 'phô mai', '片', 'piàn', 'lát', 3, 5, 12, '🧀', 0),
-  I('dairy', 'sl003', '黄油', 'huángyóu', 'bơ', '盒', 'hé', 'hộp', 15, 25, 8, '🧈', 75),
-  I('dairy', 'sl004', '冰淇淋', 'bīngqílín', 'kem', '支', 'zhī', 'cây', 6, 10, 10, '🍦', 0),
+  I('dairy', 'sl001', '酸奶', 'suānnǎi', 'sữa chua', '杯', 'bēi', 'hũ', 5, 8, 10, '', 0),
+  I('dairy', 'sl002', '奶酪', 'nǎilào', 'phô mai', '片', 'piàn', 'lát', 3, 5, 12, '', 0),
+  I('dairy', 'sl003', '黄油', 'huángyóu', 'bơ', '盒', 'hé', 'hộp', 15, 25, 8, '', 75),
+  I('dairy', 'sl004', '冰淇淋', 'bīngqílín', 'kem', '支', 'zhī', 'cây', 6, 10, 10, '', 0),
   // 日用清洁 · Đồ vệ sinh & gia dụng
-  I('household', 'gd001', '洗衣粉', 'xǐyīfěn', 'bột giặt', '袋', 'dài', 'gói', 15, 25, 8, '🧺', 75),
-  I('household', 'gd002', '洗衣液', 'xǐyīyè', 'nước giặt', '瓶', 'píng', 'chai', 27, 45, 6, '👕', 135),
-  I('household', 'gd003', '洗洁精', 'xǐjiéjīng', 'nước rửa chén', '瓶', 'píng', 'chai', 12, 20, 8, '🍽️', 60),
-  I('household', 'gd004', '纸巾', 'zhǐjīn', 'khăn giấy', '包', 'bāo', 'gói', 3, 5, 12, '🤧', 0),
-  I('household', 'gd005', '卫生纸', 'wèishēngzhǐ', 'giấy vệ sinh', '提', 'tí', 'lốc', 18, 30, 6, '🧻', 90),
-  I('household', 'gd006', '垃圾袋', 'lājīdài', 'túi đựng rác', '卷', 'juǎn', 'cuộn', 7, 12, 10, '🗑️', 40),
-  I('household', 'gd007', '电池', 'diànchí', 'pin', '节', 'jié', 'viên', 6, 10, 10, '🔋', 0),
-  I('household', 'gd008', '打火机', 'dǎhuǒjī', 'bật lửa', '个', 'gè', 'cái', 3, 5, 12, '🔥', 0),
+  I('household', 'gd001', '洗衣粉', 'xǐyīfěn', 'bột giặt', '袋', 'dài', 'gói', 15, 25, 8, '', 75),
+  I('household', 'gd002', '洗衣液', 'xǐyīyè', 'nước giặt', '瓶', 'píng', 'chai', 27, 45, 6, '', 135),
+  I('household', 'gd003', '洗洁精', 'xǐjiéjīng', 'nước rửa chén', '瓶', 'píng', 'chai', 12, 20, 8, '', 60),
+  I('household', 'gd004', '纸巾', 'zhǐjīn', 'khăn giấy', '包', 'bāo', 'gói', 3, 5, 12, '', 0),
+  I('household', 'gd005', '卫生纸', 'wèishēngzhǐ', 'giấy vệ sinh', '提', 'tí', 'lốc', 18, 30, 6, '', 90),
+  I('household', 'gd006', '垃圾袋', 'lājīdài', 'túi đựng rác', '卷', 'juǎn', 'cuộn', 7, 12, 10, '', 40),
+  I('household', 'gd007', '电池', 'diànchí', 'pin', '节', 'jié', 'viên', 6, 10, 10, '', 0),
+  I('household', 'gd008', '打火机', 'dǎhuǒjī', 'bật lửa', '个', 'gè', 'cái', 3, 5, 12, '', 0),
   // 个人护理 · Chăm sóc cá nhân
-  I('personal', 'cn001', '牙膏', 'yágāo', 'kem đánh răng', '支', 'zhī', 'tuýp', 12, 20, 8, '🦷', 60),
-  I('personal', 'cn002', '牙刷', 'yáshuā', 'bàn chải đánh răng', '把', 'bǎ', 'cái', 7, 12, 10, '🪥', 0),
-  I('personal', 'cn003', '洗发水', 'xǐfàshuǐ', 'dầu gội', '瓶', 'píng', 'chai', 27, 45, 6, '🧴', 135),
-  I('personal', 'cn004', '沐浴露', 'mùyùlù', 'sữa tắm', '瓶', 'píng', 'chai', 24, 40, 6, '🛁', 120),
-  I('personal', 'cn005', '香皂', 'xiāngzào', 'xà phòng cục', '块', 'kuài', 'cục', 6, 10, 10, '🧼', 0),
-  I('personal', 'cn006', '洗手液', 'xǐshǒuyè', 'nước rửa tay', '瓶', 'píng', 'chai', 15, 25, 8, '🫧', 75),
-  I('personal', 'cn007', '梳子', 'shūzi', 'lược', '把', 'bǎ', 'cái', 6, 10, 10, '🪮', 0),
-  I('personal', 'cn008', '口罩', 'kǒuzhào', 'khẩu trang', '包', 'bāo', 'gói', 9, 15, 8, '😷', 45),
+  I('personal', 'cn001', '牙膏', 'yágāo', 'kem đánh răng', '支', 'zhī', 'tuýp', 12, 20, 8, '', 60),
+  I('personal', 'cn002', '牙刷', 'yáshuā', 'bàn chải đánh răng', '把', 'bǎ', 'cái', 7, 12, 10, '', 0),
+  I('personal', 'cn003', '洗发水', 'xǐfàshuǐ', 'dầu gội', '瓶', 'píng', 'chai', 27, 45, 6, '', 135),
+  I('personal', 'cn004', '沐浴露', 'mùyùlù', 'sữa tắm', '瓶', 'píng', 'chai', 24, 40, 6, '', 120),
+  I('personal', 'cn005', '香皂', 'xiāngzào', 'xà phòng cục', '块', 'kuài', 'cục', 6, 10, 10, '', 0),
+  I('personal', 'cn006', '洗手液', 'xǐshǒuyè', 'nước rửa tay', '瓶', 'píng', 'chai', 15, 25, 8, '', 75),
+  I('personal', 'cn007', '梳子', 'shūzi', 'lược', '把', 'bǎ', 'cái', 6, 10, 10, '', 0),
+  I('personal', 'cn008', '口罩', 'kǒuzhào', 'khẩu trang', '包', 'bāo', 'gói', 9, 15, 8, '', 45),
   // 文具 · Văn phòng phẩm & đồ dùng
-  I('stationery', 'vp001', '笔', 'bǐ', 'bút', '支', 'zhī', 'cây', 3, 5, 12, '🖊️', 15),
-  I('stationery', 'vp002', '铅笔', 'qiānbǐ', 'bút chì', '支', 'zhī', 'cây', 2.5, 4, 12, '✏️', 0),
-  I('stationery', 'vp003', '橡皮', 'xiàngpí', 'gôm / tẩy', '块', 'kuài', 'cục', 2, 3, 12, '🧽', 0),
-  I('stationery', 'vp004', '笔记本', 'bǐjìběn', 'tập / sổ ghi chép', '本', 'běn', 'quyển', 7, 12, 10, '📓', 40),
-  I('stationery', 'vp005', '作业本', 'zuòyèběn', 'vở bài tập', '本', 'běn', 'quyển', 6, 10, 10, '📒', 30),
-  I('stationery', 'vp006', '胶带', 'jiāodài', 'băng keo', '卷', 'juǎn', 'cuộn', 5, 8, 10, '🩹', 25),
-  I('stationery', 'vp007', '剪刀', 'jiǎndāo', 'kéo', '把', 'bǎ', 'cái', 9, 15, 8, '✂️', 45),
-  I('stationery', 'vp008', '塑料袋', 'sùliàodài', 'túi ni-lông', '个', 'gè', 'cái', 0.5, 1, 12, '🛍️', 0)
+  I('stationery', 'vp001', '笔', 'bǐ', 'bút', '支', 'zhī', 'cây', 3, 5, 12, '', 15),
+  I('stationery', 'vp002', '铅笔', 'qiānbǐ', 'bút chì', '支', 'zhī', 'cây', 2.5, 4, 12, '', 0),
+  I('stationery', 'vp003', '橡皮', 'xiàngpí', 'gôm / tẩy', '块', 'kuài', 'cục', 2, 3, 12, '', 0),
+  I('stationery', 'vp004', '笔记本', 'bǐjìběn', 'tập / sổ ghi chép', '本', 'běn', 'quyển', 7, 12, 10, '', 40),
+  I('stationery', 'vp005', '作业本', 'zuòyèběn', 'vở bài tập', '本', 'běn', 'quyển', 6, 10, 10, '', 30),
+  I('stationery', 'vp006', '胶带', 'jiāodài', 'băng keo', '卷', 'juǎn', 'cuộn', 5, 8, 10, '', 25),
+  I('stationery', 'vp007', '剪刀', 'jiǎndāo', 'kéo', '把', 'bǎ', 'cái', 9, 15, 8, '', 45),
+  I('stationery', 'vp008', '塑料袋', 'sùliàodài', 'túi ni-lông', '个', 'gè', 'cái', 0.5, 1, 12, '', 0)
 ];
 
 // Lượng từ (sheet "Lượng từ")
@@ -230,6 +230,16 @@ const ORDER_TEMPLATES = [
     zh: (L, N) => `请问，${N}在哪里？我要${L}。`, pin: (P, NP) => `Qǐngwèn, ${NP} zài nǎlǐ? Wǒ yào ${P}.`, vi: (V, NV) => `Xin hỏi, ${NV} ở đâu? Tôi lấy ${V}.` }
 ];
 
+// Sự cố cho tiệm có nhiều tình huống
+const INCIDENT_RULES = {
+  // hàng tươi: còn trên kệ cuối ngày thì một nửa bị hủy (过期 hết hạn)
+  perishable: ['tp003', 'tp004', 'tp005', 'tp006', 'du006', 'du007', 'sl001', 'sl002', 'sl003', 'sl004'],
+  overnightSpoilRate: 0.5,
+  haggleChance: 0.18,      // khách mặc cả (đơn từ haggleMinDue ¥)
+  haggleMinDue: 8,
+  soldOutChance: 0.35      // có món đã mở bán mà hết hàng → khách hỏi đúng món đó
+};
+const HAGGLE_LINES = ['可以便宜一点吗？', '有打折吗？', '这个有优惠吗？'];
 const START_MONEY = 120;     // vốn đầu game (giá hàng theo file Excel)
 const SHELF_COLS = 4;
 const SHELF_ROWS = 2;
@@ -266,7 +276,15 @@ const VOCAB_TABS = [
       { chn: '批发市场', pin: 'pīfā shìchǎng', vi: 'chợ đầu mối (bán sỉ)' },
       { chn: '营业', pin: 'yíngyè', vi: 'mở cửa kinh doanh' },
       { chn: '打烊', pin: 'dǎyàng', vi: 'đóng cửa tiệm' },
-      { chn: '猫', pin: 'māo', vi: 'con mèo' }
+      { chn: '猫', pin: 'māo', vi: 'con mèo' },
+      { chn: '过期', pin: 'guòqī', vi: 'hết hạn (sử dụng)' },
+      { chn: '打碎', pin: 'dǎsuì', vi: 'làm vỡ' },
+      { chn: '老鼠', pin: 'lǎoshǔ', vi: 'con chuột' },
+      { chn: '停电', pin: 'tíngdiàn', vi: 'mất điện' },
+      { chn: '冰箱', pin: 'bīngxiāng', vi: 'tủ lạnh' },
+      { chn: '便宜', pin: 'piányi', vi: 'rẻ' },
+      { chn: '打折', pin: 'dǎzhé', vi: 'giảm giá' },
+      { chn: '卖完了', pin: 'mài wán le', vi: 'bán hết rồi' }
     ]
   }
 ];
@@ -373,6 +391,8 @@ const randInt = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 // Thiếu hàm này → mỗi lần tính tiền xong renderSingleCheckoutPhrase() ném ReferenceError, bảng điểm không hiện, khách kẹt lại, ngày không kết thúc
 const pickOne = (arr) => (Array.isArray(arr) && arr.length ? arr[randInt(0, arr.length - 1)] : null);
 const zoneOf = (id) => GROCERY_ZONES.find(z => z.id === id);
+// Hình riêng của từng món (scripts/gen_grocery_icons.cjs) — mỗi món trong Tạp hóa.xlsx đúng 1 hình
+const itemImg = (it, cls = '') => `<img class="gi ${cls}" src="${ASSET(`grocery/${it.id}.svg`)}" alt="${escapeHtml(it.nameChn)}" draggable="false">`;
 
 // "一" đổi thanh: yí trước thanh 4, yì trước các thanh khác
 function yiPinyin(nextPin) {
@@ -661,8 +681,11 @@ class GroceryGame {
 
     on('btn-take-order-action', 'click', () => this.takeOrder());
     on('btn-take-order-footer', 'click', () => this.takeOrder());
+    on('btn-sold-out', 'click', () => this.soldOutApology());
+    on('btn-inc-say', 'click', () => { if (this.incidentSay) this.audio.speak(this.incidentSay); });
     on('speech-bubble', 'click', (e) => {
-      if (e.target.closest('#btn-replay-order-audio')) return;
+      // nút loa & nút "Xin lỗi, hết hàng" nằm trong bong bóng — bấm chúng KHÔNG được tính là nhận đơn
+      if (e.target.closest('#btn-replay-order-audio, #btn-sold-out')) return;
       if (this.current && !this.current.takenAt) this.takeOrder();
     });
     on('btn-replay-order-audio', 'click', () => this.speakOrder());
@@ -828,7 +851,7 @@ class GroceryGame {
   // Nhiệm vụ ngày
   // --------------------------------------------------------------------------
   freshStats() {
-    return { spawned: 0, served: 0, lost: 0, revenue: 0, cost: 0, scoreSum: 0, changeFirstTry: 0 };
+    return { spawned: 0, served: 0, lost: 0, revenue: 0, cost: 0, scoreSum: 0, changeFirstTry: 0, incidentLoss: 0, incidents: [] };
   }
 
   buildMission() {
@@ -846,7 +869,8 @@ class GroceryGame {
     const sub = this.$('mission-sub');
     if (sub) {
       sub.innerHTML = `Mỗi ngày bán hàng gồm <b>${Math.round(DAY_RULES.lengthMs / 60000)} phút đếm ngược</b>. Khách đến liên tục tấp nập — phục vụ được càng nhiều càng tốt!`
-        + (low ? `<br>⚠️ <b>${low} món</b> sắp hết hàng — nên nhập thêm trước khi mở cửa.` : '');
+        + (low ? `<br>⚠️ <b>${low} món</b> sắp hết hàng — nên nhập thêm trước khi mở cửa.` : '')
+        + '<br>🕒 Đồ tươi còn trên kệ cuối ngày sẽ <b>hết hạn một nửa</b>; trong ngày có thể có <b>sự cố bất ngờ</b>!';
     }
     const goals = this.$('mission-goals');
     if (goals) {
@@ -869,6 +893,9 @@ class GroceryGame {
     this.closed = false;
     this.dayStartAt = this.gameTime;
     this.nextArrivalAt = this.gameTime + QUEUE_RULES.firstArrivalMs;
+    // sự cố bất ngờ: ngày 1 có 1 lần, từ ngày 2 có 1–2 lần, rơi vào khoảng 20%–85% thời gian bán
+    const nInc = this.day === 1 ? 1 : randInt(1, 2);
+    this.incidentTimes = Array.from({ length: nInc }, () => this.dayStartAt + DAY_RULES.lengthMs * (0.2 + Math.random() * 0.65)).sort((a, b) => a - b);
     this.learn('欢迎光临');
     this.learn('营业');
     this.lastTickAt = performance.now();
@@ -935,6 +962,12 @@ class GroceryGame {
       [...this.line].forEach(c => { if (this.gameTime - c.arrivedAt >= QUEUE_RULES.patienceMs) this.loseCustomer(c); });
       const cur = this.current;
       if (cur && !cur.takenAt && !cur.leaving && this.gameTime - cur.arrivedAt >= QUEUE_RULES.patienceMs) this.loseCustomer(cur);
+    }
+
+    // Sự cố bất ngờ giữa ngày
+    if (!this.closed && this.incidentTimes && this.incidentTimes.length && this.gameTime >= this.incidentTimes[0]) {
+      this.incidentTimes.shift();
+      this.triggerIncident();
     }
 
     // Tự động đổi câu tám chuyện khi chờ khách rảnh rỗi (mỗi 6-7s)
@@ -1031,9 +1064,17 @@ class GroceryGame {
   // --------------------------------------------------------------------------
   // Đơn hàng
   // --------------------------------------------------------------------------
-  makeOrder() {
+  makeOrder(allowSoldOut = true) {
     const avail = this.shelves.filter(s => s.unlocked && this.zones[s.zone] && s.currentStock > 0);
     if (!avail.length) return null;
+    // Khách hỏi đúng món đã mở bán nhưng đang hết hàng → phải xin lỗi "不好意思，这个卖完了。"
+    const soldOut = this.shelves.filter(s => s.unlocked && this.zones[s.zone] && s.currentStock <= 0);
+    if (allowSoldOut && soldOut.length && Math.random() < INCIDENT_RULES.soldOutChance) {
+      const it = pickOne(soldOut);
+      const due = it.price;
+      const paid = this.pickPaidAmount(due);
+      return { items: [{ item: it, qty: 1 }], due, paid, change: Math.round((paid - due) * 100) / 100, tpl: 'have', soldOut: true };
+    }
     const wantTwo = Math.random() < Math.min(0.75, 0.35 + this.day * 0.08);
     const count = Math.min(avail.length, wantTwo ? 2 : 1);
     const picked = [...avail].sort(() => Math.random() - 0.5).slice(0, count);
@@ -1044,7 +1085,8 @@ class GroceryGame {
     const due = items.reduce((s, x) => s + cents(x.item.price) * x.qty, 0) / 100;
     const paid = this.pickPaidAmount(due);
     const tpls = ORDER_TEMPLATES.filter(t => !t.one || items.length === 1);
-    return { items, due, paid, change: Math.round((paid - due) * 100) / 100, tpl: pickOne(tpls).id };
+    const haggle = due >= INCIDENT_RULES.haggleMinDue && Math.random() < INCIDENT_RULES.haggleChance ? pickOne(HAGGLE_LINES) : null;
+    return { items, due, paid, change: Math.round((paid - due) * 100) / 100, tpl: pickOne(tpls).id, haggle };
   }
 
   // Khách trả bằng tờ tiền "tròn" lớn hơn số phải trả
@@ -1088,6 +1130,11 @@ class GroceryGame {
   takeOrder() {
     const c = this.current;
     if (!c || !c.order || c.takenAt) return;
+    if (c.order.soldOut) {
+      this.audio.error();
+      this.showToast('📦', `${c.order.items[0].item.nameChn} đã HẾT HÀNG trên kệ! Hãy bấm "不好意思，这个卖完了" để xin lỗi khách.`, 'warn');
+      return;
+    }
     this.audio.pick();
     c.takenAt = this.gameTime;
     const used = this.patienceUsed(c);
@@ -1102,6 +1149,141 @@ class GroceryGame {
     this.renderRail();
     this.setAttention('view-shelves-station');
     this.showToast('📝', 'Đã nhận đơn! Sang 货架区 để nhặt hàng vào giỏ.');
+  }
+
+  // ---------------- Sự cố
+  // Xin lỗi khách vì món đã hết: khách đổi món khác hoặc rời tiệm
+  soldOutApology() {
+    const c = this.current;
+    if (!c || !c.order || c.takenAt || c.leaving) return;
+    if (!c.order.soldOut) {
+      this.audio.error();
+      this.showToast('🧐', 'Món khách gọi vẫn còn hàng trên kệ mà! Bấm Nhận đơn để bán cho khách.', 'warn');
+      return;
+    }
+    const sorry = '不好意思，这个卖完了。';
+    this.learn(sorry); this.learn('卖完了');
+    this.audio.speak(sorry);
+    const it = c.order.items[0].item;
+    const next = Math.random() < 0.6 ? this.makeOrder(false) : null;
+    if (next) {
+      c.order = next;
+      this.renderCounter();
+      this.showToast('🔁', `不好意思，这个卖完了 · ${c.profile.nameChn} đổi sang món khác. Nhớ nhập thêm ${it.nameChn}!`);
+      setTimeout(() => { if (this.current === c && !c.takenAt) this.speakOrder(); }, 1400);
+    } else {
+      c.leaving = true;
+      this.showToast('😞', `Hết ${it.nameChn} nên ${c.profile.nameChn} đành rời tiệm (tính 1 khách bỏ về). Nhớ vào 批发市场 nhập hàng!`, 'warn');
+      setTimeout(() => { if (this.current === c) this.loseCustomer(c, true); }, 1500);
+    }
+  }
+
+  // Sự cố bất ngờ giữa ngày (làm vỡ chai, chuột cắn túi, mất điện) — không đụng món khách đang mua
+  triggerIncident() {
+    const busy = new Set(this.current && this.current.order ? this.current.order.items.map(x => x.item.id) : []);
+    const stocked = this.shelves.filter(it => it.unlocked && this.zones[it.zone] && it.currentStock > 0 && !busy.has(it.id));
+    const types = [];
+    const bottles = stocked.filter(it => it.quantifier === '瓶' || it.quantifier === '罐');
+    const bags = stocked.filter(it => it.quantifier === '包' || it.quantifier === '袋');
+    const cold = stocked.filter(it => it.zone === 'dairy');
+    if (bottles.length) types.push('break');
+    if (bags.length) types.push('rat');
+    if (cold.length) types.push('power');
+    if (!types.length) return;
+    const type = pickOne(types);
+    const lost = [];
+    const take = (it, n) => { const q = Math.min(it.currentStock, n); if (q > 0) { it.currentStock -= q; lost.push({ item: it, qty: q }); } };
+    let ev;
+    if (type === 'break') {
+      const it = pickOne(bottles);
+      const n = Math.min(it.currentStock, randInt(1, 2));
+      take(it, n);
+      ev = { icon: '💥', title: 'Làm vỡ hàng!', zh: `哎呀！${NUM_CHN[n] || n}${it.quantifier}${it.nameChn}打碎了！`, pin: `Āiyā! ${n === 1 ? yiPinyin(it.qPin) : 'liǎng'} ${it.qPin} ${it.pinyin} dǎsuì le!`, vi: `Ôi! Làm vỡ ${n} ${it.quantifierVi} ${it.nameVi.split(' / ')[0]} rồi!`, words: ['打碎'] };
+    } else if (type === 'rat') {
+      const it = pickOne(bags);
+      take(it, randInt(1, 2));
+      ev = { icon: '🐭', title: 'Chuột cắn hàng!', zh: `糟糕！老鼠把${it.nameChn}的袋子咬破了！`, pin: `Zāogāo! Lǎoshǔ bǎ ${it.pinyin} de dàizi yǎopò le!`, vi: `Chết rồi! Chuột cắn thủng túi ${it.nameVi.split(' / ')[0]}!`, words: ['老鼠'] };
+    } else {
+      cold.forEach(it => take(it, Math.max(1, Math.ceil(it.currentStock * 0.3))));
+      ev = { icon: '🔌', title: 'Mất điện!', zh: '停电了！冰箱不冷了，冷藏食品坏了一些。', pin: 'Tíngdiàn le! Bīngxiāng bù lěng le, lěngcáng shípǐn huài le yìxiē.', vi: 'Mất điện rồi! Tủ lạnh không lạnh nữa, đồ lạnh bị hỏng một ít.', words: ['停电', '冰箱'] };
+    }
+    const loss = lost.reduce((a, x) => a + cents(x.item.cost) * x.qty, 0) / 100;
+    this.stats.incidentLoss = Math.round(((this.stats.incidentLoss || 0) + loss) * 100) / 100;
+    (this.stats.incidents = this.stats.incidents || []).push({ type, lost: lost.map(x => ({ id: x.item.id, qty: x.qty })), loss });
+    ev.words.forEach(w => this.learn(w));
+    this.audio.error();
+    this.showIncident({ ...ev, loss: `Mất: ${lost.map(x => `${x.item.nameChn} ×${x.qty}`).join(', ')} · thiệt hại ${fmt(loss)} ¥ (giá nhập)` });
+    this.renderShelves();
+    this.renderRail();
+  }
+
+  // Bảng sự cố / tình huống (dùng chung cho sự cố & mặc cả). actions: [{ label, cls, fn }]
+  showIncident({ icon, title, zh, pin, vi, loss = '', actions = null }) {
+    this.setText('inc-icon', icon);
+    this.setText('inc-title', title);
+    this.setText('inc-chn', zh);
+    this.setText('inc-pin', pin);
+    this.setText('inc-vi', vi);
+    this.setText('inc-loss', loss);
+    const lossEl = this.$('inc-loss');
+    if (lossEl) lossEl.style.display = loss ? '' : 'none';
+    const box = this.$('inc-actions');
+    if (box) {
+      const list = actions || [{ label: '<i class="fa-solid fa-check"></i> Biết rồi', cls: 'g-btn-primary', fn: () => {} }];
+      box.innerHTML = list.map((a, i) => `<button type="button" class="${a.cls || 'g-btn-ghost'}" data-inc="${i}">${a.label}</button>`).join('');
+      box.querySelectorAll('[data-inc]').forEach(b => b.addEventListener('click', () => {
+        this.closeModal('modal-incident');
+        this.lastTickAt = performance.now();
+        list[+b.dataset.inc].fn();
+      }));
+    }
+    this.incidentSay = zh;
+    this.openModal('modal-incident');
+    setTimeout(() => this.audio.speak(zh), 350);
+  }
+
+  // Khách mặc cả ở quầy thối tiền: bớt 1¥ (khách vui) hoặc từ chối lịch sự (khách hơi phật ý)
+  askHaggle() {
+    const c = this.current;
+    const o = c && c.order;
+    if (!o || !o.haggle || o.haggleDone) return;
+    const line = SHOP_SENTENCES.find(x => x.chn === o.haggle);
+    this.learn(o.haggle); this.learn('便宜'); this.learn('打折');
+    this.showIncident({
+      icon: '🤝', title: `${c.profile.nameChn} mặc cả`, zh: o.haggle, pin: line ? line.pin : '', vi: line ? line.vi : '',
+      loss: `Tổng tiền ${fmt(o.due)} ¥ · khách đưa ${fmt(o.paid)} ¥`,
+      actions: [
+        { label: '<span class="zh">好吧，便宜一块钱。</span> Bớt 1 ¥', cls: 'g-btn-primary', fn: () => {
+          o.due = Math.round((o.due - 1) * 100) / 100;
+          o.change = Math.round((o.paid - o.due) * 100) / 100;
+          o.haggleDone = 'discount';
+          c.waitScore = Math.min(100, (c.waitScore ?? 100) + 10);
+          this.audio.speak('好吧，给您便宜一块钱。');
+          this.showToast('😊', 'Đã bớt 1 ¥ — khách vui vẻ! Tổng tiền mới ' + fmt(o.due) + ' ¥, nhớ tính lại tiền thối.');
+          this.renderChange();
+        } },
+        { label: '<span class="zh">不好意思，不能便宜了。</span> Giữ giá', cls: 'g-btn-ghost', fn: () => {
+          o.haggleDone = 'refuse';
+          c.waitScore = Math.max(0, (c.waitScore ?? 100) - 15);
+          this.audio.speak('不好意思，这已经是最低价了。');
+          this.showToast('😐', 'Giữ nguyên giá — khách hơi phật ý (trừ điểm chờ).');
+          this.renderChange();
+        } }
+      ]
+    });
+  }
+
+  // Cuối ngày: hàng tươi còn trên kệ bị hủy một phần (过期)
+  spoilPerishables() {
+    const out = [];
+    this.shelves.forEach(it => {
+      if (!INCIDENT_RULES.perishable.includes(it.id) || !it.unlocked || it.currentStock <= 0) return;
+      const qty = Math.ceil(it.currentStock * INCIDENT_RULES.overnightSpoilRate);
+      it.currentStock -= qty;
+      out.push({ item: it, qty, loss: Math.round(cents(it.cost) * qty) / 100 });
+    });
+    if (out.length) this.learn('过期');
+    return out;
   }
 
   // Chuyển kệ đang xem tới khu còn món khách cần
@@ -1239,7 +1421,7 @@ class GroceryGame {
     const b = this.stagePos(target);
     const f = document.createElement('div');
     f.className = 'fly-item';
-    f.textContent = item.emoji;
+    f.innerHTML = itemImg(item);
     f.style.left = `${a.x + a.w / 2 - 16}px`;
     f.style.top = `${a.y + 10}px`;
     stage.appendChild(f);
@@ -1327,7 +1509,11 @@ class GroceryGame {
   // ---------------- Trạm 4: thu tiền & thối tiền
   prepareChange() {
     this.renderChange();
-    if (this.isReadyToCharge()) this.learn('找零');
+    if (this.isReadyToCharge()) {
+      this.learn('找零');
+      const o = this.current.order;
+      if (o.haggle && !o.haggleDone) setTimeout(() => this.askHaggle(), 250);
+    }
   }
 
   isReadyToCharge() {
@@ -1544,6 +1730,19 @@ class GroceryGame {
   showDaySummary() {
     this.dayEnded = true;
     const s = this.stats;
+    const spoiled = this.spoilPerishables();
+    const spoilLoss = spoiled.reduce((a, x) => a + x.loss, 0);
+    const spBox = this.$('summary-incidents');
+    if (spBox) {
+      const inc = s.incidents || [];
+      const incLabel = { break: '💥 Làm vỡ hàng', rat: '🐭 Chuột cắn', power: '🔌 Mất điện' };
+      spBox.innerHTML = `
+        <div class="si-row ${spoiled.length ? 'bad' : 'ok'}"><b>🗑️ <span class="zh">过期</span> · Hàng tươi hết hạn qua đêm</b>
+          <span>${spoiled.length ? spoiled.map(x => `<span class="zh">${x.item.nameChn}</span> ×${x.qty}`).join(', ') + ` — thiệt hại <b>${fmt(spoilLoss)} ¥</b>` : '✨ Không có hàng tươi nào bị hủy — nhập hàng vừa đủ, giỏi lắm!'}</span></div>
+        <div class="si-row ${inc.length ? 'bad' : 'ok'}"><b>⚠️ Sự cố trong ngày</b>
+          <span>${inc.length ? inc.map(e => `${incLabel[e.type] || e.type} (−${fmt(e.loss)} ¥)`).join(' · ') : 'Không có sự cố nào.'}</span></div>
+        <div class="si-tip">💡 Đồ tươi (🕒) còn trên kệ cuối ngày sẽ bị hủy một nửa — nhập vừa đủ bán trong ngày.</div>`;
+    }
     const goals = this.evaluateMission();
     const stars = goals.filter(g => g.done).length;
     const bonus = stars * MISSION_RULES.bonusPerStar;
@@ -1743,7 +1942,7 @@ class GroceryGame {
     // Gợi ý luôn số lượng nhập (vừa túi tiền)
     const afford = Math.floor((cents(this.money) - cents(this.restockTotal())) / cents(it.cost));
     this.restockQty[it.id] = Math.max(0, Math.min(it.maxStock - it.currentStock, 4, afford));
-    this.showToast('🆕', `Đã mở bán ${it.emoji} ${it.nameChn} (${it.nameVi})! Bấm "Xác nhận nhập hàng" để bày lên kệ.`);
+    this.showToast('🆕', `Đã mở bán ${it.nameChn} (${it.nameVi})! Bấm "Xác nhận nhập hàng" để bày lên kệ.`);
     this.renderMarket();
     this.updateHUD();
   }
@@ -1949,10 +2148,14 @@ class GroceryGame {
       this.setText('order-vi-text', '(Ông chủ ơi, sao kệ hàng trống trơn vậy?)');
       if (btn) btn.style.display = 'none';
       if (takeBtnFooter) takeBtnFooter.style.display = 'none';
+      const soBtn0 = this.$('btn-sold-out');
+      if (soBtn0) soBtn0.style.display = 'none';
       return;
     }
     if (btn) btn.style.display = c.takenAt ? 'none' : 'inline-flex';
     if (takeBtnFooter) takeBtnFooter.style.display = c.takenAt ? 'none' : 'inline-flex';
+    const soBtn = this.$('btn-sold-out');
+    if (soBtn) soBtn.style.display = c.takenAt || c.leaving ? 'none' : 'inline-flex';
     bubble?.classList.remove('hidden');
     bubble?.classList.toggle('taken', !!c.takenAt);
     this.renderSpeech();
@@ -1980,7 +2183,7 @@ class GroceryGame {
     const ul = this.$('chalk-specials');
     if (!ul) return;
     ul.innerHTML = this.shelves.filter(s => s.unlocked && this.zones[s.zone]).slice(-4).reverse()
-      .map(s => `<li><span>${s.emoji} <span class="zh">${s.nameChn}</span></span><b>${fmt(s.price)}¥</b></li>`).join('');
+      .map(s => `<li><span>${itemImg(s)} <span class="zh">${s.nameChn}</span></span><b>${fmt(s.price)}¥</b></li>`).join('');
   }
 
   wantedByZone() {
@@ -2046,7 +2249,7 @@ class GroceryGame {
       if (!it) return '<div class="prod empty-slot"></div>';
       if (!it.unlocked) {
         return `<button type="button" class="prod locked" data-locked="${it.id}">
-          <span class="lock-emoji">${it.emoji}</span>
+          <span class="lock-emoji">${itemImg(it)}</span>
           <span class="zh lock-name">${it.nameChn}</span>
           <span class="lock-price"><i class="fa-solid fa-lock"></i> Mở ở 批发市场 · ${fmt(it.unlockCost)} ¥</span>
         </button>`;
@@ -2056,7 +2259,7 @@ class GroceryGame {
       return `<button type="button" class="prod ${out ? 'out' : ''} ${wanted.has(it.id) ? 'wanted' : ''}" data-pid="${it.id}" title="${escapeHtml(it.nameVi)}">
         <span class="prod-stock ${it.currentStock <= 2 ? 'low' : ''}">${out ? 'Hết hàng' : `Còn ${it.currentStock}`}</span>
         <span class="prod-tag">${fmt(it.price)}¥</span>
-        <span class="prod-stack">${out ? '<span style="opacity:.35">📦</span>' : `<span>${it.emoji}</span>`.repeat(stackN)}</span>
+        <span class="prod-stack">${out ? `<span style="opacity:.3;filter:grayscale(1)">${itemImg(it)}</span>` : `<span>${itemImg(it)}</span>`.repeat(stackN)}</span>
         <span class="prod-name zh">${it.nameChn}</span>
         <span class="prod-pin">${escapeHtml(it.pinyin)} · ${escapeHtml(it.nameVi)}</span>
       </button>`;
@@ -2082,7 +2285,7 @@ class GroceryGame {
         const have = b ? b.qty : 0;
         const z = zoneOf(x.item.zone);
         return `<button type="button" class="oc-item ${have === x.qty ? 'done' : ''}" data-goto-zone="${z.id}" title="Tới khu ${escapeHtml(z.vi)}">
-          <span class="em">${x.item.emoji}</span>
+          <span class="em">${itemImg(x.item)}</span>
           <span class="oc-txt"><span class="zh">${NUM_CHN[x.qty] || x.qty}${x.item.quantifier}${x.item.nameChn}</span><small>${z.icon} ${z.chn} · ${escapeHtml(z.vi)}</small></span>
           <span class="cnt">${have}/${x.qty}</span>
         </button>`;
@@ -2105,7 +2308,7 @@ class GroceryGame {
     } else {
       box.innerHTML = this.basket.map(b => `
         <div class="basket-row">
-          <span class="em">${b.item.emoji}</span>
+          <span class="em">${itemImg(b.item)}</span>
           <span class="zh">${b.item.nameChn}</span>
           <span class="qty">${fmt(b.item.price)}¥ × ${b.qty}</span>
           <button type="button" data-remove="${b.item.id}" title="Trả 1 món về kệ"><i class="fa-solid fa-minus"></i></button>
@@ -2128,7 +2331,7 @@ class GroceryGame {
     } else {
       track.innerHTML = this.scanItems.map((si, i) => `
         <button type="button" class="belt-item ${si.scanned ? 'scanned' : ''} ${i === flashIdx ? 'beep' : ''}" data-scan="${i}">
-          <span class="em">${si.item.emoji}</span>
+          <span class="em">${itemImg(si.item)}</span>
           <span class="zh">${si.item.nameChn}</span>
           <span class="pr">${fmt(si.item.price)}¥</span>
           <span class="barcode"></span>
@@ -2253,8 +2456,8 @@ class GroceryGame {
       if (!it.unlocked) {
         const canUnlock = zoneOpen && free >= it.unlockCost;
         return `<div class="mk-card locked ${zoneOpen ? '' : 'zone-locked'}">
-          <span class="mk-emoji">${it.emoji}</span>
-          <b class="zh mk-name">${it.nameChn}</b>
+          <span class="mk-emoji">${itemImg(it)}</span>
+          <b class="zh mk-name">${it.nameChn}</b>${INCIDENT_RULES.perishable.includes(it.id) ? '<span class="mk-fresh">🕒 Hàng tươi</span>' : ''}
           <span class="mk-pin">${escapeHtml(it.pinyin)}</span>
           <span class="mk-vi">${escapeHtml(it.nameVi)}</span>
           <span class="mk-price">Bán ${fmt(it.price)} ¥ / ${it.quantifier} · lãi ${fmt(profit)}</span>
@@ -2266,8 +2469,8 @@ class GroceryGame {
       const pct = Math.round(((it.currentStock + q) / it.maxStock) * 100);
       return `<div class="mk-card ${it.currentStock <= 2 ? 'low' : ''}">
         <span class="mk-stock">Kệ ${it.currentStock}/${it.maxStock}${q ? ` <b>+${q}</b>` : ''}</span>
-        <span class="mk-emoji">${it.emoji}</span>
-        <b class="zh mk-name">${it.nameChn}</b>
+        <span class="mk-emoji">${itemImg(it)}</span>
+        <b class="zh mk-name">${it.nameChn}</b>${INCIDENT_RULES.perishable.includes(it.id) ? '<span class="mk-fresh">🕒 Hàng tươi</span>' : ''}
         <span class="mk-pin">${escapeHtml(it.pinyin)}</span>
         <span class="mk-vi">${escapeHtml(it.nameVi)}</span>
         <span class="mk-price">Nhập <b class="cost">${fmt(it.cost)}</b> → bán <b class="sell">${fmt(it.price)}</b> ¥</span>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+    <path d="M16 17 Q14 34 16 51 L48 51 Q50 34 48 17 z" fill="#f9c6d6" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M16 17 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2" fill="none" stroke="#5a3418" stroke-width="1.6"/>
+    <path d="M16 51 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2" fill="none" stroke="#5a3418" stroke-width="1.6"/>
+    <g stroke="#5a3418" stroke-width="1.2"><path d="M18 25l4-3v6zM30 25l-4-3v6z" fill="#ff6f91"/><circle cx="24" cy="25" r="3.5" fill="#ff8fab"/><path d="M34 25l4-3v6zM46 25l-4-3v6z" fill="#4fc3f7"/><circle cx="40" cy="25" r="3.5" fill="#81d4fa"/></g>
+    <rect x="19" y="28" width="26" height="12" rx="2" fill="#c2185b" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <text x="32" y="34" font-family="'PingFang SC','Microsoft YaHei','Noto Sans CJK SC','Hiragino Sans GB',sans-serif" font-size="11.0" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="central">糖果</text></svg>

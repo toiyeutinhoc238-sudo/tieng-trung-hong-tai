@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+    <path d="M30 20v-6h-6" fill="none" stroke="#5a3418" stroke-width="2.2" stroke-linecap="round"/>
+    <rect x="28" y="14" width="8" height="5" rx="1" fill="#e8e8e8" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <rect x="26" y="19" width="12" height="6" rx="1.5" fill="#f2f2f2" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <rect x="20" y="24" width="24" height="36" rx="5" fill="#f48fb1" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <rect x="22" y="36.6" width="20" height="13.68" rx="1.5" fill="#ffffff" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <text x="32" y="43.44" font-family="'PingFang SC','Microsoft YaHei','Noto Sans CJK SC','Hiragino Sans GB',sans-serif" font-size="5.8" font-weight="700" fill="#c2185b" text-anchor="middle" dominant-baseline="central">沐浴露</text>
+    <path d="M24 29 v6" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".55"/></svg>

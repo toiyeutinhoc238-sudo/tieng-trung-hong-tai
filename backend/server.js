@@ -840,6 +840,10 @@ function isUserAdmin(email, userData = null) {
 }
 
 // Helper to evaluate and refresh VIP status (auto-expire if passed deadline)
+// KHUYẾN MÃI: mọi tài khoản đã đăng nhập đều là VIP miễn phí tới hết 23:59:59 ngày 31/12/2026 (giờ Việt Nam).
+// Không ghi vào dữ liệu người dùng → hết hạn là tự trở lại như cũ; ai đã mua gói dài hơn thì giữ gói của họ.
+const FREE_VIP_UNTIL = new Date('2026-12-31T23:59:59.999+07:00');
+
 function checkAndComputeUserVip(userRecord, email = null) {
   if (!userRecord) {
     return {
@@ -862,6 +866,25 @@ function checkAndComputeUserVip(userRecord, email = null) {
       vipPackage: 'super_admin_vip',
       vipDaysRemaining: 9999
     };
+  }
+
+  // Khuyến mãi VIP miễn phí (trừ khi người dùng đã có gói VIP riêng dài hơn)
+  const promoEnd = FREE_VIP_UNTIL.getTime();
+  const nowMs = Date.now();
+  if (nowMs <= promoEnd) {
+    const ownActive = !!userRecord.isVip || userRecord.vipStatus === 'vip';
+    const ownExp = userRecord.vipExpiresAt ? new Date(userRecord.vipExpiresAt).getTime() : NaN;
+    const ownIsLonger = ownActive && (!userRecord.vipExpiresAt || (!isNaN(ownExp) && ownExp > promoEnd));
+    if (!ownIsLonger) {
+      return {
+        isVip: true,
+        vipStatus: 'vip',
+        vipExpiresAt: FREE_VIP_UNTIL.toISOString(),
+        vipActivatedAt: userRecord.vipActivatedAt || null,
+        vipPackage: 'free_2026',
+        vipDaysRemaining: Math.max(1, Math.ceil((promoEnd - nowMs) / (1000 * 60 * 60 * 24)))
+      };
+    }
   }
 
   const rawIsVip = !!userRecord.isVip || userRecord.vipStatus === 'vip';

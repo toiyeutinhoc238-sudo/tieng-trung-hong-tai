@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+    <path d="M12 23 Q10 34 12 45 L52 45 Q54 34 52 23 z" fill="#e1f5fe" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M12 23 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2" fill="none" stroke="#5a3418" stroke-width="1.6"/>
+    <path d="M12 45 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2" fill="none" stroke="#5a3418" stroke-width="1.6"/>
+    <path d="M28 21q4-6 8 0" fill="#fff" stroke="#5a3418" stroke-width="1.5"/><path d="M24 22h16" stroke="#5a3418" stroke-width="1.2"/>
+    <rect x="15" y="34" width="34" height="12" rx="2" fill="#0288d1" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <text x="32" y="40" font-family="'PingFang SC','Microsoft YaHei','Noto Sans CJK SC','Hiragino Sans GB',sans-serif" font-size="11.0" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="central">纸巾</text></svg>

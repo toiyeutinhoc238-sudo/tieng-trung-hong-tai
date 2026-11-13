@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+    <path d="M29 6h6l1 7h-8z" fill="#ffffff" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M24 13h16l2 6v35a4 4 0 0 1-4 4H26a4 4 0 0 1-4-4V19z" fill="#aed581" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <rect x="24" y="30" width="16" height="15" rx="1.5" fill="#ffffff" stroke="#5a3418" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <text x="32" y="37.5" font-family="'PingFang SC','Microsoft YaHei','Noto Sans CJK SC','Hiragino Sans GB',sans-serif" font-size="4.6" font-weight="700" fill="#2e7d32" text-anchor="middle" dominant-baseline="central">洗洁精</text>
+    <path d="M26 20 v6" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".55"/></svg>

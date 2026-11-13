@@ -3315,3 +3315,34 @@ body.g-portrait .shelf-pager .sp-label { display: none; }
 .vocab-tab { flex: 1 1 auto; min-width: 92px; height: auto; min-height: 34px; padding: 4px 10px; white-space: nowrap; }
 /* Tab mẫu câu / lượng từ: câu dài → chữ nhỏ hơn, chừa chỗ cho nút loa */
 .vocab-grid.long .vc .zh { font-size: 1.05rem; line-height: 1.35; padding-right: 34px; }
+
+/* Hình riêng của từng món (thay emoji) — cỡ theo font-size của chỗ chứa, như emoji trước đây */
+img.gi { display: inline-block; width: 1.2em; height: 1.2em; object-fit: contain; vertical-align: -0.25em; pointer-events: none; user-select: none; }
+.prod-stack img.gi { width: 1.35em; height: 1.35em; }
+.prod.locked .lock-emoji img.gi { filter: grayscale(1); }
+.mk-emoji img.gi { width: 1.7em; height: 1.7em; }
+
+/* Chợ đầu mối (màn ngang): hàng thẻ trước đây "minmax(0, 1fr)" → khu nhiều món (17 món = 5 hàng) bị ép
+   mỗi thẻ ~74px, hình/chữ/nút đè sang thẻ dưới. Giờ thẻ cao theo nội dung, danh sách tự cuộn. */
+.market-grid { grid-auto-rows: max-content; align-content: start; }
+
+/* ===== Sự cố & tình huống ===== */
+.incident-card { width: 520px; max-width: calc(100% - 24px); padding: 18px 20px 16px; text-align: center; display: flex; flex-direction: column; gap: 6px; }
+.inc-icon { font-size: 2.6rem; line-height: 1; }
+.inc-title { font-size: 1.15rem; font-weight: 900; color: var(--rose-d, #be123c); }
+.inc-line { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.inc-chn { font-size: 1.45rem; font-weight: 700; color: var(--ink); line-height: 1.35; }
+.inc-pin { font-size: 0.9rem; font-weight: 700; color: var(--orange-d); }
+.inc-vi { font-size: 0.86rem; font-weight: 600; color: #7a5a3c; }
+.inc-loss { margin-top: 4px; padding: 6px 10px; border-radius: 10px; background: #fff1f2; border: 1.5px dashed #fda4af; color: #9f1239; font-size: 0.8rem; font-weight: 700; }
+.inc-actions { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.inc-actions button { flex: 1 1 200px; }
+.btn-sold-out { margin-top: 6px; font-size: 0.78rem; padding: 4px 12px; border-color: #f0b4b4; color: #b4232a; }
+.mk-fresh { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 99px; background: #ecfdf5; border: 1px solid #6ee7b7; color: #047857; font-size: 0.62rem; font-weight: 800; vertical-align: middle; }
+.summary-incidents { display: flex; flex-direction: column; gap: 6px; margin: 4px 0 10px; }
+.summary-incidents .si-row { display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; border-radius: 12px; font-size: 0.8rem; text-align: left; }
+.summary-incidents .si-row.bad { background: #fff1f2; border: 1.5px solid #fecdd3; color: #881337; }
+.summary-incidents .si-row.ok { background: #f0fdf4; border: 1.5px solid #bbf7d0; color: #166534; }
+.summary-incidents .si-tip { font-size: 0.72rem; color: #7a5a3c; font-weight: 600; text-align: left; padding: 0 4px; }
+body.g-portrait .incident-card { padding: 14px 12px; }
+body.g-portrait .inc-chn { font-size: 1.2rem; }

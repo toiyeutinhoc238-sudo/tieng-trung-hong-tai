@@ -3,7 +3,7 @@
 //   npm i --no-save xlsx@0.18.5
 //   node scripts/gen_grocery_catalog.cjs
 //   cd frontend && npm run build
-// Thêm món mới: thêm dòng vào sheet tương ứng + thêm emoji cho món đó trong bảng EMOJI bên dưới.
+// Thêm món mới: thêm dòng vào sheet tương ứng + vẽ hình cho món đó trong scripts/gen_grocery_icons.cjs rồi chạy script đó.
 const X = require('xlsx');
 const fs = require('fs');
 const path = require('path');
@@ -22,15 +22,8 @@ const ZONES = [
   { sheet: 'Chăm sóc cá nhân', id: 'personal', chn: '个人护理', pin: 'gèrén hùlǐ', vi: 'Chăm sóc cá nhân', short: 'Cá nhân', icon: '🧴', unlockCost: 400 },
   { sheet: 'Văn phòng phẩm & đồ dùng', id: 'stationery', chn: '文具', pin: 'wénjù', vi: 'Văn phòng phẩm & đồ dùng', short: 'Văn phòng phẩm', icon: '✏️', unlockCost: 200 }
 ];
-const EMOJI = {
-  大米: '🌾', 方便面: '🍜', 面包: '🍞', 鸡蛋: '🥚', 香肠: '🌭', 火腿: '🥓', 罐头鱼: '🐟', 饼干: '🍪', 薯片: '🥔', 糖果: '🍭',
-  巧克力: '🍫', 花生: '🥜', 盐: '🧂', 糖: '🧊', 鱼露: '🫗', 酱油: '🍶', 食用油: '🫒',
-  矿泉水: '💧', 纯净水: '🚰', 可乐: '🥤', 汽水: '🥫', 橙汁: '🍊', 牛奶: '🥛', 豆浆: '🫘', 咖啡: '☕', 茶: '🍵',
-  酸奶: '🥣', 奶酪: '🧀', 黄油: '🧈', 冰淇淋: '🍦',
-  洗衣粉: '🧺', 洗衣液: '👕', 洗洁精: '🍽️', 纸巾: '🤧', 卫生纸: '🧻', 垃圾袋: '🗑️', 电池: '🔋', 打火机: '🔥',
-  牙膏: '🦷', 牙刷: '🪥', 洗发水: '🧴', 沐浴露: '🛁', 香皂: '🧼', 洗手液: '🫧', 梳子: '🪮', 口罩: '😷',
-  笔: '🖊️', 铅笔: '✏️', 橡皮: '🧽', 笔记本: '📓', 作业本: '📒', 胶带: '🩹', 剪刀: '✂️', 塑料袋: '🛍️'
-};
+// Hình của từng món nằm ở scripts/gen_grocery_icons.cjs (mỗi món đúng 1 hình, vẽ riêng — không dùng emoji)
+const { ICONS } = require('./gen_grocery_icons.cjs');
 
 // Lượng từ (sheet riêng): chữ → pinyin, cách dùng, ví dụ
 const Q = rows('Lượng từ').map(r => ({ chn: String(r['Lượng từ']).trim(), pin: String(r['Pinyin']).trim(), use: String(r['Cách dùng']).trim(), ex: String(r['Ví dụ tiếng Trung']).trim(), exVi: String(r['Nghĩa tiếng Việt']).trim() }));
@@ -51,8 +44,8 @@ for (const z of ZONES) {
     const qVi = sampleVi.replace(/^(một|hai|ba)\s+/i, '').split(/\s+/)[0];
     const price = Number(r['Giá game (¥)']);
     if (!qPin[qChar]) problems.push(`${chn}: lượng từ ${qChar} không có trong sheet Lượng từ`);
-    if (!EMOJI[chn]) problems.push(`${chn}: chưa có emoji`);
     if (!(price > 0)) problems.push(`${chn}: giá không hợp lệ`);
+    if (!ICONS[String(r['Mã']).trim().toLowerCase()]) problems.push(`${chn} (${r['Mã']}): chưa có hình trong scripts/gen_grocery_icons.cjs`);
     return { idx, code: String(r['Mã']).trim(), chn, pin: String(r['Pinyin']).trim(), vi: String(r['Nghĩa tiếng Việt']).trim(), qChar, qVi, price, sample, sampleVi, note: String(r['Ghi chú']).trim() };
   });
   // 3 món rẻ nhất mỗi khu bán sẵn khi khu được mở; các món khác mở ở 批发市场
@@ -79,7 +72,7 @@ out += `const GROCERY_ITEMS = [\n`;
 for (const z of ZONES) {
   out += `  // ${z.chn} · ${z.vi}\n`;
   for (const it of items.filter(i => i.zone === z.id)) {
-    out += `  I(${q(z.id)}, ${q(it.code.toLowerCase())}, ${q(it.chn)}, ${q(it.pin)}, ${q(it.vi)}, ${q(it.qChar)}, ${q(qPin[it.qChar])}, ${q(it.qVi)}, ${it.cost}, ${it.price}, ${it.maxStock}, ${q(EMOJI[it.chn])}, ${it.unlockCost}),\n`;
+    out += `  I(${q(z.id)}, ${q(it.code.toLowerCase())}, ${q(it.chn)}, ${q(it.pin)}, ${q(it.vi)}, ${q(it.qChar)}, ${q(qPin[it.qChar])}, ${q(it.qVi)}, ${it.cost}, ${it.price}, ${it.maxStock}, '', ${it.unlockCost}),\n`;
   }
 }
 out = out.replace(/,\n$/, '\n') + `];\n\n`;

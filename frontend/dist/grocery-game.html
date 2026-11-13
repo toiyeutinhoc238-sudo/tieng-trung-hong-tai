@@ -19,9 +19,9 @@
   <!-- LXGW WenKai Lite: chữ Hán chuẩn Khải thể (楷体) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
-  <script type="module" crossorigin src="/assets/groceryGame-DuQC-Lf8.js"></script>
+  <script type="module" crossorigin src="/assets/groceryGame-BmUH3Ym-.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/grocery_game-Q96cidFS.css">
+  <link rel="stylesheet" crossorigin href="/assets/grocery_game-CNOxSJbm.css">
 </head>
 
 <body class="grocery-body on-title">
@@ -194,6 +194,7 @@
             <button type="button" class="g-btn-primary" id="btn-take-order-action">
               <i class="fa-solid fa-basket-shopping"></i> <span class="zh">接单</span> Nhận đơn &amp; lấy giỏ
             </button>
+            <button type="button" class="g-btn-ghost btn-sold-out" id="btn-sold-out" title="Dùng khi món khách gọi đã hết hàng trên kệ">🙇 <span class="zh">不好意思，这个卖完了</span> Xin lỗi, hết hàng</button>
           </div>
 
           <!-- Bong bóng mèo tám chuyện lúc rảnh / chờ khách -->
@@ -398,6 +399,22 @@
     <!-- ====================================================================
          5. BẢNG ĐIỂM PHỤC VỤ (PHIẾU THANH TOÁN TỐI GIẢN & MẪU CÂU TÍNH TIỀN)
          ==================================================================== -->
+    <!-- SỰ CỐ / TÌNH HUỐNG (làm vỡ hàng, chuột cắn, mất điện, khách mặc cả) -->
+    <div class="g-modal" id="modal-incident" style="display:none;">
+      <div class="g-card incident-card">
+        <div class="inc-icon" id="inc-icon">⚠️</div>
+        <div class="inc-title" id="inc-title">Sự cố!</div>
+        <div class="inc-line">
+          <div class="inc-chn zh" id="inc-chn"></div>
+          <button type="button" class="speech-audio" id="btn-inc-say" title="Nghe lại"><i class="fa-solid fa-volume-high"></i></button>
+        </div>
+        <div class="inc-pin" id="inc-pin"></div>
+        <div class="inc-vi" id="inc-vi"></div>
+        <div class="inc-loss" id="inc-loss"></div>
+        <div class="inc-actions" id="inc-actions"></div>
+      </div>
+    </div>
+
     <div class="g-modal" id="modal-grocery-score" style="display:none;">
       <div class="g-card score-card score-card-clean">
         <div class="score-pin" aria-hidden="true"></div>
@@ -487,6 +504,7 @@
           <div class="sg"><small>Thối đúng ngay</small><b id="summary-accuracy-val">100%</b></div>
         </div>
         <div class="mission-results" id="day-mission-results"></div>
+        <div class="summary-incidents" id="summary-incidents"></div>
         <button type="button" class="g-btn-primary big" id="btn-next-day-start"><span class="zh">进入下一天</span> Sang ngày mới <i class="fa-solid fa-sun"></i></button>
       </div>
     </div>
