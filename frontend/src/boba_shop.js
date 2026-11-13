@@ -281,7 +281,6 @@ const STAGE_W = 1280;
 const STAGE_H = 720;
 const PORTRAIT_W = 480;
 const PORTRAIT_MIN_H = 760;
-const STATION_ORDER = ['view-order-station', 'view-make-station', 'view-change-station'];
 const SAVE_VERSION = 2;
 const ASSET = (f) => `./assets/${f}`;
 const cents = (v) => Math.round(Number(v) * 100);
@@ -397,7 +396,6 @@ class BobaShop {
     this.makeStep = 1;
     this.pourTimer = null;
     this.pouringTea = null;
-    this.currentStation = 'view-order-station';
     this.marketZone = 'teas';
 
     const lu = GameCloud.token() ? GameCloud.localUser() : null;
@@ -560,9 +558,9 @@ class BobaShop {
       }
     });
 
-    document.querySelectorAll('.g-tab').forEach(btn => btn.addEventListener('click', () => this.switchStation(btn.dataset.target)));
-    on('btn-goto-make-from-order', 'click', () => this.switchStation('view-make-station'));
-    on('btn-goto-pay', 'click', () => this.switchStation('view-change-station'));
+    // Bố cục 1 màn hình: không còn chuyển trạm. Nút "Sang tính tiền" mở lại bảng thanh toán
+    // (nếu người chơi lỡ bấm ✕ đóng bảng sau khi đóng nắp, trước đây không có cách mở lại → kẹt cả ngày)
+    on('btn-goto-pay', 'click', () => this.openCheckoutModal());
     on('btn-take-order-action', 'click', () => this.takeOrder());
     on('btn-take-order-footer', 'click', () => this.takeOrder());
     on('speech-bubble', 'click', (e) => {
@@ -570,12 +568,12 @@ class BobaShop {
       if (this.current && !this.current.takenAt) this.takeOrder();
     });
     on('btn-replay-order-audio', 'click', () => this.speakOrder());
-    on('btn-cat', 'click', () => this.petCat());
 
     // Pha chế
     document.querySelectorAll('.step-tab').forEach(b => b.addEventListener('click', () => { this.audio.pop(); this.setMakeStep(+b.dataset.step); }));
     on('btn-undo-topping', 'click', () => this.undoTopping());
-    on('btn-seal-lid', 'click', () => this.sealLid());
+    // Đã đóng nắp → nút thành "Tính tiền" (mở lại bảng thanh toán)
+    on('btn-seal-lid', 'click', () => (this.cup.lid && this.isReadyToCharge() ? this.openCheckoutModal() : this.sealLid()));
     on('btn-trash-cup', 'click', () => this.trashCup());
     // Thả tay ở bất cứ đâu → dừng rót
     ['pointerup', 'pointercancel', 'blur'].forEach(ev => window.addEventListener(ev, () => this.stopPour()));
@@ -941,35 +939,17 @@ class BobaShop {
     this.renderCounter();
     this.renderRail();
     this.renderMakeStation();
-    this.setAttention('view-make-station');
-    this.showToast('📝', 'Đã nhận đơn! Sang 调制台 để pha chế.');
+    this.showToast('📝', 'Đã nhận đơn! Chọn cỡ ly để bắt đầu pha chế.');
   }
 
   // --------------------------------------------------------------------------
   // Trạm
   // --------------------------------------------------------------------------
-  switchStation(id, silent = false) {
-    if (!STATION_ORDER.includes(id)) return;
+  // Bố cục 1 màn hình (#view-order-station là khu duy nhất). Không ẩn/hiện trạm nữa —
+  // bản cũ gỡ class "active" khỏi khu này khi chuyển sang trạm khác → cả màn chơi biến mất.
+  switchStation() {
     this.stopPour();
-    const prevIdx = STATION_ORDER.indexOf(this.currentStation);
-    const nextIdx = STATION_ORDER.indexOf(id);
-    this.currentStation = id;
-    document.querySelectorAll('.g-station').forEach(v => {
-      const active = v.id === id;
-      v.classList.toggle('from-left', !active && STATION_ORDER.indexOf(v.id) < nextIdx);
-      v.classList.toggle('active', active);
-    });
-    document.querySelectorAll('.g-tab').forEach(b => {
-      b.classList.toggle('active', b.dataset.target === id);
-      if (b.dataset.target === id) b.classList.remove('attention');
-    });
-    if (id === 'view-make-station') this.renderMakeStation();
-    if (id === 'view-change-station') { this.renderChange(); if (this.isReadyToCharge()) { this.learn('一共'); this.learn('找零'); } }
-    if (!silent && prevIdx !== nextIdx) this.audio.pop();
-  }
-
-  setAttention(id) {
-    document.querySelectorAll('.g-tab').forEach(b => b.classList.toggle('attention', b.dataset.target === id && this.currentStation !== id));
+    this.$('view-order-station')?.classList.add('active');
   }
 
   // ---------------- Trạm 2: pha chế
@@ -1595,14 +1575,6 @@ class BobaShop {
     this.checkDayEnd();
   }
 
-  petCat() {
-    this.audio.speak('喵～');
-    this.learn('猫');
-    const cat = this.$('btn-cat');
-    if (cat) { cat.classList.remove('meow'); void cat.offsetWidth; cat.classList.add('meow'); }
-    this.showToast('🐈', '猫 (māo) · Con mèo của quán đang phơi nắng. 喵～');
-  }
-
   // --------------------------------------------------------------------------
   // Tổng kết ngày
   // --------------------------------------------------------------------------
@@ -1794,16 +1766,12 @@ class BobaShop {
     this.renderCounter();
     this.renderMakeStation();
     this.renderChange();
-    this.renderChalkboard();
   }
 
   updateHUD() {
     this.setText('hud-money-val', `${fmt(this.money)} ¥`);
     this.setText('hud-day-val', `第${this.day}天`);
     this.setText('hud-vocab-val', `${this.learnedCount()}/${VOCAB_TOTAL}`);
-    this.setText('stats-rev-val', `${fmt(this.stats.revenue)} ¥`);
-    this.setText('stats-cust-val', String(this.stats.served));
-    this.setText('stats-lost-val', String(this.stats.lost));
     this.updateClockUI();
     this.renderHUDGoal();
     this.updateHUDReviews();
@@ -1889,9 +1857,7 @@ class BobaShop {
     const c = this.current;
     const bubble = this.$('speech-bubble');
     const tag = this.$('customer-tag');
-    const nextBtn = this.$('btn-goto-make-from-order');
     const hint = this.$('order-footer-hint');
-    const reg = this.$('reg-screen');
     if (!door) return;
     const waitBox = this.$('cust-waiting-box');
     if (!c) {
@@ -1899,14 +1865,12 @@ class BobaShop {
       bubble?.classList.add('hidden');
       tag?.classList.add('hidden');
       if (waitBox) waitBox.style.display = 'flex';
-      if (nextBtn) nextBtn.style.display = 'none';
       const takeBtnFooter = this.$('btn-take-order-footer');
       if (takeBtnFooter) takeBtnFooter.style.display = 'none';
       this.setText('door-empty-text', !this.dayStarted ? 'Quán chưa mở cửa' : this.closed ? 'Hết giờ bán hôm nay' : 'Đang chờ khách...');
       this.setText('door-empty-chn', this.closed ? '打烊' : '欢迎光临');
       if (hint) hint.innerHTML = !this.dayStarted ? '💡 Bấm <b>Mở cửa bán hàng</b> để bắt đầu ngày mới.'
         : this.closed ? '🌙 Đã đóng cửa. Đang tổng kết ngày…' : '💡 Chờ khách bước vào… Rảnh tay thì vào <b>进货</b> mở món mới cho thực đơn.';
-      if (reg) reg.textContent = '0.00';
       return;
     }
     if (waitBox) waitBox.style.display = 'none';
@@ -1931,11 +1895,8 @@ class BobaShop {
     const takeBtnFooter = this.$('btn-take-order-footer');
     if (takeBtnFooter) takeBtnFooter.style.display = c.takenAt ? 'none' : 'inline-flex';
 
-    if (nextBtn) nextBtn.style.display = c.takenAt ? 'inline-flex' : 'none';
-    if (hint) hint.innerHTML = c.takenAt
-      ? `✅ Đã nhận đơn <b>#B-${c.id}</b>. Sang <b>调制台</b> pha chế → <b>收银台</b> tính tiền.`
-      : '💡 Nghe khách gọi món rồi bấm <b>Nhận đơn</b>. Để khách chờ lâu sẽ bị trừ điểm và có thể bỏ về!';
-    if (reg) reg.textContent = c.takenAt ? fmt(c.order.due) : '0.00';
+    if (hint && !c.takenAt) hint.innerHTML = '💡 Nghe khách gọi món rồi bấm <b>Nhận đơn</b>. Để khách chờ lâu sẽ bị trừ điểm và có thể bỏ về!';
+    // đã nhận đơn → gợi ý từng bước do renderMakeStation() viết
     this.updatePatienceUI();
   }
 
@@ -1951,13 +1912,6 @@ class BobaShop {
     if (vi) { vi.textContent = p.vi; vi.style.display = this.showVietnamese ? '' : 'none'; }
   }
 
-  renderChalkboard() {
-    const ul = this.$('chalk-specials');
-    if (!ul) return;
-    const m = byId(SIZES, 'M');
-    ul.innerHTML = TEAS.filter(t => this.teasOwned.has(t.id)).slice(-4).reverse()
-      .map(t => `<li><span>🧋 <span class="zh">${t.chn}</span></span><b>${fmt(m.price + t.premium)}¥</b></li>`).join('');
-  }
 
   // ---------------- Trạm pha chế
   renderTicket() {
@@ -2173,13 +2127,15 @@ class BobaShop {
     if (undo) undo.disabled = locked || !cup.toppings.length;
     const lid = this.$('btn-seal-lid');
     if (lid) {
-      lid.disabled = locked || !has;
-      lid.innerHTML = locked ? '<i class="fa-solid fa-lock"></i> <span class="zh">已封口</span> Đã đóng nắp' : '<i class="fa-solid fa-circle-check"></i> <span class="zh">封口</span> Đóng nắp';
+      // Đã đóng nắp → nút thành "Tính tiền" để mở lại bảng thanh toán nếu lỡ đóng
+      lid.disabled = !has;
+      lid.classList.toggle('to-pay', locked);
+      lid.innerHTML = locked ? '<i class="fa-solid fa-cash-register"></i> <span class="zh">收银</span> Tính tiền' : '<i class="fa-solid fa-circle-check"></i> <span class="zh">封口</span> Đóng nắp';
     }
     const trash = this.$('btn-trash-cup');
     if (trash) trash.disabled = !has;
     const pay = this.$('btn-goto-pay');
-    if (pay) pay.disabled = !this.isReadyToCharge();
+    if (pay) pay.style.display = this.isReadyToCharge() ? 'inline-flex' : 'none';
 
     // Đánh dấu bước đã xong
     const done = { 1: !!(cup.size && cup.fill > 0), 2: !!(cup.sugar && cup.ice), 3: locked };

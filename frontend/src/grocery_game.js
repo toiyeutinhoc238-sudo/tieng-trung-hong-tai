@@ -275,6 +275,8 @@ const fmt = (v) => (Math.round(Number(v) * 100) / 100).toFixed(2);
 const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const NUM_CHN = { 1: '一', 2: '两', 3: '三' };
 const randInt = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+// Thiếu hàm này → mỗi lần tính tiền xong renderSingleCheckoutPhrase() ném ReferenceError, bảng điểm không hiện, khách kẹt lại, ngày không kết thúc
+const pickOne = (arr) => (Array.isArray(arr) && arr.length ? arr[randInt(0, arr.length - 1)] : null);
 const zoneOf = (id) => GROCERY_ZONES.find(z => z.id === id);
 
 // "一" đổi thanh: yí trước thanh 4, yì trước các thanh khác

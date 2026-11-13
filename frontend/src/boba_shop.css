@@ -1768,3 +1768,6 @@ body.boba-body:not(.g-portrait) .shop-main-bottom .top-btn b.zh { font-size: 0.9
 body.boba-body:not(.g-portrait) .shop-main-bottom .tea-tap small,
 body.boba-body:not(.g-portrait) .shop-main-bottom .top-btn small { font-size: 0.56rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 body.boba-body:not(.g-portrait) .shop-main-bottom .btn-cook-batch { font-size: 0.56rem; padding: 2px 2px; white-space: nowrap; }
+
+/* Nút Đóng nắp sau khi đã đóng → "Tính tiền" (mở lại bảng thanh toán) */
+.btn-seal-main.to-pay { background: linear-gradient(180deg, #f59e0b, #ea7a0c); animation: none; }
