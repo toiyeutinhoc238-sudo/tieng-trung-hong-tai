@@ -3346,3 +3346,14 @@ img.gi { display: inline-block; width: 1.2em; height: 1.2em; object-fit: contain
 .summary-incidents .si-tip { font-size: 0.72rem; color: #7a5a3c; font-weight: 600; text-align: left; padding: 0 4px; }
 body.g-portrait .incident-card { padding: 14px 12px; }
 body.g-portrait .inc-chn { font-size: 1.2rem; }
+
+/* ===== Phá sản ===== */
+#modal-bankrupt { z-index: 120; }
+.bankrupt-card { width: 500px; max-width: calc(100% - 24px); padding: 20px 22px 18px; text-align: center; display: flex; flex-direction: column; gap: 6px; }
+.bankrupt-card h3 { margin: 0; font-size: 1.3rem; color: #9f1239; }
+.bk-icon { font-size: 3rem; line-height: 1; }
+.bk-line { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.bk-chn { font-size: 1.35rem; font-weight: 700; color: var(--ink); }
+.bk-pin { font-size: 0.88rem; font-weight: 700; color: var(--orange-d); }
+.bk-vi { font-size: 0.86rem; font-weight: 600; color: #7a5a3c; }
+.bk-detail { margin: 6px 0 8px; padding: 8px 12px; border-radius: 12px; background: #fff1f2; border: 1.5px dashed #fda4af; color: #881337; font-size: 0.82rem; font-weight: 600; line-height: 1.5; }

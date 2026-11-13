@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+
+<head>
+  <script>
+    if (window.location.hostname.includes('onrender.com') || window.location.hostname.startsWith('www.')) {
+      window.location.replace('https://tiengtrunghongtai.online' + window.location.pathname + window.location.search + window.location.hash);
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Game Nhập Vai · Làm Chủ Tiệm | Hongtai Chinese</title>
+  <meta name="description" content="Nhóm game nhập vai học tiếng Trung: làm chủ tiệm trà sữa, tiệm tạp hóa và nhiều tiệm khác sắp ra mắt tại Tiếng Trung Hongtai.">
+  <meta property="og:title" content="Game Nhập Vai · Làm Chủ Tiệm | Hongtai Chinese">
+  <meta property="og:description" content="Vừa kinh doanh vừa học tiếng Trung: Tiệm Trà Sữa, Tiệm Tạp Hóa và nhiều game sắp ra mắt.">
+  <meta property="og:image" content="/assets/logo.png">
+  <link rel="canonical" href="https://tiengtrunghongtai.online/shop-games.html" />
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0b0f19">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    (function () {
+      var t = localStorage.getItem('theme') || 'light';
+      var bgUrl = t === 'dark' ? "url('/assets/app_bg_night_v3.png')" : "url('/assets/app_bg_day_v3.png')";
+      document.documentElement.style.setProperty('background-image', bgUrl, 'important');
+      document.documentElement.style.setProperty('background-size', 'cover', 'important');
+      document.documentElement.style.setProperty('background-position', 'center center', 'important');
+      document.documentElement.style.setProperty('background-attachment', 'fixed', 'important');
+      document.documentElement.style.setProperty('background-repeat', 'no-repeat', 'important');
+      if (t === 'dark') { document.documentElement.classList.add('dark'); document.documentElement.classList.remove('light', 'light-mode'); }
+      else { document.documentElement.classList.add('light-mode', 'light'); document.documentElement.classList.remove('dark'); }
+    })();
+  </script>
+
+  <style>
+    .sg-wrap { max-width: 1180px; margin: 0 auto; padding: 18px 16px 40px; font-family: 'Be Vietnam Pro', sans-serif; }
+    .sg-hero { text-align: center; margin: 6px auto 18px; padding: 18px 16px; border-radius: 22px; background: linear-gradient(135deg, rgba(255, 243, 224, 0.95), rgba(255, 228, 236, 0.95)); border: 2px solid #f6c89b; box-shadow: 0 10px 30px rgba(90, 50, 20, 0.15); color: #5a3418; }
+    .sg-hero h1 { margin: 0; font-family: 'Outfit', 'Be Vietnam Pro', sans-serif; font-size: clamp(1.4rem, 3.4vw, 2.1rem); font-weight: 900; }
+    .sg-hero .zh { font-family: 'LXGW WenKai Lite', 'KaiTi', 'STKaiti', serif; color: #c2410c; }
+    .sg-hero p { margin: 6px 0 0; font-size: 0.95rem; font-weight: 600; color: #7a5a3c; }
+    .sg-count { display: inline-block; margin-top: 10px; padding: 4px 14px; border-radius: 99px; background: #fff; border: 2px solid #f6c89b; font-weight: 800; color: #c2410c; font-size: 0.85rem; }
+
+    /* Kệ gỗ 6 game */
+    .sg-shelf { position: relative; padding: 18px 18px 8px; border-radius: 22px; background: linear-gradient(180deg, #8b5a2b, #6d4220); box-shadow: inset 0 0 0 6px #5a3418, 0 14px 34px rgba(60, 30, 10, 0.35); }
+    .sg-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 16px; }
+    .sg-grid::after { content: ''; }
+    .sg-card { position: relative; display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; background: #fffaf2; border: 3px solid #f0d6ad; box-shadow: 0 8px 0 #4a2a12, 0 12px 22px rgba(0, 0, 0, 0.25); text-decoration: none; color: #4a2c17; transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; }
+    .sg-card:hover { transform: translateY(-4px); box-shadow: 0 12px 0 #4a2a12, 0 18px 26px rgba(0, 0, 0, 0.3); }
+    .sg-card:active { transform: translateY(2px); box-shadow: 0 4px 0 #4a2a12, 0 8px 14px rgba(0, 0, 0, 0.25); }
+    .sg-cover { position: relative; height: 150px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+    .sg-cover::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.35)); }
+    .sg-cover .sg-emoji { position: relative; z-index: 1; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35)); }
+    .sg-card:not(.locked) .sg-emoji { display: none; }
+    .sg-badge { position: absolute; top: 10px; right: 10px; z-index: 2; padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.3px; }
+    .sg-badge.hot { background: #f43f5e; color: #fff; }
+    .sg-badge.new { background: #ea580c; color: #fff; }
+    .sg-badge.soon { background: rgba(30, 20, 10, 0.75); color: #ffe7c2; }
+    .sg-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .sg-name { font-size: 1.15rem; font-weight: 900; }
+    .sg-chn { font-family: 'LXGW WenKai Lite', 'KaiTi', 'STKaiti', serif; font-size: 1.05rem; color: #c2410c; font-weight: 700; }
+    .sg-desc { font-size: 0.82rem; font-weight: 600; color: #7a5a3c; line-height: 1.45; flex: 1; }
+    .sg-progress { font-size: 0.78rem; font-weight: 800; color: #047857; }
+    .sg-play { margin-top: 8px; align-self: stretch; text-align: center; padding: 9px 12px; border-radius: 12px; background: linear-gradient(180deg, #ffa24f, #ea580c); color: #fff; font-weight: 900; box-shadow: 0 4px 0 #9a3412; }
+    /* Game chưa mở: khóa */
+    .sg-card.locked { cursor: not-allowed; background: #f3ece2; }
+    .sg-card.locked:hover { transform: none; box-shadow: 0 8px 0 #4a2a12, 0 12px 22px rgba(0, 0, 0, 0.25); }
+    .sg-card.locked .sg-cover { background: repeating-linear-gradient(45deg, #d9c8ad 0 14px, #cfbb9c 14px 28px); }
+    .sg-card.locked .sg-emoji { filter: grayscale(1) opacity(0.45); }
+    .sg-lock { position: absolute; z-index: 2; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #fff; font-size: 0.95rem; font-weight: 900; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); }
+    .sg-lock i { font-size: 2.4rem; }
+    .sg-card.locked .sg-name, .sg-card.locked .sg-chn { opacity: 0.75; }
+    .sg-card.locked .sg-play { background: #c9b8a0; box-shadow: 0 4px 0 #8a7660; }
+    .sg-plank { height: 16px; margin: 12px -18px 0; background: linear-gradient(180deg, #a0682f, #7a4a20); box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); border-radius: 0 0 14px 14px; }
+    .sg-toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px); opacity: 0; padding: 10px 18px; border-radius: 99px; background: #4a2c17; color: #fff; font-weight: 800; font-size: 0.9rem; transition: all 0.25s; z-index: 9999; pointer-events: none; text-align: center; max-width: calc(100% - 32px); }
+    .sg-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    @media (max-width: 860px) { .sg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sg-cover { height: 120px; font-size: 3.2rem; } }
+    @media (max-width: 480px) { .sg-wrap { padding: 12px 10px 30px; } .sg-shelf { padding: 12px 10px 6px; } .sg-grid { gap: 14px 10px; } .sg-cover { height: 96px; font-size: 2.6rem; } .sg-body { padding: 9px 10px 11px; } .sg-name { font-size: 0.98rem; } .sg-desc { font-size: 0.74rem; } .sg-plank { margin: 10px -10px 0; } .sg-badge.soon { display: none; } .sg-lock i { font-size: 1.8rem; } }
+  </style>
+</head>
+
+<body class="rank-page-body">
+  <header class="rank-header-nav">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <button class="header-icon-btn global-hamburger-btn" onclick="window.toggleGlobalSidebar && window.toggleGlobalSidebar()" title="Mở danh mục menu" aria-label="Mở danh mục menu">
+        <svg class="header-svg-icon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3.5" y1="6" x2="20.5" y2="6"></line><line x1="3.5" y1="12" x2="20.5" y2="12"></line><line x1="3.5" y1="18" x2="20.5" y2="18"></line></svg>
+      </button>
+      <a href="/index.html" class="rank-brand-logo"><img src="/assets/logo.png" alt="Hongtai Logo"><span>Hongtai Chinese</span></a>
+    </div>
+    <div class="rank-nav-right">
+      <a href="/index.html" class="rank-nav-btn" title="Trang Chủ"><svg class="header-svg-icon icon-home" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H4.5A1.5 1.5 0 0 1 3 20v-9.5z"></path><polyline points="9 21 9 12 15 12 15 21"></polyline></svg></a>
+      <button id="theme-toggle-btn" class="rank-theme-btn" onclick="window.toggleTheme && window.toggleTheme()" title="Đổi giao diện Sáng/Tối">
+        <svg class="header-svg-icon icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><line x1="12" y1="1.5" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22.5"></line><line x1="4.22" y1="4.22" x2="6" y2="6"></line><line x1="18" y1="18" x2="19.78" y2="19.78"></line><line x1="1.5" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22.5" y2="12"></line><line x1="4.22" y1="19.78" x2="6" y2="18"></line><line x1="18" y1="6" x2="19.78" y2="4.22"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="sg-wrap">
+    <section class="sg-hero">
+      <h1>🎮 Game Nhập Vai · <span class="zh">我的小店</span></h1>
+      <p>Tự làm chủ tiệm, nghe khách gọi món bằng tiếng Trung, tính tiền, thối tiền — vừa chơi vừa học!</p>
+      <span class="sg-count" id="sg-count">2 game đang mở · 4 game sắp ra mắt</span>
+    </section>
+
+    <section class="sg-shelf" aria-label="Kệ game nhập vai">
+      <div class="sg-grid" id="sg-grid"></div>
+      <div class="sg-plank" aria-hidden="true"></div>
+    </section>
+  </main>
+
+  <div class="sg-toast" id="sg-toast"></div>
+
+  <script>
+    (function () {
+      // 6 game trên kệ: 2 game đang mở, 4 game khóa "Sắp ra mắt"
+      var GAMES = [
+        { key: 'boba', url: '/boba-game.html', name: 'Tiệm Trà Sữa', chn: '我的奶茶店', emoji: '🧋', cover: '/assets/boba_shop_interior_bg.jpg', badge: ['hot', 'HOT'],
+          desc: 'Nhận đơn, pha trà sữa theo yêu cầu, nấu nguyên liệu và thối tiền cho khách.' },
+        { key: 'grocery', url: '/grocery-game.html', name: 'Tiệm Tạp Hóa', chn: '我的小卖部', emoji: '🏪', cover: '/assets/grocery_shopfront.jpg', badge: ['new', 'MỚI'],
+          desc: 'Nhặt hàng theo khu kệ, quét mã, nhập hàng ở chợ đầu mối và mở rộng tiệm.' },
+        { name: 'Tiệm Cá Viên', chn: '我的鱼丸店', emoji: '🍢', desc: 'Chiên cá viên, bò viên, xiên que và chấm tương theo ý khách.' },
+        { name: 'Tiệm Bánh Mì', chn: '我的面包店', emoji: '🥖', desc: 'Kẹp nhân bánh mì theo yêu cầu, nướng giòn và gói mang đi.' },
+        { name: 'Tiệm Quần Áo', chn: '我的服装店', emoji: '👗', desc: 'Tư vấn size, màu sắc, kiểu dáng và chọn đồ cho khách.' },
+        { name: 'Tiệm Mỹ Phẩm', chn: '我的化妆品店', emoji: '💄', desc: 'Giới thiệu son, kem dưỡng, nước hoa và tư vấn làm đẹp.' }
+      ];
+
+      // tiến trình đã lưu trên máy (theo tài khoản đang đăng nhập)
+      function progress(key) {
+        try {
+          var u = JSON.parse(localStorage.getItem('user') || localStorage.getItem('currentUser') || 'null');
+          var owner = u && u.email ? String(u.email).toLowerCase().trim() : 'guest';
+          var s = JSON.parse(localStorage.getItem(key + '_save_' + owner) || 'null');
+          return s && s.day ? s.day : 0;
+        } catch (e) { return 0; }
+      }
+      function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+      var grid = document.getElementById('sg-grid');
+      grid.innerHTML = GAMES.map(function (g, i) {
+        if (!g.url) {
+          return '<div class="sg-card locked" data-soon="' + i + '" role="button" tabindex="0" aria-label="' + esc(g.name) + ' — sắp ra mắt">'
+            + '<div class="sg-cover"><span class="sg-emoji">' + g.emoji + '</span><span class="sg-badge soon">SẮP RA MẮT</span>'
+            + '<div class="sg-lock"><i class="fa-solid fa-lock"></i><span>Đang phát triển</span></div></div>'
+            + '<div class="sg-body"><div class="sg-name">' + esc(g.name) + '</div><div class="sg-chn">' + g.chn + '</div>'
+            + '<div class="sg-desc">' + esc(g.desc) + '</div><div class="sg-play"><i class="fa-solid fa-lock"></i> Sắp ra mắt</div></div></div>';
+        }
+        var day = progress(g.key);
+        return '<a class="sg-card" href="' + g.url + '" aria-label="Chơi ' + esc(g.name) + '">'
+          + '<div class="sg-cover" style="background-image:url(\'' + g.cover + '\')"><span class="sg-emoji">' + g.emoji + '</span><span class="sg-badge ' + g.badge[0] + '">' + g.badge[1] + '</span></div>'
+          + '<div class="sg-body"><div class="sg-name">' + esc(g.name) + '</div><div class="sg-chn">' + g.chn + '</div>'
+          + '<div class="sg-desc">' + esc(g.desc) + '</div>'
+          + (day > 1 ? '<div class="sg-progress">📅 Bạn đang ở ngày ' + day + '</div>' : '')
+          + '<div class="sg-play"><i class="fa-solid fa-play"></i> ' + (day > 1 ? 'Chơi tiếp' : 'Chơi ngay') + '</div></div></a>';
+      }).join('');
+
+      var tmr;
+      function soon(i) {
+        var toast = document.getElementById('sg-toast');
+        if (!toast) return;
+        toast.textContent = '🔒 ' + GAMES[i].name + ' đang được phát triển — sắp ra mắt nhé!';
+        toast.classList.add('show');
+        clearTimeout(tmr); tmr = setTimeout(function () { toast.classList.remove('show'); }, 2400);
+      }
+      // ủy quyền sự kiện ở document (giữ hoạt động kể cả khi trang được dựng lại)
+      document.addEventListener('click', function (e) {
+        var el = e.target.closest && e.target.closest('[data-soon]');
+        if (el) soon(+el.dataset.soon);
+      }, true);
+      document.addEventListener('keydown', function (e) {
+        var el = e.target.closest && e.target.closest('[data-soon]');
+        if (el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); soon(+el.dataset.soon); }
+      }, true);
+    })();
+  </script>
+  <script type="module" src="/src/main.js"></script>
+  <script type="module" src="/src/global_sidebar.js"></script>
+</body>
+
+</html>

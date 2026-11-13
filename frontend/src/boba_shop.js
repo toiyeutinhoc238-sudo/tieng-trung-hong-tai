@@ -203,6 +203,7 @@ const VOCAB_TABS = [
       { chn: '封口', pin: 'fēngkǒu', vi: 'đóng nắp (ép miệng ly)' },
       { chn: '倒掉', pin: 'dàodiào', vi: 'đổ đi' },
       { chn: '抱歉', pin: 'bàoqiàn', vi: 'xin lỗi' },
+      { chn: '破产', pin: 'pòchǎn', vi: 'phá sản' },
       { chn: '一共', pin: 'yígòng', vi: 'tổng cộng' },
       { chn: '找零', pin: 'zhǎolíng', vi: 'thối tiền' },
       { chn: '进货', pin: 'jìnhuò', vi: 'nhập hàng' },
@@ -556,6 +557,8 @@ class BobaShop {
   // Khởi tạo giao diện & sự kiện
   // --------------------------------------------------------------------------
   initDOM() {
+    document.getElementById('btn-bankrupt-restart')?.addEventListener('click', () => this.restartAfterBankrupt());
+    document.getElementById('btn-bankrupt-say')?.addEventListener('click', () => this.audio.speak('钱花光了，奶茶店破产了！'));
     const on = (id, ev, fn) => { const el = this.$(id); if (el) el.addEventListener(ev, fn); };
     window.addEventListener('resize', () => this.fitStage());
     window.addEventListener('orientationchange', () => setTimeout(() => this.fitStage(), 200));
@@ -657,7 +660,7 @@ class BobaShop {
       this.closeModal(btn.dataset.close);
       this.lastTickAt = performance.now();
       if (btn.dataset.close === 'modal-restock') this.afterMarketClosed();
-      if (btn.dataset.close === 'modal-prep') this.renderPrepModal();
+      if (btn.dataset.close === 'modal-prep') { this.renderPrepModal(); this.checkBankrupt(); }
     }));
 
     on('setting-sfx', 'change', (e) => { this.audio.sfxEnabled = e.target.checked; });
@@ -710,6 +713,36 @@ class BobaShop {
         document.exitFullscreen().catch(() => {});
       }
     } catch (e) {}
+  }
+
+  // ---------------- Phá sản: không thể kinh doanh tiếp → bắt đầu lại từ đầu
+  isBankrupt() {
+    const hasTea = [...this.teasOwned].some(id => (this.teaStock[id] || 0) > 0);
+    const cupInProgress = !!(this.current && this.current.takenAt && (this.cup.fill > 0 || this.cup.lid));
+    return !hasTea && !cupInProgress && this.money < INGREDIENT_RULES.teaBatchCost - 1e-9;
+  }
+
+  checkBankrupt() {
+    if (this.bankrupt || !this.isBankrupt()) return false;
+    this.bankrupt = true;
+    if (this.stopPour) this.stopPour();
+    ['modal-day-mission', 'modal-prep', 'modal-restock', 'modal-settings'].forEach(id => this.closeModal(id));
+    this.learn('破产');
+    this.setText('bk-day', String(this.day));
+    this.setText('bk-reason', `Không còn trà nào đã nấu và không đủ ${fmt(INGREDIENT_RULES.teaBatchCost)} ¥ để nấu thêm.`);
+    this.openModal('modal-bankrupt');
+    this.audio.sad && this.audio.sad();
+    setTimeout(() => this.audio.speak('钱花光了，奶茶店破产了！'), 400);
+    return true;
+  }
+
+  // Bắt đầu lại từ đầu sau khi phá sản (không hỏi lại; kỷ lục trên bảng xếp hạng vẫn giữ)
+  async restartAfterBankrupt() {
+    const btn = this.$('btn-bankrupt-restart');
+    if (btn) btn.disabled = true;
+    LocalSave.clear(this.owner);
+    if (this.cloud.loggedIn) { try { await GameCloud.post({ resetSave: true }); } catch (e) {} }
+    location.reload();
   }
 
   async resetGame() {
@@ -788,6 +821,7 @@ class BobaShop {
     this.renderHUDGoal();
     this.renderPrepModal();
     this.openModal('modal-day-mission');
+    this.checkBankrupt();
   }
 
   startDay() {
@@ -837,6 +871,7 @@ class BobaShop {
     const dt = Math.min(1000, now - this.lastTickAt);
     this.lastTickAt = now;
     if (this.isClockPaused() || !this.dayStarted || this.dayEnded) return;
+    if (this.checkBankrupt()) return;
     this.gameTime += dt;
 
     if (!this.closed && this.dayElapsed() >= DAY_RULES.lengthMs) {
@@ -1888,6 +1923,7 @@ class BobaShop {
     this.renderAll();
     if (!this.isDayInProgress()) this.saveProgress();
     if (this.$('modal-day-mission').style.display === 'flex') this.showMissionBriefing();
+    else this.checkBankrupt();
     if (this.$('modal-prep').style.display === 'flex') this.renderPrepModal();
   }
 

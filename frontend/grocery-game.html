@@ -36,7 +36,7 @@
         <span></span><span></span><span></span><span></span><span></span><span></span>
       </div>
 
-      <a href="index.html" class="g-title-home"><i class="fa-solid fa-arrow-left"></i> Trang chủ</a>
+      <a href="shop-games.html" class="g-title-home"><i class="fa-solid fa-arrow-left"></i> Kệ game</a>
 
       <a href="index.html" class="g-account guest" id="title-account" title="Đăng nhập để lưu thành tích">
         <span class="g-account-avatar" id="title-account-avatar"><i class="fa-solid fa-user"></i></span>
@@ -482,6 +482,20 @@
           <button type="button" class="g-btn-ghost" id="btn-mission-restock"><i class="fa-solid fa-boxes-packing"></i> <span class="zh">批发市场</span> Nhập hàng</button>
           <button type="button" class="g-btn-primary big" id="btn-mission-start"><span class="zh">开门营业</span> Mở cửa bán hàng <i class="fa-solid fa-store"></i></button>
         </div>
+      </div>
+    </div>
+
+    <!-- PHÁ SẢN: hết tiền, không thể kinh doanh tiếp → bắt đầu lại từ đầu -->
+    <div class="g-modal" id="modal-bankrupt" style="display:none;">
+      <div class="g-card bankrupt-card">
+        <div class="bk-icon">💸</div>
+        <h3><span class="zh">破产了！</span> · Phá sản rồi!</h3>
+        <div class="bk-line"><span class="zh bk-chn">钱花光了，小卖部破产了！</span>
+          <button type="button" class="speech-audio" id="btn-bankrupt-say" title="Nghe lại"><i class="fa-solid fa-volume-high"></i></button></div>
+        <div class="bk-pin">Qián huā guāng le, xiǎomàibù pòchǎn le!</div>
+        <div class="bk-vi">Hết sạch tiền rồi, tiệm tạp hóa phá sản rồi!</div>
+        <p class="bk-detail"><span id="bk-reason"></span><br>Bạn đã kinh doanh tới <b>ngày <span id="bk-day">1</span></b>. Kỷ lục trên <b>Bảng xếp hạng</b> vẫn được giữ.</p>
+        <button type="button" class="g-btn-primary big" id="btn-bankrupt-restart"><span class="zh">重新开始</span> Bắt đầu lại từ đầu <i class="fa-solid fa-rotate-right"></i></button>
       </div>
     </div>
 

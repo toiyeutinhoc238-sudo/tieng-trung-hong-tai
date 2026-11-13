@@ -290,7 +290,8 @@ const VOCAB_TABS = [
       { chn: '冰箱', pin: 'bīngxiāng', vi: 'tủ lạnh' },
       { chn: '便宜', pin: 'piányi', vi: 'rẻ' },
       { chn: '打折', pin: 'dǎzhé', vi: 'giảm giá' },
-      { chn: '卖完了', pin: 'mài wán le', vi: 'bán hết rồi' }
+      { chn: '卖完了', pin: 'mài wán le', vi: 'bán hết rồi' },
+      { chn: '破产', pin: 'pòchǎn', vi: 'phá sản' }
     ]
   }
 ];
@@ -660,6 +661,8 @@ class GroceryGame {
   // Khởi tạo giao diện & sự kiện
   // --------------------------------------------------------------------------
   initDOM() {
+    document.getElementById('btn-bankrupt-restart')?.addEventListener('click', () => this.restartAfterBankrupt());
+    document.getElementById('btn-bankrupt-say')?.addEventListener('click', () => this.audio.speak('钱花光了，小卖部破产了！'));
     const on = (id, ev, fn) => { const el = this.$(id); if (el) el.addEventListener(ev, fn); };
 
     window.addEventListener('resize', () => this.fitStage());
@@ -799,6 +802,38 @@ class GroceryGame {
     } catch (e) {}
   }
 
+  // ---------------- Phá sản: không thể kinh doanh tiếp → bắt đầu lại từ đầu
+  isBankrupt() {
+    const sell = this.shelves.filter(s => s.unlocked && this.zones[s.zone]);
+    const hasStock = sell.some(s => s.currentStock > 0);
+    const orderInProgress = !!(this.current && this.current.takenAt);
+    const cheapest = sell.length ? Math.min(...sell.map(s => s.cost)) : Infinity;
+    return !hasStock && !orderInProgress && this.money < cheapest - 1e-9;
+  }
+
+  checkBankrupt() {
+    if (this.bankrupt || !this.isBankrupt()) return false;
+    this.bankrupt = true;
+    if (this.stopPour) this.stopPour();
+    ['modal-day-mission', 'modal-restock', 'modal-settings'].forEach(id => this.closeModal(id));
+    this.learn('破产');
+    this.setText('bk-day', String(this.day));
+    this.setText('bk-reason', `Kệ hết sạch hàng và không đủ tiền nhập dù chỉ 1 món.`);
+    this.openModal('modal-bankrupt');
+    this.audio.sad && this.audio.sad();
+    setTimeout(() => this.audio.speak('钱花光了，小卖部破产了！'), 400);
+    return true;
+  }
+
+  // Bắt đầu lại từ đầu sau khi phá sản (không hỏi lại; kỷ lục trên bảng xếp hạng vẫn giữ)
+  async restartAfterBankrupt() {
+    const btn = this.$('btn-bankrupt-restart');
+    if (btn) btn.disabled = true;
+    LocalSave.clear(this.owner);
+    if (this.cloud.loggedIn) { try { await GameCloud.post({ resetSave: true }); } catch (e) {} }
+    location.reload();
+  }
+
   async resetGame() {
     if (!confirm('Chơi lại từ đầu? Tiến trình (ngày, tiền, kệ hàng) sẽ bị xóa. Kỷ lục trên bảng xếp hạng vẫn được giữ.')) return;
     LocalSave.clear(this.owner);
@@ -887,6 +922,7 @@ class GroceryGame {
     }
     this.renderHUDGoal();
     this.openModal('modal-day-mission');
+    this.checkBankrupt();
   }
 
   startDay() {
@@ -940,6 +976,7 @@ class GroceryGame {
     const dt = Math.min(1000, now - this.lastTickAt);
     this.lastTickAt = now;
     if (this.isClockPaused() || !this.dayStarted || this.dayEnded) return;
+    if (this.checkBankrupt()) return;
     this.gameTime += dt;
 
     // Đến giờ đóng cửa: không nhận khách mới, phục vụ nốt khách đang chờ
@@ -1879,6 +1916,7 @@ class GroceryGame {
     this.renderAll();
     if (!this.isDayInProgress()) this.saveProgress();
     if (this.$('modal-day-mission').style.display === 'flex') this.showMissionBriefing();
+    else this.checkBankrupt();
   }
 
   restockTotal() {

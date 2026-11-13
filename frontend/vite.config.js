@@ -37,7 +37,8 @@ export default defineConfig({
         aiDialogue: resolve(__dirname, 'ai-dialogue.html'),
         translation: resolve(__dirname, 'translation-practice.html'),
         bobaGame: resolve(__dirname, 'boba-game.html'),
-        groceryGame: resolve(__dirname, 'grocery-game.html')
+        groceryGame: resolve(__dirname, 'grocery-game.html'),
+        shopGames: resolve(__dirname, 'shop-games.html')
       },
       output: {
         manualChunks(id) {
