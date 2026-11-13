@@ -542,6 +542,16 @@ class BobaShop {
     on('btn-open-restock', 'click', () => this.openMarket());
     on('btn-open-reviews', 'click', () => { this.audio.pop(); this.openReviewsModal(); });
     on('btn-prep-all', 'click', () => this.brewAll());
+    // Đánh giá hiện tiếng Trung; bấm "Xem nghĩa" mới hiện tiếng Việt
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-show-vi]');
+      const w = b && b.closest('.rev-wrap');
+      if (!w) return;
+      const open = w.classList.toggle('vi-open');
+      if (b.textContent.trim() !== '👁' && b.textContent.trim() !== '🙈') b.textContent = open ? '🙈 Ẩn nghĩa' : '👁 Xem nghĩa';
+      else b.textContent = open ? '🙈' : '👁';
+    });
+    on('btn-open-prep', 'click', () => { this.audio.pop(); this.renderPrepModal(); this.openModal('modal-prep'); });
 
     // Nấu trà và topping trực tiếp từ nút "+5 Nấu"
     document.addEventListener('click', (e) => {
@@ -609,6 +619,7 @@ class BobaShop {
       this.closeModal(btn.dataset.close);
       this.lastTickAt = performance.now();
       if (btn.dataset.close === 'modal-restock') this.afterMarketClosed();
+      if (btn.dataset.close === 'modal-prep') this.renderPrepModal();
     }));
 
     on('setting-sfx', 'change', (e) => { this.audio.sfxEnabled = e.target.checked; });
@@ -743,6 +754,7 @@ class BobaShop {
 
   startDay() {
     this.closeModal('modal-day-mission');
+    this.closeModal('modal-prep');
     this.saveProgress();
     this.audio.init();
     this.audio.bell();
@@ -804,7 +816,8 @@ class BobaShop {
     }
 
     if (!this.relaxedMode) {
-      [...this.line].forEach(c => { if (this.gameTime - c.arrivedAt >= QUEUE_RULES.patienceMs) this.loseCustomer(c); });
+      // chỉ khách CHƯA được chốt đơn mới bỏ về (đã chốt thì chờ lấy nước)
+      [...this.line].forEach(c => { if (!c.takenAt && this.gameTime - c.arrivedAt >= QUEUE_RULES.patienceMs) this.loseCustomer(c); });
       const cur = this.current;
       if (cur && !cur.takenAt && this.gameTime - cur.arrivedAt >= QUEUE_RULES.patienceMs) this.loseCustomer(cur);
     }
@@ -833,6 +846,7 @@ class BobaShop {
   spawnArrival() {
     this.ticketSeq += 1;
     const c = { id: this.ticketSeq, profile: this.nextCustomerProfile(), arrivedAt: this.gameTime };
+    this.prepCustomer(c); // có sẵn món muốn gọi ngay khi vào quán (chọn khách nào trên hàng chờ cũng được)
     this.line.push(c);
     this.stats.spawned += 1;
     this.nextArrivalAt = this.gameTime + this.getArrivalGapMs();
@@ -843,22 +857,75 @@ class BobaShop {
     this.renderRail();
   }
 
-  promoteNext() {
-    if (this.current || !this.line.length) return;
-    const c = this.line.shift();
+  // Mỗi khách giữ riêng: món gọi, ly đang pha dở, khay tiền thối, bước pha
+  prepCustomer(c) {
+    if (c.order) return;
     c.order = this.makeOrder();
     c.changeWrong = 0;
     c.hintUsed = false;
     c.trashCount = 0;
+    c.cup = freshCup();
+    c.tray = [];
+    c.makeStep = 1;
+  }
+
+  // Đưa khách c lên quầy (dùng chung cho "khách kế tiếp" và "bấm chọn khách trên hàng chờ")
+  bringToCounter(c) {
+    this.prepCustomer(c);
     this.current = c;
-    this.cup = freshCup();
-    this.changeTray = [];
-    this.makeStep = 1;
+    this.cup = c.cup || freshCup();
+    this.changeTray = c.tray || [];
+    this.makeStep = c.makeStep || 1;
+  }
+
+  // Cất trạng thái của khách đang ở quầy (ly pha dở, khay tiền, bước) trước khi đổi khách
+  stashCurrent() {
+    const c = this.current;
+    if (!c) return;
+    c.cup = this.cup;
+    c.tray = this.changeTray;
+    c.makeStep = this.makeStep;
+  }
+
+  promoteNext() {
+    if (this.current || !this.line.length) return;
+    const c = this.line.shift();
+    this.bringToCounter(c);
     this.renderCounter(true);
     this.renderRail();
     this.renderMakeStation();
     this.renderChange();
     setTimeout(() => { if (this.current === c && !c.takenAt) this.speakOrder(); }, 450);
+  }
+
+  // Kiểu Papa's: bấm vào khách trên hàng chờ → khách đó lên quầy (xem món, chốt đơn, pha trước cho họ)
+  selectCustomer(id) {
+    if (!this.dayStarted || this.dayEnded || this.isModalOpen()) return;
+    const cur = this.current;
+    if (cur && cur.id === id) {
+      // bấm lại khách đang ở quầy → đưa tới trạm phù hợp
+      this.switchStation(!cur.takenAt ? 'view-order-station' : this.cup.lid ? 'view-change-station' : 'view-make-station');
+      return;
+    }
+    const target = this.line.find(x => x.id === id);
+    if (!target) return;
+    this.stopPour();
+    this.stashCurrent();
+    this.line = this.line.filter(x => x !== target);
+    if (cur) { this.line.push(cur); this.line.sort((a, b) => a.id - b.id); }
+    this.bringToCounter(target);
+    this.audio.pop();
+    this.renderCounter(true);
+    this.renderRail();
+    this.renderMakeStation();
+    this.renderChange();
+    if (!target.takenAt) {
+      this.switchStation('view-order-station', true);
+      setTimeout(() => { if (this.current === target && !target.takenAt) this.speakOrder(); }, 350);
+    } else {
+      this.switchStation(this.cup.lid ? 'view-change-station' : 'view-make-station', true);
+      this.showToast('📝', `Đơn #B-${target.id} của ${target.profile.nameChn}${this.cup.lid ? ' — ly đã đóng nắp, tính tiền thôi!' : ' — tiếp tục pha chế.'}`);
+    }
   }
 
   loseCustomer(c, silent = false) {
@@ -1185,6 +1252,7 @@ class BobaShop {
     this.learn('封口');
     this.audio.seal();
     this.renderMakeStation();
+    this.renderRail();
     this.setAttention('view-change-station');
     this.showToast('✅', 'Đã đóng nắp! Sang 收银台 tính tiền cho khách.');
   }
@@ -1203,6 +1271,7 @@ class BobaShop {
     this.setMakeStep(1);
     this.renderMakeStation();
     this.renderChange();
+    this.renderRail();
     this.showToast('🗑️', 'Đã đổ ly cũ (nguyên liệu trong ly đã bị huỷ). Làm lại ly mới nhé!');
   }
 
@@ -1445,7 +1514,23 @@ class BobaShop {
     }
   }
 
+  // Dòng tóm tắt nguyên liệu đã nấu trên bảng nhiệm vụ
+  renderMissionStock() {
+    const box = this.$('mission-stock');
+    if (!box) return;
+    const items = [
+      ...TEAS.filter(t => this.teasOwned.has(t.id)).map(t => ({ chn: t.chn, n: this.teaStock[t.id] || 0 })),
+      ...TOPPINGS.filter(t => this.toppingsOwned.has(t.id)).map(t => ({ chn: t.chn, n: this.toppingStock[t.id] || 0 }))
+    ];
+    const none = items.every(x => x.n <= 0);
+    box.classList.toggle('empty', none);
+    box.innerHTML = none
+      ? '⚠️ <b>Chưa nấu nguyên liệu nào</b> — bấm <b>Nấu nguyên liệu</b> trước khi mở cửa (hoặc bấm <b>+5 Nấu</b> ở trạm pha chế).'
+      : '🍲 <b>Đã nấu:</b> ' + items.map(x => `<span class="ms-item ${x.n ? '' : 'zero'}"><span class="zh">${x.chn}</span> ${x.n}</span>`).join('');
+  }
+
   renderPrepModal() {
+    this.renderMissionStock();
     const teaBox = this.$('prep-tea-grid');
     const topBox = this.$('prep-topping-grid');
     if (teaBox) {
@@ -1516,8 +1601,11 @@ class BobaShop {
               <span class="rb-item-stars">${'⭐'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</span>
             </div>
             <div style="font-size:0.72rem;color:#8a6d57">Đơn: ${escapeHtml(r.orderText)}</div>
-            <div class="rb-item-vi">"${escapeHtml(r.commentVi)}"</div>
-            <div class="rb-item-zh zh">“${escapeHtml(r.commentZh)}”</div>
+            <div class="rev-wrap">
+              <div class="rb-item-zh zh">“${escapeHtml(r.commentZh)}”</div>
+              <button type="button" class="btn-show-vi" data-show-vi>👁 Xem nghĩa</button>
+              <div class="rev-vi">${escapeHtml(r.commentVi)}</div>
+            </div>
           </div>
         </div>`).join('');
     }
@@ -1565,7 +1653,7 @@ class BobaShop {
       this.setText('score-customer-name', `${rev.customerNameChn} (${rev.customerNameVi})`);
       this.setText('scr-stars', '⭐'.repeat(rev.stars) + '☆'.repeat(5 - rev.stars));
       this.setText('score-reaction-chn', `“${rev.commentZh}”`);
-      this.setText('score-reaction-vi', `(${rev.commentVi})`);
+      this.setText('score-reaction-vi', rev.commentVi);
       const img = this.$('score-reaction-img');
       if (img) img.src = ASSET(rev.customerImg);
       sayZh = rev.commentZh;
@@ -1576,10 +1664,13 @@ class BobaShop {
       this.setText('score-customer-name', `${c.profile.nameChn} (${c.profile.nameVi})`);
       this.setText('scr-stars', '⭐'.repeat(stars) + '☆'.repeat(5 - stars));
       sayZh = total >= 90 ? '太好喝了！谢谢老板！' : total >= 70 ? '还不错，下次再来！' : '嗯……下次快一点吧。';
-      let vi = total >= 90 ? '(Ngon quá! Cảm ơn chủ quán!)' : total >= 70 ? '(Cũng ngon, lần sau tôi lại đến!)' : '(Ừm… lần sau nhanh hơn chút nhé.)';
+      let vi = total >= 90 ? 'Ngon quá! Cảm ơn chủ quán!' : total >= 70 ? 'Cũng ngon, lần sau tôi lại đến!' : 'Ừm… lần sau nhanh hơn chút nhé.';
       this.setText('score-reaction-chn', `“${sayZh}”`);
       this.setText('score-reaction-vi', vi);
     }
+    // khách mới → thu gọn lại phần nghĩa
+    const rw = this.$('score-reaction-vi')?.closest('.rev-wrap');
+    if (rw) { rw.classList.remove('vi-open'); const b = rw.querySelector('[data-show-vi]'); if (b) b.textContent = '👁 Xem nghĩa'; }
     this.lastScoreReactionZh = sayZh;
 
     // Mẫu câu tính tiền thông dụng (hiện 1 mẫu câu ngẫu nhiên)
@@ -1690,7 +1781,9 @@ class BobaShop {
           <div class="summary-rev-row">
             <img src="${ASSET(r.customerImg)}" alt="">
             <span>${'⭐'.repeat(r.stars)}</span>
-            <div class="summary-rev-text"><b>${escapeHtml(r.customerNameChn)}:</b> "${escapeHtml(r.commentVi)}"</div>
+            <div class="summary-rev-text rev-wrap"><b>${escapeHtml(r.customerNameChn)}:</b> <span class="zh">“${escapeHtml(r.commentZh)}”</span>
+              <button type="button" class="btn-show-vi" data-show-vi>👁</button>
+              <div class="rev-vi">${escapeHtml(r.commentVi)}</div></div>
           </div>`).join('');
       }
     }
@@ -1753,6 +1846,7 @@ class BobaShop {
     this.renderAll();
     if (!this.isDayInProgress()) this.saveProgress();
     if (this.$('modal-day-mission').style.display === 'flex') this.showMissionBriefing();
+    if (this.$('modal-prep').style.display === 'flex') this.renderPrepModal();
   }
 
   unlockItem(zone, id) {
@@ -1867,12 +1961,20 @@ class BobaShop {
     this.line.forEach(c => people.push({ c, serving: false }));
     box.innerHTML = !people.length
       ? `<span class="q-empty">${!this.dayStarted ? 'Quán chưa mở cửa' : this.closed ? '打烊 · Hết giờ bán hôm nay' : 'Chưa có ai xếp hàng…'}</span>`
-      : people.map(({ c, serving }) => `
-        <span class="q-chip ${serving ? 'serving' : ''}" data-cid="${c.id}">
+      : people.map(({ c, serving }) => {
+        const sealed = serving ? this.cup.lid : !!(c.cup && c.cup.lid);
+        const state = !c.takenAt ? '' : sealed ? 'ready' : 'taken';
+        const badge = !c.takenAt ? '<span class="mini-pat"><i></i></span>'
+          : `<span class="q-badge" title="${sealed ? 'Đã đóng nắp — chờ tính tiền' : 'Đã chốt đơn — chờ pha'}">${sealed ? '🧋' : '📝'}</span>`;
+        const tip = !c.takenAt ? 'Bấm để xem khách gọi món gì' : sealed ? 'Bấm để tính tiền' : 'Bấm để pha tiếp đơn này';
+        return `
+        <button type="button" class="q-chip ${serving ? 'serving' : ''} ${state}" data-cid="${c.id}" title="${tip}">
           <img src="${ASSET(c.profile.img)}" alt="">
           <span class="zh">${c.profile.nameChn}</span>
-          ${serving && c.takenAt ? '' : '<span class="mini-pat"><i></i></span>'}
-        </span>`).join('');
+          ${badge}
+        </button>`;
+      }).join('');
+    box.querySelectorAll('[data-cid]').forEach(el => el.addEventListener('click', () => this.selectCustomer(+el.dataset.cid)));
     const s = this.stats;
     this.setText('rail-info', this.dayStarted ? `✅ Đã phục vụ ${s.served} · 😠 Bỏ về ${s.lost} · Đang chờ ${this.line.length}` : '');
     this.updatePatienceUI();
@@ -1950,7 +2052,7 @@ class BobaShop {
     if (nextBtn) nextBtn.style.display = c.takenAt ? 'inline-flex' : 'none';
     if (hint) hint.innerHTML = c.takenAt
       ? `✅ Đã nhận đơn <b>#B-${c.id}</b>. Sang <b>调制台</b> pha chế → <b>收银台</b> tính tiền.`
-      : '💡 Nghe khách gọi món rồi bấm <b>Nhận đơn</b>. Để khách chờ lâu sẽ bị trừ điểm và có thể bỏ về!';
+      : '💡 Nghe khách gọi món rồi bấm <b>Nhận đơn</b>. Muốn phục vụ khách khác trước? <b>Bấm vào khách trên hàng chờ</b>.';
     if (reg) reg.textContent = c.takenAt ? fmt(c.order.due) : '0.00';
     this.updatePatienceUI();
   }

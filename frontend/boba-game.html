@@ -408,8 +408,11 @@
               <button type="button" class="btn-say-review" id="btn-replay-boba-speech" title="Nghe lại phát âm"><i
                   class="fa-solid fa-volume-high"></i></button>
             </div>
-            <div class="zh rc-chn" id="score-reaction-chn">“太好喝了！谢谢老板！”</div>
-            <div class="rc-vi" id="score-reaction-vi">(Ngon quá! Cảm ơn chủ quán!)</div>
+            <div class="rev-wrap">
+              <div class="zh rc-chn" id="score-reaction-chn">“太好喝了！谢谢老板！”</div>
+              <button type="button" class="btn-show-vi" data-show-vi>👁 Xem nghĩa</button>
+              <div class="rc-vi rev-vi" id="score-reaction-vi">Ngon quá! Cảm ơn chủ quán!</div>
+            </div>
           </div>
         </div>
 
@@ -458,11 +461,28 @@
         </div>
         <div class="mission-goals" id="mission-goals"></div>
 
-        <!-- KHU CHUẨN BỊ NGUYÊN LIỆU (NẤU TRÀ & NẤU TOPPING TRƯỚC KHI MỞ CỬA) -->
+        <!-- Tóm tắt nguyên liệu đã nấu (chi tiết ở bảng Nấu nguyên liệu) -->
+        <div class="mission-stock" id="mission-stock"></div>
+
+        <div class="mission-actions">
+          <button type="button" class="g-btn-ghost prep-open" id="btn-open-prep"><i class="fa-solid fa-fire-burner"></i>
+            <span class="zh">原料准备</span> Nấu nguyên liệu</button>
+          <button type="button" class="g-btn-primary big" id="btn-mission-start"><span class="zh">开门营业</span> Mở cửa bán
+            hàng <i class="fa-solid fa-store"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 原料准备 · NẤU NGUYÊN LIỆU TRƯỚC KHI MỞ CỬA (mở từ bảng nhiệm vụ) -->
+    <div class="g-modal" id="modal-prep" style="display:none;">
+      <div class="g-card prep-card">
+        <div class="g-card-head">
+          <h3>🔥 <span class="zh">原料准备</span> · Nấu nguyên liệu</h3>
+          <button type="button" class="g-close" data-close="modal-prep"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="mission-prep-section">
           <div class="prep-header">
-            <h4><i class="fa-solid fa-kitchen-set"></i> <span class="zh">原料准备</span> · Nấu nguyên liệu trước khi mở cửa
-            </h4>
+            <h4><i class="fa-solid fa-kitchen-set"></i> Nấu trước khi mở cửa · mỗi lần +5 phần</h4>
             <button type="button" class="g-btn-chip" id="btn-prep-all"><i class="fa-solid fa-wand-magic-sparkles"></i>
               Nấu nhanh tất cả (+5)</button>
           </div>
@@ -481,12 +501,10 @@
             </div>
           </div>
         </div>
-
-        <div class="mission-actions">
-          <button type="button" class="g-btn-ghost" id="btn-mission-restock"><i class="fa-solid fa-basket-shopping"></i>
-            <span class="zh">进货</span> Mở món mới</button>
-          <button type="button" class="g-btn-primary big" id="btn-mission-start"><span class="zh">开门营业</span> Mở cửa bán
-            hàng <i class="fa-solid fa-store"></i></button>
+        <div class="prep-foot">
+          <button type="button" class="g-btn-chip" id="btn-mission-restock"><i class="fa-solid fa-basket-shopping"></i>
+            <span class="zh">进货</span> Muốn thêm món mới?</button>
+          <button type="button" class="g-btn-primary big" data-close="modal-prep"><i class="fa-solid fa-check"></i> Xong</button>
         </div>
       </div>
     </div>
@@ -610,7 +628,7 @@
           <div class="gstep"><i>2</i><span>🛎️</span>
             <div><b>点单台 · Đón khách</b>
               <p>Nghe khách gọi món tiếng Trung (cỡ ly, loại trà, topping, độ ngọt, lượng đá) rồi bấm <b>Nhận đơn</b>.
-                Để khách chờ lâu sẽ bỏ về.</p>
+                Để khách chờ lâu sẽ bỏ về. <b>Bấm vào từng khách trên hàng chờ</b> để chọn người muốn phục vụ trước — nhận đơn nhiều khách rồi pha xen kẽ cũng được (📝 = đã chốt đơn, 🧋 = đã đóng nắp chờ tính tiền).</p>
             </div>
           </div>
           <div class="gstep"><i>3</i><span>🧋</span>
