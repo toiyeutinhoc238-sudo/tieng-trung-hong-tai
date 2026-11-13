@@ -186,6 +186,7 @@ const VOCAB_TABS = [
       { chn: '不加料', pin: 'bù jiā liào', vi: 'không thêm topping' },
       { chn: '封口', pin: 'fēngkǒu', vi: 'đóng nắp (ép miệng ly)' },
       { chn: '倒掉', pin: 'dàodiào', vi: 'đổ đi' },
+      { chn: '抱歉', pin: 'bàoqiàn', vi: 'xin lỗi' },
       { chn: '一共', pin: 'yígòng', vi: 'tổng cộng' },
       { chn: '找零', pin: 'zhǎolíng', vi: 'thối tiền' },
       { chn: '进货', pin: 'jìnhuò', vi: 'nhập hàng' },
@@ -280,7 +281,8 @@ const START_MONEY = 80;
 const STAGE_W = 1280;
 const STAGE_H = 720;
 const PORTRAIT_W = 480;
-const PORTRAIT_MIN_H = 760;
+const PORTRAIT_MIN_H = 900;   // chiều cao tối thiểu khung dọc (tablet 3:4 → 675×900)
+const STATION_ORDER = ['view-order-station', 'view-make-station', 'view-change-station'];
 const SAVE_VERSION = 2;
 const ASSET = (f) => `./assets/${f}`;
 const cents = (v) => Math.round(Number(v) * 100);
@@ -396,6 +398,7 @@ class BobaShop {
     this.makeStep = 1;
     this.pourTimer = null;
     this.pouringTea = null;
+    this.currentStation = 'view-order-station';
     this.marketZone = 'teas';
 
     const lu = GameCloud.token() ? GameCloud.localUser() : null;
@@ -560,7 +563,9 @@ class BobaShop {
 
     // Bố cục 1 màn hình: không còn chuyển trạm. Nút "Sang tính tiền" mở lại bảng thanh toán
     // (nếu người chơi lỡ bấm ✕ đóng bảng sau khi đóng nắp, trước đây không có cách mở lại → kẹt cả ngày)
-    on('btn-goto-pay', 'click', () => this.openCheckoutModal());
+    document.querySelectorAll('.g-tab').forEach(btn => btn.addEventListener('click', () => this.switchStation(btn.dataset.target)));
+    on('btn-goto-make-from-order', 'click', () => this.switchStation('view-make-station'));
+    on('btn-goto-pay', 'click', () => this.switchStation('view-change-station'));
     on('btn-take-order-action', 'click', () => this.takeOrder());
     on('btn-take-order-footer', 'click', () => this.takeOrder());
     on('speech-bubble', 'click', (e) => {
@@ -568,13 +573,16 @@ class BobaShop {
       if (this.current && !this.current.takenAt) this.takeOrder();
     });
     on('btn-replay-order-audio', 'click', () => this.speakOrder());
+    on('btn-cat', 'click', () => this.petCat());
 
     // Pha chế
     document.querySelectorAll('.step-tab').forEach(b => b.addEventListener('click', () => { this.audio.pop(); this.setMakeStep(+b.dataset.step); }));
     on('btn-undo-topping', 'click', () => this.undoTopping());
     // Đã đóng nắp → nút thành "Tính tiền" (mở lại bảng thanh toán)
-    on('btn-seal-lid', 'click', () => (this.cup.lid && this.isReadyToCharge() ? this.openCheckoutModal() : this.sealLid()));
+    // Đã đóng nắp → nút thành "Sang tính tiền"
+    on('btn-seal-lid', 'click', () => (this.cup.lid && this.isReadyToCharge() ? this.switchStation('view-change-station') : this.sealLid()));
     on('btn-trash-cup', 'click', () => this.trashCup());
+    on('btn-cancel-order', 'click', () => this.cancelOrder());
     // Thả tay ở bất cứ đâu → dừng rót
     ['pointerup', 'pointercancel', 'blur'].forEach(ev => window.addEventListener(ev, () => this.stopPour()));
 
@@ -625,7 +633,13 @@ class BobaShop {
     let sh = STAGE_H;
     if (portrait) {
       sw = PORTRAIT_W;
-      sh = Math.max(PORTRAIT_MIN_H, Math.round((PORTRAIT_W * h) / Math.max(1, w)));
+      sh = Math.round((PORTRAIT_W * h) / Math.max(1, w));
+      // Màn dọc "thấp" (máy tính bảng 3:4, điện thoại màn ngắn): giữ đủ chiều cao rồi giãn ngang lấp kín màn hình
+      // → mọi thứ nhỏ lại một chút, kệ hàng đủ chỗ, không còn dải trống 2 bên.
+      if (sh < PORTRAIT_MIN_H) {
+        sh = PORTRAIT_MIN_H;
+        sw = Math.max(PORTRAIT_W, Math.round((PORTRAIT_MIN_H * w) / Math.max(1, h)));
+      }
     }
     const scale = Math.min(w / sw, h / sh);
     this.stageScale = scale > 0 ? scale : 1;
@@ -869,6 +883,30 @@ class BobaShop {
     setTimeout(() => { this.promoteNext(); this.renderCounter(); }, isCurrent ? 550 : 0);
   }
 
+  // Đơn đã nhận nhưng KHÔNG THỂ pha: món hết mà không đủ tiền nấu thêm.
+  // Khách đã nhận đơn thì không tự bỏ về → nếu không có lối thoát, khách đứng mãi và ngày không bao giờ kết thúc.
+  orderBlockedReason() {
+    const c = this.current;
+    if (!c || !c.takenAt || !c.order || this.cup.lid) return '';
+    const o = c.order;
+    const teaInCup = this.cup.tea === o.tea.id && this.cup.fill > 0 && !this.cup.mixed;
+    if (!teaInCup && (this.teaStock[o.tea.id] || 0) <= 0 && this.money < INGREDIENT_RULES.teaBatchCost - 1e-9) return `trà ${o.tea.chn}`;
+    const topInCup = o.topping && this.cup.toppings.includes(o.topping.id);
+    if (o.topping && !topInCup && (this.toppingStock[o.topping.id] || 0) <= 0 && this.money < INGREDIENT_RULES.toppingBatchCost - 1e-9) return `topping ${o.topping.chn}`;
+    return '';
+  }
+
+  cancelOrder() {
+    const c = this.current;
+    const why = this.orderBlockedReason();
+    if (!c || !why) return;
+    this.learn('抱歉');
+    this.loseCustomer(c, true);
+    this.audio.sad();
+    this.showToast('🙇', `抱歉 (bàoqiàn) · Hết ${why} và không đủ tiền nấu thêm — ${c.profile.nameChn} đành rời quán.`, 'warn');
+    this.switchStation('view-order-station', true);
+  }
+
   checkDayEnd() {
     if (!this.dayStarted || this.dayEnded || !this.closed) return;
     if (!this.line.length && !this.current && !this.isModalOpen()) this.showDaySummary();
@@ -939,17 +977,35 @@ class BobaShop {
     this.renderCounter();
     this.renderRail();
     this.renderMakeStation();
-    this.showToast('📝', 'Đã nhận đơn! Chọn cỡ ly để bắt đầu pha chế.');
+    this.setAttention('view-make-station');
+    this.showToast('📝', 'Đã nhận đơn! Sang 调制台 để pha chế.');
   }
 
   // --------------------------------------------------------------------------
   // Trạm
   // --------------------------------------------------------------------------
-  // Bố cục 1 màn hình (#view-order-station là khu duy nhất). Không ẩn/hiện trạm nữa —
-  // bản cũ gỡ class "active" khỏi khu này khi chuyển sang trạm khác → cả màn chơi biến mất.
-  switchStation() {
+  switchStation(id, silent = false) {
+    if (!STATION_ORDER.includes(id)) return;
     this.stopPour();
-    this.$('view-order-station')?.classList.add('active');
+    const prevIdx = STATION_ORDER.indexOf(this.currentStation);
+    const nextIdx = STATION_ORDER.indexOf(id);
+    this.currentStation = id;
+    document.querySelectorAll('.g-station').forEach(v => {
+      const active = v.id === id;
+      v.classList.toggle('from-left', !active && STATION_ORDER.indexOf(v.id) < nextIdx);
+      v.classList.toggle('active', active);
+    });
+    document.querySelectorAll('.g-tab').forEach(b => {
+      b.classList.toggle('active', b.dataset.target === id);
+      if (b.dataset.target === id) b.classList.remove('attention');
+    });
+    if (id === 'view-make-station') this.renderMakeStation();
+    if (id === 'view-change-station') { this.renderChange(); if (this.isReadyToCharge()) { this.learn('一共'); this.learn('找零'); } }
+    if (!silent && prevIdx !== nextIdx) this.audio.pop();
+  }
+
+  setAttention(id) {
+    document.querySelectorAll('.g-tab').forEach(b => b.classList.toggle('attention', b.dataset.target === id && this.currentStation !== id));
   }
 
   // ---------------- Trạm 2: pha chế
@@ -1028,7 +1084,7 @@ class BobaShop {
         this.showToast('💦', 'Tràn ly rồi! Bấm 倒掉 Đổ đi để làm lại.', 'warn');
       }
       this.renderCup();
-      this.renderChecklist();
+      this.renderTicket();
     }, POUR_RULES.tickMs);
   }
 
@@ -1129,17 +1185,8 @@ class BobaShop {
     this.learn('封口');
     this.audio.seal();
     this.renderMakeStation();
-    this.openCheckoutModal();
-    this.showToast('✅', 'Đã đóng nắp! Khách đưa tiền, hãy thối tiền nhé.');
-  }
-
-  openCheckoutModal() {
-    this.renderChange();
-    this.openModal('modal-checkout');
-    if (this.current && this.current.order) {
-      this.learn('一共');
-      this.learn('找零');
-    }
+    this.setAttention('view-change-station');
+    this.showToast('✅', 'Đã đóng nắp! Sang 收银台 tính tiền cho khách.');
   }
 
   trashCup() {
@@ -1766,12 +1813,16 @@ class BobaShop {
     this.renderCounter();
     this.renderMakeStation();
     this.renderChange();
+    this.renderChalkboard();
   }
 
   updateHUD() {
     this.setText('hud-money-val', `${fmt(this.money)} ¥`);
     this.setText('hud-day-val', `第${this.day}天`);
     this.setText('hud-vocab-val', `${this.learnedCount()}/${VOCAB_TOTAL}`);
+    this.setText('stats-rev-val', `${fmt(this.stats.revenue)} ¥`);
+    this.setText('stats-cust-val', String(this.stats.served));
+    this.setText('stats-lost-val', String(this.stats.lost));
     this.updateClockUI();
     this.renderHUDGoal();
     this.updateHUDReviews();
@@ -1857,23 +1908,24 @@ class BobaShop {
     const c = this.current;
     const bubble = this.$('speech-bubble');
     const tag = this.$('customer-tag');
+    const nextBtn = this.$('btn-goto-make-from-order');
     const hint = this.$('order-footer-hint');
+    const reg = this.$('reg-screen');
     if (!door) return;
-    const waitBox = this.$('cust-waiting-box');
     if (!c) {
       door.classList.add('empty');
       bubble?.classList.add('hidden');
       tag?.classList.add('hidden');
-      if (waitBox) waitBox.style.display = 'flex';
+      if (nextBtn) nextBtn.style.display = 'none';
       const takeBtnFooter = this.$('btn-take-order-footer');
       if (takeBtnFooter) takeBtnFooter.style.display = 'none';
       this.setText('door-empty-text', !this.dayStarted ? 'Quán chưa mở cửa' : this.closed ? 'Hết giờ bán hôm nay' : 'Đang chờ khách...');
       this.setText('door-empty-chn', this.closed ? '打烊' : '欢迎光临');
       if (hint) hint.innerHTML = !this.dayStarted ? '💡 Bấm <b>Mở cửa bán hàng</b> để bắt đầu ngày mới.'
         : this.closed ? '🌙 Đã đóng cửa. Đang tổng kết ngày…' : '💡 Chờ khách bước vào… Rảnh tay thì vào <b>进货</b> mở món mới cho thực đơn.';
+      if (reg) reg.textContent = '0.00';
       return;
     }
-    if (waitBox) waitBox.style.display = 'none';
     door.classList.remove('empty');
     const wrap = this.$('door-customer');
     const img = this.$('customer-img');
@@ -1895,9 +1947,28 @@ class BobaShop {
     const takeBtnFooter = this.$('btn-take-order-footer');
     if (takeBtnFooter) takeBtnFooter.style.display = c.takenAt ? 'none' : 'inline-flex';
 
-    if (hint && !c.takenAt) hint.innerHTML = '💡 Nghe khách gọi món rồi bấm <b>Nhận đơn</b>. Để khách chờ lâu sẽ bị trừ điểm và có thể bỏ về!';
-    // đã nhận đơn → gợi ý từng bước do renderMakeStation() viết
+    if (nextBtn) nextBtn.style.display = c.takenAt ? 'inline-flex' : 'none';
+    if (hint) hint.innerHTML = c.takenAt
+      ? `✅ Đã nhận đơn <b>#B-${c.id}</b>. Sang <b>调制台</b> pha chế → <b>收银台</b> tính tiền.`
+      : '💡 Nghe khách gọi món rồi bấm <b>Nhận đơn</b>. Để khách chờ lâu sẽ bị trừ điểm và có thể bỏ về!';
+    if (reg) reg.textContent = c.takenAt ? fmt(c.order.due) : '0.00';
     this.updatePatienceUI();
+  }
+
+  petCat() {
+    this.audio.speak('喵～');
+    this.learn('猫');
+    const cat = this.$('btn-cat');
+    if (cat) { cat.classList.remove('meow'); void cat.offsetWidth; cat.classList.add('meow'); }
+    this.showToast('🐈', '猫 (māo) · Con mèo của quán đang phơi nắng. 喵～');
+  }
+
+  renderChalkboard() {
+    const ul = this.$('chalk-specials');
+    if (!ul) return;
+    const m = byId(SIZES, 'M');
+    ul.innerHTML = TEAS.filter(t => this.teasOwned.has(t.id)).slice(-4).reverse()
+      .map(t => `<li><span>🧋 <span class="zh">${t.chn}</span></span><b>${fmt(m.price + t.premium)}¥</b></li>`).join('');
   }
 
   renderSpeech() {
@@ -1915,96 +1986,29 @@ class BobaShop {
 
   // ---------------- Trạm pha chế
   renderTicket() {
-    this.renderChecklist();
-  }
-
-  renderChecklist() {
     const c = this.current;
-    const cup = this.cup;
+    const list = this.$('mt-list');
+    if (!list) return;
     this.setText('mt-id', c ? `#B-${c.id}` : '');
-    const items = ['cl-size', 'cl-tea', 'cl-sugar', 'cl-ice', 'cl-topping'];
+    const cust = this.$('mt-cust');
     if (!c || !c.takenAt || !c.order) {
-      items.forEach(id => {
-        const el = this.$(id);
-        if (el) {
-          el.classList.remove('done', 'wrong');
-          const val = el.querySelector('.cl-val');
-          if (val) val.textContent = '—';
-        }
-      });
-      this.$('btn-seal-lid')?.classList.remove('ready-pulse');
+      if (cust) cust.innerHTML = '';
+      list.innerHTML = '<li class="mt-none">Chưa có đơn.<br>Về <b class="zh">点单台</b> nhận đơn của khách.</li>';
       return;
     }
+    if (cust) cust.innerHTML = `<img src="${ASSET(c.profile.img)}" alt=""><span class="zh">${c.profile.nameChn}</span>`;
     const o = c.order;
-
-    // 1. Cỡ ly (Size)
-    const elSize = this.$('cl-size');
-    if (elSize) {
-      const match = cup.size === o.size.id;
-      elSize.classList.toggle('done', match);
-      elSize.classList.toggle('wrong', !!cup.size && !match);
-      const val = elSize.querySelector('.cl-val');
-      if (val) val.innerHTML = cup.size ? `<b>${byId(SIZES, cup.size).chn}</b>` : `cần: ${o.size.chn}`;
-    }
-
-    // 2. Loại trà (Tea)
-    const elTea = this.$('cl-tea');
-    if (elTea) {
-      const match = cup.tea === o.tea.id && !cup.mixed && cup.fill >= 70 && cup.fill <= 90;
-      elTea.classList.toggle('done', match);
-      elTea.classList.toggle('wrong', cup.fill > 0 && (!match || cup.mixed));
-      const val = elTea.querySelector('.cl-val');
-      if (val) val.innerHTML = cup.tea ? `<b>${byId(TEAS, cup.tea).chn} ${Math.round(cup.fill)}%</b>` : `cần: ${o.tea.chn}`;
-    }
-
-    // 3. Đường (Sugar)
-    const elSugar = this.$('cl-sugar');
-    if (elSugar) {
-      const match = cup.sugar === o.sugar.id;
-      elSugar.classList.toggle('done', match);
-      elSugar.classList.toggle('wrong', !!cup.sugar && !match);
-      const val = elSugar.querySelector('.cl-val');
-      if (val) val.innerHTML = cup.sugar ? `<b>${byId(SUGARS, cup.sugar).chn}</b>` : `cần: ${o.sugar.chn}`;
-    }
-
-    // 4. Lượng đá (Ice)
-    const elIce = this.$('cl-ice');
-    if (elIce) {
-      const match = cup.ice === o.ice.id;
-      elIce.classList.toggle('done', match);
-      elIce.classList.toggle('wrong', !!cup.ice && !match);
-      const val = elIce.querySelector('.cl-val');
-      if (val) val.innerHTML = cup.ice ? `<b>${byId(ICES, cup.ice).chn}</b>` : `cần: ${o.ice.chn}`;
-    }
-
-    // 5. Topping
-    const elTop = this.$('cl-topping');
-    if (elTop) {
-      const neededTop = o.topping ? o.topping.id : null;
-      let match = false;
-      if (!neededTop) {
-        match = cup.toppings.length === 0;
-      } else {
-        match = cup.toppings.length === 1 && cup.toppings[0] === neededTop;
-      }
-      elTop.classList.toggle('done', match);
-      elTop.classList.toggle('wrong', cup.toppings.length > 0 && !match);
-      const val = elTop.querySelector('.cl-val');
-      if (val) {
-        if (cup.toppings.length) {
-          val.innerHTML = cup.toppings.map(id => `<b>${byId(TOPPINGS, id).chn}</b>`).join('+');
-        } else {
-          val.textContent = neededTop ? `cần: ${o.topping.chn}` : 'không topping (✓)';
-        }
-      }
-    }
-
-    // Nút đóng nắp sáng nhịp khi đủ điều kiện
-    const btnSeal = this.$('btn-seal-lid');
-    if (btnSeal && !cup.lid) {
-      const allReady = cup.size && cup.tea && cup.sugar && cup.ice && cup.fill >= 60;
-      btnSeal.classList.toggle('ready-pulse', allReady);
-    }
+    const cup = this.cup;
+    const v = (t) => (this.showVietnamese ? `<small>${escapeHtml(t)}</small>` : '');
+    const now = (val) => `<span class="mt-now ${val ? 'set' : ''}">${val || '—'}</span>`;
+    const top = cup.toppings.map(id => byId(TOPPINGS, id).chn).join(' + ');
+    list.innerHTML = `
+      <li><span class="mt-k">🥤 Ly</span><span class="mt-v"><b class="zh">${o.size.chn}</b>${v(o.size.vi)}</span>${now(cup.size ? byId(SIZES, cup.size).chn : '')}</li>
+      <li><span class="mt-k">🍵 Trà</span><span class="mt-v"><b class="zh">${o.tea.chn}</b>${v(o.tea.vi)}</span>${now(cup.mixed ? 'lẫn' : cup.tea ? `${byId(TEAS, cup.tea).chn} ${Math.round(cup.fill)}%` : '')}</li>
+      <li><span class="mt-k">🍬 Đường</span><span class="mt-v"><b class="zh">${o.sugar.chn}</b>${v(o.sugar.vi)}</span>${now(cup.sugar ? byId(SUGARS, cup.sugar).chn : '')}</li>
+      <li><span class="mt-k">🧊 Đá</span><span class="mt-v"><b class="zh">${o.ice.chn}</b>${v(o.ice.vi)}</span>${now(cup.ice ? byId(ICES, cup.ice).chn : '')}</li>
+      <li><span class="mt-k">🧋 Topping</span><span class="mt-v"><b class="zh">${o.topping ? o.topping.chn : '不加料'}</b>${v(o.topping ? o.topping.vi : 'không topping')}</span>${now(top)}</li>
+      <li><span class="mt-k">🔒 Nắp</span><span class="mt-v"><b class="zh">封口</b>${v('đóng nắp')}</span>${now(cup.lid ? '✓' : '')}</li>`;
   }
 
   renderCup() {
@@ -2127,15 +2131,22 @@ class BobaShop {
     if (undo) undo.disabled = locked || !cup.toppings.length;
     const lid = this.$('btn-seal-lid');
     if (lid) {
-      // Đã đóng nắp → nút thành "Tính tiền" để mở lại bảng thanh toán nếu lỡ đóng
+      // Đã đóng nắp → nút thành "Sang tính tiền"; pha đủ → nút Đóng nắp nhấp nháy
       lid.disabled = !has;
       lid.classList.toggle('to-pay', locked);
-      lid.innerHTML = locked ? '<i class="fa-solid fa-cash-register"></i> <span class="zh">收银</span> Tính tiền' : '<i class="fa-solid fa-circle-check"></i> <span class="zh">封口</span> Đóng nắp';
+      lid.classList.toggle('ready-pulse', !locked && has && !!(cup.size && cup.tea && cup.sugar && cup.ice && cup.fill >= 60));
+      lid.innerHTML = locked ? '<i class="fa-solid fa-cash-register"></i> <span class="zh">收银台</span> Sang tính tiền' : '<i class="fa-solid fa-circle-check"></i> <span class="zh">封口</span> Đóng nắp';
     }
     const trash = this.$('btn-trash-cup');
     if (trash) trash.disabled = !has;
     const pay = this.$('btn-goto-pay');
-    if (pay) pay.style.display = this.isReadyToCharge() ? 'inline-flex' : 'none';
+    if (pay) pay.disabled = !this.isReadyToCharge();
+    const blocked = this.orderBlockedReason();
+    const cancel = this.$('btn-cancel-order');
+    if (cancel) {
+      cancel.style.display = blocked ? 'inline-flex' : 'none';
+      cancel.parentElement.classList.toggle('has-cancel', !!blocked);
+    }
 
     // Đánh dấu bước đã xong
     const done = { 1: !!(cup.size && cup.fill > 0), 2: !!(cup.sugar && cup.ice), 3: locked };
@@ -2143,14 +2154,15 @@ class BobaShop {
     this.setMakeStep(this.makeStep);
     this.$('view-make-station')?.classList.toggle('no-order', !has);
 
-    const hint = this.$('order-footer-hint');
+    const hint = this.$('make-hint');
     if (hint) {
-      if (!has) hint.innerHTML = '💡 Nghe khách gọi món rồi bấm <b>Nhận đơn</b>.';
-      else if (locked) hint.innerHTML = '✅ Ly đã đóng nắp! Khách đưa tiền trên quầy, hãy thối tiền.';
-      else if (!cup.size) hint.innerHTML = '💡 Bước 1: chọn <b>cỡ ly</b> (小杯 / 中杯 / 大杯) ở dải giữa.';
-      else if (!cup.fill) hint.innerHTML = '💡 <b>Nhấn giữ</b> vòi trà tương ứng, thả tay khi tới <b>vạch 80%</b>.';
-      else if (!cup.sugar || !cup.ice) hint.innerHTML = '💡 Bước 2: chọn <b>độ ngọt</b> và <b>lượng đá</b> ở dải giữa.';
-      else hint.innerHTML = '💡 Bước 3: thêm <b>topping</b> (nếu có) rồi bấm <b>Đóng nắp</b> để tính tiền.';
+      if (!has) hint.innerHTML = '💡 Chưa có đơn. Về <b>点单台</b> nhận đơn trước.';
+      else if (locked) hint.innerHTML = '✅ Ly đã đóng nắp! Bấm <b>Sang tính tiền</b>.';
+      else if (blocked) hint.innerHTML = `⚠️ Hết <b>${escapeHtml(blocked)}</b> mà không đủ tiền nấu thêm → bấm <b>Xin lỗi, hết món</b>.`;
+      else if (!cup.size) hint.innerHTML = '💡 Bước 1: chọn <b>cỡ ly</b> theo phiếu (小杯 / 中杯 / 大杯).';
+      else if (!cup.fill) hint.innerHTML = '💡 <b>Nhấn giữ</b> vòi trà đúng loại, thả tay khi tới <b>vạch 80%</b>. Hết trà thì bấm <b>+5 Nấu</b>.';
+      else if (!cup.sugar || !cup.ice) hint.innerHTML = '💡 Bước 2: chọn <b>độ ngọt</b> và <b>lượng đá</b> theo phiếu.';
+      else hint.innerHTML = '💡 Bước 3: thêm <b>topping</b> (nếu khách gọi) rồi <b>đóng nắp</b>.';
     }
   }
 

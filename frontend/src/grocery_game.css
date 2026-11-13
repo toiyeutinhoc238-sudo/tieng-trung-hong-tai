@@ -3248,3 +3248,35 @@ body.g-portrait.on-title .g-toasts { top: auto; bottom: 20px; }
 .g-rail-queue::-webkit-scrollbar { display: none; }
 .g-rail-queue > * { flex-shrink: 0; }
 .g-rail-info { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ==========================================================================
+   Kệ hàng màn dọc: mỗi hàng kệ chỉ cao bằng (chỗ trống ÷ số hàng). Trên máy tính bảng dọc (3:4)
+   hàng chỉ còn ~60–70px trong khi thẻ cao ~100px → hàng sau đè lên hàng trước.
+   Thẻ sản phẩm tự thu nhỏ theo chiều cao thật của hàng kệ (container query).
+   ========================================================================== */
+body.g-portrait .shelf-row { container-type: size; container-name: shelfrow; }
+body.g-portrait .prod { height: 100%; max-height: 100%; min-height: 0; overflow: hidden; justify-content: flex-end; }
+
+@container shelfrow (max-height: 100px) {
+  .prod { padding: 2px 2px 1px; gap: 0; }
+  .prod-stack { height: 36px; }
+  .prod-stack span { font-size: 1.55rem; }
+  .prod-stack span + span { margin-left: -14px; }
+  .prod-name { font-size: 0.9rem; }
+  .prod-pin { font-size: 0.52rem; line-height: 1.15; }
+  .prod-tag { font-size: 0.6rem; padding: 1px 4px; top: 2px; }
+  .prod-stock { font-size: 0.55rem; padding: 0 4px; top: 2px; }
+  .prod.locked { gap: 1px; }
+  .prod.locked .lock-emoji { font-size: 1.3rem; }
+  .prod.locked .lock-name { font-size: 0.78rem; }
+  .prod.locked .lock-price { font-size: 0.52rem; padding: 1px 4px; line-height: 1.25; }
+}
+@container shelfrow (max-height: 76px) {
+  .prod-pin { display: none; }
+  .prod-stack { height: 30px; }
+  .prod-stack span { font-size: 1.35rem; }
+  .prod-stack span + span { margin-left: -12px; }
+  .prod-name { font-size: 0.82rem; }
+  .prod.locked .lock-emoji { font-size: 1.1rem; }
+  .prod.locked .lock-name { display: none; }
+}

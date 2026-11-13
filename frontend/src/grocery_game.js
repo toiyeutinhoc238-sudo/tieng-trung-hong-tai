@@ -149,7 +149,7 @@ const GROCERY_ITEMS = [
 const SHELF_COLS = 4;
 const SHELF_ROWS = 2;
 const PORTRAIT_W = 480;       // bề rộng sân khấu khi cầm điện thoại dọc
-const PORTRAIT_MIN_H = 760;
+const PORTRAIT_MIN_H = 900;   // chiều cao tối thiểu khung dọc (tablet 3:4 → 675×900)
 const STARTER_STOCK = 6;    // hàng có sẵn lúc mới mở tiệm
 const ZONE_GIFT_STOCK = 4;  // tặng kèm khi mở khu mới
 
@@ -629,7 +629,13 @@ class GroceryGame {
     let sh = STAGE_H;
     if (portrait) {
       sw = PORTRAIT_W;
-      sh = Math.max(PORTRAIT_MIN_H, Math.round((PORTRAIT_W * h) / Math.max(1, w)));
+      sh = Math.round((PORTRAIT_W * h) / Math.max(1, w));
+      // Màn dọc "thấp" (máy tính bảng 3:4, điện thoại màn ngắn): giữ đủ chiều cao rồi giãn ngang lấp kín màn hình
+      // → mọi thứ nhỏ lại một chút, kệ hàng đủ chỗ, không còn dải trống 2 bên.
+      if (sh < PORTRAIT_MIN_H) {
+        sh = PORTRAIT_MIN_H;
+        sw = Math.max(PORTRAIT_W, Math.round((PORTRAIT_MIN_H * w) / Math.max(1, h)));
+      }
     }
     const scale = Math.min(w / sw, h / sh);
     this.stageScale = scale > 0 ? scale : 1;
