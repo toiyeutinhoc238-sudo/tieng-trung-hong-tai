@@ -1306,3 +1306,12 @@ body.g-portrait .prep-foot .g-btn-primary { flex: 1 1 100%; }
 .summary-rev-text .zh { font-size: 0.9rem; color: var(--ink); }
 .summary-rev-text .btn-show-vi { margin: 0 0 0 4px; padding: 0 6px; vertical-align: middle; }
 .score-customer-box .rc-chn { font-size: 1.05rem; }
+
+/* Tiền vốn trên bảng Nấu nguyên liệu */
+.prep-card .g-card-head { gap: 10px; }
+.prep-card .g-card-head h3 { flex: 1 1 auto; min-width: 0; }
+.prep-money { flex: 0 0 auto; display: inline-flex; align-items: baseline; gap: 4px; padding: 4px 12px; border-radius: 99px; background: #fff; border: 2px solid #f6c453; font-weight: 800; color: var(--ink); white-space: nowrap; }
+.prep-money small { font-size: 0.7rem; color: #a07a2c; font-weight: 700; }
+.prep-money b { color: var(--orange-d); font-size: 1rem; }
+/* Từ lóng trong đánh giá: gạch chân chấm, giữ/rê để xem pinyin + nghĩa */
+.slang { text-decoration: underline dotted #e0531c; text-underline-offset: 3px; color: #c2410c; cursor: help; }

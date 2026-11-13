@@ -188,13 +188,16 @@
           <div class="customer-tag" id="customer-tag">
             <span class="zh" id="customer-name-chn">小雨</span>
             <span id="customer-name-vi">Bé Mưa</span>
-            <div class="patience" id="counter-patience"><div class="patience-fill"></div><span class="patience-mood">😊</span></div>
+            <div class="patience" id="counter-patience">
+              <div class="patience-fill"></div><span class="patience-mood">😊</span>
+            </div>
           </div>
 
           <div class="speech-bubble" id="speech-bubble">
             <div class="speech-head">
               <span class="speech-tag">🗣️ Khách gọi món</span>
-              <button type="button" class="speech-audio" id="btn-replay-order-audio" title="Nghe lại"><i class="fa-solid fa-volume-high"></i></button>
+              <button type="button" class="speech-audio" id="btn-replay-order-audio" title="Nghe lại"><i
+                  class="fa-solid fa-volume-high"></i></button>
             </div>
             <div class="speech-chn zh" id="order-chn-text">老板，我要中杯珍珠奶茶！</div>
             <div class="speech-pin" id="order-pin-text"></div>
@@ -235,7 +238,8 @@
 
         <div class="g-station-footer">
           <div class="g-hint" id="order-footer-hint">💡 Bấm <b>Nhận đơn</b> khi khách đến quầy.</div>
-          <button type="button" class="g-btn-primary btn-take-order-footer" id="btn-take-order-footer" style="display:none;">
+          <button type="button" class="g-btn-primary btn-take-order-footer" id="btn-take-order-footer"
+            style="display:none;">
             <i class="fa-solid fa-receipt"></i> <span class="zh">接单</span> Nhận đơn
           </button>
           <button type="button" class="g-btn-next" id="btn-goto-make-from-order" style="display:none;">
@@ -277,9 +281,12 @@
           <!-- Các bước pha chế -->
           <div class="make-steps">
             <div class="step-tabs" id="step-tabs">
-              <button type="button" class="step-tab active" data-step="1"><b>1</b><span><span class="zh">杯 · 茶</span> Ly &amp; trà</span></button>
-              <button type="button" class="step-tab" data-step="2"><b>2</b><span><span class="zh">糖 · 冰</span> Đường &amp; đá</span></button>
-              <button type="button" class="step-tab" data-step="3"><b>3</b><span><span class="zh">配料 · 封口</span> Topping &amp; nắp</span></button>
+              <button type="button" class="step-tab active" data-step="1"><b>1</b><span><span class="zh">杯 · 茶</span> Ly
+                  &amp; trà</span></button>
+              <button type="button" class="step-tab" data-step="2"><b>2</b><span><span class="zh">糖 · 冰</span> Đường
+                  &amp; đá</span></button>
+              <button type="button" class="step-tab" data-step="3"><b>3</b><span><span class="zh">配料 · 封口</span> Topping
+                  &amp; nắp</span></button>
             </div>
 
             <div class="step-panel active" id="step-1">
@@ -297,19 +304,24 @@
             </div>
 
             <div class="step-panel" id="step-3">
-              <div class="sp-title"><span class="zh">加料</span> Topping <small>(đơn không có topping thì bỏ qua)</small></div>
+              <div class="sp-title"><span class="zh">加料</span> Topping <small>(đơn không có topping thì bỏ qua)</small>
+              </div>
               <div class="topping-grid" id="topping-grid"></div>
               <div class="lid-row">
-                <button type="button" class="g-btn-chip" id="btn-undo-topping"><i class="fa-solid fa-rotate-left"></i> Bớt topping</button>
-                <button type="button" class="g-btn-primary lid-btn" id="btn-seal-lid"><i class="fa-solid fa-circle-check"></i> <span class="zh">封口</span> Đóng nắp</button>
+                <button type="button" class="g-btn-chip" id="btn-undo-topping"><i class="fa-solid fa-rotate-left"></i>
+                  Bớt topping</button>
+                <button type="button" class="g-btn-primary lid-btn" id="btn-seal-lid"><i
+                    class="fa-solid fa-circle-check"></i> <span class="zh">封口</span> Đóng nắp</button>
               </div>
             </div>
           </div>
         </div>
 
         <div class="g-station-footer">
-          <button type="button" class="g-btn-ghost danger small" id="btn-trash-cup"><i class="fa-solid fa-trash"></i> <span class="zh">倒掉</span> Đổ đi</button>
-          <div class="g-hint" id="make-hint">💡 Làm theo 3 bước: chọn ly &amp; rót trà → đường &amp; đá → topping &amp; đóng nắp.</div>
+          <button type="button" class="g-btn-ghost danger small" id="btn-trash-cup"><i class="fa-solid fa-trash"></i>
+            <span class="zh">倒掉</span> Đổ đi</button>
+          <div class="g-hint" id="make-hint">💡 Làm theo 3 bước: chọn ly &amp; rót trà → đường &amp; đá → topping &amp;
+            đóng nắp.</div>
           <button type="button" class="g-btn-ghost danger small" id="btn-cancel-order" style="display:none;"
             title="Món khách gọi đã hết và không đủ tiền nấu thêm"><span class="zh">抱歉</span> Xin lỗi, hết món</button>
           <button type="button" class="g-btn-next" id="btn-goto-pay" disabled>
@@ -323,14 +335,17 @@
         <div class="change-room">
           <div class="cash-left">
             <div class="paid-card">
-              <div class="paid-row"><span><span class="zh">应付</span> Tổng tiền</span><strong id="change-due-amount">0.00 ¥</strong></div>
-              <div class="paid-row"><span><span class="zh">顾客付</span> Khách đưa</span><strong class="paid" id="change-paid-amount">0.00 ¥</strong></div>
+              <div class="paid-row"><span><span class="zh">应付</span> Tổng tiền</span><strong id="change-due-amount">0.00
+                  ¥</strong></div>
+              <div class="paid-row"><span><span class="zh">顾客付</span> Khách đưa</span><strong class="paid"
+                  id="change-paid-amount">0.00 ¥</strong></div>
               <div class="paid-row need">
                 <span><span class="zh">找零</span> Cần thối</span>
                 <strong id="change-needed-amount">? ¥</strong>
               </div>
               <div class="bill-lines" id="bill-lines"></div>
-              <button type="button" class="g-btn-chip" id="btn-change-hint"><i class="fa-solid fa-lightbulb"></i> Gợi ý (−20 điểm)</button>
+              <button type="button" class="g-btn-chip" id="btn-change-hint"><i class="fa-solid fa-lightbulb"></i> Gợi ý
+                (−20 điểm)</button>
             </div>
             <div class="paid-bill-wrap">
               <span class="paid-label">Tiền khách đặt trên quầy</span>
@@ -339,7 +354,8 @@
           </div>
 
           <div class="cash-drawer">
-            <div class="drawer-head"><i class="fa-solid fa-cash-register"></i> <span class="zh">钱箱</span> Ngăn kéo tiền · chạm để lấy</div>
+            <div class="drawer-head"><i class="fa-solid fa-cash-register"></i> <span class="zh">钱箱</span> Ngăn kéo tiền
+              · chạm để lấy</div>
             <div class="drawer-grid">
               <button type="button" class="rmb note n20" data-val="20"><b>20</b><span class="zh">元</span></button>
               <button type="button" class="rmb note n10" data-val="10"><b>10</b><span class="zh">元</span></button>
@@ -353,7 +369,8 @@
           <div class="change-tray">
             <div class="tray-head">
               <span><span class="zh">找零盘</span> Khay tiền thối</span>
-              <button type="button" class="g-btn-chip" id="btn-reset-tray-action"><i class="fa-solid fa-rotate-left"></i> Xếp lại</button>
+              <button type="button" class="g-btn-chip" id="btn-reset-tray-action"><i
+                  class="fa-solid fa-rotate-left"></i> Xếp lại</button>
             </div>
             <div class="tray-tokens" id="tray-dropped-tokens"></div>
             <div class="tray-sum" id="tray-total-picked">Đã lấy: 0.00 ¥</div>
@@ -364,7 +381,8 @@
         </div>
 
         <div class="g-station-footer">
-          <div class="g-hint" id="change-hint-text">💡 Tự tính: <b>Khách đưa − Tổng tiền = Tiền thối</b>. Thối sai sẽ bị trừ điểm.</div>
+          <div class="g-hint" id="change-hint-text">💡 Tự tính: <b>Khách đưa − Tổng tiền = Tiền thối</b>. Thối sai sẽ bị
+            trừ điểm.</div>
         </div>
       </section>
     </main>
@@ -478,6 +496,7 @@
       <div class="g-card prep-card">
         <div class="g-card-head">
           <h3>🔥 <span class="zh">原料准备</span> · Nấu nguyên liệu</h3>
+          <span class="prep-money" title="Tiền vốn hiện có">🪙 <small>Vốn</small> <b id="prep-money-val">0.00 ¥</b></span>
           <button type="button" class="g-close" data-close="modal-prep"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="mission-prep-section">
@@ -504,7 +523,8 @@
         <div class="prep-foot">
           <button type="button" class="g-btn-chip" id="btn-mission-restock"><i class="fa-solid fa-basket-shopping"></i>
             <span class="zh">进货</span> Muốn thêm món mới?</button>
-          <button type="button" class="g-btn-primary big" data-close="modal-prep"><i class="fa-solid fa-check"></i> Xong</button>
+          <button type="button" class="g-btn-primary big" data-close="modal-prep"><i class="fa-solid fa-check"></i>
+            Xong</button>
         </div>
       </div>
     </div>
@@ -628,7 +648,8 @@
           <div class="gstep"><i>2</i><span>🛎️</span>
             <div><b>点单台 · Đón khách</b>
               <p>Nghe khách gọi món tiếng Trung (cỡ ly, loại trà, topping, độ ngọt, lượng đá) rồi bấm <b>Nhận đơn</b>.
-                Để khách chờ lâu sẽ bỏ về. <b>Bấm vào từng khách trên hàng chờ</b> để chọn người muốn phục vụ trước — nhận đơn nhiều khách rồi pha xen kẽ cũng được (📝 = đã chốt đơn, 🧋 = đã đóng nắp chờ tính tiền).</p>
+                Để khách chờ lâu sẽ bỏ về. <b>Bấm vào từng khách trên hàng chờ</b> để chọn người muốn phục vụ trước —
+                nhận đơn nhiều khách rồi pha xen kẽ cũng được (📝 = đã chốt đơn, 🧋 = đã đóng nắp chờ tính tiền).</p>
             </div>
           </div>
           <div class="gstep"><i>3</i><span>🧋</span>

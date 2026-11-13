@@ -84,68 +84,153 @@ class GroceryAudio {
 // 2. DỮ LIỆU: KHU KỆ · HÀNG HÓA · KHÁCH · TỪ VỰNG
 // ============================================================================
 // Khu kệ (giống tiệm tạp hóa thật). unlockCost 0 = có sẵn từ đầu.
+// ==== SINH TỰ ĐỘNG từ "Tạp hóa.xlsx" (scripts/gen_grocery_catalog.cjs) — sửa file Excel rồi chạy lại, đừng sửa tay khối này ====
 const GROCERY_ZONES = [
+  { id: 'food', chn: '食品调料', pin: 'shípǐn tiáoliào', vi: 'Đồ ăn & gia vị', short: 'Đồ ăn', icon: '🍜', unlockCost: 0 },
   { id: 'drinks', chn: '饮料', pin: 'yǐnliào', vi: 'Đồ uống', short: 'Đồ uống', icon: '🧃', unlockCost: 0 },
-  { id: 'candy', chn: '糖果饼干', pin: 'tángguǒ bǐnggān', vi: 'Bánh kẹo', short: 'Bánh kẹo', icon: '🍬', unlockCost: 0 },
-  { id: 'snacks', chn: '零食', pin: 'língshí', vi: 'Đồ ăn vặt', short: 'Ăn vặt', icon: '🍿', unlockCost: 80 },
-  { id: 'instant', chn: '方便食品', pin: 'fāngbiàn shípǐn', vi: 'Đồ ăn liền', short: 'Ăn liền', icon: '🍜', unlockCost: 150 },
-  { id: 'cold', chn: '冷饮', pin: 'lěngyǐn', vi: 'Kem & đồ lạnh', short: 'Kem, đồ lạnh', icon: '🍦', unlockCost: 220 },
-  { id: 'daily', chn: '日用品', pin: 'rìyòngpǐn', vi: 'Đồ dùng hằng ngày', short: 'Đồ dùng', icon: '🧻', unlockCost: 300 }
+  { id: 'dairy', chn: '冷藏食品', pin: 'lěngcáng shípǐn', vi: 'Sữa & thực phẩm lạnh', short: 'Đồ lạnh', icon: '🧊', unlockCost: 150 },
+  { id: 'household', chn: '日用清洁', pin: 'rìyòng qīngjié', vi: 'Đồ vệ sinh & gia dụng', short: 'Gia dụng', icon: '🧺', unlockCost: 300 },
+  { id: 'personal', chn: '个人护理', pin: 'gèrén hùlǐ', vi: 'Chăm sóc cá nhân', short: 'Cá nhân', icon: '🧴', unlockCost: 400 },
+  { id: 'stationery', chn: '文具', pin: 'wénjù', vi: 'Văn phòng phẩm & đồ dùng', short: 'Văn phòng phẩm', icon: '✏️', unlockCost: 200 }
 ];
 
-// Hàng hóa. unlockCost 0 = bán ngay khi khu được mở; còn lại mở ở 批发市场 bằng tiền.
+// Hàng hóa (đúng tên / pinyin / nghĩa / lượng từ / giá trong file). unlockCost 0 = bán ngay khi khu được mở; còn lại mở ở 批发市场.
 const I = (zone, id, nameChn, pinyin, nameVi, quantifier, qPin, quantifierVi, cost, price, maxStock, emoji, unlockCost) =>
   ({ zone, id, nameChn, pinyin, nameVi, quantifier, qPin, quantifierVi, cost, price, maxStock, emoji, unlockCost });
 
 const GROCERY_ITEMS = [
+  // 食品调料 · Đồ ăn & gia vị
+  I('food', 'tp001', '大米', 'dàmǐ', 'gạo', '袋', 'dài', 'túi', 15, 25, 8, '🌾', 75),
+  I('food', 'tp002', '方便面', 'fāngbiànmiàn', 'mì ăn liền / mì gói', '包', 'bāo', 'gói', 2, 3, 12, '🍜', 0),
+  I('food', 'tp003', '面包', 'miànbāo', 'bánh mì', '个', 'gè', 'ổ/chiếc', 3, 5, 12, '🍞', 0),
+  I('food', 'tp004', '鸡蛋', 'jīdàn', 'trứng gà', '盒', 'hé', 'hộp', 7, 12, 10, '🥚', 40),
+  I('food', 'tp005', '香肠', 'xiāngcháng', 'xúc xích', '根', 'gēn', 'cây', 2.5, 4, 12, '🌭', 0),
+  I('food', 'tp006', '火腿', 'huǒtuǐ', 'giăm bông', '包', 'bāo', 'gói', 9, 15, 8, '🥓', 45),
+  I('food', 'tp007', '罐头鱼', 'guàntóuyú', 'cá hộp', '罐', 'guàn', 'hộp', 6, 10, 10, '🐟', 30),
+  I('food', 'tp008', '饼干', 'bǐnggān', 'bánh quy', '包', 'bāo', 'gói', 5, 8, 10, '🍪', 25),
+  I('food', 'tp009', '薯片', 'shǔpiàn', 'khoai tây chiên lát / snack khoai tây', '包', 'bāo', 'gói', 6, 10, 10, '🥔', 30),
+  I('food', 'tp010', '糖果', 'tángguǒ', 'kẹo', '包', 'bāo', 'gói', 4, 7, 10, '🍭', 25),
+  I('food', 'tp011', '巧克力', 'qiǎokèlì', 'sô-cô-la', '块', 'kuài', 'thanh/miếng', 7, 12, 10, '🍫', 40),
+  I('food', 'tp012', '花生', 'huāshēng', 'đậu phộng', '包', 'bāo', 'gói', 5, 8, 10, '🥜', 25),
+  I('food', 'tp013', '盐', 'yán', 'muối', '包', 'bāo', 'gói', 3, 5, 12, '🧂', 15),
+  I('food', 'tp014', '糖', 'táng', 'đường', '包', 'bāo', 'túi', 4, 7, 10, '🧊', 25),
+  I('food', 'tp015', '鱼露', 'yúlù', 'nước mắm', '瓶', 'píng', 'chai', 11, 18, 8, '🫗', 55),
+  I('food', 'tp016', '酱油', 'jiàngyóu', 'nước tương', '瓶', 'píng', 'chai', 9, 15, 8, '🍶', 45),
+  I('food', 'tp017', '食用油', 'shíyòngyóu', 'dầu ăn', '瓶', 'píng', 'chai', 21, 35, 6, '🫒', 105),
   // 饮料 · Đồ uống
-  I('drinks', 'water', '矿泉水', 'kuàngquánshuǐ', 'nước suối', '瓶', 'píng', 'chai', 0.8, 1.5, 12, '💧', 0),
-  I('drinks', 'iced_tea', '冰红茶', 'bīnghóngchá', 'trà đá chanh', '瓶', 'píng', 'chai', 2.0, 3.5, 10, '🧃', 0),
-  I('drinks', 'cola', '可乐', 'kělè', 'nước ngọt cola', '瓶', 'píng', 'chai', 2.0, 3.5, 10, '🥤', 15),
-  I('drinks', 'green_tea', '绿茶', 'lǜchá', 'trà xanh', '瓶', 'píng', 'chai', 2.0, 3.5, 10, '🍵', 20),
-  I('drinks', 'orange_juice', '橙汁', 'chéngzhī', 'nước cam', '瓶', 'píng', 'chai', 2.5, 4.5, 8, '🍊', 30),
-  I('drinks', 'milk', '牛奶', 'niúnǎi', 'sữa tươi', '盒', 'hé', 'hộp', 2.5, 4.0, 8, '🥛', 35),
-  I('drinks', 'yogurt', '酸奶', 'suānnǎi', 'sữa chua uống', '瓶', 'píng', 'chai', 3.0, 5.0, 8, '🍶', 45),
-  I('drinks', 'coffee', '咖啡', 'kāfēi', 'cà phê lon', '罐', 'guàn', 'lon', 4.0, 7.0, 6, '☕', 70),
-  // 糖果饼干 · Bánh kẹo
-  I('candy', 'rabbit_candy', '大白兔奶糖', 'dàbáitù nǎitáng', 'kẹo sữa Thỏ Trắng', '包', 'bāo', 'gói', 1.5, 3.0, 10, '🍬', 0),
-  I('candy', 'lollipop', '棒棒糖', 'bàngbàngtáng', 'kẹo mút', '根', 'gēn', 'cây', 0.5, 1.5, 15, '🍭', 0),
-  I('candy', 'gum', '口香糖', 'kǒuxiāngtáng', 'kẹo cao su', '盒', 'hé', 'hộp', 1.0, 2.0, 12, '🫧', 15),
-  I('candy', 'biscuit', '饼干', 'bǐnggān', 'bánh quy', '包', 'bāo', 'gói', 2.0, 3.5, 10, '🍪', 20),
-  I('candy', 'chocolate', '巧克力', 'qiǎokèlì', 'sô-cô-la', '块', 'kuài', 'thanh', 3.0, 5.0, 8, '🍫', 30),
-  I('candy', 'jelly', '果冻', 'guǒdòng', 'thạch trái cây', '袋', 'dài', 'túi', 3.0, 5.0, 8, '🍮', 40),
-  I('candy', 'cake', '蛋糕', 'dàngāo', 'bánh ngọt', '块', 'kuài', 'miếng', 4.0, 7.0, 6, '🍰', 55),
-  I('candy', 'mooncake', '月饼', 'yuèbing', 'bánh trung thu', '个', 'gè', 'cái', 5.0, 9.0, 6, '🥮', 80),
-  // 零食 · Đồ ăn vặt
-  I('snacks', 'latiao', '辣条', 'làtiáo', 'que cay', '包', 'bāo', 'gói', 1.0, 2.0, 12, '🌶️', 0),
-  I('snacks', 'shrimp_snack', '虾条', 'xiātiáo', 'snack tôm', '包', 'bāo', 'gói', 1.0, 2.0, 12, '🦐', 0),
-  I('snacks', 'seaweed', '海苔', 'hǎitái', 'rong biển', '包', 'bāo', 'gói', 2.0, 3.5, 10, '🍙', 25),
-  I('snacks', 'peanuts', '花生', 'huāshēng', 'đậu phộng', '包', 'bāo', 'gói', 2.5, 4.5, 8, '🥜', 30),
-  I('snacks', 'seeds', '瓜子', 'guāzǐ', 'hạt hướng dương', '包', 'bāo', 'gói', 3.5, 6.0, 8, '🌻', 35),
-  I('snacks', 'chips', '薯片', 'shǔpiàn', 'khoai tây chiên', '包', 'bāo', 'gói', 4.5, 7.0, 8, '🥔', 40),
-  I('snacks', 'popcorn', '爆米花', 'bàomǐhuā', 'bỏng ngô', '桶', 'tǒng', 'hộp', 3.0, 5.5, 8, '🍿', 45),
-  I('snacks', 'beef_jerky', '牛肉干', 'niúròugān', 'khô bò', '包', 'bāo', 'gói', 6.0, 10.0, 6, '🥩', 90),
-  // 方便食品 · Đồ ăn liền
-  I('instant', 'instant_noodles', '方便面', 'fāngbiànmiàn', 'mì ăn liền', '桶', 'tǒng', 'hộp', 3.0, 5.0, 8, '🍜', 0),
-  I('instant', 'sausage', '火腿肠', 'huǒtuǐcháng', 'xúc xích', '根', 'gēn', 'cây', 1.0, 2.0, 12, '🌭', 0),
-  I('instant', 'bread', '面包', 'miànbāo', 'bánh mì', '个', 'gè', 'cái', 2.5, 4.0, 8, '🍞', 30),
-  I('instant', 'congee', '八宝粥', 'bābǎozhōu', 'cháo bát bảo', '罐', 'guàn', 'lon', 3.0, 5.0, 8, '🥣', 40),
-  I('instant', 'sour_noodles', '酸辣粉', 'suānlàfěn', 'miến chua cay', '碗', 'wǎn', 'bát', 5.0, 8.5, 6, '🍲', 60),
-  I('instant', 'dumplings', '饺子', 'jiǎozi', 'sủi cảo đông lạnh', '袋', 'dài', 'túi', 6.0, 10.0, 6, '🥟', 80),
-  // 冷饮 · Kem & đồ lạnh
-  I('cold', 'ice_pop', '冰棍', 'bīnggùn', 'kem que đá', '根', 'gēn', 'cây', 0.5, 1.5, 15, '🍧', 0),
-  I('cold', 'ice_cream', '冰淇淋', 'bīngqílín', 'kem ốc quế', '个', 'gè', 'cái', 2.5, 5.0, 8, '🍦', 0),
-  I('cold', 'ice_bar', '雪糕', 'xuěgāo', 'kem cây', '根', 'gēn', 'cây', 1.5, 3.0, 10, '🍨', 30),
-  I('cold', 'watermelon', '西瓜', 'xīguā', 'dưa hấu cắt miếng', '块', 'kuài', 'miếng', 2.0, 4.0, 8, '🍉', 45),
-  // 日用品 · Đồ dùng hằng ngày
-  I('daily', 'tissue', '纸巾', 'zhǐjīn', 'khăn giấy', '包', 'bāo', 'gói', 1.5, 3.0, 10, '🧻', 0),
-  I('daily', 'battery', '电池', 'diànchí', 'pin tiểu', '节', 'jié', 'viên', 1.5, 3.0, 10, '🔋', 0),
-  I('daily', 'toothbrush', '牙刷', 'yáshuā', 'bàn chải đánh răng', '支', 'zhī', 'cái', 2.0, 4.0, 8, '🪥', 40),
-  I('daily', 'soap', '肥皂', 'féizào', 'xà phòng', '块', 'kuài', 'bánh', 2.5, 4.5, 8, '🧼', 45),
-  I('daily', 'toothpaste', '牙膏', 'yágāo', 'kem đánh răng', '支', 'zhī', 'tuýp', 4.0, 7.0, 6, '🦷', 60),
-  I('daily', 'umbrella', '雨伞', 'yǔsǎn', 'ô che mưa', '把', 'bǎ', 'cái', 12.0, 20.0, 4, '☂️', 120)
+  I('drinks', 'du001', '矿泉水', 'kuàngquánshuǐ', 'nước suối', '瓶', 'píng', 'chai', 3, 5, 12, '💧', 0),
+  I('drinks', 'du002', '纯净水', 'chúnjìngshuǐ', 'nước tinh khiết', '瓶', 'píng', 'chai', 2.5, 4, 12, '🚰', 0),
+  I('drinks', 'du003', '可乐', 'kělè', 'nước cola', '瓶', 'píng', 'chai', 6, 10, 10, '🥤', 30),
+  I('drinks', 'du004', '汽水', 'qìshuǐ', 'nước ngọt có ga', '罐', 'guàn', 'lon', 5.5, 9, 10, '🥫', 30),
+  I('drinks', 'du005', '橙汁', 'chéngzhī', 'nước cam', '盒', 'hé', 'hộp', 7, 12, 10, '🍊', 40),
+  I('drinks', 'du006', '牛奶', 'niúnǎi', 'sữa tươi', '盒', 'hé', 'hộp', 5.5, 9, 10, '🥛', 30),
+  I('drinks', 'du007', '豆浆', 'dòujiāng', 'sữa đậu nành', '瓶', 'píng', 'chai', 5, 8, 10, '🫘', 25),
+  I('drinks', 'du008', '咖啡', 'kāfēi', 'cà phê', '包', 'bāo', 'gói', 2, 3, 12, '☕', 0),
+  I('drinks', 'du009', '茶', 'chá', 'trà', '盒', 'hé', 'hộp', 12, 20, 8, '🍵', 60),
+  // 冷藏食品 · Sữa & thực phẩm lạnh
+  I('dairy', 'sl001', '酸奶', 'suānnǎi', 'sữa chua', '杯', 'bēi', 'hũ', 5, 8, 10, '🥣', 0),
+  I('dairy', 'sl002', '奶酪', 'nǎilào', 'phô mai', '片', 'piàn', 'lát', 3, 5, 12, '🧀', 0),
+  I('dairy', 'sl003', '黄油', 'huángyóu', 'bơ', '盒', 'hé', 'hộp', 15, 25, 8, '🧈', 75),
+  I('dairy', 'sl004', '冰淇淋', 'bīngqílín', 'kem', '支', 'zhī', 'cây', 6, 10, 10, '🍦', 0),
+  // 日用清洁 · Đồ vệ sinh & gia dụng
+  I('household', 'gd001', '洗衣粉', 'xǐyīfěn', 'bột giặt', '袋', 'dài', 'gói', 15, 25, 8, '🧺', 75),
+  I('household', 'gd002', '洗衣液', 'xǐyīyè', 'nước giặt', '瓶', 'píng', 'chai', 27, 45, 6, '👕', 135),
+  I('household', 'gd003', '洗洁精', 'xǐjiéjīng', 'nước rửa chén', '瓶', 'píng', 'chai', 12, 20, 8, '🍽️', 60),
+  I('household', 'gd004', '纸巾', 'zhǐjīn', 'khăn giấy', '包', 'bāo', 'gói', 3, 5, 12, '🤧', 0),
+  I('household', 'gd005', '卫生纸', 'wèishēngzhǐ', 'giấy vệ sinh', '提', 'tí', 'lốc', 18, 30, 6, '🧻', 90),
+  I('household', 'gd006', '垃圾袋', 'lājīdài', 'túi đựng rác', '卷', 'juǎn', 'cuộn', 7, 12, 10, '🗑️', 40),
+  I('household', 'gd007', '电池', 'diànchí', 'pin', '节', 'jié', 'viên', 6, 10, 10, '🔋', 0),
+  I('household', 'gd008', '打火机', 'dǎhuǒjī', 'bật lửa', '个', 'gè', 'cái', 3, 5, 12, '🔥', 0),
+  // 个人护理 · Chăm sóc cá nhân
+  I('personal', 'cn001', '牙膏', 'yágāo', 'kem đánh răng', '支', 'zhī', 'tuýp', 12, 20, 8, '🦷', 60),
+  I('personal', 'cn002', '牙刷', 'yáshuā', 'bàn chải đánh răng', '把', 'bǎ', 'cái', 7, 12, 10, '🪥', 0),
+  I('personal', 'cn003', '洗发水', 'xǐfàshuǐ', 'dầu gội', '瓶', 'píng', 'chai', 27, 45, 6, '🧴', 135),
+  I('personal', 'cn004', '沐浴露', 'mùyùlù', 'sữa tắm', '瓶', 'píng', 'chai', 24, 40, 6, '🛁', 120),
+  I('personal', 'cn005', '香皂', 'xiāngzào', 'xà phòng cục', '块', 'kuài', 'cục', 6, 10, 10, '🧼', 0),
+  I('personal', 'cn006', '洗手液', 'xǐshǒuyè', 'nước rửa tay', '瓶', 'píng', 'chai', 15, 25, 8, '🫧', 75),
+  I('personal', 'cn007', '梳子', 'shūzi', 'lược', '把', 'bǎ', 'cái', 6, 10, 10, '🪮', 0),
+  I('personal', 'cn008', '口罩', 'kǒuzhào', 'khẩu trang', '包', 'bāo', 'gói', 9, 15, 8, '😷', 45),
+  // 文具 · Văn phòng phẩm & đồ dùng
+  I('stationery', 'vp001', '笔', 'bǐ', 'bút', '支', 'zhī', 'cây', 3, 5, 12, '🖊️', 15),
+  I('stationery', 'vp002', '铅笔', 'qiānbǐ', 'bút chì', '支', 'zhī', 'cây', 2.5, 4, 12, '✏️', 0),
+  I('stationery', 'vp003', '橡皮', 'xiàngpí', 'gôm / tẩy', '块', 'kuài', 'cục', 2, 3, 12, '🧽', 0),
+  I('stationery', 'vp004', '笔记本', 'bǐjìběn', 'tập / sổ ghi chép', '本', 'běn', 'quyển', 7, 12, 10, '📓', 40),
+  I('stationery', 'vp005', '作业本', 'zuòyèběn', 'vở bài tập', '本', 'běn', 'quyển', 6, 10, 10, '📒', 30),
+  I('stationery', 'vp006', '胶带', 'jiāodài', 'băng keo', '卷', 'juǎn', 'cuộn', 5, 8, 10, '🩹', 25),
+  I('stationery', 'vp007', '剪刀', 'jiǎndāo', 'kéo', '把', 'bǎ', 'cái', 9, 15, 8, '✂️', 45),
+  I('stationery', 'vp008', '塑料袋', 'sùliàodài', 'túi ni-lông', '个', 'gè', 'cái', 0.5, 1, 12, '🛍️', 0)
 ];
 
+// Lượng từ (sheet "Lượng từ")
+const QUANTIFIER_WORDS = [
+  { chn: '个', pin: 'gè', vi: 'Lượng từ phổ biến cho đồ vật, người; dùng khi chưa có lượng từ chuyên biệt. VD: 一个打火机 (một cái bật lửa)' },
+  { chn: '包', pin: 'bāo', vi: 'Gói, bao nhỏ. VD: 一包方便面 (một gói mì)' },
+  { chn: '袋', pin: 'dài', vi: 'Túi, bao. VD: 一袋大米 (một túi gạo)' },
+  { chn: '瓶', pin: 'píng', vi: 'Chai. VD: 一瓶矿泉水 (một chai nước suối)' },
+  { chn: '罐', pin: 'guàn', vi: 'Lon hoặc hộp kim loại. VD: 一罐可乐 (một lon cola)' },
+  { chn: '盒', pin: 'hé', vi: 'Hộp. VD: 一盒牛奶 (một hộp sữa)' },
+  { chn: '杯', pin: 'bēi', vi: 'Cốc, ly hoặc hũ nhỏ dạng cốc. VD: 一杯酸奶 (một hũ sữa chua)' },
+  { chn: '支', pin: 'zhī', vi: 'Vật dài, nhỏ như bút, kem đánh răng dạng tuýp, cây kem. VD: 一支笔 (một cây bút)' },
+  { chn: '根', pin: 'gēn', vi: 'Vật dài, dạng que/cây. VD: 一根香肠 (một cây xúc xích)' },
+  { chn: '条', pin: 'tiáo', vi: 'Vật dài, dạng dải. VD: 一条毛巾 (một chiếc khăn)' },
+  { chn: '张', pin: 'zhāng', vi: 'Vật phẳng, mỏng. VD: 一张纸 (một tờ giấy)' },
+  { chn: '片', pin: 'piàn', vi: 'Lát, miếng mỏng. VD: 一片奶酪 (một lát phô mai)' },
+  { chn: '块', pin: 'kuài', vi: 'Miếng/cục; cũng dùng để nói tiền tệ trong khẩu ngữ. VD: 一块香皂 (một cục xà phòng)' },
+  { chn: '颗', pin: 'kē', vi: 'Viên nhỏ, tròn. VD: 一颗糖 (một viên kẹo)' },
+  { chn: '把', pin: 'bǎ', vi: 'Đồ vật có tay cầm hoặc nắm được. VD: 一把牙刷 (một cái bàn chải)' },
+  { chn: '卷', pin: 'juǎn', vi: 'Đồ vật cuộn thành cuộn. VD: 一卷胶带 (một cuộn băng keo)' },
+  { chn: '本', pin: 'běn', vi: 'Sách, vở, tập. VD: 一本笔记本 (một quyển tập)' },
+  { chn: '提', pin: 'tí', vi: 'Một lốc/bó hàng được xách hoặc đóng thành cụm. VD: 一提卫生纸 (một lốc giấy vệ sinh)' },
+  { chn: '节', pin: 'jié', vi: 'Viên pin. VD: 两节电池 (hai viên pin)' },
+  { chn: '斤', pin: 'jīn', vi: 'Đơn vị cân truyền thống Trung Quốc, bằng 500 gram. VD: 一斤大米 (nửa ký gạo)' }
+];
+
+// Mẫu câu (sheet "Mẫu câu") — who: 顾客 khách / 店员 nhân viên
+const SHOP_SENTENCES = [
+  { chn: '您好，欢迎光临。', pin: 'Nín hǎo, huānyíng guānglín.', vi: 'Xin chào, hoan nghênh quý khách.', topic: 'Chào hỏi', who: '店员' },
+  { chn: '你好，我想买东西。', pin: 'Nǐ hǎo, wǒ xiǎng mǎi dōngxi.', vi: 'Xin chào, tôi muốn mua ít đồ.', topic: 'Chào hỏi', who: '顾客' },
+  { chn: '请问，……在哪里？', pin: 'Qǐngwèn, ... zài nǎlǐ?', vi: 'Xin hỏi, ... ở đâu?', topic: 'Tìm hàng', who: '顾客' },
+  { chn: '有……吗？', pin: 'Yǒu ... ma?', vi: 'Có ... không?', topic: 'Tìm hàng', who: '顾客' },
+  { chn: '这个多少钱？', pin: 'Zhège duōshao qián?', vi: 'Cái này bao nhiêu tiền?', topic: 'Hỏi giá', who: '顾客' },
+  { chn: '一瓶水多少钱？', pin: 'Yì píng shuǐ duōshao qián?', vi: 'Một chai nước bao nhiêu tiền?', topic: 'Hỏi giá', who: '顾客' },
+  { chn: '我要两包方便面。', pin: 'Wǒ yào liǎng bāo fāngbiànmiàn.', vi: 'Tôi lấy hai gói mì.', topic: 'Chọn hàng & số lượng', who: '顾客' },
+  { chn: '请给我一袋米。', pin: 'Qǐng gěi wǒ yí dài mǐ.', vi: 'Làm ơn lấy cho tôi một túi gạo.', topic: 'Chọn hàng & số lượng', who: '顾客' },
+  { chn: '这个有优惠吗？', pin: 'Zhège yǒu yōuhuì ma?', vi: 'Món này có giảm giá không?', topic: 'Khuyến mãi', who: '顾客' },
+  { chn: '有打折吗？', pin: 'Yǒu dǎzhé ma?', vi: 'Có giảm giá không?', topic: 'Khuyến mãi', who: '顾客' },
+  { chn: '这个多少钱一斤？', pin: 'Zhège duōshao qián yì jīn?', vi: 'Món này bao nhiêu tiền một cân?', topic: 'Hỏi giá', who: '顾客' },
+  { chn: '我要这个，不要那个。', pin: 'Wǒ yào zhège, bú yào nàge.', vi: 'Tôi lấy cái này, không lấy cái kia.', topic: 'Chọn hàng', who: '顾客' },
+  { chn: '可以便宜一点吗？', pin: 'Kěyǐ piányi yìdiǎn ma?', vi: 'Có thể rẻ hơn một chút không?', topic: 'Mặc cả', who: '顾客' },
+  { chn: '不好意思，这个卖完了。', pin: 'Bù hǎoyìsi, zhège mài wán le.', vi: 'Xin lỗi, món này bán hết rồi.', topic: 'Hết hàng', who: '店员' },
+  { chn: '还有别的牌子吗？', pin: 'Hái yǒu bié de páizi ma?', vi: 'Còn nhãn hiệu khác không?', topic: 'Chọn hàng', who: '顾客' },
+  { chn: '这个什么时候过期？', pin: 'Zhège shénme shíhou guòqī?', vi: 'Cái này khi nào hết hạn?', topic: 'Kiểm tra sản phẩm', who: '顾客' },
+  { chn: '请问，可以用手机付款吗？', pin: 'Qǐngwèn, kěyǐ yòng shǒujī fùkuǎn ma?', vi: 'Xin hỏi, có thể thanh toán bằng điện thoại không?', topic: 'Thanh toán', who: '顾客' },
+  { chn: '可以扫码付款。', pin: 'Kěyǐ sǎomǎ fùkuǎn.', vi: 'Có thể quét mã để thanh toán.', topic: 'Thanh toán', who: '店员' },
+  { chn: '我付现金。', pin: 'Wǒ fù xiànjīn.', vi: 'Tôi trả tiền mặt.', topic: 'Thanh toán', who: '顾客' },
+  { chn: '一共多少钱？', pin: 'Yígòng duōshao qián?', vi: 'Tổng cộng bao nhiêu tiền?', topic: 'Thanh toán', who: '顾客' },
+  { chn: '一共三十五块。', pin: 'Yígòng sānshíwǔ kuài.', vi: 'Tổng cộng 35 tệ.', topic: 'Thanh toán', who: '店员' },
+  { chn: '请给我一个袋子。', pin: 'Qǐng gěi wǒ yí ge dàizi.', vi: 'Làm ơn cho tôi một cái túi.', topic: 'Đóng gói', who: '顾客' },
+  { chn: '不用袋子，谢谢。', pin: 'Bú yòng dàizi, xièxie.', vi: 'Không cần túi, cảm ơn.', topic: 'Đóng gói', who: '顾客' },
+  { chn: '需要小票吗？', pin: 'Xūyào xiǎopiào ma?', vi: 'Bạn có cần hóa đơn/biên lai không?', topic: 'Thanh toán', who: '店员' },
+  { chn: '不用了，谢谢。', pin: 'Bú yòng le, xièxie.', vi: 'Không cần đâu, cảm ơn.', topic: 'Kết thúc', who: '顾客' },
+  { chn: '欢迎下次再来。', pin: 'Huānyíng xià cì zài lái.', vi: 'Hoan nghênh lần sau ghé lại.', topic: 'Kết thúc', who: '店员' }
+];
+// ==== HẾT KHỐI SINH TỰ ĐỘNG ====
+
+// Khách gọi hàng theo các mẫu câu trong file (one = chỉ dùng khi khách mua 1 món)
+const ORDER_TEMPLATES = [
+  { id: 'want', learn: ['我要两包方便面。'],
+    zh: (L) => `我要${L}。`, pin: (P) => `Wǒ yào ${P}.`, vi: (V) => `Tôi lấy ${V}.` },
+  { id: 'give', learn: ['请给我一袋米。'],
+    zh: (L) => `请给我${L}。`, pin: (P) => `Qǐng gěi wǒ ${P}.`, vi: (V) => `Làm ơn lấy cho tôi ${V}.` },
+  { id: 'greet', learn: ['你好，我想买东西。', '我要两包方便面。'],
+    zh: (L) => `你好，我想买东西。我要${L}。`, pin: (P) => `Nǐ hǎo, wǒ xiǎng mǎi dōngxi. Wǒ yào ${P}.`, vi: (V) => `Xin chào, tôi muốn mua ít đồ. Tôi lấy ${V}.` },
+  { id: 'have', one: true, learn: ['有……吗？', '我要两包方便面。'],
+    zh: (L, N) => `有${N}吗？我要${L}。`, pin: (P, NP) => `Yǒu ${NP} ma? Wǒ yào ${P}.`, vi: (V, NV) => `Có ${NV} không? Tôi lấy ${V}.` },
+  { id: 'where', one: true, learn: ['请问，……在哪里？', '我要两包方便面。'],
+    zh: (L, N) => `请问，${N}在哪里？我要${L}。`, pin: (P, NP) => `Qǐngwèn, ${NP} zài nǎlǐ? Wǒ yào ${P}.`, vi: (V, NV) => `Xin hỏi, ${NV} ở đâu? Tôi lấy ${V}.` }
+];
+
+const START_MONEY = 120;     // vốn đầu game (giá hàng theo file Excel)
 const SHELF_COLS = 4;
 const SHELF_ROWS = 2;
 const PORTRAIT_W = 480;       // bề rộng sân khấu khi cầm điện thoại dọc
@@ -165,15 +250,9 @@ const GROCERY_CUSTOMERS = [
 
 // Sổ từ vựng: mỗi khu 1 tab + lượng từ + mua bán
 const VOCAB_TABS = [
-  ...GROCERY_ZONES.map(z => ({ id: z.id, label: `${z.icon} ${z.vi}`, words: GROCERY_ITEMS.filter(i => i.zone === z.id).map(i => ({ chn: i.nameChn, pin: i.pinyin, vi: i.nameVi })) })),
-  {
-    id: 'quantifiers', label: '🔢 Lượng từ',
-    words: Object.values(GROCERY_ITEMS.reduce((m, i) => {
-      if (!m[i.quantifier]) m[i.quantifier] = { chn: i.quantifier, pin: i.qPin, vi: new Set() };
-      m[i.quantifier].vi.add(i.quantifierVi);
-      return m;
-    }, {})).map(q => ({ chn: q.chn, pin: q.pin, vi: [...q.vi].join(', ') }))
-  },
+  ...GROCERY_ZONES.map(z => ({ id: z.id, label: `${z.icon} ${z.short}`, words: GROCERY_ITEMS.filter(i => i.zone === z.id).map(i => ({ chn: i.nameChn, pin: i.pinyin, vi: i.nameVi })) })),
+  { id: 'quantifiers', label: '🔢 Lượng từ', words: QUANTIFIER_WORDS },
+  { id: 'sentences', label: '💬 Mẫu câu', words: SHOP_SENTENCES.map(x => ({ chn: x.chn, pin: x.pin, vi: `${x.vi} · ${x.topic} (${x.who === '店员' ? 'nhân viên' : 'khách'})` })) },
   {
     id: 'business', label: '🏪 Mua bán',
     words: [
@@ -213,9 +292,9 @@ const QUEUE_RULES = {
 };
 
 const MISSION_RULES = {
-  baseTarget: 30,          // doanh thu mục tiêu ngày 1
-  targetPerDay: 12,        // tăng mỗi ngày
-  maxTarget: 200,
+  baseTarget: 60,          // doanh thu mục tiêu ngày 1 (giá theo file Excel)
+  targetPerDay: 20,        // tăng mỗi ngày
+  maxTarget: 400,
   roundTo: 5,
   baseMaxLost: 2,
   minChangeAccuracy: 80,   // % khách được thối đúng ngay lần đầu
@@ -254,7 +333,7 @@ const IDLE_CHITCHATS = [
   { chn: '今天天气真好，生意一定会很火爆！', pin: 'Jīntiān tiānqì zhēn hǎo, shēngyì yídìng huì hěn huǒbào!', vi: 'Hôm nay trời đẹp ghê, buôn bán nhất định sẽ đắt hàng!' },
   { chn: '老板，等会儿赚了钱给我买条小鱼干喵~', pin: 'Lǎobǎn, děnghuǐr zhuàn le qián gěi wǒ mǎi tiáo xiǎoyúgān miāo~', vi: 'Ông chủ ơi, lát kiếm được tiền thưởng em con cá khô nha meo~' },
   { chn: '听说隔壁新开了一家奶茶店，好多人在排队！', pin: 'Tīngshuō gébì xīn kāi le yì jiā nǎichá diàn, hǎoduō rén zài páiduì!', vi: 'Nghe nói sát bên mới mở quán trà sữa, đông người xếp hàng lắm!' },
-  { chn: '最近辣条超级抢手，不知道还要不要进货？', pin: 'Zuìjìn làtiáo chāojí qiǎngshǒu, bù zhīdào hái yào bu yào jìnhuò?', vi: 'Dạo này que cay đắt hàng dã man, không biết có nên nhập thêm không nhỉ?' },
+  { chn: '最近方便面超级抢手，不知道还要不要进货？', pin: 'Zuìjìn fāngbiànmiàn chāojí qiǎngshǒu, bù zhīdào hái yào bu yào jìnhuò?', vi: 'Dạo này mì gói đắt hàng dã man, không biết có nên nhập thêm không nhỉ?' },
   { chn: '打工人，打工魂，做生意要有耐心喵！', pin: 'Dǎgōngrén, dǎgōnghún, zuò shēngyì yào yǒu nàixīn miāo!', vi: 'Lao động hăng say, buôn bán là phải kiên nhẫn nha meo!' },
   { chn: '外面的天气好热，冰可乐一定很好卖。', pin: 'Wàimiàn de tiānqì hǎo rè, bīng kělè yídìng hěn hǎomài.', vi: 'Ngoài trời nóng ghê, món Coca ướp lạnh chắc chắn đắt hàng.' },
   { chn: '刚才那位客人真爽快，连零钱都没细看。', pin: 'Gāngcái nà wèi kèrén zhēn shuǎngkuai, lián língqián dōu méi xì kàn.', vi: 'Vị khách lúc nãy sảng khoái thật, chẳng thèm đếm lại tiền thối luôn.' },
@@ -268,7 +347,23 @@ const IDLE_CHITCHATS = [
 const STAGE_W = 1280;
 const STAGE_H = 720;
 const STATION_ORDER = ['view-order-station', 'view-shelves-station', 'view-scan-station', 'view-change-station'];
-const SAVE_VERSION = 2;
+const SAVE_VERSION = 3;
+// Bản lưu v2 (danh mục cũ 40 món) → v3: giữ ngày, quy đổi tiền theo giá mới, giữ món trùng tên đã mở
+const OLD_ZONE_MAP = { drinks: ['drinks'], candy: ['food'], snacks: ['food'], instant: ['food'], cold: ['dairy'], daily: ['household', 'personal'] };
+const OLD_ITEM_NAMES = { water: '矿泉水', cola: '可乐', orange_juice: '橙汁', milk: '牛奶', yogurt: '酸奶', coffee: '咖啡', biscuit: '饼干', chocolate: '巧克力', peanuts: '花生', chips: '薯片', instant_noodles: '方便面', bread: '面包', ice_cream: '冰淇淋', tissue: '纸巾', battery: '电池', toothbrush: '牙刷', toothpaste: '牙膏' };
+function migrateSaveV2(s) {
+  if (!s || s.v !== 2) return s;
+  const zones = new Set();
+  (Array.isArray(s.zones) ? s.zones : []).forEach(z => (OLD_ZONE_MAP[z] || []).forEach(n => zones.add(n)));
+  const items = {};
+  Object.entries(s.items && typeof s.items === 'object' ? s.items : {}).forEach(([oldId, rec]) => {
+    const name = OLD_ITEM_NAMES[oldId];
+    const it = name && GROCERY_ITEMS.find(x => x.nameChn === name);
+    if (it && Array.isArray(rec) && rec[0]) items[it.id] = [1, Math.min(it.maxStock, STARTER_STOCK)];
+  });
+  const money = Number(s.money);
+  return { ...s, v: 3, zones: [...zones], items, money: Math.max(START_MONEY, Math.round((Number.isFinite(money) ? money : 0) * 2.5 * 100) / 100), migratedFrom: 2 };
+}
 const ASSET = (f) => `./assets/${f}`;
 const cents = (v) => Math.round(Number(v) * 100);
 const fmt = (v) => (Math.round(Number(v) * 100) / 100).toFixed(2);
@@ -301,6 +396,8 @@ const GameCloud = {
       return t && t !== 'null' && t !== 'undefined' && t !== 'guest' ? t : '';
     } catch (e) { return ''; }
   },
+  // Trang chính coi là đã đăng nhập khi có token HOẶC có thông tin user (đăng nhập Google không phải lúc nào cũng có token)
+  signedIn() { return !!(this.token() || this.localUser()); },
   localUser() {
     try {
       const u = JSON.parse(localStorage.getItem('user') || localStorage.getItem('currentUser') || 'null');
@@ -313,6 +410,9 @@ const GameCloud = {
     const headers = { 'Content-Type': 'application/json' };
     const t = this.token();
     if (t) { headers.Authorization = `Bearer ${t}`; headers['x-session-token'] = t; }
+    // giống getAuthHeaders() của trang chính: đăng nhập không có token vẫn được nhận diện qua email đã lưu
+    const lu = this.localUser();
+    if (lu && lu.email) headers['x-user-email'] = String(lu.email).toLowerCase().trim();
     try {
       const res = await fetch(this.apiBase() + path, { credentials: 'include', cache: 'no-store', ...options, headers, signal: ctrl ? ctrl.signal : undefined });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -332,7 +432,8 @@ const LocalSave = {
   read(owner) {
     try {
       const s = JSON.parse(localStorage.getItem(this.key(owner)) || 'null');
-      return s && typeof s === 'object' && s.v === SAVE_VERSION ? s : null;
+      const m = s && typeof s === 'object' ? migrateSaveV2(s) : null; // bản lưu cũ (v2) → chuyển đổi, không bỏ
+      return m && m.v === SAVE_VERSION ? m : null;
     } catch (e) { return null; }
   },
   write(owner, s) { try { localStorage.setItem(this.key(owner), JSON.stringify(s)); } catch (e) {} },
@@ -380,11 +481,12 @@ class GroceryGame {
     this.changeTray = [];
     this.restockQty = {};
     this.currentStation = 'view-order-station';
-    this.shelfZone = 'drinks';
-    this.marketZone = 'drinks';
+    this.shelfZone = GROCERY_ZONES[0].id;
+    this.marketZone = GROCERY_ZONES[0].id;
+    this.shelfPage = {};
 
     // Tài khoản: tạm coi chủ dữ liệu theo phiên đăng nhập trên máy, xác nhận lại với server sau
-    const lu = GameCloud.token() ? GameCloud.localUser() : null;
+    const lu = GameCloud.localUser();
     this.owner = lu ? String(lu.email).toLowerCase().trim() : 'guest';
     this.cloud = { checked: false, loggedIn: false, offline: false, name: '', picture: '', best: null, history: [] };
     this.rankTab = 'global';
@@ -406,7 +508,7 @@ class GroceryGame {
 
   // Tiến trình "dài hạn" của tiệm (được lưu)
   resetProgressState() {
-    this.money = 50;
+    this.money = START_MONEY;
     this.day = 1;
     this.zones = Object.fromEntries(GROCERY_ZONES.map(z => [z.id, z.unlockCost === 0]));
     this.shelves = GROCERY_ITEMS.map(it => {
@@ -436,11 +538,12 @@ class GroceryGame {
   }
 
   applySnapshot(s) {
+    s = migrateSaveV2(s);
     if (!s || s.v !== SAVE_VERSION) return false;
     const num = (v, d) => (Number.isFinite(Number(v)) ? Number(v) : d);
     this.resetProgressState();
     this.day = Math.max(1, Math.round(num(s.day, 1)));
-    this.money = Math.round(num(s.money, 50) * 100) / 100;
+    this.money = Math.round(num(s.money, START_MONEY) * 100) / 100;
     GROCERY_ZONES.forEach(z => { this.zones[z.id] = z.unlockCost === 0 || (Array.isArray(s.zones) && s.zones.includes(z.id)); });
     const items = s.items && typeof s.items === 'object' ? s.items : {};
     this.shelves.forEach(it => {
@@ -688,7 +791,7 @@ class GroceryGame {
     if (el) el.classList.remove('hidden');
     document.body.classList.add('on-title');
     const busy = this.isDayInProgress();
-    const loading = !this.cloud.checked && GameCloud.token();
+    const loading = !this.cloud.checked && GameCloud.signedIn();
     this.setText('title-play-chn', busy ? '继续营业' : '开门营业');
     this.setText('title-play-vi', loading ? 'Đang tải…' : busy ? `Tiếp tục ngày ${this.day}` : (this.day > 1 ? `Vào ngày ${this.day}` : 'Bắt đầu'));
     const play = this.$('btn-title-play');
@@ -710,7 +813,7 @@ class GroceryGame {
   }
 
   onTitlePlay() {
-    if (!this.cloud.checked && GameCloud.token()) return; // đang tải tiến trình từ tài khoản
+    if (!this.cloud.checked && GameCloud.signedIn()) return; // đang tải tiến trình từ tài khoản
     this.audio.init();
     this.audio.pop();
     this.hideTitleScreen();
@@ -940,7 +1043,8 @@ class GroceryGame {
     });
     const due = items.reduce((s, x) => s + cents(x.item.price) * x.qty, 0) / 100;
     const paid = this.pickPaidAmount(due);
-    return { items, due, paid, change: Math.round((paid - due) * 100) / 100 };
+    const tpls = ORDER_TEMPLATES.filter(t => !t.one || items.length === 1);
+    return { items, due, paid, change: Math.round((paid - due) * 100) / 100, tpl: pickOne(tpls).id };
   }
 
   // Khách trả bằng tờ tiền "tròn" lớn hơn số phải trả
@@ -960,12 +1064,19 @@ class GroceryGame {
       const num = x.qty === 1 ? yiPinyin(x.item.qPin) : x.qty === 2 ? 'liǎng' : 'sān';
       return `${num} ${x.item.qPin} ${x.item.pinyin}`;
     });
-    const vi = order.items.map(x => `${x.qty} ${x.item.quantifierVi} ${x.item.nameVi}`);
+    // câu nói dùng nghĩa đầu tiên (file ghi "mì ăn liền / mì gói")
+    const shortVi = (it) => it.nameVi.split(' / ')[0];
+    const vi = order.items.map(x => `${x.qty} ${x.item.quantifierVi} ${shortVi(x.item)}`);
+    const t = ORDER_TEMPLATES.find(x => x.id === order.tpl) || ORDER_TEMPLATES[0];
+    const first = order.items[0].item;
+    const L = zh.join('和');
+    const Lhtml = zh.map(z => `<em>${z}</em>`).join('和');
     return {
-      zh: `老板，我要${zh.join('和')}！`,
-      zhHtml: `老板，我要${zh.map(z => `<em>${z}</em>`).join('和')}！`,
-      pin: `Lǎobǎn, wǒ yào ${pin.join(' hé ')}!`,
-      vi: `(Ông chủ ơi, cho tôi ${vi.join(' và ')}!)`
+      zh: t.zh(L, first.nameChn),
+      zhHtml: t.zh(Lhtml, first.nameChn),
+      pin: t.pin(pin.join(' hé '), first.pinyin),
+      vi: `(${t.vi(vi.join(' và '), shortVi(first))})`,
+      learn: t.learn
     };
   }
 
@@ -982,6 +1093,7 @@ class GroceryGame {
     const used = this.patienceUsed(c);
     c.waitScore = this.relaxedMode ? 100 : Math.round(100 - 60 * Math.max(0, Math.min(1, (used - 0.25) / 0.75)));
     c.order.items.forEach(x => { this.learn(x.item.quantifier); });
+    (this.orderPhrase(c.order).learn || []).forEach(w => this.learn(w));
     this.learn('老板');
     this.focusNeededZone();
     this.renderCounter();
@@ -1000,7 +1112,10 @@ class GroceryGame {
       const b = this.basket.find(y => y.item.id === x.item.id);
       return !b || b.qty < x.qty;
     });
-    if (pending) this.shelfZone = pending.item.zone;
+    if (pending) {
+      this.shelfZone = pending.item.zone;
+      this.shelfPage[pending.item.zone] = this.pageOfItem(pending.item);
+    }
   }
 
   resetWorkbench() {
@@ -1042,11 +1157,39 @@ class GroceryGame {
   }
 
   // ---------------- Trạm 2: kệ hàng
+  zoneShelfList(zoneId) {
+    return this.shelves.filter(s => s.zone === zoneId)
+      .sort((a, b) => (b.unlocked - a.unlocked) || (a.unlocked ? 0 : a.unlockCost - b.unlockCost));
+  }
+
+  shelfPerPage() { const g = this.shelfGrid(); return g.cols * g.rows; }
+
+  // trang chứa món (để tự lật tới món khách cần)
+  pageOfItem(item) {
+    const idx = this.zoneShelfList(item.zone).findIndex(s => s.id === item.id);
+    return idx < 0 ? 0 : Math.floor(idx / this.shelfPerPage());
+  }
+
+  pendingItems() {
+    const c = this.current;
+    if (!c || !c.takenAt || !c.order) return [];
+    return c.order.items.filter(x => { const b = this.basket.find(y => y.item.id === x.item.id); return !b || b.qty < x.qty; }).map(x => x.item);
+  }
+
+  setShelfPage(p) {
+    const pages = Math.max(1, Math.ceil(this.zoneShelfList(this.shelfZone).length / this.shelfPerPage()));
+    this.shelfPage[this.shelfZone] = Math.max(0, Math.min(pages - 1, p));
+    this.audio.pop();
+    this.renderShelves();
+  }
+
   selectAisle(zoneId) {
     const z = zoneOf(zoneId);
     if (!z) return;
     if (!this.zones[zoneId]) { this.openMarket(zoneId); return; }
     this.shelfZone = zoneId;
+    const need = this.pendingItems().find(it => it.zone === zoneId);
+    if (need) this.shelfPage[zoneId] = this.pageOfItem(need);
     this.audio.pop();
     this.renderShelves();
   }
@@ -1627,6 +1770,7 @@ class GroceryGame {
     if (!grid) return;
     const tab = VOCAB_TABS.find(t => t.id === tabId) || VOCAB_TABS[0];
     const list = tab.words;
+    grid.classList.toggle('long', tab.id === 'sentences' || tab.id === 'quantifiers');
     grid.innerHTML = list.map((v, i) => `
       <div class="vc ${this.learnedVocab.has(v.chn) ? 'learned' : ''}">
         <span class="zh">${v.chn}</span>
@@ -1872,8 +2016,26 @@ class GroceryGame {
 
     const c = this.current;
     const wanted = new Set(c && c.takenAt && c.order ? c.order.items.map(x => x.item.id) : []);
-    const items = this.shelves.filter(s => s.zone === this.shelfZone);
+    const all = this.zoneShelfList(this.shelfZone);
     const { cols, rows: rowCount } = this.shelfGrid();
+    const per = cols * rowCount;
+    const pages = Math.max(1, Math.ceil(all.length / per));
+    const page = Math.max(0, Math.min(pages - 1, this.shelfPage[this.shelfZone] || 0));
+    this.shelfPage[this.shelfZone] = page;
+    const items = all.slice(page * per, page * per + per);
+    const pager = this.$('shelf-pager');
+    if (pager) {
+      pager.style.display = pages > 1 ? 'flex' : 'none';
+      if (pages > 1) {
+        const needPages = new Set(all.map((it, i) => (wanted.has(it.id) ? Math.floor(i / per) : -1)).filter(p => p >= 0 && p !== page));
+        pager.innerHTML = `
+          <button type="button" class="sp-btn" data-page="${page - 1}" ${page === 0 ? 'disabled' : ''} aria-label="Trang trước"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="sp-dots">${Array.from({ length: pages }, (_, i) => `<button type="button" class="sp-dot ${i === page ? 'on' : ''} ${needPages.has(i) ? 'need' : ''}" data-page="${i}" aria-label="Trang ${i + 1}">${i + 1}</button>`).join('')}</span>
+          <span class="sp-label">Trang ${page + 1}/${pages}${needPages.size ? ' · <b>món khách cần ở trang khác</b>' : ''}</span>
+          <button type="button" class="sp-btn" data-page="${page + 1}" ${page === pages - 1 ? 'disabled' : ''} aria-label="Trang sau"><i class="fa-solid fa-chevron-right"></i></button>`;
+        pager.querySelectorAll('[data-page]').forEach(b => b.addEventListener('click', () => this.setShelfPage(+b.dataset.page)));
+      }
+    }
     rack.style.setProperty('--shelf-cols', cols);
     rack.style.setProperty('--shelf-rows', rowCount);
     const slots = [];
@@ -2132,12 +2294,7 @@ class GroceryGame {
   // Tài khoản & bảng xếp hạng
   // --------------------------------------------------------------------------
   async initCloud() {
-    if (!GameCloud.token()) {
-      this.switchOwner('guest');
-      this.cloud.checked = true;
-      this.renderAccountChip();
-      return;
-    }
+    // Luôn hỏi server (kể cả khi không có token): server nhận cookie phiên & email đã lưu như các trang khác
     let data;
     try {
       data = await GameCloud.getProgress();
@@ -2168,7 +2325,8 @@ class GroceryGame {
     const email = lu && lu.email ? String(lu.email).toLowerCase().trim() : '';
     this.owner = email || 'account';
     // Đồng bộ tiến trình: bản nào mới hơn thì dùng bản đó; không có bản nào → ván mới
-    const server = data.save && data.save.v === SAVE_VERSION ? data.save : null;
+    const migrated = data.save ? migrateSaveV2(data.save) : null; // tiến trình cũ trên tài khoản (v2) → chuyển đổi
+    const server = migrated && migrated.v === SAVE_VERSION ? migrated : null;
     const local = email ? LocalSave.read(email) : null;
     const sTime = server ? Number(server.updatedAt) || 0 : -1;
     const lTime = local ? Number(local.updatedAt) || 0 : -1;

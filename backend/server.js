@@ -2808,7 +2808,8 @@ function registerMiniGameRoutes({ key, field, limits }) {
 // Tiệm Trà Sữa: ngày tính theo giờ (chừa biên 40 khách/ngày); 1 ly tối đa 14 + 4 + 3 = 21 ¥ + 6 ¥ tip
 registerMiniGameRoutes({ key: 'boba', field: 'bobaGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 35 } });
 // Tiệm Tạp Hóa: ngày tính theo giờ mở cửa (khách đến liên tục, chừa biên 40/ngày); 1 khách tối đa ~50 ¥ hàng + 5.5 ¥ tip
-registerMiniGameRoutes({ key: 'grocery', field: 'groceryGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 70 } });
+// Giá hàng theo file Tạp hóa.xlsx: 1 khách tối đa 2 món × (giá ≤ 45¥, món > 8¥ chỉ mua 1) + tip ≈ 96¥ → chừa dư
+registerMiniGameRoutes({ key: 'grocery', field: 'groceryGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 150 } });
 
 // Admin: Reset toàn bộ dữ liệu người dùng (xóa MongoDB + RAM cache) - Cần secret header
 app.delete('/api/admin/reset-all', async (req, res) => {

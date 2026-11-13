@@ -3280,3 +3280,38 @@ body.g-portrait .prod { height: 100%; max-height: 100%; min-height: 0; overflow:
   .prod.locked .lock-emoji { font-size: 1.1rem; }
   .prod.locked .lock-name { display: none; }
 }
+
+/* Kệ nhiều món: thanh lật trang ở đáy kệ (chỉ hiện khi khu có > 1 trang) */
+.shelf-pager {
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 4px 8px 6px;
+  background: linear-gradient(180deg, rgba(120, 70, 30, 0.12), rgba(120, 70, 30, 0.22));
+  border-top: 2px solid rgba(120, 70, 30, 0.25);
+}
+.shelf-pager .sp-btn, .shelf-pager .sp-dot {
+  font-family: inherit;
+  border: 2px solid #e2b77a;
+  background: #fffaf0;
+  color: var(--wood-d);
+  font-weight: 800;
+  cursor: pointer;
+}
+.shelf-pager .sp-btn { width: 34px; height: 30px; border-radius: 10px; }
+.shelf-pager .sp-btn:disabled { opacity: 0.35; cursor: default; }
+.shelf-pager .sp-dots { display: inline-flex; gap: 5px; }
+.shelf-pager .sp-dot { position: relative; min-width: 28px; height: 28px; border-radius: 99px; font-size: 0.8rem; }
+.shelf-pager .sp-dot.on { background: var(--orange); border-color: var(--orange-d); color: #fff; }
+.shelf-pager .sp-dot.need::after { content: ''; position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; border-radius: 50%; background: var(--rose, #e11d48); border: 2px solid #fff; }
+.shelf-pager .sp-label { font-size: 0.74rem; font-weight: 700; color: #7a4a1c; }
+.shelf-pager .sp-label b { color: #be123c; }
+body.g-portrait .shelf-pager { gap: 6px; padding: 3px 6px 5px; }
+body.g-portrait .shelf-pager .sp-label { display: none; }
+
+/* Sổ từ vựng: 9 tab (6 khu + lượng từ + mẫu câu + mua bán) → xuống hàng khi chật, không ép chữ */
+.vocab-tabs { flex-wrap: wrap; }
+.vocab-tab { flex: 1 1 auto; min-width: 92px; height: auto; min-height: 34px; padding: 4px 10px; white-space: nowrap; }
+/* Tab mẫu câu / lượng từ: câu dài → chữ nhỏ hơn, chừa chỗ cho nút loa */
+.vocab-grid.long .vc .zh { font-size: 1.05rem; line-height: 1.35; padding-right: 34px; }

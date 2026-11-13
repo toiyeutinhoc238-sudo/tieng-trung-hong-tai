@@ -171,6 +171,22 @@ const MARKET_ZONES = [
   { id: 'toppings', chn: '配料', pin: 'pèiliào', vi: 'Topping', short: 'Topping', icon: '🧋' }
 ];
 
+// Từ lóng / khẩu ngữ hay gặp trong đánh giá của khách → tự vào sổ từ vựng khi khách viết đánh giá có từ đó
+const REVIEW_SLANG = [
+  { chn: 'Q弹', pin: 'Q tán', vi: 'dai dai, dẻo (trân châu, thạch)', match: 'Q弹' },
+  { chn: '真绝', pin: 'zhēn jué', vi: 'đỉnh thật, tuyệt cú mèo', match: '真绝' },
+  { chn: '刚刚好', pin: 'gānggāng hǎo', vi: 'vừa xinh, vừa chuẩn', match: '刚刚好' },
+  { chn: '满分好评', pin: 'mǎnfēn hǎopíng', vi: 'khen 10 điểm, đánh giá tuyệt đối', match: '满分好评' },
+  { chn: '必备', pin: 'bìbèi', vi: 'thứ không thể thiếu', match: '必备' },
+  { chn: '清甜爽口', pin: 'qīngtián shuǎngkǒu', vi: 'ngọt thanh, mát miệng', match: '清甜爽口' },
+  { chn: '正宗', pin: 'zhèngzōng', vi: 'chuẩn vị, chính gốc', match: '正宗' },
+  { chn: '见底', pin: 'jiàndǐ', vi: 'uống cạn tới đáy (ngon tới giọt cuối)', match: '见底' },
+  { chn: '性价比高', pin: 'xìngjiàbǐ gāo', vi: 'đáng đồng tiền, giá hời', match: '性价比高' },
+  { chn: '一般般', pin: 'yìbānbān', vi: 'tàm tạm, bình thường thôi', match: '一般般' },
+  { chn: '粗心', pin: 'cūxīn', vi: 'cẩu thả, bất cẩn', match: '粗心' },
+  { chn: '等得花儿都谢了', pin: 'děng de huār dōu xiè le', vi: 'chờ đến hoa cũng tàn (chờ dài cổ)', match: '等得花儿都谢了' }
+];
+
 const VOCAB_TABS = [
   { id: 'teas', label: '🍵 Loại trà', words: TEAS.map(t => ({ chn: t.chn, pin: t.pin, vi: t.vi })) },
   { id: 'toppings', label: '🧋 Topping', words: TOPPINGS.map(t => ({ chn: t.chn, pin: t.pin, vi: t.vi })) },
@@ -194,8 +210,17 @@ const VOCAB_TABS = [
       { chn: '打烊', pin: 'dǎyàng', vi: 'đóng cửa tiệm' },
       { chn: '猫', pin: 'māo', vi: 'con mèo' }
     ]
-  }
+  },
+  { id: 'slang', label: '💬 Từ lóng', words: REVIEW_SLANG.map(w => ({ chn: w.chn, pin: w.pin, vi: w.vi })) }
 ];
+function markSlang(zhEscaped) {
+  let out = zhEscaped;
+  REVIEW_SLANG.forEach(w => {
+    if (!out.includes(w.match)) return;
+    out = out.split(w.match).join(`<span class="slang" data-slang="${REVIEW_SLANG.indexOf(w)}" title="${w.pin} · ${w.vi}">${w.match}</span>`);
+  });
+  return out;
+}
 const VOCAB_TOTAL = VOCAB_TABS.reduce((s, t) => s + t.words.length, 0);
 
 // ============================================================================
@@ -310,6 +335,8 @@ const GameCloud = {
       return t && t !== 'null' && t !== 'undefined' && t !== 'guest' ? t : '';
     } catch (e) { return ''; }
   },
+  // Trang chính coi là đã đăng nhập khi có token HOẶC có thông tin user (đăng nhập Google không phải lúc nào cũng có token)
+  signedIn() { return !!(this.token() || this.localUser()); },
   localUser() {
     try {
       const u = JSON.parse(localStorage.getItem('user') || localStorage.getItem('currentUser') || 'null');
@@ -322,6 +349,9 @@ const GameCloud = {
     const headers = { 'Content-Type': 'application/json' };
     const t = this.token();
     if (t) { headers.Authorization = `Bearer ${t}`; headers['x-session-token'] = t; }
+    // giống getAuthHeaders() của trang chính: đăng nhập không có token vẫn được nhận diện qua email đã lưu
+    const lu = this.localUser();
+    if (lu && lu.email) headers['x-user-email'] = String(lu.email).toLowerCase().trim();
     try {
       const res = await fetch(this.apiBase() + path, { credentials: 'include', cache: 'no-store', ...options, headers, signal: ctrl ? ctrl.signal : undefined });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -401,7 +431,7 @@ class BobaShop {
     this.currentStation = 'view-order-station';
     this.marketZone = 'teas';
 
-    const lu = GameCloud.token() ? GameCloud.localUser() : null;
+    const lu = GameCloud.localUser();
     this.owner = lu ? String(lu.email).toLowerCase().trim() : 'guest';
     this.cloud = { checked: false, loggedIn: false, offline: false, name: '', picture: '', best: null, history: [] };
     this.rankTab = 'global';
@@ -543,6 +573,14 @@ class BobaShop {
     on('btn-open-reviews', 'click', () => { this.audio.pop(); this.openReviewsModal(); });
     on('btn-prep-all', 'click', () => this.brewAll());
     // Đánh giá hiện tiếng Trung; bấm "Xem nghĩa" mới hiện tiếng Việt
+    // chạm vào từ lóng (tô màu) trong đánh giá → đọc to + hiện pinyin, nghĩa
+    document.addEventListener('click', (e) => {
+      const sl = e.target.closest('[data-slang]');
+      const w = sl && REVIEW_SLANG[+sl.dataset.slang];
+      if (!w) return;
+      this.audio.speak(w.chn);
+      this.showToast('💬', `${w.chn} (${w.pin}) · ${w.vi}`);
+    });
     document.addEventListener('click', (e) => {
       const b = e.target.closest('[data-show-vi]');
       const w = b && b.closest('.rev-wrap');
@@ -692,7 +730,7 @@ class BobaShop {
     if (el) el.classList.remove('hidden');
     document.body.classList.add('on-title');
     const busy = this.isDayInProgress();
-    const loading = !this.cloud.checked && GameCloud.token();
+    const loading = !this.cloud.checked && GameCloud.signedIn();
     this.setText('title-play-chn', busy ? '继续营业' : '开门营业');
     this.setText('title-play-vi', loading ? 'Đang tải…' : busy ? `Tiếp tục ngày ${this.day}` : (this.day > 1 ? `Vào ngày ${this.day}` : 'Bắt đầu'));
     const play = this.$('btn-title-play');
@@ -713,7 +751,7 @@ class BobaShop {
   }
 
   onTitlePlay() {
-    if (!this.cloud.checked && GameCloud.token()) return;
+    if (!this.cloud.checked && GameCloud.signedIn()) return;
     this.audio.init();
     this.audio.pop();
     this.hideTitleScreen();
@@ -1374,6 +1412,9 @@ class BobaShop {
     // Sinh đánh giá của khách (Review)
     const review = this.generateCustomerReview(c, o, evalCup, total, scores, tip);
     this.reviews.unshift(review);
+    const fresh = REVIEW_SLANG.filter(w => review.commentZh.includes(w.match) && !this.learnedVocab.has(w.chn));
+    fresh.forEach(w => this.learn(w.chn));
+    if (fresh.length) setTimeout(() => this.showToast('📖', `Từ lóng mới vào sổ: ${fresh.map(w => `${w.chn} (${w.pin})`).join(', ')}`), 600);
     this.todayReviews.unshift(review);
     this.updateHUDReviews();
 
@@ -1531,6 +1572,7 @@ class BobaShop {
 
   renderPrepModal() {
     this.renderMissionStock();
+    this.setText('prep-money-val', `${fmt(this.money)} ¥`);
     const teaBox = this.$('prep-tea-grid');
     const topBox = this.$('prep-topping-grid');
     if (teaBox) {
@@ -1602,7 +1644,7 @@ class BobaShop {
             </div>
             <div style="font-size:0.72rem;color:#8a6d57">Đơn: ${escapeHtml(r.orderText)}</div>
             <div class="rev-wrap">
-              <div class="rb-item-zh zh">“${escapeHtml(r.commentZh)}”</div>
+              <div class="rb-item-zh zh">“${markSlang(escapeHtml(r.commentZh))}”</div>
               <button type="button" class="btn-show-vi" data-show-vi>👁 Xem nghĩa</button>
               <div class="rev-vi">${escapeHtml(r.commentVi)}</div>
             </div>
@@ -1652,7 +1694,7 @@ class BobaShop {
     if (rev) {
       this.setText('score-customer-name', `${rev.customerNameChn} (${rev.customerNameVi})`);
       this.setText('scr-stars', '⭐'.repeat(rev.stars) + '☆'.repeat(5 - rev.stars));
-      this.setText('score-reaction-chn', `“${rev.commentZh}”`);
+      { const el = this.$('score-reaction-chn'); if (el) el.innerHTML = `“${markSlang(escapeHtml(rev.commentZh))}”`; }
       this.setText('score-reaction-vi', rev.commentVi);
       const img = this.$('score-reaction-img');
       if (img) img.src = ASSET(rev.customerImg);
@@ -1781,7 +1823,7 @@ class BobaShop {
           <div class="summary-rev-row">
             <img src="${ASSET(r.customerImg)}" alt="">
             <span>${'⭐'.repeat(r.stars)}</span>
-            <div class="summary-rev-text rev-wrap"><b>${escapeHtml(r.customerNameChn)}:</b> <span class="zh">“${escapeHtml(r.commentZh)}”</span>
+            <div class="summary-rev-text rev-wrap"><b>${escapeHtml(r.customerNameChn)}:</b> <span class="zh">“${markSlang(escapeHtml(r.commentZh))}”</span>
               <button type="button" class="btn-show-vi" data-show-vi>👁</button>
               <div class="rev-vi">${escapeHtml(r.commentVi)}</div></div>
           </div>`).join('');
@@ -2386,7 +2428,7 @@ class BobaShop {
   // Tài khoản & bảng xếp hạng
   // --------------------------------------------------------------------------
   async initCloud() {
-    if (!GameCloud.token()) { this.switchOwner('guest'); this.cloud.checked = true; this.renderAccountChip(); return; }
+    // (trước đây: thiếu token là coi như khách ngay → người đã đăng nhập ở trang chính vẫn bị báo "Khách")
     let data;
     try {
       data = await GameCloud.getProgress();

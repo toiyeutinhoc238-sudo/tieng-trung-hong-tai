@@ -19,9 +19,9 @@
   <!-- LXGW WenKai Lite: chữ Hán chuẩn Khải thể (楷体) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
-  <script type="module" crossorigin src="/assets/groceryGame-xkrnPOke.js"></script>
+  <script type="module" crossorigin src="/assets/groceryGame-DuQC-Lf8.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/grocery_game-Bp4UE-rB.css">
+  <link rel="stylesheet" crossorigin href="/assets/grocery_game-Q96cidFS.css">
 </head>
 
 <body class="grocery-body on-title">
@@ -188,7 +188,7 @@
               <span class="speech-tag">🗣️ Khách gọi hàng</span>
               <button type="button" class="speech-audio" id="btn-replay-order-audio" title="Nghe lại"><i class="fa-solid fa-volume-high"></i></button>
             </div>
-            <div class="speech-chn zh" id="order-chn-text">老板，我要一包辣条！</div>
+            <div class="speech-chn zh" id="order-chn-text">我要一包方便面。</div>
             <div class="speech-pin" id="order-pin-text">Lǎobǎn, wǒ yào yì bāo làtiáo!</div>
             <div class="speech-vi" id="order-vi-text">(Ông chủ ơi, cho tôi 1 gói que cay!)</div>
             <button type="button" class="g-btn-primary" id="btn-take-order-action">
@@ -260,6 +260,7 @@
               <button type="button" class="g-btn-chip" id="btn-quick-restock-header"><i class="fa-solid fa-boxes-packing"></i> <span class="zh">批发市场</span></button>
             </div>
             <div class="shelf-rows" id="shelves-display-rack"></div>
+            <div class="shelf-pager" id="shelf-pager" style="display:none;"></div>
           </div>
 
           <aside class="basket-panel">
@@ -537,9 +538,9 @@
           <button type="button" class="g-close" data-close="modal-guide"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="guide-steps">
-          <div class="gstep"><i>1</i><span>🕗</span><div><b>Mở cửa 08:00 → 20:00</b><p>Mỗi ngày bán trong khoảng 4 phút. Khách đến liên tục — phục vụ được bao nhiêu thì phục vụ. Có mục tiêu doanh thu, số khách được bỏ về và độ chính xác thối tiền.</p></div></div>
+          <div class="gstep"><i>1</i><span>🕗</span><div><b>Mở cửa 08:00 → 20:00</b><p>Mỗi ngày bán trong khoảng 2 phút. Khách đến liên tục — phục vụ được bao nhiêu thì phục vụ. Có mục tiêu doanh thu, số khách được bỏ về và độ chính xác thối tiền.</p></div></div>
           <div class="gstep"><i>2</i><span>🛎️</span><div><b>Đón khách</b><p>Khách xếp hàng; chờ quá lâu sẽ bỏ về. Nghe câu gọi hàng tiếng Trung rồi bấm <b>Nhận đơn</b>.</p></div></div>
-          <div class="gstep"><i>3</i><span>🏪</span><div><b>Nhặt hàng theo khu</b><p>Hàng chia khu: 饮料 đồ uống, 糖果饼干 bánh kẹo, 零食 đồ ăn vặt… Chọn đúng khu (tab có chấm đỏ), đúng món và số lượng (一包, 两瓶…).</p></div></div>
+          <div class="gstep"><i>3</i><span>🏪</span><div><b>Nhặt hàng theo khu</b><p>Hàng chia 6 khu: 食品调料 đồ ăn &amp; gia vị, 饮料 đồ uống, 冷藏食品 sữa &amp; đồ lạnh, 日用清洁 gia dụng, 个人护理 chăm sóc cá nhân, 文具 văn phòng phẩm. Chọn đúng khu (tab có chấm đỏ), đúng món và số lượng (一包, 两瓶…). Khu nhiều món thì lật trang kệ ◀ ▶ (trang có món khách cần có chấm đỏ).</p></div></div>
           <div class="gstep"><i>4</i><span>📠</span><div><b>Quét mã</b><p>Chạm từng món trên băng chuyền để quét và in hóa đơn.</p></div></div>
           <div class="gstep"><i>5</i><span>💴</span><div><b>Thối tiền</b><p>Tự tính <b>khách đưa − tổng tiền</b>, lấy đúng tờ tiền và đồng xu. Dùng gợi ý sẽ bị trừ điểm.</p></div></div>
           <div class="gstep"><i>6</i><span>📦</span><div><b>批发市场 · Chợ đầu mối</b><p>Nhập hàng lên kệ, <b>mở bán món mới</b> và <b>mở khu kệ mới</b> — tất cả đều trả bằng tiền tiệm kiếm được.</p></div></div>
