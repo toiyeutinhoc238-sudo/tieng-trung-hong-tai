@@ -3231,3 +3231,20 @@ body.g-portrait .g-goal-val { white-space: nowrap; }
 body.g-portrait .g-toasts { top: 102px; bottom: auto; flex-direction: column; }
 body.g-portrait .g-toast { padding: 5px 12px; }
 body.g-portrait.on-title .g-toasts { top: auto; bottom: 20px; }
+
+/* ==========================================================================
+   Khung sân khấu: cột lưới phải cố định bằng bề rộng khung. Trước đây cột "auto" giãn theo nội dung →
+   hàng chờ nhiều khách (chip tên) đẩy HUD / quầy / tab rộng quá màn hình điện thoại, bên phải bị cắt.
+   Dùng chung cho Tạp Hóa & Trà Sữa.
+   ========================================================================== */
+.g-stage { grid-template-columns: minmax(0, 1fr); }
+.g-stage > * { min-width: 0; }
+.g-rail-queue {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.g-rail-queue::-webkit-scrollbar { display: none; }
+.g-rail-queue > * { flex-shrink: 0; }
+.g-rail-info { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
