@@ -646,7 +646,20 @@ body.g-portrait .mt-list li { padding: 2px 5px; }
   color: #8a6d57;
 }
 
-.speech-bubble {
+/* Bong bóng gọi món nằm GỌN trong khung khách (cột trái).
+   grocery_game.css đặt bong bóng tạp hóa ở vị trí tuyệt đối (left 610px / top 92px, màn dọc: top 384px…);
+   phải xoá hết các toạ độ đó, nếu không bong bóng bị đẩy lệch ra đè lên checklist & nút pha chế. */
+body.boba-body .speech-bubble,
+body.boba-body.g-portrait .speech-bubble {
+  position: relative;
+  left: auto;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  width: auto;
+  max-width: none;
+  transform: none;
+  z-index: 1;
   background: #fff;
   border: 2px solid #f0d6ad;
   border-radius: 14px;
@@ -655,8 +668,28 @@ body.g-portrait .mt-list li { padding: 2px 5px; }
   display: flex;
   flex-direction: column;
   gap: 3px;
-  position: relative;
 }
+
+body.boba-body .speech-bubble::before { display: none; }
+body.boba-body .speech-bubble.hidden { display: none; }
+body.boba-body .cust-info.hidden { display: none; }
+
+/* Khung chờ khi chưa có khách (thay chỗ bong bóng) */
+.cust-waiting-box {
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  background: #fffcf8;
+  border: 2px dashed #f0d6ad;
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+
+.cwb-title { font-size: 1.05rem; font-weight: 800; color: var(--orange-d); }
+.cwb-desc { font-size: 0.82rem; color: #8a6d57; font-weight: 600; line-height: 1.4; }
 
 .speech-head {
   display: flex;
@@ -1667,3 +1700,71 @@ body.g-portrait .topping-grid {
 body.g-portrait .prep-grids {
   grid-template-columns: 1fr;
 }
+
+/* ---- Chống chồng khối: mỗi khối giữ đúng chiều cao nội dung, thiếu chỗ thì khung tự cuộn ---- */
+.shop-unified-layout > * { flex-shrink: 0; }
+
+/* Màn ngang: khách (cột hẹp) | lời gọi món (rộng) — khối khách không cao hơn khối đơn hàng */
+body.boba-body:not(.g-portrait) .main-customer-box { flex-direction: row; align-items: stretch; }
+body.boba-body:not(.g-portrait) .cust-card { flex-direction: column; justify-content: center; width: 120px; flex: 0 0 120px; padding: 8px 6px; text-align: center; }
+body.boba-body:not(.g-portrait) .cust-card .cust-info { align-items: center; width: 100%; }
+body.boba-body:not(.g-portrait) .cust-card .cust-name-row { flex-direction: column; align-items: center; gap: 0; }
+/* .patience kế thừa flex: 1 0 100% của tạp hóa (dành cho hàng ngang) — trong thẻ dạng cột nó thành cao 100%, phải khóa lại */
+body.boba-body:not(.g-portrait) .cust-card .patience { width: 100%; flex: 0 0 auto; height: 10px; }
+body.boba-body:not(.g-portrait) .main-customer-box .speech-bubble,
+body.boba-body:not(.g-portrait) .main-customer-box .cust-waiting-box { flex: 1 1 0; min-width: 0; justify-content: center; }
+body.boba-body .speech-bubble .g-btn-primary { margin-top: 6px; }
+
+/* Màn dọc: bỏ giới hạn chiều cao bong bóng kế thừa từ tạp hóa (max-height: calc(100% - 264px)) */
+body.boba-body.g-portrait .speech-bubble { max-height: none; overflow: visible; flex-shrink: 0; }
+body.boba-body.g-portrait .main-customer-box > * { flex-shrink: 0; }
+
+/* Dòng nhắc đăng nhập trong bảng tổng kết ngày (khách chưa đăng nhập) */
+.summary-guest-note { margin: 2px 0 8px; padding: 8px 12px; border-radius: 12px; background: #fff7e6; border: 1.5px dashed #f0c27a; color: #8a5a1f; font-size: 0.8rem; font-weight: 600; text-align: center; text-decoration: none; line-height: 1.45; }
+.summary-guest-note b { color: var(--orange-d); }
+
+/* ==========================================================================
+   Khung ly CỐ ĐỊNH chiều cao: trước đây chọn size → ly hiện ra → khung giãn từ 125px lên ~266px,
+   đẩy vòi trà & topping ra khỏi màn hình ngay lúc cần nhấn giữ rót trà. Giờ thu nhỏ ly cho vừa khung.
+   ========================================================================== */
+body.boba-body:not(.g-portrait) .cup-display-area .cup-stage {
+  --cup-base: 0.4;             /* ly lớn (scale 1) cao ~100px */
+  flex: 0 0 auto;
+  height: 128px;
+  min-height: 128px;
+  max-height: 128px;
+  padding-bottom: 18px;        /* chừa chỗ cho nhãn size (bottom: -14px) */
+}
+/* ly nhỏ: nhãn độ ngọt đè lên "Vạch rót 80%" — checklist đã hiện độ ngọt nên ẩn ở màn ngang */
+body.boba-body .cup-display-area .cup-sugar-tag { display: none; }
+body.boba-body:not(.g-portrait) .cup-display-area .cup-size-tag { font-size: 0.6rem; padding: 0 8px; }
+/* màn dọc: cột ly chỉ 120px → chữ "封口 Đóng nắp" bị cắt */
+body.boba-body.g-portrait .btn-seal-main { font-size: 0.74rem; padding: 0 6px; gap: 4px; white-space: nowrap; }
+/* Màn ngang: checklist đã hiện % rót trực tiếp ("奶茶 80%") nên ẩn dòng "Đã rót" để cả màn vừa khít không phải cuộn */
+body.boba-body:not(.g-portrait) .cup-display-area .cup-fill-readout { display: none; }
+body.boba-body:not(.g-portrait) .cup-display-area .cup-target-label { font-size: 0.56rem; padding: 1px 6px; top: 3px; }
+body.boba-body:not(.g-portrait) .order-box-header { padding-bottom: 2px; }
+body.boba-body:not(.g-portrait) .shop-main-ribbon .size-btn .ob-icon { font-size: 1.25rem; }
+
+body.boba-body.g-portrait .cup-display-area .cup-stage {
+  --cup-base: 0.5;             /* ly lớn cao ~125px */
+  flex: 0 0 auto;
+  height: 150px;
+  min-height: 150px;
+  max-height: 150px;
+}
+
+/* Màn ngang: khung trà/topping cao cố định + overflow hidden → hàng 2 (món thứ 5–7) bị giấu, không dùng được.
+   Xếp tất cả món trên MỘT hàng (bao nhiêu món cũng vừa). */
+body.boba-body:not(.g-portrait) .shop-main-bottom .tea-grid,
+body.boba-body:not(.g-portrait) .shop-main-bottom .topping-grid {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 5px;
+}
+body.boba-body:not(.g-portrait) .shop-main-bottom .tea-tap b.zh,
+body.boba-body:not(.g-portrait) .shop-main-bottom .top-btn b.zh { font-size: 0.9rem; white-space: nowrap; }
+body.boba-body:not(.g-portrait) .shop-main-bottom .tea-tap small,
+body.boba-body:not(.g-portrait) .shop-main-bottom .top-btn small { font-size: 0.56rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+body.boba-body:not(.g-portrait) .shop-main-bottom .btn-cook-batch { font-size: 0.56rem; padding: 2px 2px; white-space: nowrap; }

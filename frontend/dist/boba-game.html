@@ -20,9 +20,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
   <!-- Dùng chung phong cách với Tiệm Tạp Hóa, rồi thêm phần riêng của tiệm trà sữa -->
-  <script type="module" crossorigin src="/assets/bobaGame-DH_jTSrg.js"></script>
+  <script type="module" crossorigin src="/assets/bobaGame-BIG1Br6V.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/bobaGame-COKBWvbz.css">
+  <link rel="stylesheet" crossorigin href="/assets/bobaGame-DRk9N7WV.css">
   <link rel="stylesheet" crossorigin href="/assets/grocery_game-CHlOJDfk.css">
 </head>
 
@@ -158,7 +158,7 @@
             <!-- KHÁCH HÀNG & LỜI THOẠI (BÊN TRÁI) -->
             <div class="main-customer-box">
               <div class="cust-card">
-                <div class="cust-window">
+                <div class="cust-window" id="shop-door">
                   <div class="cust-avatar-frame" id="door-customer">
                     <img id="customer-img" src="/assets/boba_customer_girl-zmXCu5fB.jpg" alt="Khách hàng">
                   </div>
@@ -192,6 +192,12 @@
                 <button type="button" class="g-btn-primary btn-take-order-bubble" id="btn-take-order-action">
                   <i class="fa-solid fa-receipt"></i> <span class="zh">接单</span> Nhận đơn
                 </button>
+              </div>
+
+              <!-- KHUNG CHỜ KHI CHƯA CÓ KHÁCH -->
+              <div class="cust-waiting-box" id="cust-waiting-box" style="display:none;">
+                <div class="cwb-title"><span class="zh">🧋 欢迎光临</span> · Tiệm Sẵn Sàng!</div>
+                <div class="cwb-desc">Đang chờ khách ghé quầy gọi món... Khi khách tới hãy nghe và bấm <b>Nhận đơn</b> nhé!</div>
               </div>
             </div>
 
@@ -417,8 +423,10 @@
         <!-- MỤC MẪU CÂU GIAO TIẾP TÍNH TIỀN THÔNG DỤNG (1 MẪU CÂU) -->
         <div class="score-phrases-card">
           <div class="sp-head">
-            <span><i class="fa-solid fa-graduation-cap"></i> <b>Mẫu câu tính tiền</b> <small class="zh">(实用口语)</small></span>
-            <button type="button" class="btn-refresh-phrase" id="btn-refresh-phrase-boba" title="Đổi câu khác"><i class="fa-solid fa-rotate"></i> Đổi câu</button>
+            <span><i class="fa-solid fa-graduation-cap"></i> <b>Mẫu câu tính tiền</b> <small
+                class="zh">(实用口语)</small></span>
+            <button type="button" class="btn-refresh-phrase" id="btn-refresh-phrase-boba" title="Đổi câu khác"><i
+                class="fa-solid fa-rotate"></i> Đổi câu</button>
           </div>
           <div class="sp-phrase-single" id="sp-phrase-list-boba"></div>
         </div>
@@ -510,6 +518,9 @@
           </div>
           <div class="summary-reviews-list" id="summary-today-reviews-list"></div>
         </div>
+
+        <a class="summary-guest-note" id="summary-guest-note" href="index.html" style="display:none;">🔐 Bạn đang chơi
+          với tư cách khách — <b>đăng nhập ở trang chủ</b> để lưu thành tích lên bảng xếp hạng!</a>
 
         <button type="button" class="g-btn-primary big" id="btn-next-day-start"><span class="zh">进入下一天</span> Sang ngày
           mới <i class="fa-solid fa-sun"></i></button>

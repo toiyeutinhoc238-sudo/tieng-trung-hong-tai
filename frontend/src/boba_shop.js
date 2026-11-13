@@ -447,7 +447,8 @@ class BobaShop {
       toppings: [...this.toppingsOwned],
       vocab: [...this.learnedVocab].slice(0, 300),
       records: this.records.slice(-30),
-      reviews: this.reviews.slice(-50),
+      // reviews mới nhất nằm ở ĐẦU mảng (unshift) → giữ 50 cái đầu, không phải 50 cái cuối
+      reviews: this.reviews.slice(0, 50),
       relaxed: !!this.relaxedMode,
       updatedAt: Date.now()
     };
@@ -464,7 +465,10 @@ class BobaShop {
     (Array.isArray(s.toppings) ? s.toppings : []).forEach(id => { if (byId(TOPPINGS, id)) this.toppingsOwned.add(id); });
     (Array.isArray(s.vocab) ? s.vocab : []).forEach(w => { if (typeof w === 'string') this.learnedVocab.add(w); });
     this.records = Array.isArray(s.records) ? s.records.filter(r => r && Number.isFinite(Number(r.earnings))) : [];
-    this.reviews = Array.isArray(s.reviews) ? s.reviews : [];
+    this.reviews = (Array.isArray(s.reviews) ? s.reviews : [])
+      .filter(r => r && typeof r === 'object' && Number.isFinite(Number(r.stars)))
+      .map(r => ({ ...r, stars: Math.min(5, Math.max(1, Math.round(Number(r.stars)))) }))
+      .slice(0, 50);
     this.todayReviews = [];
     this.relaxedMode = !!s.relaxed;
     const relaxed = document.getElementById('setting-relaxed');
@@ -1687,8 +1691,10 @@ class BobaShop {
       else GameCloud.post({ save: snap }).catch(() => {});
     } else {
       this.saveProgress(this.day + 1);
-      if (this.cloud.checked) setTimeout(() => this.showToast('🔐', 'Đăng nhập ở trang chủ để lưu thành tích lên bảng xếp hạng!'), 1500);
     }
+    // Nhắc đăng nhập nằm trong bảng tổng kết (toast nổi sẽ đè lên tiêu đề bảng trên điện thoại)
+    const guestNote = this.$('summary-guest-note');
+    if (guestNote) guestNote.style.display = !this.cloud.loggedIn && this.cloud.checked ? 'block' : 'none';
     this.updateHUD();
     this.openModal('modal-day-summary');
     this.audio.register();
@@ -1887,10 +1893,12 @@ class BobaShop {
     const hint = this.$('order-footer-hint');
     const reg = this.$('reg-screen');
     if (!door) return;
+    const waitBox = this.$('cust-waiting-box');
     if (!c) {
       door.classList.add('empty');
       bubble?.classList.add('hidden');
       tag?.classList.add('hidden');
+      if (waitBox) waitBox.style.display = 'flex';
       if (nextBtn) nextBtn.style.display = 'none';
       const takeBtnFooter = this.$('btn-take-order-footer');
       if (takeBtnFooter) takeBtnFooter.style.display = 'none';
@@ -1901,6 +1909,7 @@ class BobaShop {
       if (reg) reg.textContent = '0.00';
       return;
     }
+    if (waitBox) waitBox.style.display = 'none';
     door.classList.remove('empty');
     const wrap = this.$('door-customer');
     const img = this.$('customer-img');
