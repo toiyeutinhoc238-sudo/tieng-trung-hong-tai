@@ -103,10 +103,10 @@
           </div>
           <div class="g-goal-bar"><div class="g-goal-fill" id="hud-goal-fill"></div></div>
         </div>
-        <div class="g-pill clock" id="hud-clock" title="Giờ mở cửa: 08:00 → 20:00">
-          <span class="pill-icon">🕗</span>
-          <span class="pill-text"><small id="hud-clock-label">Chưa mở cửa</small><strong id="hud-clock-val">08:00</strong></span>
-          <span class="g-clock-bar"><i id="hud-clock-fill"></i></span>
+        <div class="g-pill clock" id="hud-clock" title="Thời gian bán hàng: 2 phút đếm ngược">
+          <span class="pill-icon" id="hud-clock-icon">⏳</span>
+          <span class="pill-text"><small id="hud-clock-label">Thời gian</small><strong id="hud-clock-val">02:00</strong></span>
+          <span class="g-clock-bar"><i id="hud-clock-fill" style="width:100%;"></i></span>
         </div>
       </div>
 
@@ -192,6 +192,20 @@
             <button type="button" class="g-btn-primary" id="btn-take-order-action">
               <i class="fa-solid fa-basket-shopping"></i> <span class="zh">接单</span> Nhận đơn &amp; lấy giỏ
             </button>
+          </div>
+
+          <!-- Bong bóng mèo tám chuyện lúc rảnh / chờ khách -->
+          <div class="cat-chitchat hidden" id="cat-chitchat">
+            <div class="cc-head">
+              <span class="cc-tag"><span class="cat-avatar">🐈</span> <span class="zh">猫咪碎碎念</span> · Tám chuyện</span>
+              <div class="cc-actions">
+                <button type="button" class="cc-btn" id="btn-chitchat-audio" title="Nghe đọc"><i class="fa-solid fa-volume-high"></i></button>
+                <button type="button" class="cc-btn" id="btn-chitchat-next" title="Đổi câu tám"><i class="fa-solid fa-rotate"></i></button>
+              </div>
+            </div>
+            <div class="cc-chn zh" id="cc-chn-text">今天天气真好，生意一定会很火爆！</div>
+            <div class="cc-pin" id="cc-pin-text">Jīntiān tiānqì zhēn hǎo, shēngyì yídìng huì hěn huǒbào!</div>
+            <div class="cc-vi" id="cc-vi-text">(Hôm nay trời đẹp ghê, buôn bán nhất định sẽ đắt hàng!)</div>
           </div>
 
           <!-- Quầy gỗ -->

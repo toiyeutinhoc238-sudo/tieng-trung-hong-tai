@@ -197,19 +197,19 @@ const VOCAB_TOTAL = VOCAB_TABS.reduce((s, t) => s + t.words.length, 0);
 // 3. LUẬT CHƠI
 // ============================================================================
 const DAY_RULES = {
-  lengthMs: 240000,        // 1 ngày bán hàng = 4 phút thật (08:00 → 20:00)
+  lengthMs: 120000,        // 1 ngày bán hàng = 2 phút thật (đúng 120s theo yêu cầu)
   openMin: 8 * 60,
   closeMin: 20 * 60
 };
 
 const QUEUE_RULES = {
-  maxLine: 3,              // tối đa 3 người đứng chờ (không tính người ở quầy)
-  patienceMs: 50000,       // chờ quá 50s mà chưa được nhận đơn → bỏ về
-  firstArrivalMs: 700,
-  arriveBaseMs: 28000,     // khoảng cách giữa 2 khách (giảm dần theo ngày)
-  arrivePerDayMs: 1500,
-  arriveMinMs: 13000,
-  arriveJitterMs: 6000
+  maxLine: 4,              // tối đa 4 người xếp hàng bên ngoài
+  patienceMs: 45000,       // chờ quá 45s mà chưa được nhận đơn → bỏ về
+  firstArrivalMs: 400,     // 0.4s sau khi mở cửa là khách đầu tiên tới ngay!
+  arriveBaseMs: 7000,      // cứ 6-8s là có khách mới ghé tiệm! (dồn dập, tấp nập)
+  arrivePerDayMs: 400,
+  arriveMinMs: 4000,       // những ngày sau càng đông khách hơn (4-5s)!
+  arriveJitterMs: 2000
 };
 
 const MISSION_RULES = {
@@ -247,6 +247,22 @@ const CHECKOUT_PHRASES = [
   { role: 'Khách', roleZh: '顾客', chn: '谢谢老板，东西真好！', pin: 'Xièxie lǎobǎn, dōngxi zhēn hǎo!', vi: 'Cảm ơn ông chủ, đồ tốt lắm!' },
   { role: 'Khách', roleZh: '顾客', chn: '太划算了，下次我还来！', pin: 'Tài huásuàn le, xià cì wǒ hái lái!', vi: 'Giá tốt quá, lần sau tôi lại đến!' },
   { role: 'Chủ tiệm', roleZh: '店家', chn: '慢走，欢迎下次光临！', pin: 'Màn zǒu, huānyíng xià cì guānglín!', vi: 'Đi thong thả, hoan nghênh lần sau lại ghé!' }
+];
+
+// Những câu tám chuyện vui nhộn khi rảnh rỗi / chờ khách
+const IDLE_CHITCHATS = [
+  { chn: '今天天气真好，生意一定会很火爆！', pin: 'Jīntiān tiānqì zhēn hǎo, shēngyì yídìng huì hěn huǒbào!', vi: 'Hôm nay trời đẹp ghê, buôn bán nhất định sẽ đắt hàng!' },
+  { chn: '老板，等会儿赚了钱给我买条小鱼干喵~', pin: 'Lǎobǎn, děnghuǐr zhuàn le qián gěi wǒ mǎi tiáo xiǎoyúgān miāo~', vi: 'Ông chủ ơi, lát kiếm được tiền thưởng em con cá khô nha meo~' },
+  { chn: '听说隔壁新开了一家奶茶店，好多人在排队！', pin: 'Tīngshuō gébì xīn kāi le yì jiā nǎichá diàn, hǎoduō rén zài páiduì!', vi: 'Nghe nói sát bên mới mở quán trà sữa, đông người xếp hàng lắm!' },
+  { chn: '最近辣条超级抢手，不知道还要不要进货？', pin: 'Zuìjìn làtiáo chāojí qiǎngshǒu, bù zhīdào hái yào bu yào jìnhuò?', vi: 'Dạo này que cay đắt hàng dã man, không biết có nên nhập thêm không nhỉ?' },
+  { chn: '打工人，打工魂，做生意要有耐心喵！', pin: 'Dǎgōngrén, dǎgōnghún, zuò shēngyì yào yǒu nàixīn miāo!', vi: 'Lao động hăng say, buôn bán là phải kiên nhẫn nha meo!' },
+  { chn: '外面的天气好热，冰可乐一定很好卖。', pin: 'Wàimiàn de tiānqì hǎo rè, bīng kělè yídìng hěn hǎomài.', vi: 'Ngoài trời nóng ghê, món Coca ướp lạnh chắc chắn đắt hàng.' },
+  { chn: '刚才那位客人真爽快，连零钱都没细看。', pin: 'Gāngcái nà wèi kèrén zhēn shuǎngkuai, lián língqián dōu méi xì kàn.', vi: 'Vị khách lúc nãy sảng khoái thật, chẳng thèm đếm lại tiền thối luôn.' },
+  { chn: '老板服务态度这么好，回头客一定很多！', pin: 'Lǎobǎn fúwù tàidù zhème hǎo, huítóukè yídìng hěn duō!', vi: 'Chủ quán phục vụ nhiệt tình thế này, khách quen nhất định sẽ tới hoài!' },
+  { chn: '伸个懒腰，晒晒太阳，感觉好舒服喵~', pin: 'Shēn gè lǎnyāo, shài shai tàiyáng, gǎnjué hǎo shūfu miāo~', vi: 'Vươn vai phơi nắng chút nào, sướng tê người meo~' },
+  { chn: '有客人在看招牌了，马上就要进来了哦！', pin: 'Yǒu kèrén zài kàn zhāopai le, mǎshàng jiù yào jìnlái le o!', vi: 'Có khách đang ngó bảng hiệu kìa, sắp bước vào tiệm rồi đấy!' },
+  { chn: '童年的零食真让人怀念，每一包都是回忆。', pin: 'Tóngnián de língshí zhēn ràng rén huáiniàn, měi yì bāo dōu shì huíyì.', vi: 'Mấy món ăn vặt tuổi thơ hoài niệm ghê, gói nào cũng là kỷ niệm.' },
+  { chn: '欢迎光临我的小卖部，好吃好喝样样有！', pin: 'Huānyíng guānglín wǒ de xiǎomàibù, hǎochī hǎohē yàngyàng yǒu!', vi: 'Kính chào quý khách ghé tiệm tạp hoá, món gì ngon cũng có nha!' }
 ];
 
 const STAGE_W = 1280;
@@ -353,6 +369,8 @@ class GroceryGame {
     this.ticketSeq = 0;
     this.customerDeck = [];
     this.nextArrivalAt = 0;
+    this.curChitChatIdx = 0;
+    this.nextChitChatTime = 0;
 
     // Bàn làm việc của đơn hiện tại
     this.basket = [];
@@ -544,6 +562,11 @@ class GroceryGame {
     });
     on('btn-replay-order-audio', 'click', () => this.speakOrder());
     on('btn-cat', 'click', () => this.petCat());
+    on('btn-chitchat-audio', 'click', () => {
+      const item = IDLE_CHITCHATS[this.curChitChatIdx % IDLE_CHITCHATS.length];
+      if (item) this.audio.speak(item.chn);
+    });
+    on('btn-chitchat-next', 'click', () => this.nextChitChat(true));
     on('btn-clear-basket-station', 'click', () => this.clearBasket());
     on('btn-quick-restock-header', 'click', () => this.openMarket(this.shelfZone));
     on('btn-trigger-scanner', 'click', () => this.scanNextItem());
@@ -711,7 +734,7 @@ class GroceryGame {
     const low = this.shelves.filter(s => s.unlocked && s.currentStock <= 2).length;
     const sub = this.$('mission-sub');
     if (sub) {
-      sub.innerHTML = `Tiệm mở cửa <b>08:00 → 20:00</b> (khoảng ${Math.round(DAY_RULES.lengthMs / 60000)} phút). Khách đến liên tục — phục vụ được càng nhiều càng tốt!`
+      sub.innerHTML = `Mỗi ngày bán hàng gồm <b>${Math.round(DAY_RULES.lengthMs / 60000)} phút đếm ngược</b>. Khách đến liên tục tấp nập — phục vụ được càng nhiều càng tốt!`
         + (low ? `<br>⚠️ <b>${low} món</b> sắp hết hàng — nên nhập thêm trước khi mở cửa.` : '');
     }
     const goals = this.$('mission-goals');
@@ -781,8 +804,8 @@ class GroceryGame {
       this.learn('打烊');
       this.audio.bell();
       this.showToast('🌙', this.line.length || this.current
-        ? '20:00 · 打烊 Đến giờ đóng cửa! Phục vụ nốt khách đang chờ nhé.'
-        : '20:00 · 打烊 Đến giờ đóng cửa!');
+        ? '打烊 Hết giờ bán hôm nay! Phục vụ nốt khách đang chờ nhé.'
+        : '打烊 Hết giờ bán hôm nay!');
       this.renderRail();
       this.renderCounter();
     }
@@ -792,7 +815,7 @@ class GroceryGame {
       if (this.line.length < QUEUE_RULES.maxLine) {
         this.spawnArrival();
       } else {
-        this.nextArrivalAt = this.gameTime + 3000; // hàng đầy → khách tới sau
+        this.nextArrivalAt = this.gameTime + 2000; // hàng đầy → kiểm tra lại nhanh
       }
     }
 
@@ -801,6 +824,12 @@ class GroceryGame {
       [...this.line].forEach(c => { if (this.gameTime - c.arrivedAt >= QUEUE_RULES.patienceMs) this.loseCustomer(c); });
       const cur = this.current;
       if (cur && !cur.takenAt && !cur.leaving && this.gameTime - cur.arrivedAt >= QUEUE_RULES.patienceMs) this.loseCustomer(cur);
+    }
+
+    // Tự động đổi câu tám chuyện khi chờ khách rảnh rỗi (mỗi 6-7s)
+    if (!this.current && this.dayStarted && !this.closed && this.gameTime >= this.nextChitChatTime) {
+      this.nextChitChat(false);
+      this.nextChitChatTime = this.gameTime + 6500;
     }
 
     if (!this.current) this.promoteNext();
@@ -1343,7 +1372,19 @@ class GroceryGame {
     this.learn('猫');
     const cat = this.$('btn-cat');
     if (cat) { cat.classList.remove('meow'); void cat.offsetWidth; cat.classList.add('meow'); }
-    this.showToast('🐈', '猫 (māo) · Con mèo đang phơi nắng trên quầy. 喵～');
+    this.nextChitChat(true);
+  }
+
+  nextChitChat(speak = false) {
+    if (!IDLE_CHITCHATS || !IDLE_CHITCHATS.length) return;
+    this.curChitChatIdx = (this.curChitChatIdx + 1 + Math.floor(Math.random() * (IDLE_CHITCHATS.length - 1))) % IDLE_CHITCHATS.length;
+    const item = IDLE_CHITCHATS[this.curChitChatIdx];
+    this.setText('cc-chn-text', item.chn);
+    this.setText('cc-pin-text', item.pin);
+    this.setText('cc-vi-text', `(${item.vi})`);
+    const cc = this.$('cat-chitchat');
+    if (cc && !this.current) cc.classList.remove('hidden');
+    if (speak) this.audio.speak(item.chn);
   }
 
   // --------------------------------------------------------------------------
@@ -1621,18 +1662,23 @@ class GroceryGame {
   }
 
   updateClockUI() {
-    const m = this.clockMinutes();
-    const hh = String(Math.floor(m / 60)).padStart(2, '0');
-    const mm = String(m % 60).padStart(2, '0');
-    this.setText('hud-clock-val', `${hh}:${mm}`);
-    const p = this.dayStarted ? Math.min(1, this.dayElapsed() / DAY_RULES.lengthMs) : 0;
+    const elapsed = this.dayElapsed();
+    const remainMs = Math.max(0, DAY_RULES.lengthMs - elapsed);
+    const remainSec = Math.ceil(remainMs / 1000);
+    const mm = String(Math.floor(remainSec / 60)).padStart(2, '0');
+    const ss = String(remainSec % 60).padStart(2, '0');
+    const remainRatio = this.dayStarted ? Math.max(0, remainMs / DAY_RULES.lengthMs) : 1;
+
+    // Đếm ngược thời gian (mm:ss) thay vì giờ đồng hồ
+    const valText = !this.dayStarted ? '02:00' : this.closed ? '00:00' : `${mm}:${ss}`;
+    this.setText('hud-clock-val', valText);
     const fill = this.$('hud-clock-fill');
-    if (fill) fill.style.width = `${Math.round(p * 100)}%`;
-    const label = !this.dayStarted ? 'Chưa mở cửa' : this.closed ? '🌙 Đã đóng cửa' : p > 0.85 ? '⏰ Sắp đóng cửa' : '☀️ Đang mở cửa';
+    if (fill) fill.style.width = `${Math.round(remainRatio * 100)}%`;
+    const label = !this.dayStarted ? 'Chưa mở' : this.closed ? '🌙 Hết giờ' : remainSec <= 20 ? '⏰ Sắp hết' : '⏳ Còn lại';
     this.setText('hud-clock-label', label);
     const pill = this.$('hud-clock');
     if (pill) {
-      pill.classList.toggle('closing', this.dayStarted && !this.closed && p > 0.85);
+      pill.classList.toggle('closing', this.dayStarted && !this.closed && remainSec <= 20);
       pill.classList.toggle('closed', this.closed);
     }
   }
@@ -1721,8 +1767,13 @@ class GroceryGame {
       if (reg) reg.textContent = '0.00';
       const takeBtnFooter = this.$('btn-take-order-footer');
       if (takeBtnFooter) takeBtnFooter.style.display = 'none';
+      const cc = this.$('cat-chitchat');
+      if (cc) cc.classList.toggle('hidden', !this.dayStarted || this.closed);
       return;
     }
+
+    const cc = this.$('cat-chitchat');
+    if (cc) cc.classList.add('hidden');
 
     door.classList.remove('empty');
     const wrap = this.$('door-customer');

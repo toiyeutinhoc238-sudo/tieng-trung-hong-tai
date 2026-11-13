@@ -203,13 +203,13 @@ const VOCAB_TOTAL = VOCAB_TABS.reduce((s, t) => s + t.words.length, 0);
 const DAY_RULES = { lengthMs: 120000, openMin: 8 * 60, closeMin: 20 * 60 }; // 1 ngày = 2 phút thật
 
 const QUEUE_RULES = {
-  maxLine: 3,
+  maxLine: 4,
   patienceMs: 42000,       // chờ quá 42s mà chưa được nhận đơn → bỏ về
-  firstArrivalMs: 800,
-  arriveBaseMs: 15000,
-  arrivePerDayMs: 500,
-  arriveMinMs: 10000,
-  arriveJitterMs: 3000
+  firstArrivalMs: 400,     // 0.4s khách đầu tiên ghé ngay
+  arriveBaseMs: 7500,      // khách đến tấp nập, đều đặn 7-9s
+  arrivePerDayMs: 400,
+  arriveMinMs: 4500,
+  arriveJitterMs: 2000
 };
 
 const INGREDIENT_RULES = {
@@ -1804,15 +1804,23 @@ class BobaShop {
   }
 
   updateClockUI() {
-    const m = this.clockMinutes();
-    this.setText('hud-clock-val', `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`);
-    const p = this.dayStarted ? Math.min(1, this.dayElapsed() / DAY_RULES.lengthMs) : 0;
+    const elapsed = this.dayElapsed();
+    const remainMs = Math.max(0, DAY_RULES.lengthMs - elapsed);
+    const remainSec = Math.ceil(remainMs / 1000);
+    const mm = String(Math.floor(remainSec / 60)).padStart(2, '0');
+    const ss = String(remainSec % 60).padStart(2, '0');
+    const remainRatio = this.dayStarted ? Math.max(0, remainMs / DAY_RULES.lengthMs) : 1;
+
+    // Đếm ngược thời gian (mm:ss) thay vì giờ đồng hồ
+    const valText = !this.dayStarted ? '02:00' : this.closed ? '00:00' : `${mm}:${ss}`;
+    this.setText('hud-clock-val', valText);
     const fill = this.$('hud-clock-fill');
-    if (fill) fill.style.width = `${Math.round(p * 100)}%`;
-    this.setText('hud-clock-label', !this.dayStarted ? 'Chưa mở cửa' : this.closed ? '🌙 Đã đóng cửa' : p > 0.85 ? '⏰ Sắp đóng cửa' : '☀️ Đang mở cửa');
+    if (fill) fill.style.width = `${Math.round(remainRatio * 100)}%`;
+    const label = !this.dayStarted ? 'Chưa mở' : this.closed ? '🌙 Hết giờ' : remainSec <= 20 ? '⏰ Sắp hết' : '⏳ Còn lại';
+    this.setText('hud-clock-label', label);
     const pill = this.$('hud-clock');
     if (pill) {
-      pill.classList.toggle('closing', this.dayStarted && !this.closed && p > 0.85);
+      pill.classList.toggle('closing', this.dayStarted && !this.closed && remainSec <= 20);
       pill.classList.toggle('closed', this.closed);
     }
   }
