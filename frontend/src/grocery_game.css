@@ -1797,7 +1797,7 @@ body.stage-flush .g-stage { border-radius: 0; box-shadow: none; }
   padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .sp-head {
@@ -1806,52 +1806,43 @@ body.stage-flush .g-stage { border-radius: 0; box-shadow: none; }
   color: #9a3412;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: space-between;
 }
 
-.sp-tabs {
-  display: flex;
-  gap: 5px;
-  overflow-x: auto;
-  padding-bottom: 2px;
-}
-
-.sp-tab {
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 8px;
-  border: 1px solid #fcd34d;
-  background: #fffbeb;
-  color: #92400e;
+.btn-refresh-phrase {
+  background: #ffedd5;
+  border: 1px solid #fed7aa;
+  color: #c2410c;
+  font-size: 0.68rem;
+  font-weight: 800;
   cursor: pointer;
-  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 99px;
   transition: all 0.12s;
 }
 
-.sp-tab.active {
-  background: #f59e0b;
-  color: #ffffff;
-  border-color: #d97706;
+.btn-refresh-phrase:hover {
+  background: #fed7aa;
+  transform: scale(1.05);
 }
 
-.sp-phrase-list {
+.sp-phrase-single {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  max-height: 130px;
-  overflow-y: auto;
 }
 
 .sp-phrase-item {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 8px;
-  border-radius: 8px;
+  padding: 6px 10px;
+  border-radius: 10px;
   background: #ffffff;
   border: 1px solid #fde68a;
-  font-size: 0.76rem;
+  font-size: 0.78rem;
 }
 
 .sp-role-badge {

@@ -233,29 +233,21 @@ const SCORE_RULES = {
 };
 
 // Mẫu câu giao tiếp tính tiền thực tế (Hỏi giá, Tính tiền, Thối tiền, Cảm ơn)
-const CHECKOUT_PHRASES = {
-  ask: [
-    { role: 'Khách', roleZh: '顾客', chn: '老板，一共多少钱？', pin: 'Lǎobǎn, yīgòng duōshao qián?', vi: 'Ông chủ, tổng cộng bao nhiêu tiền?' },
-    { role: 'Khách', roleZh: '顾客', chn: '请问这个怎么卖？', pin: 'Qǐngwèn zhège zěnme mài?', vi: 'Xin hỏi món này bán thế nào?' },
-    { role: 'Khách', roleZh: '顾客', chn: '总共多少钱？', pin: 'Zǒnggòng duōshao qián?', vi: 'Tất cả hết bao nhiêu tiền?' }
-  ],
-  pay: [
-    { role: 'Chủ tiệm', roleZh: '店家', chn: '一共是二十块钱。', pin: 'Yīgòng shì èrshí kuài qián.', vi: 'Tổng cộng là hai mươi đồng ạ.' },
-    { role: 'Khách', roleZh: '顾客', chn: '微信还是现金支付？', pin: 'Wēixìn háishì xiànjīn zhīfù?', vi: 'Quét WeChat hay trả tiền mặt vậy?' },
-    { role: 'Chủ tiệm', roleZh: '店家', chn: '都可以，扫这里就行。', pin: 'Dōu kěyǐ, sǎo zhèlǐ jiù xíng.', vi: 'Đều được ạ, quét ở đây là được.' },
-    { role: 'Khách', roleZh: '顾客', chn: '给您钱，正好不用找。', pin: 'Gěi nín qián, zhènghǎo bú yòng zhǎo.', vi: 'Gửi bạn tiền, vừa đủ không cần thối.' }
-  ],
-  change: [
-    { role: 'Chủ tiệm', roleZh: '店家', chn: '收您五十，找您二十块。', pin: 'Shōu nín wǔshí, zhǎo nín èrshí kuài.', vi: 'Nhận của bạn 50, thối lại bạn 20 đồng.' },
-    { role: 'Chủ tiệm', roleZh: '店家', chn: '找您零钱，请数一数。', pin: 'Zhǎo nín língqián, qǐng shǔ yi shǔ.', vi: 'Thối bạn tiền thừa, bạn đếm lại nhé.' },
-    { role: 'Khách', roleZh: '顾客', chn: '找零一分不差，谢谢！', pin: 'Zhǎolíng yì fēn bù chà, xièxie!', vi: 'Thối tiền chuẩn từng xu, cảm ơn bạn!' }
-  ],
-  thanks: [
-    { role: 'Khách', roleZh: '顾客', chn: '谢谢老板，东西真好！', pin: 'Xièxie lǎobǎn, dōngxi zhēn hǎo!', vi: 'Cảm ơn ông chủ, đồ tốt lắm!' },
-    { role: 'Khách', roleZh: '顾客', chn: '太划算了，下次我还来！', pin: 'Tài huásuàn le, xià cì wǒ hái lái!', vi: 'Giá tốt quá, lần sau tôi lại đến!' },
-    { role: 'Chủ tiệm', roleZh: '店家', chn: '慢走，欢迎下次光临！', pin: 'Màn zǒu, huānyíng xià cì guānglín!', vi: 'Đi thong thả, hoan nghênh lần sau lại ghé!' }
-  ]
-};
+const CHECKOUT_PHRASES = [
+  { role: 'Khách', roleZh: '顾客', chn: '老板，一共多少钱？', pin: 'Lǎobǎn, yīgòng duōshao qián?', vi: 'Ông chủ, tổng cộng bao nhiêu tiền?' },
+  { role: 'Khách', roleZh: '顾客', chn: '请问这个怎么卖？', pin: 'Qǐngwèn zhège zěnme mài?', vi: 'Xin hỏi món này bán thế nào?' },
+  { role: 'Khách', roleZh: '顾客', chn: '总共多少钱？', pin: 'Zǒnggòng duōshao qián?', vi: 'Tất cả hết bao nhiêu tiền?' },
+  { role: 'Chủ tiệm', roleZh: '店家', chn: '一共是二十块钱。', pin: 'Yīgòng shì èrshí kuài qián.', vi: 'Tổng cộng là hai mươi đồng ạ.' },
+  { role: 'Khách', roleZh: '顾客', chn: '微信还是现金支付？', pin: 'Wēixìn háishì xiànjīn zhīfù?', vi: 'Quét WeChat hay trả tiền mặt vậy?' },
+  { role: 'Chủ tiệm', roleZh: '店家', chn: '都可以，扫这里就行。', pin: 'Dōu kěyǐ, sǎo zhèlǐ jiù xíng.', vi: 'Đều được ạ, quét ở đây là được.' },
+  { role: 'Khách', roleZh: '顾客', chn: '给您钱，正好不用找。', pin: 'Gěi nín qián, zhènghǎo bú yòng zhǎo.', vi: 'Gửi bạn tiền, vừa đủ không cần thối.' },
+  { role: 'Chủ tiệm', roleZh: '店家', chn: '收您五十，找您二十块。', pin: 'Shōu nín wǔshí, zhǎo nín èrshí kuài.', vi: 'Nhận của bạn 50, thối lại bạn 20 đồng.' },
+  { role: 'Chủ tiệm', roleZh: '店家', chn: '找您零钱，请数一数。', pin: 'Zhǎo nín língqián, qǐng shǔ yi shǔ.', vi: 'Thối bạn tiền thừa, bạn đếm lại nhé.' },
+  { role: 'Khách', roleZh: '顾客', chn: '找零一分不差，谢谢！', pin: 'Zhǎolíng yì fēn bù chà, xièxie!', vi: 'Thối tiền chuẩn từng xu, cảm ơn bạn!' },
+  { role: 'Khách', roleZh: '顾客', chn: '谢谢老板，东西真好！', pin: 'Xièxie lǎobǎn, dōngxi zhēn hǎo!', vi: 'Cảm ơn ông chủ, đồ tốt lắm!' },
+  { role: 'Khách', roleZh: '顾客', chn: '太划算了，下次我还来！', pin: 'Tài huásuàn le, xià cì wǒ hái lái!', vi: 'Giá tốt quá, lần sau tôi lại đến!' },
+  { role: 'Chủ tiệm', roleZh: '店家', chn: '慢走，欢迎下次光临！', pin: 'Màn zǒu, huānyíng xià cì guānglín!', vi: 'Đi thong thả, hoan nghênh lần sau lại ghé!' }
+];
 
 const STAGE_W = 1280;
 const STAGE_H = 720;
@@ -565,12 +557,9 @@ class GroceryGame {
     on('btn-replay-score-speech', 'click', () => {
       if (this.lastScoreReactionZh) this.audio.speak(this.lastScoreReactionZh);
     });
-    document.querySelectorAll('#sp-tabs-grocery .sp-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('#sp-tabs-grocery .sp-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        this.renderCheckoutPhrases(tab.dataset.sptab);
-      });
+    on('btn-refresh-phrase-grocery', 'click', () => {
+      this.audio.pop();
+      this.renderSingleCheckoutPhrase();
     });
     on('btn-mission-start', 'click', () => this.startDay());
     on('btn-mission-restock', 'click', () => this.openMarket());
@@ -1311,21 +1300,20 @@ class GroceryGame {
     this.setText('score-reaction-chn', `“${zh}”`);
     this.setText('score-reaction-vi', vi);
 
-    // Mẫu câu tính tiền thông dụng
-    this.renderCheckoutPhrases('ask');
-    document.querySelectorAll('#sp-tabs-grocery .sp-tab').forEach(t => t.classList.toggle('active', t.dataset.sptab === 'ask'));
+    // Mẫu câu tính tiền thông dụng (hiện 1 mẫu câu ngẫu nhiên)
+    this.renderSingleCheckoutPhrase();
 
     this.openModal('modal-grocery-score');
     setTimeout(() => this.audio.speak(zh), 500);
   }
 
-  renderCheckoutPhrases(tabKey = 'ask') {
-    const list = CHECKOUT_PHRASES[tabKey] || CHECKOUT_PHRASES.ask;
+  renderSingleCheckoutPhrase() {
+    const item = pickOne(CHECKOUT_PHRASES);
     const box = this.$('sp-phrase-list-grocery');
-    if (!box) return;
-    box.innerHTML = list.map(item => `
-      <div class="sp-phrase-item">
-        <span class="sp-role-badge ${item.role === 'Chủ tiệm' ? 'owner' : 'cust'}">${item.role} <small class="zh">${item.roleZh}</small></span>
+    if (!box || !item) return;
+    box.innerHTML = `
+      <div class="sp-phrase-item single">
+        <span class="sp-role-badge ${item.role.includes('Chủ') ? 'owner' : 'cust'}">${item.role} <small class="zh">${item.roleZh}</small></span>
         <div class="sp-content">
           <div class="sp-chn zh">${item.chn}</div>
           <div class="sp-pin">${item.pin}</div>
@@ -1334,12 +1322,10 @@ class GroceryGame {
         <button type="button" class="sp-audio-btn" data-say-chn="${escapeHtml(item.chn)}" title="Nghe phát âm">
           <i class="fa-solid fa-volume-high"></i>
         </button>
-      </div>`).join('');
-    box.querySelectorAll('[data-say-chn]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.audio.speak(btn.dataset.sayChn);
-      });
+      </div>`;
+    box.querySelector('[data-say-chn]')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.audio.speak(item.chn);
     });
   }
 

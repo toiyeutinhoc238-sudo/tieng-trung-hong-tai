@@ -3,23 +3,27 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#fdf4e7">
   <meta name="format-detection" content="telephone=no">
   <title>Tiệm Trà Sữa Của Tôi (我的奶茶店) | Tiếng Trung HongTai</title>
   <link rel="icon" type="image/png" href="/assets/logo-CnsJJgQP.png">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
   <!-- Dùng chung phong cách với Tiệm Tạp Hóa, rồi thêm phần riêng của tiệm trà sữa -->
-  <script type="module" crossorigin src="/assets/bobaGame-Dqilnd5I.js"></script>
+  <script type="module" crossorigin src="/assets/bobaGame-DMVN-lGa.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/bobaGame-DHXEUMP6.css">
-  <link rel="stylesheet" crossorigin href="/assets/grocery_game-CzzzPwd8.css">
+  <link rel="stylesheet" crossorigin href="/assets/bobaGame-COKBWvbz.css">
+  <link rel="stylesheet" crossorigin href="/assets/grocery_game-CxdP_seL.css">
 </head>
 
 <body class="grocery-body boba-body on-title">
@@ -82,9 +86,12 @@
          ==================================================================== -->
     <header class="g-hud">
       <div class="g-hud-left">
-        <button type="button" class="g-hud-circle" id="btn-hud-home" title="Về màn hình chính"><i class="fa-solid fa-house"></i></button>
-        <button type="button" class="g-hud-circle" id="btn-pause-game" title="Tạm dừng & Cài đặt"><i class="fa-solid fa-pause"></i></button>
-        <button type="button" class="g-hud-circle" id="btn-fullscreen" title="Toàn màn hình"><i class="fa-solid fa-expand"></i></button>
+        <button type="button" class="g-hud-circle" id="btn-hud-home" title="Về màn hình chính"><i
+            class="fa-solid fa-house"></i></button>
+        <button type="button" class="g-hud-circle" id="btn-pause-game" title="Tạm dừng & Cài đặt"><i
+            class="fa-solid fa-pause"></i></button>
+        <button type="button" class="g-hud-circle" id="btn-fullscreen" title="Toàn màn hình"><i
+            class="fa-solid fa-expand"></i></button>
         <div class="g-pill money" title="Tiền vốn hiện có">
           <span class="pill-icon">🪙</span>
           <span class="pill-text"><small>资金 · Vốn</small><strong id="hud-money-val">120.00 ¥</strong></span>
@@ -101,11 +108,14 @@
             <span class="g-goal-label">🎯 <span class="zh">今日目标</span></span>
             <span class="g-goal-val" id="hud-goal-val">0 / 0 ¥</span>
           </div>
-          <div class="g-goal-bar"><div class="g-goal-fill" id="hud-goal-fill"></div></div>
+          <div class="g-goal-bar">
+            <div class="g-goal-fill" id="hud-goal-fill"></div>
+          </div>
         </div>
         <div class="g-pill clock" id="hud-clock" title="Giờ mở cửa: 08:00 → 20:00">
           <span class="pill-icon">🕗</span>
-          <span class="pill-text"><small id="hud-clock-label">Chưa mở cửa</small><strong id="hud-clock-val">08:00</strong></span>
+          <span class="pill-text"><small id="hud-clock-label">Chưa mở cửa</small><strong
+              id="hud-clock-val">08:00</strong></span>
           <span class="g-clock-bar"><i id="hud-clock-fill"></i></span>
         </div>
       </div>
@@ -173,7 +183,8 @@
               <div class="speech-bubble" id="speech-bubble">
                 <div class="speech-head">
                   <span class="speech-tag">🗣️ Khách gọi món:</span>
-                  <button type="button" class="speech-audio" id="btn-replay-order-audio" title="Nghe lại phát âm"><i class="fa-solid fa-volume-high"></i></button>
+                  <button type="button" class="speech-audio" id="btn-replay-order-audio" title="Nghe lại phát âm"><i
+                      class="fa-solid fa-volume-high"></i></button>
                 </div>
                 <div class="speech-chn zh" id="order-chn-text">老板，我要中杯珍珠奶茶！</div>
                 <div class="speech-pin" id="order-pin-text">Lǎobǎn, wǒ yào zhōng bēi zhēnzhū nǎichá!</div>
@@ -224,11 +235,16 @@
                     <span class="cl-id" id="mt-id"></span>
                   </div>
                   <ul class="cl-list" id="checklist-items">
-                    <li class="cl-item" id="cl-size"><span class="cl-icon">🥤</span><span class="cl-txt">Cỡ ly</span><span class="cl-val">—</span><i class="cl-check"></i></li>
-                    <li class="cl-item" id="cl-tea"><span class="cl-icon">🍵</span><span class="cl-txt">Loại trà</span><span class="cl-val">—</span><i class="cl-check"></i></li>
-                    <li class="cl-item" id="cl-sugar"><span class="cl-icon">🍬</span><span class="cl-txt">Đường</span><span class="cl-val">—</span><i class="cl-check"></i></li>
-                    <li class="cl-item" id="cl-ice"><span class="cl-icon">🧊</span><span class="cl-txt">Lượng đá</span><span class="cl-val">—</span><i class="cl-check"></i></li>
-                    <li class="cl-item" id="cl-topping"><span class="cl-icon">🧋</span><span class="cl-txt">Topping</span><span class="cl-val">—</span><i class="cl-check"></i></li>
+                    <li class="cl-item" id="cl-size"><span class="cl-icon">🥤</span><span class="cl-txt">Cỡ
+                        ly</span><span class="cl-val">—</span><i class="cl-check"></i></li>
+                    <li class="cl-item" id="cl-tea"><span class="cl-icon">🍵</span><span class="cl-txt">Loại
+                        trà</span><span class="cl-val">—</span><i class="cl-check"></i></li>
+                    <li class="cl-item" id="cl-sugar"><span class="cl-icon">🍬</span><span
+                        class="cl-txt">Đường</span><span class="cl-val">—</span><i class="cl-check"></i></li>
+                    <li class="cl-item" id="cl-ice"><span class="cl-icon">🧊</span><span class="cl-txt">Lượng
+                        đá</span><span class="cl-val">—</span><i class="cl-check"></i></li>
+                    <li class="cl-item" id="cl-topping"><span class="cl-icon">🧋</span><span
+                        class="cl-txt">Topping</span><span class="cl-val">—</span><i class="cl-check"></i></li>
                   </ul>
                   <div class="cl-tip">✨ Hoàn thành bấm <b>Đóng nắp</b> sẽ hiện giao diện thanh toán!</div>
                 </div>
@@ -258,7 +274,8 @@
             <!-- CỘT TRÁI: LOẠI NƯỚC -->
             <div class="station-pane tea-pane">
               <div class="pane-header">
-                <span class="ph-title"><i class="fa-solid fa-mug-saucer"></i> <b>Loại nước</b> <small class="zh">(茶底)</small></span>
+                <span class="ph-title"><i class="fa-solid fa-mug-saucer"></i> <b>Loại nước</b> <small
+                    class="zh">(茶底)</small></span>
                 <span class="ph-desc">Nhấn giữ để rót trà tới vạch 80%</span>
               </div>
               <div class="tea-grid" id="tea-grid"></div>
@@ -267,8 +284,10 @@
             <!-- CỘT PHẢI: TOPPING -->
             <div class="station-pane topping-pane">
               <div class="pane-header">
-                <span class="ph-title"><i class="fa-solid fa-cookie-bite"></i> <b>Topping</b> <small class="zh">(配料)</small></span>
-                <button type="button" class="g-btn-chip mini" id="btn-undo-topping"><i class="fa-solid fa-rotate-left"></i> Bớt topping</button>
+                <span class="ph-title"><i class="fa-solid fa-cookie-bite"></i> <b>Topping</b> <small
+                    class="zh">(配料)</small></span>
+                <button type="button" class="g-btn-chip mini" id="btn-undo-topping"><i
+                    class="fa-solid fa-rotate-left"></i> Bớt topping</button>
               </div>
               <div class="topping-grid" id="topping-grid"></div>
             </div>
@@ -277,8 +296,10 @@
         </div>
 
         <div class="g-station-footer">
-          <div class="g-hint" id="order-footer-hint">💡 Bấm <b>Nhận đơn</b> khi khách gọi món → chọn ly, rót trà, chọn đường/đá, thêm topping → bấm <b>Đóng nắp</b> để tính tiền!</div>
-          <button type="button" class="g-btn-primary btn-take-order-footer" id="btn-take-order-footer" style="display:none;">
+          <div class="g-hint" id="order-footer-hint">💡 Bấm <b>Nhận đơn</b> khi khách gọi món → chọn ly, rót trà, chọn
+            đường/đá, thêm topping → bấm <b>Đóng nắp</b> để tính tiền!</div>
+          <button type="button" class="g-btn-primary btn-take-order-footer" id="btn-take-order-footer"
+            style="display:none;">
             <i class="fa-solid fa-receipt"></i> <span class="zh">接单</span> Nhận đơn
           </button>
           <button type="button" class="g-btn-next" id="btn-goto-pay" style="display:none;">
@@ -294,19 +315,23 @@
         <div class="checkout-awning" aria-hidden="true"></div>
         <div class="g-card-head">
           <h3>💴 <span class="zh">收银台</span> · Tính tiền cho khách</h3>
-          <button type="button" class="g-close" data-close="modal-checkout" title="Trở lại quầy"><i class="fa-solid fa-xmark"></i></button>
+          <button type="button" class="g-close" data-close="modal-checkout" title="Trở lại quầy"><i
+              class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="change-room">
           <div class="cash-left">
             <div class="paid-card">
-              <div class="paid-row"><span><span class="zh">应付</span> Tổng tiền</span><strong id="change-due-amount">0.00 ¥</strong></div>
-              <div class="paid-row"><span><span class="zh">顾客付</span> Khách đưa</span><strong class="paid" id="change-paid-amount">0.00 ¥</strong></div>
+              <div class="paid-row"><span><span class="zh">应付</span> Tổng tiền</span><strong id="change-due-amount">0.00
+                  ¥</strong></div>
+              <div class="paid-row"><span><span class="zh">顾客付</span> Khách đưa</span><strong class="paid"
+                  id="change-paid-amount">0.00 ¥</strong></div>
               <div class="paid-row need">
                 <span><span class="zh">找零</span> Cần thối</span>
                 <strong id="change-needed-amount">? ¥</strong>
               </div>
               <div class="bill-lines" id="bill-lines"></div>
-              <button type="button" class="g-btn-chip" id="btn-change-hint"><i class="fa-solid fa-lightbulb"></i> Gợi ý (−20 điểm)</button>
+              <button type="button" class="g-btn-chip" id="btn-change-hint"><i class="fa-solid fa-lightbulb"></i> Gợi ý
+                (−20 điểm)</button>
             </div>
             <div class="paid-bill-wrap">
               <span class="paid-label">Tiền khách đặt trên quầy:</span>
@@ -315,7 +340,8 @@
           </div>
 
           <div class="cash-drawer">
-            <div class="drawer-head"><i class="fa-solid fa-cash-register"></i> <span class="zh">钱箱</span> Ngăn kéo tiền · chạm để lấy</div>
+            <div class="drawer-head"><i class="fa-solid fa-cash-register"></i> <span class="zh">钱箱</span> Ngăn kéo tiền
+              · chạm để lấy</div>
             <div class="drawer-grid">
               <button type="button" class="rmb note n20" data-val="20"><b>20</b><span class="zh">元</span></button>
               <button type="button" class="rmb note n10" data-val="10"><b>10</b><span class="zh">元</span></button>
@@ -329,7 +355,8 @@
           <div class="change-tray">
             <div class="tray-head">
               <span><span class="zh">找零盘</span> Khay tiền thối</span>
-              <button type="button" class="g-btn-chip" id="btn-reset-tray-action"><i class="fa-solid fa-rotate-left"></i> Xếp lại</button>
+              <button type="button" class="g-btn-chip" id="btn-reset-tray-action"><i
+                  class="fa-solid fa-rotate-left"></i> Xếp lại</button>
             </div>
             <div class="tray-tokens" id="tray-dropped-tokens"></div>
             <div class="tray-sum" id="tray-total-picked">Đã lấy: 0.00 ¥</div>
@@ -363,7 +390,8 @@
             <div class="sc-bubble-top">
               <strong id="score-customer-name">小雨 (Bé Mưa)</strong>
               <span class="sc-stars" id="scr-stars">⭐⭐⭐⭐⭐</span>
-              <button type="button" class="btn-say-review" id="btn-replay-boba-speech" title="Nghe lại phát âm"><i class="fa-solid fa-volume-high"></i></button>
+              <button type="button" class="btn-say-review" id="btn-replay-boba-speech" title="Nghe lại phát âm"><i
+                  class="fa-solid fa-volume-high"></i></button>
             </div>
             <div class="zh rc-chn" id="score-reaction-chn">“太好喝了！谢谢老板！”</div>
             <div class="rc-vi" id="score-reaction-vi">(Ngon quá! Cảm ơn chủ quán!)</div>
@@ -386,18 +414,13 @@
           </div>
         </div>
 
-        <!-- MỤC MẪU CÂU GIAO TIẾP TÍNH TIỀN THÔNG DỤNG -->
+        <!-- MỤC MẪU CÂU GIAO TIẾP TÍNH TIỀN THÔNG DỤNG (1 MẪU CÂU) -->
         <div class="score-phrases-card">
           <div class="sp-head">
-            <span><i class="fa-solid fa-graduation-cap"></i> <b>Mẫu câu tính tiền thông dụng</b> <small class="zh">(实用结账口语)</small></span>
+            <span><i class="fa-solid fa-graduation-cap"></i> <b>Mẫu câu tính tiền</b> <small class="zh">(实用口语)</small></span>
+            <button type="button" class="btn-refresh-phrase" id="btn-refresh-phrase-boba" title="Đổi câu khác"><i class="fa-solid fa-rotate"></i> Đổi câu</button>
           </div>
-          <div class="sp-tabs" id="sp-tabs-boba">
-            <button type="button" class="sp-tab active" data-sptab="ask">问价 Hỏi giá</button>
-            <button type="button" class="sp-tab" data-sptab="pay">结账 Tính tiền</button>
-            <button type="button" class="sp-tab" data-sptab="change">找零 Thối tiền</button>
-            <button type="button" class="sp-tab" data-sptab="thanks">道谢 Cảm ơn</button>
-          </div>
-          <div class="sp-phrase-list" id="sp-phrase-list-boba"></div>
+          <div class="sp-phrase-single" id="sp-phrase-list-boba"></div>
         </div>
 
         <button type="button" class="g-btn-primary big" id="btn-next-customer">
@@ -413,18 +436,22 @@
         <div class="mission-head">
           <span class="zh mission-day" id="mission-day-chn">第1天</span>
           <h3><span class="zh">今日任务</span> · Nhiệm vụ hôm nay</h3>
-          <p id="mission-sub">Quán mở cửa 08:00 → 20:00 (khoảng 2 phút). Khách đến liên tục — hãy chuẩn bị nguyên liệu trước!</p>
+          <p id="mission-sub">Quán mở cửa 08:00 → 20:00 (khoảng 2 phút). Khách đến liên tục — hãy chuẩn bị nguyên liệu
+            trước!</p>
         </div>
         <div class="mission-goals" id="mission-goals"></div>
 
         <!-- KHU CHUẨN BỊ NGUYÊN LIỆU (NẤU TRÀ & NẤU TOPPING TRƯỚC KHI MỞ CỬA) -->
         <div class="mission-prep-section">
           <div class="prep-header">
-            <h4><i class="fa-solid fa-kitchen-set"></i> <span class="zh">原料准备</span> · Nấu nguyên liệu trước khi mở cửa</h4>
-            <button type="button" class="g-btn-chip" id="btn-prep-all"><i class="fa-solid fa-wand-magic-sparkles"></i> Nấu nhanh tất cả (+5)</button>
+            <h4><i class="fa-solid fa-kitchen-set"></i> <span class="zh">原料准备</span> · Nấu nguyên liệu trước khi mở cửa
+            </h4>
+            <button type="button" class="g-btn-chip" id="btn-prep-all"><i class="fa-solid fa-wand-magic-sparkles"></i>
+              Nấu nhanh tất cả (+5)</button>
           </div>
           <div class="prep-notice">
-            ⚠️ <b>Quy tắc bảo quản:</b> Nước trà và topping qua ngày sẽ <b>bị hủy hết</b> (đổ bỏ cuối ngày). Ly, đá và đường được giữ lại. Hãy tính toán nấu lượng vừa đủ để không bị lãng phí!
+            ⚠️ <b>Quy tắc bảo quản:</b> Nước trà và topping qua ngày sẽ <b>bị hủy hết</b> (đổ bỏ cuối ngày). Ly, đá và
+            đường được giữ lại. Hãy tính toán nấu lượng vừa đủ để không bị lãng phí!
           </div>
           <div class="prep-grids">
             <div class="prep-block">
@@ -439,8 +466,10 @@
         </div>
 
         <div class="mission-actions">
-          <button type="button" class="g-btn-ghost" id="btn-mission-restock"><i class="fa-solid fa-basket-shopping"></i> <span class="zh">进货</span> Mở món mới</button>
-          <button type="button" class="g-btn-primary big" id="btn-mission-start"><span class="zh">开门营业</span> Mở cửa bán hàng <i class="fa-solid fa-store"></i></button>
+          <button type="button" class="g-btn-ghost" id="btn-mission-restock"><i class="fa-solid fa-basket-shopping"></i>
+            <span class="zh">进货</span> Mở món mới</button>
+          <button type="button" class="g-btn-primary big" id="btn-mission-start"><span class="zh">开门营业</span> Mở cửa bán
+            hàng <i class="fa-solid fa-store"></i></button>
         </div>
       </div>
     </div>
@@ -482,7 +511,8 @@
           <div class="summary-reviews-list" id="summary-today-reviews-list"></div>
         </div>
 
-        <button type="button" class="g-btn-primary big" id="btn-next-day-start"><span class="zh">进入下一天</span> Sang ngày mới <i class="fa-solid fa-sun"></i></button>
+        <button type="button" class="g-btn-primary big" id="btn-next-day-start"><span class="zh">进入下一天</span> Sang ngày
+          mới <i class="fa-solid fa-sun"></i></button>
       </div>
     </div>
 
@@ -525,7 +555,8 @@
             <div><small>Vốn hiện có</small><b id="market-money">0.00 ¥</b></div>
             <div><small>Món trong thực đơn</small><b class="green" id="market-count">0</b></div>
           </div>
-          <button type="button" class="g-btn-primary big" data-close="modal-restock"><i class="fa-solid fa-check"></i> Xong</button>
+          <button type="button" class="g-btn-primary big" data-close="modal-restock"><i class="fa-solid fa-check"></i>
+            Xong</button>
         </div>
       </div>
     </div>
@@ -550,13 +581,43 @@
           <button type="button" class="g-close" data-close="modal-guide"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="guide-steps">
-          <div class="gstep"><i>1</i><span>🕗</span><div><b>Mở cửa 08:00 → 20:00</b><p>Mỗi ngày bán khoảng 5 phút. Khách đến liên tục — pha được bao nhiêu ly thì bán bấy nhiêu. Có mục tiêu doanh thu, số khách được bỏ về và điểm trung bình.</p></div></div>
-          <div class="gstep"><i>2</i><span>🛎️</span><div><b>点单台 · Đón khách</b><p>Nghe khách gọi món tiếng Trung (cỡ ly, loại trà, topping, độ ngọt, lượng đá) rồi bấm <b>Nhận đơn</b>. Để khách chờ lâu sẽ bỏ về.</p></div></div>
-          <div class="gstep"><i>3</i><span>🧋</span><div><b>调制台 · Pha chế</b><p>① Chọn cỡ ly, <b>nhấn giữ</b> vòi trà tới vạch 80% → ② chọn độ ngọt &amp; lượng đá → ③ thêm topping, đóng nắp. Sai thì bấm <b>Đổ đi</b> làm lại.</p></div></div>
-          <div class="gstep"><i>4</i><span>💴</span><div><b>收银台 · Tính tiền</b><p>Tự tính <b>khách đưa − tổng tiền</b>, lấy đúng tờ tiền và đồng xu để thối. Dùng gợi ý sẽ bị trừ điểm.</p></div></div>
-          <div class="gstep"><i>5</i><span>⭐</span><div><b>Chấm điểm</b><p>Pha đúng món, nhanh tay, thối đúng tiền và không để khách chờ lâu → được nhiều tip.</p></div></div>
-          <div class="gstep"><i>6</i><span>🧺</span><div><b>进货 · Mở món mới</b><p>Dùng tiền kiếm được để mở thêm loại trà và topping mới — thực đơn càng nhiều, khách gọi càng đa dạng.</p></div></div>
-          <div class="guide-tip">💾 Tiến trình được lưu: thoát ra vào lại vẫn ở đúng ngày (thoát giữa ngày thì chơi lại ngày đó). Đăng nhập để lưu vào tài khoản và ghi kỷ lục lên <b>Bảng xếp hạng</b>.</div>
+          <div class="gstep"><i>1</i><span>🕗</span>
+            <div><b>Mở cửa 08:00 → 20:00</b>
+              <p>Mỗi ngày bán khoảng 5 phút. Khách đến liên tục — pha được bao nhiêu ly thì bán bấy nhiêu. Có mục tiêu
+                doanh thu, số khách được bỏ về và điểm trung bình.</p>
+            </div>
+          </div>
+          <div class="gstep"><i>2</i><span>🛎️</span>
+            <div><b>点单台 · Đón khách</b>
+              <p>Nghe khách gọi món tiếng Trung (cỡ ly, loại trà, topping, độ ngọt, lượng đá) rồi bấm <b>Nhận đơn</b>.
+                Để khách chờ lâu sẽ bỏ về.</p>
+            </div>
+          </div>
+          <div class="gstep"><i>3</i><span>🧋</span>
+            <div><b>调制台 · Pha chế</b>
+              <p>① Chọn cỡ ly, <b>nhấn giữ</b> vòi trà tới vạch 80% → ② chọn độ ngọt &amp; lượng đá → ③ thêm topping,
+                đóng nắp. Sai thì bấm <b>Đổ đi</b> làm lại.</p>
+            </div>
+          </div>
+          <div class="gstep"><i>4</i><span>💴</span>
+            <div><b>收银台 · Tính tiền</b>
+              <p>Tự tính <b>khách đưa − tổng tiền</b>, lấy đúng tờ tiền và đồng xu để thối. Dùng gợi ý sẽ bị trừ điểm.
+              </p>
+            </div>
+          </div>
+          <div class="gstep"><i>5</i><span>⭐</span>
+            <div><b>Chấm điểm</b>
+              <p>Pha đúng món, nhanh tay, thối đúng tiền và không để khách chờ lâu → được nhiều tip.</p>
+            </div>
+          </div>
+          <div class="gstep"><i>6</i><span>🧺</span>
+            <div><b>进货 · Mở món mới</b>
+              <p>Dùng tiền kiếm được để mở thêm loại trà và topping mới — thực đơn càng nhiều, khách gọi càng đa dạng.
+              </p>
+            </div>
+          </div>
+          <div class="guide-tip">💾 Tiến trình được lưu: thoát ra vào lại vẫn ở đúng ngày (thoát giữa ngày thì chơi lại
+            ngày đó). Đăng nhập để lưu vào tài khoản và ghi kỷ lục lên <b>Bảng xếp hạng</b>.</div>
         </div>
       </div>
     </div>
@@ -569,8 +630,10 @@
           <button type="button" class="g-close" data-close="modal-rank"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="rank-tabs">
-          <button type="button" class="rank-tab active" data-rank-tab="global">🌏 <span class="zh">全服</span> Toàn hệ thống</button>
-          <button type="button" class="rank-tab" data-rank-tab="mine">📒 <span class="zh">我的</span> Ngày bán của tôi</button>
+          <button type="button" class="rank-tab active" data-rank-tab="global">🌏 <span class="zh">全服</span> Toàn hệ
+            thống</button>
+          <button type="button" class="rank-tab" data-rank-tab="mine">📒 <span class="zh">我的</span> Ngày bán của
+            tôi</button>
         </div>
         <div class="rank-summary" id="rank-summary"></div>
         <div class="rank-list" id="rank-list"></div>
@@ -586,16 +649,24 @@
           <button type="button" class="g-close" data-close="modal-settings"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="settings-list">
-          <label class="setting"><span><b>Âm thanh</b><small>Tiếng rót trà, tiền xu, máy tính tiền</small></span><input type="checkbox" id="setting-sfx" checked><i class="sw"></i></label>
-          <label class="setting"><span><b>Giọng đọc tiếng Trung</b><small>Đọc câu gọi món của khách</small></span><input type="checkbox" id="setting-voice" checked><i class="sw"></i></label>
-          <label class="setting"><span><b>Hiện pinyin</b><small>Phiên âm dưới câu tiếng Trung</small></span><input type="checkbox" id="setting-pinyin" checked><i class="sw"></i></label>
-          <label class="setting"><span><b>Hiện nghĩa tiếng Việt</b><small>Dịch câu gọi món</small></span><input type="checkbox" id="setting-vietnamese" checked><i class="sw"></i></label>
-          <label class="setting"><span><b>Chế độ thư giãn</b><small>Khách chờ bao lâu cũng không bỏ về</small></span><input type="checkbox" id="setting-relaxed"><i class="sw"></i></label>
+          <label class="setting"><span><b>Âm thanh</b><small>Tiếng rót trà, tiền xu, máy tính tiền</small></span><input
+              type="checkbox" id="setting-sfx" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Giọng đọc tiếng Trung</b><small>Đọc câu gọi món của khách</small></span><input
+              type="checkbox" id="setting-voice" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Hiện pinyin</b><small>Phiên âm dưới câu tiếng Trung</small></span><input
+              type="checkbox" id="setting-pinyin" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Hiện nghĩa tiếng Việt</b><small>Dịch câu gọi món</small></span><input
+              type="checkbox" id="setting-vietnamese" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Chế độ thư giãn</b><small>Khách chờ bao lâu cũng không bỏ
+                về</small></span><input type="checkbox" id="setting-relaxed"><i class="sw"></i></label>
         </div>
         <div class="g-card-foot">
-          <button type="button" class="g-btn-ghost" id="btn-back-to-title"><i class="fa-solid fa-house"></i> Màn hình chính</button>
-          <button type="button" class="g-btn-ghost danger" id="btn-reset-save"><i class="fa-solid fa-rotate"></i> Chơi lại từ đầu</button>
-          <button type="button" class="g-btn-primary" data-close="modal-settings"><i class="fa-solid fa-play"></i> Tiếp tục</button>
+          <button type="button" class="g-btn-ghost" id="btn-back-to-title"><i class="fa-solid fa-house"></i> Màn hình
+            chính</button>
+          <button type="button" class="g-btn-ghost danger" id="btn-reset-save"><i class="fa-solid fa-rotate"></i> Chơi
+            lại từ đầu</button>
+          <button type="button" class="g-btn-primary" data-close="modal-settings"><i class="fa-solid fa-play"></i> Tiếp
+            tục</button>
         </div>
       </div>
     </div>
