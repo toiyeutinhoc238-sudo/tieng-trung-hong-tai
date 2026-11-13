@@ -234,10 +234,13 @@ const ORDER_TEMPLATES = [
 const INCIDENT_RULES = {
   // hàng tươi: còn trên kệ cuối ngày thì một nửa bị hủy (过期 hết hạn)
   perishable: ['tp003', 'tp004', 'tp005', 'tp006', 'du006', 'du007', 'sl001', 'sl002', 'sl003', 'sl004'],
-  overnightSpoilRate: 0.5,
-  haggleChance: 0.18,      // khách mặc cả (đơn từ haggleMinDue ¥)
+  overnightSpoilRate: 0.25,     // (giảm độ khó) chỉ 1/4 đồ tươi còn lại bị hủy
+  haggleChance: 0.015,     // khách mặc cả (đơn từ haggleMinDue ¥) — ~1/4 số ngày mới gặp, tối đa 1 lần/ngày
   haggleMinDue: 8,
-  soldOutChance: 0.35      // có món đã mở bán mà hết hàng → khách hỏi đúng món đó
+  soldOutChance: 0.015,    // có món đã mở bán mà hết hàng → khách hỏi đúng món đó (~1/4 số ngày, tối đa 1 lần/ngày)
+  firstIncidentDay: 3,     // sự cố bất ngờ giữa ngày chỉ bắt đầu từ ngày 3
+  midDayChance: 0.15       // mỗi ngày (từ ngày 3) chỉ ~15% có 1 sự cố
+  // + MỖI NGÀY TỐI ĐA 1 TÌNH HUỐNG (sự cố / mặc cả / hỏi món hết cộng chung) → tổng ~1/3 số ngày mới gặp
 };
 const HAGGLE_LINES = ['可以便宜一点吗？', '有打折吗？', '这个有优惠吗？'];
 const START_MONEY = 120;     // vốn đầu game (giá hàng theo file Excel)
@@ -279,6 +282,9 @@ const VOCAB_TABS = [
       { chn: '猫', pin: 'māo', vi: 'con mèo' },
       { chn: '过期', pin: 'guòqī', vi: 'hết hạn (sử dụng)' },
       { chn: '打碎', pin: 'dǎsuì', vi: 'làm vỡ' },
+      { chn: '不小心', pin: 'bù xiǎoxīn', vi: 'lỡ tay, không cẩn thận' },
+      { chn: '赔', pin: 'péi', vi: 'đền (tiền)' },
+      { chn: '一半', pin: 'yíbàn', vi: 'một nửa' },
       { chn: '老鼠', pin: 'lǎoshǔ', vi: 'con chuột' },
       { chn: '停电', pin: 'tíngdiàn', vi: 'mất điện' },
       { chn: '冰箱', pin: 'bīngxiāng', vi: 'tủ lạnh' },
@@ -870,7 +876,7 @@ class GroceryGame {
     if (sub) {
       sub.innerHTML = `Mỗi ngày bán hàng gồm <b>${Math.round(DAY_RULES.lengthMs / 60000)} phút đếm ngược</b>. Khách đến liên tục tấp nập — phục vụ được càng nhiều càng tốt!`
         + (low ? `<br>⚠️ <b>${low} món</b> sắp hết hàng — nên nhập thêm trước khi mở cửa.` : '')
-        + '<br>🕒 Đồ tươi còn trên kệ cuối ngày sẽ <b>hết hạn một nửa</b>; trong ngày có thể có <b>sự cố bất ngờ</b>!';
+        + '<br>🕒 Đồ tươi còn trên kệ cuối ngày sẽ <b>hết hạn một phần</b>; thỉnh thoảng có <b>sự cố bất ngờ</b>.';
     }
     const goals = this.$('mission-goals');
     if (goals) {
@@ -893,8 +899,8 @@ class GroceryGame {
     this.closed = false;
     this.dayStartAt = this.gameTime;
     this.nextArrivalAt = this.gameTime + QUEUE_RULES.firstArrivalMs;
-    // sự cố bất ngờ: ngày 1 có 1 lần, từ ngày 2 có 1–2 lần, rơi vào khoảng 20%–85% thời gian bán
-    const nInc = this.day === 1 ? 1 : randInt(1, 2);
+    // sự cố bất ngờ: lâu lâu mới có — từ ngày 3, khoảng 30% số ngày gặp 1 lần (rơi vào 20%–85% thời gian bán)
+    const nInc = this.day >= INCIDENT_RULES.firstIncidentDay && Math.random() < INCIDENT_RULES.midDayChance ? 1 : 0;
     this.incidentTimes = Array.from({ length: nInc }, () => this.dayStartAt + DAY_RULES.lengthMs * (0.2 + Math.random() * 0.65)).sort((a, b) => a - b);
     this.learn('欢迎光临');
     this.learn('营业');
@@ -1069,7 +1075,8 @@ class GroceryGame {
     if (!avail.length) return null;
     // Khách hỏi đúng món đã mở bán nhưng đang hết hàng → phải xin lỗi "不好意思，这个卖完了。"
     const soldOut = this.shelves.filter(s => s.unlocked && this.zones[s.zone] && s.currentStock <= 0);
-    if (allowSoldOut && soldOut.length && Math.random() < INCIDENT_RULES.soldOutChance) {
+    if (allowSoldOut && soldOut.length && !this.stats.eventUsed && Math.random() < INCIDENT_RULES.soldOutChance) {
+      this.stats.eventUsed = 1;
       const it = pickOne(soldOut);
       const due = it.price;
       const paid = this.pickPaidAmount(due);
@@ -1085,7 +1092,8 @@ class GroceryGame {
     const due = items.reduce((s, x) => s + cents(x.item.price) * x.qty, 0) / 100;
     const paid = this.pickPaidAmount(due);
     const tpls = ORDER_TEMPLATES.filter(t => !t.one || items.length === 1);
-    const haggle = due >= INCIDENT_RULES.haggleMinDue && Math.random() < INCIDENT_RULES.haggleChance ? pickOne(HAGGLE_LINES) : null;
+    const haggle = due >= INCIDENT_RULES.haggleMinDue && !this.stats.eventUsed && Math.random() < INCIDENT_RULES.haggleChance ? pickOne(HAGGLE_LINES) : null;
+    if (haggle) this.stats.eventUsed = 1;
     return { items, due, paid, change: Math.round((paid - due) * 100) / 100, tpl: pickOne(tpls).id, haggle };
   }
 
@@ -1180,39 +1188,65 @@ class GroceryGame {
 
   // Sự cố bất ngờ giữa ngày (làm vỡ chai, chuột cắn túi, mất điện) — không đụng món khách đang mua
   triggerIncident() {
+    if (this.stats.eventUsed) return; // hôm nay đã có 1 tình huống rồi
     const busy = new Set(this.current && this.current.order ? this.current.order.items.map(x => x.item.id) : []);
     const stocked = this.shelves.filter(it => it.unlocked && this.zones[it.zone] && it.currentStock > 0 && !busy.has(it.id));
     const types = [];
     const bottles = stocked.filter(it => it.quantifier === '瓶' || it.quantifier === '罐');
     const bags = stocked.filter(it => it.quantifier === '包' || it.quantifier === '袋');
     const cold = stocked.filter(it => it.zone === 'dairy');
-    if (bottles.length) types.push('break');
+    // khách làm vỡ: cần có khách trong tiệm (khách đang ở quầy, hoặc người đầu hàng chờ)
+    const breaker = this.current || this.line[0] || null;
+    if (bottles.length && breaker) types.push('break');
     if (bags.length) types.push('rat');
     if (cold.length) types.push('power');
     if (!types.length) return;
     const type = pickOne(types);
+    this.stats.eventUsed = 1;
     const lost = [];
     const take = (it, n) => { const q = Math.min(it.currentStock, n); if (q > 0) { it.currentStock -= q; lost.push({ item: it, qty: q }); } };
     let ev;
+    let comp = 0;
     if (type === 'break') {
+      // KHÁCH làm vỡ → hàng mất, nhưng khách đền tiền NỬA GIÁ BÁN
       const it = pickOne(bottles);
       const n = Math.min(it.currentStock, randInt(1, 2));
       take(it, n);
-      ev = { icon: '💥', title: 'Làm vỡ hàng!', zh: `哎呀！${NUM_CHN[n] || n}${it.quantifier}${it.nameChn}打碎了！`, pin: `Āiyā! ${n === 1 ? yiPinyin(it.qPin) : 'liǎng'} ${it.qPin} ${it.pinyin} dǎsuì le!`, vi: `Ôi! Làm vỡ ${n} ${it.quantifierVi} ${it.nameVi.split(' / ')[0]} rồi!`, words: ['打碎'] };
+      comp = Math.round(cents(it.price) * n / 2) / 100;
+      const numPin = n === 1 ? yiPinyin(it.qPin) : 'liǎng';
+      ev = {
+        icon: '💥', title: `${breaker.profile.nameChn} (${breaker.profile.nameVi}) làm vỡ hàng!`,
+        zh: `哎呀，不好意思！我不小心把${NUM_CHN[n] || n}${it.quantifier}${it.nameChn}打碎了。`,
+        pin: `Āiyā, bù hǎoyìsi! Wǒ bù xiǎoxīn bǎ ${numPin} ${it.qPin} ${it.pinyin} dǎsuì le.`,
+        vi: `Ôi, xin lỗi! Tôi lỡ tay làm vỡ ${n} ${it.quantifierVi} ${it.nameVi.split(' / ')[0]} rồi.`,
+        words: ['打碎', '不小心', '赔', '一半'],
+        lossText: `Vỡ: ${it.nameChn} ×${n} (giá bán ${fmt(it.price * n)} ¥) → khách đền nửa giá ${fmt(comp)} ¥`,
+        actions: [{
+          label: `💰 <span class="zh">没关系，请赔一半吧。</span> Đền tiền nửa giá (+${fmt(comp)} ¥)`, cls: 'g-btn-primary',
+          fn: () => {
+            this.money = Math.round((this.money + comp) * 100) / 100;
+            this.stats.compensation = Math.round(((this.stats.compensation || 0) + comp) * 100) / 100;
+            this.audio.coin();
+            this.audio.speak('没关系，请赔一半的钱吧。');
+            this.showToast('💰', `${breaker.profile.nameChn} đã đền ${fmt(comp)} ¥ (nửa giá).`);
+            this.updateHUD();
+          }
+        }]
+      };
     } else if (type === 'rat') {
       const it = pickOne(bags);
       take(it, randInt(1, 2));
-      ev = { icon: '🐭', title: 'Chuột cắn hàng!', zh: `糟糕！老鼠把${it.nameChn}的袋子咬破了！`, pin: `Zāogāo! Lǎoshǔ bǎ ${it.pinyin} de dàizi yǎopò le!`, vi: `Chết rồi! Chuột cắn thủng túi ${it.nameVi.split(' / ')[0]}!`, words: ['老鼠'] };
+      ev = { icon: '🐭', title: 'Chuột cắn hàng! (mất sản phẩm)', zh: `糟糕！老鼠把${it.nameChn}的袋子咬破了！`, pin: `Zāogāo! Lǎoshǔ bǎ ${it.pinyin} de dàizi yǎopò le!`, vi: `Chết rồi! Chuột cắn thủng túi ${it.nameVi.split(' / ')[0]}!`, words: ['老鼠'] };
     } else {
       cold.forEach(it => take(it, Math.max(1, Math.ceil(it.currentStock * 0.3))));
-      ev = { icon: '🔌', title: 'Mất điện!', zh: '停电了！冰箱不冷了，冷藏食品坏了一些。', pin: 'Tíngdiàn le! Bīngxiāng bù lěng le, lěngcáng shípǐn huài le yìxiē.', vi: 'Mất điện rồi! Tủ lạnh không lạnh nữa, đồ lạnh bị hỏng một ít.', words: ['停电', '冰箱'] };
+      ev = { icon: '🔌', title: 'Mất điện! (mất sản phẩm)', zh: '停电了！冰箱不冷了，冷藏食品坏了一些。', pin: 'Tíngdiàn le! Bīngxiāng bù lěng le, lěngcáng shípǐn huài le yìxiē.', vi: 'Mất điện rồi! Tủ lạnh không lạnh nữa, đồ lạnh bị hỏng một ít.', words: ['停电', '冰箱'] };
     }
     const loss = lost.reduce((a, x) => a + cents(x.item.cost) * x.qty, 0) / 100;
     this.stats.incidentLoss = Math.round(((this.stats.incidentLoss || 0) + loss) * 100) / 100;
-    (this.stats.incidents = this.stats.incidents || []).push({ type, lost: lost.map(x => ({ id: x.item.id, qty: x.qty })), loss });
+    (this.stats.incidents = this.stats.incidents || []).push({ type, lost: lost.map(x => ({ id: x.item.id, qty: x.qty })), loss, comp });
     ev.words.forEach(w => this.learn(w));
     this.audio.error();
-    this.showIncident({ ...ev, loss: `Mất: ${lost.map(x => `${x.item.nameChn} ×${x.qty}`).join(', ')} · thiệt hại ${fmt(loss)} ¥ (giá nhập)` });
+    this.showIncident({ ...ev, loss: ev.lossText || `Mất sản phẩm: ${lost.map(x => `${x.item.nameChn} ×${x.qty}`).join(', ')} · thiệt hại ${fmt(loss)} ¥ (giá nhập)` });
     this.renderShelves();
     this.renderRail();
   }
@@ -1735,13 +1769,13 @@ class GroceryGame {
     const spBox = this.$('summary-incidents');
     if (spBox) {
       const inc = s.incidents || [];
-      const incLabel = { break: '💥 Làm vỡ hàng', rat: '🐭 Chuột cắn', power: '🔌 Mất điện' };
+      const incLabel = { break: '💥 Khách làm vỡ', rat: '🐭 Chuột cắn', power: '🔌 Mất điện' };
       spBox.innerHTML = `
         <div class="si-row ${spoiled.length ? 'bad' : 'ok'}"><b>🗑️ <span class="zh">过期</span> · Hàng tươi hết hạn qua đêm</b>
           <span>${spoiled.length ? spoiled.map(x => `<span class="zh">${x.item.nameChn}</span> ×${x.qty}`).join(', ') + ` — thiệt hại <b>${fmt(spoilLoss)} ¥</b>` : '✨ Không có hàng tươi nào bị hủy — nhập hàng vừa đủ, giỏi lắm!'}</span></div>
         <div class="si-row ${inc.length ? 'bad' : 'ok'}"><b>⚠️ Sự cố trong ngày</b>
-          <span>${inc.length ? inc.map(e => `${incLabel[e.type] || e.type} (−${fmt(e.loss)} ¥)`).join(' · ') : 'Không có sự cố nào.'}</span></div>
-        <div class="si-tip">💡 Đồ tươi (🕒) còn trên kệ cuối ngày sẽ bị hủy một nửa — nhập vừa đủ bán trong ngày.</div>`;
+          <span>${inc.length ? inc.map(e => e.type === 'break' ? `${incLabel.break} (khách đền +${fmt(e.comp || 0)} ¥)` : `${incLabel[e.type] || e.type} (mất hàng −${fmt(e.loss)} ¥)`).join(' · ') : 'Không có sự cố nào.'}</span></div>
+        <div class="si-tip">💡 Đồ tươi (🕒) còn trên kệ cuối ngày sẽ bị hủy 1/4 — nhập vừa đủ bán trong ngày.</div>`;
     }
     const goals = this.evaluateMission();
     const stars = goals.filter(g => g.done).length;
