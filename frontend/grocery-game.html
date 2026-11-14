@@ -85,6 +85,7 @@
         <button type="button" class="g-hud-circle" id="btn-hud-home" title="Về màn hình chính"><i class="fa-solid fa-house"></i></button>
         <button type="button" class="g-hud-circle" id="btn-pause-game" title="Tạm dừng & Cài đặt"><i class="fa-solid fa-pause"></i></button>
         <button type="button" class="g-hud-circle" id="btn-fullscreen" title="Toàn màn hình"><i class="fa-solid fa-expand"></i></button>
+        <button type="button" class="g-hud-circle close-shop" id="btn-close-shop" title="打烊 · Đóng cửa sớm (kết thúc ngày)" style="display:none;"><i class="fa-solid fa-moon"></i></button>
         <div class="g-pill money" title="Tiền vốn hiện có">
           <span class="pill-icon">🪙</span>
           <span class="pill-text"><small>资金 · Vốn</small><strong id="hud-money-val">50.00 ¥</strong></span>
@@ -477,8 +478,11 @@
           <h3><span class="zh">今日任务</span> · Nhiệm vụ hôm nay</h3>
           <p id="mission-sub">Tiệm mở cửa 08:00 → 20:00.</p>
         </div>
+        <!-- Thông báo hôm nay: thời tiết / ngày lễ (ảnh hưởng lượng khách) -->
+        <div class="mission-event" id="mission-event"></div>
         <div class="mission-goals" id="mission-goals"></div>
         <div class="mission-actions">
+          <button type="button" class="g-btn-ghost upgrade-open" id="btn-open-upgrades"><i class="fa-solid fa-arrow-up"></i> <span class="zh">升级</span> Nâng cấp</button>
           <button type="button" class="g-btn-ghost" id="btn-mission-restock"><i class="fa-solid fa-boxes-packing"></i> <span class="zh">批发市场</span> Nhập hàng</button>
           <button type="button" class="g-btn-primary big" id="btn-mission-start"><span class="zh">开门营业</span> Mở cửa bán hàng <i class="fa-solid fa-store"></i></button>
         </div>
@@ -502,6 +506,7 @@
     <!-- TỔNG KẾT NGÀY -->
     <div class="g-modal" id="modal-day-summary" style="display:none;">
       <div class="g-card summary-card">
+        <div class="summary-scroll">
         <div class="summary-head">
           <span class="summary-icon">🏮</span>
           <h3 id="summary-day-title"><span class="zh">第1天</span> · Tổng kết ngày</h3>
@@ -517,7 +522,16 @@
         </div>
         <div class="mission-results" id="day-mission-results"></div>
         <div class="summary-incidents" id="summary-incidents"></div>
-        <button type="button" class="g-btn-primary big" id="btn-next-day-start"><span class="zh">进入下一天</span> Sang ngày mới <i class="fa-solid fa-sun"></i></button>
+        </div>
+        <!-- Thanh nút luôn hiện (không bị cuộn mất) -->
+        <div class="summary-actions">
+          <div class="summary-tools">
+            <button type="button" class="g-btn-ghost" id="btn-summary-home" title="Về màn hình chính"><i class="fa-solid fa-house"></i> <span>Về nhà</span></button>
+            <button type="button" class="g-btn-ghost" id="btn-summary-vocab" title="Sổ từ mới"><i class="fa-solid fa-book"></i> <span><span class="zh">生词</span> Từ mới</span></button>
+            <button type="button" class="g-btn-ghost" id="btn-summary-rank" title="Bảng xếp hạng"><i class="fa-solid fa-trophy"></i> <span>Xếp hạng</span></button>
+          </div>
+          <button type="button" class="g-btn-primary big" id="btn-next-day-start"><span class="zh">进入下一天</span> Sang ngày mới <i class="fa-solid fa-sun"></i></button>
+        </div>
       </div>
     </div>
 
@@ -526,7 +540,7 @@
       <div class="g-card market-card">
         <div class="market-awning" aria-hidden="true"></div>
         <div class="g-card-head">
-          <h3>📦 <span class="zh">批发市场</span> · Chợ đầu mối — nhập hàng &amp; mở hàng mới</h3>
+          <h3>📦 <span class="zh">批发市场</span> · Chợ đầu mối — nhập hàng, mở hàng mới &amp; nâng cấp</h3>
           <button type="button" class="g-close" data-close="modal-restock"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="market-body">
@@ -609,6 +623,9 @@
           <label class="setting"><span><b>Hiện pinyin</b><small>Phiên âm dưới câu tiếng Trung</small></span><input type="checkbox" id="setting-pinyin" checked><i class="sw"></i></label>
           <label class="setting"><span><b>Hiện nghĩa tiếng Việt</b><small>Dịch câu gọi hàng</small></span><input type="checkbox" id="setting-vietnamese" checked><i class="sw"></i></label>
           <label class="setting"><span><b>Chế độ thư giãn</b><small>Khách chờ bao lâu cũng không bỏ về</small></span><input type="checkbox" id="setting-relaxed"><i class="sw"></i></label>
+        </div>
+        <div class="settings-close-shop">
+          <button type="button" class="g-btn-ghost" id="btn-settings-close-shop"><i class="fa-solid fa-moon"></i> <span class="zh">打烊</span> Đóng cửa sớm hôm nay <small>(không đón khách mới, phục vụ nốt khách đã nhận đơn)</small></button>
         </div>
         <div class="g-card-foot">
           <button type="button" class="g-btn-ghost" id="btn-back-to-title"><i class="fa-solid fa-house"></i> Màn hình chính</button>

@@ -175,18 +175,18 @@ const MARKET_ZONES = [
 
 // Vật tư phải mua & được TỒN qua ngày (không hỏng): ly, đá, nước đường
 const SUPPLIES = [
-  { id: 'cupS', size: 'S', chn: '小杯', pin: 'xiǎo bēi', vi: 'ly nhỏ (kèm nắp & ống hút)', icon: '🥤', unit: 'cái', pack: 10, cost: 2, start: 10 },
-  { id: 'cupM', size: 'M', chn: '中杯', pin: 'zhōng bēi', vi: 'ly vừa (kèm nắp & ống hút)', icon: '🥤', unit: 'cái', pack: 10, cost: 2.5, start: 10 },
-  { id: 'cupL', size: 'L', chn: '大杯', pin: 'dà bēi', vi: 'ly lớn (kèm nắp & ống hút)', icon: '🥤', unit: 'cái', pack: 10, cost: 3, start: 10 },
-  { id: 'ice', chn: '冰块', pin: 'bīngkuài', vi: 'đá viên', icon: '🧊', unit: 'phần', pack: 30, cost: 3, start: 30 },
-  { id: 'sugar', chn: '糖浆', pin: 'tángjiāng', vi: 'nước đường', icon: '🍯', unit: 'phần', pack: 30, cost: 3, start: 30 }
+  { id: 'cupS', size: 'S', chn: '小杯', pin: 'xiǎo bēi', vi: 'ly nhỏ (kèm nắp & ống hút)', icon: '🥤', unit: 'cái', pack: 10, cost: 3, start: 10 },
+  { id: 'cupM', size: 'M', chn: '中杯', pin: 'zhōng bēi', vi: 'ly vừa (kèm nắp & ống hút)', icon: '🥤', unit: 'cái', pack: 10, cost: 4, start: 10 },
+  { id: 'cupL', size: 'L', chn: '大杯', pin: 'dà bēi', vi: 'ly lớn (kèm nắp & ống hút)', icon: '🥤', unit: 'cái', pack: 10, cost: 5, start: 10 },
+  { id: 'ice', chn: '冰块', pin: 'bīngkuài', vi: 'đá viên', icon: '🧊', unit: 'phần', pack: 30, cost: 5, start: 30 },
+  { id: 'sugar', chn: '糖浆', pin: 'tángjiāng', vi: 'nước đường', icon: '🍯', unit: 'phần', pack: 30, cost: 5, start: 30 }
 ];
 
 // Nâng cấp tiệm (mỗi món 3 cấp)
 const UPGRADES = [
-  { id: 'sign', chn: '招牌', pin: 'zhāopai', vi: 'biển hiệu mới', icon: '🪧', desc: 'Thu hút thêm khách: +12% khách mỗi cấp', costs: [60, 120, 200] },
-  { id: 'seats', chn: '座位', pin: 'zuòwèi', vi: 'ghế ngồi chờ', icon: '🪑', desc: 'Khách chịu chờ lâu hơn: +10 giây mỗi cấp', costs: [50, 100, 180] },
-  { id: 'hours', chn: '延长营业', pin: 'yáncháng yíngyè', vi: 'kéo dài giờ mở cửa', icon: '🕘', desc: 'Mở cửa thêm 1 giờ (+45 giây chơi) mỗi cấp', costs: [80, 150, 240] }
+  { id: 'sign', chn: '招牌', pin: 'zhāopai', vi: 'biển hiệu mới', icon: '🪧', desc: 'Thu hút thêm khách: +12% khách mỗi cấp', costs: [150, 300, 500] },
+  { id: 'seats', chn: '座位', pin: 'zuòwèi', vi: 'ghế ngồi chờ', icon: '🪑', desc: 'Khách chịu chờ lâu hơn: +10 giây mỗi cấp', costs: [120, 250, 450] },
+  { id: 'hours', chn: '延长营业', pin: 'yáncháng yíngyè', vi: 'kéo dài giờ mở cửa', icon: '🕘', desc: 'Mở cửa thêm 1 giờ (+45 giây chơi) mỗi cấp', costs: [200, 400, 650] }
 ];
 
 // Thông báo mỗi ngày: thời tiết (khách giảm) hoặc ngày lễ (khách tăng) → học thêm từ vựng
@@ -2945,7 +2945,7 @@ class BobaShop {
     const owned = z.id === 'teas' ? this.teasOwned : this.toppingsOwned;
     const zoneState = (zz) => {
       if (zz.id === 'supplies') return SUPPLIES.some(x => (this.supplies[x.id] || 0) <= 5) ? '⚠️' : '✓';
-      if (zz.id === 'upgrades') return `${UPGRADES.reduce((t, u) => t + (this.upgrades[u.id] || 0), 0)}/${UPGRADES.reduce((t, u) => t + u.costs.length, 0)}`;
+      if (zz.id === 'upgrades') return `${UPGRADES.reduce((t, u) => t + (this.upgrades[u.id] || 0), 0)}/${UPGRADES.reduce((t, u) => t + u.costs.length, 0)} cấp`;
       const l = zz.id === 'teas' ? TEAS : TOPPINGS;
       const o = zz.id === 'teas' ? this.teasOwned : this.toppingsOwned;
       return `${o.size}/${l.length}`;
