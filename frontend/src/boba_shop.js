@@ -210,8 +210,17 @@ const HOLIDAYS = [
   { id: 'national', chn: '国庆节', pin: 'Guóqìngjié', vi: 'Quốc khánh', icon: '🎆', greet: '国庆节快乐！', greetPin: 'Guóqìngjié kuàilè!', greetVi: 'Chúc mừng Quốc khánh!' },
   { id: 'christmas', chn: '圣诞节', pin: 'Shèngdànjié', vi: 'Giáng sinh', icon: '🎄', greet: '圣诞节快乐！', greetPin: 'Shèngdànjié kuàilè!', greetVi: 'Giáng sinh vui vẻ!' }
 ];
-const EVENT_RULES = { holidayChance: 0.15, holidayDemand: 1.5, firstEventDay: 2 };
-const MAX_TOPPINGS = 3;
+const EVENT_RULES = { holidayChance: 0.15, holidayDemand: 1.3, firstEventDay: 2 };
+const MAX_TOPPINGS = 3;   // tối đa 3 phần topping / ly (vd: 双份珍珠 + 椰果)
+const DOUBLE_TOPPING_CHANCE = 0.3; // khách gọi 1 loại topping 2 phần
+// gom topping trùng: [珍珠, 珍珠, 椰果] → [{ t: 珍珠, n: 2 }, { t: 椰果, n: 1 }]
+function groupTops(list) {
+  const m = new Map();
+  list.forEach(x => { const id = typeof x === 'string' ? x : x.id; const e = m.get(id); if (e) e.n += 1; else m.set(id, { t: TOPPINGS.find(t => t.id === id) || x, n: 1 }); });
+  return [...m.values()];
+}
+const topZh = (gp) => (gp.n > 1 ? `双份${gp.t.chn}` : gp.t.chn);
+const topShort = (gp) => (gp.n > 1 ? `${gp.t.chn}×${gp.n}` : gp.t.chn);
 
 // Từ lóng / khẩu ngữ hay gặp trong đánh giá của khách → tự vào sổ từ vựng khi khách viết đánh giá có từ đó
 const REVIEW_SLANG = [
@@ -262,6 +271,8 @@ const VOCAB_TABS = [
       { chn: '做错了', pin: 'zuò cuò le', vi: 'làm sai rồi' },
       { chn: '重做', pin: 'chóngzuò', vi: 'làm lại' },
       { chn: '加', pin: 'jiā', vi: 'thêm (topping)' },
+      { chn: '双份', pin: 'shuāngfèn', vi: 'gấp đôi, 2 phần' },
+      { chn: '打烊了', pin: 'dǎyàng le', vi: 'quán đóng cửa rồi' },
       ...SUPPLIES.map(x => ({ chn: x.chn, pin: x.pin, vi: x.vi })),
       ...UPGRADES.map(x => ({ chn: x.chn, pin: x.pin, vi: x.vi })),
       { chn: '升级', pin: 'shēngjí', vi: 'nâng cấp' },
@@ -301,13 +312,13 @@ const VOCAB_TOTAL = VOCAB_TABS.reduce((s, t) => s + t.words.length, 0);
 const DAY_RULES = { lengthMs: 300000, openMin: 8 * 60, closeMin: 20 * 60, extraMsPerHour: 45000, closingWarnSec: 30 }; // 1 ngày = 5 phút thật
 
 const QUEUE_RULES = {
-  maxLine: 4,
+  maxLine: 3,
   patienceMs: 60000,       // chờ quá 60s mà chưa được nhận đơn → bỏ về (nới cho kịp pha)
   firstArrivalMs: 400,     // 0.4s khách đầu tiên ghé ngay
-  arriveBaseMs: 15000,     // ngày 5 phút: khách đến giãn ra ~15-19s/người
+  arriveBaseMs: 26000,     // khách đến thong thả ~26-32s/người (đủ thời gian pha 1 ly 2-3 topping)
   arrivePerDayMs: 300,
-  arriveMinMs: 9000,
-  arriveJitterMs: 4000,
+  arriveMinMs: 20000,
+  arriveJitterMs: 6000,
   seatPatienceMs: 10000    // mỗi cấp ghế ngồi: khách chờ thêm 10s
 };
 
@@ -411,7 +422,7 @@ const REPLY_OPTIONS = {
 };
 function replyGroup(stars) { return stars >= 4 ? 'good' : stars === 3 ? 'mid' : 'bad'; }
 
-const MISSION_RULES = { baseTarget: 110, targetPerDay: 20, maxTarget: 450, roundTo: 5, baseMaxLost: 2, minAvgScore: 80, bonusPerStar: 10 };
+const MISSION_RULES = { baseTarget: 70, targetPerDay: 10, maxTarget: 300, roundTo: 5, baseMaxLost: 2, minAvgScore: 80, bonusPerStar: 10 };
 
 const POUR_RULES = { target: 80, ratePerSec: 40, tickMs: 50 };
 
@@ -718,6 +729,9 @@ class BobaShop {
 
     on('btn-hud-home', 'click', () => { this.audio.pop(); this.stopPour(); this.showTitleScreen(); });
     on('btn-pause-game', 'click', () => { this.audio.pop(); this.stopPour(); this.openModal('modal-settings'); });
+    on('btn-close-shop', 'click', () => this.closeShopEarly());
+    on('btn-settings-close-shop', 'click', () => { this.closeModal('modal-settings'); this.closeShopEarly(); });
+    on('btn-open-upgrades', 'click', () => this.openMarket('upgrades'));
     on('btn-fullscreen', 'click', () => this.toggleFullscreen());
     on('btn-open-vocab', 'click', () => { this.audio.pop(); this.openVocabModal(); });
     on('btn-open-restock', 'click', () => this.openMarket());
@@ -1273,8 +1287,9 @@ class BobaShop {
     const o = c.order;
     const teaInCup = this.cup.tea === o.tea.id && this.cup.fill > 0 && !this.cup.mixed;
     if (!teaInCup && (this.teaStock[o.tea.id] || 0) <= 0 && this.money < INGREDIENT_RULES.teaBatchCost - 1e-9) return `trà ${o.tea.chn}`;
-    for (const t of o.toppings) {
-      if (!this.cup.toppings.includes(t.id) && (this.toppingStock[t.id] || 0) <= 0 && this.money < INGREDIENT_RULES.toppingBatchCost - 1e-9) return `topping ${t.chn}`;
+    for (const gp of groupTops(o.toppings)) {
+      const missing = gp.n - this.cup.toppings.filter(id => id === gp.t.id).length;
+      if (missing > 0 && (this.toppingStock[gp.t.id] || 0) < missing && this.money < INGREDIENT_RULES.toppingBatchCost - 1e-9) return `topping ${gp.t.chn}`;
     }
     const sup = (id) => byId(SUPPLIES, id);
     if (!this.cup.size && (this.supplies.cups || 0) <= 0 && this.money < sup('cups').cost - 1e-9) return 'ly (杯子)';
@@ -1292,6 +1307,31 @@ class BobaShop {
     this.audio.sad();
     this.showToast('🙇', `抱歉 (bàoqiàn) · Hết ${why} và không đủ tiền nấu thêm — ${c.profile.nameChn} đành rời quán.`, 'warn');
     this.switchStation('view-order-station', true);
+  }
+
+  // 打烊 · Đóng cửa sớm: không đón khách mới; khách chưa gọi món được mời về (không tính bỏ về), đơn đã nhận vẫn làm nốt
+  closeShopEarly() {
+    if (!this.isDayInProgress()) { this.showToast('🌙', 'Quán chưa mở cửa — chưa cần đóng cửa.', 'warn'); return; }
+    if (this.closed) { this.showToast('🌙', 'Quán đã đóng cửa rồi, đang phục vụ nốt khách.'); return; }
+    if (!confirm('打烊 · Đóng cửa sớm hôm nay?\nKhông đón thêm khách. Khách chưa gọi món sẽ được mời về (không tính bỏ về); đơn đã nhận vẫn làm nốt.')) return;
+    this.stopPour();
+    this.closed = true;
+    this.learn('打烊');
+    this.learn('打烊了');
+    this.audio.bell();
+    const leaving = this.line.filter(c => !c.takenAt);
+    this.line = this.line.filter(c => c.takenAt);
+    if (this.current && !this.current.takenAt) {
+      leaving.push(this.current);
+      this.current = null;
+      this.cup = freshCup();
+      this.changeTray = [];
+    }
+    this.audio.speak('不好意思，我们打烊了！');
+    this.showToast('🌙', `打烊了 · Đóng cửa sớm!${leaving.length ? ` ${leaving.length} khách chưa gọi món được mời về.` : ''}${this.line.length || (this.current && this.current.takenAt) ? ' Làm nốt các đơn đã nhận nhé.' : ''}`);
+    if (!this.current) this.promoteNext();
+    this.renderAll();
+    this.checkDayEnd();
   }
 
   checkDayEnd() {
@@ -1314,7 +1354,7 @@ class BobaShop {
     const o = {
       size: pickOne(SIZES),
       tea: pickOne(teas),
-      toppings: [...tops].sort(() => Math.random() - 0.5).slice(0, this.rollToppingCount(tops.length)),
+      toppings: this.pickOrderToppings(tops),
       sugar: pickOne(SUGARS),
       ice: pickOne(ICES)
     };
@@ -1324,7 +1364,14 @@ class BobaShop {
     return o;
   }
 
-  // số topping khách gọi: 0 (20%) · 1 (40%) · 2 (28%) · 3 (12%)
+  // chọn topping cho đơn; đôi khi 1 loại gọi 2 phần (双份)
+  pickOrderToppings(tops) {
+    const list = [...tops].sort(() => Math.random() - 0.5).slice(0, this.rollToppingCount(tops.length));
+    if (list.length >= 1 && list.length < MAX_TOPPINGS && Math.random() < DOUBLE_TOPPING_CHANCE) list.push(pickOne(list));
+    return groupTops(list).flatMap(gp => Array(gp.n).fill(gp.t));
+  }
+
+  // số loại topping khách gọi: 0 (20%) · 1 (40%) · 2 (28%) · 3 (12%)
   rollToppingCount(max) {
     const r = Math.random();
     const n = r < 0.2 ? 0 : r < 0.6 ? 1 : r < 0.88 ? 2 : 3;
@@ -1342,10 +1389,10 @@ class BobaShop {
   }
 
   orderPhrase(o) {
-    const tops = o.toppings;
-    const parts = [`${o.size.chn}${o.tea.chn}`, tops.length ? `加${tops.map(t => t.chn).join('、')}` : '不加料', o.sugar.chn, o.ice.chn];
-    const pinParts = [`${o.size.pin} ${o.tea.pin}`, tops.length ? `jiā ${tops.map(t => t.pin).join(', ')}` : 'bù jiā liào', o.sugar.pin, o.ice.pin];
-    const vi = `1 ${o.size.vi} ${o.tea.vi}${tops.length ? ', thêm ' + tops.map(t => t.vi).join(' + ') : ', không topping'}, ${o.sugar.vi}, ${o.ice.vi}`;
+    const tops = groupTops(o.toppings);
+    const parts = [`${o.size.chn}${o.tea.chn}`, tops.length ? `加${tops.map(topZh).join('、')}` : '不加料', o.sugar.chn, o.ice.chn];
+    const pinParts = [`${o.size.pin} ${o.tea.pin}`, tops.length ? `jiā ${tops.map(gp => (gp.n > 1 ? 'shuāngfèn ' : '') + gp.t.pin).join(', ')}` : 'bù jiā liào', o.sugar.pin, o.ice.pin];
+    const vi = `1 ${o.size.vi} ${o.tea.vi}${tops.length ? ', thêm ' + tops.map(gp => gp.t.vi + (gp.n > 1 ? ` (${gp.n} phần)` : '')).join(' + ') : ', không topping'}, ${o.sugar.vi}, ${o.ice.vi}`;
     return {
       zh: `老板，我要${parts.join('，')}！`,
       zhHtml: `老板，我要${parts.map(p => `<em>${p}</em>`).join('，')}！`,
@@ -1363,6 +1410,7 @@ class BobaShop {
     if (!c || !c.order || c.takenAt) return;
     this.audio.pick();
     c.takenAt = this.gameTime;
+    if (groupTops(c.order.toppings).some(gp => gp.n > 1)) this.learn('双份');
     const used = this.patienceUsed(c);
     c.waitScore = this.relaxedMode ? 100 : Math.round(100 - 60 * Math.max(0, Math.min(1, (used - 0.25) / 0.75)));
     this.learn('老板');
@@ -1655,9 +1703,9 @@ class BobaShop {
     const want = o.toppings.map(t => t.id).sort();
     const got = [...cup.toppings].sort();
     const topOk = want.length === got.length && want.every((t, i) => t === got[i]);
-    const gotTxt = cup.toppings.length ? `, đã thêm <span class="zh">${cup.toppings.map(id => byId(TOPPINGS, id).chn).join('、')}</span>` : ', chưa thêm gì';
+    const gotTxt = cup.toppings.length ? `, đã thêm <span class="zh">${groupTops(cup.toppings).map(topShort).join('、')}</span>` : ', chưa thêm gì';
     if (topOk) score += 10;
-    else bad(o.toppings.length ? `Topping: cần <b class="zh">${o.toppings.map(t => t.chn).join('、')}</b>${gotTxt}` : `Khách không gọi topping (<span class="zh">不加料</span>)${gotTxt}`);
+    else bad(o.toppings.length ? `Topping: cần <b class="zh">${groupTops(o.toppings).map(topZh).join('、')}</b>${gotTxt}` : `Khách không gọi topping (<span class="zh">不加料</span>)${gotTxt}`);
     return { score: Math.round(score), mistakes, hard };
   }
 
@@ -1807,7 +1855,7 @@ class BobaShop {
       customerNameChn: customer.profile.nameChn,
       customerNameVi: customer.profile.nameVi,
       customerImg: customer.profile.img,
-      orderText: `${order.size.chn} ${order.tea.chn}${order.toppings.length ? ' + ' + order.toppings.map(t => t.chn).join('、') : ''}`,
+      orderText: `${order.size.chn} ${order.tea.chn}${order.toppings.length ? ' + ' + groupTops(order.toppings).map(topZh).join('、') : ''}`,
       stars,
       score: totalScore,
       commentZh,
@@ -2436,6 +2484,8 @@ class BobaShop {
   }
 
   updateClockUI() {
+    const cs = this.$('btn-close-shop');
+    if (cs) cs.style.display = this.isDayInProgress() && !this.closed ? '' : 'none';
     const elapsed = this.dayElapsed();
     const remainMs = Math.max(0, this.dayLengthMs() - elapsed);
     const remainSec = Math.ceil(remainMs / 1000);
@@ -2617,13 +2667,13 @@ class BobaShop {
     const cup = this.cup;
     const v = (t) => (this.showVietnamese ? `<small>${escapeHtml(t)}</small>` : '');
     const now = (val) => `<span class="mt-now ${val ? 'set' : ''}">${val || '—'}</span>`;
-    const top = cup.toppings.map(id => byId(TOPPINGS, id).chn).join(' + ');
+    const top = groupTops(cup.toppings).map(topShort).join(' + ');
     list.innerHTML = `
       <li><span class="mt-k">🥤 Ly</span><span class="mt-v"><b class="zh">${o.size.chn}</b>${v(o.size.vi)}</span>${now(cup.size ? byId(SIZES, cup.size).chn : '')}</li>
       <li><span class="mt-k">🍵 Trà</span><span class="mt-v"><b class="zh">${o.tea.chn}</b>${v(o.tea.vi)}</span>${now(cup.mixed ? 'lẫn' : cup.tea ? `${byId(TEAS, cup.tea).chn} ${Math.round(cup.fill)}%` : '')}</li>
       <li><span class="mt-k">🍬 Đường</span><span class="mt-v"><b class="zh">${o.sugar.chn}</b>${v(o.sugar.vi)}</span>${now(cup.sugar ? byId(SUGARS, cup.sugar).chn : '')}</li>
       <li><span class="mt-k">🧊 Đá</span><span class="mt-v"><b class="zh">${o.ice.chn}</b>${v(o.ice.vi)}</span>${now(cup.ice ? byId(ICES, cup.ice).chn : '')}</li>
-      <li><span class="mt-k">🧋 Topping</span><span class="mt-v"><b class="zh">${o.toppings.length ? o.toppings.map(t => t.chn).join(' + ') : '不加料'}</b>${v(o.toppings.length ? o.toppings.map(t => t.vi).join(' + ') : 'không topping')}</span>${now(top)}</li>
+      <li><span class="mt-k">🧋 Topping</span><span class="mt-v"><b class="zh">${o.toppings.length ? groupTops(o.toppings).map(topZh).join(' + ') : '不加料'}</b>${v(o.toppings.length ? groupTops(o.toppings).map(gp => gp.t.vi + (gp.n > 1 ? ` ×${gp.n}` : '')).join(' + ') : 'không topping')}</span>${now(top)}</li>
       <li><span class="mt-k">🔒 Nắp</span><span class="mt-v"><b class="zh">封口</b>${v('đóng nắp')}</span>${now(cup.lid ? '✓' : '')}</li>`;
   }
 
@@ -2798,7 +2848,7 @@ class BobaShop {
         lines.innerHTML = `
           <div><span><span class="zh">${o.size.chn}</span> ${escapeHtml(o.size.vi)}</span><b>${fmt(o.size.price)}</b></div>
           ${o.tea.premium ? `<div><span><span class="zh">${o.tea.chn}</span> +</span><b>${fmt(o.tea.premium)}</b></div>` : ''}
-          ${o.toppings.map(t => `<div><span><span class="zh">${t.chn}</span> +</span><b>${fmt(t.price)}</b></div>`).join('')}`;
+          ${groupTops(o.toppings).map(gp => `<div><span><span class="zh">${topZh(gp)}</span> +</span><b>${fmt(gp.t.price * gp.n)}</b></div>`).join('')}`;
       }
     }
     const hintBtn = this.$('btn-change-hint');

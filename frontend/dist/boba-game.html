@@ -20,9 +20,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
   <!-- Dùng chung phong cách với Tiệm Tạp Hóa, rồi thêm phần riêng của tiệm trà sữa -->
-  <script type="module" crossorigin src="/assets/bobaGame-CWQR2akQ.js"></script>
+  <script type="module" crossorigin src="/assets/bobaGame-C72QoQsB.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/bobaGame-BPOCOkcw.css">
+  <link rel="stylesheet" crossorigin href="/assets/bobaGame-5zqoFvZ5.css">
   <link rel="stylesheet" crossorigin href="/assets/grocery_game-DwMBnktp.css">
 </head>
 
@@ -92,6 +92,8 @@
             class="fa-solid fa-pause"></i></button>
         <button type="button" class="g-hud-circle" id="btn-fullscreen" title="Toàn màn hình"><i
             class="fa-solid fa-expand"></i></button>
+        <button type="button" class="g-hud-circle close-shop" id="btn-close-shop" title="打烊 · Đóng cửa sớm (kết thúc ngày)" style="display:none;"><i
+            class="fa-solid fa-moon"></i></button>
         <div class="g-pill money" title="Tiền vốn hiện có">
           <span class="pill-icon">🪙</span>
           <span class="pill-text"><small>资金 · Vốn</small><strong id="hud-money-val">120.00 ¥</strong></span>
@@ -129,9 +131,9 @@
           <span class="pill-icon">📖</span>
           <span class="pill-text"><small class="zh">生词本</small><strong id="hud-vocab-val">0/0</strong></span>
         </button>
-        <button type="button" class="g-pill action stock" id="btn-open-restock" title="Mở món mới">
+        <button type="button" class="g-pill action stock" id="btn-open-restock" title="Nhập hàng · Mở món · Nâng cấp">
           <span class="pill-icon">🧺</span>
-          <span class="pill-text"><small class="zh">进货</small><strong>Mở món</strong></span>
+          <span class="pill-text"><small class="zh">进货</small><strong>Nhập hàng</strong></span>
         </button>
       </div>
     </header>
@@ -492,6 +494,8 @@
         <div class="mission-reading" id="mission-reading"></div>
 
         <div class="mission-actions">
+          <button type="button" class="g-btn-ghost prep-open upgrade-open" id="btn-open-upgrades"><i class="fa-solid fa-arrow-up"></i>
+            <span class="zh">升级</span> Nâng cấp</button>
           <button type="button" class="g-btn-ghost prep-open" id="btn-open-prep"><i class="fa-solid fa-fire-burner"></i>
             <span class="zh">原料准备</span> Nấu nguyên liệu</button>
           <button type="button" class="g-btn-primary big" id="btn-mission-start"><span class="zh">开门营业</span> Mở cửa bán
@@ -757,6 +761,10 @@
               type="checkbox" id="setting-vietnamese" checked><i class="sw"></i></label>
           <label class="setting"><span><b>Chế độ thư giãn</b><small>Khách chờ bao lâu cũng không bỏ
                 về</small></span><input type="checkbox" id="setting-relaxed"><i class="sw"></i></label>
+        </div>
+        <div class="settings-close-shop">
+          <button type="button" class="g-btn-ghost" id="btn-settings-close-shop"><i class="fa-solid fa-moon"></i> <span
+              class="zh">打烊</span> Đóng cửa sớm hôm nay <small>(không đón khách mới, làm nốt đơn đã nhận)</small></button>
         </div>
         <div class="g-card-foot">
           <button type="button" class="g-btn-ghost" id="btn-back-to-title"><i class="fa-solid fa-house"></i> Màn hình
