@@ -43,6 +43,7 @@ import './quick_dict_widget.js';
     if (path.includes('shop-games')) return 'shopgames';
     if (path.includes('boba-game')) return 'boba';
     if (path.includes('grocery-game')) return 'grocery';
+    if (path.includes('farm-game')) return 'farm';
     if (path.includes('quiz-game')) return 'games';
     if (path.includes('han-viet-rules')) return 'rules';
     if (path.includes('rank')) return 'rank';
@@ -1411,7 +1412,7 @@ import './quick_dict_widget.js';
         <!-- DANH MỤC: GAME THI ĐẤU (có bảng xếp hạng) -->
         <div class="sidebar-section-label">Game Thi Đấu · Xếp Hạng</div>
         <ul class="sidebar-menu" style="margin-bottom: 12px;">
-          <li class="sidebar-item ${['shopgames', 'boba', 'grocery'].includes(activeKey) ? 'active' : ''}" onclick="window.location.href = '/shop-games.html'" title="Game Nhập Vai: Tiệm Trà Sữa, Tiệm Tạp Hóa và nhiều game sắp ra mắt (có bảng xếp hạng)" style="cursor: pointer;">
+          <li class="sidebar-item ${['shopgames', 'boba', 'grocery', 'farm'].includes(activeKey) ? 'active' : ''}" onclick="window.location.href = '/shop-games.html'" title="Game Nhập Vai: Tiệm Trà Sữa, Tiệm Tạp Hóa và nhiều game sắp ra mắt (có bảng xếp hạng)" style="cursor: pointer;">
             <i class="fa-solid fa-store" style="color: #f43f5e; font-size: 1.1rem;"></i> <span>Game Nhập Vai</span>
             <span style="font-size: 0.65rem; background: rgba(244, 63, 94, 0.18); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.35); padding: 1px 6px; border-radius: 99px; font-weight: 800; margin-left: auto;">HOT</span>
           </li>

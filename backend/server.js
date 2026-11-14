@@ -175,6 +175,7 @@ const userSchema = new mongoose.Schema({
   // Mini game (Trà Sữa / Tạp Hóa): kỷ lục cao nhất + lịch sử ngày bán (không lưu tiến trình ván chơi)
   bobaGame: { type: Object, default: null },
   groceryGame: { type: Object, default: null },
+  farmGame: { type: Object, default: null },
   // VIP Membership Fields
   isVip: { type: Boolean, default: false },
   vipStatus: { type: String, default: 'normal' }, // 'normal', 'vip', 'expired'
@@ -459,6 +460,7 @@ async function readUserData(forceRefresh = false) {
             accessLogs: u.accessLogs || [],
             bobaGame: u.bobaGame || null,
             groceryGame: u.groceryGame || null,
+            farmGame: u.farmGame || null,
             isVip: !!u.isVip,
             vipStatus: u.vipStatus || (u.isVip ? 'vip' : 'normal'),
             vipActivatedAt: u.vipActivatedAt || null,
@@ -621,6 +623,7 @@ async function processMongoPersistenceQueue() {
           // bobaGame được ghi thẳng bởi /api/boba/progress; chỉ đồng bộ khi cache có dữ liệu (không bao giờ xoá)
           if (u.bobaGame) updateDoc.bobaGame = u.bobaGame;
           if (u.groceryGame) updateDoc.groceryGame = u.groceryGame;
+          if (u.farmGame) updateDoc.farmGame = u.farmGame;
           await User.updateOne({ _id: email }, { $set: updateDoc }, { upsert: true });
           failedEmailRetries.delete(email);
         } catch (err) {
@@ -2833,6 +2836,9 @@ registerMiniGameRoutes({ key: 'boba', field: 'bobaGame', limits: { maxGuestsPerD
 // Tiệm Tạp Hóa: ngày tính theo giờ mở cửa (khách đến liên tục, chừa biên 40/ngày); 1 khách tối đa ~50 ¥ hàng + 5.5 ¥ tip
 // Giá hàng theo file Tạp hóa.xlsx: 1 khách tối đa 2 món × (giá ≤ 45¥, món > 8¥ chỉ mua 1) + tip ≈ 96¥ → chừa dư
 registerMiniGameRoutes({ key: 'grocery', field: 'groceryGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 150 } });
+// Nông Trại (chơi liên tục, thời gian thật): không có "ngày bán" → mỗi lần LÊN CẤP gửi 1 kết quả:
+//   day = cấp độ, earnings = tổng XP, served/total = số đơn đã giao → bảng xếp hạng xếp theo tổng XP
+registerMiniGameRoutes({ key: 'farm', field: 'farmGame', limits: { maxGuestsPerDay: 1000000, maxPerGuest: 1000000 } });
 
 // Admin: Reset toàn bộ dữ liệu người dùng (xóa MongoDB + RAM cache) - Cần secret header
 app.delete('/api/admin/reset-all', async (req, res) => {

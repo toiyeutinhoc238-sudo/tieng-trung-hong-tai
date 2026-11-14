@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nông Trại Của Tôi (我的农场) | Tiếng Trung HongTai</title>
+  <link rel="icon" type="image/png" href="./src/assets/logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
+  <!-- Dùng chung khung với Tiệm Tạp Hóa & Trà Sữa (modal, nút, thối tiền, từ vựng, xếp hạng), thêm phần riêng nông trại -->
+  <link rel="stylesheet" href="./src/grocery_game.css">
+  <link rel="stylesheet" href="./src/farm_game.css">
+</head>
+
+<body class="grocery-body farm-body on-title">
+  <div class="g-stage farm-stage" id="g-stage">
+
+    <!-- 0. MÀN HÌNH CHỜ -->
+    <section class="g-title" id="title-screen">
+      <div class="g-title-bg" aria-hidden="true"></div>
+      <div class="g-title-sun" aria-hidden="true"></div>
+      <div class="g-title-leaves" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <a href="shop-games.html" class="g-title-home"><i class="fa-solid fa-arrow-left"></i> Kệ game</a>
+      <a href="index.html" class="g-account guest" id="title-account" title="Đăng nhập để lưu thành tích">
+        <span class="g-account-avatar" id="title-account-avatar"><i class="fa-solid fa-user"></i></span>
+        <span class="g-account-text"><strong id="title-account-name">Khách</strong><small id="title-account-status">Đăng nhập để lưu thành tích</small></span>
+      </a>
+      <div class="g-title-logo">
+        <div class="g-logo-awning" aria-hidden="true"></div>
+        <div class="g-logo-board"><span class="g-logo-chn">我的农场</span><span class="g-logo-pin">Wǒ de nóngchǎng</span></div>
+        <div class="g-logo-ribbon">Nông Trại Của Tôi</div>
+        <div class="g-title-progress" id="title-progress"></div>
+      </div>
+      <div class="g-title-menu">
+        <button type="button" class="g-btn-play" id="btn-title-play">
+          <span class="play-chn" id="title-play-chn">去农场</span>
+          <span class="play-vi" id="title-play-vi">Vào nông trại</span>
+          <i class="fa-solid fa-play"></i>
+        </button>
+        <div class="g-title-sub">
+          <button type="button" class="g-btn-sub" id="btn-title-guide"><span class="sub-icon">📖</span><span><span class="zh">玩法说明</span> Hướng dẫn</span></button>
+          <button type="button" class="g-btn-sub" id="btn-title-rank"><span class="sub-icon">🏆</span><span><span class="zh">排行榜</span> Xếp hạng</span></button>
+        </div>
+      </div>
+      <div class="g-title-cat" aria-hidden="true"><span class="cat-body">🐔</span><span class="cat-zz">咯咯</span></div>
+    </section>
+
+    <!-- 1. THANH TRÊN: cấp độ · vàng · kim cương · thời tiết -->
+    <header class="g-hud farm-hud">
+      <div class="g-hud-left">
+        <button type="button" class="g-hud-circle" id="btn-hud-home" title="Về màn hình chính"><i class="fa-solid fa-house"></i></button>
+        <button type="button" class="lvl-badge" id="btn-level" title="Cấp độ & kinh nghiệm">
+          <span class="lvl-star">⭐<b id="hud-level">1</b></span>
+          <span class="lvl-xp"><small id="hud-xp-text">0/20 XP</small><span class="lvl-bar"><i id="hud-xp-fill"></i></span></span>
+        </button>
+        <div class="g-pill money" title="Vàng (金币)"><span class="pill-icon">🪙</span><span class="pill-text"><small class="zh">金币</small><strong id="hud-coins">0</strong></span></div>
+        <div class="g-pill gems" title="Kim cương (钻石): xong ngay cây/sản phẩm đang chờ"><span class="pill-icon">💎</span><span class="pill-text"><small class="zh">钻石</small><strong id="hud-gems">0</strong></span></div>
+      </div>
+      <div class="g-hud-center">
+        <button type="button" class="weather-chip" id="hud-weather" title="Thời tiết hôm nay"></button>
+      </div>
+      <div class="g-hud-right">
+        <button type="button" class="g-pill action" id="btn-open-vocab" title="Sổ từ vựng nông trại"><span class="pill-icon">📖</span><span class="pill-text"><small class="zh">生词本</small><strong id="hud-vocab-val">0/0</strong></span></button>
+        <button type="button" class="g-hud-circle" id="btn-pause-game" title="Cài đặt"><i class="fa-solid fa-gear"></i></button>
+        <button type="button" class="g-hud-circle" id="btn-fullscreen" title="Toàn màn hình"><i class="fa-solid fa-expand"></i></button>
+      </div>
+    </header>
+
+    <!-- 2. BẢN ĐỒ NÔNG TRẠI (màn chính) -->
+    <main class="farm-main">
+      <div class="farm-map" id="farm-map" aria-label="Bản đồ nông trại"></div>
+      <!-- khay hạt giống: hiện khi chạm ô đất trống -->
+      <div class="seed-tray" id="seed-tray" hidden>
+        <div class="st-head"><span>🌱 <span class="zh">播种</span> Chọn hạt rồi chạm các ô đất trống</span><button type="button" class="st-close" id="btn-seed-close" title="Đóng"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="st-list" id="seed-list"></div>
+      </div>
+      <!-- thông tin ô đang lớn -->
+      <div class="plot-tip" id="plot-tip" hidden></div>
+    </main>
+
+    <!-- 3. THANH NÚT DƯỚI -->
+    <nav class="farm-dock">
+      <button type="button" class="dock-btn" id="btn-orders"><span class="db-ico">🧾</span><span class="db-txt"><b class="zh">订单</b><small>Đơn hàng</small></span><span class="db-badge" id="badge-orders" hidden></span></button>
+      <button type="button" class="dock-btn" id="btn-truck"><span class="db-ico">🚚</span><span class="db-txt"><b class="zh">卡车</b><small>Xe tải</small></span><span class="db-badge" id="badge-truck" hidden></span></button>
+      <button type="button" class="dock-btn" id="btn-stall"><span class="db-ico">🛎️</span><span class="db-txt"><b class="zh">摊位</b><small>Quầy bán</small></span><span class="db-badge" id="badge-stall" hidden></span></button>
+      <button type="button" class="dock-btn harvest" id="btn-harvest-all" hidden><span class="db-ico">🌾</span><span class="db-txt"><b class="zh">收获</b><small>Thu hết</small></span></button>
+      <button type="button" class="dock-btn" id="btn-storage"><span class="db-ico">🏚️</span><span class="db-txt"><b class="zh">仓库</b><small id="dock-storage">Kho</small></span></button>
+      <button type="button" class="dock-btn shop" id="btn-shop"><span class="db-ico">🏪</span><span class="db-txt"><b class="zh">商店</b><small>Cửa hàng</small></span></button>
+    </nav>
+
+    <div class="g-toasts" id="g-toasts"></div>
+
+    <!-- BẢNG ĐƠN HÀNG -->
+    <div class="g-modal" id="modal-orders" style="display:none;">
+      <div class="g-card farm-card orders-card">
+        <div class="g-card-head"><h3>🧾 <span class="zh">订单板</span> · Bảng đơn hàng</h3><button type="button" class="g-close" data-close="modal-orders"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="orders-grid" id="orders-grid"></div>
+        <p class="farm-note">Đủ hàng trong kho thì bấm <b>Giao hàng</b> để nhận vàng & XP. Đơn khó quá thì bỏ — đơn mới sẽ đến sau 1 phút.</p>
+      </div>
+    </div>
+
+    <!-- XE TẢI -->
+    <div class="g-modal" id="modal-truck" style="display:none;">
+      <div class="g-card farm-card truck-card">
+        <div class="g-card-head"><h3>🚚 <span class="zh">卡车订单</span> · Đơn xe tải</h3><button type="button" class="g-close" data-close="modal-truck"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="truck-body" id="truck-body"></div>
+      </div>
+    </div>
+
+    <!-- QUẦY BÁN LẺ: khách trả tiền mặt → lấy hàng → thối tiền -->
+    <div class="g-modal" id="modal-stall" style="display:none;">
+      <div class="g-card farm-card stall-card">
+        <div class="g-card-head"><h3>🛎️ <span class="zh">路边摊</span> · Quầy bán lẻ</h3><button type="button" class="g-close" data-close="modal-stall"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="stall-body" id="stall-body"></div>
+      </div>
+    </div>
+
+    <!-- CHUỒNG / XƯỞNG -->
+    <div class="g-modal" id="modal-building" style="display:none;">
+      <div class="g-card farm-card building-card">
+        <div class="g-card-head"><h3 id="bld-title">🏭</h3><button type="button" class="g-close" data-close="modal-building"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="bld-body" id="bld-body"></div>
+      </div>
+    </div>
+
+    <!-- KHO LÚA & NHÀ KHO -->
+    <div class="g-modal" id="modal-storage" style="display:none;">
+      <div class="g-card farm-card storage-card">
+        <div class="g-card-head"><h3>🏚️ <span class="zh">粮仓 · 仓库</span> · Kho lúa &amp; Nhà kho</h3><button type="button" class="g-close" data-close="modal-storage"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="storage-tabs" id="storage-tabs"></div>
+        <div class="storage-body" id="storage-body"></div>
+      </div>
+    </div>
+
+    <!-- CỬA HÀNG -->
+    <div class="g-modal" id="modal-shop" style="display:none;">
+      <div class="g-card market-card">
+        <div class="market-awning" aria-hidden="true"></div>
+        <div class="g-card-head"><h3>🏪 <span class="zh">商店</span> · Cửa hàng nông trại</h3><button type="button" class="g-close" data-close="modal-shop"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="market-body">
+          <nav class="market-zones" id="market-zones"></nav>
+          <section class="market-main">
+            <div class="market-zone-head" id="market-zone-head"></div>
+            <div class="market-grid" id="market-grid"></div>
+          </section>
+        </div>
+        <div class="market-foot">
+          <div class="restock-balance">
+            <div><small>Vàng</small><b id="shop-coins">0</b></div>
+            <div><small>Cấp độ</small><b class="green" id="shop-level">1</b></div>
+          </div>
+          <button type="button" class="g-btn-primary big" data-close="modal-shop"><i class="fa-solid fa-check"></i> Xong</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LÊN CẤP -->
+    <div class="g-modal over-title" id="modal-levelup" style="display:none;">
+      <div class="g-card levelup-card">
+        <div class="lu-burst">⭐</div>
+        <h3><span class="zh">升级了！</span> Lên cấp <b id="lu-level">2</b></h3>
+        <div class="lu-reward" id="lu-reward"></div>
+        <div class="lu-unlocks" id="lu-unlocks"></div>
+        <button type="button" class="g-btn-primary big" data-close="modal-levelup"><span class="zh">太好了</span> Tuyệt quá! <i class="fa-solid fa-check"></i></button>
+      </div>
+    </div>
+
+    <!-- PHÁ SẢN -->
+    <div class="g-modal" id="modal-bankrupt" style="display:none;">
+      <div class="g-card bankrupt-card">
+        <div class="bk-icon">💸</div>
+        <h3><span class="zh">破产了！</span> · Phá sản rồi!</h3>
+        <div class="bk-line"><span class="zh bk-chn">钱花光了，农场破产了！</span><button type="button" class="speech-audio" id="btn-bankrupt-say" title="Nghe lại"><i class="fa-solid fa-volume-high"></i></button></div>
+        <div class="bk-pin">Qián huā guāng le, nóngchǎng pòchǎn le!</div>
+        <div class="bk-vi">Hết sạch tiền rồi, nông trại phá sản rồi!</div>
+        <p class="bk-detail"><span id="bk-reason"></span><br>Bạn đã lên tới <b>cấp <span id="bk-day">1</span></b>. Kỷ lục trên <b>Bảng xếp hạng</b> vẫn được giữ.</p>
+        <button type="button" class="g-btn-primary big" id="btn-bankrupt-restart"><span class="zh">重新开始</span> Bắt đầu lại từ đầu <i class="fa-solid fa-rotate-right"></i></button>
+      </div>
+    </div>
+
+    <!-- SỔ TỪ VỰNG -->
+    <div class="g-modal over-title" id="modal-vocab" style="display:none;">
+      <div class="g-card vocab-card">
+        <div class="g-card-head"><h3>📖 <span class="zh">生词本</span> · Từ vựng nông trại</h3><button type="button" class="g-close" data-close="modal-vocab"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="vocab-tabs" id="vocab-tabs"></div>
+        <div class="vocab-grid" id="vocab-items-grid"></div>
+      </div>
+    </div>
+
+    <!-- HƯỚNG DẪN -->
+    <div class="g-modal over-title" id="modal-guide" style="display:none;">
+      <div class="g-card guide-card">
+        <div class="g-card-head"><h3>📖 <span class="zh">玩法说明</span> · Hướng dẫn chơi</h3><button type="button" class="g-close" data-close="modal-guide"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="guide-steps">
+          <div class="gstep"><i>1</i><span>🌱</span><div><b>Gieo hạt · 播种</b><p>Chạm ô đất trống, chọn hạt (lấy 1 hạt từ <b>粮仓 kho lúa</b>). Cây lớn theo <b>giờ thật</b> — tắt game cây vẫn lớn. Chín thì chạm để thu: gieo 1 được 2.</p></div></div>
+          <div class="gstep"><i>2</i><span>🐔</span><div><b>Chăn nuôi &amp; xưởng</b><p><b>饲料厂</b> làm thức ăn từ lúa mì, ngô; gà ăn <b>鸡饲料</b> đẻ <b>鸡蛋</b>, bò ăn <b>牛饲料</b> cho <b>牛奶</b>. Lò bánh, xưởng sữa, xưởng đường làm hàng giá cao.</p></div></div>
+          <div class="gstep"><i>3</i><span>🧾</span><div><b>Đơn hàng &amp; xe tải</b><p>Khách đặt hàng bằng tiếng Trung trên <b>订单板</b>; đủ hàng thì giao để nhận <b>vàng + XP</b>. Xe tải chở đơn lớn, thưởng nhiều.</p></div></div>
+          <div class="gstep"><i>4</i><span>🛎️</span><div><b>Quầy bán lẻ</b><p>Thỉnh thoảng có khách mua lẻ trả tiền mặt: lấy đúng món, đúng số lượng rồi <b>thối tiền</b>.</p></div></div>
+          <div class="gstep"><i>5</i><span>⭐</span><div><b>Lên cấp</b><p>XP giúp lên cấp, mở cây mới, vật nuôi, xưởng mới và được thưởng 💎. Kim cương dùng để xong ngay việc đang chờ.</p></div></div>
+          <div class="gstep"><i>6</i><span>🏚️</span><div><b>Kho &amp; mở rộng</b><p>Nâng cấp kho cần vật liệu <b>钉子, 木板, 油漆</b> (rơi ngẫu nhiên khi thu hoạch, giao đơn). Mua thêm ô ruộng ở <b>商店</b>.</p></div></div>
+          <div class="guide-tip">🌦️ Mỗi ngày có thời tiết hoặc ngày lễ khác nhau: trời mưa cây lớn nhanh, ngày lễ đơn hàng thưởng nhiều hơn. 💾 Tiến trình tự lưu; đăng nhập để lưu vào tài khoản và lên <b>Bảng xếp hạng</b> (xếp theo cấp độ &amp; XP).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- XẾP HẠNG -->
+    <div class="g-modal over-title" id="modal-rank" style="display:none;">
+      <div class="g-card rank-card">
+        <div class="g-card-head"><h3>🏆 <span class="zh">排行榜</span> · Bảng xếp hạng</h3><button type="button" class="g-close" data-close="modal-rank"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="rank-tabs">
+          <button type="button" class="rank-tab active" data-rank-tab="global">🌏 <span class="zh">全服</span> Toàn hệ thống</button>
+          <button type="button" class="rank-tab" data-rank-tab="mine">📒 <span class="zh">我的</span> Các lần lên cấp</button>
+        </div>
+        <div class="rank-summary" id="rank-summary"></div>
+        <div class="rank-list" id="rank-list"></div>
+        <div class="rank-note" id="rank-note"></div>
+      </div>
+    </div>
+
+    <!-- CÀI ĐẶT -->
+    <div class="g-modal" id="modal-settings" style="display:none;">
+      <div class="g-card settings-card">
+        <div class="g-card-head"><h3>⚙️ <span class="zh">设置</span> · Cài đặt</h3><button type="button" class="g-close" data-close="modal-settings"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="settings-list">
+          <label class="setting"><span><b>Âm thanh</b><small>Tiếng gieo hạt, thu hoạch, tiền xu</small></span><input type="checkbox" id="setting-sfx" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Giọng đọc tiếng Trung</b><small>Đọc lời đặt hàng của khách</small></span><input type="checkbox" id="setting-voice" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Hiện pinyin</b><small>Phiên âm dưới câu tiếng Trung</small></span><input type="checkbox" id="setting-pinyin" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Hiện nghĩa tiếng Việt</b><small>Dịch lời khách</small></span><input type="checkbox" id="setting-vietnamese" checked><i class="sw"></i></label>
+        </div>
+        <div class="g-card-foot">
+          <button type="button" class="g-btn-ghost" id="btn-back-to-title"><i class="fa-solid fa-house"></i> Màn hình chính</button>
+          <button type="button" class="g-btn-ghost danger" id="btn-reset-save"><i class="fa-solid fa-rotate"></i> Chơi lại từ đầu</button>
+          <button type="button" class="g-btn-primary" data-close="modal-settings"><i class="fa-solid fa-play"></i> Tiếp tục</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g-rotate" id="rotate-device-overlay">
+    <div class="rotate-phone">📱</div><strong>Xoay ngang điện thoại để chơi nhé!</strong>
+    <button type="button" id="btn-rotate-fullscreen"><i class="fa-solid fa-expand"></i> Chơi toàn màn hình</button>
+  </div>
+
+  <script type="module" src="./src/farm_game.js"></script>
+  <script>
+    if (window.location.protocol === 'file:') { const s = document.createElement('script'); s.src = './src/farm_game.js'; document.body.appendChild(s); }
+  </script>
+</body>
+
+</html>

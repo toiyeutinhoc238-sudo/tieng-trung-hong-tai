@@ -50,7 +50,8 @@
 
     /* Kệ gỗ 6 game */
     .sg-shelf { position: relative; padding: 18px 18px 8px; border-radius: 22px; background: linear-gradient(180deg, #8b5a2b, #6d4220); box-shadow: inset 0 0 0 6px #5a3418, 0 14px 34px rgba(60, 30, 10, 0.35); }
-    .sg-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 16px; }
+    .sg-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px 16px; }
+    @media (max-width: 1100px) { .sg-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
     .sg-grid::after { content: ''; }
     .sg-card { position: relative; display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; background: #fffaf2; border: 3px solid #f0d6ad; box-shadow: 0 8px 0 #4a2a12, 0 12px 22px rgba(0, 0, 0, 0.25); text-decoration: none; color: #4a2c17; transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; }
     .sg-card:hover { transform: translateY(-4px); box-shadow: 0 12px 0 #4a2a12, 0 18px 26px rgba(0, 0, 0, 0.3); }
@@ -58,7 +59,9 @@
     .sg-cover { position: relative; height: 150px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 4rem; }
     .sg-cover::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.35)); }
     .sg-cover .sg-emoji { position: relative; z-index: 1; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35)); }
-    .sg-card:not(.locked) .sg-emoji { display: none; }
+    .sg-card:not(.locked) .sg-cover.has-img .sg-emoji { display: none; }
+    .sg-cover.farm-cover { background: radial-gradient(circle at 78% 22%, #fff6b3 0 11%, transparent 12%), linear-gradient(180deg, #8fd3ff 0%, #c9ecff 45%, #8fd16a 46%, #5fae45 100%); }
+    .sg-cover.farm-cover .sg-emoji { font-size: 3rem; letter-spacing: 4px; }
     .sg-badge { position: absolute; top: 10px; right: 10px; z-index: 2; padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.3px; }
     .sg-badge.hot { background: #f43f5e; color: #fff; }
     .sg-badge.new { background: #ea580c; color: #fff; }
@@ -106,7 +109,7 @@
     <section class="sg-hero">
       <h1>🎮 Game Nhập Vai · <span class="zh">我的小店</span></h1>
       <p>Tự làm chủ tiệm, nghe khách gọi món bằng tiếng Trung, tính tiền, thối tiền — vừa chơi vừa học!</p>
-      <span class="sg-count" id="sg-count">2 game đang mở · 4 game sắp ra mắt</span>
+      <span class="sg-count" id="sg-count">3 game đang mở · 4 game sắp ra mắt</span>
     </section>
 
     <section class="sg-shelf" aria-label="Kệ game nhập vai">
@@ -125,6 +128,8 @@
           desc: 'Nhận đơn, pha trà sữa theo yêu cầu, nấu nguyên liệu và thối tiền cho khách.' },
         { key: 'grocery', url: '/grocery-game.html', name: 'Tiệm Tạp Hóa', chn: '我的小卖部', emoji: '🏪', cover: '/assets/grocery_shopfront.jpg', badge: ['new', 'MỚI'],
           desc: 'Nhặt hàng theo khu kệ, quét mã, nhập hàng ở chợ đầu mối và mở rộng tiệm.' },
+        { key: 'farm', url: '/farm-game.html', name: 'Nông Trại', chn: '我的农场', emoji: '🌾🐔🚜', coverClass: 'farm-cover', badge: ['new', 'MỚI'],
+          desc: 'Trồng trọt, chăn nuôi, xưởng chế biến theo giờ thật; giao đơn hàng, xe tải và bán lẻ cho khách nói tiếng Trung.' },
         { name: 'Tiệm Cá Viên', chn: '我的鱼丸店', emoji: '🍢', desc: 'Chiên cá viên, bò viên, xiên que và chấm tương theo ý khách.' },
         { name: 'Tiệm Bánh Mì', chn: '我的面包店', emoji: '🥖', desc: 'Kẹp nhân bánh mì theo yêu cầu, nướng giòn và gói mang đi.' },
         { name: 'Tiệm Quần Áo', chn: '我的服装店', emoji: '👗', desc: 'Tư vấn size, màu sắc, kiểu dáng và chọn đồ cho khách.' },
@@ -153,7 +158,7 @@
         }
         var day = progress(g.key);
         return '<a class="sg-card" href="' + g.url + '" aria-label="Chơi ' + esc(g.name) + '">'
-          + '<div class="sg-cover" style="background-image:url(\'' + g.cover + '\')"><span class="sg-emoji">' + g.emoji + '</span><span class="sg-badge ' + g.badge[0] + '">' + g.badge[1] + '</span></div>'
+          + (g.cover ? '<div class="sg-cover has-img" style="background-image:url(\'' + g.cover + '\')">' : '<div class="sg-cover ' + (g.coverClass || '') + '">') + '<span class="sg-emoji">' + g.emoji + '</span><span class="sg-badge ' + g.badge[0] + '">' + g.badge[1] + '</span></div>'
           + '<div class="sg-body"><div class="sg-name">' + esc(g.name) + '</div><div class="sg-chn">' + g.chn + '</div>'
           + '<div class="sg-desc">' + esc(g.desc) + '</div>'
           + (day > 1 ? '<div class="sg-progress">📅 Bạn đang ở ngày ' + day + '</div>' : '')

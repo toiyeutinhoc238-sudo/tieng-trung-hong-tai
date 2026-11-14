@@ -1466,3 +1466,6 @@ body.g-portrait #modal-day-summary .summary-scroll { gap: 8px; }
 #modal-day-summary .summary-tools .g-btn-ghost span { overflow: hidden; text-overflow: ellipsis; }
 #modal-day-summary #btn-next-day-start { align-self: stretch; justify-content: center; }
 body.g-portrait #modal-day-summary .summary-tools { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* (luật chung của tạp hóa đặt 3 cột cho thanh nút tổng kết — trà sữa có 4 nút) */
+body.boba-body #modal-day-summary .summary-tools { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+body.boba-body.g-portrait #modal-day-summary .summary-tools { grid-template-columns: repeat(2, minmax(0, 1fr)); }
