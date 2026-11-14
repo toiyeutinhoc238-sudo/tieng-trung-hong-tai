@@ -142,18 +142,18 @@ const TOPPINGS = [
 ];
 
 const SUGARS = [
-  { id: 'no_sugar', chn: '无糖', pin: 'wú táng', vi: 'không đường', pct: 0 },
-  { id: 'micro_sugar', chn: '微糖', pin: 'wēi táng', vi: 'hơi ngọt (30%)', pct: 30 },
-  { id: 'half_sugar', chn: '半糖', pin: 'bàn táng', vi: 'nửa đường (50%)', pct: 50 },
-  { id: 'less_sugar', chn: '少糖', pin: 'shǎo táng', vi: 'ít đường (70%)', pct: 70 },
-  { id: 'extra_sugar', chn: '多糖', pin: 'duō táng', vi: 'nhiều đường (100%)', pct: 100 }
+  { id: 'no_sugar', chn: '无糖', pin: 'wú táng', vi: 'không đường', pct: 0, use: 0 },
+  { id: 'micro_sugar', chn: '微糖', pin: 'wēi táng', vi: 'hơi ngọt (30%)', pct: 30, use: 1 },
+  { id: 'half_sugar', chn: '半糖', pin: 'bàn táng', vi: 'nửa đường (50%)', pct: 50, use: 1 },
+  { id: 'less_sugar', chn: '少糖', pin: 'shǎo táng', vi: 'ít đường (70%)', pct: 70, use: 2 },
+  { id: 'extra_sugar', chn: '多糖', pin: 'duō táng', vi: 'nhiều đường (100%)', pct: 100, use: 3 }
 ];
 
 const ICES = [
-  { id: 'no_ice', chn: '去冰', pin: 'qù bīng', vi: 'không đá', cubes: 0, label: '0%' },
-  { id: 'less_ice', chn: '少冰', pin: 'shǎo bīng', vi: 'ít đá', cubes: 2, label: '30%' },
-  { id: 'regular_ice', chn: '正常冰', pin: 'zhèngcháng bīng', vi: 'đá vừa', cubes: 4, label: '50%' },
-  { id: 'extra_ice', chn: '多冰', pin: 'duō bīng', vi: 'nhiều đá', cubes: 6, label: '100%' }
+  { id: 'no_ice', chn: '去冰', pin: 'qù bīng', vi: 'không đá', cubes: 0, label: '0%', use: 0 },
+  { id: 'less_ice', chn: '少冰', pin: 'shǎo bīng', vi: 'ít đá', cubes: 2, label: '30%', use: 1 },
+  { id: 'regular_ice', chn: '正常冰', pin: 'zhèngcháng bīng', vi: 'đá vừa', cubes: 4, label: '50%', use: 2 },
+  { id: 'extra_ice', chn: '多冰', pin: 'duō bīng', vi: 'nhiều đá', cubes: 6, label: '100%', use: 3 }
 ];
 
 const CUSTOMERS = [
@@ -167,9 +167,51 @@ const CUSTOMERS = [
 ];
 
 const MARKET_ZONES = [
+  { id: 'supplies', chn: '物料', pin: 'wùliào', vi: 'Vật tư', short: 'Ly · đá · đường', icon: '📦' },
   { id: 'teas', chn: '茶底', pin: 'chádǐ', vi: 'Loại trà', short: 'Loại trà', icon: '🍵' },
-  { id: 'toppings', chn: '配料', pin: 'pèiliào', vi: 'Topping', short: 'Topping', icon: '🧋' }
+  { id: 'toppings', chn: '配料', pin: 'pèiliào', vi: 'Topping', short: 'Topping', icon: '🧋' },
+  { id: 'upgrades', chn: '升级', pin: 'shēngjí', vi: 'Nâng cấp', short: 'Nâng cấp tiệm', icon: '⬆️' }
 ];
+
+// Vật tư phải mua & được TỒN qua ngày (không hỏng): ly, đá, nước đường
+const SUPPLIES = [
+  { id: 'cups', chn: '杯子', pin: 'bēizi', vi: 'ly nhựa (kèm nắp & ống hút)', icon: '🥤', unit: 'cái', pack: 20, cost: 4, start: 20 },
+  { id: 'ice', chn: '冰块', pin: 'bīngkuài', vi: 'đá viên', icon: '🧊', unit: 'phần', pack: 30, cost: 3, start: 30 },
+  { id: 'sugar', chn: '糖浆', pin: 'tángjiāng', vi: 'nước đường', icon: '🍯', unit: 'phần', pack: 30, cost: 3, start: 30 }
+];
+
+// Nâng cấp tiệm (mỗi món 3 cấp)
+const UPGRADES = [
+  { id: 'sign', chn: '招牌', pin: 'zhāopai', vi: 'biển hiệu mới', icon: '🪧', desc: 'Thu hút thêm khách: +12% khách mỗi cấp', costs: [60, 120, 200] },
+  { id: 'seats', chn: '座位', pin: 'zuòwèi', vi: 'ghế ngồi chờ', icon: '🪑', desc: 'Khách chịu chờ lâu hơn: +10 giây mỗi cấp', costs: [50, 100, 180] },
+  { id: 'hours', chn: '延长营业', pin: 'yáncháng yíngyè', vi: 'kéo dài giờ mở cửa', icon: '🕘', desc: 'Mở cửa thêm 1 giờ (+45 giây chơi) mỗi cấp', costs: [80, 150, 240] }
+];
+
+// Thông báo mỗi ngày: thời tiết (khách giảm) hoặc ngày lễ (khách tăng) → học thêm từ vựng
+const WEATHERS = [
+  { id: 'sunny', chn: '晴天', pin: 'qíngtiān', vi: 'trời nắng đẹp', icon: '☀️', demand: 1, w: 34, note: 'Trời đẹp, khách đông như mọi ngày.' },
+  { id: 'cloudy', chn: '多云', pin: 'duōyún', vi: 'trời nhiều mây', icon: '⛅', demand: 1, w: 20, note: 'Trời râm mát, khách bình thường.' },
+  { id: 'hot', chn: '烈日', pin: 'lièrì', vi: 'nắng gắt', icon: '🥵', demand: 0.85, w: 12, note: 'Nắng gắt, ít người ra đường.' },
+  { id: 'rain', chn: '下雨', pin: 'xiàyǔ', vi: 'trời mưa', icon: '🌧️', demand: 0.75, w: 15, note: 'Trời mưa, khách ngại ra ngoài.' },
+  { id: 'wind', chn: '大风', pin: 'dàfēng', vi: 'gió to', icon: '🌬️', demand: 0.7, w: 9, note: 'Gió to, khách ít hơn hẳn.' },
+  { id: 'thunder', chn: '雷阵雨', pin: 'léizhènyǔ', vi: 'mưa dông', icon: '⛈️', demand: 0.6, w: 6, note: 'Mưa dông sấm sét, khách rất thưa.' },
+  { id: 'typhoon', chn: '台风', pin: 'táifēng', vi: 'bão', icon: '🌀', demand: 0.45, w: 4, note: 'Có bão! Chỉ vài khách liều ra đường.' }
+];
+const HOLIDAYS = [
+  { id: 'spring', chn: '春节', pin: 'Chūnjié', vi: 'Tết Nguyên Đán', icon: '🧧', greet: '新年快乐！', greetPin: 'Xīnnián kuàilè!', greetVi: 'Chúc mừng năm mới!' },
+  { id: 'lantern', chn: '元宵节', pin: 'Yuánxiāojié', vi: 'Tết Nguyên Tiêu (Rằm tháng Giêng)', icon: '🏮', greet: '元宵节快乐！', greetPin: 'Yuánxiāojié kuàilè!', greetVi: 'Chúc Tết Nguyên Tiêu vui vẻ!' },
+  { id: 'valentine', chn: '情人节', pin: 'Qíngrénjié', vi: 'Lễ Tình nhân', icon: '💝', greet: '情人节快乐！', greetPin: 'Qíngrénjié kuàilè!', greetVi: 'Chúc mừng Lễ Tình nhân!' },
+  { id: 'labor', chn: '劳动节', pin: 'Láodòngjié', vi: 'Quốc tế Lao động (1/5)', icon: '🛠️', greet: '劳动节快乐！', greetPin: 'Láodòngjié kuàilè!', greetVi: 'Chúc mừng ngày Quốc tế Lao động!' },
+  { id: 'children', chn: '儿童节', pin: 'Értóngjié', vi: 'Quốc tế Thiếu nhi (1/6)', icon: '🎈', greet: '儿童节快乐！', greetPin: 'Értóngjié kuàilè!', greetVi: 'Chúc mừng ngày Thiếu nhi!' },
+  { id: 'dragonboat', chn: '端午节', pin: 'Duānwǔjié', vi: 'Tết Đoan Ngọ', icon: '🐉', greet: '端午节快乐！', greetPin: 'Duānwǔjié kuàilè!', greetVi: 'Chúc Tết Đoan Ngọ vui vẻ!' },
+  { id: 'qixi', chn: '七夕', pin: 'Qīxī', vi: 'Lễ Thất Tịch (Valentine Trung Quốc)', icon: '🌌', greet: '七夕快乐！', greetPin: 'Qīxī kuàilè!', greetVi: 'Chúc Thất Tịch vui vẻ!' },
+  { id: 'teacher', chn: '教师节', pin: 'Jiàoshījié', vi: 'Ngày Nhà giáo', icon: '🍎', greet: '老师辛苦了！', greetPin: 'Lǎoshī xīnkǔ le!', greetVi: 'Thầy cô vất vả rồi!' },
+  { id: 'midautumn', chn: '中秋节', pin: 'Zhōngqiūjié', vi: 'Tết Trung Thu', icon: '🥮', greet: '中秋节快乐！', greetPin: 'Zhōngqiūjié kuàilè!', greetVi: 'Chúc Trung Thu vui vẻ!' },
+  { id: 'national', chn: '国庆节', pin: 'Guóqìngjié', vi: 'Quốc khánh', icon: '🎆', greet: '国庆节快乐！', greetPin: 'Guóqìngjié kuàilè!', greetVi: 'Chúc mừng Quốc khánh!' },
+  { id: 'christmas', chn: '圣诞节', pin: 'Shèngdànjié', vi: 'Giáng sinh', icon: '🎄', greet: '圣诞节快乐！', greetPin: 'Shèngdànjié kuàilè!', greetVi: 'Giáng sinh vui vẻ!' }
+];
+const EVENT_RULES = { holidayChance: 0.15, holidayDemand: 1.5, firstEventDay: 2 };
+const MAX_TOPPINGS = 3;
 
 // Từ lóng / khẩu ngữ hay gặp trong đánh giá của khách → tự vào sổ từ vựng khi khách viết đánh giá có từ đó
 const REVIEW_SLANG = [
@@ -217,12 +259,28 @@ const VOCAB_TABS = [
       { chn: '倒掉', pin: 'dàodiào', vi: 'đổ đi' },
       { chn: '抱歉', pin: 'bàoqiàn', vi: 'xin lỗi' },
       { chn: '破产', pin: 'pòchǎn', vi: 'phá sản' },
+      { chn: '做错了', pin: 'zuò cuò le', vi: 'làm sai rồi' },
+      { chn: '重做', pin: 'chóngzuò', vi: 'làm lại' },
+      { chn: '加', pin: 'jiā', vi: 'thêm (topping)' },
+      ...SUPPLIES.map(x => ({ chn: x.chn, pin: x.pin, vi: x.vi })),
+      ...UPGRADES.map(x => ({ chn: x.chn, pin: x.pin, vi: x.vi })),
+      { chn: '升级', pin: 'shēngjí', vi: 'nâng cấp' },
       { chn: '一共', pin: 'yígòng', vi: 'tổng cộng' },
       { chn: '找零', pin: 'zhǎolíng', vi: 'thối tiền' },
       { chn: '进货', pin: 'jìnhuò', vi: 'nhập hàng' },
       { chn: '营业', pin: 'yíngyè', vi: 'mở cửa kinh doanh' },
       { chn: '打烊', pin: 'dǎyàng', vi: 'đóng cửa tiệm' },
       { chn: '猫', pin: 'māo', vi: 'con mèo' }
+    ]
+  },
+  {
+    id: 'events', label: '🌦️ Lễ & thời tiết',
+    words: [
+      { chn: '天气', pin: 'tiānqì', vi: 'thời tiết' },
+      { chn: '节日', pin: 'jiérì', vi: 'ngày lễ' },
+      { chn: '快乐', pin: 'kuàilè', vi: 'vui vẻ' },
+      ...WEATHERS.map(w => ({ chn: w.chn, pin: w.pin, vi: w.vi })),
+      ...HOLIDAYS.map(h => ({ chn: h.chn, pin: h.pin, vi: h.vi }))
     ]
   },
   { id: 'slang', label: '💬 Từ lóng', words: REVIEW_SLANG.map(w => ({ chn: w.chn, pin: w.pin, vi: w.vi })) }
@@ -240,16 +298,17 @@ const VOCAB_TOTAL = VOCAB_TABS.reduce((s, t) => s + t.words.length, 0);
 // ============================================================================
 // 3. LUẬT CHƠI
 // ============================================================================
-const DAY_RULES = { lengthMs: 120000, openMin: 8 * 60, closeMin: 20 * 60 }; // 1 ngày = 2 phút thật
+const DAY_RULES = { lengthMs: 300000, openMin: 8 * 60, closeMin: 20 * 60, extraMsPerHour: 45000, closingWarnSec: 30 }; // 1 ngày = 5 phút thật
 
 const QUEUE_RULES = {
   maxLine: 4,
   patienceMs: 60000,       // chờ quá 60s mà chưa được nhận đơn → bỏ về (nới cho kịp pha)
   firstArrivalMs: 400,     // 0.4s khách đầu tiên ghé ngay
-  arriveBaseMs: 10000,     // khách đến đều đặn ~10-12s (không dồn dập quá)
+  arriveBaseMs: 15000,     // ngày 5 phút: khách đến giãn ra ~15-19s/người
   arrivePerDayMs: 300,
-  arriveMinMs: 6500,
-  arriveJitterMs: 2000
+  arriveMinMs: 9000,
+  arriveJitterMs: 4000,
+  seatPatienceMs: 10000    // mỗi cấp ghế ngồi: khách chờ thêm 10s
 };
 
 const INGREDIENT_RULES = {
@@ -260,8 +319,8 @@ const INGREDIENT_RULES = {
 
 // Đánh giá của khách: KHÔNG phải ai cũng viết (lâu lâu mới có), không trùng câu đã có, có cả câu khen lẫn chê "bựa"
 const REVIEW_RULES = {
-  chance: { 5: 0.18, 4: 0.15, 3: 0.3, 2: 0.5, 1: 0.5 }, // xác suất khách để lại đánh giá theo số sao
-  maxPerDay: 4                                            // tối đa 4 đánh giá mỗi ngày
+  chance: { 5: 0.25, 4: 0.25, 3: 0.4, 2: 0.6, 1: 0.6 }, // xác suất khách để lại đánh giá theo số sao
+  minPerDay: 3, maxPerDay: 4                              // mỗi ngày 3-4 đánh giá
 };
 
 const REVIEW_POOLS = {
@@ -320,6 +379,11 @@ const REVIEW_POOLS = {
     { zh: '找零错了好几次，老板的数学是体育老师教的吧！', vi: 'Thối tiền sai mấy lần, chắc chủ quán học toán với thầy thể dục!' },
     { zh: '算账算了半天，我还以为在考数学。', vi: 'Tính tiền cả buổi, tôi tưởng mình đang đi thi toán.' }
   ],
+  remake: [
+    { zh: '第一杯做错了，重做又等了好久。', vi: 'Ly đầu pha sai, làm lại lại chờ thêm cả buổi.' },
+    { zh: '看老板倒掉重做，我都替他心疼。', vi: 'Nhìn chủ quán đổ đi làm lại mà tôi xót giùm.' },
+    { zh: '重做了一杯，味道还行，就是太慢了。', vi: 'Làm lại một ly, vị cũng được, chỉ là chậm quá.' }
+  ],
   slow: [
     { zh: '等得花儿都谢了，出餐速度实在太慢了！', vi: 'Chờ dài cả cổ, quán làm nước quá chậm!' },
     { zh: '等这杯奶茶的时间，我都能追完一部剧了。', vi: 'Thời gian chờ ly trà sữa này, tôi cày xong cả bộ phim rồi.' },
@@ -347,7 +411,7 @@ const REPLY_OPTIONS = {
 };
 function replyGroup(stars) { return stars >= 4 ? 'good' : stars === 3 ? 'mid' : 'bad'; }
 
-const MISSION_RULES = { baseTarget: 70, targetPerDay: 15, maxTarget: 300, roundTo: 5, baseMaxLost: 2, minAvgScore: 80, bonusPerStar: 10 };
+const MISSION_RULES = { baseTarget: 110, targetPerDay: 20, maxTarget: 450, roundTo: 5, baseMaxLost: 2, minAvgScore: 80, bonusPerStar: 10 };
 
 const POUR_RULES = { target: 80, ratePerSec: 40, tickMs: 50 };
 
@@ -539,6 +603,9 @@ class BobaShop {
     this.reviews = [];
     this.todayReviews = [];
     this.spoiledStats = { teas: 0, toppings: 0, cost: 0 };
+    this.supplies = Object.fromEntries(SUPPLIES.map(x => [x.id, x.start]));   // ly, đá, đường: tồn qua ngày
+    this.upgrades = Object.fromEntries(UPGRADES.map(u => [u.id, 0]));
+    this.todayEvent = null;   // { day, kind: 'weather'|'holiday', id }
   }
 
   // --------------------------------------------------------------------------
@@ -556,6 +623,9 @@ class BobaShop {
       // reviews mới nhất nằm ở ĐẦU mảng (unshift) → giữ 50 cái đầu, không phải 50 cái cuối
       reviews: this.reviews.slice(0, 50),
       relaxed: !!this.relaxedMode,
+      supplies: { ...this.supplies },
+      upgrades: { ...this.upgrades },
+      event: this.todayEvent,
       updatedAt: Date.now()
     };
   }
@@ -576,6 +646,10 @@ class BobaShop {
       .map(r => ({ ...r, stars: Math.min(5, Math.max(1, Math.round(Number(r.stars)))) }))
       .slice(0, 50);
     this.todayReviews = [];
+    // bản lưu cũ chưa có vật tư → tặng lượng khởi đầu
+    if (s.supplies && typeof s.supplies === 'object') SUPPLIES.forEach(x => { this.supplies[x.id] = Math.max(0, Math.round(num(s.supplies[x.id], x.start))); });
+    if (s.upgrades && typeof s.upgrades === 'object') UPGRADES.forEach(u => { this.upgrades[u.id] = Math.min(u.costs.length, Math.max(0, Math.round(num(s.upgrades[u.id], 0)))); });
+    if (s.event && typeof s.event === 'object' && this.eventInfo(s.event)) this.todayEvent = { day: num(s.event.day, 0), kind: s.event.kind, id: s.event.id };
     this.relaxedMode = !!s.relaxed;
     const relaxed = document.getElementById('setting-relaxed');
     if (relaxed) relaxed.checked = this.relaxedMode;
@@ -669,7 +743,12 @@ class BobaShop {
     on('btn-open-prep', 'click', () => { this.audio.pop(); this.renderPrepModal(); this.openModal('modal-prep'); });
     // Bài học & đánh giá trước giờ mở cửa; chủ quán trả lời đánh giá
     document.addEventListener('click', (e) => {
-      const say = e.target.closest('#mission-reading [data-say-chn]');
+      const buy = e.target.closest('[data-buy-supply]');
+      if (buy) { this.buySupply(buy.dataset.buySupply); return; }
+      const up = e.target.closest('[data-upgrade]');
+      if (up) { this.buyUpgrade(up.dataset.upgrade); return; }
+      if (e.target.closest('#btn-wrong-trash')) { this.confirmRemake(); return; }
+      const say = e.target.closest('#mission-reading [data-say-chn], #mission-event [data-say-chn]');
       if (say) { this.audio.speak(say.dataset.sayChn); return; }
       if (e.target.closest('#btn-mission-reviews')) { this.audio.pop(); this.openReviewsModal(); return; }
       const open = e.target.closest('[data-reply-open]');
@@ -800,10 +879,20 @@ class BobaShop {
   }
 
   // ---------------- Phá sản: không thể kinh doanh tiếp → bắt đầu lại từ đầu
-  isBankrupt() {
+  isBankrupt() { return !!this.bankruptReason(); }
+
+  // Không thể bán thêm ly nào: thiếu trà hoặc thiếu ly mà không đủ tiền mua/nấu
+  bankruptReason() {
     const hasTea = [...this.teasOwned].some(id => (this.teaStock[id] || 0) > 0);
     const cupInProgress = !!(this.current && this.current.takenAt && (this.cup.fill > 0 || this.cup.lid));
-    return !hasTea && !cupInProgress && this.money < INGREDIENT_RULES.teaBatchCost - 1e-9;
+    if (cupInProgress) return '';
+    const cups = byId(SUPPLIES, 'cups');
+    const hasCup = (this.supplies.cups || 0) > 0 || !!(this.current && this.cup.size);
+    const need = (hasTea ? 0 : INGREDIENT_RULES.teaBatchCost) + (hasCup ? 0 : cups.cost);
+    if (this.money >= need - 1e-9) return '';
+    if (!hasTea && !hasCup) return `Hết trà đã nấu và hết ly, không đủ ${fmt(need)} ¥ để nấu trà + mua ly.`;
+    if (!hasTea) return `Không còn trà nào đã nấu và không đủ ${fmt(INGREDIENT_RULES.teaBatchCost)} ¥ để nấu thêm.`;
+    return `Hết ly (杯子) và không đủ ${fmt(cups.cost)} ¥ để mua thêm.`;
   }
 
   checkBankrupt() {
@@ -813,7 +902,7 @@ class BobaShop {
     ['modal-day-mission', 'modal-prep', 'modal-restock', 'modal-settings'].forEach(id => this.closeModal(id));
     this.learn('破产');
     this.setText('bk-day', String(this.day));
-    this.setText('bk-reason', `Không còn trà nào đã nấu và không đủ ${fmt(INGREDIENT_RULES.teaBatchCost)} ¥ để nấu thêm.`);
+    this.setText('bk-reason', this.bankruptReason());
     this.openModal('modal-bankrupt');
     this.audio.sad && this.audio.sad();
     setTimeout(() => this.audio.speak('钱花光了，奶茶店破产了！'), 400);
@@ -883,17 +972,24 @@ class BobaShop {
 
   buildMission() {
     const raw = MISSION_RULES.baseTarget + (this.day - 1) * MISSION_RULES.targetPerDay;
-    const target = Math.min(MISSION_RULES.maxTarget, Math.ceil(raw / MISSION_RULES.roundTo) * MISSION_RULES.roundTo);
+    // mục tiêu theo lượng khách dự kiến hôm nay (mưa bão thì thấp hơn, ngày lễ thì cao hơn; nâng cấp không làm tăng mục tiêu)
+    const ev = this.eventInfo(this.todayEvent);
+    const scaled = raw * (ev ? ev.demand : 1);
+    const target = Math.min(MISSION_RULES.maxTarget, Math.max(MISSION_RULES.roundTo * 6, Math.ceil(scaled / MISSION_RULES.roundTo) * MISSION_RULES.roundTo));
     return { day: this.day, target, maxLost: MISSION_RULES.baseMaxLost + Math.floor((this.day - 1) / 3), minAvg: MISSION_RULES.minAvgScore, rewarded: false };
   }
 
+  fmtClock(min) { return `${String(Math.floor(min / 60)).padStart(2, '0')}:${String(min % 60).padStart(2, '0')}`; }
+
   showMissionBriefing() {
+    this.rollEvent();
     this.mission = this.buildMission();
     const m = this.mission;
     this.setText('mission-day-chn', `第${this.day}天`);
     const sub = this.$('mission-sub');
     if (sub) {
-      sub.innerHTML = `Quán mở cửa <b>08:00 → 20:00</b> (khoảng ${Math.round(DAY_RULES.lengthMs / 60000)} phút). Khách đến liên tục — hãy chuẩn bị nguyên liệu trước!<br>Thực đơn hôm nay: <b>${this.teasOwned.size}</b> loại trà · <b>${this.toppingsOwned.size}</b> topping.`;
+      const lenMin = this.dayLengthMs() / 60000;
+      sub.innerHTML = `Quán mở cửa <b>08:00 → ${this.fmtClock(this.closeMin())}</b> (khoảng ${Number.isInteger(lenMin) ? lenMin : lenMin.toFixed(1)} phút). Chuẩn bị nguyên liệu &amp; vật tư (ly, đá, đường) trước khi mở cửa!<br>Thực đơn hôm nay: <b>${this.teasOwned.size}</b> loại trà · <b>${this.toppingsOwned.size}</b> topping.`;
     }
     const goals = this.$('mission-goals');
     if (goals) {
@@ -905,6 +1001,7 @@ class BobaShop {
     this.renderHUDGoal();
     this.renderPrepModal();
     this.renderMissionReading();
+    this.renderEventBanner();
     this.openModal('modal-day-mission');
     this.checkBankrupt();
   }
@@ -920,12 +1017,15 @@ class BobaShop {
     this.closed = false;
     this.dayStartAt = this.gameTime;
     this.nextArrivalAt = this.gameTime + QUEUE_RULES.firstArrivalMs;
+    this.reviewCap = REVIEW_RULES.minPerDay + Math.floor(Math.random() * (REVIEW_RULES.maxPerDay - REVIEW_RULES.minPerDay + 1));
     this.learn('欢迎光临');
     this.learn('营业');
     this.lastTickAt = performance.now();
     this.switchStation('view-order-station', true);
     this.renderAll();
     this.showToast('🌅', `第${this.day}天 · 08:00 mở cửa! Mục tiêu hôm nay: ${this.mission.target} ¥.`);
+    const ev = this.eventInfo(this.todayEvent);
+    if (ev && ev.demand !== 1) setTimeout(() => this.showToast(ev.icon, `${ev.chn} (${ev.pin}) · ${ev.vi} — ${ev.demand > 1 ? 'khách sẽ đông hơn!' : 'khách sẽ ít hơn.'}`), 900);
   }
 
   evaluateMission() {
@@ -944,11 +1044,67 @@ class BobaShop {
   // Đồng hồ & hàng đợi
   // --------------------------------------------------------------------------
   dayElapsed() { return Math.max(0, this.gameTime - this.dayStartAt); }
+  dayLengthMs() { return DAY_RULES.lengthMs + (this.upgrades.hours || 0) * DAY_RULES.extraMsPerHour; }
+  closeMin() { return DAY_RULES.closeMin + (this.upgrades.hours || 0) * 60; }
+  patienceMs() { return QUEUE_RULES.patienceMs + (this.upgrades.seats || 0) * QUEUE_RULES.seatPatienceMs; }
+  // hệ số lượng khách: sự kiện hôm nay × biển hiệu
+  demand() { const ev = this.eventInfo(this.todayEvent); return (ev ? ev.demand : 1) * (1 + 0.12 * (this.upgrades.sign || 0)); }
+
+  // ---------------- Sự kiện mỗi ngày: thời tiết (khách giảm) / ngày lễ (khách tăng)
+  eventInfo(e) {
+    if (!e) return null;
+    if (e.kind === 'holiday') { const h = byId(HOLIDAYS, e.id); return h ? { ...h, kind: 'holiday', demand: EVENT_RULES.holidayDemand } : null; }
+    const w = byId(WEATHERS, e.id);
+    return w ? { ...w, kind: 'weather' } : null;
+  }
+
+  rollEvent() {
+    if (this.todayEvent && this.todayEvent.day === this.day) return this.todayEvent;
+    let ev;
+    if (this.day < EVENT_RULES.firstEventDay) ev = { kind: 'weather', id: 'sunny' };
+    else if (Math.random() < EVENT_RULES.holidayChance) ev = { kind: 'holiday', id: pickOne(HOLIDAYS).id };
+    else {
+      const total = WEATHERS.reduce((t, w) => t + w.w, 0);
+      let r = Math.random() * total;
+      const w = WEATHERS.find(x => (r -= x.w) < 0) || WEATHERS[0];
+      ev = { kind: 'weather', id: w.id };
+    }
+    this.todayEvent = { day: this.day, ...ev };
+    return this.todayEvent;
+  }
+
+  eventSay(ev) { return ev.kind === 'holiday' ? `今天是${ev.chn}！${ev.greet}` : `今天${ev.chn}。`; }
+
+  renderEventBanner() {
+    const box = this.$('mission-event');
+    const ev = this.eventInfo(this.todayEvent);
+    if (!box) return;
+    if (!ev) { box.innerHTML = ''; box.className = 'mission-event'; return; }
+    const pct = Math.round((ev.demand - 1) * 100);
+    const effect = pct > 0 ? `<b class="up">Khách +${pct}%</b>` : pct < 0 ? `<b class="down">Khách ${pct}%</b>` : '<b>Khách bình thường</b>';
+    const head = ev.kind === 'holiday' ? '🎉 <span class="zh">节日</span> · Hôm nay là ngày lễ' : '📻 <span class="zh">天气预报</span> · Dự báo thời tiết';
+    box.className = `mission-event ${ev.kind} ${pct < 0 ? 'down' : pct > 0 ? 'up' : ''}`;
+    box.innerHTML = `
+      <div class="me-head">${head}</div>
+      <div class="me-main">
+        <span class="me-icon">${ev.icon}</span>
+        <div class="rev-wrap me-text">
+          <span class="zh me-chn">${ev.chn}</span>${ev.kind === 'holiday' ? ` <span class="zh me-greet">${ev.greet}</span>` : ''}
+          <button type="button" class="btn-show-vi" data-show-vi>👁</button>
+          <div class="rev-vi">${escapeHtml(ev.pin)} · ${escapeHtml(ev.vi)}${ev.kind === 'holiday' ? ` — ${escapeHtml(ev.greetPin)} (${escapeHtml(ev.greetVi)})` : ''}</div>
+        </div>
+        <button type="button" class="sp-audio-btn me-say" data-say-chn="${escapeHtml(this.eventSay(ev))}" title="Nghe"><i class="fa-solid fa-volume-high"></i></button>
+      </div>
+      <div class="me-effect">${effect} · ${escapeHtml(ev.kind === 'holiday' ? 'Ngày lễ, khách kéo đến đông — chuẩn bị nhiều nguyên liệu!' : ev.note)}</div>`;
+    this.learn(ev.kind === 'holiday' ? '节日' : '天气');
+    this.learn(ev.chn);
+    if (ev.kind === 'holiday') this.learn('快乐');
+  }
 
   clockMinutes() {
     if (!this.dayStarted) return DAY_RULES.openMin;
-    const p = Math.min(1, this.dayElapsed() / DAY_RULES.lengthMs);
-    return DAY_RULES.openMin + Math.floor(p * (DAY_RULES.closeMin - DAY_RULES.openMin));
+    const p = Math.min(1, this.dayElapsed() / this.dayLengthMs());
+    return DAY_RULES.openMin + Math.floor(p * (this.closeMin() - DAY_RULES.openMin));
   }
 
   tick() {
@@ -959,7 +1115,7 @@ class BobaShop {
     if (this.checkBankrupt()) return;
     this.gameTime += dt;
 
-    if (!this.closed && this.dayElapsed() >= DAY_RULES.lengthMs) {
+    if (!this.closed && this.dayElapsed() >= this.dayLengthMs()) {
       this.closed = true;
       this.learn('打烊');
       this.audio.bell();
@@ -975,9 +1131,9 @@ class BobaShop {
 
     if (!this.relaxedMode) {
       // chỉ khách CHƯA được chốt đơn mới bỏ về (đã chốt thì chờ lấy nước)
-      [...this.line].forEach(c => { if (!c.takenAt && this.gameTime - c.arrivedAt >= QUEUE_RULES.patienceMs) this.loseCustomer(c); });
+      [...this.line].forEach(c => { if (!c.takenAt && this.gameTime - c.arrivedAt >= this.patienceMs()) this.loseCustomer(c); });
       const cur = this.current;
-      if (cur && !cur.takenAt && this.gameTime - cur.arrivedAt >= QUEUE_RULES.patienceMs) this.loseCustomer(cur);
+      if (cur && !cur.takenAt && this.gameTime - cur.arrivedAt >= this.patienceMs()) this.loseCustomer(cur);
     }
 
     if (!this.current) this.promoteNext();
@@ -988,7 +1144,8 @@ class BobaShop {
 
   getArrivalGapMs() {
     const base = Math.max(QUEUE_RULES.arriveMinMs, QUEUE_RULES.arriveBaseMs - (this.day - 1) * QUEUE_RULES.arrivePerDayMs);
-    return base + Math.random() * QUEUE_RULES.arriveJitterMs;
+    // ít khách (mưa, bão…) → khách đến thưa hơn; ngày lễ / biển hiệu → khách đến dày hơn
+    return (base + Math.random() * QUEUE_RULES.arriveJitterMs) / this.demand();
   }
 
   nextCustomerProfile() {
@@ -1116,8 +1273,13 @@ class BobaShop {
     const o = c.order;
     const teaInCup = this.cup.tea === o.tea.id && this.cup.fill > 0 && !this.cup.mixed;
     if (!teaInCup && (this.teaStock[o.tea.id] || 0) <= 0 && this.money < INGREDIENT_RULES.teaBatchCost - 1e-9) return `trà ${o.tea.chn}`;
-    const topInCup = o.topping && this.cup.toppings.includes(o.topping.id);
-    if (o.topping && !topInCup && (this.toppingStock[o.topping.id] || 0) <= 0 && this.money < INGREDIENT_RULES.toppingBatchCost - 1e-9) return `topping ${o.topping.chn}`;
+    for (const t of o.toppings) {
+      if (!this.cup.toppings.includes(t.id) && (this.toppingStock[t.id] || 0) <= 0 && this.money < INGREDIENT_RULES.toppingBatchCost - 1e-9) return `topping ${t.chn}`;
+    }
+    const sup = (id) => byId(SUPPLIES, id);
+    if (!this.cup.size && (this.supplies.cups || 0) <= 0 && this.money < sup('cups').cost - 1e-9) return 'ly (杯子)';
+    if (this.cup.ice !== o.ice.id && (this.supplies.ice || 0) < o.ice.use && this.money < sup('ice').cost - 1e-9) return 'đá (冰块)';
+    if (this.cup.sugar !== o.sugar.id && (this.supplies.sugar || 0) < o.sugar.use && this.money < sup('sugar').cost - 1e-9) return 'nước đường (糖浆)';
     return '';
   }
 
@@ -1137,13 +1299,13 @@ class BobaShop {
     if (!this.line.length && !this.current && !this.isModalOpen()) this.showDaySummary();
   }
 
-  patienceUsed(c) { return c ? Math.min(1, (this.gameTime - c.arrivedAt) / QUEUE_RULES.patienceMs) : 0; }
+  patienceUsed(c) { return c ? Math.min(1, (this.gameTime - c.arrivedAt) / this.patienceMs()) : 0; }
 
   // --------------------------------------------------------------------------
   // Đơn hàng
   // --------------------------------------------------------------------------
   orderPrice(o) {
-    return o.size.price + o.tea.premium + (o.topping ? o.topping.price : 0);
+    return o.size.price + o.tea.premium + o.toppings.reduce((t, x) => t + x.price, 0);
   }
 
   makeOrder() {
@@ -1152,7 +1314,7 @@ class BobaShop {
     const o = {
       size: pickOne(SIZES),
       tea: pickOne(teas),
-      topping: Math.random() < 0.8 && tops.length ? pickOne(tops) : null,
+      toppings: [...tops].sort(() => Math.random() - 0.5).slice(0, this.rollToppingCount(tops.length)),
       sugar: pickOne(SUGARS),
       ice: pickOne(ICES)
     };
@@ -1160,6 +1322,13 @@ class BobaShop {
     o.paid = this.pickPaidAmount(o.due);
     o.change = Math.round((o.paid - o.due) * 100) / 100;
     return o;
+  }
+
+  // số topping khách gọi: 0 (20%) · 1 (40%) · 2 (28%) · 3 (12%)
+  rollToppingCount(max) {
+    const r = Math.random();
+    const n = r < 0.2 ? 0 : r < 0.6 ? 1 : r < 0.88 ? 2 : 3;
+    return Math.min(n, max, MAX_TOPPINGS);
   }
 
   pickPaidAmount(due) {
@@ -1173,11 +1342,10 @@ class BobaShop {
   }
 
   orderPhrase(o) {
-    const drinkZh = `${o.size.chn}${o.topping ? o.topping.chn : ''}${o.tea.chn}`;
-    const parts = [drinkZh, ...(o.topping ? [] : ['不加料']), o.sugar.chn, o.ice.chn];
-    const drinkPin = `${o.size.pin} ${o.topping ? o.topping.pin + ' ' : ''}${o.tea.pin}`;
-    const pinParts = [drinkPin, ...(o.topping ? [] : ['bù jiā liào']), o.sugar.pin, o.ice.pin];
-    const vi = `1 ${o.size.vi} ${o.tea.vi}${o.topping ? ' ' + o.topping.vi : ', không topping'}, ${o.sugar.vi}, ${o.ice.vi}`;
+    const tops = o.toppings;
+    const parts = [`${o.size.chn}${o.tea.chn}`, tops.length ? `加${tops.map(t => t.chn).join('、')}` : '不加料', o.sugar.chn, o.ice.chn];
+    const pinParts = [`${o.size.pin} ${o.tea.pin}`, tops.length ? `jiā ${tops.map(t => t.pin).join(', ')}` : 'bù jiā liào', o.sugar.pin, o.ice.pin];
+    const vi = `1 ${o.size.vi} ${o.tea.vi}${tops.length ? ', thêm ' + tops.map(t => t.vi).join(' + ') : ', không topping'}, ${o.sugar.vi}, ${o.ice.vi}`;
     return {
       zh: `老板，我要${parts.join('，')}！`,
       zhHtml: `老板，我要${parts.map(p => `<em>${p}</em>`).join('，')}！`,
@@ -1261,6 +1429,10 @@ class BobaShop {
       this.audio.error();
       this.showToast('🥤', 'Đã rót trà rồi, không đổi cỡ ly được. Bấm Đổ đi để làm lại.', 'warn');
       return;
+    }
+    if (!this.cup.size) {
+      if ((this.supplies.cups || 0) <= 0) { this.supplyEmpty('cups'); return; }
+      this.supplies.cups -= 1;   // lấy 1 ly mới
     }
     this.cup.size = id;
     this.learn(size.chn);
@@ -1346,6 +1518,10 @@ class BobaShop {
     if (!this.canMake()) return;
     const s = byId(SUGARS, id);
     if (!s) return;
+    const prev = byId(SUGARS, this.cup.sugar);
+    const back = prev ? prev.use : 0;   // đổi mức → trả lại phần đã dùng
+    if ((this.supplies.sugar || 0) + back < s.use) { this.supplyEmpty('sugar'); return; }
+    this.supplies.sugar = (this.supplies.sugar || 0) + back - s.use;
     this.cup.sugar = id;
     this.learn(s.chn);
     this.audio.pick();
@@ -1357,6 +1533,10 @@ class BobaShop {
     if (!this.canMake()) return;
     const ice = byId(ICES, id);
     if (!ice) return;
+    const prev = byId(ICES, this.cup.ice);
+    const back = prev ? prev.use : 0;
+    if ((this.supplies.ice || 0) + back < ice.use) { this.supplyEmpty('ice'); return; }
+    this.supplies.ice = (this.supplies.ice || 0) + back - ice.use;
     this.cup.ice = id;
     this.learn(ice.chn);
     this.audio.ice();
@@ -1379,7 +1559,7 @@ class BobaShop {
       this.showToast('⚠️', `Đã hết topping ${t.chn}! Bấm "+5 Nấu" để chuẩn bị thêm 5 phần.`, 'warn');
       return;
     }
-    if (this.cup.toppings.length >= 2) { this.audio.error(); this.showToast('🧋', 'Ly đầy topping rồi! Bấm "Bớt topping" nếu thêm nhầm.', 'warn'); return; }
+    if (this.cup.toppings.length >= MAX_TOPPINGS) { this.audio.error(); this.showToast('🧋', `Tối đa ${MAX_TOPPINGS} topping! Bấm "Bớt topping" nếu thêm nhầm.`, 'warn'); return; }
     this.cup.toppings.push(id);
     this.toppingStock[id] = Math.max(0, (this.toppingStock[id] || 0) - 1);
     this.learn(t.chn);
@@ -1406,6 +1586,8 @@ class BobaShop {
       return;
     }
     this.stopPour();
+    const check = this.evaluateCup(this.current.order, this.cup);
+    if (check.hard.length) { this.rejectCup(check.hard); return; }
     this.cup.lid = true;
     this.learn('封口');
     this.audio.seal();
@@ -1433,24 +1615,50 @@ class BobaShop {
     this.showToast('🗑️', 'Đã đổ ly cũ (nguyên liệu trong ly đã bị huỷ). Làm lại ly mới nhé!');
   }
 
-  // Chấm "pha đúng món"
+  // Ly pha sai → không cho đóng nắp / tính tiền, bắt đổ đi làm lại
+  rejectCup(list) {
+    this.audio.error();
+    this.learn('做错了');
+    this.learn('重做');
+    const box = this.$('wrong-list');
+    if (box) box.innerHTML = list.map(m => `<li>${m}</li>`).join('');
+    this.openModal('modal-wrong');
+    setTimeout(() => this.audio.speak('做错了，倒掉重做吧！'), 250);
+  }
+
+  confirmRemake() {
+    this.closeModal('modal-wrong');
+    this.lastTickAt = performance.now();
+    this.trashCup();
+    this.switchStation('view-make-station', true);
+  }
+
+  // Chấm "pha đúng món"; hard = lỗi bắt buộc làm lại (sai món), mistakes = mọi điểm trừ
   evaluateCup(o, cup) {
     const mistakes = [];
+    const hard = [];
+    const bad = (msg) => { mistakes.push(msg); hard.push(msg); };
     let score = 0;
     const size = byId(SIZES, cup.size);
-    if (cup.size === o.size.id) score += 15; else mistakes.push(`Cỡ ly: cần <b class="zh">${o.size.chn}</b>${size ? `, đã chọn ${size.chn}` : ''}`);
+    if (cup.size === o.size.id) score += 15; else bad(`Cỡ ly: cần <b class="zh">${o.size.chn}</b>${size ? `, đã chọn <span class="zh">${size.chn}</span>` : ''}`);
     if (cup.tea === o.tea.id && !cup.mixed) score += 25;
-    else mistakes.push(cup.mixed ? 'Trà bị pha lẫn 2 loại' : `Loại trà: cần <b class="zh">${o.tea.chn}</b>${cup.tea ? `, đã rót ${byId(TEAS, cup.tea).chn}` : ''}`);
+    else bad(cup.mixed ? 'Trà bị pha lẫn 2 loại' : `Loại trà: cần <b class="zh">${o.tea.chn}</b>${cup.tea ? `, đã rót <span class="zh">${byId(TEAS, cup.tea).chn}</span>` : ''}`);
     const d = Math.abs(cup.fill - POUR_RULES.target);
     const fillScore = cup.spilled ? 20 : cup.fill <= 0 ? 0 : d <= 5 ? 100 : d <= 10 ? 80 : d <= 20 ? 50 : 20;
     score += (20 * fillScore) / 100;
-    if (fillScore < 100) mistakes.push(cup.spilled ? 'Rót tràn ly' : `Rót ${Math.round(cup.fill)}% (vạch chuẩn ${POUR_RULES.target}%)`);
-    if (cup.sugar === o.sugar.id) score += 15; else mistakes.push(`Độ ngọt: cần <b class="zh">${o.sugar.chn}</b>`);
-    if (cup.ice === o.ice.id) score += 15; else mistakes.push(`Lượng đá: cần <b class="zh">${o.ice.chn}</b>`);
-    const wantTop = o.topping ? [o.topping.id] : [];
-    const topOk = cup.toppings.length === wantTop.length && cup.toppings.every((t, i) => t === wantTop[i]);
-    if (topOk) score += 10; else mistakes.push(o.topping ? `Topping: cần <b class="zh">${o.topping.chn}</b>` : 'Khách không gọi topping (<span class="zh">不加料</span>)');
-    return { score: Math.round(score), mistakes };
+    if (fillScore < 100) {
+      const msg = cup.spilled ? 'Rót tràn ly' : `Rót ${Math.round(cup.fill)}% (vạch chuẩn ${POUR_RULES.target}%)`;
+      if (cup.spilled || cup.fill < 60) bad(msg); else mistakes.push(msg);   // lệch ít → chỉ trừ điểm
+    }
+    if (cup.sugar === o.sugar.id) score += 15; else bad(`Độ ngọt: cần <b class="zh">${o.sugar.chn}</b>${cup.sugar ? `, đã chọn <span class="zh">${byId(SUGARS, cup.sugar).chn}</span>` : ' (chưa chọn)'}`);
+    if (cup.ice === o.ice.id) score += 15; else bad(`Lượng đá: cần <b class="zh">${o.ice.chn}</b>${cup.ice ? `, đã chọn <span class="zh">${byId(ICES, cup.ice).chn}</span>` : ' (chưa chọn)'}`);
+    const want = o.toppings.map(t => t.id).sort();
+    const got = [...cup.toppings].sort();
+    const topOk = want.length === got.length && want.every((t, i) => t === got[i]);
+    const gotTxt = cup.toppings.length ? `, đã thêm <span class="zh">${cup.toppings.map(id => byId(TOPPINGS, id).chn).join('、')}</span>` : ', chưa thêm gì';
+    if (topOk) score += 10;
+    else bad(o.toppings.length ? `Topping: cần <b class="zh">${o.toppings.map(t => t.chn).join('、')}</b>${gotTxt}` : `Khách không gọi topping (<span class="zh">不加料</span>)${gotTxt}`);
+    return { score: Math.round(score), mistakes, hard };
   }
 
   // ---------------- Trạm 3: tính tiền
@@ -1531,7 +1739,9 @@ class BobaShop {
 
     // Đánh giá: lâu lâu mới có khách viết (không phải ai cũng để lại), đọc & trả lời trước giờ mở cửa hôm sau
     const stars = this.starsFor(total);
-    const wantsReview = Math.random() < (REVIEW_RULES.chance[stars] || 0) && this.todayReviews.length < REVIEW_RULES.maxPerDay;
+    const cap = this.reviewCap || REVIEW_RULES.maxPerDay;
+    const lateBoost = this.closed && this.todayReviews.length < REVIEW_RULES.minPerDay; // gần hết ngày mà chưa đủ 3 → khách cuối viết
+    const wantsReview = this.todayReviews.length < cap && (lateBoost || Math.random() < (REVIEW_RULES.chance[stars] || 0));
     const review = wantsReview ? this.generateCustomerReview(c, o, evalCup, total, scores, stars) : null;
     if (review) {
       this.reviews.unshift(review);
@@ -1576,7 +1786,8 @@ class BobaShop {
   generateCustomerReview(customer, order, evalCup, totalScore, scores, stars) {
     const has = (...keys) => evalCup.mistakes.some(m => keys.some(k => m.includes(k)));
     let pool;
-    if (stars === 5) pool = REVIEW_POOLS.praise;
+    if ((customer.trashCount || 0) > 0 && stars <= 4 && Math.random() < 0.7) pool = REVIEW_POOLS.remake;
+    else if (stars === 5) pool = REVIEW_POOLS.praise;
     else if (stars === 4) pool = REVIEW_POOLS.good;
     else if (stars === 3) pool = REVIEW_POOLS.ok;
     else if (has('Loại trà', 'pha lẫn')) pool = REVIEW_POOLS.tea;
@@ -1596,7 +1807,7 @@ class BobaShop {
       customerNameChn: customer.profile.nameChn,
       customerNameVi: customer.profile.nameVi,
       customerImg: customer.profile.img,
-      orderText: `${order.size.chn} ${order.tea.chn}${order.topping ? ' + ' + order.topping.chn : ''}`,
+      orderText: `${order.size.chn} ${order.tea.chn}${order.toppings.length ? ' + ' + order.toppings.map(t => t.chn).join('、') : ''}`,
       stars,
       score: totalScore,
       commentZh,
@@ -1606,6 +1817,79 @@ class BobaShop {
       seen: false,   // chưa đọc → nhắc đọc trước giờ mở cửa
       reply: null    // câu trả lời của chủ quán { zh, pin, vi }
     };
+  }
+
+  // ---------------- Vật tư (ly, đá, nước đường): mua theo gói, tồn qua ngày
+  supplyEmpty(id) {
+    const x = byId(SUPPLIES, id);
+    this.audio.error();
+    this.showToast(x.icon, `Hết ${x.vi} (${x.chn})! Bấm "+${x.pack}" ở thanh vật tư để mua thêm (${fmt(x.cost)} ¥).`, 'warn');
+    document.querySelector(`.supply-chip[data-supply="${id}"]`)?.classList.add('flash');
+  }
+
+  buySupply(id) {
+    const x = byId(SUPPLIES, id);
+    if (!x) return;
+    if (this.money < x.cost - 1e-9) {
+      this.audio.error();
+      this.showToast('🪙', `Không đủ tiền mua ${x.chn}! Cần ${fmt(x.cost)} ¥.`, 'warn');
+      return;
+    }
+    this.money = Math.round((this.money - x.cost) * 100) / 100;
+    this.supplies[id] = (this.supplies[id] || 0) + x.pack;
+    this.learn(x.chn);
+    this.learn('进货');
+    this.audio.coin();
+    this.showToast(x.icon, `Đã mua ${x.pack} ${x.unit} ${x.chn} (${x.vi}). Còn: ${this.supplies[id]}.`);
+    this.updateHUD();
+    this.renderMakeStation();
+    this.renderPrepModal();
+    if (this.$('modal-restock')?.style.display === 'flex') this.renderMarket();
+  }
+
+  supplyChipsHtml(compact = false) {
+    return SUPPLIES.map(x => {
+      const n = this.supplies[x.id] || 0;
+      const low = n <= (x.id === 'cups' ? 3 : 5);
+      return `<div class="supply-chip ${low ? 'low' : ''} ${n <= 0 ? 'out' : ''}" data-supply="${x.id}" title="${escapeHtml(x.vi)} — tồn qua ngày, không bị hỏng">
+        <span class="sc-icon">${x.icon}</span>
+        <span class="sc-txt"><b class="zh">${x.chn}</b>${compact ? '' : `<small>${escapeHtml(x.vi)}</small>`}</span>
+        <span class="sc-n">${n}</span>
+        <button type="button" class="sc-buy" data-buy-supply="${x.id}">+${x.pack} · ${fmt(x.cost)}¥</button>
+      </div>`;
+    }).join('');
+  }
+
+  renderSupplyBar() {
+    const bar = this.$('supply-bar');
+    if (bar) bar.innerHTML = this.supplyChipsHtml(true);
+  }
+
+  // ---------------- Nâng cấp tiệm
+  buyUpgrade(id) {
+    const u = byId(UPGRADES, id);
+    if (!u) return;
+    const lv = this.upgrades[id] || 0;
+    if (lv >= u.costs.length) return;
+    if (this.isDayInProgress()) {
+      this.audio.error();
+      this.showToast('🔧', 'Nâng cấp tiệm khi quán chưa mở cửa (đầu ngày) nhé!', 'warn');
+      return;
+    }
+    const cost = u.costs[lv];
+    if (this.money < cost - 1e-9) {
+      this.audio.error();
+      this.showToast('🪙', `Cần ${fmt(cost)} ¥ để nâng cấp ${u.chn}.`, 'warn');
+      return;
+    }
+    this.money = Math.round((this.money - cost) * 100) / 100;
+    this.upgrades[id] = lv + 1;
+    this.learn(u.chn);
+    this.learn('升级');
+    this.audio.unlock();
+    this.showToast(u.icon, `升级 · Đã nâng cấp ${u.chn} (${u.vi}) lên cấp ${lv + 1}!`);
+    this.renderMarket();
+    this.updateHUD();
   }
 
   brewTeaBatch(teaId) {
@@ -1687,11 +1971,14 @@ class BobaShop {
     box.innerHTML = none
       ? '⚠️ <b>Chưa nấu nguyên liệu nào</b> — bấm <b>Nấu nguyên liệu</b> trước khi mở cửa (hoặc bấm <b>+5 Nấu</b> ở trạm pha chế).'
       : '🍲 <b>Đã nấu:</b> ' + items.map(x => `<span class="ms-item ${x.n ? '' : 'zero'}"><span class="zh">${x.chn}</span> ${x.n}</span>`).join('');
+    box.innerHTML += '<div class="ms-supplies">📦 <b>Vật tư:</b> ' + SUPPLIES.map(x => `<span class="ms-item ${(this.supplies[x.id] || 0) ? '' : 'zero'}">${x.icon} <span class="zh">${x.chn}</span> ${this.supplies[x.id] || 0}</span>`).join('') + '</div>';
   }
 
   renderPrepModal() {
     this.renderMissionStock();
     this.setText('prep-money-val', `${fmt(this.money)} ¥`);
+    const supBox = this.$('prep-supply-grid');
+    if (supBox) supBox.innerHTML = this.supplyChipsHtml(false);
     const teaBox = this.$('prep-tea-grid');
     const topBox = this.$('prep-topping-grid');
     if (teaBox) {
@@ -2150,22 +2437,23 @@ class BobaShop {
 
   updateClockUI() {
     const elapsed = this.dayElapsed();
-    const remainMs = Math.max(0, DAY_RULES.lengthMs - elapsed);
+    const remainMs = Math.max(0, this.dayLengthMs() - elapsed);
     const remainSec = Math.ceil(remainMs / 1000);
     const mm = String(Math.floor(remainSec / 60)).padStart(2, '0');
     const ss = String(remainSec % 60).padStart(2, '0');
-    const remainRatio = this.dayStarted ? Math.max(0, remainMs / DAY_RULES.lengthMs) : 1;
+    const remainRatio = this.dayStarted ? Math.max(0, remainMs / this.dayLengthMs()) : 1;
 
     // Đếm ngược thời gian (mm:ss) thay vì giờ đồng hồ
-    const valText = !this.dayStarted ? '02:00' : this.closed ? '00:00' : `${mm}:${ss}`;
+    const fullSec = Math.round(this.dayLengthMs() / 1000);
+    const valText = !this.dayStarted ? `${String(Math.floor(fullSec / 60)).padStart(2, '0')}:${String(fullSec % 60).padStart(2, '0')}` : this.closed ? '00:00' : `${mm}:${ss}`;
     this.setText('hud-clock-val', valText);
     const fill = this.$('hud-clock-fill');
     if (fill) fill.style.width = `${Math.round(remainRatio * 100)}%`;
-    const label = !this.dayStarted ? 'Chưa mở' : this.closed ? '🌙 Hết giờ' : remainSec <= 20 ? '⏰ Sắp hết' : '⏳ Còn lại';
+    const label = !this.dayStarted ? 'Chưa mở' : this.closed ? '🌙 Hết giờ' : remainSec <= DAY_RULES.closingWarnSec ? '⏰ Sắp hết' : '⏳ Còn lại';
     this.setText('hud-clock-label', label);
     const pill = this.$('hud-clock');
     if (pill) {
-      pill.classList.toggle('closing', this.dayStarted && !this.closed && remainSec <= 20);
+      pill.classList.toggle('closing', this.dayStarted && !this.closed && remainSec <= DAY_RULES.closingWarnSec);
       pill.classList.toggle('closed', this.closed);
     }
   }
@@ -2335,7 +2623,7 @@ class BobaShop {
       <li><span class="mt-k">🍵 Trà</span><span class="mt-v"><b class="zh">${o.tea.chn}</b>${v(o.tea.vi)}</span>${now(cup.mixed ? 'lẫn' : cup.tea ? `${byId(TEAS, cup.tea).chn} ${Math.round(cup.fill)}%` : '')}</li>
       <li><span class="mt-k">🍬 Đường</span><span class="mt-v"><b class="zh">${o.sugar.chn}</b>${v(o.sugar.vi)}</span>${now(cup.sugar ? byId(SUGARS, cup.sugar).chn : '')}</li>
       <li><span class="mt-k">🧊 Đá</span><span class="mt-v"><b class="zh">${o.ice.chn}</b>${v(o.ice.vi)}</span>${now(cup.ice ? byId(ICES, cup.ice).chn : '')}</li>
-      <li><span class="mt-k">🧋 Topping</span><span class="mt-v"><b class="zh">${o.topping ? o.topping.chn : '不加料'}</b>${v(o.topping ? o.topping.vi : 'không topping')}</span>${now(top)}</li>
+      <li><span class="mt-k">🧋 Topping</span><span class="mt-v"><b class="zh">${o.toppings.length ? o.toppings.map(t => t.chn).join(' + ') : '不加料'}</b>${v(o.toppings.length ? o.toppings.map(t => t.vi).join(' + ') : 'không topping')}</span>${now(top)}</li>
       <li><span class="mt-k">🔒 Nắp</span><span class="mt-v"><b class="zh">封口</b>${v('đóng nắp')}</span>${now(cup.lid ? '✓' : '')}</li>`;
   }
 
@@ -2378,6 +2666,7 @@ class BobaShop {
   renderMakeStation() {
     this.renderTicket();
     this.renderCup();
+    this.renderSupplyBar();
     const cup = this.cup;
     const locked = !!cup.lid;
     const has = !!(this.current && this.current.takenAt);
@@ -2490,7 +2779,7 @@ class BobaShop {
       else if (!cup.size) hint.innerHTML = '💡 Bước 1: chọn <b>cỡ ly</b> theo phiếu (小杯 / 中杯 / 大杯).';
       else if (!cup.fill) hint.innerHTML = '💡 <b>Nhấn giữ</b> vòi trà đúng loại, thả tay khi tới <b>vạch 80%</b>. Hết trà thì bấm <b>+5 Nấu</b>.';
       else if (!cup.sugar || !cup.ice) hint.innerHTML = '💡 Bước 2: chọn <b>độ ngọt</b> và <b>lượng đá</b> theo phiếu.';
-      else hint.innerHTML = '💡 Bước 3: thêm <b>topping</b> (nếu khách gọi) rồi <b>đóng nắp</b>.';
+      else hint.innerHTML = '💡 Bước 3: thêm <b>đủ các topping</b> trên phiếu (có thể 2–3 loại) rồi <b>đóng nắp</b>. Pha sai sẽ phải đổ đi làm lại!';
     }
   }
 
@@ -2509,7 +2798,7 @@ class BobaShop {
         lines.innerHTML = `
           <div><span><span class="zh">${o.size.chn}</span> ${escapeHtml(o.size.vi)}</span><b>${fmt(o.size.price)}</b></div>
           ${o.tea.premium ? `<div><span><span class="zh">${o.tea.chn}</span> +</span><b>${fmt(o.tea.premium)}</b></div>` : ''}
-          ${o.topping ? `<div><span><span class="zh">${o.topping.chn}</span> +</span><b>${fmt(o.topping.price)}</b></div>` : ''}`;
+          ${o.toppings.map(t => `<div><span><span class="zh">${t.chn}</span> +</span><b>${fmt(t.price)}</b></div>`).join('')}`;
       }
     }
     const hintBtn = this.$('btn-change-hint');
@@ -2575,19 +2864,59 @@ class BobaShop {
     const z = byId(MARKET_ZONES, this.marketZone) || MARKET_ZONES[0];
     const list = z.id === 'teas' ? TEAS : TOPPINGS;
     const owned = z.id === 'teas' ? this.teasOwned : this.toppingsOwned;
+    const zoneState = (zz) => {
+      if (zz.id === 'supplies') return SUPPLIES.some(x => (this.supplies[x.id] || 0) <= 5) ? '⚠️' : '✓';
+      if (zz.id === 'upgrades') return `${UPGRADES.reduce((t, u) => t + (this.upgrades[u.id] || 0), 0)}/${UPGRADES.reduce((t, u) => t + u.costs.length, 0)}`;
+      const l = zz.id === 'teas' ? TEAS : TOPPINGS;
+      const o = zz.id === 'teas' ? this.teasOwned : this.toppingsOwned;
+      return `${o.size}/${l.length}`;
+    };
     if (zonesBox) {
-      zonesBox.innerHTML = MARKET_ZONES.map(zz => {
-        const l = zz.id === 'teas' ? TEAS : TOPPINGS;
-        const o = zz.id === 'teas' ? this.teasOwned : this.toppingsOwned;
-        return `<button type="button" class="mz ${zz.id === z.id ? 'active' : ''}" data-mz="${zz.id}">
+      zonesBox.innerHTML = MARKET_ZONES.map(zz => `<button type="button" class="mz ${zz.id === z.id ? 'active' : ''}" data-mz="${zz.id}">
           <span class="mz-icon">${zz.icon}</span>
           <span class="mz-txt"><b class="zh">${zz.chn}</b><small>${escapeHtml(zz.short)}</small></span>
-          <span class="mz-state">${o.size}/${l.length}</span>
-        </button>`;
-      }).join('');
+          <span class="mz-state">${zoneState(zz)}</span>
+        </button>`).join('');
       zonesBox.querySelectorAll('[data-mz]').forEach(b => b.addEventListener('click', () => { this.marketZone = b.dataset.mz; this.audio.pop(); this.renderMarket(); }));
     }
-    if (head) head.innerHTML = `<span class="mzh-icon">${z.icon}</span><div><b class="zh">${z.chn}</b> <span class="mzh-pin">${escapeHtml(z.pin)}</span><small>${z.id === 'teas' ? 'Mở thêm loại trà — khách sẽ gọi đa dạng hơn, ly đắt hơn' : 'Mở thêm topping — mỗi topping cộng thêm tiền vào ly'}</small></div>`;
+    const zoneNote = { teas: 'Mở thêm loại trà — khách sẽ gọi đa dạng hơn, ly đắt hơn', toppings: 'Mở thêm topping — mỗi topping cộng thêm tiền vào ly', supplies: 'Ly, đá, nước đường: phải mua mới pha được · tồn qua ngày, không bị hỏng', upgrades: 'Nâng cấp tiệm: thêm khách, khách chờ lâu hơn, mở cửa lâu hơn (mua khi quán chưa mở cửa)' }[z.id];
+    if (head) head.innerHTML = `<span class="mzh-icon">${z.icon}</span><div><b class="zh">${z.chn}</b> <span class="mzh-pin">${escapeHtml(z.pin)}</span><small>${zoneNote}</small></div>`;
+    this.setText('market-money', `${fmt(this.money)} ¥`);
+    this.setText('market-count', `${this.teasOwned.size} trà · ${this.toppingsOwned.size} topping`);
+    if (z.id === 'supplies') {
+      grid.innerHTML = SUPPLIES.map(x => {
+        const ok = this.money >= x.cost;
+        return `<div class="mk-card owned supply">
+          <span class="mk-emoji">${x.icon}</span>
+          <b class="zh mk-name">${x.chn}</b>
+          <span class="mk-pin">${escapeHtml(x.pin)}</span>
+          <span class="mk-vi">${escapeHtml(x.vi)}</span>
+          <span class="mk-price">Tồn kho: <b>${this.supplies[x.id] || 0}</b> ${x.unit}</span>
+          <button type="button" class="mk-unlock" data-buy-supply="${x.id}" ${ok ? '' : 'disabled'}><i class="fa-solid fa-cart-plus"></i> +${x.pack} · ${fmt(x.cost)} ¥</button>
+        </div>`;
+      }).join('');
+      return;
+    }
+    if (z.id === 'upgrades') {
+      const busy = this.isDayInProgress();
+      grid.innerHTML = UPGRADES.map(u => {
+        const lv = this.upgrades[u.id] || 0;
+        const max = lv >= u.costs.length;
+        const cost = max ? 0 : u.costs[lv];
+        const ok = !busy && this.money >= cost;
+        return `<div class="mk-card ${lv ? 'owned' : 'locked'} upgrade">
+          <span class="mk-emoji">${u.icon}</span>
+          <b class="zh mk-name">${u.chn}</b>
+          <span class="mk-pin">${escapeHtml(u.pin)}</span>
+          <span class="mk-vi">${escapeHtml(u.vi)}</span>
+          <span class="mk-lv">${'★'.repeat(lv)}${'☆'.repeat(u.costs.length - lv)} · Cấp ${lv}/${u.costs.length}</span>
+          <span class="mk-price">${escapeHtml(u.desc)}</span>
+          ${max ? '<span class="mk-owned"><i class="fa-solid fa-check"></i> Tối đa</span>'
+            : `<button type="button" class="mk-unlock" data-upgrade="${u.id}" ${ok ? '' : 'disabled'} title="${busy ? 'Nâng cấp khi quán chưa mở cửa' : ''}"><i class="fa-solid fa-arrow-up"></i> Cấp ${lv + 1} · ${fmt(cost)} ¥</button>`}
+        </div>`;
+      }).join('');
+      return;
+    }
     grid.innerHTML = list.map(it => {
       const own = owned.has(it.id);
       const ok = this.money >= it.unlockCost;

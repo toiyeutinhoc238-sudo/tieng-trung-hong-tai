@@ -20,9 +20,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
   <!-- Dùng chung phong cách với Tiệm Tạp Hóa, rồi thêm phần riêng của tiệm trà sữa -->
-  <script type="module" crossorigin src="/assets/bobaGame-CGUF5WAc.js"></script>
+  <script type="module" crossorigin src="/assets/bobaGame-CWQR2akQ.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/bobaGame-D9eQME4m.css">
+  <link rel="stylesheet" crossorigin href="/assets/bobaGame-BPOCOkcw.css">
   <link rel="stylesheet" crossorigin href="/assets/grocery_game-DwMBnktp.css">
 </head>
 
@@ -282,6 +282,8 @@
 
           <!-- Các bước pha chế -->
           <div class="make-steps">
+            <!-- Vật tư: ly, đá, nước đường (mua thêm ngay tại đây) -->
+            <div class="supply-bar" id="supply-bar"></div>
             <div class="step-tabs" id="step-tabs">
               <button type="button" class="step-tab active" data-step="1"><b>1</b><span><span class="zh">杯 · 茶</span> Ly
                   &amp; trà</span></button>
@@ -479,6 +481,8 @@
           <p id="mission-sub">Quán mở cửa 08:00 → 20:00 (khoảng 2 phút). Khách đến liên tục — hãy chuẩn bị nguyên liệu
             trước!</p>
         </div>
+        <!-- Thông báo hôm nay: thời tiết / ngày lễ (ảnh hưởng lượng khách) -->
+        <div class="mission-event" id="mission-event"></div>
         <div class="mission-goals" id="mission-goals"></div>
 
         <!-- Tóm tắt nguyên liệu đã nấu (chi tiết ở bảng Nấu nguyên liệu) -->
@@ -511,8 +515,12 @@
               Nấu nhanh tất cả (+5)</button>
           </div>
           <div class="prep-notice">
-            ⚠️ <b>Quy tắc bảo quản:</b> Nước trà và topping qua ngày sẽ <b>bị hủy hết</b> (đổ bỏ cuối ngày). Ly, đá và
-            đường được giữ lại. Hãy tính toán nấu lượng vừa đủ để không bị lãng phí!
+            ⚠️ <b>Quy tắc bảo quản:</b> Nước trà và topping qua ngày sẽ <b>bị hủy hết</b> (đổ bỏ cuối ngày).
+            <b>Ly, đá, nước đường</b> phải mua nhưng được <b>tồn kho</b> qua ngày. Tính toán vừa đủ để không lãng phí!
+          </div>
+          <div class="prep-block prep-supplies">
+            <div class="pb-title"><span>📦 Vật tư (<span class="zh">物料</span>)</span> <small>Tồn qua ngày · không bị hỏng</small></div>
+            <div class="supply-grid" id="prep-supply-grid"></div>
           </div>
           <div class="prep-grids">
             <div class="prep-block">
@@ -531,6 +539,18 @@
           <button type="button" class="g-btn-primary big" data-close="modal-prep"><i class="fa-solid fa-check"></i>
             Xong</button>
         </div>
+      </div>
+    </div>
+
+    <!-- PHA SAI MÓN: không cho đóng nắp / tính tiền → bắt đổ đi làm lại -->
+    <div class="g-modal" id="modal-wrong" style="display:none;">
+      <div class="g-card wrong-card">
+        <div class="wrong-icon">❌</div>
+        <h3><span class="zh">做错了！</span> Pha sai món rồi</h3>
+        <p class="wrong-sub"><span class="zh">倒掉重做</span> · Ly này không đúng phiếu order — không được giao cho khách. Đổ đi và làm lại ly mới (nguyên liệu, ly trong ly cũ bị mất).</p>
+        <ul class="wrong-list" id="wrong-list"></ul>
+        <button type="button" class="g-btn-primary big danger" id="btn-wrong-trash"><i class="fa-solid fa-trash"></i>
+          <span class="zh">倒掉重做</span> Đổ đi làm lại</button>
       </div>
     </div>
 
@@ -617,7 +637,7 @@
       <div class="g-card market-card">
         <div class="market-awning" aria-hidden="true"></div>
         <div class="g-card-head">
-          <h3>🧺 <span class="zh">进货</span> · Mở món mới cho thực đơn</h3>
+          <h3>🧺 <span class="zh">进货</span> · Nhập hàng · Mở món · Nâng cấp</h3>
           <button type="button" class="g-close" data-close="modal-restock"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="market-body">

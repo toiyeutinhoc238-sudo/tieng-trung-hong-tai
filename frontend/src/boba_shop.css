@@ -1354,3 +1354,76 @@ body.g-portrait .mission-reading { margin: 10px 14px 0; }
 .rb-reply.done .btn-show-vi { margin-top: 0; }
 .mission-reading { margin-bottom: 12px; }
 #modal-day-mission .mission-card { max-height: calc(100% - 16px); overflow-y: auto; overscroll-behavior: contain; }
+
+/* ==========================================================================
+   Vật tư (ly · đá · nước đường): tồn kho, mua theo gói
+   ========================================================================== */
+.supply-bar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 6px 8px; background: #fffaf0; border-bottom: 2px dashed var(--honey); }
+.supply-chip { display: flex; align-items: center; gap: 5px; min-width: 0; padding: 3px 6px; border-radius: 10px; background: #fff; border: 1.5px solid #f0d6ad; }
+.supply-chip .sc-icon { font-size: 1.05rem; }
+.supply-chip .sc-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.1; }
+.supply-chip .sc-txt b { font-size: 0.9rem; color: var(--wood-d); }
+.supply-chip .sc-txt small { font-size: 0.66rem; color: #8a6d57; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.supply-chip .sc-n { margin-left: auto; font-weight: 900; font-size: 0.95rem; color: #047857; }
+.supply-chip.low { border-color: #fdba74; background: #fff7ed; }
+.supply-chip.low .sc-n { color: #c2410c; }
+.supply-chip.out { border-color: #fda4af; background: #fff1f2; }
+.supply-chip.out .sc-n { color: #be123c; }
+.supply-chip.flash { animation: scFlash 0.5s ease-in-out 3; }
+@keyframes scFlash { 50% { box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.35); } }
+.sc-buy { flex: 0 0 auto; padding: 2px 6px; border-radius: 8px; border: 1.5px solid #86efac; background: #f0fdf4; color: #047857; font-family: inherit; font-size: 0.66rem; font-weight: 900; cursor: pointer; white-space: nowrap; }
+.sc-buy:hover { background: #dcfce7; }
+.supply-bar .supply-chip { flex-wrap: wrap; justify-content: space-between; }
+.supply-bar .sc-buy { font-size: 0.62rem; }
+body.g-portrait .supply-bar { gap: 4px; padding: 5px 6px; }
+.prep-supplies { margin-bottom: 10px; }
+.supply-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+body.g-portrait .supply-grid { grid-template-columns: 1fr; }
+.ms-supplies { margin-top: 4px; }
+.mk-card .mk-lv { font-size: 0.75rem; font-weight: 800; color: #b45309; }
+
+/* ==========================================================================
+   Thông báo hôm nay: thời tiết / ngày lễ
+   ========================================================================== */
+.mission-event:empty { display: none; }
+.mission-event { margin: 0 22px 10px; padding: 8px 12px; border-radius: 14px; background: #eff6ff; border: 1.5px solid #bfdbfe; }
+body.g-portrait .mission-event { margin: 0 14px 10px; }
+.mission-event.down { background: #f1f5f9; border-color: #cbd5e1; }
+.mission-event.holiday { background: #fff1f2; border-color: #fda4af; }
+.me-head { font-size: 0.74rem; font-weight: 900; color: #1e40af; }
+.mission-event.holiday .me-head { color: #be123c; }
+.me-main { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
+.me-icon { font-size: 2rem; line-height: 1; }
+.me-text { flex: 1; min-width: 0; }
+.me-chn { font-size: 1.4rem; font-weight: 700; color: #1e3a8a; margin-right: 4px; }
+.mission-event.holiday .me-chn { color: #9f1239; }
+.me-greet { font-size: 1.05rem; color: #b91c1c; margin-right: 4px; }
+.me-text .btn-show-vi { margin-top: 0; vertical-align: middle; }
+.me-say { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #93c5fd; background: #fff; color: #1d4ed8; cursor: pointer; }
+.me-effect { margin-top: 3px; font-size: 0.76rem; font-weight: 700; color: #475569; }
+.me-effect .up { color: #047857; }
+.me-effect .down { color: #be123c; }
+
+/* ==========================================================================
+   Pha sai món → đổ đi làm lại
+   ========================================================================== */
+#modal-wrong { z-index: 115; }
+.wrong-card { width: 480px; max-width: calc(100% - 24px); padding: 18px 20px; text-align: center; display: flex; flex-direction: column; gap: 8px; }
+.wrong-icon { font-size: 2.6rem; line-height: 1; }
+.wrong-card h3 { margin: 0; font-size: 1.25rem; color: #9f1239; }
+.wrong-card h3 .zh { font-size: 1.45rem; }
+.wrong-sub { margin: 0; font-size: 0.82rem; font-weight: 600; color: #7a5a3c; }
+.wrong-list { margin: 0; padding: 8px 12px 8px 30px; text-align: left; background: #fff1f2; border: 1.5px solid #fda4af; border-radius: 12px; font-size: 0.86rem; font-weight: 700; color: #881337; display: flex; flex-direction: column; gap: 4px; }
+.wrong-list .zh, .wrong-list b.zh { font-size: 1.02rem; }
+#btn-wrong-trash { align-self: center; background: linear-gradient(180deg, #fb7185, #e11d48); box-shadow: 0 4px 0 #9f1239; }
+
+/* Bảng nhiệm vụ trà sữa (nhiều mục hơn): ngang → 3 mục tiêu nằm 1 hàng; nút Mở cửa luôn thấy ở đáy */
+body:not(.g-portrait) #modal-day-mission .mission-card { width: 620px; }
+body:not(.g-portrait) #modal-day-mission .mission-head { padding: 14px 24px 4px; }
+body:not(.g-portrait) #modal-day-mission .mission-head p { font-size: 0.8rem; }
+body:not(.g-portrait) #modal-day-mission .mission-goals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 4px 22px 10px; }
+body:not(.g-portrait) #modal-day-mission .mgoal { flex-direction: column; align-items: center; text-align: center; gap: 2px; padding: 6px 6px; font-size: 0.78rem; line-height: 1.25; }
+body:not(.g-portrait) #modal-day-mission .mgoal .mg-icon { font-size: 1.15rem; }
+body:not(.g-portrait) #modal-day-mission .mgoal .mg-star { display: none; }
+body:not(.g-portrait) #modal-day-mission .mission-awning { height: 22px; }
+#modal-day-mission .mission-actions { position: sticky; bottom: -20px; z-index: 2; padding-top: 8px; padding-bottom: 4px; background: linear-gradient(180deg, rgba(255, 253, 247, 0), #fffdf7 30%); }
