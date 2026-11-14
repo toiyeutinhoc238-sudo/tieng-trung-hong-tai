@@ -175,7 +175,9 @@ const MARKET_ZONES = [
 
 // Vật tư phải mua & được TỒN qua ngày (không hỏng): ly, đá, nước đường
 const SUPPLIES = [
-  { id: 'cups', chn: '杯子', pin: 'bēizi', vi: 'ly nhựa (kèm nắp & ống hút)', icon: '🥤', unit: 'cái', pack: 20, cost: 4, start: 20 },
+  { id: 'cupS', size: 'S', chn: '小杯', pin: 'xiǎo bēi', vi: 'ly nhỏ (kèm nắp & ống hút)', icon: '🥤', unit: 'cái', pack: 10, cost: 2, start: 10 },
+  { id: 'cupM', size: 'M', chn: '中杯', pin: 'zhōng bēi', vi: 'ly vừa (kèm nắp & ống hút)', icon: '🥤', unit: 'cái', pack: 10, cost: 2.5, start: 10 },
+  { id: 'cupL', size: 'L', chn: '大杯', pin: 'dà bēi', vi: 'ly lớn (kèm nắp & ống hút)', icon: '🥤', unit: 'cái', pack: 10, cost: 3, start: 10 },
   { id: 'ice', chn: '冰块', pin: 'bīngkuài', vi: 'đá viên', icon: '🧊', unit: 'phần', pack: 30, cost: 3, start: 30 },
   { id: 'sugar', chn: '糖浆', pin: 'tángjiāng', vi: 'nước đường', icon: '🍯', unit: 'phần', pack: 30, cost: 3, start: 30 }
 ];
@@ -273,7 +275,8 @@ const VOCAB_TABS = [
       { chn: '加', pin: 'jiā', vi: 'thêm (topping)' },
       { chn: '双份', pin: 'shuāngfèn', vi: 'gấp đôi, 2 phần' },
       { chn: '打烊了', pin: 'dǎyàng le', vi: 'quán đóng cửa rồi' },
-      ...SUPPLIES.map(x => ({ chn: x.chn, pin: x.pin, vi: x.vi })),
+      { chn: '杯子', pin: 'bēizi', vi: 'cái ly' },
+      ...SUPPLIES.filter(x => !x.size).map(x => ({ chn: x.chn, pin: x.pin, vi: x.vi })),
       ...UPGRADES.map(x => ({ chn: x.chn, pin: x.pin, vi: x.vi })),
       { chn: '升级', pin: 'shēngjí', vi: 'nâng cấp' },
       { chn: '一共', pin: 'yígòng', vi: 'tổng cộng' },
@@ -658,7 +661,10 @@ class BobaShop {
       .slice(0, 50);
     this.todayReviews = [];
     // bản lưu cũ chưa có vật tư → tặng lượng khởi đầu
-    if (s.supplies && typeof s.supplies === 'object') SUPPLIES.forEach(x => { this.supplies[x.id] = Math.max(0, Math.round(num(s.supplies[x.id], x.start))); });
+    if (s.supplies && typeof s.supplies === 'object') {
+      const old = s.supplies.cups != null && s.supplies.cupS == null ? Math.ceil(Math.max(0, num(s.supplies.cups, 0)) / 3) : null;
+      SUPPLIES.forEach(x => { this.supplies[x.id] = Math.max(0, Math.round(x.size && old != null ? old : num(s.supplies[x.id], x.start))); });
+    }
     if (s.upgrades && typeof s.upgrades === 'object') UPGRADES.forEach(u => { this.upgrades[u.id] = Math.min(u.costs.length, Math.max(0, Math.round(num(s.upgrades[u.id], 0)))); });
     if (s.event && typeof s.event === 'object' && this.eventInfo(s.event)) this.todayEvent = { day: num(s.event.day, 0), kind: s.event.kind, id: s.event.id };
     this.relaxedMode = !!s.relaxed;
@@ -831,6 +837,10 @@ class BobaShop {
     on('btn-mission-start', 'click', () => this.startDay());
     on('btn-mission-restock', 'click', () => this.openMarket());
     on('btn-next-day-start', 'click', () => this.startNextDay());
+    on('btn-summary-home', 'click', () => this.goHomeFromSummary());
+    on('btn-summary-vocab', 'click', () => { this.audio.pop(); this.openVocabModal(); });
+    on('btn-summary-reviews', 'click', () => { this.audio.pop(); this.openReviewsModal(); });
+    on('btn-summary-rank', 'click', () => { this.audio.pop(); this.openRankModal(); });
 
     document.querySelectorAll('.rank-tab').forEach(btn => btn.addEventListener('click', () => { this.audio.pop(); this.switchRankTab(btn.dataset.rankTab); }));
     document.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', () => {
@@ -900,13 +910,13 @@ class BobaShop {
     const hasTea = [...this.teasOwned].some(id => (this.teaStock[id] || 0) > 0);
     const cupInProgress = !!(this.current && this.current.takenAt && (this.cup.fill > 0 || this.cup.lid));
     if (cupInProgress) return '';
-    const cups = byId(SUPPLIES, 'cups');
-    const hasCup = (this.supplies.cups || 0) > 0 || !!(this.current && this.cup.size);
-    const need = (hasTea ? 0 : INGREDIENT_RULES.teaBatchCost) + (hasCup ? 0 : cups.cost);
+    const cupCost = Math.min(...SUPPLIES.filter(x => x.size).map(x => x.cost));
+    const hasCup = SUPPLIES.some(x => x.size && (this.supplies[x.id] || 0) > 0) || !!(this.current && this.cup.size);
+    const need = (hasTea ? 0 : INGREDIENT_RULES.teaBatchCost) + (hasCup ? 0 : cupCost);
     if (this.money >= need - 1e-9) return '';
     if (!hasTea && !hasCup) return `Hết trà đã nấu và hết ly, không đủ ${fmt(need)} ¥ để nấu trà + mua ly.`;
     if (!hasTea) return `Không còn trà nào đã nấu và không đủ ${fmt(INGREDIENT_RULES.teaBatchCost)} ¥ để nấu thêm.`;
-    return `Hết ly (杯子) và không đủ ${fmt(cups.cost)} ¥ để mua thêm.`;
+    return `Hết ly (杯子) và không đủ ${fmt(cupCost)} ¥ để mua thêm.`;
   }
 
   checkBankrupt() {
@@ -1292,7 +1302,8 @@ class BobaShop {
       if (missing > 0 && (this.toppingStock[gp.t.id] || 0) < missing && this.money < INGREDIENT_RULES.toppingBatchCost - 1e-9) return `topping ${gp.t.chn}`;
     }
     const sup = (id) => byId(SUPPLIES, id);
-    if (!this.cup.size && (this.supplies.cups || 0) <= 0 && this.money < sup('cups').cost - 1e-9) return 'ly (杯子)';
+    const cupId = 'cup' + o.size.id;
+    if (this.cup.size !== o.size.id && (this.supplies[cupId] || 0) <= 0 && this.money < sup(cupId).cost - 1e-9) return `ly ${o.size.chn}`;
     if (this.cup.ice !== o.ice.id && (this.supplies.ice || 0) < o.ice.use && this.money < sup('ice').cost - 1e-9) return 'đá (冰块)';
     if (this.cup.sugar !== o.sugar.id && (this.supplies.sugar || 0) < o.sugar.use && this.money < sup('sugar').cost - 1e-9) return 'nước đường (糖浆)';
     return '';
@@ -1478,9 +1489,11 @@ class BobaShop {
       this.showToast('🥤', 'Đã rót trà rồi, không đổi cỡ ly được. Bấm Đổ đi để làm lại.', 'warn');
       return;
     }
-    if (!this.cup.size) {
-      if ((this.supplies.cups || 0) <= 0) { this.supplyEmpty('cups'); return; }
-      this.supplies.cups -= 1;   // lấy 1 ly mới
+    if (this.cup.size !== id) {
+      const want = 'cup' + id;
+      if ((this.supplies[want] || 0) <= 0) { this.supplyEmpty(want); return; }
+      if (this.cup.size) this.supplies['cup' + this.cup.size] = (this.supplies['cup' + this.cup.size] || 0) + 1; // chưa rót → trả ly cũ
+      this.supplies[want] -= 1;   // lấy 1 ly mới đúng cỡ
     }
     this.cup.size = id;
     this.learn(size.chn);
@@ -1895,10 +1908,10 @@ class BobaShop {
     if (this.$('modal-restock')?.style.display === 'flex') this.renderMarket();
   }
 
-  supplyChipsHtml(compact = false) {
-    return SUPPLIES.map(x => {
+  supplyChipsHtml(compact = false, list = SUPPLIES) {
+    return list.map(x => {
       const n = this.supplies[x.id] || 0;
-      const low = n <= (x.id === 'cups' ? 3 : 5);
+      const low = n <= (x.size ? 2 : 5);
       return `<div class="supply-chip ${low ? 'low' : ''} ${n <= 0 ? 'out' : ''}" data-supply="${x.id}" title="${escapeHtml(x.vi)} — tồn qua ngày, không bị hỏng">
         <span class="sc-icon">${x.icon}</span>
         <span class="sc-txt"><b class="zh">${x.chn}</b>${compact ? '' : `<small>${escapeHtml(x.vi)}</small>`}</span>
@@ -1910,7 +1923,7 @@ class BobaShop {
 
   renderSupplyBar() {
     const bar = this.$('supply-bar');
-    if (bar) bar.innerHTML = this.supplyChipsHtml(true);
+    if (bar) bar.innerHTML = this.supplyChipsHtml(true, SUPPLIES.filter(x => !x.size));
   }
 
   // ---------------- Nâng cấp tiệm
@@ -2372,6 +2385,14 @@ class BobaShop {
     this.audio.register();
   }
 
+  // Về nhà từ bảng tổng kết: chốt sang ngày mới (đã lưu) rồi về màn hình chính; bấm Chơi → bảng nhiệm vụ ngày mới
+  goHomeFromSummary() {
+    this.audio.pop();
+    this.startNextDay();
+    this.closeModal('modal-day-mission');
+    this.showTitleScreen();
+  }
+
   startNextDay() {
     this.closeModal('modal-day-summary');
     this.day += 1;
@@ -2723,10 +2744,18 @@ class BobaShop {
 
     const sizeRow = this.$('size-row');
     if (sizeRow) {
-      sizeRow.innerHTML = SIZES.map(s => `
-        <button type="button" class="opt-btn size-btn ${cup.size === s.id ? 'on' : ''}" data-size="${s.id}" ${locked ? 'disabled' : ''}>
-          <span class="ob-icon" style="--s:${s.scale}">🥤</span><b class="zh">${s.chn}</b><small>${escapeHtml(s.pin)}</small><em>${s.price}¥</em>
-        </button>`).join('');
+      sizeRow.innerHTML = SIZES.map(s => {
+        const sup = byId(SUPPLIES, 'cup' + s.id);
+        const n = this.supplies[sup.id] || 0;
+        const out = n <= 0 && cup.size !== s.id;
+        return `<div class="size-item">
+          <button type="button" class="opt-btn size-btn ${cup.size === s.id ? 'on' : ''} ${out ? 'out-of-stock' : ''}" data-size="${s.id}" ${locked ? 'disabled' : ''}>
+            <span class="batch-stock ${n <= 0 ? 'empty' : n <= 2 ? 'low' : ''}">${n <= 0 ? 'Hết ly' : `Còn ${n}`}</span>
+            <span class="ob-icon" style="--s:${s.scale}">🥤</span><b class="zh">${s.chn}</b><small>${escapeHtml(s.pin)}</small><em>${s.price}¥</em>
+          </button>
+          <button type="button" class="btn-cook-batch buy-cup" data-buy-supply="${sup.id}" title="Mua thêm ${sup.pack} ly ${s.chn} (${fmt(sup.cost)}¥)">+${sup.pack} ly (${fmt(sup.cost)}¥)</button>
+        </div>`;
+      }).join('');
       sizeRow.querySelectorAll('[data-size]').forEach(b => b.addEventListener('click', () => this.chooseSize(b.dataset.size)));
     }
 

@@ -573,6 +573,7 @@
     <!-- TỔNG KẾT NGÀY -->
     <div class="g-modal" id="modal-day-summary" style="display:none;">
       <div class="g-card summary-card">
+        <div class="summary-scroll">
         <div class="summary-head">
           <span class="summary-icon">🏮</span>
           <h3 id="summary-day-title"><span class="zh">第1天</span> · Tổng kết ngày</h3>
@@ -610,8 +611,19 @@
         <a class="summary-guest-note" id="summary-guest-note" href="index.html" style="display:none;">🔐 Bạn đang chơi
           với tư cách khách — <b>đăng nhập ở trang chủ</b> để lưu thành tích lên bảng xếp hạng!</a>
 
-        <button type="button" class="g-btn-primary big" id="btn-next-day-start"><span class="zh">进入下一天</span> Sang ngày
-          mới <i class="fa-solid fa-sun"></i></button>
+        </div>
+
+        <!-- Thanh nút luôn hiện (không bị cuộn mất) -->
+        <div class="summary-actions">
+          <div class="summary-tools">
+            <button type="button" class="g-btn-ghost" id="btn-summary-home" title="Về màn hình chính"><i class="fa-solid fa-house"></i> <span>Về nhà</span></button>
+            <button type="button" class="g-btn-ghost" id="btn-summary-vocab" title="Sổ từ mới"><i class="fa-solid fa-book"></i> <span><span class="zh">生词</span> Từ mới</span></button>
+            <button type="button" class="g-btn-ghost" id="btn-summary-reviews" title="Sổ đánh giá"><i class="fa-solid fa-star"></i> <span>Đánh giá</span></button>
+            <button type="button" class="g-btn-ghost" id="btn-summary-rank" title="Bảng xếp hạng"><i class="fa-solid fa-trophy"></i> <span>Xếp hạng</span></button>
+          </div>
+          <button type="button" class="g-btn-primary big" id="btn-next-day-start"><span class="zh">进入下一天</span> Sang ngày
+            mới <i class="fa-solid fa-sun"></i></button>
+        </div>
       </div>
     </div>
 
