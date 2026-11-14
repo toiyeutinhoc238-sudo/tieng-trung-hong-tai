@@ -1400,15 +1400,23 @@ import './quick_dict_widget.js';
           </li>
         </ul>
 
-        <!-- DANH MỤC: TRÒ CHƠI -->
-        <div class="sidebar-section-label">Trò Chơi</div>
+        <!-- DANH MỤC: GAME ÔN TẬP (không tính xếp hạng) -->
+        <div class="sidebar-section-label">Game Ôn Tập</div>
         <ul class="sidebar-menu" style="margin-bottom: 12px;">
-          <li class="sidebar-item ${['shopgames', 'boba', 'grocery'].includes(activeKey) ? 'active' : ''}" onclick="window.location.href = '/shop-games.html'" title="Game Nhập Vai: Tiệm Trà Sữa, Tiệm Tạp Hóa và nhiều game sắp ra mắt" style="cursor: pointer;">
+          <li class="sidebar-item" onclick="window.showGameHubGuideModal ? window.showGameHubGuideModal() : (window.location.href = '/index.html?tab=flashcards')" title="Ôn từ vựng theo sổ tay: Quiz, Mạt Chược, Nuôi Rắn, Phi Đao (không tính xếp hạng)" style="cursor: pointer;">
+            <i class="fa-solid fa-book-open-reader" style="color: #10b981; font-size: 1.1rem;"></i> <span>Ôn Tập Từ Vựng</span>
+          </li>
+        </ul>
+
+        <!-- DANH MỤC: GAME THI ĐẤU (có bảng xếp hạng) -->
+        <div class="sidebar-section-label">Game Thi Đấu · Xếp Hạng</div>
+        <ul class="sidebar-menu" style="margin-bottom: 12px;">
+          <li class="sidebar-item ${['shopgames', 'boba', 'grocery'].includes(activeKey) ? 'active' : ''}" onclick="window.location.href = '/shop-games.html'" title="Game Nhập Vai: Tiệm Trà Sữa, Tiệm Tạp Hóa và nhiều game sắp ra mắt (có bảng xếp hạng)" style="cursor: pointer;">
             <i class="fa-solid fa-store" style="color: #f43f5e; font-size: 1.1rem;"></i> <span>Game Nhập Vai</span>
             <span style="font-size: 0.65rem; background: rgba(244, 63, 94, 0.18); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.35); padding: 1px 6px; border-radius: 99px; font-weight: 800; margin-left: auto;">HOT</span>
           </li>
-          <li class="sidebar-item ${activeKey === 'games' ? 'active' : ''}" onclick="window.location.href = '/quiz-game.html'">
-            <i class="fa-solid fa-gamepad" style="color: #f59e0b;"></i> <span>Đấu Trường Game</span>
+          <li class="sidebar-item ${activeKey === 'games' ? 'active' : ''}" onclick="window.location.href = '/quiz-game.html'" title="Đấu Trường Quiz: tính điểm xếp hạng">
+            <i class="fa-solid fa-trophy" style="color: #f59e0b;"></i> <span>Đấu Trường Quiz</span>
           </li>
         </ul>
 

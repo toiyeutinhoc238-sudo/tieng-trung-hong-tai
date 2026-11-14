@@ -1315,3 +1315,42 @@ body.g-portrait .prep-foot .g-btn-primary { flex: 1 1 100%; }
 .prep-money b { color: var(--orange-d); font-size: 1rem; }
 /* Từ lóng trong đánh giá: gạch chân chấm, giữ/rê để xem pinyin + nghĩa */
 .slang { text-decoration: underline dotted #e0531c; text-underline-offset: 3px; color: #c2410c; cursor: help; }
+
+/* ==========================================================================
+   Trước giờ mở cửa: bài học hôm nay + đánh giá mới (đọc lúc rảnh, không phải lúc khách đông)
+   ========================================================================== */
+.mission-reading { margin: 10px 22px 0; display: flex; flex-direction: column; gap: 8px; }
+body.g-portrait .mission-reading { margin: 10px 14px 0; }
+.mr-lesson { background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 14px; padding: 8px 12px; }
+.mr-title { font-size: 0.8rem; font-weight: 900; color: #047857; margin-bottom: 4px; }
+.mr-phrase { display: flex; align-items: flex-start; gap: 8px; padding: 3px 0; }
+.mr-phrase + .mr-phrase { border-top: 1px dashed #bbf7d0; }
+.mr-phrase .rev-wrap { flex: 1; min-width: 0; }
+.mr-chn { font-size: 1.12rem; color: #14532d; font-weight: 700; margin-right: 6px; }
+.mr-phrase .btn-show-vi { margin-top: 0; vertical-align: middle; }
+.mr-phrase .sp-audio-btn { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid #86efac; background: #fff; color: #047857; cursor: pointer; }
+.mr-reviews { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; padding: 9px 12px; border-radius: 14px; border: 1.5px solid #fed7aa; background: #fff7ed; color: #9a3412; font-family: inherit; font-size: 0.85rem; font-weight: 800; cursor: pointer; text-align: left; }
+.mr-reviews.has-new { background: #fff1f2; border-color: #fda4af; color: #be123c; animation: mrPulse 1.6s ease-in-out infinite; }
+.mr-reviews b { font-size: 1rem; }
+@keyframes mrPulse { 50% { box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.18); } }
+
+/* Đánh giá mới + chủ quán trả lời */
+.rb-item.unread { border-color: #fda4af; background: #fff7f8; }
+.rb-new { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 99px; background: #f43f5e; color: #fff; font-size: 0.6rem; font-weight: 900; vertical-align: middle; }
+.rb-item-zh.zh { font-size: 1.05rem; color: #7c2d12; }
+.rb-reply { margin-top: 6px; }
+.rb-reply-toggle { padding: 4px 12px; border-radius: 99px; border: 1.5px solid #fdba74; background: #fff; color: #c2410c; font-family: inherit; font-size: 0.74rem; font-weight: 800; cursor: pointer; }
+.rb-reply-opts { display: none; flex-direction: column; gap: 5px; margin-top: 6px; }
+.rb-reply.open .rb-reply-opts { display: flex; }
+.rb-reply-opt { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 6px 10px; border-radius: 10px; border: 1.5px solid #fed7aa; background: #fffaf2; font-family: inherit; text-align: left; cursor: pointer; }
+.rb-reply-opt:hover { border-color: #fb923c; background: #fff7ed; }
+.rb-reply-opt .zh { font-size: 1rem; color: #7c2d12; font-weight: 700; }
+.rb-reply-opt small { font-size: 0.68rem; color: #b4642a; }
+.rb-reply-opt em { font-size: 0.68rem; color: #8a6d57; font-style: normal; }
+.rb-reply.done { display: flex; align-items: flex-start; gap: 6px; padding: 5px 9px; border-radius: 10px; background: #eff6ff; border: 1px solid #bfdbfe; }
+.rb-reply-tag { flex: 0 0 auto; font-size: 0.68rem; font-weight: 900; color: #1d4ed8; padding-top: 3px; }
+.rb-reply.done .rev-wrap { flex: 1; min-width: 0; }
+.rb-reply-zh { font-size: 0.98rem; color: #1e3a8a; font-weight: 700; margin-right: 4px; }
+.rb-reply.done .btn-show-vi { margin-top: 0; }
+.mission-reading { margin-bottom: 12px; }
+#modal-day-mission .mission-card { max-height: calc(100% - 16px); overflow-y: auto; overscroll-behavior: contain; }

@@ -184,7 +184,20 @@ const REVIEW_SLANG = [
   { chn: '性价比高', pin: 'xìngjiàbǐ gāo', vi: 'đáng đồng tiền, giá hời', match: '性价比高' },
   { chn: '一般般', pin: 'yìbānbān', vi: 'tàm tạm, bình thường thôi', match: '一般般' },
   { chn: '粗心', pin: 'cūxīn', vi: 'cẩu thả, bất cẩn', match: '粗心' },
-  { chn: '等得花儿都谢了', pin: 'děng de huār dōu xiè le', vi: 'chờ đến hoa cũng tàn (chờ dài cổ)', match: '等得花儿都谢了' }
+  { chn: '等得花儿都谢了', pin: 'děng de huār dōu xiè le', vi: 'chờ đến hoa cũng tàn (chờ dài cổ)', match: '等得花儿都谢了' },
+  { chn: '绝绝子', pin: 'juéjuézǐ', vi: 'đỉnh của chóp, tuyệt vời', match: '绝绝子' },
+  { chn: '打工人', pin: 'dǎgōngrén', vi: 'dân đi làm, dân làm thuê', match: '打工人' },
+  { chn: '续命', pin: 'xùmìng', vi: '"tiếp mạng", nạp năng lượng sống', match: '续命' },
+  { chn: '永远的神', pin: 'yǒngyuǎn de shén', vi: 'mãi đỉnh, huyền thoại (yyds)', match: '永远的神' },
+  { chn: '种草', pin: 'zhòngcǎo', vi: 'bị "dụ" mê, muốn mua theo', match: '种草' },
+  { chn: '佛系', pin: 'fóxì', vi: 'chill, tùy duyên, không vội', match: '佛系' },
+  { chn: '踩雷', pin: 'cǎiléi', vi: '"dính phốt", mua trúng đồ dở', match: '踩雷' },
+  { chn: '离谱', pin: 'lípǔ', vi: 'vô lý, quá đáng, khó tin', match: '离谱' },
+  { chn: '无语', pin: 'wúyǔ', vi: 'cạn lời', match: '无语' },
+  { chn: '下头', pin: 'xiàtóu', vi: 'tụt mood, mất hứng', match: '下头' },
+  { chn: '翻车', pin: 'fānchē', vi: '"toang", làm hỏng việc', match: '翻车' },
+  { chn: '开盲盒', pin: 'kāi mánghé', vi: 'mở hộp mù (không biết sẽ ra gì)', match: '开盲盒' },
+  { chn: '怀疑人生', pin: 'huáiyí rénshēng', vi: 'hoài nghi nhân sinh', match: '怀疑人生' }
 ];
 
 const VOCAB_TABS = [
@@ -231,11 +244,11 @@ const DAY_RULES = { lengthMs: 120000, openMin: 8 * 60, closeMin: 20 * 60 }; // 1
 
 const QUEUE_RULES = {
   maxLine: 4,
-  patienceMs: 42000,       // chờ quá 42s mà chưa được nhận đơn → bỏ về
+  patienceMs: 60000,       // chờ quá 60s mà chưa được nhận đơn → bỏ về (nới cho kịp pha)
   firstArrivalMs: 400,     // 0.4s khách đầu tiên ghé ngay
-  arriveBaseMs: 7500,      // khách đến tấp nập, đều đặn 7-9s
-  arrivePerDayMs: 400,
-  arriveMinMs: 4500,
+  arriveBaseMs: 10000,     // khách đến đều đặn ~10-12s (không dồn dập quá)
+  arrivePerDayMs: 300,
+  arriveMinMs: 6500,
   arriveJitterMs: 2000
 };
 
@@ -245,42 +258,103 @@ const INGREDIENT_RULES = {
   toppingBatchCost: 4.0   // chi phí 1 mẻ topping (5 phần) = 4.00 ¥
 };
 
-const PRAISE_REVIEWS = [
-  { zh: '太好喝了！珍珠很Q弹，甜度也刚刚好，老板手艺真绝！', vi: 'Ngon tuyệt cú mèo! Trân châu dẻo dai vừa miệng, vị ngọt đúng chuẩn, chủ quán pha siêu đỉnh!' },
-  { zh: '出餐速度很快，茶香浓郁，冰块给得正合适，满分好评！', vi: 'Phục vụ siêu nhanh, trà thơm lừng, lượng đá chuẩn chỉnh không chê vào đâu được! 5 sao!' },
-  { zh: '非常满意！这家奶茶店已经成了我的每日必备！', vi: 'Cực kỳ hài lòng! Tiệm trà sữa này chính là quán ruột mỗi ngày của mình!' },
-  { zh: '老板很热情，算账找零又快又准，奶茶清甜爽口！', vi: 'Chủ quán niềm nở, tính tiền chuẩn xác, trà thanh mát uống đã cơn khát!' },
-  { zh: '茶底很正宗，配料给得很足，喝到见底还想再来一杯！', vi: 'Vị trà chuẩn đét, topping đầy đặn, uống hết ly mà vẫn thòm thèm muốn uống thêm!' }
-];
+// Đánh giá của khách: KHÔNG phải ai cũng viết (lâu lâu mới có), không trùng câu đã có, có cả câu khen lẫn chê "bựa"
+const REVIEW_RULES = {
+  chance: { 5: 0.18, 4: 0.15, 3: 0.3, 2: 0.5, 1: 0.5 }, // xác suất khách để lại đánh giá theo số sao
+  maxPerDay: 4                                            // tối đa 4 đánh giá mỗi ngày
+};
 
-const GOOD_REVIEWS = [
-  { zh: '味道挺不错的，就是排队等得有点久，总体很满意！', vi: 'Trà khá ngon, chỉ là phải xếp hàng chờ hơi lâu chút xíu, nhìn chung rất hài lòng!' },
-  { zh: '茶味很浓，配料很新鲜，下次还会来！', vi: 'Vị trà đậm đà, nguyên liệu tươi mới, lần sau nhất định ghé lại!' },
-  { zh: '杯子包装很好看，甜度合适，性价比高！', vi: 'Ly đóng nắp đẹp, độ ngọt vừa phải, giá cả rất hợp lý!' },
-  { zh: '服务态度很好，奶茶味道纯正！', vi: 'Thái độ phục vụ rất tốt, hương vị trà sữa thanh khiết!' }
-];
+const REVIEW_POOLS = {
+  praise: [
+    { zh: '太好喝了！珍珠很Q弹，甜度也刚刚好，老板手艺真绝！', vi: 'Ngon tuyệt cú mèo! Trân châu dẻo dai vừa miệng, vị ngọt đúng chuẩn, chủ quán pha siêu đỉnh!' },
+    { zh: '出餐速度很快，茶香浓郁，冰块给得正合适，满分好评！', vi: 'Phục vụ siêu nhanh, trà thơm lừng, lượng đá chuẩn chỉnh không chê vào đâu được! 5 sao!' },
+    { zh: '非常满意！这家奶茶店已经成了我的每日必备！', vi: 'Cực kỳ hài lòng! Tiệm trà sữa này chính là quán ruột mỗi ngày của mình!' },
+    { zh: '老板很热情，算账找零又快又准，奶茶清甜爽口！', vi: 'Chủ quán niềm nở, tính tiền chuẩn xác, trà thanh mát uống đã cơn khát!' },
+    { zh: '茶底很正宗，配料给得很足，喝到见底还想再来一杯！', vi: 'Vị trà chuẩn đét, topping đầy đặn, uống hết ly mà vẫn thòm thèm muốn uống thêm!' },
+    { zh: '绝绝子！这杯奶茶是我们打工人的续命神器！', vi: 'Đỉnh của chóp! Ly trà sữa này là thần dược tiếp sức cho dân đi làm như tụi tôi!' },
+    { zh: '这家店是奶茶界永远的神，我宣布这是我的本命店！', vi: 'Quán này là "thần" mãi đỉnh của giới trà sữa, tôi tuyên bố đây là quán ruột của đời tôi!' },
+    { zh: '喝了一口，男朋友都不想要了，只想要这杯奶茶。', vi: 'Uống một ngụm là chẳng cần bạn trai nữa, chỉ cần ly trà sữa này thôi.' },
+    { zh: '已经被种草了，明天带全公司的人来！', vi: 'Bị "dụ" mê luôn rồi, mai dẫn cả công ty tới!' }
+  ],
+  good: [
+    { zh: '味道挺不错的，就是排队等得有点久，总体很满意！', vi: 'Trà khá ngon, chỉ là phải xếp hàng chờ hơi lâu chút xíu, nhìn chung rất hài lòng!' },
+    { zh: '茶味很浓，配料很新鲜，下次还会来！', vi: 'Vị trà đậm đà, nguyên liệu tươi mới, lần sau nhất định ghé lại!' },
+    { zh: '杯子包装很好看，甜度合适，性价比高！', vi: 'Ly đóng nắp đẹp, độ ngọt vừa phải, giá cả rất hợp lý!' },
+    { zh: '服务态度很好，奶茶味道纯正！', vi: 'Thái độ phục vụ rất tốt, hương vị trà sữa thanh khiết!' },
+    { zh: '好喝是好喝，就是喝完我得去跑步了。', vi: 'Ngon thì ngon thật, nhưng uống xong chắc phải đi chạy bộ.' },
+    { zh: '老板长得一般，奶茶倒是挺好喝的。', vi: 'Chủ quán nhan sắc bình thường, nhưng trà sữa thì khá ngon.' },
+    { zh: '佛系老板，佛系出餐，味道还行，给四星。', vi: 'Chủ quán chill, ra món cũng chill, vị ổn, cho 4 sao.' }
+  ],
+  ok: [
+    { zh: '味道一般般，冰块化了之后茶味有点淡。', vi: 'Uống tạm được, nhưng đá tan ra làm trà hơi nhạt một chút.' },
+    { zh: '速度稍微有点慢，希望人多的时候能再快点。', vi: 'Làm hơi chậm một xíu, hy vọng lúc đông khách quán đẩy nhanh tốc độ hơn.' },
+    { zh: '感觉甜度比我平时喝的偏甜了一点点。', vi: 'Cảm giác độ ngọt hơi đậm hơn so với khẩu vị thường ngày của mình.' },
+    { zh: '不算踩雷，但也没有惊喜。', vi: 'Không tới mức "dính phốt", nhưng cũng chẳng có gì bất ngờ.' },
+    { zh: '珍珠嚼得我下巴都累了。', vi: 'Trân châu nhai mỏi cả quai hàm.' },
+    { zh: '这杯奶茶跟我的工资一样，平平无奇。', vi: 'Ly trà sữa này giống lương của tôi vậy: bình thường, chẳng có gì nổi bật.' }
+  ],
+  bad: [
+    { zh: '做错了配方，完全不是我想要的味道，很失望！', vi: 'Pha sai công thức rồi, hoàn toàn không đúng vị tôi dặn, rất thất vọng!' },
+    { zh: '踩雷了！这是我今年喝过最离谱的奶茶。', vi: 'Dính phốt rồi! Đây là ly trà sữa vô lý nhất tôi uống năm nay.' },
+    { zh: '无语，喝一口直接下头。', vi: 'Cạn lời, uống một ngụm là tụt mood luôn.' },
+    { zh: '老板是不是在梦游？做得乱七八糟！', vi: 'Chủ quán đang mộng du à? Pha lung tung cả lên!' },
+    { zh: '这杯奶茶，我家的猫都不喝。', vi: 'Ly trà sữa này, đến con mèo nhà tôi cũng không thèm uống.' }
+  ],
+  tea: [
+    { zh: '做错了茶底，完全不是我想要的味道，很失望！', vi: 'Pha sai loại trà rồi, không đúng vị tôi gọi, rất thất vọng!' },
+    { zh: '我点的不是这个茶！老板你翻车了！', vi: 'Tôi đâu có gọi loại trà này! Chủ quán "toang" rồi nhé!' },
+    { zh: '茶底都能搞错，老板是不是没睡醒？', vi: 'Đến loại trà cũng nhầm, chủ quán chưa ngủ dậy hả?' }
+  ],
+  sugar: [
+    { zh: '甜度完全不对，跟我说的不一样，喝不下去！', vi: 'Độ ngọt sai hoàn toàn, khác hẳn tôi dặn, không uống nổi!' },
+    { zh: '甜得我牙都快掉了，糖不要钱吗？', vi: 'Ngọt muốn rụng răng, đường không mất tiền à?' },
+    { zh: '甜度跟我说的完全不一样，老板没听清吗？', vi: 'Độ ngọt khác hẳn tôi dặn, chủ quán không nghe rõ à?' }
+  ],
+  topping: [
+    { zh: '忘加我选的配料了，做奶茶太粗心了！', vi: 'Quên cho topping tôi gọi rồi, làm ăn bất cẩn quá!' },
+    { zh: '我的配料呢？被老板偷吃了吗？', vi: 'Topping của tôi đâu? Bị chủ quán ăn vụng rồi à?' },
+    { zh: '配料放错了，我这是在开盲盒吗？', vi: 'Bỏ nhầm topping, tôi đang mở hộp mù à?' }
+  ],
+  change: [
+    { zh: '找零钱算错了好几次，老板算账不行啊！', vi: 'Thối tiền sai mấy lần, chủ quán tính nhẩm kém quá!' },
+    { zh: '找零错了好几次，老板的数学是体育老师教的吧！', vi: 'Thối tiền sai mấy lần, chắc chủ quán học toán với thầy thể dục!' },
+    { zh: '算账算了半天，我还以为在考数学。', vi: 'Tính tiền cả buổi, tôi tưởng mình đang đi thi toán.' }
+  ],
+  slow: [
+    { zh: '等得花儿都谢了，出餐速度实在太慢了！', vi: 'Chờ dài cả cổ, quán làm nước quá chậm!' },
+    { zh: '等这杯奶茶的时间，我都能追完一部剧了。', vi: 'Thời gian chờ ly trà sữa này, tôi cày xong cả bộ phim rồi.' },
+    { zh: '排队排到我怀疑人生。', vi: 'Xếp hàng tới mức tôi hoài nghi nhân sinh.' }
+  ]
+};
 
-const OK_REVIEWS = [
-  { zh: '味道一般般，冰块化了之后茶味有点淡。', vi: 'Uống tạm được, nhưng đá tan ra làm trà hơi nhạt một chút.' },
-  { zh: '速度稍微有点慢，希望人多的时候能再快点。', vi: 'Làm hơi chậm một xíu, hy vọng lúc đông khách quán đẩy nhanh tốc độ hơn.' },
-  { zh: '感觉甜度比我平时喝的偏甜了一点点。', vi: 'Cảm giác độ ngọt hơi đậm hơn so với khẩu vị thường ngày của mình.' }
-];
-
-const BAD_REVIEWS = [
-  { zh: '做错了配方，完全不是我想要的味道，很失望！', vi: 'Pha sai công thức rồi, hoàn toàn không đúng vị tôi dặn, rất thất vọng!' },
-  { zh: '太甜了，跟点了全糖一样，根本喝不下去！', vi: 'Ngọt quá, như cho 100% đường vậy, không uống nổi luôn!' },
-  { zh: '等了大半天，找零还算错了好几次，服务太粗心了！', vi: 'Chờ cả buổi mà thối tiền còn sai tới sai lui, làm ăn quá bất cẩn!' },
-  { zh: '忘加我最喜欢的配料了，太难过了！', vi: 'Quên cho topping ruột của tôi rồi, buồn quá!' }
-];
+// Chủ quán trả lời đánh giá: chọn 1 câu tiếng Trung (theo số sao của đánh giá)
+const REPLY_OPTIONS = {
+  good: [
+    { zh: '谢谢您的好评，欢迎下次再来！', pin: 'Xièxie nín de hǎopíng, huānyíng xiàcì zài lái!', vi: 'Cảm ơn bạn đã khen, hẹn gặp lại lần sau!' },
+    { zh: '您喜欢就好，我们会继续努力！', pin: 'Nín xǐhuan jiù hǎo, wǒmen huì jìxù nǔlì!', vi: 'Bạn thích là vui rồi, quán sẽ tiếp tục cố gắng!' },
+    { zh: '谢谢夸奖，下次给您多加珍珠！', pin: 'Xièxie kuājiǎng, xiàcì gěi nín duō jiā zhēnzhū!', vi: 'Cảm ơn lời khen, lần sau thêm trân châu cho bạn nhé!' }
+  ],
+  mid: [
+    { zh: '谢谢您的建议，我们会改进的！', pin: 'Xièxie nín de jiànyì, wǒmen huì gǎijìn de!', vi: 'Cảm ơn góp ý, quán sẽ cải thiện!' },
+    { zh: '下次一定做得更好，请再给我们一次机会！', pin: 'Xiàcì yídìng zuò de gèng hǎo, qǐng zài gěi wǒmen yí cì jīhuì!', vi: 'Lần sau nhất định làm tốt hơn, cho quán thêm một cơ hội nhé!' },
+    { zh: '收到！下次给您调得更合口味。', pin: 'Shōudào! Xiàcì gěi nín tiáo de gèng hé kǒuwèi.', vi: 'Đã nhận! Lần sau pha hợp khẩu vị bạn hơn.' }
+  ],
+  bad: [
+    { zh: '非常抱歉，下次给您免费换一杯！', pin: 'Fēicháng bàoqiàn, xiàcì gěi nín miǎnfèi huàn yì bēi!', vi: 'Thành thật xin lỗi, lần sau đổi miễn phí một ly cho bạn!' },
+    { zh: '对不起，是我们太粗心了，一定改正！', pin: 'Duìbuqǐ, shì wǒmen tài cūxīn le, yídìng gǎizhèng!', vi: 'Xin lỗi, là quán quá bất cẩn, nhất định sẽ sửa!' },
+    { zh: '我家的猫刚才在帮忙，下次不让它碰奶茶了！', pin: 'Wǒ jiā de māo gāngcái zài bāngmáng, xiàcì bú ràng tā pèng nǎichá le!', vi: 'Lúc nãy con mèo nhà tôi phụ pha, lần sau không cho nó đụng vào trà sữa nữa!' }
+  ]
+};
+function replyGroup(stars) { return stars >= 4 ? 'good' : stars === 3 ? 'mid' : 'bad'; }
 
 const MISSION_RULES = { baseTarget: 70, targetPerDay: 15, maxTarget: 300, roundTo: 5, baseMaxLost: 2, minAvgScore: 80, bonusPerStar: 10 };
 
-const POUR_RULES = { target: 80, ratePerSec: 28, tickMs: 50 };
+const POUR_RULES = { target: 80, ratePerSec: 40, tickMs: 50 };
 
 const SCORE_RULES = {
   changePenalty: 30,
   hintPenalty: 20,
-  speedBaseMs: 40000,
+  speedBaseMs: 55000,
   trashPenaltyMs: 8000,
   tipMax: 6,
   weights: { pick: 0.4, speed: 0.15, change: 0.25, wait: 0.2 }
@@ -593,6 +667,16 @@ class BobaShop {
       else b.textContent = open ? '🙈' : '👁';
     });
     on('btn-open-prep', 'click', () => { this.audio.pop(); this.renderPrepModal(); this.openModal('modal-prep'); });
+    // Bài học & đánh giá trước giờ mở cửa; chủ quán trả lời đánh giá
+    document.addEventListener('click', (e) => {
+      const say = e.target.closest('#mission-reading [data-say-chn]');
+      if (say) { this.audio.speak(say.dataset.sayChn); return; }
+      if (e.target.closest('#btn-mission-reviews')) { this.audio.pop(); this.openReviewsModal(); return; }
+      const open = e.target.closest('[data-reply-open]');
+      if (open) { open.closest('.rb-reply')?.classList.toggle('open'); return; }
+      const pick = e.target.closest('[data-reply]');
+      if (pick) { const [i, k] = pick.dataset.reply.split(':').map(Number); this.replyToReview(i, k); }
+    });
 
     // Nấu trà và topping trực tiếp từ nút "+5 Nấu"
     document.addEventListener('click', (e) => {
@@ -820,6 +904,7 @@ class BobaShop {
     }
     this.renderHUDGoal();
     this.renderPrepModal();
+    this.renderMissionReading();
     this.openModal('modal-day-mission');
     this.checkBankrupt();
   }
@@ -1444,68 +1529,65 @@ class BobaShop {
     if (evalCup.score === 100) this.stats.perfect += 1;
     if (c.changeWrong === 0 && !c.hintUsed) this.stats.changeFirstTry += 1;
 
-    // Sinh đánh giá của khách (Review)
-    const review = this.generateCustomerReview(c, o, evalCup, total, scores, tip);
-    this.reviews.unshift(review);
-    const fresh = REVIEW_SLANG.filter(w => review.commentZh.includes(w.match) && !this.learnedVocab.has(w.chn));
-    fresh.forEach(w => this.learn(w.chn));
-    if (fresh.length) setTimeout(() => this.showToast('📖', `Từ lóng mới vào sổ: ${fresh.map(w => `${w.chn} (${w.pin})`).join(', ')}`), 600);
-    this.todayReviews.unshift(review);
-    this.updateHUDReviews();
+    // Đánh giá: lâu lâu mới có khách viết (không phải ai cũng để lại), đọc & trả lời trước giờ mở cửa hôm sau
+    const stars = this.starsFor(total);
+    const wantsReview = Math.random() < (REVIEW_RULES.chance[stars] || 0) && this.todayReviews.length < REVIEW_RULES.maxPerDay;
+    const review = wantsReview ? this.generateCustomerReview(c, o, evalCup, total, scores, stars) : null;
+    if (review) {
+      this.reviews.unshift(review);
+      this.reviews = this.reviews.slice(0, 50);
+      this.todayReviews.unshift(review);
+      this.updateHUDReviews();
+    }
 
     this.audio.register();
     this.floatCoins();
-    this.showScorecard(c, scores, total, tip, earned, evalCup.mistakes, review);
-
     this.current = null;
     this.cup = freshCup();
     this.changeTray = [];
+    // Không mở phiếu dài nữa (khách đông không kịp đọc) → chỉ hiện biên nhận ngắn rồi phục vụ khách tiếp
+    this.showReceipt(c, stars, tip, earned, !!review);
+    this.switchStation('view-order-station');
+    this.promoteNext();
     this.renderAll();
+    this.checkDayEnd();
   }
 
-  generateCustomerReview(customer, order, evalCup, totalScore, scores, tip) {
-    let stars = 5;
-    let commentZh = '';
-    let commentVi = '';
+  starsFor(total) { return total >= 95 ? 5 : total >= 80 ? 4 : total >= 65 ? 3 : total >= 45 ? 2 : 1; }
 
-    if (totalScore >= 95) {
-      stars = 5;
-      const q = pickOne(PRAISE_REVIEWS);
-      commentZh = q.zh;
-      commentVi = q.vi;
-    } else if (totalScore >= 80) {
-      stars = 4;
-      const q = pickOne(GOOD_REVIEWS);
-      commentZh = q.zh;
-      commentVi = q.vi;
-    } else if (totalScore >= 65) {
-      stars = 3;
-      const q = pickOne(OK_REVIEWS);
-      commentZh = q.zh;
-      commentVi = q.vi;
-    } else {
-      stars = totalScore >= 45 ? 2 : 1;
-      if (evalCup.mistakes.some(m => m.includes('Loại trà') || m.includes('pha lẫn'))) {
-        commentZh = '做错了茶底，完全不是我想要的味道，很失望！';
-        commentVi = 'Pha sai loại trà rồi, không đúng vị tôi gọi, rất thất vọng!';
-      } else if (evalCup.mistakes.some(m => m.includes('Độ ngọt') || m.includes('đường'))) {
-        commentZh = '甜度完全不对，我说了少糖结果很甜，喝不下去！';
-        commentVi = 'Độ ngọt sai rồi, tôi dặn ít đường mà quá ngọt, không uống nổi!';
-      } else if (evalCup.mistakes.some(m => m.includes('Topping') || m.includes('topping'))) {
-        commentZh = '忘加我选的配料了，做奶茶太粗心了！';
-        commentVi = 'Quên cho topping tôi gọi rồi, làm ăn bất cẩn quá!';
-      } else if (scores.change < 70) {
-        commentZh = '找零钱算错了好几次，老板算账不行啊！';
-        commentVi = 'Thối tiền sai mấy lần, chủ quán tính nhẩm kém quá!';
-      } else if (scores.speed < 60) {
-        commentZh = '等得花儿都谢了，出餐速度实在太慢了！';
-        commentVi = 'Chờ dài cả cổ, quán làm nước quá chậm!';
-      } else {
-        const q = pickOne(BAD_REVIEWS);
-        commentZh = q.zh;
-        commentVi = q.vi;
-      }
-    }
+  showReceipt(c, stars, tip, earned, reviewed) {
+    const thanks = stars >= 4 ? '谢谢老板！' : stars === 3 ? '还行，下次再来。' : '唉……下次认真一点吧。';
+    this.showToast('🧾', `${c.profile.nameChn}: +${fmt(earned)} ¥${tip > 0 ? ` (tip ${fmt(tip)})` : ''} · ${'⭐'.repeat(stars)}${reviewed ? ' · 📝 có đánh giá mới' : ''}`);
+    this.lastScoreReactionZh = thanks;
+    setTimeout(() => this.audio.speak(thanks), 300);
+  }
+
+  // chọn câu chưa từng xuất hiện trong các đánh giá đã lưu (tránh trùng nhau)
+  pickFreshComment(pool) {
+    // vị trí xuất hiện gần nhất (reviews mới ở đầu mảng); chưa dùng = Infinity
+    const lastUse = (q) => { const i = this.reviews.findIndex(r => r.commentZh === q.zh); return i < 0 ? Infinity : i; };
+    const fresh = pool.filter(q => lastUse(q) === Infinity);
+    if (fresh.length) return pickOne(fresh);
+    // đã dùng hết → chọn trong nửa số câu lâu chưa xuất hiện nhất (không bao giờ lặp lại câu vừa rồi)
+    const ranked = [...pool].sort((a, b) => lastUse(b) - lastUse(a));
+    return pickOne(ranked.slice(0, Math.max(1, Math.ceil(ranked.length / 2))));
+  }
+
+  generateCustomerReview(customer, order, evalCup, totalScore, scores, stars) {
+    const has = (...keys) => evalCup.mistakes.some(m => keys.some(k => m.includes(k)));
+    let pool;
+    if (stars === 5) pool = REVIEW_POOLS.praise;
+    else if (stars === 4) pool = REVIEW_POOLS.good;
+    else if (stars === 3) pool = REVIEW_POOLS.ok;
+    else if (has('Loại trà', 'pha lẫn')) pool = REVIEW_POOLS.tea;
+    else if (has('Độ ngọt', 'đường')) pool = REVIEW_POOLS.sugar;
+    else if (has('Topping', 'topping')) pool = REVIEW_POOLS.topping;
+    else if (scores.change < 70) pool = REVIEW_POOLS.change;
+    else if (scores.speed < 60) pool = REVIEW_POOLS.slow;
+    else pool = REVIEW_POOLS.bad;
+    const q = this.pickFreshComment(pool);
+    const commentZh = q.zh;
+    const commentVi = q.vi;
 
     const now = new Date();
     const dateStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -1520,7 +1602,9 @@ class BobaShop {
       commentZh,
       commentVi,
       day: this.day,
-      time: dateStr
+      time: dateStr,
+      seen: false,   // chưa đọc → nhắc đọc trước giờ mở cửa
+      reply: null    // câu trả lời của chủ quán { zh, pin, vi }
     };
   }
 
@@ -1669,12 +1753,12 @@ class BobaShop {
     if (!count) {
       listEl.innerHTML = '<div class="rank-empty">🧋 Chưa có đánh giá nào.<br>Phục vụ khách để nhận những đánh giá đầu tiên!</div>';
     } else {
-      listEl.innerHTML = this.reviews.map(r => `
-        <div class="rb-item">
+      listEl.innerHTML = this.reviews.map((r, i) => `
+        <div class="rb-item${r.seen === false ? ' unread' : ''}">
           <img src="${ASSET(r.customerImg)}" alt="">
           <div class="rb-item-main">
             <div class="rb-item-head">
-              <b>${escapeHtml(r.customerNameChn)} (${escapeHtml(r.customerNameVi)}) <small style="color:#a08670;font-weight:normal">· Ngày ${r.day}</small></b>
+              <b>${escapeHtml(r.customerNameChn)} (${escapeHtml(r.customerNameVi)}) <small style="color:#a08670;font-weight:normal">· Ngày ${r.day}</small>${r.seen === false ? ' <span class="rb-new">MỚI</span>' : ''}</b>
               <span class="rb-item-stars">${'⭐'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</span>
             </div>
             <div style="font-size:0.72rem;color:#8a6d57">Đơn: ${escapeHtml(r.orderText)}</div>
@@ -1683,10 +1767,74 @@ class BobaShop {
               <button type="button" class="btn-show-vi" data-show-vi>👁 Xem nghĩa</button>
               <div class="rev-vi">${escapeHtml(r.commentVi)}</div>
             </div>
+            ${this.replyHtml(r, i)}
           </div>
         </div>`).join('');
     }
     this.openModal('modal-reviews');
+    // đã mở sổ đánh giá → đánh dấu đã đọc, từ lóng trong các đánh giá mới vào sổ từ vựng
+    const unread = this.reviews.filter(r => r.seen === false);
+    unread.forEach(r => { r.seen = true; });
+    const fresh = REVIEW_SLANG.filter(w => unread.some(r => String(r.commentZh).includes(w.match)) && !this.learnedVocab.has(w.chn));
+    fresh.forEach(w => this.learn(w.chn));
+    if (fresh.length) setTimeout(() => this.showToast('📖', `Từ lóng mới vào sổ: ${fresh.map(w => `${w.chn} (${w.pin})`).join(', ')}`), 400);
+    if (unread.length) { this.saveProgress(); this.renderMissionReading(); }
+  }
+
+  // Chủ quán trả lời 1 câu (chọn câu tiếng Trung phù hợp với số sao)
+  replyHtml(r, i) {
+    if (r.reply && r.reply.zh) {
+      return `<div class="rb-reply done"><span class="rb-reply-tag">🧑‍🍳 <span class="zh">老板回复</span></span>
+        <div class="rev-wrap"><span class="zh rb-reply-zh">${escapeHtml(r.reply.zh)}</span>
+        <button type="button" class="btn-show-vi" data-show-vi>👁</button>
+        <div class="rev-vi">${escapeHtml(r.reply.pin || '')} · ${escapeHtml(r.reply.vi || '')}</div></div></div>`;
+    }
+    const opts = REPLY_OPTIONS[replyGroup(r.stars)];
+    return `<div class="rb-reply">
+      <button type="button" class="rb-reply-toggle" data-reply-open="${i}">💬 <span class="zh">回复</span> Trả lời khách</button>
+      <div class="rb-reply-opts">${opts.map((o, k) => `
+        <button type="button" class="rb-reply-opt" data-reply="${i}:${k}">
+          <span class="zh">${escapeHtml(o.zh)}</span><small>${escapeHtml(o.pin)}</small><em>${escapeHtml(o.vi)}</em>
+        </button>`).join('')}</div>
+    </div>`;
+  }
+
+  replyToReview(i, k) {
+    const r = this.reviews[i];
+    const o = r && REPLY_OPTIONS[replyGroup(r.stars)][k];
+    if (!o || (r.reply && r.reply.zh)) return;
+    r.reply = { zh: o.zh, pin: o.pin, vi: o.vi };
+    this.audio.speak(o.zh);
+    this.showToast('💬', `Đã trả lời ${r.customerNameChn}: ${o.zh}`);
+    this.saveProgress();
+    const item = document.querySelector(`[data-reply-open="${i}"]`)?.closest('.rb-reply');
+    if (item) item.outerHTML = this.replyHtml(r, i);
+    this.renderMissionReading();
+  }
+
+  // Trước giờ mở cửa: bài học hôm nay + đánh giá mới (đọc lúc rảnh, không phải lúc khách đông)
+  renderMissionReading() {
+    const box = this.$('mission-reading');
+    if (!box) return;
+    const n = CHECKOUT_PHRASES.length;
+    const lessons = [CHECKOUT_PHRASES[((this.day - 1) * 2) % n], CHECKOUT_PHRASES[((this.day - 1) * 2 + 1) % n]];
+    const unread = this.reviews.filter(r => r.seen === false).length;
+    const noReply = this.reviews.filter(r => !(r.reply && r.reply.zh)).length;
+    box.innerHTML = `
+      <div class="mr-lesson">
+        <div class="mr-title">📘 <span class="zh">今日一课</span> · Bài học hôm nay</div>
+        ${lessons.map(l => `
+          <div class="mr-phrase">
+            <button type="button" class="sp-audio-btn" data-say-chn="${escapeHtml(l.chn)}" title="Nghe phát âm"><i class="fa-solid fa-volume-high"></i></button>
+            <div class="rev-wrap"><span class="zh mr-chn">${escapeHtml(l.chn)}</span>
+              <button type="button" class="btn-show-vi" data-show-vi>👁</button>
+              <div class="rev-vi">${escapeHtml(l.pin)} · ${escapeHtml(l.vi)} <small>(${escapeHtml(l.role)})</small></div></div>
+          </div>`).join('')}
+      </div>
+      <button type="button" class="mr-reviews${unread ? ' has-new' : ''}" id="btn-mission-reviews">
+        <span>⭐ <span class="zh">顾客评价</span> · ${unread ? `<b>${unread}</b> đánh giá mới — đọc &amp; trả lời` : (this.reviews.length ? `Xem đánh giá${noReply ? ` (${noReply} chưa trả lời)` : ''}` : 'Chưa có đánh giá nào')}</span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>`;
   }
 
   floatCoins() {

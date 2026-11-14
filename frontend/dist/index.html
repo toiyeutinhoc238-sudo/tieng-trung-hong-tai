@@ -223,11 +223,11 @@
   </script>
   <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   <script type="module" crossorigin src="/assets/vendor-BfYXEYrK.js"></script>
-  <script type="module" crossorigin src="/assets/global_sidebar-BKP7KXgE.js"></script>
+  <script type="module" crossorigin src="/assets/global_sidebar-yQgq0fCU.js"></script>
   <script type="module" crossorigin src="/assets/hsk-grammar-data-DLPb-ska.js"></script>
   <script type="module" crossorigin src="/assets/games-data-C8HRhjEW.js"></script>
   <script type="module" crossorigin src="/assets/vendor-pinyin-haNF1LmB.js"></script>
-  <script type="module" crossorigin src="/assets/main-1-zvOW75.js"></script>
+  <script type="module" crossorigin src="/assets/main-BGQ00e7J.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/global_sidebar-UEsj2WVq.css">
 </head>
 
@@ -444,19 +444,29 @@
         </li>
       </ul>
 
-      <!-- DANH MỤC: TRÒ CHƠI ÔN TẬP -->
-      <div class="sidebar-section-label">Trò Chơi</div>
+      <!-- DANH MỤC: GAME ÔN TẬP (không tính xếp hạng) -->
+      <div class="sidebar-section-label">Game Ôn Tập</div>
+      <ul class="sidebar-menu" style="margin-bottom: 12px;">
+        <li class="sidebar-item" id="sidebar-nav-games" onclick="window.showGameHubGuideModal()"
+          style="cursor: pointer; display: flex; align-items: center; gap: 10px;" title="Ôn từ vựng theo sổ tay: Quiz, Mạt Chược, Nuôi Rắn, Phi Đao (không tính xếp hạng)">
+          <i class="fa-solid fa-book-open-reader" style="color: #10b981; font-size: 1.15rem; flex-shrink: 0;"></i>
+          <span style="white-space: nowrap; flex: 1; min-width: 0;">Ôn Tập Từ Vựng</span>
+        </li>
+      </ul>
+
+      <!-- DANH MỤC: GAME THI ĐẤU (có bảng xếp hạng) -->
+      <div class="sidebar-section-label">Game Thi Đấu · Xếp Hạng</div>
       <ul class="sidebar-menu" style="margin-bottom: 12px;">
         <li class="sidebar-item" onclick="window.location.href = '/shop-games.html'"
-          style="cursor: pointer; display: flex; align-items: center; gap: 10px;" title="Game Nhập Vai: Tiệm Trà Sữa, Tiệm Tạp Hóa và nhiều game sắp ra mắt">
+          style="cursor: pointer; display: flex; align-items: center; gap: 10px;" title="Game Nhập Vai: Tiệm Trà Sữa, Tiệm Tạp Hóa và nhiều game sắp ra mắt (có bảng xếp hạng)">
           <i class="fa-solid fa-store" style="color: #f43f5e; font-size: 1.15rem; flex-shrink: 0;"></i>
           <span style="white-space: nowrap; flex: 1; min-width: 0;">Game Nhập Vai</span>
           <span style="font-size: 0.65rem; background: rgba(244, 63, 94, 0.18); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.35); padding: 1px 6px; border-radius: 99px; font-weight: 800; margin-left: auto;">HOT</span>
         </li>
-        <li class="sidebar-item" id="sidebar-nav-games" onclick="window.showGameHubGuideModal()"
-          style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
-          <i class="fa-solid fa-gamepad" style="color: #f59e0b; font-size: 1.15rem; flex-shrink: 0;"></i>
-          <span style="white-space: nowrap; flex: 1; min-width: 0;">Đấu Trường Game</span>
+        <li class="sidebar-item" onclick="window.location.href = '/quiz-game.html'"
+          style="cursor: pointer; display: flex; align-items: center; gap: 10px;" title="Đấu Trường Quiz: tính điểm xếp hạng">
+          <i class="fa-solid fa-trophy" style="color: #f59e0b; font-size: 1.15rem; flex-shrink: 0;"></i>
+          <span style="white-space: nowrap; flex: 1; min-width: 0;">Đấu Trường Quiz</span>
         </li>
       </ul>
 
