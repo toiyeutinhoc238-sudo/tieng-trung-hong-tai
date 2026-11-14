@@ -263,3 +263,43 @@ body.g-portrait .seed-pick { width: 78px; }
 /* Điện thoại dọc: bản đồ to hơn, kéo ngang để xem cả nông trại */
 body.g-portrait .farm-map { overflow-x: auto; overflow-y: hidden; justify-content: flex-start; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
 body.g-portrait .farm-map svg { flex: 0 0 auto; width: 860px; height: 100%; max-height: 100%; }
+
+/* ---------------- Bản sắc riêng của nông trại (không dùng nền / mái hiên của tiệm tạp hóa) */
+body.farm-body .g-title-bg.farm-title-bg { background: #bfe6fb; animation: none; overflow: hidden; }
+body.farm-body .g-title-bg.farm-title-bg::after { background: linear-gradient(180deg, transparent 55%, rgba(30, 70, 20, 0.28) 100%); }
+.farm-scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.fs-cloud { animation: fsDrift 38s linear infinite alternate; }
+.fs-cloud.c2 { animation-duration: 52s; animation-direction: alternate-reverse; }
+.fs-cloud.c3 { animation-duration: 30s; }
+@keyframes fsDrift { from { transform: translateX(-60px); } to { transform: translateX(90px); } }
+.fs-blades { animation: sunSpin 9s linear infinite; }
+.fs-hen { animation: fsPeck 2.4s ease-in-out infinite; }
+@keyframes fsPeck { 0%, 70%, 100% { transform: translate(360px, 650px) rotate(0); } 80% { transform: translate(360px, 652px) rotate(14deg); } }
+body.farm-body .g-title-sun { background: repeating-conic-gradient(from 0deg, rgba(255, 240, 170, 0.28) 0deg 8deg, transparent 8deg 22deg); }
+/* bướm bay thay lá rơi */
+body.farm-body .farm-butterflies span { width: 14px; height: 12px; border-radius: 50% 50% 10% 50%; background: #ffb3cf; opacity: 0.9; animation: fsFly 14s ease-in-out infinite; top: auto; bottom: -20px; }
+body.farm-body .farm-butterflies span:nth-child(2n) { background: #fff176; }
+body.farm-body .farm-butterflies span:nth-child(3n) { background: #fff; }
+@keyframes fsFly {
+  0% { transform: translate(0, 0) scaleX(1); }
+  25% { transform: translate(50px, -180px) scaleX(0.4); }
+  50% { transform: translate(-30px, -360px) scaleX(1); }
+  75% { transform: translate(40px, -540px) scaleX(0.4); }
+  100% { transform: translate(-10px, -780px) scaleX(1); }
+}
+/* cửa hàng: mái lá xanh – kem, nền ván gỗ kho thóc thay cho gạch đỏ */
+body.farm-body .market-awning { background: repeating-linear-gradient(90deg, #3f9b4f 0 40px, #fff8ea 40px 80px); border-bottom: 3px solid #2e7d32; }
+body.farm-body .market-body {
+  background:
+    linear-gradient(180deg, rgba(247, 252, 238, 0.95), rgba(232, 244, 214, 0.95)),
+    repeating-linear-gradient(90deg, #c9a274 0 58px, #b78f60 58px 61px);
+  background-size: auto;
+}
+body.farm-body .market-zones { border-right-color: #b9d99a; }
+body.farm-body .mz { border-color: #cfe5b5; }
+body.farm-body .mz.active { border-color: #4caf50; background: linear-gradient(90deg, #e3f5d3, #fff); box-shadow: 0 4px 0 #9bcf7c; }
+body.farm-body .mk-card { border-color: #d6e9c2; }
+/* dân làng: ảnh đại diện emoji trên nền màu */
+.npc-face { display: inline-grid; place-items: center; flex: 0 0 auto; border-radius: 50%; line-height: 1; background: var(--npc-bg, #e8f5d8); border: 2px solid #4caf50; }
+.oc-top .npc-face { width: 32px; height: 32px; font-size: 1.25rem; }
+.stall-cust .npc-face { width: 60px; height: 60px; font-size: 2.3rem; border-width: 3px; }

@@ -84,12 +84,12 @@ class FarmAudio {
 // grow / time tính bằng GIÂY THẬT. price = giá trị 1 đơn vị (vàng), xp = kinh nghiệm khi thu / làm ra
 const ITEMS = [
   { id: 'wheat', kind: 'crop', chn: '小麦', pin: 'xiǎomài', vi: 'lúa mì', q: '袋', qPin: 'dài', qVi: 'bao', icon: '🌾', grow: 120, price: 3, xp: 1, lvl: 1 },
-  { id: 'corn', kind: 'crop', chn: '玉米', pin: 'yùmǐ', vi: 'ngô (bắp)', q: '根', qPin: 'gēn', qVi: 'bắp', icon: '🌽', grow: 300, price: 5, xp: 1, lvl: 2 },
+  { id: 'corn', kind: 'crop', chn: '玉米', pin: 'yùmǐ', vi: 'ngô', q: '根', qPin: 'gēn', qVi: 'bắp', icon: '🌽', grow: 300, price: 5, xp: 1, lvl: 2 },
   { id: 'carrot', kind: 'crop', chn: '胡萝卜', pin: 'húluóbo', vi: 'cà rốt', q: '根', qPin: 'gēn', qVi: 'củ', icon: '🥕', grow: 600, price: 7, xp: 2, lvl: 3 },
-  { id: 'soybean', kind: 'crop', chn: '大豆', pin: 'dàdòu', vi: 'đậu nành', q: '袋', qPin: 'dài', qVi: 'bao', icon: '🫘', grow: 1200, price: 9, xp: 2, lvl: 5 },
-  { id: 'sugarcane', kind: 'crop', chn: '甘蔗', pin: 'gānzhè', vi: 'mía', q: '根', qPin: 'gēn', qVi: 'cây', icon: '🎋', grow: 1800, price: 11, xp: 3, lvl: 7 },
-  { id: 'tomato', kind: 'crop', chn: '西红柿', pin: 'xīhóngshì', vi: 'cà chua', q: '个', qPin: 'gè', qVi: 'quả', icon: '🍅', grow: 2700, price: 14, xp: 4, lvl: 9 },
-  { id: 'strawberry', kind: 'crop', chn: '草莓', pin: 'cǎoméi', vi: 'dâu tây', q: '盒', qPin: 'hé', qVi: 'hộp', icon: '🍓', grow: 3600, price: 18, xp: 5, lvl: 11 },
+  { id: 'soybean', kind: 'crop', chn: '大豆', pin: 'dàdòu', vi: 'đậu nành', q: '袋', qPin: 'dài', qVi: 'bao', icon: '🫘', grow: 1200, price: 10, xp: 2, lvl: 5 },
+  { id: 'sugarcane', kind: 'crop', chn: '甘蔗', pin: 'gānzhè', vi: 'mía', q: '根', qPin: 'gēn', qVi: 'cây', icon: '🎋', grow: 1800, price: 13, xp: 3, lvl: 7 },
+  { id: 'tomato', kind: 'crop', chn: '西红柿', pin: 'xīhóngshì', vi: 'cà chua', q: '个', qPin: 'gè', qVi: 'quả', icon: '🍅', grow: 2700, price: 18, xp: 4, lvl: 9 },
+  { id: 'strawberry', kind: 'crop', chn: '草莓', pin: 'cǎoméi', vi: 'dâu tây', q: '盒', qPin: 'hé', qVi: 'hộp', icon: '🍓', grow: 3600, price: 24, xp: 5, lvl: 11 },
   { id: 'chickenfeed', kind: 'feed', chn: '鸡饲料', pin: 'jī sìliào', vi: 'thức ăn gà', q: '袋', qPin: 'dài', qVi: 'bao', icon: '🟡', price: 4, xp: 1 },
   { id: 'cowfeed', kind: 'feed', chn: '牛饲料', pin: 'niú sìliào', vi: 'thức ăn bò', q: '袋', qPin: 'dài', qVi: 'bao', icon: '🟤', price: 6, xp: 1 },
   { id: 'egg', kind: 'product', chn: '鸡蛋', pin: 'jīdàn', vi: 'trứng gà', q: '个', qPin: 'gè', qVi: 'quả', icon: '🥚', price: 8, xp: 2 },
@@ -110,7 +110,7 @@ const MATERIALS = ['nail', 'plank', 'paint'];
 // Chuồng trại & xưởng (vị trí cố định trên bản đồ: ô gốc + kích thước)
 const BUILDINGS = [
   { id: 'feedmill', type: 'factory', chn: '饲料厂', pin: 'sìliàochǎng', vi: 'xưởng thức ăn gia súc', icon: '🏭', lvl: 2, cost: 30, slots: 2,
-    recipes: [{ out: 'chickenfeed', n: 3, need: { wheat: 2, corn: 1 }, time: 120, lvl: 2 }, { out: 'cowfeed', n: 3, need: { corn: 1, soybean: 2 }, time: 240, lvl: 6 }],
+    recipes: [{ out: 'chickenfeed', n: 3, need: { wheat: 2, corn: 1 }, time: 120, lvl: 2 }, { out: 'cowfeed', n: 3, need: { corn: 1, soybean: 1 }, time: 240, lvl: 6 }],
     origin: [1, 6], size: [2, 2], wallL: '#8d6e63', wallR: '#a1887f', roofA: '#455a64', roofB: '#607d8b' },
   { id: 'coop', type: 'animal', chn: '鸡舍', pin: 'jīshè', vi: 'chuồng gà', icon: '🐔', lvl: 3, cost: 50,
     animal: { chn: '鸡', pin: 'jī', vi: 'gà', icon: '🐔', cost: 30, max: 6, start: 3 }, food: 'chickenfeed', product: 'egg', time: 300,
@@ -151,11 +151,15 @@ const CAP_BASE = 50;
 const CAP_STEP = 25;
 
 // Nâng cấp
+// Nâng cấp nông trại (đồ dùng nhà nông — không dùng biển hiệu / ghế ngồi của tiệm)
 const UPGRADES = [
-  { id: 'sprinkler', chn: '洒水器', pin: 'sǎshuǐqì', vi: 'máy tưới nước', icon: '💦', desc: 'Cây lớn nhanh hơn 20% mỗi cấp', costs: [150, 300, 500] },
-  { id: 'sign', chn: '招牌', pin: 'zhāopai', vi: 'biển hiệu mới', icon: '🪧', desc: 'Khách mua lẻ ghé quầy thường xuyên hơn (+20% mỗi cấp)', costs: [100, 220, 400] },
-  { id: 'seats', chn: '座位', pin: 'zuòwèi', vi: 'ghế ngồi chờ', icon: '🪑', desc: 'Khách mua lẻ chịu chờ lâu hơn (+1 phút mỗi cấp)', costs: [80, 180, 320] }
+  { id: 'sprinkler', chn: '洒水器', pin: 'sǎshuǐqì', vi: 'máy tưới nước', icon: '💦', lvl: 1, desc: 'Cây trồng lớn nhanh hơn 20% mỗi cấp', costs: [150, 300, 500] },
+  { id: 'fertilizer', chn: '有机肥', pin: 'yǒujīféi', vi: 'phân bón hữu cơ', icon: '🌿', lvl: 2, desc: 'Mỗi cấp +15% cơ hội thu hoạch được thêm 1 nông sản', costs: [120, 260, 450] },
+  { id: 'feeder', chn: '自动喂食器', pin: 'zìdòng wèishíqì', vi: 'máy cho ăn tự động', icon: '🥣', lvl: 3, desc: 'Gà, bò cho trứng / sữa nhanh hơn 15% mỗi cấp', costs: [180, 360, 600] },
+  { id: 'generator', chn: '发电机', pin: 'fādiànjī', vi: 'máy phát điện', icon: '⚡', lvl: 4, desc: 'Các xưởng chế biến chạy nhanh hơn 15% mỗi cấp', costs: [200, 400, 700] }
 ];
+// nâng cấp cũ (mượn từ tiệm) → hoàn lại vàng khi tải bản lưu cũ
+const OLD_UPGRADES = { sign: [100, 220, 400], seats: [80, 180, 320] };
 
 // Thời tiết & ngày lễ theo NGÀY THẬT (mọi người cùng 1 thời tiết trong ngày)
 const WEATHERS = [
@@ -168,6 +172,10 @@ const WEATHERS = [
   { id: 'typhoon', chn: '台风', pin: 'táifēng', vi: 'bão', icon: '🌀', grow: 0.7, w: 4, note: 'Có bão! Cây lớn chậm.' }
 ];
 const HOLIDAYS = [
+  // Lễ riêng của nhà nông: cây cũng lớn nhanh hơn
+  { id: 'harvest', chn: '丰收节', pin: 'Fēngshōujié', vi: 'Lễ hội Được mùa', icon: '🌾', grow: 1.25, greet: '丰收节快乐！', greetPin: 'Fēngshōujié kuàilè!', greetVi: 'Chúc mừng Lễ hội Được mùa!' },
+  { id: 'arbor', chn: '植树节', pin: 'Zhíshùjié', vi: 'Tết Trồng cây', icon: '🌳', grow: 1.2, greet: '一起种树吧！', greetPin: 'Yìqǐ zhòng shù ba!', greetVi: 'Cùng nhau trồng cây nào!' },
+  { id: 'qingming', chn: '清明节', pin: 'Qīngmíngjié', vi: 'Tiết Thanh Minh (mùa gieo hạt)', icon: '🌱', grow: 1.15, greet: '清明前后，种瓜点豆。', greetPin: 'Qīngmíng qiánhòu, zhòng guā diǎn dòu.', greetVi: 'Quanh Thanh Minh, gieo dưa trồng đậu.' },
   { id: 'spring', chn: '春节', pin: 'Chūnjié', vi: 'Tết Nguyên Đán', icon: '🧧', greet: '新年快乐！', greetPin: 'Xīnnián kuàilè!', greetVi: 'Chúc mừng năm mới!' },
   { id: 'lantern', chn: '元宵节', pin: 'Yuánxiāojié', vi: 'Tết Nguyên Tiêu', icon: '🏮', greet: '元宵节快乐！', greetPin: 'Yuánxiāojié kuàilè!', greetVi: 'Chúc Tết Nguyên Tiêu vui vẻ!' },
   { id: 'valentine', chn: '情人节', pin: 'Qíngrénjié', vi: 'Lễ Tình nhân', icon: '💝', greet: '情人节快乐！', greetPin: 'Qíngrénjié kuàilè!', greetVi: 'Chúc mừng Lễ Tình nhân!' },
@@ -181,16 +189,21 @@ const HOLIDAYS = [
 ];
 const HOLIDAY_RULES = { chance: 0.15, orderBonus: 1.2, stallBonus: 1.3 };
 
+// Dân làng quanh nông trại (ảnh đại diện emoji, không dùng ảnh khách của game khác)
 const CUSTOMERS = [
-  { id: 'xiaoyu', nameChn: '小雨', nameVi: 'Bé Mưa', img: 'boba_customer_girl.jpg' },
-  { id: 'xiaohao', nameChn: '小浩', nameVi: 'Tiểu Hạo', img: 'boba_customer_boy.jpg' },
-  { id: 'xiaotong', nameChn: '晓彤', nameVi: 'Hiểu Đồng', img: 'boba_customer_xiaotong.jpg' },
-  { id: 'linjie', nameChn: '林姐', nameVi: 'Chị Lâm', img: 'boba_customer_linjie.jpg' },
-  { id: 'wangshu', nameChn: '王叔', nameVi: 'Chú Vương', img: 'boba_customer_wangshu.jpg' },
-  { id: 'nainai', nameChn: '奶奶', nameVi: 'Bà nội', img: 'boba_customer_grandma.jpg' },
-  { id: 'abao', nameChn: '阿宝', nameVi: 'Gấu A Bảo', img: 'boba_customer_abao.jpg' }
+  { id: 'lidaye', nameChn: '李大爷', nameVi: 'Ông Lý', face: '👴', bg: '#ffe9c7' },
+  { id: 'zhangayi', nameChn: '张阿姨', nameVi: 'Cô Trương', face: '👩‍🌾', bg: '#e3f5d3' },
+  { id: 'xiaoming', nameChn: '小明', nameVi: 'Tiểu Minh', face: '👦', bg: '#dcefff' },
+  { id: 'wangnainai', nameChn: '王奶奶', nameVi: 'Bà Vương', face: '👵', bg: '#fde2ec' },
+  { id: 'chenshifu', nameChn: '陈师傅', nameVi: 'Bác thợ bánh Trần', face: '🧑‍🍳', bg: '#fff3c4' },
+  { id: 'liulaoshi', nameChn: '刘老师', nameVi: 'Cô giáo Lưu', face: '👩‍🏫', bg: '#e8e1ff' },
+  { id: 'xiaomei', nameChn: '小美', nameVi: 'Bé Mỹ', face: '👧', bg: '#ffe0d6' },
+  { id: 'zhaoshu', nameChn: '赵叔', nameVi: 'Chú Triệu', face: '👨‍🌾', bg: '#d9f2e6' }
 ];
+const npcFace = (prof) => `<span class="npc-face" style="--npc-bg:${prof.bg}">${prof.face}</span>`;
 
+// fresh: chỉ hỏi "có tươi không" với nông sản, trứng, sữa (không hỏi với thức ăn gia súc, đường...)
+const FRESH_IDS = ['wheat', 'corn', 'carrot', 'soybean', 'sugarcane', 'tomato', 'strawberry', 'egg', 'milk', 'bread'];
 const ORDER_TEMPLATES = [
   { id: 'want', zh: (L) => `老板，我要${L}。`, pin: (P) => `Lǎobǎn, wǒ yào ${P}.`, vi: (V) => `Ông chủ ơi, tôi muốn mua ${V}.`, learn: ['老板'] },
   { id: 'fresh', zh: (L, F) => `今天的${F}新鲜吗？我要${L}。`, pin: (P, F) => `Jīntiān de ${F} xīnxiān ma? Wǒ yào ${P}.`, vi: (V, F) => `${F} hôm nay có tươi không? Cho tôi ${V}.`, learn: ['新鲜'] },
@@ -256,9 +269,11 @@ const VOCAB_TABS = [
 const VOCAB_TOTAL = VOCAB_TABS.reduce((s, t) => s + t.words.length, 0);
 
 // Đơn hàng & quầy bán lẻ (thời gian thật, giây)
+const pickTemplate = (items) => pickOne(ORDER_TEMPLATES.filter(t => t.id !== 'fresh' || FRESH_IDS.includes(items[0][0]))).id;
 const ORDER_RULES = { slots: 6, refillSec: 15, discardSec: 60, truckCooldownSec: 180, materialChance: 0.2 };
-const STALL_RULES = { gapMin: 90, gapMax: 150, patienceSec: 180, seatSec: 60 };
+const STALL_RULES = { gapMin: 90, gapMax: 150, patienceSec: 180 };
 const HARVEST_MATERIAL_CHANCE = 0.08;
+const MATERIAL_GEMS = 2;   // giá 1 vật liệu khi mua bằng kim cương
 
 const STAGE_W = 1280;
 const STAGE_H = 720;
@@ -266,7 +281,6 @@ const PORTRAIT_W = 480;
 const PORTRAIT_MIN_H = 900;
 const SAVE_VERSION = 2;
 
-const ASSET = (f) => `./assets/${f}`;
 const cents = (v) => Math.round(Number(v) * 100);
 const fmt = (v) => (Math.round(Number(v) * 100) / 100).toFixed(2);
 const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -497,10 +511,10 @@ class FarmGame {
     if (s.blds && typeof s.blds === 'object') BUILDINGS.forEach(b => {
       const src = s.blds[b.id];
       if (!src || typeof src !== 'object') return;
-      if (b.type === 'animal') this.blds[b.id] = { owned: !!src.owned, n: int(src.n, 0, b.animal.max, 0), readyAt: num(src.readyAt, 0) };
+      if (b.type === 'animal') this.blds[b.id] = { owned: !!src.owned, n: int(src.n, 0, b.animal.max, 0), readyAt: num(src.readyAt, 0), dur: num(src.dur, 0) };
       else this.blds[b.id] = {
         owned: !!src.owned, slots: int(src.slots, b.slots, 6, b.slots),
-        queue: Array.isArray(src.queue) ? src.queue.filter(j => j && b.recipes.some(r => r.out === j.out)).map(j => ({ out: j.out, readyAt: num(j.readyAt, 0) })).slice(0, 6) : []
+        queue: Array.isArray(src.queue) ? src.queue.filter(j => j && b.recipes.some(r => r.out === j.out)).map(j => ({ out: j.out, readyAt: num(j.readyAt, 0), dur: num(j.dur, 0) })).slice(0, 6) : []
       };
     });
     const validOrder = (o) => o && typeof o === 'object' && (o.waitUntil != null || (Array.isArray(o.items) && o.items.every(x => Array.isArray(x) && itemOf(x[0]))));
@@ -514,7 +528,11 @@ class FarmGame {
         customer: prof && Array.isArray(cu.items) && cu.items.every(x => Array.isArray(x) && itemOf(x[0])) ? { ...cu, profile: prof, basket: Array.isArray(cu.basket) ? cu.basket : [], tray: [] } : null
       };
     }
-    if (s.upgrades && typeof s.upgrades === 'object') UPGRADES.forEach(u => { this.upgrades[u.id] = int(s.upgrades[u.id], 0, u.costs.length, 0); });
+    if (s.upgrades && typeof s.upgrades === 'object') {
+      UPGRADES.forEach(u => { this.upgrades[u.id] = int(s.upgrades[u.id], 0, u.costs.length, 0); });
+      const refund = Object.entries(OLD_UPGRADES).reduce((t, [k, costs]) => t + costs.slice(0, int(s.upgrades[k], 0, costs.length, 0)).reduce((x, y) => x + y, 0), 0);
+      if (refund) { this.coins += refund; this.upgradeRefund = refund; }
+    }
     if (Array.isArray(s.vocab)) s.vocab.forEach(w => { if (typeof w === 'string') this.learnedVocab.add(w); });
     this.records = Array.isArray(s.records) ? s.records.filter(r => r && Number.isFinite(Number(r.earnings))) : [];
     if (s.stats && typeof s.stats === 'object') Object.keys(this.stats).forEach(k => { this.stats[k] = int(s.stats[k], 0, 1e9, 0); });
@@ -644,6 +662,7 @@ class FarmGame {
   unlocksAt(L) {
     const out = [];
     CROPS.filter(c => c.lvl === L).forEach(c => out.push(`${c.icon} <span class="zh">${c.chn}</span> ${escapeHtml(c.vi)}`));
+    UPGRADES.filter(u => u.lvl === L && L > 1).forEach(u => out.push(`${u.icon} <span class="zh">${u.chn}</span> ${escapeHtml(u.vi)} (nâng cấp)`));
     BUILDINGS.filter(b => b.lvl === L).forEach(b => out.push(`${b.icon} <span class="zh">${b.chn}</span> ${escapeHtml(b.vi)}`));
     BUILDINGS.forEach(b => (b.recipes || []).filter(r => r.lvl === L && r.lvl !== b.lvl).forEach(r => { const it = itemOf(r.out); out.push(`${it.icon} <span class="zh">${it.chn}</span> ${escapeHtml(it.vi)}`); }));
     const plots = PLOT_CELLS.map((_, k) => k).filter(k => k >= PLOTS_START && plotLevel(k) === L).length;
@@ -692,7 +711,7 @@ class FarmGame {
     if (this._evKey === key) return this._ev;
     const r = hashStr(`farm-${key}`);
     let ev;
-    if (r < HOLIDAY_RULES.chance) ev = { ...HOLIDAYS[Math.floor(hashStr(`h-${key}`) * HOLIDAYS.length)], kind: 'holiday', grow: 1 };
+    if (r < HOLIDAY_RULES.chance) { ev = { ...HOLIDAYS[Math.floor(hashStr(`h-${key}`) * HOLIDAYS.length)], kind: 'holiday' }; ev.grow = ev.grow || 1; }
     else {
       const total = WEATHERS.reduce((t, w) => t + w.w, 0);
       let x = hashStr(`w-${key}`) * total;
@@ -702,6 +721,10 @@ class FarmGame {
     this._ev = ev;
     return ev;
   }
+  animalRate() { return 1 + 0.15 * (this.upgrades.feeder || 0); }
+  factoryRate() { return 1 + 0.15 * (this.upgrades.generator || 0); }
+  animalMs(b) { return Math.round((b.time * 1000) / this.animalRate()); }
+  recipeMs(r) { return Math.round((r.time * 1000) / this.factoryRate()); }
   growRate() { return (this.todayEvent().grow || 1) * (1 + 0.2 * (this.upgrades.sprinkler || 0)); }
   orderBonus() { return this.todayEvent().kind === 'holiday' ? HOLIDAY_RULES.orderBonus : 1; }
 
@@ -715,7 +738,7 @@ class FarmGame {
     this.markDirty();
     const say = ev.kind === 'holiday' ? `今天是${ev.chn}！${ev.greet}` : `今天${ev.chn}。`;
     this.showToast(ev.icon, ev.kind === 'holiday'
-      ? `${ev.chn} (${ev.pin}) · ${ev.vi} — ${ev.greet} Đơn hàng hôm nay thưởng thêm 20%!`
+      ? `${ev.chn} (${ev.pin}) · ${ev.vi} — ${ev.greet} Đơn hàng hôm nay thưởng thêm 20%!${ev.grow > 1 ? ` Cây lớn nhanh ×${ev.grow}!` : ''}`
       : `${ev.chn} (${ev.pin}) · ${ev.vi} — ${ev.note}`);
     setTimeout(() => this.audio.speak(say), 600);
   }
@@ -800,7 +823,7 @@ class FarmGame {
       if (a) this.buildingAction(a.dataset.bact, a.dataset.bid, a.dataset.arg);
     });
     on('storage-tabs', 'click', (e) => { const t = e.target.closest('[data-stab]'); if (t) { this.storageTab = t.dataset.stab; this.audio.pop(); this.renderStorage(); } });
-    on('storage-body', 'click', (e) => { const u = e.target.closest('[data-upgrade-store]'); if (u) this.upgradeStorage(u.dataset.upgradeStore); });
+    on('storage-body', 'click', (e) => { const u = e.target.closest('[data-upgrade-store]'); if (u) this.upgradeStorage(u.dataset.upgradeStore); const m = e.target.closest('[data-buy-mats]'); if (m) this.buyMissingMats(m.dataset.buyMats); });
     on('market-zones', 'click', (e) => { const z = e.target.closest('[data-mz]'); if (z) { this.shopZone = z.dataset.mz; this.audio.pop(); this.renderShop(); } });
     on('market-grid', 'click', (e) => {
       const b = e.target.closest('[data-buy]');
@@ -886,6 +909,7 @@ class FarmGame {
     this.tick();
     this.renderAll();
     this.announceEvent();
+    if (this.upgradeRefund) { this.showToast('🪙', `Nông trại đổi bộ nâng cấp mới — hoàn lại ${this.upgradeRefund} vàng cho 招牌 / 座位 cũ.`); this.upgradeRefund = 0; this.markDirty(); }
     if (this.xp === 0 && this.level === 1) setTimeout(() => this.showToast('👆', 'Lúa mì sắp chín! Chạm vào ô ruộng có ✨ để thu hoạch, rồi chạm ô trống để gieo lại.'), 1500);
     this.checkBankrupt();
   }
@@ -1049,21 +1073,24 @@ class FarmGame {
       if (!quiet) { this.audio.error(); this.learn('仓库满了'); this.showToast('🌾', `粮仓满了！Kho lúa đầy (${this.usedOf('silo')}/${this.siloCap()}). Giao đơn hoặc nâng cấp kho lúa.`, 'warn'); }
       return -1;
     }
-    this.addItem(c.id, 2);
+    const bonus = this.freeFor(c.id) >= 3 && Math.random() < 0.15 * (this.upgrades.fertilizer || 0) ? 1 : 0;
+    const got = 2 + bonus;
+    this.addItem(c.id, got);
+    if (bonus) this.learn('有机肥');
     p.crop = null;
     p.readyAt = 0;
-    this.stats.harvested += 2;
+    this.stats.harvested += got;
     this.learn('收获');
     this.learn('成熟');
     this.learn(c.chn);
     if (!quiet) {
       this.audio.harvest();
-      this.floatText(`+2 ${c.icon}  +${c.xp * 2}XP`, el);
+      this.floatText(`+${got} ${c.icon}${bonus ? '🌿' : ''}  +${c.xp * 2}XP`, el);
     }
     this.addXP(c.xp * 2);
     this.maybeMaterial(HARVEST_MATERIAL_CHANCE, el);
     this.renderMap(true);
-    return 2;
+    return got;
   }
 
   harvestAll() {
@@ -1126,10 +1153,11 @@ class FarmGame {
     const food = itemOf(b.food);
     if (this.animalPhase(b, s) !== 'hungry') return;
     if (!this.takeItem(b.food, s.n)) { this.audio.error(); this.showToast(food.icon, `Cần ${s.n} ${food.q}${food.chn} (${food.vi}) để cho ${s.n} ${b.animal.vi} ăn — làm ở 饲料厂.`, 'warn'); return; }
-    s.readyAt = now() + b.time * 1000;
+    s.dur = this.animalMs(b);
+    s.readyAt = now() + s.dur;
     this.learn('喂'); this.learn('饲料'); this.learn(b.animal.chn); this.learn(food.chn);
     this.audio.cluck();
-    this.showToast(b.animal.icon, `喂${b.animal.chn} · Đã cho ${s.n} ${b.animal.vi} ăn. ${fmtSec(b.time)} nữa có ${itemOf(b.product).chn}.`);
+    this.showToast(b.animal.icon, `喂${b.animal.chn} · Đã cho ${s.n} ${b.animal.vi} ăn. ${fmtSec(s.dur / 1000)} nữa có ${itemOf(b.product).chn}.`);
     this.markDirty();
     this.renderMap(true);
     if (this.isOpen('modal-building')) this.renderBuildingModal(id);
@@ -1162,7 +1190,8 @@ class FarmGame {
     if (miss.length) { this.audio.error(); this.showToast('📦', `Thiếu ${miss.map(([k, v]) => `${v - this.stockOf(k)} ${itemOf(k).chn}`).join(', ')}.`, 'warn'); return; }
     need.forEach(([k, v]) => this.takeItem(k, v));
     const start = Math.max(now(), ...s.queue.map(j => j.readyAt));
-    s.queue.push({ out, readyAt: start + r.time * 1000 });
+    const dur = this.recipeMs(r);
+    s.queue.push({ out, readyAt: start + dur, dur });
     this.learn(b.chn);
     this.learn(itemOf(out).chn);
     this.audio.pop();
@@ -1247,11 +1276,11 @@ class FarmGame {
       const remain = ph === 'busy' ? (s.readyAt - t) / 1000 : 0;
       body.innerHTML = `
         <div class="bld-animals">${Array.from({ length: s.n }, () => `<span>${b.animal.icon}</span>`).join('')}<small>${s.n}/${b.animal.max} ${escapeHtml(b.animal.vi)}</small></div>
-        <div class="bld-recipe"><span>1 ${food.icon} <span class="zh">${food.chn}</span></span><i class="fa-solid fa-arrow-right"></i><span>1 ${prod.icon} <span class="zh">${prod.chn}</span></span><small>mỗi con · ${fmtSec(b.time)}</small></div>
+        <div class="bld-recipe"><span>1 ${food.icon} <span class="zh">${food.chn}</span></span><i class="fa-solid fa-arrow-right"></i><span>1 ${prod.icon} <span class="zh">${prod.chn}</span></span><small>mỗi con · ${fmtSec(this.animalMs(b) / 1000)}</small></div>
         <div class="bld-phase">${ph === 'hungry' ? `😋 Đang đói — cần ${s.n} ${food.icon} <span class="zh">${food.chn}</span> (kho có ${this.stockOf(food.id)})`
           : ph === 'busy' ? `⏳ Đang ${id === 'coop' ? 'đẻ trứng' : 'cho sữa'} — còn ${fmtSec(remain)}`
             : ph === 'ready' ? `✅ Có ${s.n} ${prod.icon} <span class="zh">${prod.chn}</span> chờ thu` : 'Chưa có con nào.'}</div>
-        ${ph === 'busy' ? `<div class="bld-bar big"><i style="width:${Math.round(Math.min(1, 1 - remain / b.time) * 100)}%"></i></div>` : ''}
+        ${ph === 'busy' ? `<div class="bld-bar big"><i style="width:${Math.round(Math.min(1, 1 - remain / ((s.dur || b.time * 1000) / 1000)) * 100)}%"></i></div>` : ''}
         <div class="bld-actions">
           <button type="button" class="g-btn-primary" data-bact="feed" data-bid="${id}" ${ph === 'hungry' ? '' : 'disabled'}>🍽️ <span class="zh">喂</span> Cho ăn</button>
           <button type="button" class="g-btn-primary" data-bact="collect" data-bid="${id}" ${ph === 'ready' ? '' : 'disabled'}>🧺 <span class="zh">收</span> Thu ${prod.chn}</button>
@@ -1268,7 +1297,7 @@ class FarmGame {
           return `<div class="recipe ${locked ? 'locked' : ''}">
             <span class="rc-out">${r.n > 1 ? `${r.n}×` : ''}${it.icon}<b class="zh">${it.chn}</b><small>${escapeHtml(it.vi)}</small></span>
             <span class="rc-need">${Object.entries(r.need).map(([k, v]) => `<span class="${this.stockOf(k) >= v ? 'ok' : 'miss'}">${itemOf(k).icon}${this.stockOf(k)}/${v}</span>`).join('')}</span>
-            <span class="rc-time">⏱ ${fmtSec(r.time)}</span>
+            <span class="rc-time">⏱ ${fmtSec(this.recipeMs(r) / 1000)}</span>
             ${locked ? `<span class="rc-lock">🔒 Cấp ${r.lvl}</span>` : `<button type="button" class="g-btn-chip" data-bact="make" data-bid="${id}" data-arg="${r.out}" ${ok && s.queue.length < s.slots ? '' : 'disabled'}>Làm</button>`}
           </div>`;
         }).join('')}</div>
@@ -1278,8 +1307,9 @@ class FarmGame {
           const it = itemOf(j.out);
           const r = b.recipes.find(x => x.out === j.out);
           const done = t >= j.readyAt;
-          const startAt = j.readyAt - r.time * 1000;
-          const p = done ? 1 : Math.max(0, (t - startAt) / (r.time * 1000));
+          const dur = j.dur || r.time * 1000;
+          const startAt = j.readyAt - dur;
+          const p = done ? 1 : Math.max(0, (t - startAt) / dur);
           return `<div class="q-slot ${done ? 'done' : ''}"><span>${it.icon}</span><div class="bld-bar"><i style="width:${Math.round(p * 100)}%"></i></div><small>${done ? '✓ Xong' : t < startAt ? 'Chờ lượt' : fmtSec((j.readyAt - t) / 1000)}</small></div>`;
         }).join('')}</div>
         <div class="bld-actions">
@@ -1324,7 +1354,7 @@ class FarmGame {
     return {
       id: `${now().toString(36)}${randInt(100, 999)}`,
       npc: pickOne(CUSTOMERS).id,
-      tpl: pickOne(ORDER_TEMPLATES).id,
+      tpl: pickTemplate(items),
       items,
       coins: Math.round(value * (big ? 1.5 : 1.15 + Math.random() * 0.15) * this.orderBonus()),
       xp: Math.round(xp * (big ? 1.5 : 1)),
@@ -1363,7 +1393,7 @@ class FarmGame {
     const ph = this.orderPhrase(o);
     const ok = this.canFill(o);
     return `<div class="order-card ${ok ? 'ready' : ''} ${big ? 'big' : ''}">
-      <div class="oc-top"><img src="${ASSET(prof.img)}" alt=""><b class="zh">${prof.nameChn}</b>
+      <div class="oc-top">${npcFace(prof)}<b class="zh">${prof.nameChn}</b>
         <button type="button" class="oc-say" ${big ? 'data-say-truck="1"' : `data-say-order="${i}"`} title="Nghe"><i class="fa-solid fa-volume-high"></i></button></div>
       <div class="oc-line zh">${ph.zhHtml}</div>
       ${this.showPinyin ? `<div class="oc-pin">${escapeHtml(ph.pin)}</div>` : ''}
@@ -1446,7 +1476,7 @@ class FarmGame {
   stallGapMs() {
     const base = randInt(STALL_RULES.gapMin, STALL_RULES.gapMax) * 1000;
     const holiday = this.todayEvent().kind === 'holiday' ? HOLIDAY_RULES.stallBonus : 1;
-    return base / ((1 + 0.2 * (this.upgrades.sign || 0)) * holiday);
+    return base / holiday;
   }
 
   spawnStallCustomer() {
@@ -1460,8 +1490,8 @@ class FarmGame {
     const paid = this.pickPaidAmount(due);
     const prof = pickOne(CUSTOMERS);
     this.stall.customer = {
-      profile: prof, tpl: pickOne(ORDER_TEMPLATES).id, items, due, paid, change: paid - due,
-      leaveAt: now() + (STALL_RULES.patienceSec + STALL_RULES.seatSec * (this.upgrades.seats || 0)) * 1000,
+      profile: prof, tpl: pickTemplate(items), items, due, paid, change: paid - due,
+      leaveAt: now() + STALL_RULES.patienceSec * 1000,
       basket: [], tray: [], wrong: 0, changeWrong: 0
     };
     this.stallStep = 'pick';
@@ -1584,11 +1614,11 @@ class FarmGame {
     if (!box) return;
     const cu = this.stall.customer;
     if (!cu) {
-      box.innerHTML = `<div class="truck-away">🛎️<p>Chưa có khách ở quầy. Khách tiếp theo khoảng <b>${fmtSec((this.stall.nextAt - now()) / 1000)}</b> nữa.</p><small>Nâng cấp <span class="zh">招牌</span> để khách ghé thường xuyên hơn.</small></div>`;
+      box.innerHTML = `<div class="truck-away">🛎️<p>Chưa có khách ở quầy. Khách tiếp theo khoảng <b>${fmtSec((this.stall.nextAt - now()) / 1000)}</b> nữa.</p><small>Ngày lễ khách ghé thường xuyên hơn.</small></div>`;
       return;
     }
     const ph = this.orderPhrase(cu);
-    const head = `<div class="stall-cust"><img src="${ASSET(cu.profile.img)}" alt="">
+    const head = `<div class="stall-cust">${npcFace(cu.profile)}
       <div class="sc-say"><div class="sc-name"><b class="zh">${cu.profile.nameChn}</b> ${escapeHtml(cu.profile.nameVi)} <button type="button" class="oc-say" data-say-chn="${escapeHtml(ph.zh)}"><i class="fa-solid fa-volume-high"></i></button>
         <small>chờ thêm ${fmtSec((cu.leaveAt - now()) / 1000)}</small></div>
         <div class="oc-line zh">${ph.zhHtml}</div>${this.showPinyin ? `<div class="oc-pin">${escapeHtml(ph.pin)}</div>` : ''}${this.showVietnamese ? `<div class="oc-vi">${escapeHtml(ph.vi)}</div>` : ''}</div></div>`;
@@ -1666,11 +1696,26 @@ class FarmGame {
       <div class="store-upgrade">
         <span><b>⬆️ Nâng cấp ${where === 'silo' ? '<span class="zh">粮仓</span>' : '<span class="zh">仓库</span>'}</b> +${CAP_STEP} chỗ · cần
           ${Object.entries(need.mats).map(([k, v]) => `<span class="${this.stockOf(k) >= v ? 'ok' : 'miss'}">${itemOf(k).icon}<span class="zh">${itemOf(k).chn}</span> ${this.stockOf(k)}/${v}</span>`).join(' ')} · 🪙${need.coins}</span>
+        ${okMats ? '' : `<button type="button" class="g-btn-ghost" data-buy-mats="${where}">Mua vật liệu thiếu · ${this.missingMats(where).gems} 💎</button>`}
         <button type="button" class="g-btn-primary" data-upgrade-store="${where}" ${okMats && this.coins >= need.coins ? '' : 'disabled'}>Nâng cấp</button>
       </div>
-      <p class="farm-note">Vật liệu <span class="zh">钉子、木板、油漆</span> rơi ngẫu nhiên khi thu hoạch, giao đơn và giao xe tải.</p>`;
+      <p class="farm-note">Vật liệu <span class="zh">钉子、木板、油漆</span> rơi ngẫu nhiên khi thu hoạch, giao đơn và giao xe tải — thiếu thì mua bằng 💎 (${MATERIAL_GEMS} 💎/món).</p>`;
   }
 
+  missingMats(where) {
+    const miss = Object.entries(this.storageNeed(where).mats).map(([k, v]) => [k, Math.max(0, v - this.stockOf(k))]).filter(([, n]) => n > 0);
+    return { miss, gems: miss.reduce((t, [, n]) => t + n * MATERIAL_GEMS, 0) };
+  }
+  buyMissingMats(where) {
+    const { miss, gems } = this.missingMats(where);
+    if (!miss.length) return;
+    if (this.barnCap() - this.usedOf('barn') < miss.reduce((t, [, n]) => t + n, 0)) { this.audio.error(); this.learn('仓库满了'); this.showToast('🏚️', '仓库满了！Nhà kho không còn chỗ chứa vật liệu.', 'warn'); return; }
+    if (!this.spendGems(gems)) return;
+    miss.forEach(([k, n]) => { this.addItem(k, n); this.learn(itemOf(k).chn); });
+    this.audio.unlock();
+    this.showToast('💎', `Đã mua ${miss.map(([k, n]) => `${n} ${itemOf(k).q}${itemOf(k).chn}`).join('、')} bằng ${gems} 💎.`);
+    this.renderStorage();
+  }
   upgradeStorage(where) {
     const need = this.storageNeed(where);
     if (!Object.entries(need.mats).every(([k, v]) => this.stockOf(k) >= v)) { this.audio.error(); this.showToast('🔩', 'Chưa đủ vật liệu nâng cấp.', 'warn'); return; }
@@ -1756,7 +1801,9 @@ class FarmGame {
   buyUpgrade(id) {
     const u = UPGRADES.find(x => x.id === id);
     const lv = this.upgrades[id] || 0;
-    if (!u || lv >= u.costs.length || !this.spend(u.costs[lv])) return;
+    if (!u || lv >= u.costs.length) return;
+    if (u.lvl > this.level) { this.audio.error(); this.showToast('🔒', `Cần cấp ${u.lvl} để mua ${u.chn}.`, 'warn'); return; }
+    if (!this.spend(u.costs[lv])) return;
     this.upgrades[id] = lv + 1;
     this.learn(u.chn);
     this.learn('升级');
@@ -1800,12 +1847,12 @@ class FarmGame {
       grid.innerHTML = k >= PLOT_CELLS.length ? '<p class="farm-note">Đã mở hết ô ruộng!</p>'
         : card({ owned: false, icon: '🟫', chn: '田地', pin: 'tiándì', vi: `ô ruộng thứ ${k + 1}`, info: `Đang có ${k} ô`, btn: plotLevel(k) > this.level ? `<span class="mk-owned lock">🔒 Cấp ${plotLevel(k)}</span>` : btn('plot:1', `➕ Mua · 🪙${plotCost(k)}`, this.coins >= plotCost(k)) });
     } else {
-      if (head) head.innerHTML = '<span class="mzh-icon">⬆️</span><div><b class="zh">升级</b> <span class="mzh-pin">shēngjí</span><small>Máy tưới, biển hiệu, ghế ngồi cho khách</small></div>';
+      if (head) head.innerHTML = '<span class="mzh-icon">⬆️</span><div><b class="zh">升级</b> <span class="mzh-pin">shēngjí</span><small>Máy tưới, phân bón, máy cho ăn, máy phát điện</small></div>';
       grid.innerHTML = UPGRADES.map(u => {
         const lv = this.upgrades[u.id] || 0;
         const max = lv >= u.costs.length;
         return card({ owned: lv > 0, icon: u.icon, chn: u.chn, pin: u.pin, vi: u.vi, lv: `${'★'.repeat(lv)}${'☆'.repeat(u.costs.length - lv)} · Cấp ${lv}/${u.costs.length}`, info: escapeHtml(u.desc),
-          btn: max ? '<span class="mk-owned"><i class="fa-solid fa-check"></i> Tối đa</span>' : btn(`upgrade:${u.id}`, `<i class="fa-solid fa-arrow-up"></i> Cấp ${lv + 1} · 🪙${u.costs[lv]}`, this.coins >= u.costs[lv]) });
+          btn: max ? '<span class="mk-owned"><i class="fa-solid fa-check"></i> Tối đa</span>' : u.lvl > this.level ? `<span class="mk-owned lock">🔒 Cấp ${u.lvl}</span>` : btn(`upgrade:${u.id}`, `<i class="fa-solid fa-arrow-up"></i> Cấp ${lv + 1} · 🪙${u.costs[lv]}`, this.coins >= u.costs[lv]) });
       }).join('');
     }
     this.setText('shop-coins', `🪙 ${this.coins}`);
@@ -1992,7 +2039,7 @@ class FarmGame {
     if (b.type === 'animal') {
       const ph = this.animalPhase(b, s, t);
       if (ph === 'ready') content = `<text x="${x}" y="${y + 5}" text-anchor="middle" font-size="17" class="bubble-pop">${itemOf(b.product).icon}×${s.n}</text>`;
-      else if (ph === 'busy') content = `<text x="${x - 14}" y="${y + 5}" text-anchor="middle" font-size="13">⏳</text><rect x="${x - 4}" y="${y - 3}" width="26" height="6" rx="3" fill="rgba(0,0,0,0.25)"/><rect data-bbar="${b.id}" x="${x - 4}" y="${y - 3}" width="${(26 * Math.min(1, 1 - (s.readyAt - t) / (b.time * 1000))).toFixed(1)}" height="6" rx="3" fill="#22c55e"/>`;
+      else if (ph === 'busy') content = `<text x="${x - 14}" y="${y + 5}" text-anchor="middle" font-size="13">⏳</text><rect x="${x - 4}" y="${y - 3}" width="26" height="6" rx="3" fill="rgba(0,0,0,0.25)"/><rect data-bbar="${b.id}" x="${x - 4}" y="${y - 3}" width="${(26 * Math.min(1, 1 - (s.readyAt - t) / (s.dur || b.time * 1000))).toFixed(1)}" height="6" rx="3" fill="#22c55e"/>`;
       else content = `<text x="${x}" y="${y + 5}" text-anchor="middle" font-size="13">🍽️${itemOf(b.food).icon}</text>`;
     } else {
       const done = s.queue.filter(j => t >= j.readyAt);
@@ -2049,13 +2096,13 @@ class FarmGame {
   updateMapBars() {
     const t = now();
     document.querySelectorAll('[data-pbar]').forEach(el => { const p = this.plots[+el.dataset.pbar]; if (p && p.crop) el.setAttribute('width', (36 * this.plotProgress(p, t)).toFixed(1)); });
-    document.querySelectorAll('[data-bbar]').forEach(el => { const b = bldOf(el.dataset.bbar); const s = this.blds[b.id]; el.setAttribute('width', (26 * Math.max(0, Math.min(1, 1 - (s.readyAt - t) / (b.time * 1000)))).toFixed(1)); });
+    document.querySelectorAll('[data-bbar]').forEach(el => { const b = bldOf(el.dataset.bbar); const s = this.blds[b.id]; el.setAttribute('width', (26 * Math.max(0, Math.min(1, 1 - (s.readyAt - t) / (s.dur || b.time * 1000)))).toFixed(1)); });
     document.querySelectorAll('[data-fbar]').forEach(el => {
       const b = bldOf(el.dataset.fbar);
       const j = this.blds[b.id].queue.find(x => t < x.readyAt);
       if (!j) return;
       const r = b.recipes.find(x => x.out === j.out);
-      el.setAttribute('width', (26 * Math.max(0, Math.min(1, 1 - (j.readyAt - t) / (r.time * 1000)))).toFixed(1));
+      el.setAttribute('width', (26 * Math.max(0, Math.min(1, 1 - (j.readyAt - t) / (j.dur || r.time * 1000)))).toFixed(1));
     });
   }
 

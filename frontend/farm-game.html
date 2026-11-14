@@ -21,9 +21,50 @@
 
     <!-- 0. MÀN HÌNH CHỜ -->
     <section class="g-title" id="title-screen">
-      <div class="g-title-bg" aria-hidden="true"></div>
+      <div class="g-title-bg farm-title-bg" aria-hidden="true">
+        <svg class="farm-scene" viewBox="0 0 1280 720" preserveAspectRatio="xMinYMax slice">
+          <defs>
+            <linearGradient id="fsSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cc8f2"/><stop offset="0.6" stop-color="#bfe6fb"/><stop offset="1" stop-color="#fff1c9"/></linearGradient>
+            <linearGradient id="fsHill1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd27a"/><stop offset="1" stop-color="#6fb552"/></linearGradient>
+            <linearGradient id="fsHill2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fc35e"/><stop offset="1" stop-color="#4f9c3f"/></linearGradient>
+            <pattern id="fsRows" width="46" height="24" patternUnits="userSpaceOnUse" patternTransform="skewX(-28)"><rect width="46" height="24" fill="#c98a4b"/><rect width="46" height="9" fill="#a96d36"/><circle cx="12" cy="16" r="5" fill="#69b347"/><circle cx="34" cy="16" r="5" fill="#69b347"/></pattern>
+            <pattern id="fsWheat" width="22" height="30" patternUnits="userSpaceOnUse"><rect width="22" height="30" fill="#f0c64a"/><path d="M5 30 V8 M16 30 V4" stroke="#d29a20" stroke-width="3"/><ellipse cx="5" cy="8" rx="3" ry="6" fill="#ffe08a"/><ellipse cx="16" cy="4" rx="3" ry="6" fill="#ffe08a"/></pattern>
+          </defs>
+          <rect width="1280" height="720" fill="url(#fsSky)"/>
+          <circle cx="1090" cy="120" r="62" fill="#ffe37a"/><circle cx="1090" cy="120" r="90" fill="#ffe37a" opacity="0.25"/>
+          <g class="fs-clouds" fill="#fff">
+            <g class="fs-cloud c1"><ellipse cx="200" cy="110" rx="70" ry="26"/><ellipse cx="240" cy="92" rx="44" ry="30"/><ellipse cx="170" cy="98" rx="34" ry="22"/></g>
+            <g class="fs-cloud c2"><ellipse cx="760" cy="70" rx="60" ry="22"/><ellipse cx="792" cy="54" rx="36" ry="24"/></g>
+            <g class="fs-cloud c3"><ellipse cx="520" cy="170" rx="48" ry="17"/><ellipse cx="545" cy="158" rx="28" ry="18"/></g>
+          </g>
+          <path d="M0 380 Q 180 300 380 350 T 820 330 T 1280 350 V720 H0Z" fill="url(#fsHill1)"/>
+          <!-- cối xay gió -->
+          <g transform="translate(1010 250)"><path d="M-16 120 L-8 0 H8 L16 120Z" fill="#f4ead6" stroke="#b9875a" stroke-width="3"/><path d="M-12 -4 L0 -22 L12 -4Z" fill="#c4553b"/>
+            <g class="fs-blades"><rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2"/><rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2" transform="rotate(90)"/><rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2" transform="rotate(180)"/><rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2" transform="rotate(270)"/><circle r="7" fill="#7a4a26"/></g></g>
+          <path d="M0 450 Q 260 380 560 430 T 1280 420 V720 H0Z" fill="url(#fsHill2)"/>
+          <!-- chuồng đỏ + silo -->
+          <g transform="translate(150 300)">
+            <rect x="150" y="20" width="56" height="150" rx="6" fill="#d9dde3" stroke="#8a95a3" stroke-width="3"/><path d="M150 26 Q178 -14 206 26Z" fill="#9aa5b3" stroke="#6f7a88" stroke-width="3"/>
+            <path d="M150 60 H206 M150 100 H206 M150 140 H206" stroke="#b7bfca" stroke-width="3"/>
+            <path d="M-10 70 L80 0 L170 70 V175 H-10Z" fill="#cf3f33" stroke="#7d1f19" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M-22 76 L80 -8 L182 76" fill="none" stroke="#fff4e0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="45" y="95" width="70" height="80" fill="#9c2c24" stroke="#fff4e0" stroke-width="5"/><path d="M45 95 L115 175 M115 95 L45 175" stroke="#fff4e0" stroke-width="5"/>
+            <rect x="62" y="38" width="36" height="28" fill="#fff4e0" stroke="#7d1f19" stroke-width="3"/>
+          </g>
+          <!-- ruộng -->
+          <path d="M440 520 L1280 470 V600 L520 640Z" fill="url(#fsRows)"/>
+          <path d="M600 655 L1280 610 V720 H640Z" fill="url(#fsWheat)"/>
+          <path d="M0 560 Q 300 520 520 580 T 1280 640 V720 H0Z" fill="#5aa845"/>
+          <!-- hàng rào -->
+          <g stroke="#b07a46" stroke-width="7" stroke-linecap="round"><path d="M0 590 L560 600"/><path d="M0 618 L560 626"/></g>
+          <g fill="#d39a5d" stroke="#8a5a2c" stroke-width="3"><rect x="10" y="570" width="14" height="66" rx="4"/><rect x="76" y="571" width="14" height="66" rx="4"/><rect x="142" y="572" width="14" height="66" rx="4"/><rect x="208" y="573" width="14" height="66" rx="4"/><rect x="274" y="574" width="14" height="66" rx="4"/><rect x="340" y="575" width="14" height="66" rx="4"/><rect x="406" y="576" width="14" height="66" rx="4"/><rect x="472" y="577" width="14" height="66" rx="4"/><rect x="538" y="578" width="14" height="66" rx="4"/></g>
+          <!-- gà, hoa -->
+          <g class="fs-hen" transform="translate(360 650)"><ellipse rx="22" ry="17" fill="#fff"/><circle cx="16" cy="-14" r="10" fill="#fff"/><path d="M14 -26 l4 -6 l4 6 l4 -6 l2 8Z" fill="#e53935"/><path d="M26 -14 l9 3 l-9 3Z" fill="#ffb300"/><circle cx="19" cy="-16" r="2" fill="#333"/></g>
+          <g fill="#ff8fb1"><circle cx="90" cy="690" r="8"/><circle cx="140" cy="702" r="7" fill="#fff176"/><circle cx="480" cy="700" r="8"/><circle cx="1220" cy="700" r="8" fill="#fff176"/></g>
+        </svg>
+      </div>
       <div class="g-title-sun" aria-hidden="true"></div>
-      <div class="g-title-leaves" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="g-title-leaves farm-butterflies" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
       <a href="shop-games.html" class="g-title-home"><i class="fa-solid fa-arrow-left"></i> Kệ game</a>
       <a href="index.html" class="g-account guest" id="title-account" title="Đăng nhập để lưu thành tích">
         <span class="g-account-avatar" id="title-account-avatar"><i class="fa-solid fa-user"></i></span>
@@ -114,7 +155,7 @@
     <!-- QUẦY BÁN LẺ: khách trả tiền mặt → lấy hàng → thối tiền -->
     <div class="g-modal" id="modal-stall" style="display:none;">
       <div class="g-card farm-card stall-card">
-        <div class="g-card-head"><h3>🛎️ <span class="zh">路边摊</span> · Quầy bán lẻ</h3><button type="button" class="g-close" data-close="modal-stall"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head"><h3>🛎️ <span class="zh">摊位</span> · Quầy bán lẻ</h3><button type="button" class="g-close" data-close="modal-stall"><i class="fa-solid fa-xmark"></i></button></div>
         <div class="stall-body" id="stall-body"></div>
       </div>
     </div>
