@@ -260,11 +260,14 @@ function decodeXmlEntities(str) {
     .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(code));
 }
 
-function pickBestCaptionTrack(tracks) {
-  if (!Array.isArray(tracks) || tracks.length === 0) return null;
+function pickBestCaptionTrack(tracks, excludeUrls = []) {
+  if (!Array.isArray(tracks)) return null;
+  tracks = tracks.filter(t => !excludeUrls.includes(t.baseUrl));
+  if (tracks.length === 0) return null;
 
   const isZh = t => t.languageCode && t.languageCode.startsWith('zh');
-  const isZhHans = t => t.languageCode && (t.languageCode === 'zh-Hans' || t.languageCode === 'zh-CN' || t.languageCode === 'zh');
+  // Explicit Simplified first: a bare "zh" track is sometimes pinyin-only
+  const isZhHans = t => t.languageCode && (t.languageCode === 'zh-Hans' || t.languageCode === 'zh-CN');
   const isZhHant = t => t.languageCode && (t.languageCode === 'zh-Hant' || t.languageCode === 'zh-TW' || t.languageCode === 'zh-HK');
   const isManual = t => t.kind !== 'asr';
 
@@ -275,6 +278,10 @@ function pickBestCaptionTrack(tracks) {
   // 2. Any Chinese manual
   const zhManual = tracks.find(t => isZh(t) && isManual(t));
   if (zhManual) return zhManual;
+
+  // 2b. Bare "zh" manual
+  const zhBare = tracks.find(t => t.languageCode === 'zh' && isManual(t));
+  if (zhBare) return zhBare;
 
   // 3. Chinese Hans ASR (Auto-generated Chinese)
   const zhHansAsr = tracks.find(t => isZhHans(t));
@@ -293,6 +300,19 @@ function pickBestCaptionTrack(tracks) {
   if (enTrack) return enTrack;
 
   return tracks[0];
+}
+
+/**
+ * Some Chinese-learning videos ship a mixed track: pinyin line + hanzi line + English line per segment.
+ * If a good share of lines contain Hanzi, keep only those so we don't treat pinyin/English as the speech text.
+ */
+export function keepHanziLinesIfMixed(items) {
+  if (!Array.isArray(items) || items.length === 0) return items;
+  const hasHan = t => /[一-鿿]/.test(t.text || '');
+  const hanCount = items.filter(hasHan).length;
+  if (hanCount === 0 || hanCount === items.length) return items;
+  if (hanCount / items.length < 0.3) return items;
+  return items.filter(hasHan);
 }
 
 /**
@@ -358,7 +378,7 @@ export function mergeSubtitleFragments(sentences) {
  * Uses official mobile app signature (zero yt-dlp dependency, <0.5s response, 0% rate limit).
  * This is the exact mechanism used by eJOY, 4English, and Language Reactor.
  */
-async function fetchInnerTubeCaptions(youtubeId) {
+async function fetchInnerTubeCaptions(youtubeId, excludeUrls = []) {
   try {
     console.log(`[InnerTube Captions] Fetching caption tracks for ${youtubeId}...`);
     const resp = await fetch(INNERTUBE_API_URL, {
@@ -395,7 +415,7 @@ async function fetchInnerTubeCaptions(youtubeId) {
       return null;
     }
 
-    const chosenTrack = pickBestCaptionTrack(captionTracks);
+    const chosenTrack = pickBestCaptionTrack(captionTracks, excludeUrls);
     if (!chosenTrack || !chosenTrack.baseUrl) {
       return null;
     }
@@ -460,9 +480,15 @@ async function fetchInnerTubeCaptions(youtubeId) {
 
     if (sentences.length === 0) return null;
 
+    // A "Chinese" track with no Hanzi at all (e.g. pinyin-only): try another track instead
+    if ((chosenTrack.languageCode || '').startsWith('zh') && !sentences.some(x => /[一-鿿]/.test(x.text)) && excludeUrls.length < 4) {
+      console.log(`[InnerTube Captions] Track ${chosenTrack.languageCode} has no Hanzi (pinyin-only?), trying another track...`);
+      return await fetchInnerTubeCaptions(youtubeId, [...excludeUrls, chosenTrack.baseUrl]);
+    }
+
     // Deduplicate consecutive identical text
     const deduped = [];
-    for (const s of sentences) {
+    for (const s of keepHanziLinesIfMixed(sentences)) {
       if (deduped.length > 0 && deduped[deduped.length - 1].text === s.text) {
         deduped[deduped.length - 1].endTime = s.endTime;
         deduped[deduped.length - 1].duration = parseFloat((s.endTime - deduped[deduped.length - 1].startTime).toFixed(3));
@@ -522,7 +548,7 @@ export async function fetchFromYoutubeTranscript(youtubeId) {
         }
 
         if (sentences.length > 0) {
-          const merged = mergeSubtitleFragments(sentences);
+          const merged = mergeSubtitleFragments(keepHanziLinesIfMixed(sentences));
           const detectedLang = raw[0].lang || lang || 'auto';
           console.log(`[YoutubeTranscript Engine] Extracted ${sentences.length} raw snippets -> Merged into ${merged.length} complete sentences (lang: ${detectedLang})!`);
           return {
@@ -927,51 +953,52 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
  * Universal Multi-Model LLM JSON Caller (Groq Qwen 27B -> Groq GPT-OSS 20B -> Gemini 3.6 Flash)
  */
 async function callLLMJson(prompt) {
+  // 1) Gemini first (reliable JSON mode, handles 25-sentence chunks)
+  const geminiKey = getGeminiApiKey();
+  if (geminiKey) {
+    for (const modelName of ['gemini-3.6-flash', 'gemini-2.5-flash-lite']) {
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+            generationConfig: { responseMimeType: 'application/json', temperature: 0.1, maxOutputTokens: 8192 }
+          }),
+          signal: AbortSignal.timeout(45000)
+        });
+        if (res.ok) {
+          const gData = await res.json();
+          const text = (gData.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('');
+          if (text) return JSON.parse(text);
+        } else {
+          console.warn(`[LLM] Gemini ${modelName} HTTP ${res.status}`);
+        }
+      } catch (eGem) {
+        console.warn(`[LLM] Gemini ${modelName} call warn:`, eGem.message);
+      }
+    }
+  }
+
+  // 2) Groq fallback
   const groq = getGroqClient();
   if (groq) {
-    const groqModels = ['openai/gpt-oss-20b', 'qwen/qwen3.8-27b', 'openai/gpt-oss-120b'];
-    for (const model of groqModels) {
+    for (const model of ['openai/gpt-oss-120b', 'openai/gpt-oss-20b']) {
       try {
         const res = await groq.chat.completions.create({
           model,
-          max_tokens: model.includes('qwen') ? 800 : 1500,
+          max_tokens: 6000,
           messages: [
             { role: 'system', content: 'You are a professional linguistic editor and translator. Output MUST be valid JSON only.' },
             { role: 'user', content: prompt }
           ],
-          temperature: 0,
+          temperature: 0.1,
           response_format: { type: 'json_object' }
         });
         const content = res.choices[0]?.message?.content;
         if (content) return JSON.parse(content);
       } catch (eGroq) {
         console.warn(`[LLM] Groq ${model} warning:`, eGroq.message);
-      }
-    }
-  }
-
-  const geminiKey = getGeminiApiKey();
-  if (geminiKey) {
-    const candidateModels = ['gemini-3.6-flash', 'gemini-flash-latest', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
-    for (const modelName of candidateModels) {
-      try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiKey}`;
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ role: 'user', parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: 'application/json', temperature: 0 }
-          }),
-          signal: AbortSignal.timeout(10000)
-        });
-        if (res.ok) {
-          const gData = await res.json();
-          const text = gData.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (text) return JSON.parse(text);
-        }
-      } catch (eGem) {
-        console.warn(`[LLM] Gemini ${modelName} call warn:`, eGem.message);
       }
     }
   }
@@ -1021,13 +1048,15 @@ Dưới đây là danh sách các câu trích xuất từ âm thanh thực tế 
 ${JSON.stringify(chunkInput, null, 2)}
 
 NHIỆM VỤ BIÊN TẬP VÀ DỊCH NGHĨA CHUẨN XÁC:
-1. "hanzi": 
-   - Nếu lời thoại/âm thanh trong video là Tiếng Trung: BẮT BUỘC giữ đúng Chữ Hán Giản Thể (Simplified Chinese) khớp 100% với lời nói trong âm thanh. Nếu có chữ phồn thể, hãy chuyển sang giản thể.
-   - Nếu lời thoại/âm thanh trong video là Tiếng Việt hoặc ngôn ngữ khác (ví dụ bài hát tiếng Việt): GIỮ NGUYÊN đúng văn bản lời nói/ca từ gốc thực tế, TUYỆT ĐỐI KHÔNG tự bịa hoặc ép dịch sang chữ Hán giả mạo.
-2. "vietnamese": Dịch Tiếng Việt chuẩn xác, mượt mà, đúng ngữ cảnh (nếu gốc là tiếng Việt thì giữ nguyên lời thoại tiếng Việt đúng chính tả).
-3. TUYỆT ĐỐI KHÔNG tự bịa thêm câu mới. GIỮ NGUYÊN đúng số lượng và "id" của từng câu.
-4. "hskLevel": Đánh giá cấp độ HSK tương đương ("1", "2", "3", "4", "5", "6").
-5. "category": Phân loại chính xác 1 trong: "Giao Tiếp", "Âm Nhạc", "Phim Ảnh", "Ẩm Thực", "Du Lịch", "Đời Sống", "Tin Tức", "Hoạt Hình".
+1. "hanzi": LUÔN là Chữ Hán Giản Thể (Simplified Chinese) tự nhiên, đúng văn phong người bản xứ để người học luyện nói theo (shadowing):
+   - Nếu câu gốc đã là tiếng Trung: giữ nguyên khớp 100% với lời nói (chuyển phồn thể sang giản thể nếu cần).
+   - Nếu câu gốc là tiếng Việt, tiếng Anh hoặc ngôn ngữ khác: DỊCH sang tiếng Trung giản thể, ngắn gọn, tự nhiên, sát nghĩa và đúng ngữ cảnh của cả đoạn (không dịch từng từ máy móc). Với lời bài hát thì dịch thoát ý nhưng giữ sát nghĩa.
+2. "original": văn bản gốc của câu đó, chép lại nguyên văn (không sửa).
+3. "isChinese": true nếu câu gốc vốn là tiếng Trung, ngược lại false.
+4. "vietnamese": nghĩa Tiếng Việt chuẩn xác, mượt mà, đúng ngữ cảnh (nếu câu gốc đã là tiếng Việt thì giữ nguyên lời gốc đúng chính tả).
+5. TUYỆT ĐỐI KHÔNG tự bịa thêm câu mới. GIỮ NGUYÊN đúng số lượng và "id" của từng câu.
+6. "hskLevel": Đánh giá cấp độ HSK của phần "hanzi" ("1", "2", "3", "4", "5", "6").
+7. "category": Phân loại chính xác 1 trong: "Giao Tiếp", "Âm Nhạc", "Phim Ảnh", "Ẩm Thực", "Du Lịch", "Đời Sống", "Tin Tức", "Hoạt Hình".
 
 BẮT BUỘC TRẢ VỀ ĐÚNG JSON THEO ĐỊNH DẠNG:
 {
@@ -1037,6 +1066,8 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON THEO ĐỊNH DẠNG:
     {
       "id": 1,
       "hanzi": "...",
+      "original": "...",
+      "isChinese": false,
       "vietnamese": "..."
     }
   ]
@@ -1061,6 +1092,8 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON THEO ĐỊNH DẠNG:
           const match = parsedSentences.find(p => p.id === orig.id) || parsedSentences[cIdx] || {};
 
           let hanzi = (match.hanzi || orig.text || orig.hanzi || '').trim();
+          const originalText = String(match.original || orig.text || orig.hanzi || '').trim();
+          const isTranslated = match.isChinese === false && !!match.hanzi && hanzi !== originalText;
           let vietnamese = (match.vietnamese || '').trim();
 
           if (!vietnamese && hanzi) {
@@ -1093,6 +1126,8 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON THEO ĐỊNH DẠNG:
             hanzi: hanzi,
             pinyin: py,
             meaning: vietnamese,
+            original: originalText,
+            isTranslated,
             keywords: keywords.length > 0 ? keywords : [cleanHanzi.slice(0, 1) || '你']
           });
         }
@@ -1343,7 +1378,7 @@ export async function processYouTubeVideo(urlOrId) {
     levelText: classification.levelText,
     category: classification.category,
     hskDetectionSource: classification.detectionSource,
-    description: `Bài luyện nghe chép chính tả & shadowing (${classification.levelText} • ${classification.category}) từ video "${meta.title}".`,
+    description: `Bài luyện nghe chép chính tả & shadowing (${classification.levelText} • ${classification.category}) từ video "${meta.title}".` + (enrichedSentences.filter(x => x.isTranslated).length > enrichedSentences.length / 2 ? ' Video gốc không phải tiếng Trung: phần chữ Hán là bản dịch AI (tham khảo, không phải phụ đề gốc).' : ''),
     tierUsed: transcriptionResult.source,
     sentencesCount: enrichedSentences.length,
     sentences: enrichedSentences
