@@ -12236,8 +12236,36 @@ window.generateWeeklyChartBarsHtml = generateWeeklyChartBarsHtml;
 function startStudyTimer() {
   window.__hasMainStudyTimer = true;
   if (activeTimer) clearInterval(activeTimer);
+  if (!window.__studyFlushBound) {
+    window.__studyFlushBound = true;
+    // Gửi nốt số giây còn lại khi ẩn/đóng tab (tránh mất tối đa 14s mỗi lần)
+    const flushStudyTime = () => {
+      const increment = sessionStudyTime;
+      if (increment <= 0 || !currentUser) return;
+      sessionStudyTime = 0;
+      recordDailyStudyTime(increment);
+      try {
+        const payload = JSON.stringify({ incrementStudyTime: increment, localDateStr: new Date().toLocaleDateString('sv') });
+        const blob = new Blob([payload], { type: 'application/json' });
+        if (!navigator.sendBeacon || !navigator.sendBeacon(API_BASE_URL + '/api/user/stats/sync', blob)) {
+          fetch(API_BASE_URL + '/api/user/stats/sync', {
+            method: 'POST',
+            headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+            body: payload,
+            credentials: 'include',
+            keepalive: true
+          }).catch(() => { });
+        }
+      } catch (e) { }
+    };
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') flushStudyTime();
+    });
+    window.addEventListener('pagehide', flushStudyTime);
+  }
   activeTimer = setInterval(() => {
-    if (document.hasFocus()) {
+    // Tính giờ khi tab đang hiển thị (không đòi focus, để xem video/iframe vẫn được tính)
+    if (document.visibilityState === 'visible') {
       sessionStudyTime++;
 
       const totalSecs = userStudyTime + sessionStudyTime;

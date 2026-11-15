@@ -443,7 +443,7 @@ document.addEventListener('click', (e) => {
 
   setInterval(() => {
     if (window.__hasMainStudyTimer) return;
-    if (document.hasFocus()) {
+    if (document.visibilityState === 'visible') {
       sessionSecs++;
       if (sessionSecs >= 15) {
         const increment = sessionSecs;
