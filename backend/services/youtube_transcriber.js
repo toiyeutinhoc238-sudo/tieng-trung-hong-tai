@@ -348,7 +348,10 @@ export function mergeSubtitleFragments(sentences) {
     const next = sentences[i];
     const gap = next.startTime - cur.endTime;
     const combinedDuration = next.endTime - cur.startTime;
-    const combinedLength = (cur.text + next.text).length;
+    const combinedText = cur.text + next.text;
+    const combinedLength = combinedText.length;
+    // Chinese packs more meaning per character: keep chunks shorter (~5-6s of speech)
+    const maxLen = /[一-鿿]/.test(combinedText) ? 22 : 48;
 
     // Merge conditions:
     // 1. Current sentence does not end with sentence-ending punctuation (。！？.!?) OR is too brief (< 1.2s or < 4 chars)
@@ -357,10 +360,10 @@ export function mergeSubtitleFragments(sentences) {
     // 4. Combined length is reasonable (<= 36 characters)
     const shouldMerge = (
       (!isSentenceEnd(cur.text) || cur.duration < 1.2 || cur.text.length < 4) &&
-      gap <= 1.2 &&
+      gap <= 0.8 &&
       gap >= -0.5 &&
-      combinedDuration <= 9.0 &&
-      combinedLength <= 36
+      combinedDuration <= 7.0 &&
+      combinedLength <= maxLen
     );
 
     if (shouldMerge) {
@@ -452,13 +455,23 @@ async function fetchInnerTubeCaptions(youtubeId, excludeUrls = []) {
     const xml = await subRes.text();
     const sentences = [];
 
-    // Parse format 3: <p t="ms" d="ms">text</p>
-    const pRegex = /<p\s+[^>]*?t="(\d+)"[^>]*?(?:d="(\d+)")?[^>]*?>([\s\S]*?)<\/p>/gi;
+    // Parse format 3: <p t="ms" d="ms">text</p>  (attributes read separately: order/optional d must not matter)
+    const pRegex = /<p\b([^>]*)>([\s\S]*?)<\/p>/gi;
     let match;
     while ((match = pRegex.exec(xml)) !== null) {
-      const startMs = parseInt(match[1], 10);
-      const durMs = parseInt(match[2] || '3000', 10);
-      let text = match[3].replace(/<[^>]+>/g, '').trim();
+      const attrs = match[1];
+      const tM = /\bt="(\d+)"/.exec(attrs);
+      if (!tM) continue;
+      const startMs = parseInt(tM[1], 10);
+      const dM = /\bd="(\d+)"/.exec(attrs);
+      let durMs = dM ? parseInt(dM[1], 10) : 3000;
+      // Auto-captions carry word offsets (<s t="ms">): the line really ends shortly after its last word starts
+      const wordOffsets = [...match[2].matchAll(/<s\b[^>]*\bt="(\d+)"/gi)].map(w => parseInt(w[1], 10));
+      if (wordOffsets.length > 0) {
+        const lastWord = Math.max(...wordOffsets);
+        durMs = Math.min(durMs, lastWord + 700);
+      }
+      let text = match[2].replace(/<[^>]+>/g, '').trim();
       text = decodeXmlEntities(text);
       const textClean = cleanSpeechText(text);
       if (textClean) {
@@ -474,11 +487,14 @@ async function fetchInnerTubeCaptions(youtubeId, excludeUrls = []) {
 
     // Fallback format 1: <text start="s" dur="s">text</text>
     if (sentences.length === 0) {
-      const textRegex = /<text\s+[^>]*?start="([\d\.]+)"[^>]*?(?:dur="([\d\.]+)")?[^>]*?>([\s\S]*?)<\/text>/gi;
+      const textRegex = /<text\b([^>]*)>([\s\S]*?)<\/text>/gi;
       while ((match = textRegex.exec(xml)) !== null) {
-        const start = parseFloat(match[1]);
-        const dur = parseFloat(match[2] || '3.0');
-        let text = match[3].replace(/<[^>]+>/g, '').trim();
+        const sM = /\bstart="([\d.]+)"/.exec(match[1]);
+        if (!sM) continue;
+        const dM = /\bdur="([\d.]+)"/.exec(match[1]);
+        const start = parseFloat(sM[1]);
+        const dur = dM ? parseFloat(dM[1]) : 3.0;
+        let text = match[2].replace(/<[^>]+>/g, '').trim();
         text = decodeXmlEntities(text);
         const textClean = cleanSpeechText(text);
         if (textClean) {
@@ -494,6 +510,27 @@ async function fetchInnerTubeCaptions(youtubeId, excludeUrls = []) {
     }
 
     if (sentences.length === 0) return null;
+
+    // Overlapping cues (rolling auto-captions): clamp each line to the start of the next one
+    sentences.sort((x, y) => x.startTime - y.startTime);
+    for (let i = 0; i < sentences.length - 1; i++) {
+      const nx = sentences[i + 1].startTime;
+      if (nx > sentences[i].startTime && sentences[i].endTime > nx) {
+        sentences[i].endTime = parseFloat(nx.toFixed(3));
+        sentences[i].duration = parseFloat((nx - sentences[i].startTime).toFixed(3));
+      }
+    }
+
+    // A line far longer than its text can be spoken has swallowed an instrumental/silent gap: shorten it
+    for (const x of sentences) {
+      const han = (x.text.match(/[一-鿿]/g) || []).length;
+      const est = han > 0 ? han * 0.3 + 1 : x.text.split(/s+/).filter(Boolean).length * 0.6 + 1;
+      const d0 = x.endTime - x.startTime;
+      if (d0 > Math.max(est * 2, 6)) {
+        x.endTime = parseFloat((x.startTime + est * 1.4).toFixed(3));
+        x.duration = parseFloat((x.endTime - x.startTime).toFixed(3));
+      }
+    }
 
     // A "Chinese" track with no Hanzi at all (e.g. pinyin-only): try another track instead
     if ((chosenTrack.languageCode || '').startsWith('zh') && !sentences.some(x => /[一-鿿]/.test(x.text)) && excludeUrls.length < 4) {
