@@ -60,8 +60,6 @@
     .sg-cover::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.35)); }
     .sg-cover .sg-emoji { position: relative; z-index: 1; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.35)); }
     .sg-card:not(.locked) .sg-cover.has-img .sg-emoji { display: none; }
-    .sg-cover.farm-cover { background: radial-gradient(circle at 78% 22%, #fff6b3 0 11%, transparent 12%), linear-gradient(180deg, #8fd3ff 0%, #c9ecff 45%, #8fd16a 46%, #5fae45 100%); }
-    .sg-cover.farm-cover .sg-emoji { font-size: 3rem; letter-spacing: 4px; }
     .sg-badge { position: absolute; top: 10px; right: 10px; z-index: 2; padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.3px; }
     .sg-badge.hot { background: #f43f5e; color: #fff; }
     .sg-badge.new { background: #ea580c; color: #fff; }
@@ -128,8 +126,8 @@
           desc: 'Nhận đơn, pha trà sữa theo yêu cầu, nấu nguyên liệu và thối tiền cho khách.' },
         { key: 'grocery', url: '/grocery-game.html', name: 'Tiệm Tạp Hóa', chn: '我的小卖部', emoji: '🏪', cover: '/assets/grocery_shopfront.jpg', badge: ['new', 'MỚI'],
           desc: 'Nhặt hàng theo khu kệ, quét mã, nhập hàng ở chợ đầu mối và mở rộng tiệm.' },
-        { key: 'farm', url: '/farm-game.html', name: 'Nông Trại', chn: '我的农场', emoji: '🌾🐔🚜', coverClass: 'farm-cover', badge: ['new', 'MỚI'],
-          desc: 'Trồng trọt, chăn nuôi, xưởng chế biến theo giờ thật; giao đơn hàng, xe tải và bán lẻ cho khách nói tiếng Trung.' },
+        { key: 'farm', url: '/farm-game.html', name: 'Nông Trại', chn: '我的农场', emoji: '🌾🐔🚜', cover: '/assets/farm_cover.svg', badge: ['new', 'MỚI'],
+          desc: 'Nhấp để đi khắp nông trại: trồng rau, nuôi gà heo cừu bò, câu cá, nấu ăn và trò chuyện với hàng xóm bằng tiếng Trung.' },
         { name: 'Tiệm Cá Viên', chn: '我的鱼丸店', emoji: '🍢', desc: 'Chiên cá viên, bò viên, xiên que và chấm tương theo ý khách.' },
         { name: 'Tiệm Bánh Mì', chn: '我的面包店', emoji: '🥖', desc: 'Kẹp nhân bánh mì theo yêu cầu, nướng giòn và gói mang đi.' },
         { name: 'Tiệm Quần Áo', chn: '我的服装店', emoji: '👗', desc: 'Tư vấn size, màu sắc, kiểu dáng và chọn đồ cho khách.' },
