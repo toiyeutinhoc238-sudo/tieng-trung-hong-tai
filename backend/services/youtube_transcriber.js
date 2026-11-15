@@ -1194,6 +1194,75 @@ function resolveCategory(lowerTitle, aiCategory) {
 }
 
 /**
+ * TIER 1C: Let Gemini read the YouTube video by URL (Google fetches the video itself,
+ * so it works when YouTube blocks our server's IP — e.g. on Render).
+ * Only used when no official subtitles could be fetched. Public videos only.
+ */
+export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
+  const key = getGeminiApiKey();
+  if (!key) return null;
+  // Keep cost/latency bounded: very long videos are skipped
+  if (durationSec && durationSec > 20 * 60) {
+    console.log(`[Gemini YouTube] Video too long (${durationSec}s), skipping.`);
+    return null;
+  }
+
+  const prompt = 'Transcribe all human speech or singing in this video, in the language it is actually spoken (do not translate). ' +
+    'Split into short natural sentences or lyric lines. Output ONLY a JSON array of objects ' +
+    '{"start": seconds(number), "end": seconds(number), "text": string}. ' +
+    'Do not invent text that is not spoken. If there is no speech, output [].';
+
+  for (const model of ['gemini-3.6-flash', 'gemini-2.5-flash-lite']) {
+    try {
+      console.log(`[Gemini YouTube] Transcribing ${youtubeId} with ${model}...`);
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+        body: JSON.stringify({
+          contents: [{ parts: [
+            { file_data: { file_uri: `https://www.youtube.com/watch?v=${youtubeId}` } },
+            { text: prompt }
+          ] }],
+          generationConfig: { responseMimeType: 'application/json', temperature: 0, maxOutputTokens: 16000 }
+        }),
+        signal: AbortSignal.timeout(110000)
+      });
+      if (!res.ok) {
+        console.warn(`[Gemini YouTube] ${model} HTTP ${res.status}`);
+        continue;
+      }
+      const data = await res.json();
+      const text = (data.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('');
+      let arr;
+      try { arr = JSON.parse(text); } catch (e) { continue; }
+      if (!Array.isArray(arr)) continue;
+
+      const sentences = [];
+      for (const it of arr) {
+        const t = cleanSpeechText(String(it.text || it.hanzi || ''));
+        const start = Number(it.start);
+        if (!t || !Number.isFinite(start)) continue;
+        const end = Number.isFinite(Number(it.end)) && Number(it.end) > start ? Number(it.end) : start + 3;
+        sentences.push({
+          id: sentences.length + 1,
+          startTime: parseFloat(start.toFixed(3)),
+          endTime: parseFloat(end.toFixed(3)),
+          duration: parseFloat((end - start).toFixed(3)),
+          text: t
+        });
+      }
+      if (sentences.length > 0) {
+        console.log(`[Gemini YouTube] Got ${sentences.length} sentences via ${model}.`);
+        return { lang: 'auto', source: `Gemini AI (nghe trực tiếp từ YouTube)`, sentences };
+      }
+    } catch (err) {
+      console.warn(`[Gemini YouTube] ${model} error:`, err.message);
+    }
+  }
+  return null;
+}
+
+/**
  * MASTER ENTRYPOINT: Transcribe Any YouTube Video
  * Zero-Hallucination Guarantee.
  */
@@ -1221,6 +1290,15 @@ export async function processYouTubeVideo(urlOrId) {
     transcriptionResult = await extractYouTubeSubtitles(youtubeId);
   } catch (eSub) {
     console.warn(`[Video Transcriber] Subtitle step warning:`, eSub.message);
+  }
+
+  // Step 2b: Gemini reads the video directly by URL (works even when YouTube blocks our server IP)
+  if (!transcriptionResult || !transcriptionResult.sentences || transcriptionResult.sentences.length === 0) {
+    try {
+      transcriptionResult = await transcribeWithGeminiYouTube(youtubeId, meta.duration);
+    } catch (eGem) {
+      console.warn(`[Video Transcriber] Gemini YouTube step warning:`, eGem.message);
+    }
   }
 
   // Step 3: Tier 2 - Audio Download & Groq Whisper Large v3 with Strict VAD
