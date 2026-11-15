@@ -979,9 +979,9 @@ async function callLLMJson(prompt) {
           headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey },
           body: JSON.stringify({
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: 'application/json', temperature: 0.1, maxOutputTokens: 8192 }
+            generationConfig: { responseMimeType: 'application/json', temperature: 0.1, maxOutputTokens: 12000 }
           }),
-          signal: AbortSignal.timeout(45000)
+          signal: AbortSignal.timeout(70000)
         });
         if (res.ok) {
           const gData = await res.json();
@@ -989,7 +989,9 @@ async function callLLMJson(prompt) {
           if (text) return JSON.parse(text);
         } else {
           console.warn(`[LLM] Gemini ${modelName} HTTP ${res.status}`);
-          if (res.status === 429 || res.status === 503) await new Promise(r => setTimeout(r, 5000));
+          if (res.status === 503 || (res.status === 429 && !/per day|PerDay/i.test(await res.text().catch(() => '')))) {
+            await new Promise(r => setTimeout(r, 5000));
+          }
         }
       } catch (eGem) {
         console.warn(`[LLM] Gemini ${modelName} call warn:`, eGem.message);
@@ -1035,7 +1037,7 @@ export async function enrichWithPinyinAndContextTranslation(rawItems, videoTitle
   const maxSentences = 80;
   const targetItems = rawItems.slice(0, maxSentences);
   console.log(`[AI Enrichment] Translating and enriching ${targetItems.length} sentences for "${videoTitle}"...`);
-  const chunkSize = 25;
+  const chunkSize = 40;
   let aiHskLevel = null;
   let aiCategory = null;
 
@@ -1284,7 +1286,16 @@ export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
       });
       if (!res.ok) {
         console.warn(`[Gemini YouTube] ${model} HTTP ${res.status}`);
-        if (res.status === 429 || res.status === 503) await new Promise(r => setTimeout(r, 8000));
+        if (res.status === 429) {
+          const body = await res.text().catch(() => '');
+          if (/per day|PerDay/i.test(body)) {
+            console.warn('[Gemini YouTube] Daily free-tier quota exhausted — enable billing on the Gemini key to raise limits.');
+            break;
+          }
+          await new Promise(r => setTimeout(r, 8000));
+        } else if (res.status === 503) {
+          await new Promise(r => setTimeout(r, 8000));
+        }
         continue;
       }
       const data = await res.json();
@@ -1343,7 +1354,28 @@ export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
  * MASTER ENTRYPOINT: Transcribe Any YouTube Video
  * Zero-Hallucination Guarantee.
  */
+const lessonCache = new Map();
+const LESSON_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+
 export async function processYouTubeVideo(urlOrId) {
+  const id = extractYouTubeId(urlOrId);
+  if (id) {
+    const hit = lessonCache.get(id);
+    if (hit && Date.now() - hit.t < LESSON_CACHE_TTL_MS) {
+      console.log(`[Video Transcriber] Cache hit for ${id}`);
+      return hit.result;
+    }
+  }
+  const result = await processYouTubeVideoUncached(urlOrId);
+  // Only cache good, AI-quality results (not the degraded auto-caption fallback of a non-Chinese video)
+  if (id && result && result.success && !String(result.tierUsed || '').includes('Official Subtitles (vi)')) {
+    if (lessonCache.size >= 60) lessonCache.delete(lessonCache.keys().next().value);
+    lessonCache.set(id, { t: Date.now(), result });
+  }
+  return result;
+}
+
+async function processYouTubeVideoUncached(urlOrId) {
   const youtubeId = extractYouTubeId(urlOrId);
   if (!youtubeId) {
     return {
