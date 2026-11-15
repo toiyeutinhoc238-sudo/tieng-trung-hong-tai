@@ -1009,7 +1009,9 @@ async function callLLMJson(prompt) {
   // 1) Gemini first (reliable JSON mode, handles 25-sentence chunks)
   const geminiKey = getGeminiApiKey();
   if (geminiKey) {
-    for (const modelName of ['gemini-3.6-flash', 'gemini-3.6-flash', 'gemini-2.5-flash-lite']) {
+    const dailyBlockedModels = new Set();
+    for (const modelName of ['gemini-3.6-flash', 'gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']) {
+      if (dailyBlockedModels.has(modelName)) continue;
       try {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`, {
           method: 'POST',
@@ -1026,7 +1028,11 @@ async function callLLMJson(prompt) {
           if (text) return JSON.parse(text);
         } else {
           console.warn(`[LLM] Gemini ${modelName} HTTP ${res.status}`);
-          if (res.status === 503 || (res.status === 429 && !/per day|PerDay/i.test(await res.text().catch(() => '')))) {
+          if (res.status === 429) {
+            const body429 = await res.text().catch(() => '');
+            if (/per day|PerDay/i.test(body429)) dailyBlockedModels.add(modelName);
+            else await new Promise(r => setTimeout(r, 5000));
+          } else if (res.status === 503) {
             await new Promise(r => setTimeout(r, 5000));
           }
         }
@@ -1289,7 +1295,12 @@ function resolveCategory(lowerTitle, aiCategory) {
  * so it works when YouTube blocks our server's IP — e.g. on Render).
  * Only used when no official subtitles could be fetched. Public videos only.
  */
+// Why the last Gemini-audio attempt failed ('quota' | 'busy' | null) — used to give the user an honest error
+let lastGeminiAudioIssue = null;
+
 export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
+  lastGeminiAudioIssue = null;
+  const dailyBlocked = new Set();
   const key = getGeminiApiKey();
   if (!key) return null;
   // Keep cost/latency bounded: very long videos are skipped
@@ -1305,8 +1316,10 @@ export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
     'Output ONLY a JSON array of objects {"start": seconds(number), "end": seconds(number), "text": string}. ' +
     'Do not invent text that is not spoken. If there is no speech, output [].';
 
-  // Only the main model: smaller models invent timestamps for audio. Retry on rate limit instead.
-  for (const model of ['gemini-3.6-flash', 'gemini-3.6-flash', 'gemini-3.6-flash']) {
+  // Main model first (retry on rate limit); gemini-2.5-flash is a verified fallback with its own quota.
+  // Smaller "lite" models are NOT used: they invent timestamps for audio.
+  for (const model of ['gemini-3.6-flash', 'gemini-3.6-flash', 'gemini-2.5-flash']) {
+    if (dailyBlocked.has(model)) continue;
     try {
       console.log(`[Gemini YouTube] Transcribing ${youtubeId} with ${model}...`);
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
@@ -1326,11 +1339,15 @@ export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
         if (res.status === 429) {
           const body = await res.text().catch(() => '');
           if (/per day|PerDay/i.test(body)) {
-            console.warn('[Gemini YouTube] Daily free-tier quota exhausted — enable billing on the Gemini key to raise limits.');
-            break;
+            console.warn(`[Gemini YouTube] Daily free-tier quota exhausted for ${model} — enable billing on the Gemini key to raise limits.`);
+            dailyBlocked.add(model);
+            lastGeminiAudioIssue = 'quota';
+            continue;
           }
+          lastGeminiAudioIssue = lastGeminiAudioIssue || 'busy';
           await new Promise(r => setTimeout(r, 8000));
         } else if (res.status === 503) {
+          lastGeminiAudioIssue = lastGeminiAudioIssue || 'busy';
           await new Promise(r => setTimeout(r, 8000));
         }
         continue;
@@ -1468,6 +1485,18 @@ async function processYouTubeVideoUncached(urlOrId) {
       transcriptionResult = await transcribeAudioWithVAD(youtubeId, meta.title);
     } catch (eAudio) {
       console.error(`[Video Transcriber] Audio transcription error:`, eAudio.message);
+      if (lastGeminiAudioIssue === 'quota') {
+        return {
+          success: false,
+          error: 'Hệ thống AI đang hết lượt sử dụng trong ngày nên chưa thể nghe và dịch video này (máy chủ không lấy được phụ đề trực tiếp từ YouTube). Bạn vui lòng thử lại sau, hoặc dán trực tiếp lời thoại vào ô bên dưới rồi bấm "Dịch Tiếng Trung" nhé!'
+        };
+      }
+      if (lastGeminiAudioIssue === 'busy') {
+        return {
+          success: false,
+          error: 'Dịch vụ AI đang quá tải tạm thời nên chưa nghe được video này. Bạn vui lòng thử lại sau ít phút, hoặc dán trực tiếp lời thoại vào ô bên dưới nhé!'
+        };
+      }
       return {
         success: false,
         error: `Video này không có phụ đề CC (Closed Captions) sẵn trên YouTube (giống như ứng dụng eJOY / 4English yêu cầu video phải có phụ đề CC). Khi video không có phụ đề sẵn, hệ thống cần tải âm thanh về máy chủ để AI phân tích nhưng YouTube đang tạm thời hạn chế IP máy chủ (429 Rate Limit). Bạn vui lòng chọn video YouTube có bật phụ đề CC (hoặc dán trực tiếp câu thoại vào ô bên dưới) nhé!`
