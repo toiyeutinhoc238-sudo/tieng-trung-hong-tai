@@ -197,9 +197,24 @@ function parseISO8601Duration(isoStr) {
 /**
  * Filter out non-speech tags, music cues, sound effects, and brackets
  */
+// Removes stray timestamps such as "[00:40.800]", "[34.000 - 40.800]", "40.800]" or "(1:02)" that leak into text
+export function stripTimestampArtifacts(text) {
+  if (!text) return '';
+  let t = String(text);
+  const num = String.raw`\d{1,3}(?::\d{2}){0,2}(?:[.,]\d{1,3})?`;
+  const range = String.raw`(?:\s*(?:-->|->|→|–|—|-|~)\s*${num})?`;
+  // leading with opening bracket: [00:40.800] / [34.000 - 40.800] / (0:34 --> 0:40) (closing optional)
+  t = t.replace(new RegExp(String.raw`^\s*[\[\(（【]\s*${num}${range}\s*[\]\)）】]?\s*`, 'u'), '');
+  // leading leftover without opening bracket: "40.800] text" (needs a decimal/colon so "1) item" is kept)
+  t = t.replace(new RegExp(String.raw`^\s*\d{1,3}(?::\d{2})*[.:,]\d{1,3}${range}\s*[\]\)）】]\s*`, 'u'), '');
+  // trailing timestamp: "text [00:41]"
+  t = t.replace(new RegExp(String.raw`\s*[\[\(（【]\s*${num}\s*[\]\)）】]\s*$`, 'u'), '');
+  return t.trim();
+}
+
 export function cleanSpeechText(text) {
   if (!text) return '';
-  let cleaned = text
+  let cleaned = stripTimestampArtifacts(text)
     .replace(/[\[\(【（](?:Âm nhạc|Nhạc|tiếng nhạc|Music|music|Applause|Vỗ tay|Tiếng cười|Laughter|Tiếng ồn|Silence|Trống|Guitar|Piano|Hát|Singing|Cheering|音乐|伴奏|掌声|笑声|吉他|钢琴|欢呼|BGM|Sound Effect)[\]\)】）]/gi, '')
     .replace(/[♪♫♩♬★☆✦✧❤️👍🔥]+/g, '')
     .replace(/\s{2,}/g, ' ')
@@ -504,6 +519,7 @@ async function fetchInnerTubeCaptions(youtubeId, excludeUrls = []) {
     return {
       lang: chosenTrack.languageCode || 'zh',
       source: `YouTube Official Subtitles (${chosenTrack.languageCode})`,
+      isAsr: chosenTrack.kind === 'asr',
       sentences: mergedSentences
     };
   } catch (err) {
@@ -956,7 +972,7 @@ async function callLLMJson(prompt) {
   // 1) Gemini first (reliable JSON mode, handles 25-sentence chunks)
   const geminiKey = getGeminiApiKey();
   if (geminiKey) {
-    for (const modelName of ['gemini-3.6-flash', 'gemini-2.5-flash-lite']) {
+    for (const modelName of ['gemini-3.6-flash', 'gemini-3.6-flash', 'gemini-2.5-flash-lite']) {
       try {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`, {
           method: 'POST',
@@ -973,6 +989,7 @@ async function callLLMJson(prompt) {
           if (text) return JSON.parse(text);
         } else {
           console.warn(`[LLM] Gemini ${modelName} HTTP ${res.status}`);
+          if (res.status === 429 || res.status === 503) await new Promise(r => setTimeout(r, 5000));
         }
       } catch (eGem) {
         console.warn(`[LLM] Gemini ${modelName} call warn:`, eGem.message);
@@ -1091,10 +1108,10 @@ BẮT BUỘC TRẢ VỀ ĐÚNG JSON THEO ĐỊNH DẠNG:
           const orig = chunk[cIdx];
           const match = parsedSentences.find(p => p.id === orig.id) || parsedSentences[cIdx] || {};
 
-          let hanzi = (match.hanzi || orig.text || orig.hanzi || '').trim();
-          const originalText = String(match.original || orig.text || orig.hanzi || '').trim();
+          let hanzi = stripTimestampArtifacts((match.hanzi || orig.text || orig.hanzi || '').trim());
+          const originalText = stripTimestampArtifacts(String(match.original || orig.text || orig.hanzi || '').trim());
           const isTranslated = match.isChinese === false && !!match.hanzi && hanzi !== originalText;
-          let vietnamese = (match.vietnamese || '').trim();
+          let vietnamese = stripTimestampArtifacts((match.vietnamese || '').trim());
 
           if (!vietnamese && hanzi) {
             vietnamese = 'Câu luyện tập';
@@ -1243,11 +1260,14 @@ export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
   }
 
   const prompt = 'Transcribe all human speech or singing in this video, in the language it is actually spoken (do not translate). ' +
-    'Split into short natural sentences or lyric lines. Output ONLY a JSON array of objects ' +
-    '{"start": seconds(number), "end": seconds(number), "text": string}. ' +
+    'Split into short natural sentences or lyric lines (one complete phrase per item, never cut in the middle of a phrase, about 2-12 seconds each). ' +
+    '"start" is when the first word is heard; "end" is when the LAST word of that line finishes — NOT when the next line starts, so instrumental gaps are excluded. ' +
+    'The "text" field must contain ONLY the spoken words: no timestamps, no brackets, no speaker labels. ' +
+    'Output ONLY a JSON array of objects {"start": seconds(number), "end": seconds(number), "text": string}. ' +
     'Do not invent text that is not spoken. If there is no speech, output [].';
 
-  for (const model of ['gemini-3.6-flash', 'gemini-2.5-flash-lite']) {
+  // Only the main model: smaller models invent timestamps for audio. Retry on rate limit instead.
+  for (const model of ['gemini-3.6-flash', 'gemini-3.6-flash', 'gemini-3.6-flash']) {
     try {
       console.log(`[Gemini YouTube] Transcribing ${youtubeId} with ${model}...`);
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
@@ -1264,6 +1284,7 @@ export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
       });
       if (!res.ok) {
         console.warn(`[Gemini YouTube] ${model} HTTP ${res.status}`);
+        if (res.status === 429 || res.status === 503) await new Promise(r => setTimeout(r, 8000));
         continue;
       }
       const data = await res.json();
@@ -1285,6 +1306,27 @@ export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
           duration: parseFloat((end - start).toFixed(3)),
           text: t
         });
+      }
+      // Safety net: keep timings realistic even if the model returns long/overlapping ends
+      sentences.sort((a, b) => a.startTime - b.startTime);
+      for (let i = 0; i < sentences.length; i++) {
+        const cur = sentences[i];
+        // Estimated natural length of the line from its word/character count
+        const hanChars = (cur.text.match(/[一-鿿]/g) || []).length;
+        const est = hanChars > 0
+          ? hanChars * 0.3 + 1
+          : cur.text.split(/\s+/).filter(Boolean).length * 0.6 + 1;
+        const modelDur = cur.endTime - cur.startTime;
+        let dur = modelDur;
+        if (modelDur > est * 2) dur = est * 1.3;      // model swallowed an instrumental gap
+        else if (modelDur < est * 0.6) dur = est;     // model cut the line too short
+        dur = Math.min(12, Math.max(2, dur));
+        let end = cur.startTime + dur;
+        if (i + 1 < sentences.length) end = Math.min(end, sentences[i + 1].startTime);
+        if (end <= cur.startTime) end = cur.startTime + 2;
+        cur.endTime = parseFloat(end.toFixed(3));
+        cur.duration = parseFloat((cur.endTime - cur.startTime).toFixed(3));
+        cur.id = i + 1;
       }
       if (sentences.length > 0) {
         console.log(`[Gemini YouTube] Got ${sentences.length} sentences via ${model}.`);
@@ -1327,6 +1369,16 @@ export async function processYouTubeVideo(urlOrId) {
     console.warn(`[Video Transcriber] Subtitle step warning:`, eSub.message);
   }
 
+  // Step 2a: auto-generated (ASR) captions in a non-Chinese language are often wrong and cut mid-phrase
+  // (especially songs). Prefer Gemini listening to the audio; keep the captions only as a fallback.
+  let asrFallback = null;
+  if (transcriptionResult && transcriptionResult.sentences?.length > 0 && transcriptionResult.isAsr &&
+      !(transcriptionResult.lang || '').startsWith('zh')) {
+    asrFallback = transcriptionResult;
+    transcriptionResult = null;
+    console.log('[Video Transcriber] Non-Chinese auto-captions detected -> trying Gemini audio transcription first.');
+  }
+
   // Step 2b: Gemini reads the video directly by URL (works even when YouTube blocks our server IP)
   if (!transcriptionResult || !transcriptionResult.sentences || transcriptionResult.sentences.length === 0) {
     try {
@@ -1334,6 +1386,10 @@ export async function processYouTubeVideo(urlOrId) {
     } catch (eGem) {
       console.warn(`[Video Transcriber] Gemini YouTube step warning:`, eGem.message);
     }
+  }
+
+  if ((!transcriptionResult || !transcriptionResult.sentences?.length) && asrFallback) {
+    transcriptionResult = asrFallback;
   }
 
   // Step 3: Tier 2 - Audio Download & Groq Whisper Large v3 with Strict VAD
