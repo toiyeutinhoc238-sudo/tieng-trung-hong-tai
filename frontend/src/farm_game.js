@@ -2046,31 +2046,10 @@ class FarmGame {
     this.todaySent = this.pickSentences();
     this.todaySent.forEach(i => this.sentSeen.add(i));
   }
-  tomorrowList() {
-    const L2 = [];
-    let ripeTmr = 0;
-    let water = 0;
-    this.plots.forEach(p => { if (p.crop && !p.ripe) { if (p.watered && p.grow + 1 >= this.cropNeed(p)) ripeTmr += 1; else water += 1; } });
-    const dead = this.plots.filter(p => p.state === 'dead').length;
-    const empty = this.plots.filter(p => (p.state === 'tilled' && !p.crop) || p.state === 'grass').length;
-    const chickensFed = this.pens.chicken.animals.filter((_, i) => this.pens.chicken.food[i] && this.pens.chicken.water[i]).length;
-    if (ripeTmr) L2.push(`✨ Thu hoạch ${ripeTmr} ô rau sẽ chín`);
-    if (water) L2.push(`💧 Tưới ${water} ô rau đang lớn (trừ khi trời mưa)`);
-    if (this.animalsTotal()) L2.push(`🌾 Cho ${this.animalsTotal()} con vật ăn & thêm nước — mua đủ 饲料, múc đủ nước`);
-    if (chickensFed) L2.push(`🥚 Nhặt khoảng ${chickensFed} quả trứng`);
-    L2.push('🧹 Dọn phân trong chuồng (nếu có)');
-    if (dead) L2.push(`🥀 Vặt xác ${dead} ô cây héo, cuốc lại đất rồi gieo lại`);
-    if (empty) L2.push(`🌱 Gieo hạt vào ${empty} ô đất trống`);
-    return L2;
-  }
-
   askSleep() {
     this.learn('床');
     this.learn('明天');
-    const tm = this.tomorrowList();
-    const doneN = (this.tasks || []).filter(t => t.done).length;
-    this.confirm('🛏️ <span class="zh">睡觉</span> · Đi ngủ', `<p>Đi ngủ và chuyển sang <b>第${this.day + 1}天</b>? Hôm nay xong <b>${doneN}/${(this.tasks || []).length}</b> nhiệm vụ.</p>
-      <h4 class="tm-title">📋 <span class="zh">明天要做的事</span> · Nhiệm vụ cần làm ngày mai</h4><ul class="tm-list">${tm.map(x => `<li>${x}</li>`).join('')}</ul>
+    this.confirm('🛏️ <span class="zh">睡觉</span> · Đi ngủ', `<p>Đi ngủ và chuyển sang <b>第${this.day + 1}天</b>?</p>
       <p class="farm-note">Khay ăn/nước trong chuồng sẽ hết khi sang ngày; đồ trong túi được giữ nguyên.</p>`, '睡觉 Ngủ', () => this.sleepFade());
   }
   sleepFade() {
@@ -2170,8 +2149,6 @@ class FarmGame {
       <div class="day-weather">${w.icon} ${this.wordLine({ zh: `今天${w.chn}`, pin: `Jīntiān ${w.pin}`, vi: `Hôm nay ${w.vi}` })}<small>${w.note}</small></div>
       <div class="day-energy">⚡ Năng lượng hồi đầy <b>${ENERGY_MAX}/${ENERGY_MAX}</b> · 💰 ${this.money}元</div>
       <ul class="day-sum">${sum.map(s => `<li>${s}</li>`).join('') || '<li>Một đêm yên bình.</li>'}</ul>
-      <h4 class="tm-title">📋 <span class="zh">今天的任务</span> · Nhiệm vụ hôm nay</h4>
-      <ul class="task-list">${this.tasks.map(tk => `<li><b class="zh">${tk.zh}</b> <small>${tk.pin}</small> — ${tk.vi}</li>`).join('')}</ul>
       <h4 class="tm-title">📝 <span class="zh">今天的句子</span> · Mẫu câu hôm nay</h4>
       <div class="sent-list">${this.todaySent.map(i => `<div class="sent">${this.wordLine(S(i))}<em>${escapeHtml(S(i).topic)}</em></div>`).join('')}</div>
       ${this.npc ? `<p class="farm-note">💬 Có <b class="zh">${this.npcWho().chn}</b> (${this.npcWho().vi}) đang đợi ở lối vào nông trại.</p>` : ''}`;
