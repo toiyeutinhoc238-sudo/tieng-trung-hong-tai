@@ -2234,7 +2234,7 @@ class FarmGame {
     let items = [];
     if (t === 'seed') items = Object.values(ITEMS).filter(i => ['seed', 'sapling', 'fry'].includes(i.kind)).sort((a, b) => a.lvl - b.lvl);
     if (t === 'feed') items = ['feed', 'fishfood', 'rice', 'oil'].map(k => ITEMS[k]);
-    if (t === 'tool') items = ['hoe', 'can', 'fert', 'basket', 'rod', 'bait'].map(k => ITEMS[k]);
+    if (t === 'tool') items = ['hoe', 'can', 'fert', 'rod', 'bait'].map(k => ITEMS[k]);
     grid.innerHTML = items.map(it => {
       const isTool = it.kind === 'tool';
       const owned = isTool && this.has(it.id);
