@@ -1,5 +1,5 @@
 // ==== DỮ LIỆU TỪ EXCEL "thông tin nông trại.xlsx" (tạo tự động; pinyin hội thoại NPC sinh bằng pinyin-pro) ====
-const XLS_VEG = [["VEG01","空心菜","kōngxīncài","Rau muống",2,1,1,1,1],["VEG02","西红柿","xīhóngshì","Cà chua",3,1,1,3,2],["VEG03","胡萝卜","húluóbo","Cà rốt",7,1,1,0,0],["VEG04","白菜","báicài","Cải thảo",10,3,2,2,0],["VEG05","黄瓜","huángguā","Dưa leo",13,4,3,3,2],["VEG06","土豆","tǔdòu","Khoai tây",16,5,1,0,0],["VEG07","卷心菜","juǎnxīncài","Bắp cải",19,4,2,2,0],["VEG08","南瓜","nánguā","Bí đỏ",22,5,2,3,0],["VEG09","落葵","luòkuí","Rau mồng tơi",25,2,3,1,1],["VEG10","芥菜","jiècài","Cải xanh",28,3,2,2,0],["VEG11","茄子","qiézi","Cà tím",31,5,3,3,2],["VEG12","辣椒","làjiāo","Ớt",34,4,3,3,2],["VEG13","洋葱","yángcōng","Hành tây",37,4,1,0,0],["VEG14","大蒜","dàsuàn","Tỏi",40,5,1,0,0],["VEG15","生菜","shēngcài","Xà lách",42,2,3,1,1],["VEG16","菠菜","bōcài","Rau chân vịt",44,3,2,2,0],["VEG17","玉米","yùmǐ","Ngô",46,5,1,0,0],["VEG18","白萝卜","báiluóbo","Củ cải trắng",47,4,1,0,0],["VEG19","西兰花","xīlánhuā","Bông cải xanh",49,4,2,2,0],["VEG20","豆角","dòujiǎo","Đậu que",50,4,3,3,2]];
+const XLS_VEG = [["VEG01","空心菜","kōngxīncài","Rau muống",1,1,1,1,1],["VEG02","西红柿","xīhóngshì","Cà chua",3,1,1,3,2],["VEG03","胡萝卜","húluóbo","Cà rốt",7,1,1,0,0],["VEG04","白菜","báicài","Cải thảo",10,3,2,2,0],["VEG05","黄瓜","huángguā","Dưa leo",13,4,3,3,2],["VEG06","土豆","tǔdòu","Khoai tây",16,5,1,0,0],["VEG07","卷心菜","juǎnxīncài","Bắp cải",19,4,2,2,0],["VEG08","南瓜","nánguā","Bí đỏ",22,5,2,3,0],["VEG09","落葵","luòkuí","Rau mồng tơi",25,2,3,1,1],["VEG10","芥菜","jiècài","Cải xanh",28,3,2,2,0],["VEG11","茄子","qiézi","Cà tím",31,5,3,3,2],["VEG12","辣椒","làjiāo","Ớt",34,4,3,3,2],["VEG13","洋葱","yángcōng","Hành tây",37,4,1,0,0],["VEG14","大蒜","dàsuàn","Tỏi",40,5,1,0,0],["VEG15","生菜","shēngcài","Xà lách",42,2,3,1,1],["VEG16","菠菜","bōcài","Rau chân vịt",44,3,2,2,0],["VEG17","玉米","yùmǐ","Ngô",46,5,1,0,0],["VEG18","白萝卜","báiluóbo","Củ cải trắng",47,4,1,0,0],["VEG19","西兰花","xīlánhuā","Bông cải xanh",49,4,2,2,0],["VEG20","豆角","dòujiǎo","Đậu que",50,4,3,3,2]];
 const XLS_ANI = [["ANI01","鸡","jī","Gà","Đẻ trứng; người chơi cho ăn, lấy trứng và dọn chuồng","鸡舍 - Chuồng gà",1],["ANI02","猪","zhū","Heo","Chăm sóc theo ngày; có thể bán vật nuôi/sản phẩm theo cơ chế game","猪舍 - Chuồng heo",20],["ANI03","羊","yáng","Cừu","Cho ăn, chăm sóc và thu hoạch lông cừu","羊舍 - Chuồng cừu",30],["ANI04","牛","niú","Bò","Cho ăn, chăm sóc và thu hoạch sữa","牛舍 - Chuồng bò",40],["ANI05","狗","gǒu","Chó","Thú cưng trong nhà; chạy quanh nhà, có thể đi theo nhân vật","家里 - Trong nhà",12],["ANI06","猫","māo","Mèo","Thú cưng trong nhà; chạy quanh nhà và có hoạt ảnh đuổi/bắt chuột","家里 - Trong nhà",16]];
 const XLS_FRUIT = [["FR01","苹果","píngguǒ","Táo",20],["FR02","橘子","júzi","Quýt",22],["FR03","桃子","táozi","Đào",25],["FR04","梨","lí","Lê",27],["FR05","葡萄","pútao","Nho",30],["FR06","草莓","cǎoméi","Dâu tây",21],["FR07","香蕉","xiāngjiāo","Chuối",33],["FR08","西瓜","xīguā","Dưa hấu",36],["FR09","芒果","mángguǒ","Xoài",39],["FR10","菠萝","bōluó","Dứa",42],["FR11","火龙果","huǒlóngguǒ","Thanh long",46],["FR12","荔枝","lìzhī","Vải",50]];
 const XLS_FISH = [["F01","鲤鱼","lǐyú","Cá chép",20],["F04","鲶鱼","niányú","Cá trê",30],["F05","罗非鱼","luófēiyú","Cá rô phi",34],["F06","金鱼","jīnyú","Cá vàng",38],["F09","虾","xiā","Tôm",48],["F10","螃蟹","pángxiè","Cua",50]];
@@ -335,7 +335,7 @@ function unlocksAt(L) {
   FISH.filter(f => f.lvl === L).forEach(f => out.push(`${f.chn}苗 ${f.vi.toLowerCase()} giống`));
   ANIMAL_IDS.filter(k => ANIMALS[k].lvl === L && L > 1).forEach(k => out.push(`${ANIMALS[k].pen.chn} ${ANIMALS[k].pen.vi} (mua chuồng) · ${ANIMALS[k].chn} ${ANIMALS[k].vi.toLowerCase()}`));
   Object.values(PETS).filter(p => p.lvl === L).forEach(p => out.push(`${p.chn} ${p.vi.toLowerCase()} (thú cưng)`));
-  Object.values(ITEMS).filter(i => (i.kind === 'tool' || i.kind === 'consumable') && i.lvl === L && L > 1).forEach(i => out.push(`${i.chn} ${i.vi.toLowerCase()}`));
+  Object.values(ITEMS).filter(i => (i.kind === 'tool' || i.kind === 'consumable') && !['basket', 'gloves'].includes(i.id) && i.lvl === L && L > 1).forEach(i => out.push(`${i.chn} ${i.vi.toLowerCase()}`));
   DECOR.filter(d => d.lvl === L).forEach(d => out.push(`${d.chn} ${d.vi.toLowerCase()} (trang trí)`));
   if (L === BACKYARD_LVL) out.push('后院 vườn sau nhà: vườn cây ăn quả & ao cá');
   if (bedsAllowed(L) > bedsAllowed(L - 1)) out.push(`菜地 thêm 1 luống rau được mua (${bedsAllowed(L)} luống)`);
@@ -2652,12 +2652,10 @@ class FarmGame {
       { id: 'pen_pig', open: this.pens.pig.owned, need: `cấp ${ANIMALS.pig.lvl} + mua chuồng` }, { id: 'pen_sheep', open: this.pens.sheep.owned, need: `cấp ${ANIMALS.sheep.lvl} + mua chuồng` }, { id: 'pen_cow', open: this.pens.cow.owned, need: `cấp ${ANIMALS.cow.lvl} + mua chuồng` },
       { id: 'forest', open: this.level >= BACKYARD_LVL, need: `cấp ${BACKYARD_LVL}` }
     ];
-    const next = [];
-    for (let L = this.level + 1; L <= LEVEL_MAX && next.length < 8; L++) { const u = unlocksAt(L); if (u.length) next.push({ L, u }); }
     this.$('map-body').innerHTML = `
       <div class="map-areas">${areas.map(a => { const s = SCENES[a.id]; return `<div class="map-area ${a.open ? '' : 'locked'} ${this.sceneId === a.id ? 'here' : ''}"><span>${s.icon}</span><b class="zh">${s.chn}</b><small>${escapeHtml(s.vi)}</small>${this.sceneId === a.id ? '<em>📍 Bạn ở đây</em>' : a.open ? '' : `<em>🔒 ${a.need}</em>`}</div>`; }).join('')}</div>
-      <h4>⭐ Cấp ${this.level} · ${this.xp - xpTotal(this.level)}/${xpNeed(this.level)} EXP — sắp mở khóa</h4>
-      <ol class="ms-list">${next.map(x => `<li class="${x.L === this.level + 1 ? 'next' : ''}"><b>Cấp ${x.L}</b><small>${x.u.map(escapeHtml).join(' · ')}</small></li>`).join('') || '<li class="done">Đã mở khóa tất cả!</li>'}</ol>`;
+      <h4>⭐ Cấp ${this.level}${this.level >= LEVEL_MAX ? ' · MAX' : ` · ${this.xp - xpTotal(this.level)}/${xpNeed(this.level)} EXP`}</h4>
+      <p class="farm-note">Làm việc trong nông trại để nhận EXP. Mỗi lần lên cấp sẽ có điều bất ngờ mới được mở khóa! 🎁</p>`;
     this.openModal('modal-map');
   }
 
