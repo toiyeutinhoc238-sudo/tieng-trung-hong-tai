@@ -8,8 +8,8 @@ body.farm-body .g-logo-ribbon { background: linear-gradient(180deg, #4caf50, #2e
 /* ==========================================================================
    我的农场 v2.1 — bản đồ ô vuông (canvas) · thanh trên · các hộp thoại
    ========================================================================== */
-.g-stage.farm-stage { grid-template-rows: 62px minmax(0, 1fr); background: #3f8c3a; }
-body.g-portrait .g-stage.farm-stage { grid-template-rows: auto minmax(0, 1fr); }
+.g-stage.farm-stage { grid-template-rows: 62px minmax(0, 1fr) auto; background: #3f8c3a; }
+body.g-portrait .g-stage.farm-stage { grid-template-rows: auto minmax(0, 1fr) auto; }
 
 /* ---------------- Thanh trên */
 .farm-hud { background: linear-gradient(180deg, #fff8e6, #fdeccb); border-bottom: 3px solid #e3b56a; }
@@ -313,3 +313,34 @@ body.g-portrait .day-card { width: auto; }
 .weather-chip small { display: none; }
 .farm-hud .g-hud-right { gap: 6px; }
 .farm-hud .hud-tool { min-width: 48px; padding: 2px 6px; }
+
+/* ---------------- Thanh công cụ ở đáy (ba lô ở góc dưới bên phải) */
+.tool-dock { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 12px; min-height: 68px; background: linear-gradient(180deg, #fff8e6, #fdeccb); border-top: 3px solid #e3b56a; z-index: 3; }
+.tool-list { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; min-width: 0; overflow-x: auto; padding: 8px 4px 2px; scrollbar-width: none; }
+.tool-list::-webkit-scrollbar { display: none; }
+.tool-btn { position: relative; display: flex; align-items: center; gap: 6px; flex: 0 0 auto; height: 54px; padding: 3px 12px 3px 6px; border-radius: 16px; background: #fff; border: 2px solid #f0d6ad; box-shadow: 0 3px 0 #e8c88e; cursor: pointer; transition: transform 0.12s, box-shadow 0.12s, background 0.12s; }
+.tool-btn:hover { transform: translateY(-2px); }
+.tool-btn.on { background: #fff3c4; border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.45), 0 3px 0 #e0a43a; transform: translateY(-4px); }
+.tool-btn.empty { opacity: 0.55; }
+.tool-btn .fi-svg, .tool-btn .fi-emo { width: 36px; height: 36px; font-size: 1.9rem; display: inline-flex; align-items: center; justify-content: center; object-fit: contain; }
+.tool-name { display: flex; flex-direction: column; align-items: flex-start; text-align: left; line-height: 1.1; }
+.tool-name .zh { font-size: 1.1rem; font-weight: 900; color: var(--ink); }
+.tool-name small { font-size: 0.62rem; font-weight: 800; color: var(--ink-soft); }
+.tool-n { position: absolute; top: -9px; right: -4px; min-width: 22px; padding: 1px 6px; border-radius: 99px; background: #e53935; color: #fff; font-size: 0.7rem; font-weight: 900; text-align: center; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25); }
+.tool-btn.pulse { animation: toolPulse 0.8s ease 2; }
+@keyframes toolPulse { 0%, 100% { transform: none; box-shadow: 0 3px 0 #e8c88e; } 50% { transform: translateY(-7px) scale(1.07); box-shadow: 0 0 0 6px rgba(229, 57, 53, 0.5); } }
+.bag-btn { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; height: 58px; margin-left: auto; padding: 0 16px 0 12px; border-radius: 18px; background: #fff; border: 3px solid #f0d6ad; box-shadow: 0 3px 0 #e8c88e; cursor: pointer; }
+.bag-btn:hover { transform: translateY(-1px); }
+.bag-btn .bag-ic { font-size: 2rem; line-height: 1; }
+.bag-btn small { display: flex; flex-direction: column; align-items: flex-start; font-weight: 900; font-size: 0.8rem; line-height: 1.15; }
+.bag-btn small .zh { font-size: 1.05rem; }
+body.g-portrait .tool-dock { padding: 6px 8px; gap: 6px; min-height: 64px; }
+body.g-portrait .tool-list { gap: 6px; }
+body.g-portrait .tool-btn { flex-direction: column; justify-content: center; gap: 0; height: 56px; min-width: 56px; padding: 2px 6px; }
+body.g-portrait .tool-btn .fi-svg, body.g-portrait .tool-btn .fi-emo { width: 30px; height: 30px; font-size: 1.6rem; }
+body.g-portrait .tool-name { align-items: center; }
+body.g-portrait .tool-name .zh { font-size: 0.82rem; }
+body.g-portrait .tool-name small { display: none; }
+body.g-portrait .bag-btn { height: 56px; padding: 0 10px 0 8px; gap: 5px; }
+body.g-portrait .bag-btn .bag-ic { font-size: 1.7rem; }
+body.g-portrait .bag-btn small .zh { font-size: 0.85rem; }

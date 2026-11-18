@@ -292,6 +292,18 @@ const itemOf = (id) => ITEMS[id];
 const BAG_CAP = 60;
 const BASKET_BONUS = 30;       // 篮子: túi chứa thêm
 const WATER_CAP = 20;
+
+// Thanh công cụ ở đáy màn hình: ngoài ruộng và trong chuồng hiện các dụng cụ khác nhau; chọn công cụ rồi mới bấm vào ô
+const TOOLS = {
+  hoe: { chn: '锄头', pin: 'chútou', vi: 'Cuốc', icon: 'svg:hoe', tip: 'Nhấp vào ô đất còn cỏ để cuốc.' },
+  gloves: { chn: '手套', pin: 'shǒutào', vi: 'Bao tay', icon: '🧤', tip: 'Nhấp vào cây đã chín để thu hoạch, hoặc cây héo để vặt bỏ.' },
+  seed: { chn: '种子', pin: 'zhǒngzi', vi: 'Hạt giống', icon: '🌱', tip: 'Nhấp vào ô đất đã cuốc để gieo hạt.' },
+  can: { chn: '水壶', pin: 'shuǐhú', vi: 'Bình tưới', icon: 'svg:can', tip: 'Nhấp vào cây chưa tưới để tưới nước.' },
+  feed: { chn: '饲料', pin: 'sìliào', vi: 'Thức ăn', icon: 'svg:sack_y', tip: 'Nhấp vào máng thức ăn để đổ vào.' },
+  water: { chn: '水', pin: 'shuǐ', vi: 'Nước', icon: '💧', tip: 'Nhấp vào máng nước để đổ vào.' },
+  basket: { chn: '篮子', pin: 'lánzi', vi: 'Giỏ', icon: '🧺', tip: 'Nhấp vào ổ trứng hoặc vật nuôi có sản phẩm để thu.' }
+};
+const FREE_TOOLS = ['gloves', 'basket'];   // bao tay & giỏ: ai cũng có, không cần mua
 const FRIDGE_CAP = 300;
 const countsInBag = (it) => it && !['tool', 'consumable', 'water'].includes(it.kind);
 const SELLABLE = ['crop', 'fruit', 'fish', 'product'];
@@ -1188,6 +1200,8 @@ class FarmGame {
     this.dogPos = null;
     this.bag = { ...START.bag };
     this.fridge = {};
+    this.tool = null;
+    this.seedSel = null;
     this.plots = PLOT_POS.map((_, i) => ({ state: bedOf(i) < 2 ? 'grass' : 'locked', crop: null, grow: 0, harvestNo: 0, watered: false, ripe: false, fert: false }));
     this.trees = ORCHARD_POS.map(() => null);
     this.pens = {};
@@ -1241,7 +1255,9 @@ class FarmGame {
     this.todaySent = Array.isArray(s.todaySent) ? s.todaySent.filter(i => SENTENCES[i]) : [];
     if (Array.isArray(s.sentSeen)) s.sentSeen.forEach(i => { if (SENTENCES[i]) this.sentSeen.add(i); });
     this.bag = counts(s.bag, 9999);
-    this.fridge = counts(s.fridge, 9999);
+    this.fridge = {};
+    // Tủ lạnh nay chỉ để trang trí: đồ cũ cất trong tủ được trả về túi (không mất gì)
+    Object.entries(counts(s.fridge, 9999)).forEach(([k, n]) => { this.bag[k] = (this.bag[k] || 0) + n; });
     let srcPlots = Array.isArray(s.plots) ? s.plots : null;
     // Save cũ: mỗi luống chỉ có 1 mục. Chuyển sang 4 ô mà KHÔNG nhân đôi cây: ô đầu giữ nguyên cây/trạng thái của luống cũ
     // (1 cây = 1 phần giá ×3 = đúng bằng 3 phần giá cũ), 3 ô còn lại giữ đất đã cuốc nhưng để trống.
@@ -1416,6 +1432,7 @@ class FarmGame {
   rebuild() { this.scene = buildScene(this, this.sceneId); }
   changeScene(id, x, y, face = 'down') {
     this.sceneId = id;
+    this.tool = null;
     this.walk = null;
     this.rebuild();
     this.player = { x, y, face };
@@ -1626,7 +1643,7 @@ class FarmGame {
     if (k === 'npc') return this.goDo(o, () => this.openDialogue());
     if (k === 'bed') return this.goDo(o, () => this.askSleep());
     if (k === 'stove') return this.goDo(o, () => this.openKitchen());
-    if (k === 'fridge') return this.goDo(o, () => this.openFridge());
+    if (k === 'fridge') return this.goDo(o, () => { this.audio.door(); this.learn('冰箱'); this.showToast('🧊', '冰箱 bīngxiāng · tủ lạnh: chỉ để trang trí, không cần cất đồ vào.'); });
     if (k === 'table') return this.goDo(o, () => this.openEat());
     if (k === 'decor') return this.showCard(o.word);
     if (k === 'tray') return this.tapTray(o);
@@ -1672,8 +1689,13 @@ class FarmGame {
         this.markDirty();
       }));
     }
+    const need = this.plotNeedsTool(p);
+    if (need && this.tool !== need) {
+      const why = { hoe: 'Ô đất còn cỏ', gloves: p.state === 'dead' ? 'Cây đã héo 枯萎' : 'Cây đã chín ✨', seed: 'Đất đã cuốc xong', can: 'Cây cần được tưới' }[need];
+      return this.toolNeed(need, why);
+    }
     if (p.state === 'dead') {
-      // vặt xác cây héo: làm bằng tay, không cần dụng cụ
+      // vặt xác cây héo bằng 手套 (bao tay)
       if (!this.needEnergy(ENERGY.clear)) return;
       return this.goDo(o, () => {
         if (p.state !== 'dead' || !this.needEnergy(ENERGY.clear)) return;
@@ -1714,12 +1736,13 @@ class FarmGame {
         this.addXP(EXP.plant);
         this.bump('plant');
       });
+      if (this.seedSel && this.bag[this.seedSel] > 0) return plant(this.seedSel);
       if (seeds.length === 1) return plant(seeds[0]);
       return this.pick('🌱 <span class="zh">播种</span> · Chọn hạt giống', seeds.map(id => { const c = itemOf(ITEMS[id].seedOf); return { id, icon: c.icon, chn: c.chn, pin: c.pin, vi: c.vi, note: `×${this.bag[id]} · ${c.waits[0]} ngày · ${c.harvests} lứa` }; }), plant);
     }
     const c = itemOf(p.crop);
     if (p.ripe) {
-      if (this.bagFree() < c.yield) return this.warn('🎒', `Túi đầy (${this.bagUsed()}/${this.bagCap()}). Cất đồ vào 冰箱 hoặc bán ở 商店.`);
+      if (this.bagFree() < c.yield) return this.warn('🎒', `Túi đầy (${this.bagUsed()}/${this.bagCap()}). Bán bớt ở 商店.`);
       if (!this.needEnergy(ENERGY.harvest)) return;
       return this.goDo(o, () => {
         if (!p.ripe || this.bagFree() < c.yield || !this.needEnergy(ENERGY.harvest)) return;
@@ -1735,7 +1758,7 @@ class FarmGame {
         this.learn('成熟');
         this.actWord('收获', ` +${c.yield}${c.icon.startsWith('svg:') ? '' : c.icon}`);
         if (!last) this.showToast(c.icon, `${c.chn}: lứa ${p.harvestNo}/${c.harvests}. Tiếp tục tưới, ${c.waits[p.harvestNo]} ngày nữa thu lứa sau.`);
-        else this.showToast('🥀', `${c.chn} đã thu hết ${c.harvests} lứa — cây 枯萎 héo. Nhấp vào ô đó để vặt xác cây (không cần dụng cụ) rồi gieo lại.`);
+        else this.showToast('🥀', `${c.chn} đã thu hết ${c.harvests} lứa — cây 枯萎 héo. Chọn 手套 (bao tay) rồi nhấp vào ô đó để vặt xác cây, sau đó gieo lại.`);
         this.addXP(EXP.harvest);
         this.bump('harvest');
       });
@@ -1808,6 +1831,7 @@ class FarmGame {
     const isFood = o.tray === 'food';
     const arr = isFood ? pen.food : pen.water;
     if (arr[o.slot]) return this.showToast(isFood ? '🍽️' : '💧', `${isFood ? '食槽 máng thức ăn' : '水槽 máng nước'} số ${o.slot + 1} đã đầy cho hôm nay.`);
+    if (this.tool !== (isFood ? 'feed' : 'water')) return this.toolNeed(isFood ? 'feed' : 'water', isFood ? 'Máng thức ăn đang trống' : 'Máng nước đang trống');
     const need = isFood ? 'feed' : 'water';
     if (!this.has(need)) return this.warn(isFood ? '🌾' : '💧', isFood ? 'Túi hết 饲料 (thức ăn chăn nuôi) — mua ở 商店.' : 'Túi hết nước — ra 水井 múc nước.');
     if (!this.needEnergy(ENERGY.fill)) return;
@@ -1826,7 +1850,8 @@ class FarmGame {
   tapNest(o) {
     const pen = this.pens.chicken;
     if (!pen.nests[o.slot]) return this.showToast('🪺', `鸡窝 jīwō (ổ gà) số ${o.slot + 1} chưa có trứng. Gà được ăn & uống đủ hôm nay thì sáng mai đẻ trứng.`);
-    if (this.bagFree() < 1) return this.warn('🎒', 'Túi đầy — cất bớt vào 冰箱.');
+    if (this.tool !== 'basket') return this.toolNeed('basket', 'Ổ gà có trứng 🥚');
+    if (this.bagFree() < 1) return this.warn('🎒', 'Túi đầy — bán bớt ở 商店.');
     return this.goDo(o, () => {
       if (!pen.nests[o.slot] || this.bagFree() < 1) return;
       pen.nests[o.slot] = false;
@@ -1847,7 +1872,8 @@ class FarmGame {
     this.learn(a.chn);
     if (an.ready && a.product) {
       const prod = itemOf(a.product);
-      if (this.bagFree() < 1) return this.warn('🎒', 'Túi đầy — cất bớt vào 冰箱.');
+      if (this.tool !== 'basket') return this.toolNeed('basket', `${a.chn} đã có ${prod.chn}`);
+      if (this.bagFree() < 1) return this.warn('🎒', 'Túi đầy — bán bớt ở 商店.');
       if (!this.needEnergy(ENERGY.collect)) return;
       return this.goDo(o, () => {
         if (!an.ready || this.bagFree() < 1 || !this.needEnergy(ENERGY.collect)) return;
@@ -1861,7 +1887,8 @@ class FarmGame {
       });
     }
     if (a.id === 'pig' && pigGrown(an)) {
-      if (this.bagFree() < PIG_MEAT) return this.warn('🎒', `Túi cần trống ${PIG_MEAT} chỗ để nhận thịt — cất bớt vào 冰箱.`);
+      if (this.tool !== 'basket') return this.toolNeed('basket', 'Heo đã lớn 🥩');
+      if (this.bagFree() < PIG_MEAT) return this.warn('🎒', `Túi cần trống ${PIG_MEAT} chỗ để nhận thịt — bán bớt ở 商店.`);
       if (!this.needEnergy(ENERGY.collect)) return;
       return this.goDo(o, () => this.confirm('🥩 Thu hoạch thịt heo', `<p>Thu hoạch <b class="zh">猪肉</b> zhūròu (thịt heo) từ con heo số ${o.slot + 1}? Bạn nhận <b>${PIG_MEAT} miếng thịt</b> 🥩 và con heo này không còn trong chuồng.</p>`, '收肉 Thu hoạch', () => this.harvestPig(o.slot)));
     }
@@ -1928,7 +1955,7 @@ class FarmGame {
     }
     const f = itemOf(tr.sp);
     if (tr.ripe) {
-      if (this.bagFree() < f.yield) return this.warn('🎒', 'Túi đầy — cất bớt vào 冰箱.');
+      if (this.bagFree() < f.yield) return this.warn('🎒', 'Túi đầy — bán bớt ở 商店.');
       if (!this.needEnergy(ENERGY.harvest)) return;
       return this.goDo(o, () => {
         if (!tr.ripe || this.bagFree() < f.yield || !this.needEnergy(ENERGY.harvest)) return;
@@ -1963,7 +1990,7 @@ class FarmGame {
     if (!this.has('bait')) return this.warn('🪱', `Hết 鱼饵 yú'ěr (mồi câu, cấp ${ITEMS.bait.lvl}) — mua ở 商店.`);
     if (!this.pond.fish.length) return this.warn('🐟', 'Ao chưa có cá. Mua 鱼苗 (cá giống) ở 商店 rồi thả ở bảng 鱼塘.');
     if (!this.matureFish().length) return this.warn('🐟', 'Chưa có con nào đủ lớn. Cho cá ăn mỗi ngày ở bảng 鱼塘.');
-    if (this.bagFree() < 1) return this.warn('🎒', 'Túi đầy — cất bớt vào 冰箱.');
+    if (this.bagFree() < 1) return this.warn('🎒', 'Túi đầy — bán bớt ở 商店.');
     if (!this.needEnergy(ENERGY.fish)) return;
     return this.goDo(o, () => this.startFishing(), tx, ty);
   }
@@ -2267,7 +2294,7 @@ class FarmGame {
     if (t === 'sell') {
       const list = Object.keys(this.bag).filter(k => SELLABLE.includes(ITEMS[k].kind));
       grid.innerHTML = list.map(k => { const it = ITEMS[k]; return card({ icon: it.icon, chn: it.chn, pin: it.pin, vi: `${it.vi} · có ${this.bag[k]}`, price: `${it.sell}元/${it.q}`, btns: `<button type="button" class="g-btn-chip" data-sell="${k}:1">卖 1</button><button type="button" class="g-btn-chip" data-sell="${k}:all">卖全部</button>` }); }).join('')
-        || '<p class="farm-note">Túi chưa có rau, trái cây, cá, trứng, sữa hay lông cừu để bán. (Đồ trong 冰箱 phải lấy ra túi trước.)</p>';
+        || '<p class="farm-note">Túi chưa có rau, trái cây, cá, trứng, sữa hay lông cừu để bán.</p>';
       return;
     }
     let items = [];
@@ -2462,7 +2489,7 @@ class FarmGame {
     if (!this.needEnergy(ENERGY.cook)) return;
     Object.entries(r.need).forEach(([k, n]) => { if (k === 'veg') this.takeAny(VEG_ANY.find(v => this.stockAll(v) >= n), n); else this.takeAny(k, n); });
     this.useEnergy(ENERGY.cook);
-    if (this.bagFree() >= 1) this.give(r.id, 1); else this.fridge[r.id] = (this.fridge[r.id] || 0) + 1;
+    this.give(r.id, 1);
     this.audio.harvest();
     this.learn(r.chn);
     this.learn('做饭');
@@ -2718,6 +2745,76 @@ class FarmGame {
   // --------------------------------------------------------------------------
   // Thanh trên, màn hình chờ, sự kiện DOM
   // --------------------------------------------------------------------------
+  // ---- thanh công cụ
+  toolsHere() {
+    if (this.sceneId === 'farm') return ['hoe', 'gloves', 'seed', 'can'];
+    if (this.sceneId.startsWith('pen_')) return ['feed', 'water', 'basket'];
+    return [];
+  }
+  seedKinds() { return Object.keys(this.bag).filter(k => ITEMS[k] && ITEMS[k].kind === 'seed'); }
+  toolCount(id) {
+    if (id === 'seed') return this.seedKinds().reduce((n, k) => n + this.bag[k], 0);
+    if (id === 'can' || id === 'water') return this.bag.water || 0;
+    if (id === 'feed') return this.bag.feed || 0;
+    return null;
+  }
+  toolReady(id) {
+    if (FREE_TOOLS.includes(id)) return true;
+    if (id === 'hoe' || id === 'can') return this.has(id);
+    return (this.toolCount(id) || 0) > 0;
+  }
+  renderToolDock() {
+    const list = this.$('tool-list');
+    if (!list) return;
+    const ids = this.toolsHere();
+    list.innerHTML = ids.map(id => {
+      const t = TOOLS[id];
+      const n = this.toolCount(id);
+      const cnt = n === null ? '' : `<b class="tool-n">${id === 'can' || id === 'water' ? `${n}/${WATER_CAP}` : n}</b>`;
+      return `<button type="button" class="tool-btn ${this.tool === id ? 'on' : ''} ${this.toolReady(id) ? '' : 'empty'}" data-tool="${id}" title="${escapeHtml(t.vi)}">${iconHtml(t.icon, 'tool-ic')}<span class="tool-name"><span class="zh">${t.chn}</span>${this.showPinyin ? `<small>${t.pin}</small>` : ''}<small>${t.vi}</small></span>${cnt}</button>`;
+    }).join('');
+  }
+  selectTool(id) {
+    if (!this.toolsHere().includes(id)) return;
+    const t = TOOLS[id];
+    if (this.tool === id) { this.tool = null; this.audio.pop(); this.renderToolDock(); return; }   // bấm lại = bỏ chọn
+    const chosen = () => {
+      this.tool = id;
+      this.audio.pop();
+      this.learn(t.chn);
+      this.renderToolDock();
+      this.showToast(t.icon.startsWith('svg:') ? '🧰' : t.icon, `Đã chọn ${t.chn} · ${t.vi.toLowerCase()}. ${t.tip}`);
+    };
+    if (id === 'seed') {
+      const seeds = this.seedKinds();
+      if (!seeds.length) return this.warn('🌱', 'Túi không có hạt giống — mua ở 商店 (cửa hàng).');
+      const use = (sid) => { this.seedSel = sid; chosen(); };
+      if (seeds.length === 1) return use(seeds[0]);
+      return this.pick('🌱 <span class="zh">种子</span> · Chọn hạt giống', seeds.map(sid => { const c = itemOf(ITEMS[sid].seedOf); return { id: sid, icon: c.icon, chn: c.chn, pin: c.pin, vi: c.vi, note: `×${this.bag[sid]}` }; }), use);
+    }
+    if (!this.toolReady(id)) {
+      const msg = { hoe: 'Chưa có 锄头 (cuốc) — mua ở 商店.', can: 'Chưa có 水壶 (bình tưới) — mua ở 商店.', water: 'Hết nước — ra 水井 (giếng) múc nước.', feed: 'Hết 饲料 (thức ăn) — mua ở 商店.' }[id];
+      return this.warn('🧰', msg || 'Chưa dùng được dụng cụ này.');
+    }
+    chosen();
+  }
+  // Nhắc người chơi chọn đúng công cụ và nháy nút đó trên thanh công cụ
+  toolNeed(need, why) {
+    const t = TOOLS[need];
+    this.audio.error();
+    this.showToast(t.icon.startsWith('svg:') ? '🧰' : t.icon, `${why} — chọn ${t.chn} (${t.vi.toLowerCase()}) ở thanh công cụ phía dưới.`, 'warn');
+    const b = this.$('tool-list') && this.$('tool-list').querySelector(`[data-tool="${need}"]`);
+    if (b) { b.classList.remove('pulse'); void b.offsetWidth; b.classList.add('pulse'); }
+  }
+  plotNeedsTool(p) {
+    if (p.state === 'grass') return 'hoe';
+    if (p.state === 'dead') return 'gloves';
+    if (p.state === 'tilled' && !p.crop) return 'seed';
+    if (p.crop && p.ripe) return 'gloves';
+    if (p.crop && !p.ripe) return (!p.watered || (this.has('fert') && !p.fert)) ? 'can' : null;
+    return null;
+  }
+
   renderHUD() {
     const w = WEATHERS[this.weather];
     this.setText('hud-day', `第${this.day}天`);
@@ -2743,6 +2840,7 @@ class FarmGame {
     if (loc) loc.innerHTML = `${s.icon} <span class="zh">${s.chn}</span> <small>${s.vi}</small>`;
     const ins = this.$('btn-inspect');
     if (ins) ins.classList.toggle('on', this.inspect);
+    this.renderToolDock();
   }
 
   showTitleScreen() {
@@ -2771,7 +2869,7 @@ class FarmGame {
     const w = WEATHERS[this.weather];
     this.learn(w.chn);
     this.showToast(w.icon, `第${this.day}天 · ${w.chn} ${w.pin} · ${w.vi}. ${w.note}`);
-    if (this.day === 1 && !this.xp) setTimeout(() => { this.openTasks(); this.showToast('👆', 'Nhấp vào vật thể (ô đất, giếng, chuồng gà…) — nhân vật sẽ tự đi tới và làm việc.'); }, 900);
+    if (this.day === 1 && !this.xp) setTimeout(() => { this.openTasks(); this.showToast('👆', 'Chọn công cụ ở thanh dưới (锄头, 种子, 水壶, 手套), rồi nhấp vào ô đất — nhân vật sẽ tự đi tới và làm việc.'); }, 900);
     else if (this.npc && !this.npc.done) setTimeout(() => this.showToast('💬', `Có ${this.npcWho().chn} (${this.npcWho().vi}) đang đợi ở lối vào nông trại.`), 1800);
   }
   async resetGame() {
@@ -2797,6 +2895,7 @@ class FarmGame {
     on('btn-rotate-fullscreen', 'click', () => this.toggleFullscreen());
     on('btn-open-vocab', 'click', () => this.openVocab());
     on('btn-bag', 'click', () => this.openBag());
+    on('tool-dock', 'click', (e) => { const b = e.target.closest('[data-tool]'); if (b) this.selectTool(b.dataset.tool); });
     on('btn-map', 'click', () => this.openMap());
     on('btn-tasks', 'click', () => this.openTasks());
     on('btn-level', 'click', () => this.openMap());

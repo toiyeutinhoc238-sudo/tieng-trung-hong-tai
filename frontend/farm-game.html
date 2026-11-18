@@ -189,8 +189,6 @@
       </div>
       <div class="g-hud-right">
         <button type="button" class="hud-tool" id="btn-tasks" title="Nhiệm vụ & mẫu câu hôm nay"><span>📋</span><small><span class="zh">任务</span> <b id="hud-task-val">0/0</b></small></button>
-        <button type="button" class="hud-tool" id="btn-bag" title="Túi đồ"><span>🎒</span><small><span
-              class="zh">背包</span> <b id="hud-bag-val">0/60</b></small></button>
         <button type="button" class="hud-tool" id="btn-map" title="Bản đồ & mốc phát triển"><span>🗺️</span><small><span
               class="zh">地图</span></small></button>
         <button type="button" class="hud-tool" id="btn-open-vocab" title="Sổ tay từ vựng"><span>📖</span><small><span
@@ -209,8 +207,15 @@
     <main class="farm-main">
       <canvas id="farm-canvas" aria-label="Bản đồ nông trại"></canvas>
       <div class="loc-chip" id="loc-chip"></div>
-      <div class="map-hint">👆 Nhấp vào vật thể — nhân vật tự đi tới và làm việc</div>
+      <div class="map-hint">👆 Chọn công cụ bên dưới rồi nhấp vào ô đất</div>
     </main>
+
+    <!-- 3. THANH CÔNG CỤ Ở ĐÁY: ngoài ruộng (cuốc, bao tay, hạt giống, bình tưới) · trong chuồng (thức ăn, nước, giỏ) · ba lô ở góc dưới bên phải -->
+    <footer class="tool-dock" id="tool-dock">
+      <div class="tool-list" id="tool-list"></div>
+      <button type="button" class="bag-btn" id="btn-bag" title="Túi đồ"><span class="bag-ic">🎒</span><small><span
+            class="zh">背包</span> <b id="hud-bag-val">0/60</b></small></button>
+    </footer>
 
     <div class="g-toasts" id="g-toasts"></div>
     <div class="sleep-fade" id="sleep-fade" aria-hidden="true"><span class="zzz">Zzz… <span class="zh">晚安</span></span></div>
@@ -388,10 +393,12 @@
           </div>
           <div class="gstep"><i>2</i><span>🌱</span>
             <div><b>Vườn rau · 菜地</b>
-              <p>Mỗi luống có <b>4 ô đất</b>, làm từng ô một: <b>锄地</b> cuốc đất → <b>播种</b> gieo hạt → ra <b>水井</b> (góc trên,
-                ngay dưới nhà) múc nước → <b>浇水</b> tưới (tưới xong dưới chân cây có <b>vòng tròn đậm</b>). Rau chỉ lớn khi được
-                tưới trong ngày; chín có ✨ thì <b>收获</b>. Có loại thu được nhiều lứa; thu hết thì cây <b>枯萎</b> héo — nhấp vào ô đó để
-                <b>vặt xác cây</b> (làm bằng tay, không cần dụng cụ) rồi gieo lại.</p>
+              <p>Dùng <b>thanh công cụ ở đáy màn hình</b>: chọn công cụ rồi nhấp vào ô. Mỗi luống có <b>4 ô đất</b>, làm từng ô một:
+                chọn <b>锄头</b> cuốc đất → chọn <b>种子</b> gieo hạt → ra <b>水井</b> (góc trên, ngay dưới nhà) múc nước → chọn
+                <b>水壶</b> tưới (tưới xong dưới chân cây có <b>vòng tròn đậm</b>). Rau chỉ lớn khi được tưới trong ngày; chín có ✨ thì
+                chọn <b>手套</b> bao tay để <b>收获</b>. Có loại thu được nhiều lứa; thu hết thì cây <b>枯萎</b> héo — dùng
+                <b>手套</b> vặt xác cây rồi gieo lại. Trong chuồng: chọn <b>饲料</b> / <b>水</b> để đổ vào máng, chọn <b>篮子</b> để
+                nhặt trứng và sản phẩm.</p>
             </div>
           </div>
           <div class="gstep"><i>3</i><span>🐔</span>
