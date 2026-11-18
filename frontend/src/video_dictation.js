@@ -13,6 +13,8 @@ let currentSentenceIdx = 0;
 let currentMode = 'dictation'; // Mặc định là Nghe Chép Chính Tả (hỗ trợ chuyển đổi sang Shadowing)
 let currentSpeed = 0.85;
 let autoPauseEnabled = true;
+// Nút "Nghe Lại Câu": chỉ phát đúng câu đó rồi dừng (kể cả khi đang ở chế độ video chạy liên tục)
+let replayOnceMode = false;
 let isVideoBlurred = false;
 let isVideoHidden = false;
 let userAnswers = {}; // { sentenceId: { isCorrect, score, userAnswer, blanks: [] } }
@@ -461,10 +463,11 @@ function startPlaybackWatcher() {
         }
 
         // 4. Tự động dừng ở cuối mỗi câu (kể cả khi bấm Nghe Lại nhiều lần)
-        if (autoPauseEnabled && !isPassageMode && currentLesson.sentences[currentSentenceIdx]) {
+        if ((autoPauseEnabled || replayOnceMode) && !isPassageMode && currentLesson.sentences[currentSentenceIdx]) {
           const curSent = currentLesson.sentences[currentSentenceIdx];
           if (curTime >= curSent.endTime + 0.02 && lastPausedSentenceIdx !== currentSentenceIdx) {
             ytPlayer.pauseVideo();
+            replayOnceMode = false;
             lastPausedSentenceIdx = currentSentenceIdx;
             isSentencePlaying = false;
             stopPlaybackWatcher();
@@ -528,6 +531,7 @@ function stopPlaybackWatcher() {
 }
 
 function playCurrentSentence() {
+  replayOnceMode = false;
   if (!currentLesson || !currentLesson.sentences || !currentLesson.sentences[currentSentenceIdx]) return;
   const sentence = currentLesson.sentences[currentSentenceIdx];
   if (ytPlayer && ytPlayer.seekTo) {
@@ -551,6 +555,7 @@ function playCurrentSentence() {
 
 function replaySnippet() {
   playCurrentSentence();
+  replayOnceMode = true;
   showToast("Đang phát lại câu hiện tại 🔁");
 }
 
@@ -565,8 +570,7 @@ function setPlaybackSpeed(rate) {
   showToast(`Tốc độ phát: ${currentSpeed}x`);
 }
 
-function toggleAutoPause() {
-  autoPauseEnabled = !autoPauseEnabled;
+function updateAutoPauseButton() {
   const btn = document.getElementById('toggle-autopause-btn');
   if (btn) {
     btn.classList.toggle('active', autoPauseEnabled);
@@ -574,6 +578,19 @@ function toggleAutoPause() {
       ? '<i class="fa-solid fa-pause"></i> <span>Tự Dừng Câu: BẬT</span>'
       : '<i class="fa-solid fa-play"></i> <span>Tự Dừng Câu: TẮT</span>';
   }
+}
+
+// Mặc định theo chế độ: Shadowing = video chạy liên tục, câu hiển thị tự chạy theo video;
+// Nghe chép / Lồng tiếng = dừng ở cuối mỗi câu để người học gõ/ghi âm.
+function applyAutoPauseDefaultForMode(mode) {
+  autoPauseEnabled = mode !== 'shadowing';
+  replayOnceMode = false;
+  updateAutoPauseButton();
+}
+
+function toggleAutoPause() {
+  autoPauseEnabled = !autoPauseEnabled;
+  updateAutoPauseButton();
   showToast(autoPauseEnabled ? "Đã BẬT tự động dừng ở cuối mỗi câu" : "Đã TẮT tự động dừng (Video chạy liên tục)");
 }
 
@@ -798,6 +815,7 @@ function clearCurrentNotes() {
 
 function switchMode(mode) {
   currentMode = mode || 'dictation';
+  applyAutoPauseDefaultForMode(currentMode);
   document.querySelectorAll('.mode-tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === currentMode);
   });
@@ -3671,6 +3689,7 @@ async function initVideoDictationPage() {
   } else {
     currentMode = 'dictation';
   }
+  applyAutoPauseDefaultForMode(currentMode);
 
   // Hiện 2 tab lựa chọn: Nghe chép theo Video vs Nghe chép Đoạn ngắn HSK
   if (typeTabsEl) typeTabsEl.style.display = 'flex';
