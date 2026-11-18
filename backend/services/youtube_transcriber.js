@@ -1002,6 +1002,15 @@ export async function transcribeAudioWithVAD(youtubeId, videoTitle = '') {
   }
 }
 
+// Models that just answered 503 / hung are skipped for a short while (also across requests),
+// so one overloaded model cannot add 30-60s of waiting to every call.
+const modelCooldown = new Map();
+const isCooling = (m) => (modelCooldown.get(m) || 0) > Date.now();
+const coolModel = (m, ms = 60000) => modelCooldown.set(m, Date.now() + ms);
+const pickAvailable = (list) => { const ok = list.filter(m => !isCooling(m)); return ok.length ? ok : list; };
+// Skip a model that is cooling down while a later one in the list is still healthy
+const skipCooling = (list, idx) => isCooling(list[idx]) && list.slice(idx + 1).some(m => !isCooling(m));
+
 /**
  * Universal Multi-Model LLM JSON Caller (Groq Qwen 27B -> Groq GPT-OSS 20B -> Gemini 3.6 Flash)
  */
@@ -1010,8 +1019,10 @@ async function callLLMJson(prompt) {
   const geminiKey = getGeminiApiKey();
   if (geminiKey) {
     const dailyBlockedModels = new Set();
-    for (const modelName of ['gemini-3.6-flash', 'gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']) {
-      if (dailyBlockedModels.has(modelName)) continue;
+    const enrichModels = ['gemini-3.6-flash', 'gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+    for (let mi = 0; mi < enrichModels.length; mi++) {
+      const modelName = enrichModels[mi];
+      if (dailyBlockedModels.has(modelName) || skipCooling(enrichModels, mi)) continue;
       try {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`, {
           method: 'POST',
@@ -1020,7 +1031,7 @@ async function callLLMJson(prompt) {
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             generationConfig: { responseMimeType: 'application/json', temperature: 0.1, maxOutputTokens: 12000 }
           }),
-          signal: AbortSignal.timeout(70000)
+          signal: AbortSignal.timeout(28000)
         });
         if (res.ok) {
           const gData = await res.json();
@@ -1033,11 +1044,13 @@ async function callLLMJson(prompt) {
             if (/per day|PerDay/i.test(body429)) dailyBlockedModels.add(modelName);
             else await new Promise(r => setTimeout(r, 5000));
           } else if (res.status === 503) {
-            await new Promise(r => setTimeout(r, 5000));
+            coolModel(modelName, 45000);
+            await new Promise(r => setTimeout(r, 1500));
           }
         }
       } catch (eGem) {
         console.warn(`[LLM] Gemini ${modelName} call warn:`, eGem.message);
+        coolModel(modelName, 60000);
       }
     }
   }
@@ -1318,8 +1331,15 @@ export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
 
   // Main model first (retry on rate limit); gemini-2.5-flash is a verified fallback with its own quota.
   // Smaller "lite" models are NOT used: they invent timestamps for audio.
-  for (const model of ['gemini-3.6-flash', 'gemini-3.6-flash', 'gemini-2.5-flash']) {
-    if (dailyBlocked.has(model)) continue;
+  // Total time budget: a slow/overloaded Gemini must not keep the user waiting for minutes
+  const deadline = Date.now() + 85000;
+  const perRequestMs = Math.min(90000, Math.max(35000, 20000 + (durationSec || 300) * 100));
+  const audioModels = ['gemini-3.6-flash', 'gemini-3.6-flash', 'gemini-2.5-flash'];
+  for (let ai = 0; ai < audioModels.length; ai++) {
+    const model = audioModels[ai];
+    if (dailyBlocked.has(model) || skipCooling(audioModels, ai)) continue;
+    const remaining = deadline - Date.now();
+    if (remaining < 15000) { console.warn('[Gemini YouTube] Time budget used up, giving up.'); lastGeminiAudioIssue = lastGeminiAudioIssue || 'busy'; break; }
     try {
       console.log(`[Gemini YouTube] Transcribing ${youtubeId} with ${model}...`);
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
@@ -1332,7 +1352,7 @@ export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
           ] }],
           generationConfig: { responseMimeType: 'application/json', temperature: 0, maxOutputTokens: 16000 }
         }),
-        signal: AbortSignal.timeout(110000)
+        signal: AbortSignal.timeout(Math.min(perRequestMs, remaining))
       });
       if (!res.ok) {
         console.warn(`[Gemini YouTube] ${model} HTTP ${res.status}`);
@@ -1345,10 +1365,11 @@ export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
             continue;
           }
           lastGeminiAudioIssue = lastGeminiAudioIssue || 'busy';
-          await new Promise(r => setTimeout(r, 8000));
+          await new Promise(r => setTimeout(r, 4000));
         } else if (res.status === 503) {
           lastGeminiAudioIssue = lastGeminiAudioIssue || 'busy';
-          await new Promise(r => setTimeout(r, 8000));
+          coolModel(model, 45000);
+          await new Promise(r => setTimeout(r, 1500));
         }
         continue;
       }
@@ -1399,6 +1420,8 @@ export async function transcribeWithGeminiYouTube(youtubeId, durationSec = 0) {
       }
     } catch (err) {
       console.warn(`[Gemini YouTube] ${model} error:`, err.message);
+      coolModel(model, 60000);
+      lastGeminiAudioIssue = lastGeminiAudioIssue || 'busy';
     }
   }
   return null;
@@ -1474,6 +1497,10 @@ async function processYouTubeVideoUncached(urlOrId) {
     }
   }
 
+  if (asrFallback && transcriptionResult?.sentences?.length && transcriptionResult.sentences.length < asrFallback.sentences.length * 0.6) {
+    console.log(`[Video Transcriber] AI audio gave only ${transcriptionResult.sentences.length} lines vs ${asrFallback.sentences.length} caption lines -> using the fuller captions.`);
+    transcriptionResult = null;
+  }
   if ((!transcriptionResult || !transcriptionResult.sentences?.length) && asrFallback) {
     transcriptionResult = asrFallback;
   }
