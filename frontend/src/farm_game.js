@@ -1699,7 +1699,7 @@ class FarmGame {
       if (!this.needEnergy(ENERGY.clear)) return;
       return this.goDo(o, () => {
         if (p.state !== 'dead' || !this.needEnergy(ENERGY.clear)) return;
-        p.state = 'tilled';
+        p.state = 'grass';   // đất còn lại chưa cuốc: phải 锄头 cuốc rồi mới gieo lại
         this.useEnergy(ENERGY.clear);
         this.audio.dig();
         this.learn('枯萎');
@@ -1758,7 +1758,7 @@ class FarmGame {
         this.learn('成熟');
         this.actWord('收获', ` +${c.yield}${c.icon.startsWith('svg:') ? '' : c.icon}`);
         if (!last) this.showToast(c.icon, `${c.chn}: lứa ${p.harvestNo}/${c.harvests}. Tiếp tục tưới, ${c.waits[p.harvestNo]} ngày nữa thu lứa sau.`);
-        else this.showToast('🥀', `${c.chn} đã thu hết ${c.harvests} lứa — cây 枯萎 héo. Chọn 手套 (bao tay) rồi nhấp vào ô đó để vặt xác cây, sau đó gieo lại.`);
+        else this.showToast('🥀', `${c.chn} đã thu hết ${c.harvests} lứa — cây 枯萎 héo. Chọn 手套 (bao tay) vặt xác cây, rồi chọn 锄头 cuốc lại đất, sau đó mới gieo lại.`);
         this.addXP(EXP.harvest);
         this.bump('harvest');
       });
@@ -2059,7 +2059,7 @@ class FarmGame {
     if (this.animalsTotal()) L2.push(`🌾 Cho ${this.animalsTotal()} con vật ăn & thêm nước — mua đủ 饲料, múc đủ nước`);
     if (chickensFed) L2.push(`🥚 Nhặt khoảng ${chickensFed} quả trứng`);
     L2.push('🧹 Dọn phân trong chuồng (nếu có)');
-    if (dead) L2.push(`🥀 Vặt xác ${dead} ô cây héo rồi gieo lại`);
+    if (dead) L2.push(`🥀 Vặt xác ${dead} ô cây héo, cuốc lại đất rồi gieo lại`);
     if (empty) L2.push(`🌱 Gieo hạt vào ${empty} ô đất trống`);
     return L2;
   }
