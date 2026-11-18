@@ -1673,6 +1673,7 @@ class GroceryGame {
     this.renderShelves();
     this.renderBasket();
     this.renderOrderChecklist();
+    this.renderChange();
   }
 
   isBasketComplete() {
