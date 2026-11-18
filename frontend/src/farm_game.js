@@ -1425,7 +1425,12 @@ class FarmGame {
   // Luống được phép mua theo cấp
   refreshBeds() {
     const allowed = bedsAllowed(this.level);
-    this.plots.forEach((p, i) => { if (bedOf(i) < allowed && p.state === 'locked') p.state = 'sale'; });
+    for (let b = 0; b < BED_POS.length; b++) {
+      const cells = this.plots.slice(b * BED_W, b * BED_W + BED_W);
+      if (b < allowed) { cells.forEach(p => { if (p.state === 'locked') p.state = 'sale'; }); continue; }
+      // Luống vượt mức cấp cho phép (từ save cũ): khóa lại nếu đang trống; luống còn cây/xác cây giữ nguyên để không mất cây
+      if (cells.every(p => !p.crop && p.state !== 'dead')) cells.forEach(p => { p.state = 'locked'; p.ripe = false; p.watered = false; });
+    }
   }
 
   // --------------------------------------------------------------------------
@@ -2136,6 +2141,7 @@ class FarmGame {
       this.plots.forEach(p => { if (p.crop && !p.ripe) p.watered = true; });
       this.trees.forEach(tr => { if (tr && !tr.ripe) tr.watered = true; });
     }
+    this.refreshBeds();
     this.startDay();
     this.sceneId = 'house';
     this.walk = null;

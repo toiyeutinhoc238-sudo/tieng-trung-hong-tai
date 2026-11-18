@@ -320,57 +320,29 @@
         <div class="g-station-footer">
           <div class="g-hint" id="scan-hint">💡 Quét hết các món để in hóa đơn.</div>
           <button type="button" class="g-btn-next" id="btn-goto-change" disabled>
-            <span class="zh">找零台</span> Sang thu tiền <i class="fa-solid fa-arrow-right"></i>
+            <span class="zh">收银台</span> Sang thanh toán <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
       </section>
 
-      <!-- TRẠM 4: THU TIỀN & THỐI TIỀN (找零台) -->
+      <!-- TRẠM 4: THANH TOÁN BẰNG HỘI THOẠI (收银台) -->
       <section class="g-station" id="view-change-station">
-        <div class="change-room">
-          <div class="cash-left">
+        <div class="pay-room">
+          <div class="pay-bill">
             <div class="paid-card">
-              <div class="paid-row"><span><span class="zh">应付</span> Tổng tiền</span><strong id="change-due-amount">0.00 ¥</strong></div>
-              <div class="paid-row"><span><span class="zh">顾客付</span> Khách đưa</span><strong class="paid" id="change-paid-amount">0.00 ¥</strong></div>
-              <div class="paid-row need">
-                <span><span class="zh">找零</span> Cần thối</span>
-                <strong id="change-needed-amount">? ¥</strong>
-              </div>
-              <button type="button" class="g-btn-chip" id="btn-change-hint"><i class="fa-solid fa-lightbulb"></i> Gợi ý (−20 điểm)</button>
+              <div class="paid-row"><span><span class="zh">账单</span> Hóa đơn</span><strong id="change-due-amount">—</strong></div>
+              <div class="paid-row"><span><span class="zh">付款方式</span> Khách trả</span><strong class="paid" id="pay-method-label">…</strong></div>
             </div>
-            <div class="paid-bill-wrap">
-              <span class="paid-label">Tiền khách đặt trên quầy</span>
-              <div class="paid-bills" id="customer-bill-render"></div>
-            </div>
+            <div class="pay-qr" id="pay-qr" aria-hidden="true"><span class="pay-qr-box"></span><b class="zh">二维码</b><small>Mã QR thanh toán</small></div>
           </div>
-
-          <div class="cash-drawer">
-            <div class="drawer-head"><i class="fa-solid fa-cash-register"></i> <span class="zh">钱箱</span> Ngăn kéo tiền · chạm để lấy</div>
-            <div class="drawer-grid">
-              <button type="button" class="rmb note n20" data-val="20"><b>20</b><span class="zh">元</span></button>
-              <button type="button" class="rmb note n10" data-val="10"><b>10</b><span class="zh">元</span></button>
-              <button type="button" class="rmb note n5" data-val="5"><b>5</b><span class="zh">元</span></button>
-              <button type="button" class="rmb note n1" data-val="1"><b>1</b><span class="zh">元</span></button>
-              <button type="button" class="rmb coin c5" data-val="0.5"><b>5</b><span class="zh">角</span></button>
-              <button type="button" class="rmb coin c1" data-val="0.1"><b>1</b><span class="zh">角</span></button>
-            </div>
-          </div>
-
-          <div class="change-tray">
-            <div class="tray-head">
-              <span><span class="zh">找零盘</span> Khay tiền thối</span>
-              <button type="button" class="g-btn-chip" id="btn-reset-tray-action"><i class="fa-solid fa-rotate-left"></i> Xếp lại</button>
-            </div>
-            <div class="tray-tokens" id="tray-dropped-tokens"></div>
-            <div class="tray-sum" id="tray-total-picked">Đã lấy: 0.00 ¥</div>
-            <button type="button" class="g-btn-primary big" id="btn-confirm-and-deliver">
-              <i class="fa-solid fa-circle-check"></i> <span class="zh">找零 · 交货</span> Thối tiền &amp; giao hàng
-            </button>
+          <div class="pay-talk">
+            <div class="pay-chat" id="pay-chat"></div>
+            <div class="pay-opts" id="pay-opts"></div>
           </div>
         </div>
 
         <div class="g-station-footer">
-          <div class="g-hint" id="change-hint-text">💡 Tự tính: <b>Khách đưa − Tổng tiền = Tiền thối</b>. Thối sai sẽ bị trừ điểm.</div>
+          <div class="g-hint" id="change-hint-text">💬 Đọc <b>hóa đơn</b> bên trái, rồi chọn câu tiếng Trung đúng để nói với khách. Chọn sai sẽ bị trừ điểm.</div>
         </div>
       </section>
     </main>
@@ -389,7 +361,7 @@
         <span class="tab-icon">📠</span><span class="tab-txt"><b class="zh">扫码台</b><small>3. Quét mã</small></span>
       </button>
       <button type="button" class="g-tab" data-target="view-change-station" id="tab-grocery-change">
-        <span class="tab-icon">💴</span><span class="tab-txt"><b class="zh">找零台</b><small>4. Thối tiền</small></span>
+        <span class="tab-icon">💬</span><span class="tab-txt"><b class="zh">收银台</b><small>4. Thanh toán</small></span>
       </button>
     </nav>
 
@@ -518,7 +490,7 @@
           <div class="sg"><small>Lợi nhuận</small><b class="green" id="summary-profit-val">+0.00 ¥</b></div>
           <div class="sg"><small>Khách phục vụ</small><b id="summary-customers-val">0/0</b></div>
           <div class="sg"><small>Điểm trung bình</small><b id="summary-avg-val">0%</b></div>
-          <div class="sg"><small>Thối đúng ngay</small><b id="summary-accuracy-val">100%</b></div>
+          <div class="sg"><small>Hội thoại đúng ngay</small><b id="summary-accuracy-val">100%</b></div>
         </div>
         <div class="mission-results" id="day-mission-results"></div>
         <div class="summary-incidents" id="summary-incidents"></div>
@@ -582,11 +554,11 @@
           <button type="button" class="g-close" data-close="modal-guide"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="guide-steps">
-          <div class="gstep"><i>1</i><span>🕗</span><div><b>Mở cửa 08:00 → 20:00</b><p>Mỗi ngày bán trong khoảng 2 phút. Khách đến liên tục — phục vụ được bao nhiêu thì phục vụ. Có mục tiêu doanh thu, số khách được bỏ về và độ chính xác thối tiền.</p></div></div>
+          <div class="gstep"><i>1</i><span>🕗</span><div><b>Mở cửa 08:00 → 20:00</b><p>Mỗi ngày bán trong khoảng 2 phút. Khách đến liên tục — phục vụ được bao nhiêu thì phục vụ. Có mục tiêu doanh thu, số khách được bỏ về và tỉ lệ trả lời hội thoại thanh toán đúng ngay lần đầu.</p></div></div>
           <div class="gstep"><i>2</i><span>🛎️</span><div><b>Đón khách</b><p>Khách xếp hàng; chờ quá lâu sẽ bỏ về. Nghe câu gọi hàng tiếng Trung rồi bấm <b>Nhận đơn</b>.</p></div></div>
           <div class="gstep"><i>3</i><span>🏪</span><div><b>Nhặt hàng theo khu</b><p>Hàng chia 6 khu: 食品调料 đồ ăn &amp; gia vị, 饮料 đồ uống, 冷藏食品 sữa &amp; đồ lạnh, 日用清洁 gia dụng, 个人护理 chăm sóc cá nhân, 文具 văn phòng phẩm. Chọn đúng khu (tab có chấm đỏ), đúng món và số lượng (一包, 两瓶…). Khu nhiều món thì lật trang kệ ◀ ▶ (trang có món khách cần có chấm đỏ).</p></div></div>
           <div class="gstep"><i>4</i><span>📠</span><div><b>Quét mã</b><p>Chạm từng món trên băng chuyền để quét và in hóa đơn.</p></div></div>
-          <div class="gstep"><i>5</i><span>💴</span><div><b>Thối tiền</b><p>Tự tính <b>khách đưa − tổng tiền</b>, lấy đúng tờ tiền và đồng xu. Dùng gợi ý sẽ bị trừ điểm.</p></div></div>
+          <div class="gstep"><i>5</i><span>💬</span><div><b>Thanh toán bằng hội thoại</b><p>Khách hỏi tính tiền. Đọc <b>hóa đơn</b>, chọn câu tiếng Trung đúng: nói tổng tiền và hỏi <b>转账 chuyển khoản</b> hay <b>现金 tiền mặt</b>, nhận tiền hoặc mời quét mã, rồi chào cảm ơn. Chọn sai sẽ bị trừ điểm.</p></div></div>
           <div class="gstep"><i>6</i><span>📦</span><div><b>批发市场 · Chợ đầu mối</b><p>Nhập hàng lên kệ, <b>mở bán món mới</b> và <b>mở khu kệ mới</b> — tất cả đều trả bằng tiền tiệm kiếm được.</p></div></div>
           <div class="guide-tip">💾 Tiến trình được lưu: thoát ra vào lại vẫn ở đúng ngày (thoát giữa ngày thì chơi lại ngày đó). Đăng nhập để lưu vào tài khoản và ghi kỷ lục lên <b>Bảng xếp hạng</b>.</div>
         </div>

@@ -1,8 +1,9 @@
+import { createCheckoutDialogue, pickOption, renderChatHtml, renderOptionsHtml } from './shop_dialogue.js';
 /**
  * Tiệm Trà Sữa Của Tôi (我的奶茶店) — chia 3 giai đoạn như Tiệm Tạp Hóa:
  *   1. 点单台 Đón khách: khách xếp hàng, gọi món bằng tiếng Trung → nhận đơn
  *   2. 调制台 Pha chế: ① chọn ly & nhấn giữ rót trà tới vạch ② độ ngọt & lượng đá ③ topping & đóng nắp
- *   3. 收银台 Tính tiền: tự tính tiền thối, lấy đúng tờ tiền/đồng xu → chấm điểm
+ *   3. 收银台 Tính tiền: thanh toán bằng hội thoại tiếng Trung → chấm điểm
  * Ngày tính theo giờ (08:00 → 20:00), mở thêm loại trà/topping bằng tiền, lưu tiến trình theo tài khoản,
  * bảng xếp hạng giữ thành tích cao nhất.
  *
@@ -280,7 +281,9 @@ const VOCAB_TABS = [
       ...UPGRADES.map(x => ({ chn: x.chn, pin: x.pin, vi: x.vi })),
       { chn: '升级', pin: 'shēngjí', vi: 'nâng cấp' },
       { chn: '一共', pin: 'yígòng', vi: 'tổng cộng' },
-      { chn: '找零', pin: 'zhǎolíng', vi: 'thối tiền' },
+      { chn: '账单', pin: 'zhàngdān', vi: 'hóa đơn' },
+      { chn: '现金', pin: 'xiànjīn', vi: 'tiền mặt' },
+      { chn: '转账', pin: 'zhuǎnzhàng', vi: 'chuyển khoản' },
       { chn: '进货', pin: 'jìnhuò', vi: 'nhập hàng' },
       { chn: '营业', pin: 'yíngyè', vi: 'mở cửa kinh doanh' },
       { chn: '打烊', pin: 'dǎyàng', vi: 'đóng cửa tiệm' },
@@ -342,7 +345,7 @@ const REVIEW_POOLS = {
     { zh: '太好喝了！珍珠很Q弹，甜度也刚刚好，老板手艺真绝！', vi: 'Ngon tuyệt cú mèo! Trân châu dẻo dai vừa miệng, vị ngọt đúng chuẩn, chủ quán pha siêu đỉnh!' },
     { zh: '出餐速度很快，茶香浓郁，冰块给得正合适，满分好评！', vi: 'Phục vụ siêu nhanh, trà thơm lừng, lượng đá chuẩn chỉnh không chê vào đâu được! 5 sao!' },
     { zh: '非常满意！这家奶茶店已经成了我的每日必备！', vi: 'Cực kỳ hài lòng! Tiệm trà sữa này chính là quán ruột mỗi ngày của mình!' },
-    { zh: '老板很热情，算账找零又快又准，奶茶清甜爽口！', vi: 'Chủ quán niềm nở, tính tiền chuẩn xác, trà thanh mát uống đã cơn khát!' },
+    { zh: '老板很热情，算账又快又准，奶茶清甜爽口！', vi: 'Chủ quán niềm nở, tính tiền chuẩn xác, trà thanh mát uống đã cơn khát!' },
     { zh: '茶底很正宗，配料给得很足，喝到见底还想再来一杯！', vi: 'Vị trà chuẩn đét, topping đầy đặn, uống hết ly mà vẫn thòm thèm muốn uống thêm!' },
     { zh: '绝绝子！这杯奶茶是我们打工人的续命神器！', vi: 'Đỉnh của chóp! Ly trà sữa này là thần dược tiếp sức cho dân đi làm như tụi tôi!' },
     { zh: '这家店是奶茶界永远的神，我宣布这是我的本命店！', vi: 'Quán này là "thần" mãi đỉnh của giới trà sữa, tôi tuyên bố đây là quán ruột của đời tôi!' },
@@ -389,8 +392,8 @@ const REVIEW_POOLS = {
     { zh: '配料放错了，我这是在开盲盒吗？', vi: 'Bỏ nhầm topping, tôi đang mở hộp mù à?' }
   ],
   change: [
-    { zh: '找零钱算错了好几次，老板算账不行啊！', vi: 'Thối tiền sai mấy lần, chủ quán tính nhẩm kém quá!' },
-    { zh: '找零错了好几次，老板的数学是体育老师教的吧！', vi: 'Thối tiền sai mấy lần, chắc chủ quán học toán với thầy thể dục!' },
+    { zh: '账单说错了好几次，老板算账不行啊！', vi: 'Nói sai hóa đơn mấy lần, chủ quán tính nhẩm kém quá!' },
+    { zh: '收款说错了好几次，老板的数学是体育老师教的吧！', vi: 'Thu tiền nói sai mấy lần, chắc chủ quán học toán với thầy thể dục!' },
     { zh: '算账算了半天，我还以为在考数学。', vi: 'Tính tiền cả buổi, tôi tưởng mình đang đi thi toán.' }
   ],
   remake: [
@@ -438,7 +441,7 @@ const SCORE_RULES = {
   weights: { pick: 0.4, speed: 0.15, change: 0.25, wait: 0.2 }
 };
 
-// Mẫu câu giao tiếp tính tiền thực tế (Hỏi giá, Tính tiền, Thối tiền, Cảm ơn)
+// Mẫu câu giao tiếp tính tiền thực tế (Hỏi giá, Tính tiền, Chuyển khoản/Tiền mặt, Cảm ơn)
 const CHECKOUT_PHRASES = [
   { role: 'Khách', roleZh: '顾客', chn: '老板，一共多少钱？', pin: 'Lǎobǎn, yīgòng duōshao qián?', vi: 'Ông chủ, tổng cộng bao nhiêu tiền?' },
   { role: 'Khách', roleZh: '顾客', chn: '请问一杯多少钱？', pin: 'Qǐngwèn yì bēi duōshao qián?', vi: 'Xin hỏi một ly bao nhiêu tiền?' },
@@ -446,10 +449,8 @@ const CHECKOUT_PHRASES = [
   { role: 'Chủ quán', roleZh: '店家', chn: '一共是十五块钱。', pin: 'Yīgòng shì shíwǔ kuài qián.', vi: 'Tổng cộng là mười lăm đồng ạ.' },
   { role: 'Khách', roleZh: '顾客', chn: '微信还是现金支付？', pin: 'Wēixìn háishì xiànjīn zhīfù?', vi: 'Quét WeChat hay trả tiền mặt vậy?' },
   { role: 'Chủ quán', roleZh: '店家', chn: '都可以，扫这里就行。', pin: 'Dōu kěyǐ, sǎo zhèlǐ jiù xíng.', vi: 'Đều được ạ, quét ở đây là được.' },
-  { role: 'Khách', roleZh: '顾客', chn: '给您钱，正好不用找。', pin: 'Gěi nín qián, zhènghǎo bú yòng zhǎo.', vi: 'Gửi bạn tiền, vừa đủ không cần thối.' },
-  { role: 'Chủ quán', roleZh: '店家', chn: '收您五十，找您三十五块。', pin: 'Shōu nín wǔshí, zhǎo nín sānshíwǔ kuài.', vi: 'Nhận của bạn 50, thối lại bạn 35 đồng.' },
-  { role: 'Chủ quán', roleZh: '店家', chn: '找您零钱，请数一数。', pin: 'Zhǎo nín língqián, qǐng shǔ yi shǔ.', vi: 'Thối bạn tiền thừa, bạn đếm lại nhé.' },
-  { role: 'Khách', roleZh: '顾客', chn: '找零一分不差，谢谢！', pin: 'Zhǎolíng yì fēn bù chà, xièxie!', vi: 'Thối tiền chuẩn từng xu, cảm ơn bạn!' },
+  { role: 'Chủ quán', roleZh: '店家', chn: '您的账单一共十八块，您想转账还是付现金？', pin: 'Nín de zhàngdān yígòng shíbā kuài, nín xiǎng zhuǎnzhàng háishi fù xiànjīn?', vi: 'Hóa đơn của bạn tổng cộng 18 tệ, bạn muốn chuyển khoản hay trả tiền mặt?' },
+  { role: 'Chủ quán', roleZh: '店家', chn: '好的，请扫这个二维码付款。', pin: 'Hǎo de, qǐng sǎo zhège èrwéimǎ fùkuǎn.', vi: 'Được, mời quét mã QR để thanh toán.' },
   { role: 'Khách', roleZh: '顾客', chn: '太好喝了！下次我还来！', pin: 'Tài hǎohē le! Xià cì wǒ hái lái!', vi: 'Ngon tuyệt cú mèo! Lần sau tôi lại đến!' },
   { role: 'Khách', roleZh: '顾客', chn: '谢谢老板，服务真好！', pin: 'Xièxie lǎobǎn, fúwù zhēn hǎo!', vi: 'Cảm ơn chủ quán, phục vụ tốt quá!' },
   { role: 'Chủ quán', roleZh: '店家', chn: '慢走，欢迎下次光临！', pin: 'Màn zǒu, huānyíng xià cì guānglín!', vi: 'Đi thong thả, hoan nghênh lần sau lại ghé!' }
@@ -577,7 +578,6 @@ class BobaShop {
     this.nextArrivalAt = 0;
 
     this.cup = freshCup();
-    this.changeTray = [];
     this.makeStep = 1;
     this.pourTimer = null;
     this.pouringTea = null;
@@ -821,10 +821,8 @@ class BobaShop {
     ['pointerup', 'pointercancel', 'blur'].forEach(ev => window.addEventListener(ev, () => this.stopPour()));
 
     // Tính tiền
-    on('btn-reset-tray-action', 'click', () => this.resetTray());
-    on('btn-change-hint', 'click', () => this.useChangeHint());
-    on('btn-confirm-and-deliver', 'click', () => this.deliver());
-    document.querySelectorAll('.drawer-grid .rmb').forEach(btn => btn.addEventListener('click', () => this.addToTray(parseFloat(btn.dataset.val))));
+    const payBox = this.$('pay-opts');
+    if (payBox) payBox.addEventListener('click', (e) => { const b = e.target.closest('[data-pay-opt]'); if (b) this.chooseDialogue(+b.dataset.payOpt); });
 
     on('btn-next-customer', 'click', () => this.closeScorecard());
     on('btn-replay-boba-speech', 'click', () => {
@@ -1196,7 +1194,7 @@ class BobaShop {
     this.renderRail();
   }
 
-  // Mỗi khách giữ riêng: món gọi, ly đang pha dở, khay tiền thối, bước pha
+  // Mỗi khách giữ riêng: món gọi, ly đang pha dở, hội thoại thanh toán, bước pha
   prepCustomer(c) {
     if (c.order) return;
     c.order = this.makeOrder();
@@ -1213,7 +1211,6 @@ class BobaShop {
     this.prepCustomer(c);
     this.current = c;
     this.cup = c.cup || freshCup();
-    this.changeTray = c.tray || [];
     this.makeStep = c.makeStep || 1;
   }
 
@@ -1222,7 +1219,6 @@ class BobaShop {
     const c = this.current;
     if (!c) return;
     c.cup = this.cup;
-    c.tray = this.changeTray;
     c.makeStep = this.makeStep;
   }
 
@@ -1273,7 +1269,6 @@ class BobaShop {
       this.stopPour();
       this.current = null;
       this.cup = freshCup();
-      this.changeTray = [];
       const door = this.$('door-customer');
       if (door) { door.classList.remove('enter'); door.classList.add('leave', 'angry'); }
     } else {
@@ -1336,7 +1331,6 @@ class BobaShop {
       leaving.push(this.current);
       this.current = null;
       this.cup = freshCup();
-      this.changeTray = [];
     }
     this.audio.speak('不好意思，我们打烊了！');
     this.showToast('🌙', `打烊了 · Đóng cửa sớm!${leaving.length ? ` ${leaving.length} khách chưa gọi món được mời về.` : ''}${this.line.length || (this.current && this.current.takenAt) ? ' Làm nốt các đơn đã nhận nhé.' : ''}`);
@@ -1372,6 +1366,7 @@ class BobaShop {
     o.due = this.orderPrice(o);
     o.paid = this.pickPaidAmount(o.due);
     o.change = Math.round((o.paid - o.due) * 100) / 100;
+    o.pay = this.pickPay();
     return o;
   }
 
@@ -1452,7 +1447,7 @@ class BobaShop {
       if (b.dataset.target === id) b.classList.remove('attention');
     });
     if (id === 'view-make-station') this.renderMakeStation();
-    if (id === 'view-change-station') { this.renderChange(); if (this.isReadyToCharge()) { this.learn('一共'); this.learn('找零'); } }
+    if (id === 'view-change-station') { this.renderChange(); if (this.isReadyToCharge()) { this.learn('一共'); ['账单', '现金', '转账'].forEach(w => this.learn(w)); const c0 = this.current; if (c0 && c0.dlg && !c0.dlgIntro) { c0.dlgIntro = true; this.audio.speak(c0.dlg.log[0].zh); } } }
     if (!silent && prevIdx !== nextIdx) this.audio.pop();
   }
 
@@ -1666,7 +1661,6 @@ class BobaShop {
     this.stopPour();
     this.cup = freshCup();
     c.trashCount = (c.trashCount || 0) + 1;
-    this.changeTray = [];
     this.learn('倒掉');
     this.audio.drain();
     this.setMakeStep(1);
@@ -1722,49 +1716,32 @@ class BobaShop {
     return { score: Math.round(score), mistakes, hard };
   }
 
-  // ---------------- Trạm 3: tính tiền
+  // ---------------- Trạm 3: tính tiền bằng hội thoại (thay cho thối tiền)
   isReadyToCharge() { return !!(this.current && this.current.takenAt && this.cup.lid); }
 
-  addToTray(val) {
-    if (!this.isReadyToCharge()) {
+  pickPay() { return Math.random() < 0.55 ? 'cash' : 'qr'; }   // khách trả tiền mặt hay chuyển khoản
+
+  // Người chơi chọn câu đáp thứ i trong hội thoại thanh toán
+  chooseDialogue(i) {
+    const c = this.current;
+    if (!c || !c.dlg || c.completing || !this.isReadyToCharge()) return;
+    const r = pickOption(c.dlg, i);
+    if (r.ignored) return;
+    c.changeWrong = c.dlg.wrong;
+    if (!r.ok) {
       this.audio.error();
-      this.showToast('🧋', 'Chưa pha xong ly! Hoàn tất pha chế & đóng nắp trước khi tính tiền.', 'warn');
+      this.showToast('💢', r.why || 'Câu này chưa đúng — chọn lại nhé!', 'warn');
+      this.renderChange();
       return;
     }
-    this.changeTray.push(val);
     this.audio.coin();
-    this.renderTray();
-  }
-
-  removeFromTray(i) { this.changeTray.splice(i, 1); this.audio.coin(); this.renderTray(); }
-  resetTray() { this.changeTray = []; this.renderTray(); }
-
-  useChangeHint() {
-    const c = this.current;
-    if (!c || !c.order || c.hintUsed || !this.isReadyToCharge()) return;
-    c.hintUsed = true;
+    this.audio.speak(r.spoken[0]);
+    if (r.spoken.length > 1) setTimeout(() => { if (this.current === c) this.audio.speak(r.spoken.slice(1).join('，')); }, 1700);
     this.renderChange();
-  }
-
-  deliver() {
-    const c = this.current;
-    if (!this.isReadyToCharge()) {
-      this.audio.error();
-      this.showToast('⚠️', 'Chưa đủ bước: nhận đơn → pha chế & đóng nắp → rồi mới tính tiền.', 'warn');
-      return;
+    if (r.finished) {
+      c.completing = true;
+      setTimeout(() => { if (this.current === c) this.completeOrder(); }, 2400);
     }
-    const tray = this.changeTray.reduce((s, v) => s + cents(v), 0);
-    const need = cents(c.order.change);
-    if (tray !== need) {
-      c.changeWrong += 1;
-      this.audio.error();
-      this.audio.speak('老板，钱找错啦！');
-      const diff = (tray - need) / 100;
-      this.showToast('💢', diff > 0 ? `Thối THỪA ${fmt(diff)} ¥ rồi! Đếm lại nhé.` : `Thối THIẾU ${fmt(-diff)} ¥ rồi! Đếm lại nhé.`, 'warn');
-      return;
-    }
-    this.closeModal('modal-checkout');
-    this.completeOrder();
   }
 
   completeOrder() {
@@ -1815,7 +1792,6 @@ class BobaShop {
     this.floatCoins();
     this.current = null;
     this.cup = freshCup();
-    this.changeTray = [];
     // Không mở phiếu dài nữa (khách đông không kịp đọc) → chỉ hiện biên nhận ngắn rồi phục vụ khách tiếp
     this.showReceipt(c, stars, tip, earned, !!review);
     this.switchStation('view-order-station');
@@ -2187,7 +2163,7 @@ class BobaShop {
 
   floatCoins() {
     const stage = this.$('g-stage');
-    const from = document.querySelector('.change-tray');
+    const from = document.querySelector('.pay-talk');
     const to = document.querySelector('.g-pill.money');
     if (!stage || !from || !to) return;
     const a = this.stagePos(from);
@@ -2402,7 +2378,6 @@ class BobaShop {
     this.line = [];
     this.current = null;
     this.cup = freshCup();
-    this.changeTray = [];
     this.todayReviews = [];
     this.stats = this.freshStats();
     this.saveProgress();
@@ -2866,9 +2841,9 @@ class BobaShop {
   renderChange() {
     const c = this.current;
     const ready = this.isReadyToCharge();
+    if (ready && !c.dlg) c.dlg = createCheckoutDialogue({ due: c.order.due, pay: c.order.pay });
+    const dlg = ready ? c.dlg : null;
     this.setText('change-due-amount', ready ? `${fmt(c.order.due)} ¥` : '—');
-    this.setText('change-paid-amount', ready ? `${fmt(c.order.paid)} ¥` : '—');
-    this.setText('change-needed-amount', ready && c.hintUsed ? `${fmt(c.order.change)} ¥` : '? ¥');
     const lines = this.$('bill-lines');
     if (lines) {
       if (!ready) lines.innerHTML = '';
@@ -2880,59 +2855,20 @@ class BobaShop {
           ${groupTops(o.toppings).map(gp => `<div><span><span class="zh">${topZh(gp)}</span> +</span><b>${fmt(gp.t.price * gp.n)}</b></div>`).join('')}`;
       }
     }
-    const hintBtn = this.$('btn-change-hint');
-    if (hintBtn) {
-      hintBtn.classList.toggle('used', !!(c && c.hintUsed));
-      hintBtn.innerHTML = c && c.hintUsed ? '<i class="fa-solid fa-lightbulb"></i> Đã xem gợi ý' : '<i class="fa-solid fa-lightbulb"></i> Gợi ý (−20 điểm)';
+    const method = dlg && dlg.payMethod;
+    this.setText('pay-method-label', method === 'cash' ? '💵 Tiền mặt' : method === 'qr' ? '📱 Chuyển khoản' : '…');
+    const qr = this.$('pay-qr');
+    if (qr) qr.classList.toggle('show', method === 'qr');
+    const chat = this.$('pay-chat');
+    const box = this.$('pay-opts');
+    if (!dlg) {
+      if (chat) chat.innerHTML = '<div class="pay-empty">Pha xong &amp; đóng nắp ly, khách sẽ đến quầy thanh toán và trò chuyện với bạn bằng tiếng Trung.</div>';
+      if (box) box.innerHTML = '';
+      return;
     }
-    const bills = this.$('customer-bill-render');
-    if (bills) {
-      bills.innerHTML = !ready
-        ? '<div class="tray-empty" style="color:#fff4dd">Khách sẽ trả tiền khi ly đã pha xong &amp; đóng nắp.</div>'
-        : this.splitIntoNotes(c.order.paid).map(v => this.noteHtml(v)).join('');
-    }
-    this.renderTray();
-  }
-
-  splitIntoNotes(amount) {
-    const out = [];
-    let left = cents(amount);
-    [10000, 5000, 2000, 1000, 500, 100, 50, 10].forEach(d => { while (left >= d) { out.push(d / 100); left -= d; } });
-    return out;
-  }
-
-  noteHtml(v) {
-    if (v >= 1) {
-      const cls = { 100: 'n100', 50: 'n50', 20: 'n20', 10: 'n10', 5: 'n5', 1: 'n1' }[v] || 'n1';
-      return `<span class="rmb note ${cls}" style="width:120px;height:66px;cursor:default"><b>${v}</b><span class="zh">元</span></span>`;
-    }
-    return `<span class="rmb coin ${v === 0.5 ? 'c5' : 'c1'}" style="width:56px;height:56px;cursor:default"><b>${v === 0.5 ? 5 : 1}</b><span class="zh">角</span></span>`;
-  }
-
-  renderTray() {
-    const box = this.$('tray-dropped-tokens');
-    if (!box) return;
-    if (!this.changeTray.length) {
-      box.innerHTML = `<div class="tray-empty">${this.isReadyToCharge() ? 'Chạm tờ tiền/đồng xu trong ngăn kéo để lấy tiền thối.' : 'Pha xong & đóng nắp ly trước khi thối tiền.'}</div>`;
-    } else {
-      box.innerHTML = this.changeTray.map((v, i) => {
-        if (v >= 1) {
-          const cls = { 20: 'n20', 10: 'n10', 5: 'n5', 1: 'n1' }[v] || 'n1';
-          return `<button type="button" class="token ${cls}" data-tray="${i}" title="Bỏ lại ngăn kéo">${v}<span class="zh">元</span></button>`;
-        }
-        return `<button type="button" class="token coin ${v === 0.5 ? 'c5' : 'c1'}" data-tray="${i}" title="Bỏ lại ngăn kéo">${v === 0.5 ? 5 : 1}<span class="zh">角</span></button>`;
-      }).join('');
-      box.querySelectorAll('[data-tray]').forEach(el => el.addEventListener('click', () => this.removeFromTray(+el.dataset.tray)));
-    }
-    const sum = this.changeTray.reduce((s, v) => s + cents(v), 0) / 100;
-    const sumEl = this.$('tray-total-picked');
-    if (sumEl) {
-      sumEl.textContent = `Đã lấy: ${fmt(sum)} ¥`;
-      const c = this.current;
-      sumEl.classList.toggle('match', !!(c && c.hintUsed && this.isReadyToCharge() && cents(sum) === cents(c.order.change)));
-    }
-    const btn = this.$('btn-confirm-and-deliver');
-    if (btn) btn.disabled = !this.isReadyToCharge();
+    const opts = { showPinyin: this.showPinyin, showVi: this.showVietnamese };
+    if (chat) { chat.innerHTML = renderChatHtml(dlg, opts); chat.scrollTop = chat.scrollHeight; }
+    if (box) box.innerHTML = renderOptionsHtml(dlg, opts);
   }
 
   renderMarket() {

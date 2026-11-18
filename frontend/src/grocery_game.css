@@ -3399,3 +3399,55 @@ body.grocery-body #modal-day-summary .summary-tools { display: grid; grid-templa
 body.grocery-body #modal-day-summary .summary-tools .g-btn-ghost { justify-content: center; padding: 7px 6px; font-size: 0.8rem; min-width: 0; white-space: nowrap; }
 body.grocery-body #modal-day-summary #btn-next-day-start { align-self: stretch; justify-content: center; }
 body.grocery-body:not(.g-portrait) #modal-day-mission .mission-actions .g-btn-ghost { white-space: nowrap; flex: 0 0 auto; padding-left: 12px; padding-right: 12px; }
+
+/* ==========================================================================
+   Trạm THANH TOÁN bằng hội thoại (Tạp hóa & Trà sữa) — thay cho thối tiền
+   ========================================================================== */
+.pay-room {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 14px;
+  padding: 14px;
+  min-height: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 240, 210, 0.92), rgba(246, 222, 180, 0.92)),
+    var(--tex-brick);
+  background-size: auto, 64px 40px;
+  overflow: hidden;
+}
+.pay-bill { display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow-y: auto; }
+.pay-qr { display: none; flex-direction: column; align-items: center; gap: 4px; padding: 12px; border-radius: 16px; background: #fff; border: 3px solid var(--honey); box-shadow: var(--shadow-soft); }
+.pay-qr.show { display: flex; animation: payQrIn 0.35s ease; }
+@keyframes payQrIn { from { transform: scale(0.9); opacity: 0; } to { transform: none; opacity: 1; } }
+.pay-qr-box { width: 96px; height: 96px; border-radius: 8px; border: 6px solid #222; background: repeating-conic-gradient(#222 0 25%, #fff 0 50%) 0 0 / 16px 16px; }
+.pay-qr b.zh { font-size: 1.05rem; }
+.pay-qr small { font-size: 0.72rem; font-weight: 700; color: var(--ink-soft); }
+.pay-talk { display: flex; flex-direction: column; gap: 10px; min-height: 0; overflow-y: auto; }
+.pay-chat { flex: 1 1 auto; min-height: 96px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 16px; background: rgba(255, 255, 255, 0.72); border: 3px solid #f0d6ad; }
+.pay-bub { max-width: 84%; padding: 8px 12px; border-radius: 4px 16px 16px 16px; background: #fff; border: 2.5px solid #f0d6ad; display: flex; flex-direction: column; gap: 1px; align-self: flex-start; }
+.pay-bub.me { align-self: flex-end; border-radius: 16px 4px 16px 16px; background: #e8f5e9; border-color: #a5d6a7; }
+.pay-bub b.zh { font-size: 1.12rem; }
+.pay-bub small { font-size: 0.76rem; font-weight: 700; color: #6b5444; }
+.pay-bub small.pin { color: var(--orange-d); }
+.pay-opts { display: flex; flex-direction: column; gap: 7px; flex: 0 0 auto; }
+.pay-topic { font-size: 0.82rem; font-weight: 800; color: var(--ink-soft); }
+.pay-opt { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 8px 12px; border-radius: 14px; background: #fff; border: 2.5px solid #d6e9c2; cursor: pointer; text-align: left; font-family: inherit; transition: border-color 0.12s, background 0.12s, transform 0.12s; }
+.pay-opt:hover:not(:disabled) { border-color: #43a047; background: #f1f8e9; transform: translateY(-1px); }
+.pay-opt b.zh { font-size: 1.08rem; }
+.pay-opt small { font-size: 0.74rem; font-weight: 700; color: #6b5444; }
+.pay-opt small.pin { color: var(--orange-d); }
+.pay-opt.wrong { opacity: 0.5; cursor: not-allowed; border-color: #e57373; background: #fdecea; }
+.pay-opt.wrong b.zh { text-decoration: line-through; }
+.pay-empty, .pay-done { margin: auto; text-align: center; font-weight: 800; color: var(--ink-soft); padding: 14px; }
+.pay-done { color: #2e7d32; }
+
+body.g-portrait .pay-room { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); gap: 8px; padding: 8px; }
+body.g-portrait .pay-bill { flex-direction: row; gap: 8px; align-items: stretch; overflow: visible; }
+body.g-portrait .pay-bill .paid-card { flex: 1 1 0; min-width: 0; padding: 8px 10px; gap: 4px; }
+body.g-portrait .pay-qr { padding: 6px 10px; gap: 2px; }
+body.g-portrait .pay-qr-box { width: 44px; height: 44px; border-width: 4px; background-size: 11px 11px; }
+body.g-portrait .pay-qr small { display: none; }
+body.g-portrait .pay-chat { min-height: 70px; padding: 8px; }
+body.g-portrait .pay-bub b.zh { font-size: 1rem; }
+body.g-portrait .pay-opt { padding: 6px 10px; }
+body.g-portrait .pay-opt b.zh { font-size: 0.98rem; }

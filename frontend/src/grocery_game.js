@@ -1,8 +1,9 @@
+import { createCheckoutDialogue, pickOption, renderChatHtml, renderOptionsHtml } from './shop_dialogue.js';
 /**
  * Tiệm Tạp Hóa Của Tôi (我的小卖部)
  * Mô phỏng quản lý tiệm tạp hóa kiểu Papa's:
  *   - Mỗi ngày mở cửa 08:00 → 20:00 (tính theo thời gian). Khách đến liên tục, phục vụ được bao nhiêu thì phục vụ.
- *   - Nhận đơn → nhặt hàng (theo từng khu kệ) → quét mã → thu tiền & thối tiền → chấm điểm.
+ *   - Nhận đơn → nhặt hàng (theo từng khu kệ) → quét mã → thanh toán bằng hội thoại tiếng Trung → chấm điểm.
  *   - Hàng chia theo khu như tiệm thật (đồ uống, bánh kẹo, đồ ăn vặt…). Khu kệ và từng món đều mở bằng tiền ở 批发市场.
  *
  * LƯU TIẾN TRÌNH: đã đăng nhập → lưu theo tài khoản (server) + bản sao trên máy; khách → lưu trên trình duyệt.
@@ -306,7 +307,9 @@ const VOCAB_TABS = [
       { chn: '老板', pin: 'lǎobǎn', vi: 'ông chủ, chủ tiệm' },
       { chn: '货架', pin: 'huòjià', vi: 'kệ hàng' },
       { chn: '一共', pin: 'yígòng', vi: 'tổng cộng' },
-      { chn: '找零', pin: 'zhǎolíng', vi: 'thối tiền' },
+      { chn: '账单', pin: 'zhàngdān', vi: 'hóa đơn' },
+      { chn: '现金', pin: 'xiànjīn', vi: 'tiền mặt' },
+      { chn: '转账', pin: 'zhuǎnzhàng', vi: 'chuyển khoản' },
       { chn: '进货', pin: 'jìnhuò', vi: 'nhập hàng' },
       { chn: '批发市场', pin: 'pīfā shìchǎng', vi: 'chợ đầu mối (bán sỉ)' },
       { chn: '营业', pin: 'yíngyè', vi: 'mở cửa kinh doanh' },
@@ -374,7 +377,7 @@ const MISSION_RULES = {
   maxTarget: 300,
   roundTo: 5,
   baseMaxLost: 2,
-  minChangeAccuracy: 80,   // % khách được thối đúng ngay lần đầu
+  minChangeAccuracy: 80,   // % khách có hội thoại thanh toán đúng ngay lần đầu
   bonusPerStar: 10
 };
 
@@ -388,7 +391,7 @@ const SCORE_RULES = {
   weights: { pick: 0.3, speed: 0.2, change: 0.3, wait: 0.2 }
 };
 
-// Mẫu câu giao tiếp tính tiền thực tế (Hỏi giá, Tính tiền, Thối tiền, Cảm ơn)
+// Mẫu câu giao tiếp tính tiền thực tế (Hỏi giá, Tính tiền, Chuyển khoản/Tiền mặt, Cảm ơn)
 const CHECKOUT_PHRASES = [
   { role: 'Khách', roleZh: '顾客', chn: '老板，一共多少钱？', pin: 'Lǎobǎn, yīgòng duōshao qián?', vi: 'Ông chủ, tổng cộng bao nhiêu tiền?' },
   { role: 'Khách', roleZh: '顾客', chn: '请问这个怎么卖？', pin: 'Qǐngwèn zhège zěnme mài?', vi: 'Xin hỏi món này bán thế nào?' },
@@ -396,10 +399,8 @@ const CHECKOUT_PHRASES = [
   { role: 'Chủ tiệm', roleZh: '店家', chn: '一共是二十块钱。', pin: 'Yīgòng shì èrshí kuài qián.', vi: 'Tổng cộng là hai mươi đồng ạ.' },
   { role: 'Khách', roleZh: '顾客', chn: '微信还是现金支付？', pin: 'Wēixìn háishì xiànjīn zhīfù?', vi: 'Quét WeChat hay trả tiền mặt vậy?' },
   { role: 'Chủ tiệm', roleZh: '店家', chn: '都可以，扫这里就行。', pin: 'Dōu kěyǐ, sǎo zhèlǐ jiù xíng.', vi: 'Đều được ạ, quét ở đây là được.' },
-  { role: 'Khách', roleZh: '顾客', chn: '给您钱，正好不用找。', pin: 'Gěi nín qián, zhènghǎo bú yòng zhǎo.', vi: 'Gửi bạn tiền, vừa đủ không cần thối.' },
-  { role: 'Chủ tiệm', roleZh: '店家', chn: '收您五十，找您二十块。', pin: 'Shōu nín wǔshí, zhǎo nín èrshí kuài.', vi: 'Nhận của bạn 50, thối lại bạn 20 đồng.' },
-  { role: 'Chủ tiệm', roleZh: '店家', chn: '找您零钱，请数一数。', pin: 'Zhǎo nín língqián, qǐng shǔ yi shǔ.', vi: 'Thối bạn tiền thừa, bạn đếm lại nhé.' },
-  { role: 'Khách', roleZh: '顾客', chn: '找零一分不差，谢谢！', pin: 'Zhǎolíng yì fēn bù chà, xièxie!', vi: 'Thối tiền chuẩn từng xu, cảm ơn bạn!' },
+  { role: 'Chủ tiệm', roleZh: '店家', chn: '您的账单一共三十五块，您想转账还是付现金？', pin: 'Nín de zhàngdān yígòng sānshíwǔ kuài, nín xiǎng zhuǎnzhàng háishi fù xiànjīn?', vi: 'Hóa đơn của bạn tổng cộng 35 tệ, bạn muốn chuyển khoản hay trả tiền mặt?' },
+  { role: 'Chủ tiệm', roleZh: '店家', chn: '好的，请扫这个二维码付款。', pin: 'Hǎo de, qǐng sǎo zhège èrwéimǎ fùkuǎn.', vi: 'Được, mời quét mã QR để thanh toán.' },
   { role: 'Khách', roleZh: '顾客', chn: '谢谢老板，东西真好！', pin: 'Xièxie lǎobǎn, dōngxi zhēn hǎo!', vi: 'Cảm ơn ông chủ, đồ tốt lắm!' },
   { role: 'Khách', roleZh: '顾客', chn: '太划算了，下次我还来！', pin: 'Tài huásuàn le, xià cì wǒ hái lái!', vi: 'Giá tốt quá, lần sau tôi lại đến!' },
   { role: 'Chủ tiệm', roleZh: '店家', chn: '慢走，欢迎下次光临！', pin: 'Màn zǒu, huānyíng xià cì guānglín!', vi: 'Đi thong thả, hoan nghênh lần sau lại ghé!' }
@@ -413,7 +414,7 @@ const IDLE_CHITCHATS = [
   { chn: '最近方便面超级抢手，不知道还要不要进货？', pin: 'Zuìjìn fāngbiànmiàn chāojí qiǎngshǒu, bù zhīdào hái yào bu yào jìnhuò?', vi: 'Dạo này mì gói đắt hàng dã man, không biết có nên nhập thêm không nhỉ?' },
   { chn: '打工人，打工魂，做生意要有耐心喵！', pin: 'Dǎgōngrén, dǎgōnghún, zuò shēngyì yào yǒu nàixīn miāo!', vi: 'Lao động hăng say, buôn bán là phải kiên nhẫn nha meo!' },
   { chn: '外面的天气好热，冰可乐一定很好卖。', pin: 'Wàimiàn de tiānqì hǎo rè, bīng kělè yídìng hěn hǎomài.', vi: 'Ngoài trời nóng ghê, món Coca ướp lạnh chắc chắn đắt hàng.' },
-  { chn: '刚才那位客人真爽快，连零钱都没细看。', pin: 'Gāngcái nà wèi kèrén zhēn shuǎngkuai, lián língqián dōu méi xì kàn.', vi: 'Vị khách lúc nãy sảng khoái thật, chẳng thèm đếm lại tiền thối luôn.' },
+  { chn: '刚才那位客人真爽快，连价格都没多问。', pin: 'Gāngcái nà wèi kèrén zhēn shuǎngkuài, lián jiàgé dōu méi duō wèn.', vi: 'Vị khách lúc nãy sảng khoái thật, chẳng hỏi thêm giá luôn.' },
   { chn: '老板服务态度这么好，回头客一定很多！', pin: 'Lǎobǎn fúwù tàidù zhème hǎo, huítóukè yídìng hěn duō!', vi: 'Chủ quán phục vụ nhiệt tình thế này, khách quen nhất định sẽ tới hoài!' },
   { chn: '伸个懒腰，晒晒太阳，感觉好舒服喵~', pin: 'Shēn gè lǎnyāo, shài shai tàiyáng, gǎnjué hǎo shūfu miāo~', vi: 'Vươn vai phơi nắng chút nào, sướng tê người meo~' },
   { chn: '有客人在看招牌了，马上就要进来了哦！', pin: 'Yǒu kèrén zài kàn zhāopai le, mǎshàng jiù yào jìnlái le o!', vi: 'Có khách đang ngó bảng hiệu kìa, sắp bước vào tiệm rồi đấy!' },
@@ -557,7 +558,6 @@ class GroceryGame {
     // Bàn làm việc của đơn hiện tại
     this.basket = [];
     this.scanItems = [];
-    this.changeTray = [];
     this.restockQty = {};
     this.currentStation = 'view-order-station';
     this.shelfZone = GROCERY_ZONES[0].id;
@@ -765,10 +765,8 @@ class GroceryGame {
     on('btn-clear-basket-station', 'click', () => this.clearBasket());
     on('btn-quick-restock-header', 'click', () => this.openMarket(this.shelfZone));
     on('btn-trigger-scanner', 'click', () => this.scanNextItem());
-    on('btn-reset-tray-action', 'click', () => this.resetTray());
-    on('btn-change-hint', 'click', () => this.useChangeHint());
-    on('btn-confirm-and-deliver', 'click', () => this.deliver());
-    document.querySelectorAll('.drawer-grid .rmb').forEach(btn => btn.addEventListener('click', () => this.addToTray(parseFloat(btn.dataset.val))));
+    const payBox = this.$('pay-opts');
+    if (payBox) payBox.addEventListener('click', (e) => { const b = e.target.closest('[data-pay-opt]'); if (b) this.chooseDialogue(+b.dataset.payOpt); });
 
     // Bảng điểm, nhiệm vụ, tổng kết
     on('btn-next-customer-grocery', 'click', () => this.closeScorecard());
@@ -992,7 +990,7 @@ class GroceryGame {
       goals.innerHTML = `
         <div class="mgoal main"><span class="mg-icon">💰</span><span>Doanh thu đạt <b>${m.target} ¥</b></span><span class="mg-star">⭐</span></div>
         <div class="mgoal"><span class="mg-icon">😊</span><span>Không để quá <b>${m.maxLost}</b> khách bỏ về</span><span class="mg-star">⭐</span></div>
-        <div class="mgoal"><span class="mg-icon">💴</span><span>Thối đúng ngay lần đầu cho <b>${m.minAccuracy}%</b> khách</span><span class="mg-star">⭐</span></div>`;
+        <div class="mgoal"><span class="mg-icon">💬</span><span>Trả lời hội thoại đúng ngay lần đầu cho <b>${m.minAccuracy}%</b> khách</span><span class="mg-star">⭐</span></div>`;
     }
     this.renderHUDGoal();
     this.renderEventBanner();
@@ -1031,7 +1029,7 @@ class GroceryGame {
     return [
       { icon: '💰', text: `Doanh thu ${m.target} ¥`, value: `${fmt(s.revenue)} ¥`, done: s.revenue >= m.target },
       { icon: '😊', text: `Tối đa ${m.maxLost} khách bỏ về`, value: `${s.lost} khách`, done: s.lost <= m.maxLost },
-      { icon: '💴', text: `Thối đúng ngay ≥ ${m.minAccuracy}%`, value: s.served > 0 ? `${accuracy}%` : '—', done: s.served > 0 && accuracy >= m.minAccuracy }
+      { icon: '💬', text: `Hội thoại đúng ngay ≥ ${m.minAccuracy}%`, value: s.served > 0 ? `${accuracy}%` : '—', done: s.served > 0 && accuracy >= m.minAccuracy }
     ];
   }
 
@@ -1288,6 +1286,7 @@ class GroceryGame {
   // --------------------------------------------------------------------------
   // Đơn hàng
   // --------------------------------------------------------------------------
+  pickPay() { return Math.random() < 0.55 ? 'cash' : 'qr'; }   // khách trả tiền mặt hay chuyển khoản
   makeOrder(allowSoldOut = true) {
     const avail = this.shelves.filter(s => s.unlocked && this.zones[s.zone] && s.currentStock > 0);
     if (!avail.length) return null;
@@ -1298,7 +1297,7 @@ class GroceryGame {
       const it = pickOne(soldOut);
       const due = it.price;
       const paid = this.pickPaidAmount(due);
-      return { items: [{ item: it, qty: 1 }], due, paid, change: Math.round((paid - due) * 100) / 100, tpl: 'have', soldOut: true };
+      return { items: [{ item: it, qty: 1 }], due, paid, change: Math.round((paid - due) * 100) / 100, tpl: 'have', soldOut: true, pay: this.pickPay() };
     }
     const wantTwo = Math.random() < Math.min(0.75, 0.35 + this.day * 0.08);
     const count = Math.min(avail.length, wantTwo ? 2 : 1);
@@ -1310,9 +1309,8 @@ class GroceryGame {
     const due = items.reduce((s, x) => s + cents(x.item.price) * x.qty, 0) / 100;
     const paid = this.pickPaidAmount(due);
     const tpls = ORDER_TEMPLATES.filter(t => !t.one || items.length === 1);
-    const haggle = due >= INCIDENT_RULES.haggleMinDue && !this.stats.eventUsed && Math.random() < INCIDENT_RULES.haggleChance ? pickOne(HAGGLE_LINES) : null;
-    if (haggle) this.stats.eventUsed = 1;
-    return { items, due, paid, change: Math.round((paid - due) * 100) / 100, tpl: pickOne(tpls).id, haggle };
+    const haggle = null;   // mặc cả đã bỏ (gắn với thối tiền)
+    return { items, due, paid, change: Math.round((paid - due) * 100) / 100, tpl: pickOne(tpls).id, haggle, pay: this.pickPay() };
   }
 
   // Khách trả bằng tờ tiền "tròn" lớn hơn số phải trả
@@ -1494,37 +1492,6 @@ class GroceryGame {
     setTimeout(() => this.audio.speak(zh), 350);
   }
 
-  // Khách mặc cả ở quầy thối tiền: bớt 1¥ (khách vui) hoặc từ chối lịch sự (khách hơi phật ý)
-  askHaggle() {
-    const c = this.current;
-    const o = c && c.order;
-    if (!o || !o.haggle || o.haggleDone) return;
-    const line = SHOP_SENTENCES.find(x => x.chn === o.haggle);
-    this.learn(o.haggle); this.learn('便宜'); this.learn('打折');
-    this.showIncident({
-      icon: '🤝', title: `${c.profile.nameChn} mặc cả`, zh: o.haggle, pin: line ? line.pin : '', vi: line ? line.vi : '',
-      loss: `Tổng tiền ${fmt(o.due)} ¥ · khách đưa ${fmt(o.paid)} ¥`,
-      actions: [
-        { label: '<span class="zh">好吧，便宜一块钱。</span> Bớt 1 ¥', cls: 'g-btn-primary', fn: () => {
-          o.due = Math.round((o.due - 1) * 100) / 100;
-          o.change = Math.round((o.paid - o.due) * 100) / 100;
-          o.haggleDone = 'discount';
-          c.waitScore = Math.min(100, (c.waitScore ?? 100) + 10);
-          this.audio.speak('好吧，给您便宜一块钱。');
-          this.showToast('😊', 'Đã bớt 1 ¥ — khách vui vẻ! Tổng tiền mới ' + fmt(o.due) + ' ¥, nhớ tính lại tiền thối.');
-          this.renderChange();
-        } },
-        { label: '<span class="zh">不好意思，不能便宜了。</span> Giữ giá', cls: 'g-btn-ghost', fn: () => {
-          o.haggleDone = 'refuse';
-          c.waitScore = Math.max(0, (c.waitScore ?? 100) - 15);
-          this.audio.speak('不好意思，这已经是最低价了。');
-          this.showToast('😐', 'Giữ nguyên giá — khách hơi phật ý (trừ điểm chờ).');
-          this.renderChange();
-        } }
-      ]
-    });
-  }
-
   // Cuối ngày: hàng tươi còn trên kệ bị hủy một phần (过期)
   spoilPerishables() {
     const out = [];
@@ -1555,7 +1522,6 @@ class GroceryGame {
   resetWorkbench() {
     this.basket = [];
     this.scanItems = [];
-    this.changeTray = [];
     this.renderBasket();
     this.renderScan();
     this.renderChange();
@@ -1702,7 +1668,6 @@ class GroceryGame {
     this.basket.forEach(b => { b.item.currentStock += b.qty; });
     this.basket = [];
     this.scanItems = [];
-    this.changeTray = [];
     if (!silent) this.audio.pick();
     this.focusNeededZone();
     this.renderShelves();
@@ -1741,7 +1706,7 @@ class GroceryGame {
       this.setAttention('view-change-station');
       const total = this.current ? this.current.order.due : 0;
       this.audio.speak(`一共${this.yuanToChinese(total)}`);
-      this.showToast('🧾', `Đã in hóa đơn: 一共 ${fmt(total)} ¥. Sang 找零台 thu tiền!`);
+      this.showToast('🧾', `Đã in hóa đơn: 一共 ${fmt(total)} ¥. Sang 收银台 để thanh toán!`);
     }
   }
 
@@ -1758,13 +1723,13 @@ class GroceryGame {
     if (idx >= 0) this.scanItem(idx);
   }
 
-  // ---------------- Trạm 4: thu tiền & thối tiền
+  // ---------------- Trạm 4: thanh toán bằng hội thoại (thay cho thối tiền)
   prepareChange() {
     this.renderChange();
     if (this.isReadyToCharge()) {
-      this.learn('找零');
-      const o = this.current.order;
-      if (o.haggle && !o.haggleDone) setTimeout(() => this.askHaggle(), 250);
+      ['账单', '现金', '转账'].forEach(w => this.learn(w));
+      const c = this.current;
+      if (c && c.dlg && !c.dlgIntro) { c.dlgIntro = true; this.audio.speak(c.dlg.log[0].zh); }
     }
   }
 
@@ -1772,53 +1737,27 @@ class GroceryGame {
     return !!(this.current && this.current.takenAt && this.isBasketComplete() && this.scanItems.length && this.scanItems.every(x => x.scanned));
   }
 
-  addToTray(val) {
-    if (!this.isReadyToCharge()) {
+  // Người chơi chọn câu đáp thứ i trong hội thoại thanh toán
+  chooseDialogue(i) {
+    const c = this.current;
+    if (!c || !c.dlg || c.completing || !this.isReadyToCharge()) return;
+    const r = pickOption(c.dlg, i);
+    if (r.ignored) return;
+    c.changeWrong = c.dlg.wrong;
+    if (!r.ok) {
       this.audio.error();
-      this.showToast('📠', 'Chưa quét xong hàng! Hoàn tất 扫码台 trước khi thối tiền.', 'warn');
+      this.showToast('💢', r.why || 'Câu này chưa đúng — chọn lại nhé!', 'warn');
+      this.renderChange();
       return;
     }
-    this.changeTray.push(val);
     this.audio.coin();
-    this.renderTray();
-  }
-
-  removeFromTray(i) {
-    this.changeTray.splice(i, 1);
-    this.audio.coin();
-    this.renderTray();
-  }
-
-  resetTray() {
-    this.changeTray = [];
-    this.renderTray();
-  }
-
-  useChangeHint() {
-    const c = this.current;
-    if (!c || !c.order || c.hintUsed || !this.isReadyToCharge()) return;
-    c.hintUsed = true;
+    this.audio.speak(r.spoken[0]);
+    if (r.spoken.length > 1) setTimeout(() => { if (this.current === c) this.audio.speak(r.spoken.slice(1).join('，')); }, 1700);
     this.renderChange();
-  }
-
-  deliver() {
-    const c = this.current;
-    if (!this.isReadyToCharge()) {
-      this.audio.error();
-      this.showToast('⚠️', 'Chưa đủ bước: nhận đơn → nhặt đủ hàng → quét mã → rồi mới thối tiền.', 'warn');
-      return;
+    if (r.finished) {
+      c.completing = true;
+      setTimeout(() => { if (this.current === c) this.completeOrder(); }, 2400);
     }
-    const tray = this.changeTray.reduce((s, v) => s + cents(v), 0);
-    const need = cents(c.order.change);
-    if (tray !== need) {
-      c.changeWrong += 1;
-      this.audio.error();
-      this.audio.speak('老板，钱找错啦！');
-      const diff = (tray - need) / 100;
-      this.showToast('💢', diff > 0 ? `Thối THỪA ${fmt(diff)} ¥ rồi! Đếm lại nhé.` : `Thối THIẾU ${fmt(-diff)} ¥ rồi! Đếm lại nhé.`, 'warn');
-      return;
-    }
-    this.completeOrder();
   }
 
   completeOrder() {
@@ -1858,13 +1797,12 @@ class GroceryGame {
     this.current = null;
     this.basket = [];
     this.scanItems = [];
-    this.changeTray = [];
     this.renderAll();
   }
 
   floatCoins() {
     const stage = this.$('g-stage');
-    const from = document.querySelector('.change-tray') || document.querySelector('.shop-counter');
+    const from = document.querySelector('.pay-talk') || document.querySelector('.shop-counter');
     const to = document.querySelector('.g-pill.money');
     if (!stage || !from || !to) return;
     const a = this.stagePos(from);
@@ -1905,8 +1843,8 @@ class GroceryGame {
 
     let zh, vi;
     if (total >= 90) {
-      zh = '老板服务真好，找零一分不差，谢谢您！';
-      vi = '(Chủ tiệm phục vụ tốt quá, thối tiền chuẩn từng xu, cảm ơn nhé!)';
+      zh = '老板服务真好，账算得清清楚楚，谢谢您！';
+      vi = '(Chủ tiệm phục vụ tốt quá, tính tiền rõ ràng, cảm ơn nhé!)';
     } else if (total >= 70) {
       zh = '谢谢老板，下次再来！';
       vi = '(Cảm ơn chủ tiệm, lần sau tôi lại đến!)';
@@ -2417,7 +2355,7 @@ class GroceryGame {
     this.renderSpeech();
     if (nextBtn) nextBtn.style.display = c.takenAt ? 'inline-flex' : 'none';
     if (hint) hint.innerHTML = c.takenAt
-      ? `✅ Đã nhận đơn <b>#G-${c.id}</b>. Sang <b>货架区</b> nhặt hàng → <b>扫码台</b> quét mã → <b>找零台</b> thối tiền.`
+      ? `✅ Đã nhận đơn <b>#G-${c.id}</b>. Sang <b>货架区</b> nhặt hàng → <b>扫码台</b> quét mã → <b>收银台</b> thanh toán.`
       : '💡 Nghe khách gọi hàng rồi bấm <b>Nhận đơn</b>. Để khách chờ lâu sẽ bị trừ điểm và có thể bỏ về!';
     if (reg) reg.textContent = c.takenAt ? fmt(c.order.due) : '0.00';
     this.updatePatienceUI();
@@ -2614,62 +2552,23 @@ class GroceryGame {
   renderChange() {
     const c = this.current;
     const ready = this.isReadyToCharge();
+    if (ready && !c.dlg) c.dlg = createCheckoutDialogue({ due: c.order.due, pay: c.order.pay });
+    const dlg = ready ? c.dlg : null;
     this.setText('change-due-amount', ready ? `${fmt(c.order.due)} ¥` : '—');
-    this.setText('change-paid-amount', ready ? `${fmt(c.order.paid)} ¥` : '—');
-    this.setText('change-needed-amount', ready && c.hintUsed ? `${fmt(c.order.change)} ¥` : '? ¥');
-    const hintBtn = this.$('btn-change-hint');
-    if (hintBtn) {
-      hintBtn.classList.toggle('used', !!(c && c.hintUsed));
-      hintBtn.innerHTML = c && c.hintUsed ? '<i class="fa-solid fa-lightbulb"></i> Đã xem gợi ý' : '<i class="fa-solid fa-lightbulb"></i> Gợi ý (−20 điểm)';
+    const method = dlg && dlg.payMethod;
+    this.setText('pay-method-label', method === 'cash' ? '💵 Tiền mặt' : method === 'qr' ? '📱 Chuyển khoản' : '…');
+    const qr = this.$('pay-qr');
+    if (qr) qr.classList.toggle('show', method === 'qr');
+    const chat = this.$('pay-chat');
+    const box = this.$('pay-opts');
+    if (!dlg) {
+      if (chat) chat.innerHTML = '<div class="pay-empty">Quét xong hàng, khách sẽ đến quầy thanh toán và trò chuyện với bạn bằng tiếng Trung.</div>';
+      if (box) box.innerHTML = '';
+      return;
     }
-    const bills = this.$('customer-bill-render');
-    if (bills) {
-      bills.innerHTML = !ready
-        ? '<div class="tray-empty" style="color:#fff4dd">Khách sẽ đưa tiền khi bạn quét xong hàng.</div>'
-        : this.splitIntoNotes(c.order.paid).map(v => this.noteHtml(v)).join('');
-    }
-    this.renderTray();
-  }
-
-  splitIntoNotes(amount) {
-    const out = [];
-    let left = cents(amount);
-    [10000, 5000, 2000, 1000, 500, 100, 50, 10].forEach(d => { while (left >= d) { out.push(d / 100); left -= d; } });
-    return out;
-  }
-
-  noteHtml(v) {
-    if (v >= 1) {
-      const cls = { 100: 'n100', 50: 'n50', 20: 'n20', 10: 'n10', 5: 'n5', 1: 'n1' }[v] || 'n1';
-      return `<span class="rmb note ${cls}" style="width:120px;height:66px;cursor:default"><b>${v}</b><span class="zh">元</span></span>`;
-    }
-    return `<span class="rmb coin ${v === 0.5 ? 'c5' : 'c1'}" style="width:56px;height:56px;cursor:default"><b>${v === 0.5 ? 5 : 1}</b><span class="zh">角</span></span>`;
-  }
-
-  renderTray() {
-    const box = this.$('tray-dropped-tokens');
-    if (!box) return;
-    if (!this.changeTray.length) {
-      box.innerHTML = `<div class="tray-empty">${this.isReadyToCharge() ? 'Chạm tờ tiền/đồng xu trong ngăn kéo để lấy tiền thối.' : 'Hoàn tất quét mã trước khi thối tiền.'}</div>`;
-    } else {
-      box.innerHTML = this.changeTray.map((v, i) => {
-        if (v >= 1) {
-          const cls = { 20: 'n20', 10: 'n10', 5: 'n5', 1: 'n1' }[v] || 'n1';
-          return `<button type="button" class="token ${cls}" data-tray="${i}" title="Bỏ lại ngăn kéo">${v}<span class="zh">元</span></button>`;
-        }
-        return `<button type="button" class="token coin ${v === 0.5 ? 'c5' : 'c1'}" data-tray="${i}" title="Bỏ lại ngăn kéo">${v === 0.5 ? 5 : 1}<span class="zh">角</span></button>`;
-      }).join('');
-      box.querySelectorAll('[data-tray]').forEach(el => el.addEventListener('click', () => this.removeFromTray(+el.dataset.tray)));
-    }
-    const sum = this.changeTray.reduce((s, v) => s + cents(v), 0) / 100;
-    const sumEl = this.$('tray-total-picked');
-    if (sumEl) {
-      sumEl.textContent = `Đã lấy: ${fmt(sum)} ¥`;
-      const c = this.current;
-      sumEl.classList.toggle('match', !!(c && c.hintUsed && this.isReadyToCharge() && cents(sum) === cents(c.order.change)));
-    }
-    const btn = this.$('btn-confirm-and-deliver');
-    if (btn) btn.disabled = !this.isReadyToCharge();
+    const opts = { showPinyin: this.showPinyin, showVi: this.showVietnamese };
+    if (chat) { chat.innerHTML = renderChatHtml(dlg, opts); chat.scrollTop = chat.scrollHeight; }
+    if (box) box.innerHTML = renderOptionsHtml(dlg, opts);
   }
 
   renderMarket() {
