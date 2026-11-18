@@ -1,3 +1,4 @@
+import { NPC_ANS_VI } from './farm_npc_vi.js';
 // ==== DỮ LIỆU TỪ EXCEL "thông tin nông trại.xlsx" (tạo tự động; pinyin hội thoại NPC sinh bằng pinyin-pro) ====
 const XLS_VEG = [["VEG01","空心菜","kōngxīncài","Rau muống",1,1,1,1,1],["VEG02","西红柿","xīhóngshì","Cà chua",3,1,1,3,2],["VEG03","胡萝卜","húluóbo","Cà rốt",7,1,1,0,0],["VEG04","白菜","báicài","Cải thảo",10,3,2,2,0],["VEG05","黄瓜","huángguā","Dưa leo",13,4,3,3,2],["VEG06","土豆","tǔdòu","Khoai tây",16,5,1,0,0],["VEG07","卷心菜","juǎnxīncài","Bắp cải",19,4,2,2,0],["VEG08","南瓜","nánguā","Bí đỏ",22,5,2,3,0],["VEG09","落葵","luòkuí","Rau mồng tơi",25,2,3,1,1],["VEG10","芥菜","jiècài","Cải xanh",28,3,2,2,0],["VEG11","茄子","qiézi","Cà tím",31,5,3,3,2],["VEG12","辣椒","làjiāo","Ớt",34,4,3,3,2],["VEG13","洋葱","yángcōng","Hành tây",37,4,1,0,0],["VEG14","大蒜","dàsuàn","Tỏi",40,5,1,0,0],["VEG15","生菜","shēngcài","Xà lách",42,2,3,1,1],["VEG16","菠菜","bōcài","Rau chân vịt",44,3,2,2,0],["VEG17","玉米","yùmǐ","Ngô",46,5,1,0,0],["VEG18","白萝卜","báiluóbo","Củ cải trắng",47,4,1,0,0],["VEG19","西兰花","xīlánhuā","Bông cải xanh",49,4,2,2,0],["VEG20","豆角","dòujiǎo","Đậu que",50,4,3,3,2]];
 const XLS_ANI = [["ANI01","鸡","jī","Gà","Đẻ trứng; người chơi cho ăn, lấy trứng và dọn chuồng","鸡舍 - Chuồng gà",1],["ANI02","猪","zhū","Heo","Chăm sóc theo ngày; có thể bán vật nuôi/sản phẩm theo cơ chế game","猪舍 - Chuồng heo",20],["ANI03","羊","yáng","Cừu","Cho ăn, chăm sóc và thu hoạch lông cừu","羊舍 - Chuồng cừu",30],["ANI04","牛","niú","Bò","Cho ăn, chăm sóc và thu hoạch sữa","牛舍 - Chuồng bò",40],["ANI05","狗","gǒu","Chó","Thú cưng trong nhà; chạy quanh nhà, có thể đi theo nhân vật","家里 - Trong nhà",12],["ANI06","猫","māo","Mèo","Thú cưng trong nhà; chạy quanh nhà và có hoạt ảnh đuổi/bắt chuột","家里 - Trong nhà",16]];
@@ -301,9 +302,10 @@ const TOOLS = {
   can: { chn: '水壶', pin: 'shuǐhú', vi: 'Bình tưới', icon: 'svg:can', tip: 'Nhấp vào cây chưa tưới để tưới nước.' },
   feed: { chn: '饲料', pin: 'sìliào', vi: 'Thức ăn', icon: 'svg:sack_y', tip: 'Nhấp vào máng thức ăn để đổ vào.' },
   water: { chn: '水', pin: 'shuǐ', vi: 'Nước', icon: '💧', tip: 'Nhấp vào máng nước để đổ vào.' },
-  basket: { chn: '篮子', pin: 'lánzi', vi: 'Giỏ', icon: '🧺', tip: 'Nhấp vào ổ trứng hoặc vật nuôi có sản phẩm để thu.' }
+  basket: { chn: '篮子', pin: 'lánzi', vi: 'Giỏ', icon: '🧺', tip: 'Nhấp vào ổ trứng hoặc vật nuôi có sản phẩm để thu.' },
+  broom: { chn: '扫把', pin: 'sǎobǎ', vi: 'Chổi', icon: '🧹', tip: 'Nhấp vào đống phân trong chuồng để quét dọn.' }
 };
-const FREE_TOOLS = ['gloves', 'basket'];   // bao tay & giỏ: ai cũng có, không cần mua
+const FREE_TOOLS = ['gloves', 'basket', 'broom'];   // bao tay & giỏ: ai cũng có, không cần mua
 const FRIDGE_CAP = 300;
 const countsInBag = (it) => it && !['tool', 'consumable', 'water'].includes(it.kind);
 const SELLABLE = ['crop', 'fruit', 'fish', 'product'];
@@ -351,7 +353,7 @@ const NPC_TOPIC = {
   'Ý kiến, sở thích, giao tiếp mở rộng': { chn: '朋友', pin: 'péngyou', vi: 'bạn bè', face: '👧', color: '#ffccbc' },
   'Ăn uống, sinh hoạt, mời khách': { chn: '客人', pin: 'kèrén', vi: 'khách', face: '👨', color: '#c8e6c9' }
 };
-const NPC_DLG = XLS_NPC.map(([topic, zh, pin, vi, choices, pins, ok], i) => ({ i, topic, zh, pin, vi, choices, pins, ok, who: NPC_TOPIC[topic] || NPC_TOPIC['Chào hỏi, thăm nhà'] }));
+const NPC_DLG = XLS_NPC.map(([topic, zh, pin, vi, choices, pins, ok], i) => ({ i, topic, zh, pin, vi, choices, pins, ok, vis: choices.map(c => NPC_ANS_VI[c] || ''), who: NPC_TOPIC[topic] || NPC_TOPIC['Chào hỏi, thăm nhà'] }));
 
 // Sổ tay từ vựng: 10 nhóm
 const V = (chn, pin, vi) => ({ chn, pin, vi });
@@ -1650,6 +1652,7 @@ class FarmGame {
     if (k === 'nest') return this.tapNest(o);
     if (k === 'animal') return this.tapAnimal(o);
     if (k === 'poop') {
+      if (this.tool !== 'broom') return this.toolNeed('broom', 'Có phân trong chuồng 💩');
       if (!this.needEnergy(ENERGY.clean)) return;
       return this.goDo(o, () => this.cleanPoop(o.idx));
     }
@@ -2622,13 +2625,13 @@ class FarmGame {
   renderDialogue() {
     const { d, step, why, pick } = this.dlgState;
     const n = d.who;
-    const head = `<div class="talk-npc"><span class="talk-face" style="background:${n.color}">${n.face}</span><div><b class="zh">${n.chn}</b> <small>${n.pin} · ${n.vi}</small><br><small class="talk-topic">${escapeHtml(d.topic)}</small></div></div>`;
+    const head = `<div class="talk-npc"><span class="talk-face" style="background:${n.color}">${n.face}</span><div><b class="zh">${n.chn}</b> <small>${n.pin} · ${n.vi}</small><br><small class="talk-topic">💬 Chủ đề: ${escapeHtml(d.topic)}</small></div></div>`;
     let body = `<div class="talk-bubble">${this.wordLine({ zh: d.zh, pin: d.pin, vi: d.vi })}</div>`;
     if (step === 'ask') {
       body += `${why ? `<div class="talk-why">💡 ${escapeHtml(why)}<br><small>Không sao, chọn lại nhé!</small></div>` : '<div class="talk-hint">Chọn câu đáp phù hợp nhất với lời khách nói:</div>'}
-        <div class="talk-choices">${d.choices.map((c, i) => `<button type="button" class="talk-choice" data-choice="${i}"><b class="zh">${String.fromCharCode(65 + i)}. ${escapeHtml(c)}</b>${this.showPinyin ? `<small class="pin">${escapeHtml(d.pins[i])}</small>` : ''}</button>`).join('')}</div>`;
+        <div class="talk-choices">${d.choices.map((c, i) => `<button type="button" class="talk-choice" data-choice="${i}"><b class="zh">${String.fromCharCode(65 + i)}. ${escapeHtml(c)}</b>${this.showPinyin ? `<small class="pin">${escapeHtml(d.pins[i])}</small>` : ''}${this.showVietnamese && d.vis[i] ? `<small class="vi">${escapeHtml(d.vis[i])}</small>` : ''}</button>`).join('')}</div>`;
     } else {
-      body += `<div class="talk-bubble me">${this.wordLine({ zh: d.choices[pick], pin: d.pins[pick], vi: 'Bạn trả lời đúng! ✅' })}</div>
+      body += `<div class="talk-bubble me">${this.wordLine({ zh: d.choices[pick], pin: d.pins[pick], vi: d.vis[pick] || '' })}<div class="talk-right">✅ Bạn trả lời đúng!</div></div>
         <div class="talk-paid">+${EXP.talk} EXP</div>
         <div class="talk-end"><button type="button" class="g-btn-primary" data-close="modal-talk"><span class="zh">再见</span> Tạm biệt</button></div>`;
     }
@@ -2725,7 +2728,7 @@ class FarmGame {
   // ---- thanh công cụ
   toolsHere() {
     if (this.sceneId === 'farm') return ['hoe', 'gloves', 'seed', 'can'];
-    if (this.sceneId.startsWith('pen_')) return ['feed', 'water', 'basket'];
+    if (this.sceneId.startsWith('pen_')) return ['feed', 'water', 'basket', 'broom'];
     return [];
   }
   seedKinds() { return Object.keys(this.bag).filter(k => ITEMS[k] && ITEMS[k].kind === 'seed'); }

@@ -344,3 +344,7 @@ body.g-portrait .tool-name small { display: none; }
 body.g-portrait .bag-btn { height: 56px; padding: 0 10px 0 8px; gap: 5px; }
 body.g-portrait .bag-btn .bag-ic { font-size: 1.7rem; }
 body.g-portrait .bag-btn small .zh { font-size: 0.85rem; }
+
+/* Hội thoại NPC: nghĩa của đáp án + dòng báo trả lời đúng */
+.talk-choice small.vi { color: #5d4037; font-weight: 600; font-size: 0.8rem; }
+.talk-right { margin-top: 6px; font-weight: 900; font-size: 0.85rem; color: #2e7d32; }
