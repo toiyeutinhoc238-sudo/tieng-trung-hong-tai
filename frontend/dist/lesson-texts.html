@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous" referrerpolicy="no-referrer">
     <!-- Kaiti WebFont for standard Chinese handwriting & textbook characters -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
 
   <script>
     (function () {
@@ -1683,6 +1683,7 @@
             <option value="1">HSK 1 (3.0)</option>
             <option value="2">HSK 2 (3.0)</option>
             <option value="3">HSK 3 (3.0)</option>
+            <option value="6">HSK 6 (Chuẩn)</option>
           </select>
           <select id="lesson-switcher-select" onchange="window.switchHskLesson(this.value)"
             title="Chọn bài học"
@@ -1790,7 +1791,9 @@
 
     async function loadLessonVocabs() {
       try {
-        const res = await fetch(`/api/vocabulary?level=${currentLevel}&lessonId=${currentLessonId}&version=${currentVersion}`);
+        let vUrl = `/api/vocabulary?level=${currentLevel}&lessonId=${currentLessonId}`;
+        if (Number(currentLevel) !== 6) vUrl += `&version=${currentVersion}`;
+        const res = await fetch(vUrl);
         if (res.ok) {
           const list = await res.json();
           if (Array.isArray(list)) {
@@ -1983,7 +1986,9 @@
 
     async function loadData() {
       try {
-        if (currentVersion === '2.0' || currentVersion === 'yct' || Number(currentLevel) > 3) {
+        const lvlNum = Number(currentLevel);
+        const isSupported = [1, 2, 3, 6].includes(lvlNum);
+        if (!isSupported || currentVersion === 'yct' || (currentVersion === '2.0' && lvlNum !== 6)) {
           allReadingTexts = [];
           currentLessonVocabs = [];
           return;
@@ -2010,7 +2015,8 @@
       const stepperRoadmapBtn = document.getElementById('stepper-roadmap-btn');
       const stepperVideoBtn = document.getElementById('stepper-extra-video-btn');
 
-      if (lvlBadge) lvlBadge.textContent = `HSK ${currentLevel} (${currentVersion})`;
+      const isLvl6 = Number(currentLevel) === 6;
+      if (lvlBadge) lvlBadge.textContent = isLvl6 ? `HSK 6 (Chuẩn)` : `HSK ${currentLevel} (${currentVersion})`;
       if (lesBadge) lesBadge.textContent = `Bài ${currentLessonId}`;
       if (titleBadge) titleBadge.innerHTML = `<i class="fa-solid fa-bookmark"></i> Bài Khóa HSK ${currentLevel} (${currentVersion}) - Bài ${currentLessonId}`;
       if (headerRoadmapBtn) headerRoadmapBtn.href = `/index.html?tab=lessons&level=${currentLevel}&version=${currentVersion}`;
@@ -2192,8 +2198,12 @@
       const tabBox = document.getElementById('dialogue-tabs-box');
       if (tabBox && lessonObj && lessonObj.dialogues && lessonObj.dialogues.length > 0) {
         const numDialogues = lessonObj.dialogues.length;
-        let tabHtml = '';
-        for (let d = 1; d <= numDialogues; d++) {
+        if (numDialogues <= 1) {
+          tabBox.style.display = 'none';
+        } else {
+          tabBox.style.display = 'flex';
+          let tabHtml = '';
+          for (let d = 1; d <= numDialogues; d++) {
           const isActive = d === currentDialogueId ? 'active' : '';
           tabHtml += `
             <button class="dialogue-tab-btn ${isActive}" onclick="selectDialogue(${d})">
@@ -2202,6 +2212,7 @@
           `;
         }
         tabBox.innerHTML = tabHtml;
+        }
       }
 
       const diagObj = getActiveDialogueData();

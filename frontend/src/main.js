@@ -8587,7 +8587,7 @@ window.openLessonDetailModal = function (lessonKey) {
   const btnText = document.getElementById('modal-btn-mod-text');
   if (btnText) {
     const textBadge = btnText.querySelector('small');
-    const hasReadingText = (activeHskVersion === '3.0') && ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct';
+    const hasReadingText = ((activeHskVersion === '3.0') && ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct') || String(currentLvl) === '6';
     if (!hasReadingText) {
       if (textBadge) {
         textBadge.textContent = 'Đang khóa 🔒';
@@ -9651,7 +9651,7 @@ window.goToLessonStep = function (step, lessonId) {
   } else if (step === 'grammar') {
     window.openLessonGrammarModal(numId);
   } else if (step === 'text') {
-    const hasReadingText = (currentVer === '3.0') && ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct';
+    const hasReadingText = ((currentVer === '3.0') && ['1', '2', '3'].includes(String(currentLvl)) && activeLessonsCurriculum !== 'yct') || String(currentLvl) === '6';
     if (!hasReadingText) {
       showComingSoonNotice(`Bài Khóa HSK ${currentLvl} (${currentVer === '2.0' ? 'Phiên bản 2.0' : currentVer}) đang được đội ngũ chuẩn bị và sẽ sớm ra mắt!`);
       return;
@@ -11259,7 +11259,7 @@ window.openLessonTextStudy = function (lessonId) {
   const currentVer = activeLessonsCurriculum === 'yct' ? 'yct' : (activeHskVersion || activeRoadmapVersion || '3.0');
   const lvlStr = String(currentLvl);
 
-  const hasReadingText = (currentVer === '3.0') && ['1', '2', '3'].includes(lvlStr) && activeLessonsCurriculum !== 'yct';
+  const hasReadingText = ((currentVer === '3.0') && ['1', '2', '3'].includes(lvlStr) && activeLessonsCurriculum !== 'yct') || lvlStr === '6';
   if (!hasReadingText) {
     showComingSoonNotice(`Bài Khóa HSK ${currentLvl} (${currentVer === '2.0' ? 'Phiên bản 2.0' : currentVer}) đang được đội ngũ chuẩn bị và sẽ sớm ra mắt!`);
     return;
