@@ -1,0 +1,5 @@
+rooster.wav — tiếng gà gáy báo sáng trong game Nông trại.
+
+Nguồn: "Small rooster crowing.ogg" (Wikimedia Commons), tác giả alys, từ PDSounds (Public Domain Sounds).
+Giấy phép: Public domain (phạm vi công cộng) — dùng tự do, không bắt buộc ghi công.
+Chỉnh sửa: cắt đoạn gáy (~2,2 giây), làm mờ đầu/cuối, chuẩn hóa âm lượng, đổi sang WAV 24 kHz mono 16-bit để chạy được trên mọi trình duyệt (kể cả iPhone).

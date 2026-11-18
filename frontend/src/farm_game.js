@@ -37,6 +37,7 @@ class FarmAudio {
     if (!this.ctx) {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (AC) { try { this.ctx = new AC(); } catch (e) { this.ctx = null; } }
+      if (this.ctx && typeof this.preloadRooster === 'function') setTimeout(() => this.preloadRooster(), 0);
     }
     if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
   }
@@ -125,13 +126,45 @@ const iconHtml = (icon, cls = '') => (icon && icon.startsWith('svg:')
 
 
 // Âm thanh bổ sung: gà gáy (ngày mới) · tiếng mưa liên tục
-FarmAudio.prototype.rooster = function rooster() {
-  if (!this.sfxEnabled) return;
+// Tiếng gà gáy báo sáng: dùng bản ghi âm thật (public/audio/rooster.wav — "Small rooster crowing" của alys, PDSounds, phạm vi công cộng).
+// Không tải được thì phát bản tổng hợp cũ để game vẫn có âm thanh.
+FarmAudio.prototype.preloadRooster = function preloadRooster() {
+  if (this.roosterBuf !== undefined || this.roosterLoading) return;
+  this.init();
+  if (!this.ctx || typeof fetch !== 'function') { this.roosterBuf = null; return; }
+  this.roosterLoading = true;
+  fetch('/audio/rooster.wav')
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); })
+    .then(ab => new Promise((resolve, reject) => { const p = this.ctx.decodeAudioData(ab, resolve, reject); if (p && p.catch) p.catch(reject); }))
+    .then(buf => { this.roosterBuf = buf; })
+    .catch(() => { this.roosterBuf = null; })
+    .then(() => { this.roosterLoading = false; if (this.roosterWanted) { this.roosterWanted = false; this.rooster(); } });
+};
+FarmAudio.prototype.roosterSynth = function roosterSynth() {
   // "ò ó o o": 3 tiếng ngắn lên giọng rồi 1 tiếng dài kéo xuống
   [[520, 760, 0, 0.16], [700, 900, 0.2, 0.16], [820, 1050, 0.4, 0.18], [1050, 560, 0.64, 0.75]].forEach(([a, b, d, len]) => {
     this.tone(a, len, { type: 'sawtooth', vol: 0.1, delay: d, slideTo: b });
     this.tone(a * 2, len, { type: 'square', vol: 0.03, delay: d, slideTo: b * 2 });
   });
+};
+FarmAudio.prototype.rooster = function rooster() {
+  if (!this.sfxEnabled) return;
+  this.init();
+  if (this.roosterBuf === undefined) {          // chưa tải xong: đợi rồi phát (tối đa ~1 giây, sau đó dùng bản tổng hợp)
+    this.roosterWanted = true;
+    this.preloadRooster();
+    setTimeout(() => { if (this.roosterWanted) { this.roosterWanted = false; this.roosterSynth(); } }, 1200);
+    return;
+  }
+  if (!this.roosterBuf || !this.ctx) { this.roosterSynth(); return; }
+  try {
+    const src = this.ctx.createBufferSource();
+    const gain = this.ctx.createGain();
+    src.buffer = this.roosterBuf;
+    gain.gain.value = 0.85;
+    src.connect(gain); gain.connect(this.ctx.destination);
+    src.start();
+  } catch (e) { this.roosterSynth(); }
 };
 FarmAudio.prototype.setRain = function setRain(on) {
   if (!on || !this.sfxEnabled) {
