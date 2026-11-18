@@ -6,15 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Nông Trại Của Tôi (我的农场) | Tiếng Trung HongTai</title>
   <link rel="icon" type="image/png" href="/assets/logo-CnsJJgQP.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
   <!-- Dùng chung khung với Tiệm Tạp Hóa & Trà Sữa (modal, nút, thối tiền, từ vựng, xếp hạng), thêm phần riêng nông trại -->
-  <script type="module" crossorigin src="/assets/farmGame-eikZt1Hw.js"></script>
+  <script type="module" crossorigin src="/assets/farmGame-DGlg8Epk.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/farmGame-Che7du0g.css">
+  <link rel="stylesheet" crossorigin href="/assets/farmGame-BbeBcFI6.css">
   <link rel="stylesheet" crossorigin href="/assets/grocery_game-Dk9qV7ql.css">
 </head>
 
@@ -26,55 +29,129 @@
       <div class="g-title-bg farm-title-bg" aria-hidden="true">
         <svg class="farm-scene" viewBox="0 0 1280 720" preserveAspectRatio="xMinYMax slice">
           <defs>
-            <linearGradient id="fsSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cc8f2"/><stop offset="0.6" stop-color="#bfe6fb"/><stop offset="1" stop-color="#fff1c9"/></linearGradient>
-            <linearGradient id="fsHill1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd27a"/><stop offset="1" stop-color="#6fb552"/></linearGradient>
-            <linearGradient id="fsHill2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fc35e"/><stop offset="1" stop-color="#4f9c3f"/></linearGradient>
-            <pattern id="fsRows" width="46" height="24" patternUnits="userSpaceOnUse" patternTransform="skewX(-28)"><rect width="46" height="24" fill="#c98a4b"/><rect width="46" height="9" fill="#a96d36"/><circle cx="12" cy="16" r="5" fill="#69b347"/><circle cx="34" cy="16" r="5" fill="#69b347"/></pattern>
-            <pattern id="fsWheat" width="22" height="30" patternUnits="userSpaceOnUse"><rect width="22" height="30" fill="#f0c64a"/><path d="M5 30 V8 M16 30 V4" stroke="#d29a20" stroke-width="3"/><ellipse cx="5" cy="8" rx="3" ry="6" fill="#ffe08a"/><ellipse cx="16" cy="4" rx="3" ry="6" fill="#ffe08a"/></pattern>
+            <linearGradient id="fsSky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#7cc8f2" />
+              <stop offset="0.6" stop-color="#bfe6fb" />
+              <stop offset="1" stop-color="#fff1c9" />
+            </linearGradient>
+            <linearGradient id="fsHill1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#9fd27a" />
+              <stop offset="1" stop-color="#6fb552" />
+            </linearGradient>
+            <linearGradient id="fsHill2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#7fc35e" />
+              <stop offset="1" stop-color="#4f9c3f" />
+            </linearGradient>
+            <pattern id="fsRows" width="46" height="24" patternUnits="userSpaceOnUse" patternTransform="skewX(-28)">
+              <rect width="46" height="24" fill="#c98a4b" />
+              <rect width="46" height="9" fill="#a96d36" />
+              <circle cx="12" cy="16" r="5" fill="#69b347" />
+              <circle cx="34" cy="16" r="5" fill="#69b347" />
+            </pattern>
+            <pattern id="fsWheat" width="22" height="30" patternUnits="userSpaceOnUse">
+              <rect width="22" height="30" fill="#f0c64a" />
+              <path d="M5 30 V8 M16 30 V4" stroke="#d29a20" stroke-width="3" />
+              <ellipse cx="5" cy="8" rx="3" ry="6" fill="#ffe08a" />
+              <ellipse cx="16" cy="4" rx="3" ry="6" fill="#ffe08a" />
+            </pattern>
           </defs>
-          <rect width="1280" height="720" fill="url(#fsSky)"/>
-          <circle cx="1090" cy="120" r="62" fill="#ffe37a"/><circle cx="1090" cy="120" r="90" fill="#ffe37a" opacity="0.25"/>
+          <rect width="1280" height="720" fill="url(#fsSky)" />
+          <circle cx="1090" cy="120" r="62" fill="#ffe37a" />
+          <circle cx="1090" cy="120" r="90" fill="#ffe37a" opacity="0.25" />
           <g class="fs-clouds" fill="#fff">
-            <g class="fs-cloud c1"><ellipse cx="200" cy="110" rx="70" ry="26"/><ellipse cx="240" cy="92" rx="44" ry="30"/><ellipse cx="170" cy="98" rx="34" ry="22"/></g>
-            <g class="fs-cloud c2"><ellipse cx="760" cy="70" rx="60" ry="22"/><ellipse cx="792" cy="54" rx="36" ry="24"/></g>
-            <g class="fs-cloud c3"><ellipse cx="520" cy="170" rx="48" ry="17"/><ellipse cx="545" cy="158" rx="28" ry="18"/></g>
+            <g class="fs-cloud c1">
+              <ellipse cx="200" cy="110" rx="70" ry="26" />
+              <ellipse cx="240" cy="92" rx="44" ry="30" />
+              <ellipse cx="170" cy="98" rx="34" ry="22" />
+            </g>
+            <g class="fs-cloud c2">
+              <ellipse cx="760" cy="70" rx="60" ry="22" />
+              <ellipse cx="792" cy="54" rx="36" ry="24" />
+            </g>
+            <g class="fs-cloud c3">
+              <ellipse cx="520" cy="170" rx="48" ry="17" />
+              <ellipse cx="545" cy="158" rx="28" ry="18" />
+            </g>
           </g>
-          <path d="M0 380 Q 180 300 380 350 T 820 330 T 1280 350 V720 H0Z" fill="url(#fsHill1)"/>
+          <path d="M0 380 Q 180 300 380 350 T 820 330 T 1280 350 V720 H0Z" fill="url(#fsHill1)" />
           <!-- cối xay gió -->
-          <g transform="translate(1010 250)"><path d="M-16 120 L-8 0 H8 L16 120Z" fill="#f4ead6" stroke="#b9875a" stroke-width="3"/><path d="M-12 -4 L0 -22 L12 -4Z" fill="#c4553b"/>
-            <g class="fs-blades"><rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2"/><rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2" transform="rotate(90)"/><rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2" transform="rotate(180)"/><rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2" transform="rotate(270)"/><circle r="7" fill="#7a4a26"/></g></g>
-          <path d="M0 450 Q 260 380 560 430 T 1280 420 V720 H0Z" fill="url(#fsHill2)"/>
+          <g transform="translate(1010 250)">
+            <path d="M-16 120 L-8 0 H8 L16 120Z" fill="#f4ead6" stroke="#b9875a" stroke-width="3" />
+            <path d="M-12 -4 L0 -22 L12 -4Z" fill="#c4553b" />
+            <g class="fs-blades">
+              <rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2" />
+              <rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2"
+                transform="rotate(90)" />
+              <rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2"
+                transform="rotate(180)" />
+              <rect x="-4" y="-74" width="8" height="74" rx="3" fill="#fff8ea" stroke="#b9875a" stroke-width="2"
+                transform="rotate(270)" />
+              <circle r="7" fill="#7a4a26" />
+            </g>
+          </g>
+          <path d="M0 450 Q 260 380 560 430 T 1280 420 V720 H0Z" fill="url(#fsHill2)" />
           <!-- chuồng đỏ + silo -->
           <g transform="translate(150 300)">
-            <rect x="150" y="20" width="56" height="150" rx="6" fill="#d9dde3" stroke="#8a95a3" stroke-width="3"/><path d="M150 26 Q178 -14 206 26Z" fill="#9aa5b3" stroke="#6f7a88" stroke-width="3"/>
-            <path d="M150 60 H206 M150 100 H206 M150 140 H206" stroke="#b7bfca" stroke-width="3"/>
-            <path d="M-10 70 L80 0 L170 70 V175 H-10Z" fill="#cf3f33" stroke="#7d1f19" stroke-width="4" stroke-linejoin="round"/>
-            <path d="M-22 76 L80 -8 L182 76" fill="none" stroke="#fff4e0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-            <rect x="45" y="95" width="70" height="80" fill="#9c2c24" stroke="#fff4e0" stroke-width="5"/><path d="M45 95 L115 175 M115 95 L45 175" stroke="#fff4e0" stroke-width="5"/>
-            <rect x="62" y="38" width="36" height="28" fill="#fff4e0" stroke="#7d1f19" stroke-width="3"/>
+            <rect x="150" y="20" width="56" height="150" rx="6" fill="#d9dde3" stroke="#8a95a3" stroke-width="3" />
+            <path d="M150 26 Q178 -14 206 26Z" fill="#9aa5b3" stroke="#6f7a88" stroke-width="3" />
+            <path d="M150 60 H206 M150 100 H206 M150 140 H206" stroke="#b7bfca" stroke-width="3" />
+            <path d="M-10 70 L80 0 L170 70 V175 H-10Z" fill="#cf3f33" stroke="#7d1f19" stroke-width="4"
+              stroke-linejoin="round" />
+            <path d="M-22 76 L80 -8 L182 76" fill="none" stroke="#fff4e0" stroke-width="10" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <rect x="45" y="95" width="70" height="80" fill="#9c2c24" stroke="#fff4e0" stroke-width="5" />
+            <path d="M45 95 L115 175 M115 95 L45 175" stroke="#fff4e0" stroke-width="5" />
+            <rect x="62" y="38" width="36" height="28" fill="#fff4e0" stroke="#7d1f19" stroke-width="3" />
           </g>
           <!-- ruộng -->
-          <path d="M440 520 L1280 470 V600 L520 640Z" fill="url(#fsRows)"/>
-          <path d="M600 655 L1280 610 V720 H640Z" fill="url(#fsWheat)"/>
-          <path d="M0 560 Q 300 520 520 580 T 1280 640 V720 H0Z" fill="#5aa845"/>
+          <path d="M440 520 L1280 470 V600 L520 640Z" fill="url(#fsRows)" />
+          <path d="M600 655 L1280 610 V720 H640Z" fill="url(#fsWheat)" />
+          <path d="M0 560 Q 300 520 520 580 T 1280 640 V720 H0Z" fill="#5aa845" />
           <!-- hàng rào -->
-          <g stroke="#b07a46" stroke-width="7" stroke-linecap="round"><path d="M0 590 L560 600"/><path d="M0 618 L560 626"/></g>
-          <g fill="#d39a5d" stroke="#8a5a2c" stroke-width="3"><rect x="10" y="570" width="14" height="66" rx="4"/><rect x="76" y="571" width="14" height="66" rx="4"/><rect x="142" y="572" width="14" height="66" rx="4"/><rect x="208" y="573" width="14" height="66" rx="4"/><rect x="274" y="574" width="14" height="66" rx="4"/><rect x="340" y="575" width="14" height="66" rx="4"/><rect x="406" y="576" width="14" height="66" rx="4"/><rect x="472" y="577" width="14" height="66" rx="4"/><rect x="538" y="578" width="14" height="66" rx="4"/></g>
+          <g stroke="#b07a46" stroke-width="7" stroke-linecap="round">
+            <path d="M0 590 L560 600" />
+            <path d="M0 618 L560 626" />
+          </g>
+          <g fill="#d39a5d" stroke="#8a5a2c" stroke-width="3">
+            <rect x="10" y="570" width="14" height="66" rx="4" />
+            <rect x="76" y="571" width="14" height="66" rx="4" />
+            <rect x="142" y="572" width="14" height="66" rx="4" />
+            <rect x="208" y="573" width="14" height="66" rx="4" />
+            <rect x="274" y="574" width="14" height="66" rx="4" />
+            <rect x="340" y="575" width="14" height="66" rx="4" />
+            <rect x="406" y="576" width="14" height="66" rx="4" />
+            <rect x="472" y="577" width="14" height="66" rx="4" />
+            <rect x="538" y="578" width="14" height="66" rx="4" />
+          </g>
           <!-- gà, hoa -->
-          <g class="fs-hen" transform="translate(360 650)"><ellipse rx="22" ry="17" fill="#fff"/><circle cx="16" cy="-14" r="10" fill="#fff"/><path d="M14 -26 l4 -6 l4 6 l4 -6 l2 8Z" fill="#e53935"/><path d="M26 -14 l9 3 l-9 3Z" fill="#ffb300"/><circle cx="19" cy="-16" r="2" fill="#333"/></g>
-          <g fill="#ff8fb1"><circle cx="90" cy="690" r="8"/><circle cx="140" cy="702" r="7" fill="#fff176"/><circle cx="480" cy="700" r="8"/><circle cx="1220" cy="700" r="8" fill="#fff176"/></g>
+          <g class="fs-hen" transform="translate(360 650)">
+            <ellipse rx="22" ry="17" fill="#fff" />
+            <circle cx="16" cy="-14" r="10" fill="#fff" />
+            <path d="M14 -26 l4 -6 l4 6 l4 -6 l2 8Z" fill="#e53935" />
+            <path d="M26 -14 l9 3 l-9 3Z" fill="#ffb300" />
+            <circle cx="19" cy="-16" r="2" fill="#333" />
+          </g>
+          <g fill="#ff8fb1">
+            <circle cx="90" cy="690" r="8" />
+            <circle cx="140" cy="702" r="7" fill="#fff176" />
+            <circle cx="480" cy="700" r="8" />
+            <circle cx="1220" cy="700" r="8" fill="#fff176" />
+          </g>
         </svg>
       </div>
       <div class="g-title-sun" aria-hidden="true"></div>
-      <div class="g-title-leaves farm-butterflies" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="g-title-leaves farm-butterflies" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span></div>
       <a href="shop-games.html" class="g-title-home"><i class="fa-solid fa-arrow-left"></i> Kệ game</a>
       <a href="index.html" class="g-account guest" id="title-account" title="Đăng nhập để lưu thành tích">
         <span class="g-account-avatar" id="title-account-avatar"><i class="fa-solid fa-user"></i></span>
-        <span class="g-account-text"><strong id="title-account-name">Khách</strong><small id="title-account-status">Đăng nhập để lưu thành tích</small></span>
+        <span class="g-account-text"><strong id="title-account-name">Khách</strong><small id="title-account-status">Đăng
+            nhập để lưu thành tích</small></span>
       </a>
       <div class="g-title-logo">
         <div class="g-logo-awning" aria-hidden="true"></div>
-        <div class="g-logo-board"><span class="g-logo-chn">我的农场</span><span class="g-logo-pin">Wǒ de nóngchǎng</span></div>
+        <div class="g-logo-board"><span class="g-logo-chn">我的农场</span><span class="g-logo-pin">Wǒ de nóngchǎng</span>
+        </div>
         <div class="g-logo-ribbon">Nông Trại Của Tôi</div>
         <div class="g-title-progress" id="title-progress"></div>
       </div>
@@ -85,8 +162,10 @@
           <i class="fa-solid fa-play"></i>
         </button>
         <div class="g-title-sub">
-          <button type="button" class="g-btn-sub" id="btn-title-guide"><span class="sub-icon">📖</span><span><span class="zh">玩法说明</span> Hướng dẫn</span></button>
-          <button type="button" class="g-btn-sub" id="btn-title-rank"><span class="sub-icon">🏆</span><span><span class="zh">排行榜</span> Xếp hạng</span></button>
+          <button type="button" class="g-btn-sub" id="btn-title-guide"><span class="sub-icon">📖</span><span><span
+                class="zh">玩法说明</span> Hướng dẫn</span></button>
+          <button type="button" class="g-btn-sub" id="btn-title-rank"><span class="sub-icon">🏆</span><span><span
+                class="zh">排行榜</span> Xếp hạng</span></button>
         </div>
       </div>
       <div class="g-title-cat" aria-hidden="true"><span class="cat-body">🐔</span><span class="cat-zz">咯咯</span></div>
@@ -95,21 +174,36 @@
     <!-- 1. THANH TRÊN: ngày · thời tiết · tiền · năng lượng · túi đồ · bản đồ · sổ tay · cài đặt -->
     <header class="g-hud farm-hud">
       <div class="g-hud-left">
-        <button type="button" class="g-hud-circle" id="btn-hud-home" title="Về màn hình chính"><i class="fa-solid fa-house"></i></button>
-        <div class="day-chip" title="Ngày hiện tại"><span class="day-ava">🧑‍🌾</span><span class="day-txt"><b class="zh" id="hud-day">第1天</b><small id="hud-day-vi">Ngày 1</small></span></div>
+        <button type="button" class="g-hud-circle" id="btn-hud-home" title="Về màn hình chính"><i
+            class="fa-solid fa-house"></i></button>
+        <div class="day-chip" title="Ngày hiện tại"><span class="day-ava">🧑‍🌾</span><span class="day-txt"><b
+              class="zh" id="hud-day">第1天</b><small id="hud-day-vi">Ngày 1</small></span></div>
         <button type="button" class="weather-chip" id="hud-weather" title="Thời tiết hôm nay"></button>
+        <button type="button" class="level-chip" id="btn-level" title="Cấp độ & EXP — xem nội dung sắp mở khóa"><span class="lv-star">⭐<b id="hud-level">1</b></span><span class="lv-wrap"><small><span class="zh">等级</span> LV · <b id="hud-xp">0/40</b></small><span class="lv-bar"><i id="hud-xp-fill"></i></span></span></button>
       </div>
       <div class="g-hud-center">
-        <div class="g-pill money" title="Tiền (元)"><span class="pill-icon">💰</span><span class="pill-text"><small class="zh">钱</small><strong id="hud-money">0元</strong></span></div>
-        <button type="button" class="energy-pill" id="btn-energy" title="Năng lượng (体力)"><span class="pill-icon">⚡</span><span class="en-wrap"><small><span class="zh">体力</span> <b id="hud-energy-val">100/100</b></small><span class="en-bar"><i id="hud-energy-fill"></i></span></span></button>
+        <div class="g-pill money" title="Tiền (元)"><span class="pill-icon">💰</span><span class="pill-text"><small
+              class="zh">钱</small><strong id="hud-money">0元</strong></span></div>
+        <button type="button" class="energy-pill" id="btn-energy" title="Năng lượng (体力)"><span
+            class="pill-icon">⚡</span><span class="en-wrap"><small><span class="zh">体力</span> <b
+                id="hud-energy-val">100/100</b></small><span class="en-bar"><i
+                id="hud-energy-fill"></i></span></span></button>
       </div>
       <div class="g-hud-right">
-        <button type="button" class="hud-tool" id="btn-bag" title="Túi đồ"><span>🎒</span><small><span class="zh">背包</span> <b id="hud-bag-val">0/60</b></small></button>
-        <button type="button" class="hud-tool" id="btn-map" title="Bản đồ & mốc phát triển"><span>🗺️</span><small><span class="zh">地图</span></small></button>
-        <button type="button" class="hud-tool" id="btn-open-vocab" title="Sổ tay từ vựng"><span>📖</span><small><span class="zh">生词</span> <b id="hud-vocab-val">0/0</b></small></button>
-        <button type="button" class="hud-tool" id="btn-inspect" title="Chế độ thẻ từ: nhấp vật để xem từ vựng"><span>🔍</span><small><span class="zh">识字</span></small></button>
-        <button type="button" class="g-hud-circle" id="btn-pause-game" title="Cài đặt"><i class="fa-solid fa-gear"></i></button>
-        <button type="button" class="g-hud-circle" id="btn-fullscreen" title="Toàn màn hình"><i class="fa-solid fa-expand"></i></button>
+        <button type="button" class="hud-tool" id="btn-tasks" title="Nhiệm vụ & mẫu câu hôm nay"><span>📋</span><small><span class="zh">任务</span> <b id="hud-task-val">0/0</b></small></button>
+        <button type="button" class="hud-tool" id="btn-bag" title="Túi đồ"><span>🎒</span><small><span
+              class="zh">背包</span> <b id="hud-bag-val">0/60</b></small></button>
+        <button type="button" class="hud-tool" id="btn-map" title="Bản đồ & mốc phát triển"><span>🗺️</span><small><span
+              class="zh">地图</span></small></button>
+        <button type="button" class="hud-tool" id="btn-open-vocab" title="Sổ tay từ vựng"><span>📖</span><small><span
+              class="zh">生词</span> <b id="hud-vocab-val">0/0</b></small></button>
+        <button type="button" class="hud-tool" id="btn-inspect"
+          title="Chế độ thẻ từ: nhấp vật để xem từ vựng"><span>🔍</span><small><span
+              class="zh">识字</span></small></button>
+        <button type="button" class="g-hud-circle" id="btn-pause-game" title="Cài đặt"><i
+            class="fa-solid fa-gear"></i></button>
+        <button type="button" class="g-hud-circle" id="btn-fullscreen" title="Toàn màn hình"><i
+            class="fa-solid fa-expand"></i></button>
       </div>
     </header>
 
@@ -121,23 +215,39 @@
     </main>
 
     <div class="g-toasts" id="g-toasts"></div>
+    <div class="sleep-fade" id="sleep-fade" aria-hidden="true"><span class="zzz">Zzz… <span class="zh">晚安</span></span></div>
+
+    <!-- NHIỆM VỤ & MẪU CÂU -->
+    <div class="g-modal" id="modal-tasks" style="display:none;">
+      <div class="g-card farm-card">
+        <div class="g-card-head"><h3>📋 <span class="zh">任务</span> · Nhiệm vụ &amp; mẫu câu</h3><button type="button" class="g-close" data-close="modal-tasks"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="farm-scroll" id="tasks-body"></div>
+      </div>
+    </div>
 
     <!-- CHỢ -->
     <div class="g-modal" id="modal-market" style="display:none;">
       <div class="g-card farm-card market2">
         <div class="market-awning" aria-hidden="true"></div>
-        <div class="g-card-head"><h3 id="mk-title">集市</h3><button type="button" class="g-close" data-close="modal-market"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3 id="mk-title">集市</h3><button type="button" class="g-close" data-close="modal-market"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="mk-talk" id="mk-talk"></div>
         <div class="vocab-tabs" id="mk-tabs" hidden></div>
         <div class="mk-grid" id="mk-grid"></div>
-        <div class="mk-foot"><span>💰 <b id="mk-money">0元</b></span><span>🎒 <b id="mk-bag">0/60</b></span><button type="button" class="g-btn-primary" data-close="modal-market"><span class="zh">再见</span> Xong</button></div>
+        <div class="mk-foot"><span>💰 <b id="mk-money">0元</b></span><span>🎒 <b id="mk-bag">0/60</b></span><button
+            type="button" class="g-btn-primary" data-close="modal-market"><span class="zh">再见</span> Xong</button></div>
       </div>
     </div>
 
     <!-- TÚI ĐỒ -->
     <div class="g-modal" id="modal-bag" style="display:none;">
       <div class="g-card farm-card">
-        <div class="g-card-head"><h3>🎒 <span class="zh">背包</span> · Túi đồ <small id="bag-cap"></small></h3><button type="button" class="g-close" data-close="modal-bag"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3>🎒 <span class="zh">背包</span> · Túi đồ <small id="bag-cap"></small></h3><button type="button"
+            class="g-close" data-close="modal-bag"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="farm-scroll" id="bag-body"></div>
       </div>
     </div>
@@ -145,19 +255,32 @@
     <!-- TỦ LẠNH -->
     <div class="g-modal" id="modal-fridge" style="display:none;">
       <div class="g-card farm-card wide">
-        <div class="g-card-head"><h3>🧊 <span class="zh">冰箱</span> · Tủ lạnh / kho <small id="fr-cap"></small></h3><button type="button" class="g-close" data-close="modal-fridge"><i class="fa-solid fa-xmark"></i></button></div>
-        <div class="fr-cols">
-          <section><h4>🎒 Trong túi</h4><div class="farm-scroll" id="fr-bag"></div></section>
-          <section><h4>🧊 Trong tủ lạnh</h4><div class="farm-scroll" id="fr-fridge"></div></section>
+        <div class="g-card-head">
+          <h3>🧊 <span class="zh">冰箱</span> · Tủ lạnh / kho <small id="fr-cap"></small></h3><button type="button"
+            class="g-close" data-close="modal-fridge"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="mk-foot"><button type="button" class="g-btn-ghost" id="btn-store-all">Cất hết nông sản & món ăn ➜</button><button type="button" class="g-btn-primary" data-close="modal-fridge">Xong</button></div>
+        <div class="fr-cols">
+          <section>
+            <h4>🎒 Trong túi</h4>
+            <div class="farm-scroll" id="fr-bag"></div>
+          </section>
+          <section>
+            <h4>🧊 Trong tủ lạnh</h4>
+            <div class="farm-scroll" id="fr-fridge"></div>
+          </section>
+        </div>
+        <div class="mk-foot"><button type="button" class="g-btn-ghost" id="btn-store-all">Cất hết nông sản & món ăn
+            ➜</button><button type="button" class="g-btn-primary" data-close="modal-fridge">Xong</button></div>
       </div>
     </div>
 
     <!-- BẾP -->
     <div class="g-modal" id="modal-kitchen" style="display:none;">
       <div class="g-card farm-card">
-        <div class="g-card-head"><h3>🍳 <span class="zh">厨房</span> · Nhà bếp <small id="kc-energy"></small></h3><button type="button" class="g-close" data-close="modal-kitchen"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3>🍳 <span class="zh">厨房</span> · Nhà bếp <small id="kc-energy"></small></h3><button type="button"
+            class="g-close" data-close="modal-kitchen"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <p class="farm-note">Nguyên liệu lấy từ 冰箱 trước, rồi tới túi đồ. Nấu xong mang ra 饭桌 (bàn ăn) để ăn.</p>
         <div class="farm-scroll" id="kc-list"></div>
       </div>
@@ -166,7 +289,10 @@
     <!-- BÀN ĂN -->
     <div class="g-modal" id="modal-eat" style="display:none;">
       <div class="g-card farm-card">
-        <div class="g-card-head"><h3>🍚 <span class="zh">饭桌</span> · Bàn ăn <small id="eat-energy"></small></h3><button type="button" class="g-close" data-close="modal-eat"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3>🍚 <span class="zh">饭桌</span> · Bàn ăn <small id="eat-energy"></small></h3><button type="button"
+            class="g-close" data-close="modal-eat"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="farm-scroll" id="eat-list"></div>
       </div>
     </div>
@@ -174,7 +300,10 @@
     <!-- AO CÁ -->
     <div class="g-modal" id="modal-pond" style="display:none;">
       <div class="g-card farm-card">
-        <div class="g-card-head"><h3>🐟 <span class="zh">鱼塘</span> · Ao cá</h3><button type="button" class="g-close" data-close="modal-pond"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3>🐟 <span class="zh">鱼塘</span> · Ao cá</h3><button type="button" class="g-close" data-close="modal-pond"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="farm-scroll" id="pond-body"></div>
       </div>
     </div>
@@ -182,7 +311,10 @@
     <!-- CÂU CÁ -->
     <div class="g-modal" id="modal-fish" style="display:none;">
       <div class="g-card farm-card small">
-        <div class="g-card-head"><h3>🎣 <span class="zh">钓鱼</span> · Câu cá</h3><button type="button" class="g-close" data-close="modal-fish"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3>🎣 <span class="zh">钓鱼</span> · Câu cá</h3><button type="button" class="g-close"
+            data-close="modal-fish"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div id="fish-body"></div>
       </div>
     </div>
@@ -190,7 +322,10 @@
     <!-- HỘI THOẠI NPC -->
     <div class="g-modal" id="modal-talk" style="display:none;">
       <div class="g-card farm-card talk-card">
-        <div class="g-card-head"><h3>💬 <span class="zh">对话</span> · Trò chuyện</h3><button type="button" class="g-close" data-close="modal-talk"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3>💬 <span class="zh">对话</span> · Trò chuyện</h3><button type="button" class="g-close"
+            data-close="modal-talk"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="farm-scroll" id="talk-body"></div>
       </div>
     </div>
@@ -198,7 +333,10 @@
     <!-- BẢN ĐỒ & MỐC -->
     <div class="g-modal" id="modal-map" style="display:none;">
       <div class="g-card farm-card wide">
-        <div class="g-card-head"><h3>🗺️ <span class="zh">地图</span> · Bản đồ & mốc phát triển</h3><button type="button" class="g-close" data-close="modal-map"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3>🗺️ <span class="zh">地图</span> · Bản đồ & mốc phát triển</h3><button type="button" class="g-close"
+            data-close="modal-map"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="farm-scroll" id="map-body"></div>
       </div>
     </div>
@@ -208,7 +346,8 @@
       <div class="g-card farm-card day-card">
         <div class="day-sun">🌅</div>
         <div id="day-body"></div>
-        <button type="button" class="g-btn-primary big" data-close="modal-day"><span class="zh">早上好</span> Chào buổi sáng! <i class="fa-solid fa-sun"></i></button>
+        <button type="button" class="g-btn-primary big" data-close="modal-day"><span class="zh">早上好</span> Chào buổi
+          sáng! <i class="fa-solid fa-sun"></i></button>
       </div>
     </div>
 
@@ -216,15 +355,20 @@
     <div class="g-modal" id="modal-milestone" style="display:none;">
       <div class="g-card levelup-card">
         <div id="ms-body"></div>
-        <button type="button" class="g-btn-primary big" data-close="modal-milestone"><span class="zh">太好了</span> Tuyệt quá! <i class="fa-solid fa-check"></i></button>
+        <button type="button" class="g-btn-primary big" data-close="modal-milestone"><span class="zh">太好了</span> Tuyệt
+          quá! <i class="fa-solid fa-check"></i></button>
       </div>
     </div>
 
     <!-- SỔ TAY TỪ VỰNG -->
     <div class="g-modal over-title" id="modal-vocab" style="display:none;">
       <div class="g-card vocab-card">
-        <div class="g-card-head"><h3>📖 <span class="zh">生词本</span> · Sổ tay từ vựng <small id="vocab-count"></small></h3><button type="button" class="g-close" data-close="modal-vocab"><i class="fa-solid fa-xmark"></i></button></div>
-        <div class="vocab-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" id="vocab-search" placeholder="Tìm chữ Hán, pinyin hoặc nghĩa tiếng Việt…"></div>
+        <div class="g-card-head">
+          <h3>📖 <span class="zh">生词本</span> · Sổ tay từ vựng <small id="vocab-count"></small></h3><button type="button"
+            class="g-close" data-close="modal-vocab"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="vocab-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" id="vocab-search"
+            placeholder="Tìm chữ Hán, pinyin hoặc nghĩa tiếng Việt…"></div>
         <div class="vocab-tabs" id="vocab-tabs"></div>
         <div class="vocab-grid" id="vocab-items-grid"></div>
       </div>
@@ -233,15 +377,51 @@
     <!-- HƯỚNG DẪN -->
     <div class="g-modal over-title" id="modal-guide" style="display:none;">
       <div class="g-card guide-card">
-        <div class="g-card-head"><h3>📖 <span class="zh">玩法说明</span> · Hướng dẫn chơi</h3><button type="button" class="g-close" data-close="modal-guide"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3>📖 <span class="zh">玩法说明</span> · Hướng dẫn chơi</h3><button type="button" class="g-close"
+            data-close="modal-guide"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="guide-steps">
-          <div class="gstep"><i>1</i><span>👆</span><div><b>Nhấp để đi &amp; làm việc</b><p>Nhấp vào vật thể (ô đất, giếng, chuồng, quầy chợ…) — nhân vật tự tìm đường, đi tới và làm việc. Nhấp ô trống để đi tới đó. Đang đi vẫn có thể đổi mục tiêu.</p></div></div>
-          <div class="gstep"><i>2</i><span>🌱</span><div><b>Vườn rau · 菜地</b><p><b>锄地</b> cuốc đất → <b>播种</b> gieo hạt → ra <b>井</b> múc nước → <b>浇水</b> tưới. Rau chỉ lớn khi được tưới trong ngày; chín có ✨ thì <b>收获</b> thu hoạch.</p></div></div>
-          <div class="gstep"><i>3</i><span>🐔</span><div><b>Chuồng gà · 鸡舍</b><p>Vào chuồng: thêm thức ăn vào từng <b>食槽</b> (bên trái), thêm nước vào từng <b>水槽</b> (bên phải), dọn <b>粪便</b>. Gà ăn uống đủ thì sáng mai có trứng trong <b>鸡窝</b>.</p></div></div>
-          <div class="gstep"><i>4</i><span>🛏️</span><div><b>Ngày &amp; năng lượng</b><p>Mỗi việc tốn ⚡ năng lượng. Vào nhà: <b>厨房</b> nấu ăn, <b>饭桌</b> ăn để hồi năng lượng, <b>床</b> ngủ để sang ngày mới. Trời <b>雨天</b> mưa thì cây tự được tưới.</p></div></div>
-          <div class="gstep"><i>5</i><span>🏪</span><div><b>Chợ · 集市</b><p>5 quầy: 动物 (mua/bán vật nuôi), 种子 (hạt, cây giống, cá giống), 饲料 (thức ăn, gạo, dầu), 工具 (dụng cụ), 收购 (bán nông sản). Tiền là <b>元</b>.</p></div></div>
-          <div class="gstep"><i>6</i><span>🏁</span><div><b>Mốc phát triển</b><p>Không có cấp độ hay EXP. Chăm nông trại đến đâu thì mở đến đó: thêm đất, chuồng heo/cừu/bò, rừng sau nhà (vườn cây ăn quả, ao cá). Xem ở 🗺️ Bản đồ.</p></div></div>
-          <div class="guide-tip">💬 Thỉnh thoảng có hàng xóm, bạn bè, khách mua hàng… ghé cổng nông trại — trò chuyện bằng tiếng Trung, trả lời sai cũng không sao. 🔍 Bật <b>识字</b> để nhấp vào mọi thứ xem thẻ từ vựng. 💾 Tự động lưu; đăng nhập để lưu vào tài khoản.</div>
+          <div class="gstep"><i>1</i><span>👆</span>
+            <div><b>Nhấp để đi &amp; làm việc</b>
+              <p>Nhấp vào vật thể (ô đất, giếng, chuồng, quầy chợ…) — nhân vật tự tìm đường, đi tới và làm việc. Nhấp ô
+                trống để đi tới đó. Đang đi vẫn có thể đổi mục tiêu.</p>
+            </div>
+          </div>
+          <div class="gstep"><i>2</i><span>🌱</span>
+            <div><b>Vườn rau · 菜地</b>
+              <p><b>锄地</b> cuốc đất → <b>播种</b> gieo hạt → ra <b>水井</b> múc nước → <b>浇水</b> tưới. Rau chỉ lớn khi được
+                tưới trong ngày; chín có ✨ thì <b>收获</b>. Có loại thu được nhiều lứa; thu hết thì cây <b>枯萎</b> héo — dọn luống bằng
+                <b>手套</b> găng tay hoặc cuốc.</p>
+            </div>
+          </div>
+          <div class="gstep"><i>3</i><span>🐔</span>
+            <div><b>Chuồng gà · 鸡舍</b>
+              <p>Vào chuồng: thêm thức ăn vào từng <b>食槽</b> (bên trái), thêm nước vào từng <b>水槽</b> (bên phải), dọn
+                <b>粪便</b>. Gà ăn uống đủ thì sáng mai có trứng trong <b>鸡窝</b>.</p>
+            </div>
+          </div>
+          <div class="gstep"><i>4</i><span>🛏️</span>
+            <div><b>Ngày &amp; năng lượng</b>
+              <p>Mỗi việc tốn ⚡ năng lượng. Vào nhà: <b>厨房</b> nấu ăn, <b>饭桌</b> ăn để hồi năng lượng, <b>床</b> ngủ để
+                sang ngày mới. Trời <b>雨天</b> mưa thì cây tự được tưới.</p>
+            </div>
+          </div>
+          <div class="gstep"><i>5</i><span>🏪</span>
+            <div><b>Cửa hàng · 商店</b>
+              <p>Các quầy: 种子 (hạt, cây giống, cá giống), 动物 (vật nuôi, chó mèo), 饲料, 工具, 装饰 (đồ trang trí trong nhà),
+                收购 (bán nông sản). Tiền là <b>元</b>.</p>
+            </div>
+          </div>
+          <div class="gstep"><i>6</i><span>⭐</span>
+            <div><b>Cấp độ · 等级 (1–50)</b>
+              <p>Mỗi việc làm được EXP. Đủ EXP thì lên cấp và mở khóa rau, cây ăn quả, cá, chuồng heo/cừu/bò, chó mèo, đồ
+                trang trí, vườn sau nhà (cấp 20). 📋 Mỗi ngày có <b>任务</b> nhiệm vụ và <b>句子</b> mẫu câu để học.</p>
+            </div>
+          </div>
+          <div class="guide-tip">💬 Thỉnh thoảng có hàng xóm, bạn bè, khách mua hàng… ghé cổng nông trại — trò chuyện
+            bằng tiếng Trung, trả lời sai cũng không sao. 🔍 Bật <b>识字</b> để nhấp vào mọi thứ xem thẻ từ vựng. 💾 Tự
+            động lưu; đăng nhập để lưu vào tài khoản.</div>
         </div>
       </div>
     </div>
@@ -249,10 +429,15 @@
     <!-- XẾP HẠNG -->
     <div class="g-modal over-title" id="modal-rank" style="display:none;">
       <div class="g-card rank-card">
-        <div class="g-card-head"><h3>🏆 <span class="zh">排行榜</span> · Bảng xếp hạng</h3><button type="button" class="g-close" data-close="modal-rank"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3>🏆 <span class="zh">排行榜</span> · Bảng xếp hạng</h3><button type="button" class="g-close"
+            data-close="modal-rank"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="rank-tabs">
-          <button type="button" class="rank-tab active" data-rank-tab="global">🌏 <span class="zh">全服</span> Toàn hệ thống</button>
-          <button type="button" class="rank-tab" data-rank-tab="mine">📒 <span class="zh">我的</span> Thu nhập từng ngày</button>
+          <button type="button" class="rank-tab active" data-rank-tab="global">🌏 <span class="zh">全服</span> Toàn hệ
+            thống</button>
+          <button type="button" class="rank-tab" data-rank-tab="mine">📒 <span class="zh">我的</span> Thu nhập từng
+            ngày</button>
         </div>
         <div class="rank-summary" id="rank-summary"></div>
         <div class="rank-list" id="rank-list"></div>
@@ -263,18 +448,29 @@
     <!-- CÀI ĐẶT -->
     <div class="g-modal" id="modal-settings" style="display:none;">
       <div class="g-card settings-card">
-        <div class="g-card-head"><h3>⚙️ <span class="zh">设置</span> · Cài đặt</h3><button type="button" class="g-close" data-close="modal-settings"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3>⚙️ <span class="zh">设置</span> · Cài đặt</h3><button type="button" class="g-close"
+            data-close="modal-settings"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="settings-list">
-          <label class="setting"><span><b>Âm thanh</b><small>Tiếng bước chân, tưới nước, thu hoạch</small></span><input type="checkbox" id="setting-sfx" checked><i class="sw"></i></label>
-          <label class="setting"><span><b>Giọng đọc tiếng Trung</b><small>Cho phép phát âm (nút 🔊)</small></span><input type="checkbox" id="setting-voice" checked><i class="sw"></i></label>
-          <label class="setting"><span><b>Tự động phát âm</b><small>Tự đọc từ khi làm việc, khi NPC nói</small></span><input type="checkbox" id="setting-autovoice" checked><i class="sw"></i></label>
-          <label class="setting"><span><b>Hiện pinyin</b><small>Phiên âm dưới chữ Hán</small></span><input type="checkbox" id="setting-pinyin" checked><i class="sw"></i></label>
-          <label class="setting"><span><b>Hiện nghĩa tiếng Việt</b><small>Tắt đi để tự luyện đọc hiểu</small></span><input type="checkbox" id="setting-vietnamese" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Âm thanh</b><small>Tiếng bước chân, tưới nước, thu hoạch</small></span><input
+              type="checkbox" id="setting-sfx" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Giọng đọc tiếng Trung</b><small>Cho phép phát âm (nút 🔊)</small></span><input
+              type="checkbox" id="setting-voice" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Tự động phát âm</b><small>Tự đọc từ khi làm việc, khi NPC
+                nói</small></span><input type="checkbox" id="setting-autovoice" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Hiện pinyin</b><small>Phiên âm dưới chữ Hán</small></span><input
+              type="checkbox" id="setting-pinyin" checked><i class="sw"></i></label>
+          <label class="setting"><span><b>Hiện nghĩa tiếng Việt</b><small>Tắt đi để tự luyện đọc
+                hiểu</small></span><input type="checkbox" id="setting-vietnamese" checked><i class="sw"></i></label>
         </div>
         <div class="g-card-foot">
-          <button type="button" class="g-btn-ghost" id="btn-back-to-title"><i class="fa-solid fa-house"></i> Màn hình chính</button>
-          <button type="button" class="g-btn-ghost danger" id="btn-reset-save"><i class="fa-solid fa-rotate"></i> Chơi lại từ đầu</button>
-          <button type="button" class="g-btn-primary" data-close="modal-settings"><i class="fa-solid fa-play"></i> Tiếp tục</button>
+          <button type="button" class="g-btn-ghost" id="btn-back-to-title"><i class="fa-solid fa-house"></i> Màn hình
+            chính</button>
+          <button type="button" class="g-btn-ghost danger" id="btn-reset-save"><i class="fa-solid fa-rotate"></i> Chơi
+            lại từ đầu</button>
+          <button type="button" class="g-btn-primary" data-close="modal-settings"><i class="fa-solid fa-play"></i> Tiếp
+            tục</button>
         </div>
       </div>
     </div>
@@ -282,7 +478,10 @@
     <!-- CHỌN (hạt giống, cây giống) -->
     <div class="g-modal" id="modal-pick" style="display:none;">
       <div class="g-card farm-card small">
-        <div class="g-card-head"><h3 id="pk-title"></h3><button type="button" class="g-close" data-close="modal-pick"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3 id="pk-title"></h3><button type="button" class="g-close" data-close="modal-pick"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="pk-grid" id="pk-grid"></div>
       </div>
     </div>
@@ -290,7 +489,10 @@
     <!-- THẺ TỪ VỰNG -->
     <div class="g-modal over-title" id="modal-card" style="display:none;">
       <div class="g-card farm-card word-card">
-        <div class="g-card-head"><h3>🔍 <span class="zh">生词卡</span> · Thẻ từ vựng</h3><button type="button" class="g-close" data-close="modal-card"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3>🔍 <span class="zh">生词卡</span> · Thẻ từ vựng</h3><button type="button" class="g-close"
+            data-close="modal-card"><i class="fa-solid fa-xmark"></i></button>
+        </div>
         <div id="card-body"></div>
       </div>
     </div>
@@ -298,9 +500,13 @@
     <!-- XÁC NHẬN -->
     <div class="g-modal" id="modal-confirm" style="display:none;">
       <div class="g-card farm-card small">
-        <div class="g-card-head"><h3 id="cf-title"></h3><button type="button" class="g-close" data-close="modal-confirm"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="g-card-head">
+          <h3 id="cf-title"></h3><button type="button" class="g-close" data-close="modal-confirm"><i
+              class="fa-solid fa-xmark"></i></button>
+        </div>
         <div class="cf-body" id="cf-body"></div>
-        <div class="mk-foot"><button type="button" class="g-btn-ghost" data-close="modal-confirm">Thôi</button><button type="button" class="g-btn-primary" id="cf-ok">OK</button></div>
+        <div class="mk-foot"><button type="button" class="g-btn-ghost" data-close="modal-confirm">Thôi</button><button
+            type="button" class="g-btn-primary" id="cf-ok">OK</button></div>
       </div>
     </div>
   </div>
