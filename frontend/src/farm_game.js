@@ -196,7 +196,7 @@ const ANI_X = Object.fromEntries(XLS_ANI.map(r => [r[0], r]));
 const mkAni = (code, extra) => { const [, chn, pin, vi, role, , lvl] = ANI_X[code]; return { chn, pin, vi, role, lvl, ...extra }; };
 const ANIMALS = {
   chicken: mkAni('ANI01', { id: 'chicken', icon: '🐔', q: '只', price: 20, sell: 15, pen: { chn: '鸡舍', pin: 'jīshè', vi: 'chuồng gà', cost: 0 }, product: 'egg', cycle: 1, slots: 6 }),
-  pig: mkAni('ANI02', { id: 'pig', icon: '🐷', q: '头', price: 60, sell: 50, sellGrown: 160, growDays: 6, pen: { chn: '猪舍', pin: 'zhūshè', vi: 'chuồng heo', cost: 150 }, product: null, cycle: 0, slots: 6 }),
+  pig: mkAni('ANI02', { id: 'pig', icon: '🐷', q: '头', price: 60, sell: 50, sellGrown: 140, growDays: 4, pen: { chn: '猪舍', pin: 'zhūshè', vi: 'chuồng heo', cost: 150 }, product: null, cycle: 0, slots: 6 }),
   sheep: mkAni('ANI03', { id: 'sheep', icon: '🐑', q: '只', price: 80, sell: 60, pen: { chn: '羊舍', pin: 'yángshè', vi: 'chuồng cừu', cost: 200 }, product: 'wool', cycle: 3, slots: 6 }),
   cow: mkAni('ANI04', { id: 'cow', icon: '🐄', q: '头', price: 120, sell: 90, pen: { chn: '牛舍', pin: 'niúshè', vi: 'chuồng bò', cost: 300 }, product: 'milk', cycle: 2, slots: 6 })
 };
