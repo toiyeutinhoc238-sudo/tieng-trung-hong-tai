@@ -1243,7 +1243,13 @@ class FarmGame {
     this.bag = counts(s.bag, 9999);
     this.fridge = counts(s.fridge, 9999);
     let srcPlots = Array.isArray(s.plots) ? s.plots : null;
-    if (srcPlots && srcPlots.length <= BED_POS.length) srcPlots = srcPlots.flatMap(p => (p && typeof p === 'object' ? Array.from({ length: BED_W }, () => ({ ...p })) : Array(BED_W).fill(null)));
+    // Save cũ: mỗi luống chỉ có 1 mục. Chuyển sang 4 ô mà KHÔNG nhân đôi cây: ô đầu giữ nguyên cây/trạng thái của luống cũ
+    // (1 cây = 1 phần giá ×3 = đúng bằng 3 phần giá cũ), 3 ô còn lại giữ đất đã cuốc nhưng để trống.
+    if (srcPlots && srcPlots.length <= BED_POS.length) srcPlots = srcPlots.flatMap(p => {
+      if (!p || typeof p !== 'object') return Array(BED_W).fill(null);
+      const rest = (p.state === 'tilled' || p.state === 'dead') ? { state: 'tilled' } : { state: p.state };
+      return [{ ...p }, ...Array.from({ length: BED_W - 1 }, () => ({ ...rest }))];
+    });
     if (srcPlots) srcPlots.slice(0, PLOT_POS.length).forEach((p, i) => {
       if (!p || typeof p !== 'object') return;
       const st = ['locked', 'sale', 'grass', 'tilled', 'dead'].includes(p.state) ? p.state : 'locked';
