@@ -201,6 +201,8 @@ FarmAudio.prototype.setRain = function setRain(on) {
 // 3. DỮ LIỆU GAME (lấy từ Excel — xem XLS_* ở đầu file)
 // ============================================================================
 const LEVEL_MAX = 50;
+const levelReward = (L) => 10 + 3 * L;                            // tiền thưởng khi lên cấp L
+const taskReward = (L) => 5 + Math.ceil(L / 2);                   // tiền thưởng mỗi nhiệm vụ
 const xpNeed = (L) => 30 + 10 * L;                               // EXP cần để từ cấp L lên L+1
 const xpTotal = (L) => { let s = 0; for (let l = 1; l < L; l++) s += xpNeed(l); return s; };
 const EXP = { hoe: 2, plant: 2, water: 1, harvest: 4, fill: 1, egg: 2, clean: 2, collect: 4, tree: 5, fruit: 4, fishfeed: 1, fish: 8, cook: 3, sell: 1, talk: 6, task: 10, clear: 1 };
@@ -1606,7 +1608,7 @@ class FarmGame {
     const gained = [];
     while (this.level < LEVEL_MAX && this.xp >= xpTotal(this.level + 1)) { this.level += 1; gained.push(this.level); }
     if (gained.length) {
-      gained.forEach(L => { this.money += 10 * L; });
+      gained.forEach(L => { this.money += levelReward(L); });
       this.refreshBeds();
       this.rebuild();
       this.learn('升级');
@@ -1622,9 +1624,9 @@ class FarmGame {
       if (tk.done || tk.key !== key) return;
       if (this.today[key] >= tk.need) {
         tk.done = true;
-        this.money += 5;
+        this.money += taskReward(this.level);
         this.learn('任务');
-        this.showToast('✅', `完成任务！Xong nhiệm vụ: ${tk.vi} · +${EXP.task} EXP, +5元`);
+        this.showToast('✅', `完成任务！Xong nhiệm vụ: ${tk.vi} · +${EXP.task} EXP, +${taskReward(this.level)}元`);
         this.audio.unlock();
         this.addXP(EXP.task);
       }
@@ -2675,7 +2677,7 @@ class FarmGame {
     const L = levels[levels.length - 1];
     const unl = levels.flatMap(l => unlocksAt(l));
     this.$('ms-body').innerHTML = `<div class="lu-burst">⭐</div><h3><span class="zh">升级了！</span> Lên cấp ${L}</h3>
-      <div class="lu-reward">💰 +${levels.reduce((s, l) => s + 10 * l, 0)}元</div>
+      <div class="lu-reward">💰 +${levels.reduce((s, l) => s + levelReward(l), 0)}元</div>
       ${unl.length ? `<div class="ms-unlock"><b>🔓 Mở khóa:</b><ul>${unl.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul></div>` : ''}
       <p class="farm-note">Mở khóa là được quyền mua — bạn vẫn dùng tiền để mua ở 商店.</p>`;
     this.audio.fanfare();
@@ -2690,7 +2692,7 @@ class FarmGame {
     this.$('tasks-body').innerHTML = `
       <h4 class="tm-title">📋 <span class="zh">今天的任务</span> · Nhiệm vụ hôm nay (第${this.day}天)</h4>
       <ul class="task-list big">${(this.tasks || []).map(tk => { const have = Math.min(tk.need, this.today[tk.key] || 0); return `<li class="${tk.done ? 'done' : ''}"><span>${tk.done ? '✅' : '⬜'}</span><div><b class="zh">${tk.zh}</b> <small>${tk.pin}</small><br>${escapeHtml(tk.vi)}</div><em>${have}/${tk.need}</em></li>`; }).join('') || '<li>Không có nhiệm vụ.</li>'}</ul>
-      <p class="farm-note">Mỗi nhiệm vụ xong: +${EXP.task} EXP, +5元.</p>
+      <p class="farm-note">Mỗi nhiệm vụ xong: +${EXP.task} EXP, +5元 (tăng dần theo cấp).</p>
       <h4 class="tm-title">📝 <span class="zh">今天的句子</span> · Mẫu câu hôm nay</h4>
       <div class="sent-list">${(this.todaySent || []).map(i => `<div class="sent">${this.wordLine(S(i))}<em>${escapeHtml(S(i).topic)}</em></div>`).join('')}</div>
       <details class="sent-all"><summary>📚 Các mẫu câu đã học (${seen.length}/${SENTENCES.length})</summary>
