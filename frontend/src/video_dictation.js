@@ -2312,10 +2312,13 @@ window.autoGenerateAllWithAI = async function () {
       }
 
       const lines = data.sentences.map(s => {
-        const sMin = Math.floor(s.startTime / 60);
-        const sSec = (s.startTime % 60).toFixed(3);
-        const eMin = Math.floor(s.endTime / 60);
-        const eSec = (s.endTime % 60).toFixed(3);
+        // Work in whole milliseconds so rounding can never print "60.000"
+        const sMs = Math.round(s.startTime * 1000);
+        const eMs = Math.round(s.endTime * 1000);
+        const sMin = Math.floor(sMs / 60000);
+        const sSec = ((sMs % 60000) / 1000).toFixed(3);
+        const eMin = Math.floor(eMs / 60000);
+        const eSec = ((eMs % 60000) / 1000).toFixed(3);
         const sFormatted = `${String(sMin).padStart(2, '0')}:${String(sSec).padStart(6, '0')}`;
         const eFormatted = `${String(eMin).padStart(2, '0')}:${String(eSec).padStart(6, '0')}`;
         const py = s.pinyin ? ` | ${s.pinyin}` : '';
@@ -3450,10 +3453,12 @@ async function handleSaveCustomVideo(e) {
         let textLine = line;
 
         // A. Range bracket: [00:12 - 00:18] or 00:12 - 00:18
-        const rangeMatch = line.match(/^\[?\s*([\d:.\s]+?)\s*(?:-|–|to)\s*([\d:.\s]+?)\s*\]?\s*(.*)$/i);
+        // (greedy, whitespace-free number groups: the old lazy groups stopped after one digit,
+        //  turning the end time into 0 and leaking "0:40.800]" into the text)
+        const rangeMatch = line.match(/^\[?\s*(\d{1,3}(?::\d{1,2}){0,2}(?:[.,]\d+)?)\s*(?:-->|-|–|—|to)\s*(\d{1,3}(?::\d{1,2}){0,2}(?:[.,]\d+)?)\s*\]?\s*(.*)$/i);
         if (rangeMatch && rangeMatch[1] && rangeMatch[2]) {
-          startTime = parseTimeToSeconds(rangeMatch[1].replace(/\s+/g, ':'));
-          endTime = parseTimeToSeconds(rangeMatch[2].replace(/\s+/g, ':'));
+          startTime = parseTimeToSeconds(rangeMatch[1].replace(',', '.'));
+          endTime = parseTimeToSeconds(rangeMatch[2].replace(',', '.'));
           textLine = rangeMatch[3];
         } else {
           // B. Single timestamp prefix: [0:17] text or 0:17 text
