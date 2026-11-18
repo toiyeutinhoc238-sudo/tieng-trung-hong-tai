@@ -178,7 +178,7 @@ const CROPS = XLS_VEG.map(([code, chn, pin, vi, lvl, d1, n, w2, w3]) => {
   const waits = [d1, w2 || d1, w3 || w2 || d1].slice(0, Math.max(1, n));
   const totalDays = waits.reduce((a, b) => a + b, 0);
   const seed = 2 + Math.round(lvl / 5);
-  const yieldN = 3;
+  const yieldN = 1;   // mỗi ô đất cho 1 phần (giá bán tính theo công thức nên giữ nguyên thu nhập trên mỗi hạt)
   const sell = Math.max(2, Math.round((seed * 1.6 + totalDays * 4) / (yieldN * waits.length)));
   return { id: code.toLowerCase(), code, chn, pin, vi, lvl: Math.max(1, lvl), waits, harvests: waits.length, icon: VEG_ICON[code] || '🌱', q: VEG_Q[code] || '个', seed, sell, yield: yieldN };
 });
@@ -236,6 +236,7 @@ const TOOL_X = Object.fromEntries(XLS_TOOL.map(r => [r[0], r]));
 const tool = (code, id, icon, buy, kind = 'tool') => { const [, chn, pin, vi, grp, lvl] = TOOL_X[code]; return { id, chn, pin, vi, grp, lvl: Math.max(1, lvl), icon, q: '个', kind, buy, group: 'tool' }; };
 [
   { id: 'egg', chn: '鸡蛋', pin: 'jīdàn', vi: 'trứng gà', icon: '🥚', q: '个', kind: 'product', sell: 3, group: 'food' },
+  { id: 'pork', chn: '猪肉', pin: 'zhūròu', vi: 'thịt heo', icon: '🥩', q: '块', kind: 'product', sell: 35, group: 'food' },
   { id: 'milk', chn: '牛奶', pin: 'niúnǎi', vi: 'sữa bò', icon: '🥛', q: '瓶', kind: 'product', sell: 25, group: 'food' },
   { id: 'wool', chn: '羊毛', pin: 'yángmáo', vi: 'lông cừu', icon: 'svg:wool', q: '团', kind: 'product', sell: 40, group: 'animal' },
   { ...tool('S04', 'feed', 'svg:sack_y', 1, 'feed'), q: '份' },
@@ -275,16 +276,21 @@ const WEATHERS = {
 };
 const rollWeather = () => { const r = Math.random(); return r < 0.5 ? 'sunny' : r < 0.75 ? 'cloudy' : 'rain'; };
 
-// Vườn rau: 16 luống (4×4), mỗi luống dài 4 ô. Số luống được mua theo cấp
+// Vườn rau: 16 luống (4×4), mỗi luống gồm 4 Ô ĐẤT RIÊNG (cuốc, gieo, tưới, thu hoạch, vặt xác từng ô). Số luống được mua theo cấp
 const BED_COLS = [7, 12, 17, 22];
 const BED_ROWS = [8, 10, 12, 14];
 const BED_W = 4;
-const PLOT_POS = [];
-BED_ROWS.forEach(y => BED_COLS.forEach(x => PLOT_POS.push([x, y])));
-const PLOT_PRICE = (k) => 20 + 10 * k;
-const bedsAllowed = (L) => Math.min(PLOT_POS.length, 2 + Math.floor(L / 3));
+const BED_POS = [];
+BED_ROWS.forEach(y => BED_COLS.forEach(x => BED_POS.push([x, y])));
+const PLOT_POS = [];                                   // từng ô đất: luống b có các ô b*4 … b*4+3
+BED_POS.forEach(([x, y]) => { for (let c = 0; c < BED_W; c++) PLOT_POS.push([x + c, y]); });
+const bedOf = (cellIdx) => Math.floor(cellIdx / BED_W);
+const PLOT_PRICE = (bedIdx) => 20 + 10 * bedIdx;       // giá mua theo luống
+const bedsAllowed = (L) => Math.min(BED_POS.length, 2 + Math.floor(L / 3));
+const PIG_MEAT = 4;                                    // 1 heo lớn → 4 miếng 猪肉
+const pigGrown = (an) => !!an && an.growth >= ANIMALS.pig.growDays;
 const ORCHARD_POS = [[3, 3], [6, 3], [3, 6], [6, 6], [3, 9], [6, 9], [3, 12], [6, 12]];
-const START = { money: 100, bag: { hoe: 1, can: 1, water: 5, seed_veg01: 3, feed: 6, rice: 2 } };
+const START = { money: 100, bag: { hoe: 1, can: 1, water: 5, seed_veg01: 8, feed: 6, rice: 2 } };
 
 // Mẫu câu (Excel) & hội thoại NPC (Excel)
 const SENTENCES = XLS_SENT.map(([topic, zh, pin, vi, len], i) => ({ i, topic, zh, pin, vi, len }));
@@ -353,7 +359,7 @@ const SCENES = {
 const PEN_X = { chicken: 7, pig: 11, sheep: 15, cow: 19 };   // chuồng 4×3 ô ở hàng y = 1..3
 const PEN_DOOR = (a) => [PEN_X[a] + 2, 4];
 const GARDEN = { x0: 6, y0: 7, x1: 26, y1: 15 };
-const WELL = [28, 9];
+const WELL = [3, 6];                                    // giếng ở phía trên, ngay dưới nhà: sáng dậy múc nước là tưới rau / cho vật nuôi uống
 const POND = { x0: 15, y0: 4, x1: 21, y1: 10 };
 const FEEDER = [14, 3];
 const ANIMAL_SPOTS = [[3, 2], [6, 2], [9, 2], [3, 5], [6, 5], [9, 5]];
@@ -383,14 +389,14 @@ function buildScene(g, id) {
       base[y][x] = edge && !gap ? 'F' : 's';
     }
     // hoa, bụi trang trí ở bãi cỏ trống
-    [[4, 7, 'x'], [3, 12, 'x'], [4, 14, 'x'], [5, 10, 'b'], [5, 6, 'x'], [28, 13, 'x'], [29, 14, 'x'], [28, 6, 'b'], [24, 6, 'x'], [9, 6, 'x'], [19, 6, 'x'], [14, 6, 'b']].forEach(([x, y, c]) => { base[y][x] = c; });
+    [[5, 8, 'x'], [3, 12, 'x'], [4, 14, 'x'], [5, 10, 'b'], [5, 6, 'x'], [28, 13, 'x'], [29, 14, 'x'], [28, 6, 'b'], [24, 6, 'x'], [9, 6, 'x'], [19, 6, 'x'], [14, 6, 'b']].forEach(([x, y, c]) => { base[y][x] = c; });
     add({ id: 'house', kind: 'house', x: 1, y: 1, w: 5, h: 4, word: '房子', stand: [[3, 5]] });
     ANIMAL_IDS.forEach(a => add({ id: `pen_${a}`, kind: 'pen', animal: a, x: PEN_X[a], y: 1, w: 4, h: 3, word: ANIMALS[a].pen.chn, stand: [PEN_DOOR(a)] }));
     add({ id: 'shop', kind: 'shop', x: 25, y: 1, w: 5, h: 4, word: '商店', stand: [[27, 5]] });
-    PLOT_POS.forEach(([x, y], i) => add({ id: `plot${i}`, kind: 'plot', idx: i, x, y, w: BED_W, h: 1, word: '菜地' }));
-    add({ id: 'well', kind: 'well', x: WELL[0], y: WELL[1], w: 2, h: 2, word: '水井', stand: [[27, 9], [27, 10]] });
+    PLOT_POS.forEach(([x, y], i) => add({ id: `plot${i}`, kind: 'plot', idx: i, x, y, w: 1, h: 1, word: '菜地' }));
+    add({ id: 'well', kind: 'well', x: WELL[0], y: WELL[1], w: 2, h: 2, word: '水井', stand: [[WELL[0], WELL[1] - 1], [WELL[0] + 1, WELL[1] - 1]] });
     add({ id: 'exit_forest', kind: 'exit', to: 'forest', x: 0, y: 15, w: 1, h: 1, word: '后院', stand: [[1, 15]] });
-    if (g.npc && !g.npc.done) add({ id: 'npc', kind: 'npc', x: 3, y: 9, word: g.npcWho().chn });
+    if (g.npc && !g.npc.done) add({ id: 'npc', kind: 'npc', x: 3, y: 11, word: g.npcWho().chn });
   } else if (id === 'house') {
     for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) base[y][x] = (y === 0 || y === rows - 1 || x === 0 || x === cols - 1) ? 'w' : 'f';
     base[rows - 1][6] = 'f';
@@ -795,7 +801,7 @@ function drawObj(ctx, g, sc, o, X, Y, T, t) {
       const big = a.id === 'pig' ? 0.55 + 0.35 * Math.min(1, an.growth / a.growDays) : 0.85;
       drawIcon(ctx, a.icon, cx, cy + b, T * big);
       if (an.ready && a.product) { drawIcon(ctx, itemOf(a.product).icon, cx + T * 0.4, Y - T * 0.05, T * 0.36); sparkle(ctx, cx, cy, T, t); }
-      if (a.id === 'pig' && an.growth >= a.growDays) label(ctx, '长大了', cx, Y - T * 0.2, T, '#43a047', '#fff');
+      if (a.id === 'pig' && pigGrown(an)) { drawIcon(ctx, '🥩', cx, Y - T * 0.2 + Math.sin(t / 300) * 2, T * 0.5); sparkle(ctx, cx, cy, T, t); }
       if (an.health < 40) label(ctx, '🤒', cx - T * 0.45, Y, T, 'rgba(255,255,255,0.9)');
       break;
     }
@@ -857,53 +863,66 @@ function drawPen(ctx, g, o, X, Y, T, t) {
   // sân rào
   ctx.fillStyle = '#e8cf95'; ctx.fillRect(X + T * 0.2, Y + T * 1.8, W - T * 0.4, T * 1.1);
   const shown = pen.animals.slice(0, 3);
-  shown.forEach((_, i) => drawIcon(ctx, a.icon, X + T * (0.85 + i * 1.15), Y + T * 2.3 + Math.sin(t / 400 + i) * 1.5, T * 0.62));
   ctx.strokeStyle = '#a0693a'; ctx.lineWidth = 3;
   ctx.beginPath(); ctx.moveTo(X + T * 0.2, Y + T * 2.65); ctx.lineTo(X + W * 0.4, Y + T * 2.65); ctx.moveTo(X + W * 0.6, Y + T * 2.65); ctx.lineTo(X + W - T * 0.2, Y + T * 2.65); ctx.stroke();
   for (let i = 0; i <= 6; i++) { const px = X + T * 0.2 + (i * (W - T * 0.4)) / 6; if (px > X + W * 0.42 && px < X + W * 0.58) continue; ctx.fillStyle = '#c98a4b'; ctx.fillRect(px - 2, Y + T * 2.45, 5, T * 0.45); }
   board(ctx, cx, Y + T * 0.32, T * 0.82, `${a.pen.chn} ${pen.animals.length}${a.icon}`, '');
+  // vật nuôi vẽ SAU hàng rào để thấy trọn cả con (không bị rào che nửa người)
+  shown.forEach((an, i) => {
+    const ax = X + T * (0.85 + i * 1.15);
+    const ay = Y + T * 2.1 + Math.sin(t / 400 + i) * 1.5;
+    drawIcon(ctx, a.icon, ax, ay, T * 0.66);
+    if (a.id === 'pig' && pigGrown(an)) drawIcon(ctx, '🥩', ax, ay - T * 0.5, T * 0.36);
+  });
   if (g.penNeedsCare(a.id)) drawIcon(ctx, '❗', X + W - T * 0.3, Y + T * 1.1, T * 0.4);
 }
 
-// Luống rau dài 4 ô: 5 cây
+// Một ô đất 1×1: cuốc → gieo → tưới (vòng đậm dưới chân cây) → thu hoạch → vặt xác cây
 function drawBed(ctx, g, o, X, Y, T, t) {
   const p = g.plots[o.idx];
-  const W = o.w * T;
   if (!p) return;
+  const cx = X + T / 2;
+  const cy = Y + T / 2;
   if (p.state === 'locked') {
-    ctx.fillStyle = 'rgba(120,80,40,0.18)'; rr(ctx, X + 3, Y + 4, W - 6, T - 8, 8); ctx.fill();
+    ctx.fillStyle = 'rgba(120,80,40,0.18)'; rr(ctx, X + 2, Y + 3, T - 4, T - 6, 8); ctx.fill();
     return;
   }
   if (p.state === 'sale') {
-    ctx.strokeStyle = 'rgba(120,70,30,0.65)'; ctx.setLineDash([6, 4]); ctx.lineWidth = 2; rr(ctx, X + 3, Y + 4, W - 6, T - 8, 8); ctx.stroke(); ctx.setLineDash([]);
-    label(ctx, `出售 · Mua ${PLOT_PRICE(o.idx)}元`, X + W / 2, Y + T / 2, T, '#fff8e1', '#b45309');
+    ctx.strokeStyle = 'rgba(120,70,30,0.65)'; ctx.setLineDash([6, 4]); ctx.lineWidth = 2; rr(ctx, X + 2, Y + 3, T - 4, T - 6, 8); ctx.stroke(); ctx.setLineDash([]);
+    if (o.idx % BED_W === 0) label(ctx, `出售 · Mua ${PLOT_PRICE(bedOf(o.idx))}元`, X + (BED_W * T) / 2, cy, T, '#fff8e1', '#b45309');
     return;
   }
-  ctx.fillStyle = 'rgba(0,0,0,0.12)'; rr(ctx, X + 4, Y + 7, W - 6, T - 8, 8); ctx.fill();
-  ctx.fillStyle = p.state === 'grass' ? '#b89a62' : p.watered ? '#6d4426' : '#a0703c';
-  rr(ctx, X + 3, Y + 4, W - 6, T - 8, 8); ctx.fill();
+  ctx.fillStyle = 'rgba(0,0,0,0.12)'; rr(ctx, X + 3, Y + 6, T - 5, T - 7, 8); ctx.fill();
+  ctx.fillStyle = p.state === 'grass' ? '#b89a62' : '#a0703c';
+  rr(ctx, X + 2, Y + 3, T - 4, T - 6, 8); ctx.fill();
   ctx.strokeStyle = '#7a4a22'; ctx.lineWidth = 2; ctx.stroke();
   if (p.state === 'grass') {
     ctx.strokeStyle = '#7cb342'; ctx.lineWidth = 1.5;
-    for (let i = 0; i < 8; i++) { ctx.beginPath(); ctx.moveTo(X + T * (0.3 + i * 0.47), Y + T * 0.72); ctx.lineTo(X + T * (0.25 + i * 0.47), Y + T * 0.45); ctx.stroke(); }
+    [0.26, 0.5, 0.74].forEach((k, i) => { ctx.beginPath(); ctx.moveTo(X + T * k, Y + T * (0.72 - (i % 2) * 0.06)); ctx.lineTo(X + T * (k - 0.05), Y + T * 0.42); ctx.stroke(); });
     return;
   }
-  ctx.strokeStyle = p.watered ? 'rgba(40,20,5,0.45)' : 'rgba(90,55,20,0.45)'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(X + 10, Y + T * 0.5); ctx.lineTo(X + W - 10, Y + T * 0.5); ctx.stroke();
-  const xs = [0.12, 0.31, 0.5, 0.69, 0.88].map(k => X + W * k);
-  const cy = Y + T / 2;
-  if (p.state === 'dead') { xs.forEach(x => { ctx.strokeStyle = '#8d6e3f'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, cy + T * 0.25); ctx.lineTo(x - 3, cy - T * 0.2); ctx.moveTo(x, cy + T * 0.05); ctx.lineTo(x + 5, cy - T * 0.12); ctx.stroke(); }); label(ctx, '枯萎 · dọn luống', X + W / 2, Y - T * 0.05, T, 'rgba(255,255,255,0.9)', '#8d6e3f'); return; }
+  // ô đã cuốc: một rãnh đất
+  ctx.strokeStyle = 'rgba(90,55,20,0.4)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(X + T * 0.18, Y + T * 0.82); ctx.lineTo(X + T * 0.82, Y + T * 0.82); ctx.stroke();
+  if (p.state === 'dead') {
+    ctx.strokeStyle = '#8d6e3f'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(cx, cy + T * 0.28); ctx.lineTo(cx - 4, cy - T * 0.22); ctx.moveTo(cx, cy + T * 0.08); ctx.lineTo(cx + T * 0.16, cy - T * 0.1); ctx.moveTo(cx - 2, cy - T * 0.02); ctx.lineTo(cx - T * 0.15, cy - T * 0.12); ctx.stroke();
+    drawIcon(ctx, '🥀', cx, cy - T * 0.05, T * 0.46);
+    return;
+  }
+  // đã tưới: vòng tròn đậm dưới chân cây báo hiệu cây đã được tưới
+  if (p.crop && p.watered) {
+    ctx.fillStyle = 'rgba(40,20,5,0.30)'; ctx.beginPath(); ctx.ellipse(cx, cy + T * 0.22, T * 0.36, T * 0.17, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = 'rgba(28,12,2,0.8)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(cx, cy + T * 0.22, T * 0.36, T * 0.17, 0, 0, 7); ctx.stroke();
+  }
   if (!p.crop) return;
   const c = itemOf(p.crop);
   const need = c.waits[Math.min(p.harvestNo || 0, c.waits.length - 1)];
   const prog = p.ripe ? 1 : p.grow / need;
-  xs.forEach((x, i) => {
-    if (p.ripe) drawIcon(ctx, c.icon, x, cy - T * 0.08, T * 0.56);
-    else if (prog <= 0 && !(p.harvestNo > 0)) { ctx.fillStyle = '#4e342e'; ctx.beginPath(); ctx.arc(x, cy, T * 0.05, 0, 7); ctx.fill(); }
-    else drawIcon(ctx, prog < 0.5 ? '🌱' : '🌿', x, cy - T * 0.06, T * (0.36 + 0.2 * prog + (i % 2) * 0.03));
-  });
-  if (p.ripe) sparkle(ctx, X + W / 2, cy, T * 1.4, t);
-  if (!p.watered && !p.ripe) drawIcon(ctx, '💧', X + W - T * 0.12, Y + T * 0.08, T * 0.26);
+  if (p.ripe) { drawIcon(ctx, c.icon, cx, cy - T * 0.06, T * 0.7); sparkle(ctx, cx, cy, T * 1.1, t); }
+  else if (prog <= 0 && !(p.harvestNo > 0)) { ctx.fillStyle = '#4e342e'; ctx.beginPath(); ctx.arc(cx, cy + T * 0.1, T * 0.07, 0, 7); ctx.fill(); }
+  else drawIcon(ctx, prog < 0.5 ? '🌱' : '🌿', cx, cy - T * 0.04, T * (0.42 + 0.3 * prog));
+  if (!p.watered && !p.ripe) drawIcon(ctx, '💧', X + T * 0.84, Y + T * 0.14, T * 0.3);
 }
 
 function drawTray(ctx, g, sc, o, X, Y, T) {
@@ -1136,7 +1155,7 @@ class FarmGame {
     this.dogPos = null;
     this.bag = { ...START.bag };
     this.fridge = {};
-    this.plots = PLOT_POS.map((_, i) => ({ state: i < 2 ? 'grass' : 'locked', crop: null, grow: 0, harvestNo: 0, watered: false, ripe: false, fert: false }));
+    this.plots = PLOT_POS.map((_, i) => ({ state: bedOf(i) < 2 ? 'grass' : 'locked', crop: null, grow: 0, harvestNo: 0, watered: false, ripe: false, fert: false }));
     this.trees = ORCHARD_POS.map(() => null);
     this.pens = {};
     ANIMAL_IDS.forEach(id => {
@@ -1190,7 +1209,9 @@ class FarmGame {
     if (Array.isArray(s.sentSeen)) s.sentSeen.forEach(i => { if (SENTENCES[i]) this.sentSeen.add(i); });
     this.bag = counts(s.bag, 9999);
     this.fridge = counts(s.fridge, 9999);
-    if (Array.isArray(s.plots)) s.plots.slice(0, PLOT_POS.length).forEach((p, i) => {
+    let srcPlots = Array.isArray(s.plots) ? s.plots : null;
+    if (srcPlots && srcPlots.length <= BED_POS.length) srcPlots = srcPlots.flatMap(p => (p && typeof p === 'object' ? Array.from({ length: BED_W }, () => ({ ...p })) : Array(BED_W).fill(null)));
+    if (srcPlots) srcPlots.slice(0, PLOT_POS.length).forEach((p, i) => {
       if (!p || typeof p !== 'object') return;
       const st = ['locked', 'sale', 'grass', 'tilled', 'dead'].includes(p.state) ? p.state : 'locked';
       const crop = p.crop && ITEMS[p.crop] && ITEMS[p.crop].kind === 'crop' ? p.crop : null;
@@ -1341,13 +1362,13 @@ class FarmGame {
   penNeedsCare(id) {
     const p = this.pens[id];
     if (!p.owned) return false;
-    return p.animals.some((_, i) => !p.food[i] || !p.water[i]) || p.poops.length > 0 || p.nests.some(Boolean) || p.animals.some(a => a.ready);
+    return p.animals.some((_, i) => !p.food[i] || !p.water[i]) || p.poops.length > 0 || p.nests.some(Boolean) || p.animals.some(a => a.ready) || (id === 'pig' && p.animals.some(pigGrown));
   }
 
   // Luống được phép mua theo cấp
   refreshBeds() {
     const allowed = bedsAllowed(this.level);
-    this.plots.forEach((p, i) => { if (i < allowed && p.state === 'locked') p.state = 'sale'; });
+    this.plots.forEach((p, i) => { if (bedOf(i) < allowed && p.state === 'locked') p.state = 'sale'; });
   }
 
   // --------------------------------------------------------------------------
@@ -1599,30 +1620,29 @@ class FarmGame {
     const p = this.plots[o.idx];
     if (p.state === 'locked') return this.warn('🔒', `Luống này chưa mở. Lên cấp để được mua thêm luống (hiện được ${bedsAllowed(this.level)} luống).`);
     if (p.state === 'sale') {
-      const price = PLOT_PRICE(o.idx);
-      return this.goDo(o, () => this.confirm('🟫 Mua luống rau', `<p>Mua thêm 1 luống <b class="zh">菜地</b> càidì giá <b>${price}元</b>?</p>`, '买 Mua', () => {
+      const bed = bedOf(o.idx);
+      const price = PLOT_PRICE(bed);
+      return this.goDo(o, () => this.confirm('🟫 Mua luống rau', `<p>Mua thêm 1 luống <b class="zh">菜地</b> càidì (gồm ${BED_W} ô đất) giá <b>${price}元</b>?</p>`, '买 Mua', () => {
         if (this.money < price) return this.warn('💰', `Chưa đủ tiền (cần ${price}元).`);
         this.money -= price;
-        p.state = 'grass';
+        for (let c = 0; c < BED_W; c++) { const q = this.plots[bed * BED_W + c]; if (q && q.state === 'sale') q.state = 'grass'; }
         this.learn('菜地');
         this.audio.unlock();
-        this.showToast('🟫', 'Đã mua luống mới! Dùng 锄头 cuốc đất rồi gieo hạt nhé.');
+        this.showToast('🟫', 'Đã mua luống mới (4 ô)! Dùng 锄头 cuốc từng ô rồi gieo hạt nhé.');
         this.renderHUD();
         this.markDirty();
       }));
     }
     if (p.state === 'dead') {
-      const gl = this.has('gloves');
-      if (!gl && !this.has('hoe')) return this.warn('🧤', 'Cần 手套 (găng tay) hoặc 锄头 (cuốc) để dọn luống héo.');
-      const cost = gl ? ENERGY.clear : ENERGY.clearHoe;
-      if (!this.needEnergy(cost)) return;
+      // vặt xác cây héo: làm bằng tay, không cần dụng cụ
+      if (!this.needEnergy(ENERGY.clear)) return;
       return this.goDo(o, () => {
-        if (p.state !== 'dead' || !this.needEnergy(cost)) return;
+        if (p.state !== 'dead' || !this.needEnergy(ENERGY.clear)) return;
         p.state = 'tilled';
-        this.useEnergy(cost);
+        this.useEnergy(ENERGY.clear);
         this.audio.dig();
         this.learn('枯萎');
-        this.actWord(gl ? '手套' : '锄地');
+        this.actWord('清理');
         this.addXP(EXP.clear);
       });
     }
@@ -1676,7 +1696,7 @@ class FarmGame {
         this.learn('成熟');
         this.actWord('收获', ` +${c.yield}${c.icon.startsWith('svg:') ? '' : c.icon}`);
         if (!last) this.showToast(c.icon, `${c.chn}: lứa ${p.harvestNo}/${c.harvests}. Tiếp tục tưới, ${c.waits[p.harvestNo]} ngày nữa thu lứa sau.`);
-        else this.showToast('🥀', `${c.chn} đã thu hết ${c.harvests} lứa — cây 枯萎 héo, dọn luống (手套 găng tay / 锄头 cuốc) rồi gieo lại.`);
+        else this.showToast('🥀', `${c.chn} đã thu hết ${c.harvests} lứa — cây 枯萎 héo. Nhấp vào ô đó để vặt xác cây (không cần dụng cụ) rồi gieo lại.`);
         this.addXP(EXP.harvest);
         this.bump('harvest');
       });
@@ -1801,12 +1821,36 @@ class FarmGame {
         this.addXP(EXP.collect);
       });
     }
+    if (a.id === 'pig' && pigGrown(an)) {
+      if (this.bagFree() < PIG_MEAT) return this.warn('🎒', `Túi cần trống ${PIG_MEAT} chỗ để nhận thịt — cất bớt vào 冰箱.`);
+      if (!this.needEnergy(ENERGY.collect)) return;
+      return this.goDo(o, () => this.confirm('🥩 Thu hoạch thịt heo', `<p>Thu hoạch <b class="zh">猪肉</b> zhūròu (thịt heo) từ con heo số ${o.slot + 1}? Bạn nhận <b>${PIG_MEAT} miếng thịt</b> 🥩 và con heo này không còn trong chuồng.</p>`, '收肉 Thu hoạch', () => this.harvestPig(o.slot)));
+    }
     const fed = pen.food[o.slot] && pen.water[o.slot];
-    const extra = a.id === 'pig' ? ` · lớn ${Math.min(an.growth, a.growDays)}/${a.growDays} ngày${an.growth >= a.growDays ? ' (长大了 — bán được giá cao ở 商店)' : ''}`
+    const extra = a.id === 'pig' ? ` · lớn ${Math.min(an.growth, a.growDays)}/${a.growDays} ngày`
       : a.product ? ` · ${itemOf(a.product).chn} sau ${Math.max(0, a.cycle - an.prog)} ngày được chăm` : '';
     this.say(a.chn);
     this.showToast(a.icon, `${a.chn} ${a.pin} · ${a.vi} số ${o.slot + 1}: ${an.health >= 70 ? '健康 khỏe' : an.health >= 40 ? 'hơi yếu' : '🤒 ốm — cho ăn, uống, dọn chuồng'} (${an.health}%) · hôm nay ${fed ? 'đã no' : '饿 còn đói/khát'}${extra}`);
     return null;
+  }
+  harvestPig(slot) {
+    const here = this.penHere();
+    if (!here) return;
+    const { a, pen } = here;
+    const an = pen.animals[slot];
+    if (!an || a.id !== 'pig' || !pigGrown(an) || this.bagFree() < PIG_MEAT || !this.needEnergy(ENERGY.collect)) return;
+    pen.animals.splice(slot, 1);
+    pen.food.splice(slot, 1); pen.food.push(false);
+    pen.water.splice(slot, 1); pen.water.push(false);
+    this.give('pork', PIG_MEAT);
+    this.useEnergy(ENERGY.collect);
+    this.audio.harvest();
+    this.learn('猪'); this.learn('猪肉');
+    this.actWord('猪肉', ` +${PIG_MEAT}🥩`);
+    this.addXP(EXP.collect);
+    this.rebuild();
+    this.renderHUD();
+    this.markDirty();
   }
   cleanPoop(idx) {
     const { pen } = this.penHere();
@@ -1897,12 +1941,12 @@ class FarmGame {
     const poops = ANIMAL_IDS.reduce((s, k) => s + (this.pens[k].owned ? this.pens[k].poops.length : 0), 0);
     const empty = this.plots.filter(p => (p.state === 'tilled' && !p.crop) || p.state === 'grass').length;
     const T = (key, need, zh, pin, vi) => ({ key, need, zh, pin, vi, done: false });
-    if (ripe) out.push(T('harvest', ripe, '收获成熟的菜', 'shōuhuò chéngshú de cài', `Thu hoạch ${ripe} luống/cây đã chín ✨`));
-    if (growing && this.weather !== 'rain') out.push(T('water', growing, '给菜浇水', 'gěi cài jiāoshuǐ', `Tưới ${growing} luống/cây đang lớn`));
+    if (ripe) out.push(T('harvest', ripe, '收获成熟的菜', 'shōuhuò chéngshú de cài', `Thu hoạch ${ripe} ô/cây đã chín ✨`));
+    if (growing && this.weather !== 'rain') out.push(T('water', growing, '给菜浇水', 'gěi cài jiāoshuǐ', `Tưới ${growing} ô/cây đang lớn`));
     if (this.animalsTotal()) out.push(T('feed', this.animalsTotal() * 2, '喂动物、加水', 'wèi dòngwù, jiā shuǐ', `Cho ${this.animalsTotal()} con vật ăn & uống (${this.animalsTotal() * 2} máng)`));
     if (eggs) out.push(T('eggs', eggs, '捡鸡蛋', 'jiǎn jīdàn', `Nhặt ${eggs} quả trứng trong 鸡窝`));
     if (poops) out.push(T('clean', poops, '打扫鸡舍', 'dǎsǎo jīshè', `Dọn ${poops} chỗ phân trong chuồng`));
-    if (empty && Object.keys(this.bag).some(k => ITEMS[k].kind === 'seed')) out.push(T('plant', 1, '播种', 'bōzhǒng', 'Gieo hạt vào 1 luống trống'));
+    if (empty && Object.keys(this.bag).some(k => ITEMS[k].kind === 'seed')) out.push(T('plant', 1, '播种', 'bōzhǒng', 'Gieo hạt vào 1 ô đất trống'));
     if (this.npc) out.push(T('talk', 1, '和客人聊天', 'hé kèrén liáotiān', 'Trò chuyện với khách ở lối vào'));
     out.push(T('sell', 3, '卖东西', 'mài dōngxi', 'Bán 3 món nông sản ở 商店'));
     if (this.day % 2 === 0) out.push(T('cook', 1, '做饭', 'zuòfàn', 'Nấu 1 món ăn trong bếp'));
@@ -1944,13 +1988,13 @@ class FarmGame {
     const dead = this.plots.filter(p => p.state === 'dead').length;
     const empty = this.plots.filter(p => (p.state === 'tilled' && !p.crop) || p.state === 'grass').length;
     const chickensFed = this.pens.chicken.animals.filter((_, i) => this.pens.chicken.food[i] && this.pens.chicken.water[i]).length;
-    if (ripeTmr) L2.push(`✨ Thu hoạch ${ripeTmr} luống rau sẽ chín`);
-    if (water) L2.push(`💧 Tưới ${water} luống rau đang lớn (trừ khi trời mưa)`);
+    if (ripeTmr) L2.push(`✨ Thu hoạch ${ripeTmr} ô rau sẽ chín`);
+    if (water) L2.push(`💧 Tưới ${water} ô rau đang lớn (trừ khi trời mưa)`);
     if (this.animalsTotal()) L2.push(`🌾 Cho ${this.animalsTotal()} con vật ăn & thêm nước — mua đủ 饲料, múc đủ nước`);
     if (chickensFed) L2.push(`🥚 Nhặt khoảng ${chickensFed} quả trứng`);
     L2.push('🧹 Dọn phân trong chuồng (nếu có)');
-    if (dead) L2.push(`🥀 Dọn ${dead} luống héo rồi gieo lại`);
-    if (empty) L2.push(`🌱 Gieo hạt vào ${empty} luống trống`);
+    if (dead) L2.push(`🥀 Vặt xác ${dead} ô cây héo rồi gieo lại`);
+    if (empty) L2.push(`🌱 Gieo hạt vào ${empty} ô đất trống`);
     return L2;
   }
 
@@ -1989,7 +2033,7 @@ class FarmGame {
       p.watered = false;
       p.fert = false;
     });
-    if (grown) sum.push(`🌱 ${grown} luống rau lớn thêm${ripe ? `, <b>${ripe} luống đã chín</b> ✨` : ''}.`);
+    if (grown) sum.push(`🌱 ${grown} ô rau lớn thêm${ripe ? `, <b>${ripe} ô đã chín</b> ✨` : ''}.`);
     let fruits = 0;
     this.trees.forEach(tr => {
       if (!tr) return;
@@ -2167,6 +2211,7 @@ class FarmGame {
         btns: this.pets[p.id] ? '<em class="ok">✔ Đã nuôi</em>' : `<button type="button" class="g-btn-chip" data-buypet="${p.id}" ${this.money >= p.price ? '' : 'disabled'}>买</button>` })));
       ANIMAL_IDS.forEach(id => {
         const a = ANIMALS[id];
+        if (id === 'pig') return;   // heo: thu hoạch thịt trong chuồng, không bán cả con
         this.pens[id].animals.forEach((an, i) => {
           const price = a.id === 'pig' && an.growth >= a.growDays ? a.sellGrown : a.sell;
           rows.push(card({ icon: a.icon, chn: `卖 ${a.chn} #${i + 1}`, pin: a.pin, vi: `bán ${a.vi.toLowerCase()}${a.id === 'pig' ? (an.growth >= a.growDays ? ' · 长大了' : ` · lớn ${an.growth}/${a.growDays}`) : ''}`, price: `${price}元`, btns: `<button type="button" class="g-btn-chip" data-sellanimal="${id}:${i}">卖</button>` }));
@@ -2189,7 +2234,7 @@ class FarmGame {
     let items = [];
     if (t === 'seed') items = Object.values(ITEMS).filter(i => ['seed', 'sapling', 'fry'].includes(i.kind)).sort((a, b) => a.lvl - b.lvl);
     if (t === 'feed') items = ['feed', 'fishfood', 'rice', 'oil'].map(k => ITEMS[k]);
-    if (t === 'tool') items = ['hoe', 'can', 'fert', 'basket', 'gloves', 'rod', 'bait'].map(k => ITEMS[k]);
+    if (t === 'tool') items = ['hoe', 'can', 'fert', 'basket', 'rod', 'bait'].map(k => ITEMS[k]);
     grid.innerHTML = items.map(it => {
       const isTool = it.kind === 'tool';
       const owned = isTool && this.has(it.id);
@@ -2270,7 +2315,7 @@ class FarmGame {
     const a = ANIMALS[id];
     const pen = this.pens[id];
     const an = pen.animals[i];
-    if (!an) return;
+    if (!an || id === 'pig') return;
     const price = a.id === 'pig' && an.growth >= a.growDays ? a.sellGrown : a.sell;
     this.confirm(`${a.icon} Bán ${a.vi.toLowerCase()}`, `<p>Bán ${a.vi.toLowerCase()} số ${i + 1} (con vật sống) giá <b>${price}元</b>?</p>`, '卖 Bán', () => {
       pen.animals.splice(i, 1);
@@ -2689,7 +2734,7 @@ class FarmGame {
     const w = WEATHERS[this.weather];
     this.learn(w.chn);
     this.showToast(w.icon, `第${this.day}天 · ${w.chn} ${w.pin} · ${w.vi}. ${w.note}`);
-    if (this.day === 1 && !this.xp) setTimeout(() => { this.openTasks(); this.showToast('👆', 'Nhấp vào vật thể (luống rau, giếng, chuồng gà…) — nhân vật sẽ tự đi tới và làm việc.'); }, 900);
+    if (this.day === 1 && !this.xp) setTimeout(() => { this.openTasks(); this.showToast('👆', 'Nhấp vào vật thể (ô đất, giếng, chuồng gà…) — nhân vật sẽ tự đi tới và làm việc.'); }, 900);
     else if (this.npc && !this.npc.done) setTimeout(() => this.showToast('💬', `Có ${this.npcWho().chn} (${this.npcWho().vi}) đang đợi ở lối vào nông trại.`), 1800);
   }
   async resetGame() {
