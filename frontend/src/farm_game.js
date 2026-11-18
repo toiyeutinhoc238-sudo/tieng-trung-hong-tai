@@ -211,34 +211,34 @@ const VEG_Q = { VEG01: '把', VEG02: '个', VEG03: '根', VEG04: '棵', VEG05: '
 const CROPS = XLS_VEG.map(([code, chn, pin, vi, lvl, d1, n, w2, w3]) => {
   const waits = [d1, w2 || d1, w3 || w2 || d1].slice(0, Math.max(1, n));
   const totalDays = waits.reduce((a, b) => a + b, 0);
-  const seed = 2 + Math.round(lvl / 5);
+  const seed = 4 + Math.round(lvl * 1.1);     // hạt giống đắt dần theo cấp (chống lạm phát)
   const yieldN = 1;   // mỗi ô đất cho 1 phần (giá bán tính theo công thức nên giữ nguyên thu nhập trên mỗi hạt)
-  const sell = Math.max(2, Math.round((seed * 1.6 + totalDays * 4) / (yieldN * waits.length)));
+  const sell = Math.max(2, Math.round((seed * 1.35 + totalDays * 2.5) / (yieldN * waits.length)));
   return { id: code.toLowerCase(), code, chn, pin, vi, lvl: Math.max(1, lvl), waits, harvests: waits.length, icon: VEG_ICON[code] || '🌱', q: VEG_Q[code] || '个', seed, sell, yield: yieldN };
 });
 const FRUIT_ICON = { FR01: '🍎', FR02: '🍊', FR03: '🍑', FR04: '🍐', FR05: '🍇', FR06: '🍓', FR07: '🍌', FR08: '🍉', FR09: '🥭', FR10: '🍍', FR11: '🐉', FR12: '🍒' };
 const FRUITS = XLS_FRUIT.map(([code, chn, pin, vi, lvl]) => {
   const grow = 3 + Math.round((lvl - 20) / 8);
-  return { id: code.toLowerCase(), code, chn, pin, vi, lvl, icon: FRUIT_ICON[code] || '🍎', q: '个', sap: 30 + (lvl - 20) * 3, grow, regrow: 2 + (lvl >= 35 ? 1 : 0), yield: 3, sell: 6 + Math.round((lvl - 20) / 3) };
+  return { id: code.toLowerCase(), code, chn, pin, vi, lvl, icon: FRUIT_ICON[code] || '🍎', q: '个', sap: 60 + (lvl - 20) * 8, grow, regrow: 2 + (lvl >= 35 ? 1 : 0), yield: 3, sell: Math.round((60 + (lvl - 20) * 8) * 0.15) };
 });
 const FISH_ICON = { F01: '🐟', F04: '🐟', F05: '🐟', F06: '🐠', F09: '🦐', F10: '🦀' };
-const FISH = XLS_FISH.map(([code, chn, pin, vi, lvl]) => ({ id: code.toLowerCase(), code, chn, pin, vi, lvl, icon: FISH_ICON[code] || '🐟', fry: 8 + Math.round((lvl - 20) / 2), sell: 20 + (lvl - 20), days: lvl >= 45 ? 4 : 3 }));
+const FISH = XLS_FISH.map(([code, chn, pin, vi, lvl]) => ({ id: code.toLowerCase(), code, chn, pin, vi, lvl, icon: FISH_ICON[code] || '🐟', fry: 15 + (lvl - 20) * 2, sell: Math.round((15 + (lvl - 20) * 2) * 1.8), days: lvl >= 45 ? 4 : 3 }));
 const POND_CAP = 10;
 const BACKYARD_LVL = 20;
 // Vật nuôi (tối đa 6 con / chuồng) + thú cưng trong nhà
 const ANI_X = Object.fromEntries(XLS_ANI.map(r => [r[0], r]));
 const mkAni = (code, extra) => { const [, chn, pin, vi, role, , lvl] = ANI_X[code]; return { chn, pin, vi, role, lvl, ...extra }; };
 const ANIMALS = {
-  chicken: mkAni('ANI01', { id: 'chicken', icon: '🐔', q: '只', price: 20, sell: 15, pen: { chn: '鸡舍', pin: 'jīshè', vi: 'chuồng gà', cost: 0 }, product: 'egg', cycle: 1, slots: 6 }),
-  pig: mkAni('ANI02', { id: 'pig', icon: '🐷', q: '头', price: 60, sell: 50, sellGrown: 140, growDays: 4, pen: { chn: '猪舍', pin: 'zhūshè', vi: 'chuồng heo', cost: 150 }, product: null, cycle: 0, slots: 6 }),
-  sheep: mkAni('ANI03', { id: 'sheep', icon: '🐑', q: '只', price: 80, sell: 60, pen: { chn: '羊舍', pin: 'yángshè', vi: 'chuồng cừu', cost: 200 }, product: 'wool', cycle: 3, slots: 6 }),
-  cow: mkAni('ANI04', { id: 'cow', icon: '🐄', q: '头', price: 120, sell: 90, pen: { chn: '牛舍', pin: 'niúshè', vi: 'chuồng bò', cost: 300 }, product: 'milk', cycle: 2, slots: 6 })
+  chicken: mkAni('ANI01', { id: 'chicken', icon: '🐔', q: '只', price: 30, sell: 20, pen: { chn: '鸡舍', pin: 'jīshè', vi: 'chuồng gà', cost: 0 }, product: 'egg', cycle: 1, slots: 6 }),
+  pig: mkAni('ANI02', { id: 'pig', icon: '🐷', q: '头', price: 120, sell: 90, sellGrown: 260, growDays: 4, pen: { chn: '猪舍', pin: 'zhūshè', vi: 'chuồng heo', cost: 300 }, product: null, cycle: 0, slots: 6 }),
+  sheep: mkAni('ANI03', { id: 'sheep', icon: '🐑', q: '只', price: 180, sell: 130, pen: { chn: '羊舍', pin: 'yángshè', vi: 'chuồng cừu', cost: 500 }, product: 'wool', cycle: 3, slots: 6 }),
+  cow: mkAni('ANI04', { id: 'cow', icon: '🐄', q: '头', price: 280, sell: 200, pen: { chn: '牛舍', pin: 'niúshè', vi: 'chuồng bò', cost: 800 }, product: 'milk', cycle: 2, slots: 6 })
 };
 Object.values(ANIMALS).forEach(a => { a.pen.lvl = a.lvl; a.food = 'feed'; });
 const ANIMAL_IDS = ['chicken', 'pig', 'sheep', 'cow'];
 const PETS = {
-  dog: mkAni('ANI05', { id: 'dog', icon: '🐕', price: 200 }),
-  cat: mkAni('ANI06', { id: 'cat', icon: '🐈', price: 160 })
+  dog: mkAni('ANI05', { id: 'dog', icon: '🐕', price: 400 }),
+  cat: mkAni('ANI06', { id: 'cat', icon: '🐈', price: 320 })
 };
 const MAX_PER_PEN = 6;
 // Món ăn (bếp)
@@ -269,26 +269,26 @@ FISH.forEach(f => {
 const TOOL_X = Object.fromEntries(XLS_TOOL.map(r => [r[0], r]));
 const tool = (code, id, icon, buy, kind = 'tool') => { const [, chn, pin, vi, grp, lvl] = TOOL_X[code]; return { id, chn, pin, vi, grp, lvl: Math.max(1, lvl), icon, q: '个', kind, buy, group: 'tool' }; };
 [
-  { id: 'egg', chn: '鸡蛋', pin: 'jīdàn', vi: 'trứng gà', icon: '🥚', q: '个', kind: 'product', sell: 3, group: 'food' },
-  { id: 'pork', chn: '猪肉', pin: 'zhūròu', vi: 'thịt heo', icon: '🥩', q: '块', kind: 'product', sell: 35, group: 'food' },
-  { id: 'milk', chn: '牛奶', pin: 'niúnǎi', vi: 'sữa bò', icon: '🥛', q: '瓶', kind: 'product', sell: 25, group: 'food' },
-  { id: 'wool', chn: '羊毛', pin: 'yángmáo', vi: 'lông cừu', icon: 'svg:wool', q: '团', kind: 'product', sell: 40, group: 'animal' },
-  { ...tool('S04', 'feed', 'svg:sack_y', 1, 'feed'), q: '份' },
-  { id: 'fishfood', chn: '鱼食', pin: 'yúshí', vi: 'thức ăn cho cá', icon: 'svg:sack_b', q: '份', kind: 'feed', buy: 2, lvl: BACKYARD_LVL, group: 'fish' },
-  { id: 'rice', chn: '大米', pin: 'dàmǐ', vi: 'gạo', icon: 'svg:rice', q: '份', kind: 'food', buy: 2, lvl: 1, group: 'food' },
-  { id: 'oil', chn: '食用油', pin: 'shíyòngyóu', vi: 'dầu ăn', icon: 'svg:oil', q: '份', kind: 'food', buy: 3, lvl: 1, group: 'food' },
+  { id: 'egg', chn: '鸡蛋', pin: 'jīdàn', vi: 'trứng gà', icon: '🥚', q: '个', kind: 'product', sell: 5, group: 'food' },
+  { id: 'pork', chn: '猪肉', pin: 'zhūròu', vi: 'thịt heo', icon: '🥩', q: '块', kind: 'product', sell: 55, group: 'food' },
+  { id: 'milk', chn: '牛奶', pin: 'niúnǎi', vi: 'sữa bò', icon: '🥛', q: '瓶', kind: 'product', sell: 40, group: 'food' },
+  { id: 'wool', chn: '羊毛', pin: 'yángmáo', vi: 'lông cừu', icon: 'svg:wool', q: '团', kind: 'product', sell: 60, group: 'animal' },
+  { ...tool('S04', 'feed', 'svg:sack_y', 3, 'feed'), q: '份' },
+  { id: 'fishfood', chn: '鱼食', pin: 'yúshí', vi: 'thức ăn cho cá', icon: 'svg:sack_b', q: '份', kind: 'feed', buy: 6, lvl: BACKYARD_LVL, group: 'fish' },
+  { id: 'rice', chn: '大米', pin: 'dàmǐ', vi: 'gạo', icon: 'svg:rice', q: '份', kind: 'food', buy: 4, lvl: 1, group: 'food' },
+  { id: 'oil', chn: '食用油', pin: 'shíyòngyóu', vi: 'dầu ăn', icon: 'svg:oil', q: '份', kind: 'food', buy: 6, lvl: 1, group: 'food' },
   { id: 'water', chn: '水', pin: 'shuǐ', vi: 'nước', icon: '💧', q: '份', kind: 'water', group: 'life' },
-  tool('T01', 'hoe', 'svg:hoe', 20),
-  tool('T03', 'can', 'svg:can', 20),
-  { ...tool('T05', 'fert', '🧪', 5, 'consumable'), q: '袋' },
+  tool('T01', 'hoe', 'svg:hoe', 40),
+  tool('T03', 'can', 'svg:can', 40),
+  { ...tool('T05', 'fert', '🧪', 15, 'consumable'), q: '袋' },
   tool('T06', 'basket', '🧺', 60),
   tool('T10', 'gloves', '🧤', 40),
-  tool('T07', 'rod', 'svg:rod', 50),
-  { ...tool('T08', 'bait', '🪱', 1, 'consumable'), q: '份' }
+  tool('T07', 'rod', 'svg:rod', 120),
+  { ...tool('T08', 'bait', '🪱', 6, 'consumable'), q: '份' }
 ].forEach(addItem);
 RECIPES.forEach(r => addItem({ ...r, kind: 'dish', q: '份', group: 'food' }));
 const DECOR_ICON = { DEC01: '🛋️', DEC02: '🫖', DEC03: '🟥', DEC04: '📚', DEC05: '🖼️', DEC06: '🕰️', DEC07: '🪟', DEC08: '💡', DEC09: '🪴', DEC10: '👟' };
-const DECOR = XLS_DECOR.map(([code, grp, chn, pin, vi, price, lvl, where]) => ({ id: code.toLowerCase(), code, grp, chn, pin, vi, price, lvl, where, icon: DECOR_ICON[code] || '🎁' }));
+const DECOR = XLS_DECOR.map(([code, grp, chn, pin, vi, price, lvl, where]) => ({ id: code.toLowerCase(), code, grp, chn, pin, vi, price: price * 2, lvl, where, icon: DECOR_ICON[code] || '🎁' }));
 const itemOf = (id) => ITEMS[id];
 const BAG_CAP = 60;
 const BASKET_BONUS = 30;       // 篮子: túi chứa thêm
@@ -332,7 +332,7 @@ BED_ROWS.forEach(y => BED_COLS.forEach(x => BED_POS.push([x, y])));
 const PLOT_POS = [];                                   // từng ô đất: luống b có các ô b*4 … b*4+3
 BED_POS.forEach(([x, y]) => { for (let c = 0; c < BED_W; c++) PLOT_POS.push([x + c, y]); });
 const bedOf = (cellIdx) => Math.floor(cellIdx / BED_W);
-const PLOT_PRICE = (bedIdx) => 20 + 10 * bedIdx;       // giá mua theo luống
+const PLOT_PRICE = (bedIdx) => 40 + 25 * bedIdx;       // giá mua theo luống
 const bedsAllowed = (L) => Math.min(BED_POS.length, 2 + Math.floor(L / 3));
 const PIG_MEAT = 4;                                    // 1 heo lớn → 4 miếng 猪肉
 const pigGrown = (an) => !!an && an.growth >= ANIMALS.pig.growDays;
