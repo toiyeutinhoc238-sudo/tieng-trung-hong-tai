@@ -397,6 +397,7 @@ export class ShopGame {
       headCard('m-rank', '🏆 <span class="zh">排行榜</span> · Bảng xếp hạng',
         '<div class="sh-ranktabs"><button type="button" class="sh-ranktab active" data-rank="global">🌏 <span class="zh">全服</span> Toàn hệ thống</button><button type="button" class="sh-ranktab" data-rank="mine">📒 <span class="zh">我的</span> Ngày bán của tôi</button></div>'
         + '<div class="sh-rank-sum" id="rank-sum"></div><div class="sh-rank-list" id="rank-list"></div><div class="sh-rank-note" id="rank-note"></div>', 'rank'),
+      modalShell('m-fit', `<h3>🪞 <span class="zh">试衣间</span> Phòng thử đồ</h3><div class="sh-chat-box" id="fit-chat"></div><div id="fit-anim"></div><div class="sh-opts" id="fit-opts"></div><button type="button" class="sh-btn" id="btn-fit-done" style="display:none">Tiếp tục ➜</button>`, 'wide'),
       modalShell('m-vocab', `<h3>📖 <span class="zh">生词本</span> Sổ từ vựng</h3><div class="sh-vocab-sub" id="vocab-sub"></div><div class="sh-vocab" id="vocab-list"></div><button type="button" class="sh-btn" data-close="m-vocab">Đóng</button>`, 'wide'),
       modalShell('m-market', `<h3>📦 <span class="zh">进货市场</span> Chợ nhập hàng</h3><div class="sh-market-money" id="market-money"></div>
         <div class="sh-ranktabs"><button type="button" class="sh-ranktab" data-mtab="stock">📦 Nhập hàng</button><button type="button" class="sh-ranktab" data-mtab="unlock">🔓 Mở rộng</button><button type="button" class="sh-ranktab" data-mtab="upgrade">🔧 Nâng cấp</button></div>
@@ -651,12 +652,28 @@ export class ShopGame {
       const b = this.$('btn-confirm'); if (b) { b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); }
       return;
     }
+    // tiệm quần áo: thỉnh thoảng khách xin thử đồ trước khi tính tiền (có thể đổi size / màu hoặc mua thêm)
+    if (this.mode.beforePay && !c.fitStarted) { c.fitStarted = true; if (this.mode.beforePay(this, c)) return; }
+    this.startPayment(c);
+  }
+  startPayment(c) {
     c.billed = true;
     c.dlg = createCheckoutDialogue({ due: c.order.due, pay: c.order.pay });
     this.audio.register();
     this.station = 'pay';
     this.renderAll();
     if (c.dlg.log[0]) setTimeout(() => this.audio.speak(c.dlg.log[0].zh), 350);
+  }
+  finishFitting(c, res) {
+    c.fitWrong = res.wrong || 0;
+    if (this.current !== c) return;
+    if (res.mutated) {
+      c.fitted = true;
+      this.station = 'prep';
+      this.renderAll();
+      this.toast('🪞', 'Khách thử đồ xong và đổi ý — sửa túi hàng cho đúng lời khách rồi mới tính tiền nhé!');
+      if (c.order.say2) setTimeout(() => this.audio.speak(c.order.say2.zh), 400);
+    } else this.startPayment(c);
   }
   choosePay(i) {
     const c = this.current;
@@ -679,20 +696,20 @@ export class ShopGame {
     const scores = {
       pick: Math.max(0, 100 - 20 * c.wrong),
       speed: elapsed <= target ? 100 : Math.max(40, Math.round(100 - 60 * ((elapsed - target) / (2 * target)))),
-      talk: Math.max(0, 100 - 25 * c.dlg.wrong),
+      talk: Math.max(0, 100 - 25 * (c.dlg.wrong + (c.fitWrong || 0))),
       wait: c.waitScore ?? 100
     };
     const total = Math.round(scores.pick * 0.35 + scores.speed * 0.15 + scores.talk * 0.35 + scores.wait * 0.15);
     const busy = this.line.length >= 1;
     let tip = 0;
-    if (busy && total >= 85 && c.dlg.wrong === 0) tip = Math.round(this.cfg.tip * (total >= 95 ? 1.5 : 1) * 100) / 100;
+    if (busy && total >= 85 && c.dlg.wrong + (c.fitWrong || 0) === 0) tip = Math.round(this.cfg.tip * (total >= 95 ? 1.5 : 1) * 100) / 100;
     const earned = Math.round((c.order.due + tip) * 100) / 100;
     this.money = Math.round((this.money + earned) * 100) / 100;
     this.stats.revenue = Math.round((this.stats.revenue + earned) * 100) / 100;
     this.stats.served += 1;
     this.stats.scoreSum += total;
-    if (c.wrong === 0 && c.dlg.wrong === 0) this.stats.firstTry += 1;
-    if (c.dlg.wrong === 0) this.stats.dlgFirst += 1;
+    if (c.wrong === 0 && c.dlg.wrong + (c.fitWrong || 0) === 0) this.stats.firstTry += 1;
+    if (c.dlg.wrong + (c.fitWrong || 0) === 0) this.stats.dlgFirst += 1;
     this.mode.stockUse(c.order).forEach((u) => { this.stock[u.id] = Math.max(0, (this.stock[u.id] || 0) - u.qty); });
     this.audio.register();
     this.showScore(c, scores, total, tip, earned);
@@ -991,9 +1008,17 @@ export class ShopGame {
   }
   renderRail() {
     const q = this.$('sh-rail-q'); if (!q) return;
-    const cur = this.current ? `<span class="sh-rq cur" title="Đang phục vụ"><img src="${this.current.profile.img}" alt=""></span>` : '';
-    q.innerHTML = cur + this.line.map((c) => `<span class="sh-rq" title="${esc(c.profile.zh)}"><img src="${c.profile.img}" alt=""></span>`).join('') || '<small>Chưa có khách</small>';
-    this.setText('sh-rail-info', this.dayStarted ? `Đang chờ ${this.line.length}/${MAX_LINE} · Đã phục vụ ${this.stats.served} · Bỏ về ${this.stats.lost}` : '');
+    const chip = (c, cur) => '<span class="sh-rq ' + (cur ? 'cur' : '') + '" data-cid="' + c.id + '" title="' + esc(c.profile.zh) + '"><img src="' + c.profile.img + '" alt=""><b class="zh">' + esc(c.profile.zh) + '</b><i class="pb"><u></u></i>' + (cur ? '<span>🛎️</span>' : '') + '</span>';
+    q.innerHTML = (this.current ? chip(this.current, true) : '') + this.line.map((c) => chip(c, false)).join('') || '<small>Chưa có khách</small>';
+    this.setText('sh-rail-info', this.dayStarted ? '✅ Đã phục vụ ' + this.stats.served + ' · 😠 Bỏ về ' + this.stats.lost + ' · Đang chờ ' + this.line.length + '/' + MAX_LINE : '');
+    this.updateRailBars();
+  }
+  updateRailBars() {
+    document.querySelectorAll('.sh-rq[data-cid]').forEach((el) => {
+      const id = +el.dataset.cid; const c = (this.current && this.current.id === id) ? this.current : this.line.find((x) => x.id === id);
+      const u = c && !c.takenAt && !this.relaxed ? this.patienceUsed(c) : 0;
+      const bar = el.querySelector('u'); if (bar) { bar.style.width = ((1 - u) * 100) + '%'; bar.className = u > 0.75 ? 'red' : u > 0.5 ? 'amber' : ''; }
+    });
   }
   syncTabs() {
     const c = this.current;
@@ -1009,7 +1034,7 @@ export class ShopGame {
   renderGreet() {
     const el = this.$('st-greet'); if (!el) return;
     el.innerHTML = sceneHtml(this, say);
-    const t = this.$('btn-take'); if (t) t.addEventListener('click', () => this.takeOrder());
+    ['btn-take', 'btn-take2'].forEach((id) => { const t = this.$(id); if (t) t.addEventListener('click', () => this.takeOrder()); });
     this.updatePatience();
   }
   todayBoard() {
@@ -1017,6 +1042,7 @@ export class ShopGame {
     return `<div class="sh-board"><b class="zh">今日营收</b><strong>${fmt(s.revenue)} ¥</strong><span>✅ ${s.served} · 😠 ${s.lost}</span></div>`;
   }
   updatePatience() {
+    this.updateRailBars();
     const el = this.$('sh-patience'); const c = this.current;
     if (!el || !c || c.takenAt) { if (el) el.style.display = c && c.takenAt ? 'none' : ''; return; }
     const u = this.relaxed ? 0 : this.patienceUsed(c);
@@ -1031,7 +1057,7 @@ export class ShopGame {
     el.innerHTML = `
       <div class="sh-prep">
         <aside class="sh-ticket"><div class="sh-ticket-head">🧾 <span class="zh">客人的话</span> Lời khách <button type="button" class="sh-say-btn" data-say="${esc(c.order.say.zh)}"><i class="fa-solid fa-volume-high"></i></button></div>
-          ${this.sayHtml(c.order.say)}${this.mode.ticketExtra ? this.mode.ticketExtra(c.order) : ''}</aside>
+          ${this.sayHtml(c.order.say)}${c.order.say2 ? '<div class="sh-ticket-say2"><b>🪞 Sau khi thử đồ, khách nói:</b>' + this.sayHtml(c.order.say2) + '</div>' : ''}${this.mode.ticketExtra ? this.mode.ticketExtra(c.order) : ''}</aside>
         <div class="sh-prep-body" id="prep-body"></div>
       </div>
       <div class="sh-footer sticky"><div class="sh-hint" id="prep-hint">${this.mode.hint}</div><button type="button" class="sh-btn next" id="btn-confirm" disabled><span class="zh">结账</span> Xác nhận · Sang thanh toán ➜</button></div>`;

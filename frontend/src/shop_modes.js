@@ -9,6 +9,7 @@
 import { esc, fmt, randInt, pickOne, shuffle, say } from './shop_engine.js';
 import { intToZh } from './shop_dialogue.js';
 import { renderCavienSide } from './shop_fry.js';
+import { startClothesFitting } from './shop_fitting.js';
 
 const num = (n) => (n === 2 ? '两' : intToZh(n));
 const iconBy = (text, rules, fallback) => { for (const [k, v] of rules) if (text.includes(k)) return v; return fallback; };
@@ -69,6 +70,7 @@ export function clothesMode(D) {
       const vi = `${parts.map((x) => x.vi).join('. ')}.`;
       return { lines, say: say(zh, vi), due: lines.reduce((s, l) => s + byId[l.id].price * l.qty, 0), words: [...lines.flatMap((l) => [byId[l.id].chn, D.colors[l.color].zh, D.sizes[l.size].zh])] };
     },
+    beforePay(game, c) { return startClothesFitting(game, c, { D, byId, gById, say, shuffle, pickOne, randInt, num }); },
     emptySel() { return { lines: [], tab: null, pick: null, size: null, color: null }; },
     canConfirm(order, sel) { return sel.lines.length > 0; },
     unitCount(order) { return order.lines.reduce((s, l) => s + l.qty, 0); },
@@ -211,11 +213,12 @@ export function banhmiMode(D) {
         const main = sel.main ? byId[sel.main] : null;
         const pool = main ? POOL[main.raw.group] : [];
         const stack = main ? sel.ings.map((i) => ING[i].icon).join('') : '';
+        const recipeInfo = main ? '<div class="sh-recipe"><div class="sh-lbl">📋 Công thức chuẩn <span class="zh">标准配方</span></div><div class="sh-recipe-chips">' + toppings(main.raw).map((i) => '<span class="sh-rchip">' + ING[i].icon + ' ' + esc(ING[i].vi) + ' <span class="zh">' + esc(ING[i].zh) + '</span></span>').join('') + '</div><small>Khách có thể bảo bỏ (不要) hoặc thêm (多加). Hãy tự bấm nguyên liệu bên dưới để làm đúng bánh.</small></div>' : '';
         el.innerHTML = `
           <div class="sh-catalog">${tabsHtml(zs, sel.tab)}<div class="sh-pgrid">${prods.map((p) => productCard(p, '', (p.id === sel.main || p.id === sel.drink) ? 'sel' : '')).join('')}</div></div>
           <aside class="sh-side">
             <div class="sh-panel"><h4>${main ? `${main.icon} ${esc(main.vi)} <span class="zh">${esc(main.chn)}</span>` : '👈 Chọn loại bánh'}</h4>
-              ${main ? `<div class="sh-sandwich"><span>🥖</span><span class="stack">${stack || '…'}</span><span>🥖</span></div>
+              ${main ? `${recipeInfo}<div class="sh-lbl">🥪 Bánh của bạn</div><div class="sh-sandwich"><span>🥖</span><span class="stack">${stack || '<small>chưa có nhân</small>'}</span><span>🥖</span></div>
               <div class="sh-lbl">🧂 Topping <span class="zh">配料</span> <small>(bấm để bỏ / thêm)</small></div>
               <div class="sh-chips">${pool.map((i) => `<button type="button" class="sh-chip ${sel.ings.includes(i) ? 'on' : ''}" data-ing="${i}">${ING[i].icon} ${esc(ING[i].vi)} <span class="zh">${esc(ING[i].zh)}</span></button>`).join('')}</div>` : ''}
             </div>
@@ -225,7 +228,7 @@ export function banhmiMode(D) {
         el.querySelectorAll('[data-pid]').forEach((b) => b.addEventListener('click', () => {
           const p = byId[b.dataset.pid]; game.audio.pick(); game.learn(p.chn); game.audio.speak(p.chn);
           if (p.zone === 'drink') sel.drink = sel.drink === p.id ? null : p.id;
-          else { sel.main = p.id; sel.ings = toppings(p.raw); }
+          else { sel.main = p.id; sel.ings = []; }
           draw(); game.selChanged();
         }));
         el.querySelectorAll('[data-ing]').forEach((b) => b.addEventListener('click', () => {
@@ -386,12 +389,22 @@ export function mayphamMode(D) {
   const zones = D.groups.map((g) => ({ ...g, short: g.vi, unlock: GZ[g.id] }));
   const products = mkProducts(D.items, (it) => it.group, (it) => iconBy(it.chn, BEAUTY_ICON, '🧴'), 90);
   const byId = Object.fromEntries(products.map((p) => [p.id, p]));
+  const SHADE_IDS = ['TD001', 'TD002', 'TD007', 'TD011'];   // son, son tint, má hồng, phấn mắt: khách hỏi tông màu
+  const SHADE = {
+    pink: ['有没有偏粉一点的颜色？', 'Có màu thiên hồng hơn một chút không?', 'Hồng', '偏粉'],
+    orange: ['有没有偏橘一点的颜色？', 'Có màu thiên cam hơn một chút không?', 'Cam', '偏橘'],
+    natural: ['有没有自然一点的颜色？', 'Có màu nào tự nhiên hơn không?', 'Tự nhiên', '自然']
+  };
+  const WRAP = {
+    bag: ['请帮我装袋。', 'Làm ơn đóng túi giúp tôi.', '装袋'],
+    gift: ['这是送给朋友的，可以帮我包起来吗？', 'Món này tặng bạn tôi, có thể gói lại giúp tôi không?', '包起来']
+  };
   const itemSay = (p, n) => `${num(n)}${p.raw.measure}${p.raw.nameSaid}`;
   const itemVi = (p, n) => `${n} ${lc(p.raw.sampleVi).replace(/^một\s+/, '')}`;
   const vocab = [...products.map((p) => ({ zh: p.chn, pin: p.pin, vi: p.vi })), ...D.groups.map((g) => ({ zh: g.chn, pin: g.pin, vi: g.vi })), ...(D.slang || []).map((s) => ({ zh: s.zh, pin: s.pin, vi: s.vi.slice(0, 90) }))];
   return {
     zones, products, vocab,
-    hint: '💡 Nghe kỹ <b>tên sản phẩm</b> và <b>lượng từ</b> (瓶 · 支 · 罐 · 盒 · 个…), rồi chọn đúng món và số lượng.',
+    hint: '💡 Nghe kỹ <b>tên sản phẩm</b> và <b>lượng từ</b> (瓶 · 支 · 罐 · 盒 · 个…), chọn đúng số lượng, <b>tông màu</b> (nếu khách hỏi) và <b>cách gói</b>.',
     makeOrder(ctx) {
       const pool = ctx.products;
       if (!pool.length) return null;
@@ -403,16 +416,47 @@ export function mayphamMode(D) {
         const open = pickOne(['我想买', '请给我', '我要', '麻烦给我拿']);
         const zh = `${open}${items.map((x) => itemSay(byId[x.id], x.qty)).join('和')}。`;
         const vi = `${pickOne(['Tôi muốn mua', 'Làm ơn đưa tôi', 'Tôi cần', 'Phiền bạn lấy cho tôi'])} ${items.map((x) => itemVi(byId[x.id], x.qty)).join(' và ')}.`;
-        return { items, say: say(zh, vi), due, words: items.map((x) => byId[x.id].chn) };
+        const needShade = items.some((x) => SHADE_IDS.includes(x.id));
+        const shade = needShade ? pickOne(Object.keys(SHADE)) : 'none';
+        const wr = ctx.day >= 2 ? Math.random() : 1;
+        const wrap = wr < 0.2 ? 'bag' : wr < 0.4 ? 'gift' : 'none';
+        let zz = zh; let vv = vi;
+        if (shade !== 'none') { zz += SHADE[shade][0]; vv += ' ' + SHADE[shade][1]; }
+        if (wrap !== 'none') { zz += WRAP[wrap][0]; vv += ' ' + WRAP[wrap][1]; }
+        return { items, shade, wrap, say: say(zz, vv), due, words: [...items.map((x) => byId[x.id].chn), ...(shade !== 'none' ? [SHADE[shade][3]] : []), ...(wrap !== 'none' ? [WRAP[wrap][2]] : [])] };
       }
       return null;
     },
-    emptySel() { return { qty: {}, tab: null }; },
-    canConfirm(order, sel) { return Object.values(sel.qty).some((v) => v > 0); },
+    emptySel() { return { qty: {}, shade: null, wrap: 'none', tab: null }; },
+    canConfirm(order, sel) { return Object.values(sel.qty).some((v) => v > 0) && (order.shade === 'none' || !!sel.shade); },
     unitCount(order) { return order.items.reduce((s, x) => s + x.qty, 0); },
     stockUse(order) { return order.items.map((x) => ({ id: x.id, qty: x.qty })); },
     billLines(order) { return order.items.map((x) => ({ zh: byId[x.id].chn, vi: byId[x.id].vi, qty: x.qty, amount: byId[x.id].price * x.qty })); },
-    diff(order, sel) { return qtyDiff(order, sel, { missing: 'Sản phẩm', qty: 'Số lượng', extra: 'Thừa sản phẩm' }); },
-    renderPrep(el, game) { qtyGrid(el, game, { zones, byId, maxQty: 5 }); }
+    diff(order, sel) {
+      const bad = qtyDiff(order, sel, { missing: 'Sản phẩm', qty: 'Số lượng', extra: 'Thừa sản phẩm' });
+      if (order.shade !== 'none' && sel.shade !== order.shade) bad.push('Tông màu');
+      if (sel.wrap !== order.wrap) bad.push('Cách gói');
+      return bad;
+    },
+    renderPrep(el, game) {
+      qtyGrid(el, game, {
+        zones, byId, maxQty: 5, extraPanel: true,
+        bindExtra(root, draw, sel) {
+          const side = root.querySelector('#extra-side'); if (!side) return;
+          const order = game.current && game.current.order;
+          const needShade = !!(order && order.shade !== 'none');
+          const shadeHtml = needShade
+            ? '<div class="sh-lbl">🎨 Tông màu <span class="zh">色号</span> <small>(son / má / phấn mắt)</small></div><div class="sh-chips">' + Object.entries(SHADE).map(([k, v]) => '<button type="button" class="sh-chip ' + (sel.shade === k ? 'on' : '') + '" data-shade="' + k + '">' + v[2] + ' <span class="zh">' + v[3] + '</span></button>').join('') + '</div>'
+            : '<small>Đơn này không cần chọn tông màu.</small>';
+          side.innerHTML = '<div class="sh-panel"><h4>🎁 Tư vấn &amp; đóng gói</h4>' + shadeHtml
+            + '<div class="sh-lbl">🛍️ Cách gói <span class="zh">包装</span></div><div class="sh-chips">'
+            + '<button type="button" class="sh-chip ' + (sel.wrap === 'none' ? 'on' : '') + '" data-wrap="none">Không gói</button>'
+            + '<button type="button" class="sh-chip ' + (sel.wrap === 'bag' ? 'on' : '') + '" data-wrap="bag">👜 Túi <span class="zh">装袋</span></button>'
+            + '<button type="button" class="sh-chip ' + (sel.wrap === 'gift' ? 'on' : '') + '" data-wrap="gift">🎁 Hộp quà <span class="zh">包起来</span></button></div></div>';
+          side.querySelectorAll('[data-shade]').forEach((b) => b.addEventListener('click', () => { sel.shade = b.dataset.shade; game.audio.pop(); game.audio.speak(SHADE[sel.shade][3]); draw(); game.selChanged(); }));
+          side.querySelectorAll('[data-wrap]').forEach((b) => b.addEventListener('click', () => { sel.wrap = b.dataset.wrap; game.audio.pop(); if (WRAP[sel.wrap]) game.audio.speak(WRAP[sel.wrap][2]); draw(); game.selChanged(); }));
+        }
+      });
+    }
   };
 }

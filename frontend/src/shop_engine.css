@@ -443,3 +443,130 @@ button { font-family: inherit; cursor: pointer; }
   .sh-scene .sh-bubble { margin: 0; width: 100%; max-width: none; } .sh-scene .sh-bubble::before { display: none; }
   .sh-counter-items { font-size: 1.25rem; max-height: 3.2em; overflow: hidden; }
 }
+
+/* ---------- Công thức chuẩn (Bánh mì) · phiếu thử đồ (Quần áo) ---------- */
+.sh-recipe { padding: 8px 10px; border-radius: 12px; background: #fff8e6; border: 2px dashed #f0b45a; margin-bottom: 6px; }
+.sh-recipe small { display: block; margin-top: 4px; font-size: .7rem; opacity: .75; }
+.sh-recipe-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.sh-rchip { padding: 3px 8px; border-radius: 99px; background: #fff; border: 1.5px solid #f3d9a6; font-size: .74rem; font-weight: 700; }
+.sh-sandwich .stack small { font-size: .72rem; opacity: .65; letter-spacing: 0; }
+.sh-ticket-say2 { margin-top: 8px; padding-top: 6px; border-top: 2px dashed #eab308; }
+.sh-ticket-say2 > b { display: block; font-size: .74rem; color: #a16207; margin-bottom: 2px; }
+.sh-fit-anim { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 18px; border-radius: 14px; background: linear-gradient(90deg, #fce7f3, #fff, #fce7f3); font-weight: 800; }
+.sh-curtain { font-size: 2.2rem; animation: shCurtain 1s ease-in-out infinite alternate; }
+@keyframes shCurtain { from { transform: scale(1) rotate(-6deg); } to { transform: scale(1.15) rotate(6deg); } }
+
+/* =====================================================================================================================
+   MÔ PHỎNG CÁCH TRÌNH BÀY CỦA TIỆM TRÀ SỮA / TẠP HÓA: thanh trên kem, thanh xếp hàng gỗ, mái hiên lớn, cảnh quầy, tab gỗ
+   ===================================================================================================================== */
+.sh-hud { padding: 8px 12px; background: linear-gradient(180deg, #fffaf0, #fde9c2); border-bottom: 3px solid #c58a4f; box-shadow: 0 4px 10px rgba(80, 40, 10, .25); }
+.sh-circle { background: #fffdf7; border: 2px solid #f0cf98; color: var(--a); box-shadow: 0 3px 0 rgba(180, 120, 50, .3); }
+.sh-circle.moon { background: #fffdf7; color: #4338ca; }
+.sh-pill { background: #fffdf7; border: 2px solid #f3d9a6; border-radius: 18px; box-shadow: 0 3px 0 rgba(180, 120, 50, .25); }
+.sh-pill-tx small { color: #a16a3a; }
+.sh-pill.stock { background: var(--soft); border-color: var(--a); color: var(--b); }
+.sh-pill.stock .sh-pill-tx small { color: var(--a); }
+.sh-pill.goal { min-width: 170px; }
+.sh-bar { left: 8px; right: 8px; bottom: 3px; height: 5px; border-radius: 99px; background: rgba(0, 0, 0, .1); }
+
+.sh-rail { background: repeating-linear-gradient(180deg, transparent 0 22px, rgba(60, 28, 10, .25) 22px 24px), linear-gradient(180deg, #c98a52, #a8693a); border-bottom: 3px solid #5a3216; color: #fff3d6; min-height: 40px; padding: 4px 14px; }
+.sh-rail-lb { font-weight: 800; color: #fff3d6; }
+.sh-rq { display: inline-flex; align-items: center; gap: 6px; width: auto; height: auto; padding: 2px 10px 2px 3px; border-radius: 99px; background: #fffdf7; border: 2px solid #f0cf98; box-shadow: 0 2px 0 rgba(0, 0, 0, .25); overflow: visible; color: var(--ink); font-size: .78rem; }
+.sh-rq.cur { border-color: var(--a); }
+.sh-rq img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+.sh-rq .pb { width: 44px; height: 7px; border-radius: 99px; background: rgba(0, 0, 0, .12); overflow: hidden; display: inline-block; }
+.sh-rq .pb u { display: block; height: 100%; background: #22c55e; border-radius: 99px; transition: width .3s; } .sh-rq .pb u.amber { background: #f59e0b; } .sh-rq .pb u.red { background: #ef4444; }
+.sh-rail-info { color: #fff3d6; font-weight: 700; }
+
+/* mái hiên lớn có viền răng cưa */
+.sh-awning-big { position: relative; flex: none; height: 54px; background: linear-gradient(180deg, rgba(255, 255, 255, .28), rgba(0, 0, 0, .05)), repeating-linear-gradient(90deg, var(--a) 0 48px, #fdf6e6 48px 96px); box-shadow: 0 5px 10px rgba(0, 0, 0, .3); z-index: 3; }
+.sh-awning-big::after { content: ''; position: absolute; left: 0; right: 0; bottom: -17px; height: 18px; background: radial-gradient(circle at 24px 0, var(--a) 23px, transparent 24px) 0 0 / 96px 18px repeat-x, radial-gradient(circle at 24px 0, #fdf6e6 23px, transparent 24px) 48px 0 / 96px 18px repeat-x; }
+.sh-awning-sign { position: absolute; left: 50%; bottom: -22px; transform: translateX(-50%); padding: 3px 26px 4px; border-radius: 0 0 14px 14px; background: #5a3216; color: #fff3c4; font-weight: 700; letter-spacing: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, .4); z-index: 4; white-space: nowrap; }
+.sh-scene-awning, .sh-scene-sign { display: none; }
+
+/* bố cục cảnh: bảng phấn + doanh thu | cửa vòm + bong bóng | kệ trưng bày */
+.sh-scene { border-radius: 0; border-width: 0 4px; box-shadow: none; }
+.sh-scene-main { display: grid; grid-template-columns: 240px minmax(0, 1fr) 190px; align-items: end; gap: 12px; padding: 26px 14px 0; }
+.sh-wall-left { align-self: stretch; display: flex; flex-direction: column; gap: 12px; padding-top: 8px; }
+.sh-chalk { padding: 10px 12px; border-radius: 10px; background: #2f4a3a; border: 6px solid #8d5a2d; box-shadow: 0 6px 12px rgba(0, 0, 0, .4); color: #f5f5dc; transform: rotate(-1.5deg); }
+.sh-chalk b { display: block; text-align: center; font-size: 1.15rem; margin-bottom: 4px; }
+.sh-chalk ul { list-style: none; margin: 0; padding: 0; } .sh-chalk li { display: flex; justify-content: space-between; gap: 8px; font-size: .78rem; padding: 2px 0; border-bottom: 1px dashed rgba(255, 255, 255, .25); } .sh-chalk em { font-style: normal; font-weight: 800; color: #fde68a; }
+.sh-revenue { padding: 8px 12px; border-radius: 10px; background: #fffdf7; border: 3px solid #f0cf98; box-shadow: 0 5px 10px rgba(0, 0, 0, .35); text-align: center; color: var(--ink); transform: rotate(1deg); margin-top: -6px; }
+.sh-revenue > b { font-size: .95rem; } .sh-revenue strong { display: block; font-size: 1.5rem; color: var(--a); line-height: 1.2; }
+.sh-revenue div { display: flex; justify-content: space-between; font-size: .76rem; font-weight: 700; }
+.sh-counter-board { display: none; }
+.sh-center { display: flex; align-items: flex-end; gap: 14px; min-width: 0; }
+.sh-doorbox { flex: none; width: 230px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.sh-door { width: 100%; position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.sh-bell { position: absolute; top: -18px; z-index: 2; font-size: 1.4rem; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .4)); }
+.sh-door-glass { width: 100%; height: 250px; border-radius: 125px 125px 8px 8px; border: 7px solid #7d4a24; background: rgba(255, 255, 255, .22); }
+.sh-door-glass img { object-position: center 18%; }
+.sh-door-glass.empty { border-radius: 125px 125px 8px 8px; }
+.sh-doorbox .sh-nametag { margin-bottom: 2px; }
+.sh-wall-right { align-self: end; padding-bottom: 12px; }
+.sh-shelf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 4px; padding: 14px 10px; border-radius: 6px; background: linear-gradient(180deg, #a8693a, #8d5a2d); border: 5px solid #7d4a24; box-shadow: 0 6px 12px rgba(0, 0, 0, .4); font-size: 1.7rem; text-align: center; min-height: 92px; }
+.sh-shelf span { filter: drop-shadow(0 2px 1px rgba(0, 0, 0, .35)); }
+
+/* quầy gỗ: máy tính tiền, hũ, biển hiệu */
+.sh-counter { margin-top: 0; }
+.sh-counter-top { background: repeating-linear-gradient(90deg, transparent 0 80px, rgba(80, 40, 10, .12) 80px 82px), linear-gradient(180deg, #e2b27c, #c08650); padding: 8px 18px; min-height: 56px; }
+.sh-counter-decor { display: flex; align-items: flex-end; gap: 8px; flex: none; }
+.sh-register { display: inline-block; width: 78px; height: 50px; border-radius: 8px; background: linear-gradient(180deg, #e8d5b0, #c9ad7e); border: 3px solid #8d6a3a; position: relative; box-shadow: 0 4px 6px rgba(0, 0, 0, .35); }
+.sh-register i { position: absolute; left: 8px; right: 8px; top: -14px; height: 16px; border-radius: 4px; background: #14301f; border: 2px solid #8d6a3a; }
+.sh-jar { display: inline-block; width: 32px; height: 46px; border-radius: 8px 8px 12px 12px; background: radial-gradient(circle at 30% 70%, #f472b6 0 5px, transparent 6px), radial-gradient(circle at 65% 55%, #60a5fa 0 5px, transparent 6px), radial-gradient(circle at 45% 30%, #fbbf24 0 5px, transparent 6px), rgba(255, 255, 255, .55); border: 3px solid rgba(255, 255, 255, .8); box-shadow: 0 3px 6px rgba(0, 0, 0, .3); }
+.sh-jar.j2 { height: 52px; } .sh-jar.j3 { height: 42px; }
+.sh-counter-front { display: flex; align-items: center; justify-content: center; padding: 10px; min-height: 70px; background: repeating-linear-gradient(180deg, transparent 0 22px, rgba(0, 0, 0, .18) 22px 24px), linear-gradient(180deg, #a8693a, #7d4a24); letter-spacing: 0; }
+.sh-signboard { display: flex; flex-direction: column; align-items: center; padding: 6px 34px; border-radius: 10px; background: #fff8ea; border: 4px solid #5a3216; box-shadow: 0 5px 10px rgba(0, 0, 0, .4); }
+.sh-signboard b { font-size: 1.4rem; color: #7d4a24; letter-spacing: 6px; } .sh-signboard small { font-size: .72rem; color: #8b6b4a; font-weight: 700; }
+.sh-footer.greet { padding: 8px 14px; background: linear-gradient(180deg, #fffaf0, #fde9c2); border-top: 3px solid #c58a4f; margin-top: 0; position: static; }
+
+/* tab gỗ phía dưới */
+.sh-tabs { padding: 0; gap: 0; background: repeating-linear-gradient(90deg, transparent 0 70px, rgba(0, 0, 0, .12) 70px 72px), linear-gradient(180deg, #b07240, #8d5a2d); border-top: 4px solid #5a3216; }
+.sh-tab { flex-direction: row; justify-content: center; gap: 8px; padding: 10px 6px; border-radius: 0; color: #fff3d6; border-right: 2px solid rgba(0, 0, 0, .22); }
+.sh-tab:last-child { border-right: 0; }
+.sh-tab > span { font-size: 1.5rem; } .sh-tab b { font-size: 1.05rem; display: block; } .sh-tab small { display: block; font-size: .7rem; }
+.sh-tab.active { background: linear-gradient(180deg, #fffdf7, #ffe9c0); color: var(--b); border-top: 4px solid var(--a); box-shadow: inset 0 -4px 8px rgba(0, 0, 0, .08); }
+.sh-tab.off { opacity: .55; }
+
+@media (max-width: 1000px) {
+  .sh-scene-main { grid-template-columns: minmax(0, 1fr); }
+  .sh-wall-left, .sh-wall-right { display: none; }
+  .sh-counter-board { display: block; position: absolute; right: 8px; top: 38px; z-index: 5; } .sh-counter-board .sh-revenue { transform: none; padding: 4px 10px; margin: 0; } .sh-counter-board .sh-revenue div { display: none; } .sh-counter-board .sh-revenue strong { font-size: 1.1rem; }
+}
+@media (max-width: 700px) {
+  .sh-awning-big { height: 36px; } .sh-awning-big::after { bottom: -13px; height: 14px; } .sh-awning-sign { bottom: -16px; padding: 1px 16px 2px; font-size: .85rem; }
+  .sh-scene-main { padding: 20px 8px 0; overflow-y: auto; } .sh-center { flex-direction: column; align-items: center; width: 100%; }
+  .sh-doorbox { width: 100%; flex-direction: row; justify-content: center; align-items: flex-end; gap: 10px; } .sh-door { width: 130px; } .sh-door-glass { height: 140px; border-radius: 65px 65px 6px 6px; border-width: 5px; }
+  .sh-bell { top: -14px; font-size: 1.1rem; }
+  .sh-counter-top { padding: 6px 10px; min-height: 44px; } .sh-counter-decor { display: none; } .sh-counter-front { min-height: 44px; padding: 4px; } .sh-signboard { padding: 2px 18px; } .sh-signboard b { font-size: 1rem; letter-spacing: 3px; } .sh-signboard small { display: none; }
+  .sh-tab { flex-direction: column; gap: 0; padding: 6px 2px; } .sh-tab > span { font-size: 1.15rem; } .sh-tab b { font-size: .88rem; } .sh-tab small { font-size: .6rem; }
+  .sh-rail { padding: 3px 8px; overflow-x: auto; } .sh-rail-info { display: none; }
+  .sh-hud { padding: 6px 8px; } .sh-pill.goal { min-width: 0; }
+  .sh-footer.greet { flex-wrap: wrap; } .sh-footer.greet .sh-btn { flex: 1 1 100%; padding: 8px 12px; }
+}
+
+/* ---- vừa khít màn hình thấp (laptop 720px): cửa vòm co theo chiều cao, bong bóng cuộn được ---- */
+.sh-scene { min-height: 0; }
+.sh-scene-main { min-height: 0; overflow: hidden; }
+.sh-door-glass { height: clamp(130px, calc(100dvh - 500px), 250px); border-radius: 125px 125px 8px 8px / 110px 110px 8px 8px; }
+.sh-center { min-height: 0; max-height: 100%; }
+.sh-scene .sh-bubble { max-height: 100%; overflow-y: auto; margin-bottom: 8px; }
+.sh-counter-front { min-height: 54px; padding: 6px; }
+@media (max-height: 800px) {
+  .sh-revenue div { display: none; }
+  .sh-chalk li:nth-child(n+4) { display: none; }
+  .sh-awning-big { height: 44px; }
+  .sh-counter-top { min-height: 48px; padding: 4px 16px; }
+  .sh-signboard { padding: 3px 28px; } .sh-signboard b { font-size: 1.15rem; }
+  .sh-say.big b { font-size: 1.25rem; }
+}
+@media (max-width: 700px) {
+  .sh-scene-main { overflow-y: auto; }
+  .sh-door-glass { height: 140px; border-radius: 65px 65px 6px 6px; }
+  .sh-door { width: 120px; }
+  .sh-scene .sh-bubble { max-height: none; overflow: visible; margin-bottom: 10px; }
+  .sh-center { max-height: none; }
+}
+@media (max-width: 700px) {
+  .sh-scene-main { align-items: flex-start; }
+}
