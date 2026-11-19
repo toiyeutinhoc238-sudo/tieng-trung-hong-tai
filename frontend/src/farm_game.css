@@ -228,8 +228,10 @@ body.g-portrait .map-areas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 body.g-portrait .pk-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 body.g-portrait .rc-card { flex-wrap: wrap; }
 /* ---------------- Bản sắc riêng của nông trại (không dùng nền / mái hiên của tiệm tạp hóa) */
-body.farm-body .g-title-bg.farm-title-bg { background: #bfe6fb; animation: none; overflow: hidden; }
-body.farm-body .g-title-bg.farm-title-bg::after { background: linear-gradient(180deg, transparent 55%, rgba(30, 70, 20, 0.28) 100%); }
+body.farm-body::before { background-image: url('/assets/farm_game_bg.jpg'); }
+body.farm-body .g-title-bg.farm-title-bg { background: #bfe6fb url('/assets/farm_game_bg.jpg') center 40% / cover no-repeat; overflow: hidden; }
+body.farm-body .g-title-bg.farm-title-bg .farm-scene { display: none; }
+body.farm-body .g-title-bg.farm-title-bg::after { background: linear-gradient(180deg, rgba(255, 220, 160, 0.12) 0%, transparent 35%, rgba(30, 50, 15, 0.5) 100%), radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(20, 40, 10, 0.35) 100%); }
 .farm-scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .fs-cloud { animation: fsDrift 38s linear infinite alternate; }
 .fs-cloud.c2 { animation-duration: 52s; animation-direction: alternate-reverse; }

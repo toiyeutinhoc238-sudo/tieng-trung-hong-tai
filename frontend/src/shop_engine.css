@@ -5,18 +5,32 @@
 .sh-cavien { --a: #dc2626; --b: #7f1d1d; --soft: #fff0ee; --bg: linear-gradient(180deg, #ffe1d6, #fecaa8); --ink: #4a1f17; }
 .sh-mypham { --a: #9333ea; --b: #581c87; --soft: #f7efff; --bg: linear-gradient(180deg, #f3e4ff, #e9d0fb); --ink: #3b1d57; }
 
+.sh-clothes { --cover: url('/assets/clothing_game_bg.jpg'); }
+.sh-banhmi { --cover: url('/assets/bakery_game_bg.jpg'); }
+.sh-cavien { --cover: url('/assets/fishball_game_bg.jpg'); }
+.sh-mypham { --cover: url('/assets/cosmetics_game_bg.jpg'); }
+
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
+body.shop-body::before { content: ''; position: fixed; inset: -40px; background: var(--cover, none) center / cover no-repeat; filter: blur(26px) brightness(.55) saturate(1.15); }
 body.shop-body { font-family: 'Be Vietnam Pro', system-ui, sans-serif; color: var(--ink); background: #2a1a10; overflow: hidden; -webkit-tap-highlight-color: transparent; }
 .zh { font-family: 'LXGW WenKai Lite', 'KaiTi', 'STKaiti', '楷体', serif; }
 button { font-family: inherit; cursor: pointer; }
-#shop-root { height: 100dvh; }
+#shop-root { position: relative; height: 100dvh; }
 
 .sh-stage { position: relative; height: 100dvh; width: 100%; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto; background: var(--bg); overflow: hidden; }
+
+.sh-stage::before { content: ''; position: absolute; inset: -16px; background: var(--cover, none) center / cover no-repeat; filter: blur(7px) saturate(1.1); opacity: .42; z-index: 0; pointer-events: none; }
+.sh-stage > .sh-hud, .sh-stage > .sh-rail, .sh-stage > .sh-main, .sh-stage > .sh-tabs { position: relative; z-index: 1; }
 
 /* ---------- Màn hình chờ ---------- */
 .sh-title { position: absolute; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 20px; background: radial-gradient(circle at 50% 20%, #fff7ea, var(--soft) 45%, #f9d7b3); }
 .sh-title.hidden { display: none; }
+.sh-title::before { content: ''; position: absolute; inset: 0; background: var(--cover, none) center 40% / cover no-repeat; animation: shZoom 24s ease-in-out infinite alternate; }
+.sh-title::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255, 220, 160, .12) 0%, transparent 35%, rgba(60, 25, 10, .55) 100%), radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(40, 20, 8, .4) 100%); }
+.sh-title > * { z-index: 2; }
+.sh-title > .sh-logo, .sh-title > .sh-menu { position: relative; }
+@keyframes shZoom { from { transform: scale(1.02); } to { transform: scale(1.1) translateY(-10px); } }
 .sh-title-home { position: absolute; top: 14px; left: 14px; padding: 8px 14px; border-radius: 99px; background: #fff; color: var(--b); font-weight: 800; font-size: .85rem; text-decoration: none; box-shadow: 0 3px 10px rgba(0, 0, 0, .15); }
 .sh-account { position: absolute; top: 14px; right: 14px; display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 99px; background: #fff; color: var(--ink); text-decoration: none; box-shadow: 0 3px 10px rgba(0, 0, 0, .15); max-width: 62vw; }
 .sh-account-av { width: 34px; height: 34px; border-radius: 50%; background: var(--soft); display: grid; place-items: center; overflow: hidden; flex: none; }
@@ -25,12 +39,12 @@ button { font-family: inherit; cursor: pointer; }
 .sh-account-tx strong { font-size: .85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sh-account-tx small { font-size: .68rem; opacity: .75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sh-logo { text-align: center; }
-.sh-logo-emoji { font-size: clamp(3rem, 12vw, 5rem); filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .25)); }
+.sh-logo-emoji { display: none; font-size: clamp(3rem, 12vw, 5rem); filter: drop-shadow(0 6px 8px rgba(0, 0, 0, .25)); }
 .sh-logo-board { display: inline-flex; flex-direction: column; padding: 10px 28px; border-radius: 16px; background: var(--b); color: #fff; border: 4px solid #f6d9a8; box-shadow: 0 8px 0 rgba(0, 0, 0, .25); }
 .sh-logo-zh { font-size: clamp(1.8rem, 7vw, 2.8rem); font-weight: 800; letter-spacing: .08em; }
 .sh-logo-pin { font-size: .85rem; opacity: .85; }
 .sh-logo-ribbon { margin: 14px auto 0; display: inline-block; padding: 5px 22px; border-radius: 8px; background: var(--a); color: #fff; font-weight: 900; box-shadow: 0 4px 0 var(--b); }
-.sh-logo-progress { margin-top: 8px; font-weight: 700; font-size: .85rem; color: var(--b); min-height: 1.2em; }
+.sh-logo-progress { margin-top: 10px; font-weight: 800; font-size: .85rem; color: #fff; text-shadow: 0 2px 6px rgba(0, 0, 0, .7); min-height: 1.2em; }
 .sh-menu { display: flex; flex-direction: column; align-items: center; gap: 12px; width: min(360px, 100%); }
 .sh-btn-play { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 18px; border: 0; border-radius: 18px; background: linear-gradient(180deg, #ffa24f, var(--a)); color: #fff; font-size: 1.15rem; box-shadow: 0 6px 0 var(--b); }
 .sh-btn-play .zh { font-size: 1.3rem; font-weight: 800; }
