@@ -262,7 +262,7 @@ export class ShopGame {
     this.relaxed = false;
     this.pace = cfg.pace || 1;
     // giá vốn nhập hàng + sức chứa kho của từng món; sổ từ vựng gồm cả từ thời tiết / ngày lễ / nâng cấp
-    this.mode.products.forEach((p) => { p.cost = Math.round(p.price * (cfg.costRate || 0.55) * 100) / 100; p.maxStock = cfg.maxStock; });
+    this.mode.products.forEach((p) => { if (p.cost == null) p.cost = Math.round(p.price * (cfg.costRate || 0.55) * 100) / 100; if (!p.maxStock) p.maxStock = cfg.maxStock; });
     this.vocabList = [...mode.vocab, ...EXTRA_VOCAB];
     this.marketTab = 'stock';
 
@@ -337,6 +337,10 @@ export class ShopGame {
     }
     if (s.upgrades && typeof s.upgrades === 'object') UPGRADE_DEFS.forEach((u) => { this.upgrades[u.id] = Math.min(u.costs.length, Math.max(0, Math.round(num(s.upgrades[u.id], 0)))); });
     if (s.event && typeof s.event === 'object' && this.eventInfo(s.event)) this.todayEvent = { day: num(s.event.day, 0), kind: s.event.kind, id: s.event.id };
+    // bản lưu cũ chưa có mặt hàng mới (vd: nước chấm của Cá Viên): luôn mở các khu / món miễn phí và cấp hàng khởi đầu
+    this.mode.zones.forEach((z) => { if (!z.unlock) this.zonesOpen.add(z.id); });
+    this.mode.products.forEach((p) => { if (!p.unlockCost) this.itemsOpen.add(p.id); });
+    this.mode.products.forEach((p) => { if (this.itemsOpen.has(p.id) && this.zonesOpen.has(p.zone) && this.stock[p.id] === undefined) this.stock[p.id] = this.cfg.starter; });
     this.savedAt = num(s.updatedAt, 0);
     return true;
   }
@@ -400,7 +404,7 @@ export class ShopGame {
         <button type="button" class="sh-btn" data-close="m-pause">▶️ Tiếp tục chơi</button>
         <button type="button" class="sh-btn ghost" id="btn-reset">🗑️ Chơi lại từ đầu</button>`),
       modalShell('m-mission', `<h3 id="mission-title"></h3><div id="mission-body"></div><div class="sh-row"><button type="button" class="sh-btn ghost" id="btn-mission-market">📦 <span class="zh">进货</span> Nhập hàng</button><button type="button" class="sh-btn" id="btn-open-shop"><span class="zh">开门</span> Mở cửa</button></div>`),
-      modalShell('m-score', `<div id="score-body"></div><button type="button" class="sh-btn" id="btn-score-next">Khách tiếp theo ➜</button>`, 'score'),
+      modalShell('m-score', `<div id="score-body"></div><button type="button" class="sh-btn" id="btn-score-next"><span class="zh">继续营业</span> Tiếp tục bán hàng ➜</button>`, 'score'),
       modalShell('m-summary', `<div id="summary-body"></div>
         <div class="sh-row"><button type="button" class="sh-btn ghost" id="btn-sum-market">📦 Nhập hàng</button><button type="button" class="sh-btn" id="btn-sum-next"><span class="zh">下一天</span> Ngày mới</button></div>`, 'wide')
     ].join('');
@@ -433,6 +437,8 @@ export class ShopGame {
     document.querySelectorAll('.sh-tab').forEach((b) => b.addEventListener('click', () => this.goStation(b.dataset.st)));
     const stage = this.$('sh-stage');
     stage.addEventListener('click', (e) => {
+      const rf = e.target.closest('[data-refresh-phrase]');
+      if (rf) { const p = pickOne(this.cfg.chat); const box = this.$('sh-phrase-body'); if (p && box) { box.innerHTML = this.sayHtml(p); this.audio.speak(p.zh); } return; }
       const sayBtn = e.target.closest('[data-say]');
       if (sayBtn) { this.audio.speak(sayBtn.dataset.say); return; }
       const opt = e.target.closest('[data-pay-opt]');
@@ -686,6 +692,7 @@ export class ShopGame {
     this.audio.register();
     this.showScore(c, scores, total, tip, earned);
     this.current = null; this.sel = null;
+    this.station = 'greet';   // thanh toán xong → tự nhảy về trạm Đón khách
     this.renderAll();
   }
 
@@ -703,17 +710,22 @@ export class ShopGame {
     const rv = this.reviewFor(stars);
     if (rv) this.stats.reviews.push({ ...rv, stars, who: c.profile.zh + ' ' + c.profile.vi });
     const bar = (label, v) => `<div class="sh-sc-row"><span>${label}</span><div class="sh-sc-bar"><i style="width:${v}%"></i></div><b>${v}%</b></div>`;
-    this.$('score-body').innerHTML = `
-      <div class="sh-score-head"><img src="${c.profile.img}" alt=""><div><b>${esc(c.profile.zh)} · ${esc(c.profile.vi)}</b><div class="sh-stars">${'⭐'.repeat(stars)}${'☆'.repeat(5 - stars)}</div></div></div>
-      ${rv ? `<div class="sh-review">${this.sayHtml(rv)}<button type="button" class="sh-say-btn" data-say="${esc(rv.zh)}"><i class="fa-solid fa-volume-high"></i></button></div>` : ''}
-      <div class="sh-sc-money"><div><span>Tiền hàng</span><b>${fmt(c.order.due)} ¥</b></div><div><span>Tip</span><b>${tip ? '+' + fmt(tip) : '0'} ¥</b></div><div class="tot"><span>Nhận được</span><b>+${fmt(earned)} ¥</b></div></div>
-      ${bar('Chọn đúng đơn', scores.pick)}${bar('Tốc độ', scores.speed)}${bar('Hội thoại', scores.talk)}${bar('Không để khách chờ', scores.wait)}
-      <div class="sh-sc-total">Điểm phục vụ: <b>${total}%</b></div>`;
+    const tipBadge = tip > 0 ? '<small class="sh-tipb up">Phục vụ nhanh + đông khách nên có tip!</small>' : '<small class="sh-tipb">Bình thường không tip</small>';
+    const phr = pickOne(this.cfg.chat);
+    this.$('score-body').innerHTML =
+      '<div class="sh-receipt-head"><span class="zh">🧾 结账小票</span><strong>Phiếu #' + c.id + ' · ' + esc(c.profile.zh) + '</strong></div>'
+      + '<div class="sh-score-head"><img src="' + c.profile.img + '" alt=""><div><b>' + esc(c.profile.zh) + ' · ' + esc(c.profile.vi) + '</b><div class="sh-stars">' + '⭐'.repeat(stars) + '☆'.repeat(5 - stars) + '</div></div></div>'
+      + (rv ? '<div class="sh-review"><div class="sh-review-tag">💬 <span class="zh">顾客评价</span> Đánh giá của khách</div>' + this.sayHtml(rv) + '<button type="button" class="sh-say-btn" data-say="' + esc(rv.zh) + '" title="Nghe lại"><i class="fa-solid fa-volume-high"></i></button></div>' : '')
+      + '<div class="sh-sc-money"><div><span>Tiền hàng</span><b>' + fmt(c.order.due) + ' ¥</b></div><div><span>Tiền tip</span><b>' + (tip ? '+' + fmt(tip) : '0') + ' ¥</b>' + tipBadge + '</div><div class="tot"><span>Thực nhận</span><b>+' + fmt(earned) + ' ¥</b></div></div>'
+      + bar('Chọn đúng đơn', scores.pick) + bar('Tốc độ', scores.speed) + bar('Hội thoại', scores.talk) + bar('Không để khách chờ', scores.wait)
+      + '<div class="sh-sc-total">Điểm phục vụ: <b>' + total + '%</b></div>'
+      + (phr ? '<div class="sh-phrase"><div class="sh-phrase-head"><span>🎓 <b>Mẫu câu giao tiếp</b> <small class="zh">(实用口语)</small></span><button type="button" class="sh-say-btn" data-refresh-phrase title="Đổi câu khác"><i class="fa-solid fa-rotate"></i></button></div><div class="sh-phrase-body" id="sh-phrase-body">' + this.sayHtml(phr) + '</div></div>' : '');
     this.openModal('m-score');
     if (rv) setTimeout(() => this.audio.speak(rv.zh), 300);
   }
   closeScore() {
     this.closeModal('m-score');
+    this.station = 'greet';
     this.renderAll();
   }
 
@@ -819,7 +831,7 @@ export class ShopGame {
       html.push('<h4>' + this.zoneName(z) + '</h4>');
       prods.forEach((p) => {
         const have = this.stock[p.id] || 0; const add = this.restockQty[p.id] || 0;
-        html.push('<div class="sh-mk-row"><span class="sh-mk-name"><span class="sh-ico">' + p.icon + '</span> ' + esc(p.vi) + ' <span class="zh">' + esc(p.chn) + '</span><small>Kho ' + have + (add ? ' <b>+' + add + '</b>' : '') + '/' + p.maxStock + ' · vốn ' + fmt(p.cost) + ' ¥ · bán ' + fmt(p.price) + ' ¥</small></span>'
+        html.push('<div class="sh-mk-row"><span class="sh-mk-name"><span class="sh-ico">' + p.icon + '</span> ' + esc(p.vi) + ' <span class="zh">' + esc(p.chn) + '</span><small>Kho ' + have + (add ? ' <b>+' + add + '</b>' : '') + '/' + p.maxStock + ' · vốn ' + fmt(p.cost) + ' ¥' + (p.price > 0 ? ' · bán ' + fmt(p.price) + ' ¥' : ' · tặng kèm') + '</small></span>'
           + '<span class="sh-qty"><button type="button" data-rs-dec="' + p.id + '">−</button><b>' + add + '</b><button type="button" data-rs-inc="' + p.id + '">+</button></span></div>');
       });
     });

@@ -23,7 +23,7 @@ function mkProducts(items, zoneOf, iconOf, costStep, tierOf) {
 // Thẻ hàng dùng chung
 const productCard = (p, extra = '', cls = '') => `<div class="sh-pcard ${cls}" data-pid="${p.id}"><span class="sh-ico">${p.icon}</span><b>${esc(p.vi)}</b><span class="zh">${esc(p.chn)}</span><small>${esc(p.pin)}</small><em>${fmt(p.price)} ¥</em>${extra}</div>`;
 const tabsHtml = (zones, cur) => `<div class="sh-ptabs">${zones.map((z) => `<button type="button" class="sh-ptab ${z.id === cur ? 'active' : ''}" data-tab="${z.id}">${z.icon} ${esc(z.short || z.vi)}</button>`).join('')}</div>`;
-const openZones = (game, zones) => zones.filter((z) => game.zonesOpen.has(z.id));
+const openZones = (game, zones) => zones.filter((z) => game.zonesOpen.has(z.id) && z.prep !== false);
 
 // ===================================================================================================================
 // 1. QUẦN ÁO (Quần áo.xlsx): chọn đúng sản phẩm + size + màu
@@ -288,12 +288,17 @@ export function cavienMode(D) {
   ];
   const cnt = { chien: 0, khac: 0 };
   const foods = D.foods.map((f) => { const z = zoneOfFood(f); const i = cnt[z]++; return { ...f, tier: Math.min(4, Math.floor(i / 5)) }; });
+  // chỉ giữ 5 loại nước chấm phổ biến; mỗi loại là một mặt hàng phải NHẬP KHO (khách chấm bao nhiêu thì hết bấy nhiêu)
+  const SAUCE_KEEP = ['S001', 'S002', 'S003', 'S005', 'S006'];
+  const sauces = D.sauces.filter((s) => SAUCE_KEEP.includes(s.id));
+  zones.push({ id: 'sauce', chn: '酱料', pin: 'jiàngliào', vi: 'Nước chấm', short: 'Nước chấm', icon: '🫙', unlock: 0, prep: false });
   const products = [
     ...mkProducts(foods, zoneOfFood, (it) => iconBy(it.chn, FOOD_ICON, '🍢'), 30),
-    ...mkProducts(D.drinks, () => 'drink', () => '🥤', 25)
+    ...mkProducts(D.drinks, () => 'drink', () => '🥤', 25),
+    ...sauces.map((s) => ({ id: s.id, zone: 'sauce', chn: s.chn, pin: s.pin, vi: s.vi, price: 0, icon: SAUCE_ICON[s.id] || '🫙', tier: 0, unlockCost: 0, cost: 1, maxStock: 30, raw: s }))
   ];
   const byId = Object.fromEntries(products.map((p) => [p.id, p]));
-  const sauces = D.sauces; const sById = Object.fromEntries(sauces.map((s) => [s.id, s]));
+  const sById = Object.fromEntries(sauces.map((s) => [s.id, s]));
   const measureVi = (p) => lc(p.raw.sampleVi || p.vi).replace(/^một\s+/, '');
   const itemSay = (p, n) => (p.zone === 'drink' ? `${num(n)}${/可乐|矿泉水/.test(p.chn) ? '瓶' : '杯'}${p.chn}` : `${num(n)}${p.raw.measure}${p.raw.nameSaid}`);
   const itemVi = (p, n) => (p.zone === 'drink' ? `${n} ${/可乐|矿泉水/.test(p.chn) ? 'chai' : 'ly'} ${lc(p.vi)}` : `${n} ${measureVi(p)}`);
@@ -308,14 +313,14 @@ export function cavienMode(D) {
     zones, products, vocab,
     hint: '💡 Chọn đúng <b>món</b> và <b>số lượng</b>, thêm <b>nước chấm</b>, chọn <b>mang đi / ăn tại đây</b> và độ chiên theo lời khách.',
     makeOrder(ctx) {
-      const pool = ctx.products.filter((p) => p.zone !== 'drink');
+      const pool = ctx.products.filter((p) => p.zone !== 'drink' && p.zone !== 'sauce');
       if (!pool.length) return null;
       const nLines = Math.min(pool.length, ctx.day >= 3 ? randInt(2, 3) : randInt(1, 2));
       const items = shuffle(pool).slice(0, nLines).map((p) => ({ id: p.id, qty: Math.min(ctx.stock(p.id), randInt(1, ctx.day >= 4 ? 5 : 3)) }));
       const drinks = ctx.products.filter((p) => p.zone === 'drink');
       if (drinks.length && Math.random() < 0.3) items.push({ id: pickOne(drinks).id, qty: 1 });
       const nSauce = Math.random() < 0.25 ? 0 : (Math.random() < 0.3 ? 2 : 1);
-      const ss = shuffle(sauces).slice(0, nSauce).map((s) => s.id);
+      const ss = shuffle(ctx.products.filter((p) => p.zone === 'sauce')).slice(0, nSauce).map((s) => s.id);   // chỉ gọi nước chấm còn trong kho
       const serve = Math.random() < 0.5 ? 'take' : 'dine';
       const hasFry = items.some((x) => byId[x.id].raw.group === 'Món chiên');
       const fry = hasFry && Math.random() < 0.4 ? pickOne(['crisp', 'nocharr']) : 'normal';
@@ -334,7 +339,7 @@ export function cavienMode(D) {
     emptySel() { return { qty: {}, sauces: [], serve: null, fry: 'normal', tab: null }; },
     canConfirm(order, sel) { return Object.values(sel.qty).some((v) => v > 0) && !!sel.serve; },
     unitCount(order) { return Math.ceil(order.items.reduce((s, x) => s + x.qty, 0) / 2) + order.sauces.length; },
-    stockUse(order) { return order.items.map((x) => ({ id: x.id, qty: x.qty })); },
+    stockUse(order) { return [...order.items.map((x) => ({ id: x.id, qty: x.qty })), ...order.sauces.map((s) => ({ id: s, qty: 1 }))]; },
     billLines(order) { return order.items.map((x) => ({ zh: byId[x.id].chn, vi: byId[x.id].vi, qty: x.qty, amount: byId[x.id].price * x.qty })); },
     diff(order, sel) {
       const bad = qtyDiff(order, sel, { missing: 'Món hàng', qty: 'Số lượng', extra: 'Thừa món' });
@@ -352,7 +357,7 @@ export function cavienMode(D) {
           const main = root.querySelector('#extra-main');
           if (main) {
             main.innerHTML = `<div class="sh-lbl">🫙 Nước chấm <span class="zh">酱料</span> <small>(chọn theo lời khách, có thể không chọn)</small></div>
-              <div class="sh-chips big">${sauces.map((s) => `<button type="button" class="sh-chip ${sel.sauces.includes(s.id) ? 'on' : ''}" data-sauce="${s.id}">${SAUCE_ICON[s.id] || '🫙'} ${esc(s.vi)} <span class="zh">${esc(s.chn)}</span></button>`).join('')}</div>`;
+              <div class="sh-chips big">${sauces.filter((s) => game.zonesOpen.has('sauce') && game.itemsOpen.has(s.id)).map((s) => `<button type="button" class="sh-chip ${sel.sauces.includes(s.id) ? 'on' : ''}${(game.stock[s.id] || 0) <= 0 ? ' out' : ''}" data-sauce="${s.id}">${SAUCE_ICON[s.id] || '🫙'} ${esc(s.vi)} <span class="zh">${esc(s.chn)}</span></button>`).join('')}</div>`;
             main.querySelectorAll('[data-sauce]').forEach((b) => b.addEventListener('click', () => {
               const id = b.dataset.sauce;
               sel.sauces = sel.sauces.includes(id) ? sel.sauces.filter((x) => x !== id) : [...sel.sauces, id];
