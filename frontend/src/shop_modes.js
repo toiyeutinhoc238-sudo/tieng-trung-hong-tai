@@ -8,6 +8,7 @@
  */
 import { esc, fmt, randInt, pickOne, shuffle, say } from './shop_engine.js';
 import { intToZh } from './shop_dialogue.js';
+import { renderCavienSide } from './shop_fry.js';
 
 const num = (n) => (n === 2 ? '两' : intToZh(n));
 const iconBy = (text, rules, fallback) => { for (const [k, v] of rules) if (text.includes(k)) return v; return fallback; };
@@ -21,7 +22,7 @@ function mkProducts(items, zoneOf, iconOf, costStep, tierOf) {
 }
 
 // Thẻ hàng dùng chung
-const productCard = (p, extra = '', cls = '') => `<div class="sh-pcard ${cls}" data-pid="${p.id}"><span class="sh-ico">${p.icon}</span><b>${esc(p.vi)}</b><span class="zh">${esc(p.chn)}</span><small>${esc(p.pin)}</small><em>${fmt(p.price)} ¥</em>${extra}</div>`;
+const productCard = (p, extra = '', cls = '') => `<div class="sh-pcard ${cls}" data-pid="${p.id}"><span class="sh-ico">${p.icon}</span><b>${esc(p.vi)}</b><span class="zh">${esc(p.chn)}</span><small>${esc(p.pin)}</small><em>${p.price > 0 ? fmt(p.price) + ' ¥' : 'tặng kèm'}</em>${p.stockNow !== undefined ? `<span class="sh-stockb ${p.stockNow <= 2 ? 'low' : ''}" title="Tồn kho">${p.stockNow}</span>` : ''}${extra}</div>`;
 const tabsHtml = (zones, cur) => `<div class="sh-ptabs">${zones.map((z) => `<button type="button" class="sh-ptab ${z.id === cur ? 'active' : ''}" data-tab="${z.id}">${z.icon} ${esc(z.short || z.vi)}</button>`).join('')}</div>`;
 const openZones = (game, zones) => zones.filter((z) => game.zonesOpen.has(z.id) && z.prep !== false);
 
@@ -254,10 +255,10 @@ function qtyGrid(el, game, { zones, byId, extraTabs = '', extraPanel = '', bindE
       <div class="sh-catalog">${tabsHtml(zs, sel.tab).replace('</div>', `${extraTabs.replace('%ACTIVE%', sel.tab === '__extra' ? 'active' : '')}</div>`)}
         <div class="sh-pgrid">${sel.tab === '__extra' ? '' : prods.map((p) => productCard(p, `<div class="sh-qty"><button type="button" data-dec="${p.id}">−</button><b>${sel.qty[p.id] || 0}</b><button type="button" data-inc="${p.id}">+</button></div>`, sel.qty[p.id] ? 'sel' : '')).join('')}</div>
         ${sel.tab === '__extra' ? '<div class="sh-extra-wrap" id="extra-main"></div>' : ''}</div>
-      <aside class="sh-side"><div class="sh-panel bag"><h4>🧺 Giỏ hàng <small>(${total} món)</small></h4>
-        ${picked.length ? picked.map((k) => `<div class="sh-bagrow"><span>${byId[k].icon} ${esc(byId[k].vi)} ×${sel.qty[k]}</span><button type="button" class="sh-x" data-clr="${k}">✕</button></div>`).join('') : '<small>Giỏ đang trống</small>'}</div>${extraPanel ? '<div id="extra-side"></div>' : ''}</aside>`;
+      <aside class="sh-side">${extraPanel ? '<div id="extra-side"></div>' : ''}<div class="sh-panel bag"><h4>🧺 Giỏ hàng <small>(${total} món)</small></h4>
+        ${picked.length ? picked.map((k) => `<div class="sh-bagrow"><span><span class="sh-pile">${byId[k].icon.repeat(Math.min(sel.qty[k], 6))}</span> ${esc(byId[k].vi)} ×${sel.qty[k]}</span><button type="button" class="sh-x" data-clr="${k}">✕</button></div>`).join('') : '<small>Giỏ đang trống</small>'}</div></aside>`;
     el.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => { sel.tab = b.dataset.tab; draw(); }));
-    el.querySelectorAll('[data-inc]').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); const id = b.dataset.inc; if ((sel.qty[id] || 0) < maxQty) { sel.qty[id] = (sel.qty[id] || 0) + 1; game.audio.pick(); game.learn(byId[id].chn); game.audio.speak(`${sel.qty[id]}`); } draw(); game.selChanged(); }));
+    el.querySelectorAll('[data-inc]').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); const id = b.dataset.inc; if ((sel.qty[id] || 0) < Math.min(maxQty, game.stock[id] ?? maxQty)) { sel.qty[id] = (sel.qty[id] || 0) + 1; game.audio.pick(); game.learn(byId[id].chn); game.audio.speak(`${sel.qty[id]}`); } draw(); game.selChanged(); }));
     el.querySelectorAll('[data-dec]').forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); const id = b.dataset.dec; if ((sel.qty[id] || 0) > 0) { sel.qty[id] -= 1; game.audio.pop(); } draw(); game.selChanged(); }));
     el.querySelectorAll('[data-pid]').forEach((b) => b.addEventListener('click', (e) => { if (e.target.closest('.sh-qty')) return; game.audio.speak(byId[b.dataset.pid].chn); game.learn(byId[b.dataset.pid].chn); }));
     el.querySelectorAll('[data-clr]').forEach((b) => b.addEventListener('click', () => { sel.qty[b.dataset.clr] = 0; draw(); game.selChanged(); }));
@@ -302,7 +303,7 @@ export function cavienMode(D) {
   const measureVi = (p) => lc(p.raw.sampleVi || p.vi).replace(/^một\s+/, '');
   const itemSay = (p, n) => (p.zone === 'drink' ? `${num(n)}${/可乐|矿泉水/.test(p.chn) ? '瓶' : '杯'}${p.chn}` : `${num(n)}${p.raw.measure}${p.raw.nameSaid}`);
   const itemVi = (p, n) => (p.zone === 'drink' ? `${n} ${/可乐|矿泉水/.test(p.chn) ? 'chai' : 'ly'} ${lc(p.vi)}` : `${n} ${measureVi(p)}`);
-  const FRY = { normal: ['', ''], crisp: ['帮我炸久一点，炸脆一点', 'Chiên lâu hơn, giòn hơn giúp tôi'], nocharr: ['不要炸得太焦', 'Đừng chiên cháy quá'] };
+  const FRY = { normal: ['可以帮我炸一下吗？', 'Có thể chiên giúp tôi không?'], crisp: ['帮我炸久一点，炸脆一点', 'Chiên lâu hơn, giòn hơn giúp tôi'], nocharr: ['不要炸得太焦', 'Đừng chiên cháy quá'] };
   const SERVE = { take: ['我要打包', 'Tôi muốn mang đi'], dine: ['我在这里吃', 'Tôi ăn tại đây'] };
   const vocab = [
     ...products.map((p) => ({ zh: p.chn, pin: p.pin, vi: p.vi })),
@@ -311,7 +312,7 @@ export function cavienMode(D) {
   ];
   return {
     zones, products, vocab,
-    hint: '💡 Chọn đúng <b>món</b> và <b>số lượng</b>, thêm <b>nước chấm</b>, chọn <b>mang đi / ăn tại đây</b> và độ chiên theo lời khách.',
+    hint: '💡 Chọn đúng <b>món</b> và <b>số lượng</b>, thêm <b>nước chấm</b>, chọn <b>mang đi / ăn tại đây</b>, rồi <b>chiên</b> — vớt ra đúng vùng 🟢 vừa · 🟠 giòn · 🔴 cháy.',
     makeOrder(ctx) {
       const pool = ctx.products.filter((p) => p.zone !== 'drink' && p.zone !== 'sauce');
       if (!pool.length) return null;
@@ -323,7 +324,8 @@ export function cavienMode(D) {
       const ss = shuffle(ctx.products.filter((p) => p.zone === 'sauce')).slice(0, nSauce).map((s) => s.id);   // chỉ gọi nước chấm còn trong kho
       const serve = Math.random() < 0.5 ? 'take' : 'dine';
       const hasFry = items.some((x) => byId[x.id].raw.group === 'Món chiên');
-      const fry = hasFry && Math.random() < 0.4 ? pickOne(['crisp', 'nocharr']) : 'normal';
+      let fry = 'none';
+      if (hasFry) { const r = Math.random(); fry = r < 0.5 ? 'normal' : r < 0.8 ? 'crisp' : 'nocharr'; }
       const open = pickOne(['给我', '我要', '来']);
       let zh = `${open}${items.map((x) => itemSay(byId[x.id], x.qty)).join('和')}。`;
       let vi = `Cho tôi ${items.map((x) => itemVi(byId[x.id], x.qty)).join(' và ')}.`;
@@ -332,12 +334,12 @@ export function cavienMode(D) {
         vi += ` Thêm ${ss.map((s) => lc(sById[s].vi)).join(' và ')}.`;
       }
       zh += `${SERVE[serve][0]}。`; vi += ` ${SERVE[serve][1]}.`;
-      if (fry !== 'normal') { zh += `${FRY[fry][0]}。`; vi += ` ${FRY[fry][1]}.`; }
+      if (fry !== 'none') { const fz = FRY[fry][0]; const fv = FRY[fry][1]; zh += '？！。'.includes(fz.slice(-1)) ? fz : fz + '。'; vi += ' ' + fv + (fv.endsWith('?') ? '' : '.'); }
       const words = [...items.map((x) => byId[x.id].chn), ...ss.map((s) => sById[s].chn), serve === 'take' ? '打包' : '在这里吃', ...(fry === 'crisp' ? ['炸脆一点'] : fry === 'nocharr' ? ['不要炸得太焦'] : [])];
       return { items, sauces: ss, serve, fry, say: say(zh, vi), due: items.reduce((s, x) => s + byId[x.id].price * x.qty, 0), words };
     },
-    emptySel() { return { qty: {}, sauces: [], serve: null, fry: 'normal', tab: null }; },
-    canConfirm(order, sel) { return Object.values(sel.qty).some((v) => v > 0) && !!sel.serve; },
+    emptySel() { return { qty: {}, sauces: [], serve: null, fry: null, frying: false, fryP: null, tab: null }; },
+    canConfirm(order, sel) { return Object.values(sel.qty).some((v) => v > 0) && !!sel.serve && (order.fry === 'none' || (!!sel.fry && !sel.frying)); },
     unitCount(order) { return Math.ceil(order.items.reduce((s, x) => s + x.qty, 0) / 2) + order.sauces.length; },
     stockUse(order) { return [...order.items.map((x) => ({ id: x.id, qty: x.qty })), ...order.sauces.map((s) => ({ id: s, qty: 1 }))]; },
     billLines(order) { return order.items.map((x) => ({ zh: byId[x.id].chn, vi: byId[x.id].vi, qty: x.qty, amount: byId[x.id].price * x.qty })); },
@@ -345,7 +347,9 @@ export function cavienMode(D) {
       const bad = qtyDiff(order, sel, { missing: 'Món hàng', qty: 'Số lượng', extra: 'Thừa món' });
       if (sel.sauces.length !== order.sauces.length || !order.sauces.every((s) => sel.sauces.includes(s))) bad.push('Nước chấm');
       if (sel.serve !== order.serve) bad.push('Mang đi / ăn tại đây');
-      if (sel.fry !== order.fry) bad.push('Độ chiên');
+      if (order.fry === 'normal' && sel.fry !== 'normal') bad.push('Độ chiên (khách muốn chín vừa — vùng xanh)');
+      else if (order.fry === 'crisp' && sel.fry !== 'crisp') bad.push('Độ chiên (khách muốn giòn hơn — vùng cam)');
+      else if (order.fry === 'nocharr' && !['normal', 'crisp'].includes(sel.fry)) bad.push('Độ chiên (khách không muốn cháy — đừng để vào vùng đỏ)');
       return bad;
     },
     renderPrep(el, game) {
@@ -365,15 +369,7 @@ export function cavienMode(D) {
             }));
           }
           const side = root.querySelector('#extra-side');
-          if (side) {
-            side.innerHTML = `<div class="sh-panel"><div class="sh-lbl">📦 Cách dùng <span class="zh">打包 / 堂食</span></div>
-              <div class="sh-chips"><button type="button" class="sh-chip ${sel.serve === 'take' ? 'on' : ''}" data-serve="take">🛍️ Mang đi <span class="zh">打包</span></button><button type="button" class="sh-chip ${sel.serve === 'dine' ? 'on' : ''}" data-serve="dine">🍽️ Ăn tại đây <span class="zh">在这里吃</span></button></div>
-              <div class="sh-lbl">🔥 Độ chiên</div>
-              <div class="sh-chips"><button type="button" class="sh-chip ${sel.fry === 'normal' ? 'on' : ''}" data-fry="normal">Bình thường</button><button type="button" class="sh-chip ${sel.fry === 'crisp' ? 'on' : ''}" data-fry="crisp">Giòn hơn <span class="zh">炸脆</span></button><button type="button" class="sh-chip ${sel.fry === 'nocharr' ? 'on' : ''}" data-fry="nocharr">Đừng cháy <span class="zh">不焦</span></button></div>
-              ${sel.sauces.length ? `<div class="sh-lbl">🫙 Đã chọn: ${sel.sauces.map((s) => esc(sById[s].vi)).join(', ')}</div>` : ''}</div>`;
-            side.querySelectorAll('[data-serve]').forEach((b) => b.addEventListener('click', () => { sel.serve = b.dataset.serve; game.audio.pop(); game.audio.speak(SERVE[sel.serve][0].replace('我要', '').replace('我在', '')); draw(); game.selChanged(); }));
-            side.querySelectorAll('[data-fry]').forEach((b) => b.addEventListener('click', () => { sel.fry = b.dataset.fry; game.audio.pop(); draw(); game.selChanged(); }));
-          }
+          if (side) renderCavienSide(side, { game, sel, draw, byId, sById, SERVE, SAUCE_ICON, order: game.current && game.current.order });
         }
       });
     }

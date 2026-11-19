@@ -9,6 +9,7 @@
  * Phần riêng của từng tiệm nằm ở shop_modes.js (sinh đơn, giao diện chuẩn bị, chấm đúng/sai, hóa đơn).
  */
 import { pinyin } from 'pinyin-pro';
+import { sceneHtml } from './shop_scene.js';
 import { createCheckoutDialogue, pickOption, renderChatHtml, renderOptionsHtml } from './shop_dialogue.js';
 
 const SAVE_VERSION = 1;
@@ -356,7 +357,11 @@ export class ShopGame {
   // --------------------------------------------------------------------------- tiện ích
   $(id) { return document.getElementById(id); }
   setText(id, t) { const e = this.$(id); if (e) e.textContent = t; }
-  unlockedProducts() { return this.mode.products.filter((p) => this.zonesOpen.has(p.zone) && this.itemsOpen.has(p.id)); }
+  unlockedProducts() {
+    const list = this.mode.products.filter((p) => this.zonesOpen.has(p.zone) && this.itemsOpen.has(p.id));
+    list.forEach((p) => { p.stockNow = this.stock[p.id] || 0; });   // thẻ hàng hiện số tồn kho
+    return list;
+  }
   toast(icon, text, kind = '') {
     const box = this.$('sh-toasts'); if (!box) return;
     const t = document.createElement('div');
@@ -1003,34 +1008,7 @@ export class ShopGame {
 
   renderGreet() {
     const el = this.$('st-greet'); if (!el) return;
-    const c = this.current;
-    const chat = this.cfg.chat.length ? this.cfg.chat[this.chatIdx % this.cfg.chat.length] : null;
-    if (!c) {
-      el.innerHTML = `
-        <div class="sh-greet empty">
-          <div class="sh-shopfront"><div class="sh-awning"></div><div class="sh-door-empty"><b class="zh">欢迎光临</b><small>${this.dayInProgress() ? (this.closed ? 'Đã đóng cửa…' : 'Đang chờ khách…') : 'Bấm ▶ để mở cửa tiệm'}</small></div></div>
-          ${chat && this.dayInProgress() ? `<div class="sh-chat"><span class="sh-chat-tag">🐈 <span class="zh">闲聊</span> Tám chuyện</span>${this.sayHtml(chat)}<button type="button" class="sh-say-btn" data-say="${esc(chat.zh)}"><i class="fa-solid fa-volume-high"></i></button></div>` : ''}
-          ${this.todayBoard()}
-        </div>`;
-      return;
-    }
-    if (!c.order) {   // kho hết sạch: khách không gọi được gì, sắp ra về
-      el.innerHTML = '<div class="sh-greet"><div class="sh-customer"><img src="' + c.profile.img + '" alt=""><div class="sh-cname"><b class="zh">' + esc(c.profile.zh) + '</b><span>' + esc(c.profile.vi) + '</span></div></div>'
-        + '<div class="sh-bubble"><div class="sh-bubble-head"><span>🗣️ Khách nói</span></div>' + this.sayHtml(say('哎呀，什么都没有了……', 'Ôi, chẳng còn gì cả…'), 'big') + '<div class="sh-taken warn">📦 Kho hết sạch hàng! Bấm 进货 để nhập hàng cho khách sau.</div></div></div>';
-      return;
-    }
-    const o = c.order;
-    el.innerHTML = `
-      <div class="sh-greet">
-        <div class="sh-customer"><img src="${c.profile.img}" alt=""><div class="sh-cname"><b class="zh">${esc(c.profile.zh)}</b><span>${esc(c.profile.vi)}</span></div>
-          <div class="sh-patience" id="sh-patience"><i></i><span id="sh-mood">😊</span></div></div>
-        <div class="sh-bubble">
-          <div class="sh-bubble-head"><span>🗣️ Khách nói</span><button type="button" class="sh-say-btn" data-say="${esc(o.say.zh)}" title="Nghe lại"><i class="fa-solid fa-volume-high"></i></button></div>
-          ${this.sayHtml(o.say, 'big')}
-          ${c.takenAt ? '<div class="sh-taken">✅ Đã nhận đơn — sang bước 2 để chuẩn bị.</div>' : `<button type="button" class="sh-btn" id="btn-take"><span class="zh">接单</span> Nhận đơn</button>`}
-        </div>
-        ${this.todayBoard()}
-      </div>`;
+    el.innerHTML = sceneHtml(this, say);
     const t = this.$('btn-take'); if (t) t.addEventListener('click', () => this.takeOrder());
     this.updatePatience();
   }
