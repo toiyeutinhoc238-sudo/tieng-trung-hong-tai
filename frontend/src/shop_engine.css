@@ -225,12 +225,12 @@ button { font-family: inherit; cursor: pointer; }
 .sh-tab.off { opacity: .45; }
 
 /* ---------- Toast & modal ---------- */
-.sh-toasts { position: absolute; left: 50%; top: 96px; transform: translateX(-50%); z-index: 70; display: flex; flex-direction: column; gap: 6px; width: min(92vw, 460px); pointer-events: none; }
+.sh-toasts { position: absolute; left: 50%; top: 96px; transform: translateX(-50%); z-index: 320; display: flex; flex-direction: column; gap: 6px; width: min(92vw, 460px); pointer-events: none; }
 .sh-toast { display: flex; gap: 8px; align-items: center; padding: 9px 14px; border-radius: 14px; background: #4a2c17; color: #fff; font-size: .85rem; font-weight: 700; box-shadow: 0 6px 16px rgba(0, 0, 0, .3); animation: shIn .25s; }
 .sh-toast.warn { background: #b91c1c; }
 .sh-toast.out { opacity: 0; transition: opacity .3s; }
 @keyframes shIn { from { transform: translateY(-8px); opacity: 0; } }
-.sh-modal { position: absolute; inset: 0; z-index: 80; background: rgba(30, 15, 5, .62); align-items: center; justify-content: center; padding: 12px; }
+.sh-modal { position: absolute; inset: 0; z-index: 300; background: rgba(30, 15, 5, .62); align-items: center; justify-content: center; padding: 12px; }
 .sh-card { width: min(94vw, 460px); max-height: 92dvh; overflow-y: auto; padding: 18px; border-radius: 20px; background: #fffaf2; border: 3px solid var(--a); display: flex; flex-direction: column; gap: 10px; }
 .sh-card.wide { width: min(94vw, 680px); }
 .sh-card h3 { margin: 0; font-size: 1.15rem; color: var(--b); }
