@@ -39,7 +39,11 @@ export default defineConfig({
         bobaGame: resolve(__dirname, 'boba-game.html'),
         groceryGame: resolve(__dirname, 'grocery-game.html'),
         shopGames: resolve(__dirname, 'shop-games.html'),
-        farmGame: resolve(__dirname, 'farm-game.html')
+        farmGame: resolve(__dirname, 'farm-game.html'),
+        clothesGame: resolve(__dirname, 'clothes-game.html'),
+        banhmiGame: resolve(__dirname, 'banhmi-game.html'),
+        cavienGame: resolve(__dirname, 'cavien-game.html'),
+        myphamGame: resolve(__dirname, 'mypham-game.html')
       },
       output: {
         manualChunks(id) {

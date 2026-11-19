@@ -10,9 +10,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Game Nhập Vai · Làm Chủ Tiệm | Hongtai Chinese</title>
-  <meta name="description" content="Nhóm game nhập vai học tiếng Trung: làm chủ tiệm trà sữa, tiệm tạp hóa và nhiều tiệm khác sắp ra mắt tại Tiếng Trung Hongtai.">
+  <meta name="description" content="Nhóm game nhập vai học tiếng Trung: làm chủ tiệm trà sữa, tạp hóa, quần áo, bánh mì, cá viên, mỹ phẩm và nông trại tại Tiếng Trung Hongtai.">
   <meta property="og:title" content="Game Nhập Vai · Làm Chủ Tiệm | Hongtai Chinese">
-  <meta property="og:description" content="Vừa kinh doanh vừa học tiếng Trung: Tiệm Trà Sữa, Tiệm Tạp Hóa và nhiều game sắp ra mắt.">
+  <meta property="og:description" content="Vừa kinh doanh vừa học tiếng Trung: Tiệm Trà Sữa, Tạp Hóa, Quần Áo, Bánh Mì, Cá Viên, Mỹ Phẩm.">
   <meta property="og:image" content="/assets/logo.png">
   <link rel="canonical" href="https://tiengtrunghongtai.online/shop-games.html" />
   <link rel="icon" type="image/png" href="/assets/logo.png">
@@ -71,6 +71,10 @@
     .sg-progress { font-size: 0.78rem; font-weight: 800; color: #047857; }
     .sg-play { margin-top: 8px; align-self: stretch; text-align: center; padding: 9px 12px; border-radius: 12px; background: linear-gradient(180deg, #ffa24f, #ea580c); color: #fff; font-weight: 900; box-shadow: 0 4px 0 #9a3412; }
     /* Game chưa mở: khóa */
+    .sg-cover.cv-cavien { background: linear-gradient(135deg, #fca5a5, #f97316 60%, #facc15); }
+    .sg-cover.cv-banhmi { background: linear-gradient(135deg, #fde68a, #f59e0b 60%, #b45309); }
+    .sg-cover.cv-clothes { background: linear-gradient(135deg, #fbcfe8, #ec4899 60%, #9d174d); }
+    .sg-cover.cv-mypham { background: linear-gradient(135deg, #e9d5ff, #a855f7 60%, #6b21a8); }
     .sg-card.locked { cursor: not-allowed; background: #f3ece2; }
     .sg-card.locked:hover { transform: none; box-shadow: 0 8px 0 #4a2a12, 0 12px 22px rgba(0, 0, 0, 0.25); }
     .sg-card.locked .sg-cover { background: repeating-linear-gradient(45deg, #d9c8ad 0 14px, #cfbb9c 14px 28px); }
@@ -106,7 +110,7 @@
   <main class="sg-wrap">
     <section class="sg-hero">
       <h1>🎮 Game Nhập Vai</h1>
-      <span class="sg-count" id="sg-count">3 game đang mở · 4 game sắp ra mắt</span>
+      <span class="sg-count" id="sg-count">7 game đang mở · luyện tiếng Trung khi bán hàng</span>
     </section>
 
     <section class="sg-shelf" aria-label="Kệ game nhập vai">
@@ -119,7 +123,7 @@
 
   <script>
     (function () {
-      // 6 game trên kệ: 2 game đang mở, 4 game khóa "Sắp ra mắt"
+      // 7 game trên kệ (game chưa có url sẽ hiện khóa "Sắp ra mắt")
       var GAMES = [
         { key: 'boba', url: '/boba-game.html', name: 'Tiệm Trà Sữa', chn: '我的奶茶店', emoji: '🧋', cover: '/assets/boba_shop_interior_bg.jpg', badge: ['hot', 'HOT'],
           desc: 'Nhận đơn, pha trà sữa theo yêu cầu, nấu nguyên liệu và trò chuyện thanh toán bằng tiếng Trung với khách.' },
@@ -127,10 +131,10 @@
           desc: 'Nhặt hàng theo khu kệ, quét mã, trò chuyện thanh toán (chuyển khoản hay tiền mặt), nhập hàng ở chợ đầu mối và mở rộng tiệm.' },
         { key: 'farm', url: '/farm-game.html', name: 'Nông Trại', chn: '我的农场', emoji: '🌾🐔🚜', cover: '/assets/farm_cover.svg', badge: ['new', 'MỚI'],
           desc: 'Nhấp để đi khắp nông trại: trồng rau, nuôi gà heo cừu bò, câu cá, nấu ăn và trò chuyện với hàng xóm bằng tiếng Trung.' },
-        { name: 'Tiệm Cá Viên', chn: '我的鱼丸店', emoji: '🍢', desc: 'Chiên cá viên, bò viên, xiên que và chấm tương theo ý khách.' },
-        { name: 'Tiệm Bánh Mì', chn: '我的面包店', emoji: '🥖', desc: 'Kẹp nhân bánh mì theo yêu cầu, nướng giòn và gói mang đi.' },
-        { name: 'Tiệm Quần Áo', chn: '我的服装店', emoji: '👗', desc: 'Tư vấn size, màu sắc, kiểu dáng và chọn đồ cho khách.' },
-        { name: 'Tiệm Mỹ Phẩm', chn: '我的化妆品店', emoji: '💄', desc: 'Giới thiệu son, kem dưỡng, nước hoa và tư vấn làm đẹp.' }
+        { key: 'cavien', url: '/cavien-game.html', name: 'Quầy Cá Viên Chiên', chn: '我的鱼丸店', emoji: '🍢', coverClass: 'cv-cavien', badge: ['new', 'MỚI'], desc: 'Nghe khách gọi xiên cá viên, bò viên, xúc xích với lượng từ đúng, thêm nước chấm và gói mang đi.' },
+        { key: 'banhmi', url: '/banhmi-game.html', name: 'Tiệm Bánh Mì', chn: '我的面包店', emoji: '🥖', coverClass: 'cv-banhmi', badge: ['new', 'MỚI'], desc: 'Làm bánh mì, hamburger, sandwich theo yêu cầu bỏ / thêm topping của khách, kèm nước uống.' },
+        { key: 'clothes', url: '/clothes-game.html', name: 'Tiệm Quần Áo', chn: '我的服装店', emoji: '👗', coverClass: 'cv-clothes', badge: ['new', 'MỚI'], desc: 'Tư vấn áo, quần, váy, giày: chọn đúng sản phẩm, size và màu sắc khách yêu cầu.' },
+        { key: 'mypham', url: '/mypham-game.html', name: 'Tiệm Mỹ Phẩm', chn: '我的化妆品店', emoji: '💄', coverClass: 'cv-mypham', badge: ['new', 'MỚI'], desc: 'Bán son, kem dưỡng, chống nắng, dầu gội… và luyện lượng từ 瓶 · 支 · 罐 · 盒 với khách.' }
       ];
 
       // tiến trình đã lưu trên máy (theo tài khoản đang đăng nhập)

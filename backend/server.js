@@ -176,6 +176,10 @@ const userSchema = new mongoose.Schema({
   bobaGame: { type: Object, default: null },
   groceryGame: { type: Object, default: null },
   farmGame: { type: Object, default: null },
+  clothesGame: { type: Object, default: null },
+  banhmiGame: { type: Object, default: null },
+  cavienGame: { type: Object, default: null },
+  myphamGame: { type: Object, default: null },
   // VIP Membership Fields
   isVip: { type: Boolean, default: false },
   vipStatus: { type: String, default: 'normal' }, // 'normal', 'vip', 'expired'
@@ -461,6 +465,10 @@ async function readUserData(forceRefresh = false) {
             bobaGame: u.bobaGame || null,
             groceryGame: u.groceryGame || null,
             farmGame: u.farmGame || null,
+            clothesGame: u.clothesGame || null,
+            banhmiGame: u.banhmiGame || null,
+            cavienGame: u.cavienGame || null,
+            myphamGame: u.myphamGame || null,
             isVip: !!u.isVip,
             vipStatus: u.vipStatus || (u.isVip ? 'vip' : 'normal'),
             vipActivatedAt: u.vipActivatedAt || null,
@@ -624,6 +632,10 @@ async function processMongoPersistenceQueue() {
           if (u.bobaGame) updateDoc.bobaGame = u.bobaGame;
           if (u.groceryGame) updateDoc.groceryGame = u.groceryGame;
           if (u.farmGame) updateDoc.farmGame = u.farmGame;
+          if (u.clothesGame) updateDoc.clothesGame = u.clothesGame;
+          if (u.banhmiGame) updateDoc.banhmiGame = u.banhmiGame;
+          if (u.cavienGame) updateDoc.cavienGame = u.cavienGame;
+          if (u.myphamGame) updateDoc.myphamGame = u.myphamGame;
           await User.updateOne({ _id: email }, { $set: updateDoc }, { upsert: true });
           failedEmailRetries.delete(email);
         } catch (err) {
@@ -2573,7 +2585,7 @@ app.get('/api/leaderboard', async (req, res) => {
 });
 
 // ============================================================
-// MINI GAME (Tiệm Trà Sữa · Tiệm Tạp Hóa): thành tích theo tài khoản + bảng xếp hạng
+// MINI GAME (Trà Sữa · Tạp Hóa · Quần Áo · Bánh Mì · Cá Viên · Mỹ Phẩm): thành tích theo tài khoản + bảng xếp hạng
 // Mỗi game lưu trong users[email][field] = { save, best, history, totals, updatedAt }.
 //   save    : tiến trình ván chơi (ngày, tiền, kệ/hàng đã mở…) — thoát ra vào lại vẫn tiếp tục
 //   best    : thành tích cao nhất (doanh thu 1 ngày) → bảng xếp hạng
@@ -2839,6 +2851,11 @@ registerMiniGameRoutes({ key: 'grocery', field: 'groceryGame', limits: { maxGues
 // Nông Trại (chơi liên tục, thời gian thật): không có "ngày bán" → mỗi lần LÊN CẤP gửi 1 kết quả:
 //   day = cấp độ, earnings = tổng XP, served/total = số đơn đã giao → bảng xếp hạng xếp theo tổng XP
 registerMiniGameRoutes({ key: 'farm', field: 'farmGame', limits: { maxGuestsPerDay: 1000000, maxPerGuest: 1000000 } });
+// 4 tiệm mới (shop_engine.js): ngày tính theo giờ, đơn tối đa < 1000 ¥ + tip nhỏ (chừa biên)
+registerMiniGameRoutes({ key: 'clothes', field: 'clothesGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 1100 } });
+registerMiniGameRoutes({ key: 'banhmi', field: 'banhmiGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 300 } });
+registerMiniGameRoutes({ key: 'cavien', field: 'cavienGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 400 } });
+registerMiniGameRoutes({ key: 'mypham', field: 'myphamGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 1100 } });
 
 // Admin: Reset toàn bộ dữ liệu người dùng (xóa MongoDB + RAM cache) - Cần secret header
 app.delete('/api/admin/reset-all', async (req, res) => {

@@ -1675,7 +1675,7 @@ import{h as ot}from"./vendor-BfYXEYrK.js";const J="__hongtai_seasonal_particles_
         <!-- DANH MỤC: GAME THI ĐẤU (có bảng xếp hạng) -->
         <div class="sidebar-section-label">Game Thi Đấu · Xếp Hạng</div>
         <ul class="sidebar-menu" style="margin-bottom: 12px;">
-          <li class="sidebar-item ${["shopgames","boba","grocery","farm"].includes(t)?"active":""}" onclick="window.location.href = '/shop-games.html'" title="Game Nhập Vai: Tiệm Trà Sữa, Tiệm Tạp Hóa và nhiều game sắp ra mắt (có bảng xếp hạng)" style="cursor: pointer;">
+          <li class="sidebar-item ${["shopgames","boba","grocery","farm","clothes","banhmi","cavien","mypham"].includes(t)?"active":""}" onclick="window.location.href = '/shop-games.html'" title="Game Nhập Vai: 6 tiệm nhập vai + Nông Trại học tiếng Trung (có bảng xếp hạng)" style="cursor: pointer;">
             <i class="fa-solid fa-store" style="color: #f43f5e; font-size: 1.1rem;"></i> <span>Game Nhập Vai</span>
             <span style="font-size: 0.65rem; background: rgba(244, 63, 94, 0.18); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.35); padding: 1px 6px; border-radius: 99px; font-weight: 800; margin-left: auto;">HOT</span>
           </li>
