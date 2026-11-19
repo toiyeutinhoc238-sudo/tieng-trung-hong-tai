@@ -286,3 +286,30 @@ button { font-family: inherit; cursor: pointer; }
   .sh-rrow { grid-template-columns: 26px 1fr auto auto; } .sh-rrow .sv { display: none; }
   .sh-customer img { width: 78px; height: 78px; } .sh-say.big b { font-size: 1.25rem; }
 }
+
+/* ---------- Thời tiết · kho · nâng cấp · feedback ---------- */
+.sh-event { padding: 10px 12px; border-radius: 14px; background: #eaf6ff; border: 2px solid #9fd3ee; display: flex; flex-direction: column; gap: 4px; }
+.sh-event.holiday { background: #fff1f2; border-color: #fda4af; }
+.sh-event-head { font-size: .75rem; font-weight: 800; color: #1e40af; }
+.sh-event.holiday .sh-event-head { color: #be123c; }
+.sh-event-main { display: flex; align-items: center; gap: 10px; }
+.sh-event-main > div { flex: 1; display: flex; flex-direction: column; }
+.sh-event-main b { font-size: 1.2rem; } .sh-event-main small { font-size: .76rem; color: #475569; }
+.sh-event-ic { font-size: 2rem; }
+.sh-event-eff { font-size: .78rem; font-weight: 600; } .sh-event-eff .up { color: #15803d; } .sh-event-eff .down { color: #b91c1c; }
+.sh-mrow.warn { background: #fee2e2; color: #991b1b; }
+.sh-mk-row .sh-qty { margin-top: 0; flex: none; }
+.sh-mk-row .sh-qty b { min-width: 24px; text-align: center; }
+.sh-max { font-size: .8rem; color: #15803d; }
+.sh-market h4 small { font-weight: 600; opacity: .65; }
+#market-foot { margin-top: 4px; } #market-foot:empty { display: none; }
+.sh-sum-grid { grid-template-columns: repeat(3, 1fr); }
+.sh-sum-grid b.pos { color: #15803d; } .sh-sum-grid b.neg { color: #b91c1c; }
+.sh-fb { padding: 10px; border-radius: 14px; background: #fff; display: flex; flex-direction: column; gap: 6px; }
+.sh-fb-head { font-weight: 800; font-size: .82rem; }
+.sh-fb-row { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; padding: 4px 0; border-top: 1px dashed #e5d3bd; font-size: .8rem; }
+.sh-fb-row b { font-size: 1.02rem; } .sh-fb-row small { display: block; opacity: .75; font-size: .7rem; }
+.sh-ranktab { cursor: pointer; }
+@media (max-width: 520px) { .sh-sum-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.sh-taken.warn { color: #b91c1c; }

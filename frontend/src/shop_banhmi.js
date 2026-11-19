@@ -7,8 +7,8 @@ const mode = banhmiMode(D);
 const R = (stars, zh, vi) => ({ stars, ...say(zh, vi) });
 mountShop({
   key: 'banhmi', title: 'Tiệm Bánh Mì Của Tôi', chn: '我的面包店', pin: 'Wǒ de miànbāo diàn', emoji: '🥖',
-  prepIcon: '🥪', prepZh: '做面包', prepVi: 'Làm bánh', startMoney: 80, dayMs: 170000, tip: 2, starBonus: 15,
-  goal: (day) => 110 + 25 * (day - 1),
+  prepIcon: '🥪', prepZh: '做面包', prepVi: 'Làm bánh', startMoney: 100, dayMs: 300000, tip: 2, starBonus: 15, starter: 6, maxStock: 14, costRate: 0.5, pace: 1, upgradeScale: 0.7, restockGoal: 9,
+  goal: (day) => 70 + 15 * (day - 1),
   chat: [
     say('欢迎光临！想吃点什么？', 'Chào mừng quý khách! Bạn muốn ăn gì?'),
     say('刚烤好的面包，又脆又香！', 'Bánh mì vừa nướng xong, giòn và thơm lắm!'),
@@ -30,6 +30,8 @@ mountShop({
     <li>🛎️ <b>Đón khách:</b> khách gọi một loại bánh (bánh mì, hamburger, sandwich) kèm yêu cầu <b>bỏ</b> (不要) hoặc <b>thêm</b> (多加) topping, đôi khi gọi thêm nước uống.</li>
     <li>🥪 <b>Làm bánh:</b> chọn đúng loại bánh — nhân chuẩn sẽ tự được bật sẵn. Bấm topping để bỏ hoặc thêm cho đúng lời khách, rồi chọn nước uống nếu có.</li>
     <li>💬 <b>Thanh toán:</b> chọn câu tiếng Trung đúng để báo tiền và nhận thanh toán.</li>
-    <li>📦 <b>Nhập hàng:</b> dùng tiền mở các món mới và khu Hamburger / Sandwich.</li>
+    <li>📦 <b>Nhập hàng trước, bán sau:</b> đầu mỗi ngày xem <b>dự báo thời tiết</b> (trời đẹp khách đông, mưa bão khách thưa), bấm “Nhập hàng” để bổ sung kho rồi mới “Mở cửa”. Hết hàng thì khách ra về tay không.</li>
+    <li>🔧 <b>Nâng cấp &amp; mở rộng:</b> ở chợ nhập hàng, dùng tiền mở khu Hamburger / Sandwich và các món mới và nâng cấp biển hiệu, ghế chờ, giờ mở cửa.</li>
+    <li>💬 <b>Feedback:</b> mỗi khách để lại một lời đánh giá bằng tiếng Trung; cuối ngày xem lại cả lãi / lỗ.</li>
     <li>🏆 Mỗi ngày bán được ghi lên bảng xếp hạng (đăng nhập để lưu).</li></ul>`
 }, mode);

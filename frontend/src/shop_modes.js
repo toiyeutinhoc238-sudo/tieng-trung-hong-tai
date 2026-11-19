@@ -62,7 +62,7 @@ export function clothesMode(D) {
       if (!pool.length) return null;
       const nLines = ctx.day >= 3 && Math.random() < Math.min(0.6, 0.35 + ctx.day * 0.03) ? 2 : 1;
       const chosen = shuffle(pool).slice(0, nLines);
-      const lines = chosen.map((p) => ({ id: p.id, size: pickOne(p.raw.sizes), color: pickOne(p.raw.colors), qty: ctx.day >= 5 && Math.random() < 0.2 ? 2 : 1 }));
+      const lines = chosen.map((p) => ({ id: p.id, size: pickOne(p.raw.sizes), color: pickOne(p.raw.colors), qty: Math.min(ctx.stock(p.id), ctx.day >= 5 && Math.random() < 0.2 ? 2 : 1) }));
       const parts = lines.map((l, i) => lineSay(l, i === 0));
       const zh = `${parts.map((x) => x.zh).join('。')}。`;
       const vi = `${parts.map((x) => x.vi).join('. ')}.`;
@@ -71,6 +71,7 @@ export function clothesMode(D) {
     emptySel() { return { lines: [], tab: null, pick: null, size: null, color: null }; },
     canConfirm(order, sel) { return sel.lines.length > 0; },
     unitCount(order) { return order.lines.reduce((s, l) => s + l.qty, 0); },
+    stockUse(order) { return order.lines.map((l) => ({ id: l.id, qty: l.qty })); },
     billLines(order) { return order.lines.map((l) => ({ zh: `${D.colors[l.color].zh}${byId[l.id].chn} ${l.size}`, vi: `${byId[l.id].vi} · ${l.color}`, qty: l.qty, amount: byId[l.id].price * l.qty })); },
     diff(order, sel) {
       const bad = new Set();
@@ -187,6 +188,7 @@ export function banhmiMode(D) {
     emptySel() { return { main: null, ings: [], drink: null, tab: null }; },
     canConfirm(order, sel) { return !!sel.main; },
     unitCount(order) { return 1 + order.mods.length * 0.5 + (order.drink ? 1 : 0); },
+    stockUse(order) { return [{ id: order.main, qty: 1 }, ...(order.drink ? [{ id: order.drink, qty: 1 }] : [])]; },
     billLines(order) {
       const m = byId[order.main]; const rows = [{ zh: m.chn, vi: m.vi, qty: 1, amount: m.price }];
       if (order.drink) { const d = byId[order.drink]; rows.push({ zh: d.chn, vi: d.vi, qty: 1, amount: d.price }); }
@@ -309,7 +311,7 @@ export function cavienMode(D) {
       const pool = ctx.products.filter((p) => p.zone !== 'drink');
       if (!pool.length) return null;
       const nLines = Math.min(pool.length, ctx.day >= 3 ? randInt(2, 3) : randInt(1, 2));
-      const items = shuffle(pool).slice(0, nLines).map((p) => ({ id: p.id, qty: randInt(1, ctx.day >= 4 ? 5 : 3) }));
+      const items = shuffle(pool).slice(0, nLines).map((p) => ({ id: p.id, qty: Math.min(ctx.stock(p.id), randInt(1, ctx.day >= 4 ? 5 : 3)) }));
       const drinks = ctx.products.filter((p) => p.zone === 'drink');
       if (drinks.length && Math.random() < 0.3) items.push({ id: pickOne(drinks).id, qty: 1 });
       const nSauce = Math.random() < 0.25 ? 0 : (Math.random() < 0.3 ? 2 : 1);
@@ -332,6 +334,7 @@ export function cavienMode(D) {
     emptySel() { return { qty: {}, sauces: [], serve: null, fry: 'normal', tab: null }; },
     canConfirm(order, sel) { return Object.values(sel.qty).some((v) => v > 0) && !!sel.serve; },
     unitCount(order) { return Math.ceil(order.items.reduce((s, x) => s + x.qty, 0) / 2) + order.sauces.length; },
+    stockUse(order) { return order.items.map((x) => ({ id: x.id, qty: x.qty })); },
     billLines(order) { return order.items.map((x) => ({ zh: byId[x.id].chn, vi: byId[x.id].vi, qty: x.qty, amount: byId[x.id].price * x.qty })); },
     diff(order, sel) {
       const bad = qtyDiff(order, sel, { missing: 'Món hàng', qty: 'Số lượng', extra: 'Thừa món' });
@@ -393,7 +396,7 @@ export function mayphamMode(D) {
       if (!pool.length) return null;
       for (let attempt = 0; attempt < 12; attempt++) {
         const nLines = Math.min(pool.length, ctx.day >= 3 ? randInt(2, 3) : randInt(1, 2));
-        const items = shuffle(pool).slice(0, nLines).map((p) => ({ id: p.id, qty: ctx.day >= 4 && Math.random() < 0.3 ? 2 : 1 }));
+        const items = shuffle(pool).slice(0, nLines).map((p) => ({ id: p.id, qty: Math.min(ctx.stock(p.id), ctx.day >= 4 && Math.random() < 0.3 ? 2 : 1) }));
         const due = items.reduce((s, x) => s + byId[x.id].price * x.qty, 0);
         if (due >= 990) continue;
         const open = pickOne(['我想买', '请给我', '我要', '麻烦给我拿']);
@@ -406,6 +409,7 @@ export function mayphamMode(D) {
     emptySel() { return { qty: {}, tab: null }; },
     canConfirm(order, sel) { return Object.values(sel.qty).some((v) => v > 0); },
     unitCount(order) { return order.items.reduce((s, x) => s + x.qty, 0); },
+    stockUse(order) { return order.items.map((x) => ({ id: x.id, qty: x.qty })); },
     billLines(order) { return order.items.map((x) => ({ zh: byId[x.id].chn, vi: byId[x.id].vi, qty: x.qty, amount: byId[x.id].price * x.qty })); },
     diff(order, sel) { return qtyDiff(order, sel, { missing: 'Sản phẩm', qty: 'Số lượng', extra: 'Thừa sản phẩm' }); },
     renderPrep(el, game) { qtyGrid(el, game, { zones, byId, maxQty: 5 }); }
