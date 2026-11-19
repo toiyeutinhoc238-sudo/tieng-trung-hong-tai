@@ -139,24 +139,27 @@ function template(cfg) {
   return `
 <div class="sh-stage sh-${cfg.key}" id="sh-stage">
   <section class="sh-title" id="sh-title">
+    <div class="sh-title-sun" aria-hidden="true"></div>
+    <div class="sh-title-leaves" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
     <a href="/shop-games.html" class="sh-title-home"><i class="fa-solid fa-arrow-left"></i> Kệ game</a>
-    <a href="/index.html" class="sh-account guest" id="sh-account">
+    <a href="/index.html" class="sh-account guest" id="sh-account" title="Đăng nhập để lưu thành tích">
       <span class="sh-account-av" id="sh-account-av"><i class="fa-solid fa-user"></i></span>
       <span class="sh-account-tx"><strong id="sh-account-name">Khách</strong><small id="sh-account-status">Đăng nhập để lưu thành tích</small></span>
     </a>
     <div class="sh-logo">
-      <div class="sh-logo-emoji">${cfg.emoji}</div>
+      <div class="sh-logo-awning" aria-hidden="true"></div>
       <div class="sh-logo-board"><span class="sh-logo-zh zh">${cfg.chn}</span><span class="sh-logo-pin">${cfg.pin}</span></div>
       <div class="sh-logo-ribbon">${esc(cfg.title)}</div>
-      <div class="sh-logo-progress" id="sh-title-progress"></div>
+      <div class="sh-title-progress" id="sh-title-progress"></div>
     </div>
     <div class="sh-menu">
       <button type="button" class="sh-btn-play" id="sh-btn-play"><span class="zh" id="sh-play-zh">开门营业</span><b id="sh-play-vi">Bắt đầu</b><i class="fa-solid fa-play"></i></button>
       <div class="sh-menu-sub">
-        <button type="button" class="sh-btn-sub" id="sh-btn-guide">📖 <span class="zh">玩法说明</span> Hướng dẫn</button>
-        <button type="button" class="sh-btn-sub" id="sh-btn-rank">🏆 <span class="zh">排行榜</span> Xếp hạng</button>
+        <button type="button" class="sh-btn-sub" id="sh-btn-guide"><span>📖</span><span><span class="zh">玩法说明</span> Hướng dẫn</span></button>
+        <button type="button" class="sh-btn-sub" id="sh-btn-rank"><span>🏆</span><span><span class="zh">排行榜</span> Xếp hạng</span></button>
       </div>
     </div>
+    <div class="sh-title-cat" aria-hidden="true"><span class="cat-body">${cfg.emoji}</span><span class="cat-zz">${cfg.mascotSay || '欢迎'}</span></div>
   </section>
 
   <header class="sh-hud">
@@ -374,7 +377,11 @@ export class ShopGame {
     this.setText('sh-play-zh', next ? '继续营业' : '开门营业');
     this.setText('sh-play-vi', next ? `Tiếp tục · Ngày ${this.day}` : this.day > 1 ? `Chơi tiếp · Ngày ${this.day}` : 'Bắt đầu');
     const p = this.$('sh-title-progress');
-    if (p) p.textContent = this.day > 1 || this.records.length ? `📅 Đang ở ngày ${this.day} · 🪙 ${fmt(this.money)} ¥` : '';
+    if (p) {
+      const known = this.mode.vocab.filter((w) => this.vocab.has(w.zh)).length;
+      p.innerHTML = this.day > 1 || this.records.length || this.dayInProgress()
+        ? `<span>📅 <span class="zh">第${this.day}天</span></span><span>🪙 ${fmt(this.money)} ¥</span><span>📖 ${known}/${this.mode.vocab.length} từ</span>` : '';
+    }
   }
   hideTitle() { const t = this.$('sh-title'); if (t) t.classList.add('hidden'); document.body.classList.remove('on-title'); }
   onPlay() {
