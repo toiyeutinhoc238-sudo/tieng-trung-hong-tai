@@ -1,6 +1,6 @@
 import './shop_engine.css';
 import D from './shop_data/banhmi.js';
-import { mountShop, say } from './shop_engine.js';
+import { mountShop, buildGuide, say } from './shop_engine.js';
 import { banhmiMode } from './shop_modes.js';
 
 const mode = banhmiMode(D);
@@ -26,12 +26,5 @@ mountShop({
     R(2, '少了一样配料，有点失望。', 'Thiếu một loại nhân, hơi thất vọng.'), R(2, '等太久了，面包都凉了。', 'Chờ lâu quá, bánh mì nguội mất rồi.'),
     R(1, '做错了，我要的不是这个。', 'Làm sai rồi, tôi gọi đâu phải món này.')
   ],
-  guideHtml: `<ul>
-    <li>🛎️ <b>Đón khách:</b> khách gọi một loại bánh (bánh mì, hamburger, sandwich) kèm yêu cầu <b>bỏ</b> (不要) hoặc <b>thêm</b> (多加) topping, đôi khi gọi thêm nước uống.</li>
-    <li>🥪 <b>Làm bánh:</b> chọn đúng loại bánh — nhân chuẩn sẽ tự được bật sẵn. Bấm topping để bỏ hoặc thêm cho đúng lời khách, rồi chọn nước uống nếu có.</li>
-    <li>💬 <b>Thanh toán:</b> chọn câu tiếng Trung đúng để báo tiền và nhận thanh toán.</li>
-    <li>📦 <b>Nhập hàng trước, bán sau:</b> đầu mỗi ngày xem <b>dự báo thời tiết</b> (trời đẹp khách đông, mưa bão khách thưa), bấm “Nhập hàng” để bổ sung kho rồi mới “Mở cửa”. Hết hàng thì khách ra về tay không.</li>
-    <li>🔧 <b>Nâng cấp &amp; mở rộng:</b> ở chợ nhập hàng, dùng tiền mở khu Hamburger / Sandwich và các món mới và nâng cấp biển hiệu, ghế chờ, giờ mở cửa.</li>
-    <li>💬 <b>Feedback:</b> mỗi khách để lại một lời đánh giá bằng tiếng Trung; cuối ngày xem lại cả lãi / lỗ.</li>
-    <li>🏆 Mỗi ngày bán được ghi lên bảng xếp hạng (đăng nhập để lưu).</li></ul>`
+  guideSteps: buildGuide({ icon: '🥪', title: 'Làm bánh · 做面包', text: 'Chọn đúng loại bánh (bánh mì, hamburger, sandwich) — nhân chuẩn tự bật sẵn. Nghe khách yêu cầu <b>不要</b> (bỏ) hoặc <b>多加</b> (thêm) rồi bấm từng topping cho đúng, thêm <b>nước uống</b> nếu khách gọi.' }, 'khu Hamburger / Sandwich và các món mới')
 }, mode);

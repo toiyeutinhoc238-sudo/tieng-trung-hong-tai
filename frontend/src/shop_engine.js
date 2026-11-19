@@ -227,6 +227,21 @@ function template(cfg) {
 </div>`;
 }
 
+export function buildGuide(prep, expand) {
+  return [
+    { icon: '🕗', title: 'Mở cửa 08:00 → 20:00', text: 'Mỗi ngày bán khoảng 5 phút, khách đến thong thả (mưa bão khách thưa, ngày lễ khách đông). Có mục tiêu doanh thu, số khách bỏ về và tỉ lệ hội thoại thanh toán đúng ngay lần đầu.' },
+    { icon: '📦', title: '进货 · Nhập hàng trước khi mở cửa', text: 'Đầu ngày xem <b>天气预报 dự báo thời tiết</b>, bấm <b>Nhập hàng</b> để bổ sung kho rồi mới <b>Mở cửa</b>. Hết hàng thì khách ra về tay không.' },
+    { icon: '🛎️', title: 'Đón khách', text: 'Khách xếp hàng; chờ quá lâu sẽ bỏ về. Nghe câu gọi hàng tiếng Trung rồi bấm <b>Nhận đơn</b>.' },
+    prep,
+    { icon: '💬', title: 'Thanh toán bằng hội thoại', text: 'Khách hỏi tính tiền. Đọc <b>hóa đơn</b>, chọn câu tiếng Trung đúng: nói tổng tiền và hỏi <b>转账 chuyển khoản</b> hay <b>现金 tiền mặt</b>, nhận tiền hoặc mời quét mã, rồi chào cảm ơn. Chọn sai sẽ bị trừ điểm.' },
+    { icon: '🔧', title: '升级 · Mở rộng & nâng cấp', text: 'Dùng tiền kiếm được để mở ' + expand + ', nâng cấp biển hiệu, ghế chờ, giờ mở cửa. Cuối ngày xem <b>feedback của khách</b> và lãi lỗ.' }
+  ];
+}
+
+function headCard(id, title, body, cls = '') {
+  return '<div class="sh-modal" id="' + id + '" style="display:none"><div class="sh-card gcard ' + cls + '"><div class="sh-card-head"><h3>' + title + '</h3><button type="button" class="sh-close" data-close="' + id + '" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button></div>' + body + '</div></div>';
+}
+
 function modalShell(id, inner, cls = '') {
   return `<div class="sh-modal" id="${id}" style="display:none"><div class="sh-card ${cls}">${inner}</div></div>`;
 }
@@ -367,11 +382,12 @@ export class ShopGame {
     root.innerHTML = template(this.cfg);
     const m = this.$('sh-modals');
     m.innerHTML = [
-      modalShell('m-guide', `<h3>📖 <span class="zh">玩法说明</span> Hướng dẫn</h3><div class="sh-guide">${this.cfg.guideHtml}</div><button type="button" class="sh-btn" data-close="m-guide">Đã hiểu</button>`),
-      modalShell('m-rank', `<h3>🏆 <span class="zh">排行榜</span> Bảng xếp hạng</h3>
-        <div class="sh-ranktabs"><button type="button" class="sh-ranktab active" data-rank="global">🌏 Toàn hệ thống</button><button type="button" class="sh-ranktab" data-rank="mine">📜 Của tôi</button></div>
-        <div class="sh-rank-sum" id="rank-sum"></div><div class="sh-rank-note" id="rank-note"></div><div class="sh-rank-list" id="rank-list"></div>
-        <button type="button" class="sh-btn" data-close="m-rank">Đóng</button>`, 'wide'),
+      headCard('m-guide', '📖 <span class="zh">玩法说明</span> · Hướng dẫn chơi',
+        '<div class="sh-gsteps">' + this.cfg.guideSteps.map((s, i) => '<div class="sh-gstep"><i>' + (i + 1) + '</i><span>' + s.icon + '</span><div><b class="gt">' + s.title + '</b><p>' + s.text + '</p></div></div>').join('')
+        + '<div class="sh-gtip">💾 Tiến trình được lưu: thoát ra vào lại vẫn ở đúng ngày (thoát giữa ngày thì chơi lại ngày đó). Đăng nhập để lưu vào tài khoản và ghi kỷ lục lên <b>Bảng xếp hạng</b>.</div></div>', 'guide'),
+      headCard('m-rank', '🏆 <span class="zh">排行榜</span> · Bảng xếp hạng',
+        '<div class="sh-ranktabs"><button type="button" class="sh-ranktab active" data-rank="global">🌏 <span class="zh">全服</span> Toàn hệ thống</button><button type="button" class="sh-ranktab" data-rank="mine">📒 <span class="zh">我的</span> Ngày bán của tôi</button></div>'
+        + '<div class="sh-rank-sum" id="rank-sum"></div><div class="sh-rank-list" id="rank-list"></div><div class="sh-rank-note" id="rank-note"></div>', 'rank'),
       modalShell('m-vocab', `<h3>📖 <span class="zh">生词本</span> Sổ từ vựng</h3><div class="sh-vocab-sub" id="vocab-sub"></div><div class="sh-vocab" id="vocab-list"></div><button type="button" class="sh-btn" data-close="m-vocab">Đóng</button>`, 'wide'),
       modalShell('m-market', `<h3>📦 <span class="zh">进货市场</span> Chợ nhập hàng</h3><div class="sh-market-money" id="market-money"></div>
         <div class="sh-ranktabs"><button type="button" class="sh-ranktab" data-mtab="stock">📦 Nhập hàng</button><button type="button" class="sh-ranktab" data-mtab="unlock">🔓 Mở rộng</button><button type="button" class="sh-ranktab" data-mtab="upgrade">🔧 Nâng cấp</button></div>
@@ -1124,40 +1140,53 @@ export class ShopGame {
     document.querySelectorAll('.sh-ranktab').forEach((b) => b.classList.toggle('active', b.dataset.rank === this.rankTab));
     if (this.rankTab === 'mine') this.renderMyRank(); else this.renderGlobalRank();
   }
-  rankRow(r, i, medals) {
-    return `<div class="sh-rrow ${i < 3 ? 'top' : ''} ${r.isMe ? 'me' : ''}"><span class="pos">${medals[i] || i + 1}</span>
-      <span class="who"><b>${esc(r.name || '')}${r.isMe ? ' <em>Bạn</em>' : ''}</b><small><span class="zh">第${Number(r.day) || 1}天</span></small></span>
-      <span class="earn">${fmt(r.earnings)} ¥</span><span class="sv">🧺 ${r.served}/${r.total}</span><span class="stars">${'⭐'.repeat(r.stars || 0)}${'☆'.repeat(3 - (r.stars || 0))}</span></div>`;
+  rankRow(r, medals, mine = false) {
+    const rank = r.rank || 0;
+    const pos = rank ? (medals[rank - 1] || rank) : '•';
+    const stars = (r.stars || 0);
+    const ava = r.picture ? '<img class="sh-rr-av" src="' + esc(r.picture) + '" alt="" referrerpolicy="no-referrer" loading="lazy">' : '<span class="sh-rr-av"><i class="fa-solid fa-user"></i></span>';
+    const dayTxt = '<span class="zh">第' + (Number(r.day) || 1) + '天</span>';
+    const when = r.achievedAt ? ' · ' + new Date(r.achievedAt).toLocaleDateString('vi-VN') : (r.date ? ' · ' + esc(r.date) : '');
+    const who = mine
+      ? '<span class="rr-name"><b class="zh">第' + (Number(r.day) || 1) + '天</b><small>' + esc(r.date || '') + '</small></span>'
+      : ava + '<span class="rr-name"><b>' + esc(r.name || '') + (r.isMe ? '<span class="rr-me">Bạn</span>' : '') + '</b><small>' + dayTxt + when + '</small></span>';
+    return '<div class="sh-rrow ' + ((rank && rank <= 3) || (mine && r.top) ? 'top' : '') + ' ' + (r.isMe ? 'me' : '') + '"><span class="rr-pos">' + pos + '</span><span class="rr-player">' + who + '</span>'
+      + '<span class="rr-earn">' + fmt(r.earnings) + ' ¥</span><span class="rr-sv">🧺 ' + r.served + '/' + r.total + (r.lost ? ' · 😠 ' + r.lost : '') + '</span><span class="rr-avg">' + (r.served > 0 ? (r.avg || 0) + '%' : '—') + '</span>'
+      + '<span class="rr-stars">' + '⭐'.repeat(stars) + '☆'.repeat(Math.max(0, 3 - stars)) + '</span></div>';
   }
+  rankTile(icon, value, label) { return '<div class="sh-rs"><span>' + icon + '</span><strong>' + value + '</strong><small>' + label + '</small></div>'; }
   async renderGlobalRank() {
     const list = this.$('rank-list'); const sum = this.$('rank-sum'); if (!list) return;
     this.setText('rank-note', 'Mỗi người chỉ tính thành tích cao nhất · Xếp theo doanh thu 1 ngày → số sao → điểm trung bình');
     sum.innerHTML = '';
-    list.innerHTML = '<div class="sh-rank-empty"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải bảng xếp hạng…</div>';
+    list.innerHTML = '<div class="sh-rank-empty"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải bảng xếp hạng...</div>';
     const req = (this.rankReq = (this.rankReq || 0) + 1);
     let data;
     try { data = await this.cloudApi.getLeaderboard(); } catch (e) {
       if (req !== this.rankReq || this.rankTab !== 'global') return;
-      list.innerHTML = '<div class="sh-rank-empty">📡 Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại nhé!</div>'; return;
+      list.innerHTML = '<div class="sh-rank-empty">📡 Không kết nối được máy chủ.<br>Kiểm tra mạng rồi thử lại nhé!<br><br><button type="button" class="sh-btn small" id="btn-rank-retry">🔄 Thử lại</button></div>';
+      const rb = this.$('btn-rank-retry'); if (rb) rb.addEventListener('click', () => this.renderGlobalRank());
+      return;
     }
     if (req !== this.rankReq || this.rankTab !== 'global') return;
     const me = data.me;
-    sum.innerHTML = `<div><span>👥</span><b>${data.totalPlayers || 0}</b><small>Chủ tiệm</small></div><div><span>🏅</span><b>${me ? '#' + me.rank : '—'}</b><small>Hạng của bạn</small></div><div><span>🏆</span><b>${me ? fmt(me.earnings) + ' ¥' : '—'}</b><small>Kỷ lục</small></div>`;
+    sum.innerHTML = this.rankTile('👥', data.totalPlayers || 0, 'Chủ tiệm') + this.rankTile('🏅', me ? '#' + me.rank : '—', 'Hạng của bạn') + this.rankTile('🏆', me ? fmt(me.earnings) + ' ¥' : '—', 'Kỷ lục của bạn') + this.rankTile('📅', me ? (me.daysPlayed || 0) : '—', 'Ngày đã bán');
     const top = Array.isArray(data.top) ? data.top : [];
-    const cta = !data.loggedIn ? '<div class="sh-rank-cta">🔐 Đang chơi với tư cách khách — <a href="/index.html">đăng nhập</a> để ghi tên lên bảng!</div>' : '';
-    if (!top.length) { list.innerHTML = cta + '<div class="sh-rank-empty">🏪 Chưa có ai trên bảng. Hoàn thành 1 ngày bán hàng để là người đầu tiên!</div>'; return; }
+    const cta = !data.loggedIn ? '<div class="sh-rank-cta"><span>🔐 Bạn đang chơi với tư cách khách — đăng nhập để ghi tên lên bảng!</span><a href="/index.html">Đăng nhập</a></div>' : '';
+    if (!top.length) { list.innerHTML = cta + '<div class="sh-rank-empty">🏪 Chưa có ai trên bảng xếp hạng.<br>Hoàn thành 1 ngày bán hàng để là người đầu tiên!</div>'; return; }
     const medals = ['🥇', '🥈', '🥉'];
-    list.innerHTML = cta + top.map((r, i) => this.rankRow(r, i, medals)).join('') + (me && !top.some((r) => r.isMe) ? `<div class="sh-rank-gap">⋮</div>${this.rankRow(me, 99, medals)}` : '');
+    list.innerHTML = cta + top.map((r) => this.rankRow(r, medals)).join('') + (me && !top.some((r) => r.isMe) ? '<div class="sh-rank-gap">⋮</div>' + this.rankRow(me, medals) : '');
   }
   renderMyRank() {
     const list = this.$('rank-list'); const sum = this.$('rank-sum'); if (!list) return;
-    const src = this.cloud.loggedIn ? this.cloud.history : this.records;
-    this.setText('rank-note', this.cloud.loggedIn ? '☁️ Các ngày bán đã lưu trong tài khoản' : 'Đang lưu trên máy này · Đăng nhập để lên bảng xếp hạng');
+    const fmtDate = (iso) => { const d = new Date(iso); return Number.isNaN(d.getTime()) ? '' : d.toLocaleDateString('vi-VN'); };
+    const src = this.cloud.loggedIn ? this.cloud.history.map((h) => ({ ...h, date: fmtDate(h.playedAt) })) : this.records;
+    this.setText('rank-note', this.cloud.loggedIn ? '☁️ Các ngày bán đã lưu trong tài khoản · Xếp theo doanh thu trong ngày' : 'Đang lưu trên máy này · Đăng nhập để lưu vào tài khoản và lên bảng xếp hạng');
     const recs = [...src].filter((r) => r && Number.isFinite(Number(r.earnings))).sort((a, b) => b.earnings - a.earnings);
-    sum.innerHTML = `<div><span>📅</span><b>${recs.length}</b><small>Ngày đã bán</small></div><div><span>🪙</span><b>${fmt(recs.reduce((s, r) => s + Number(r.earnings), 0))} ¥</b><small>Tổng doanh thu</small></div>`;
-    if (!recs.length) { list.innerHTML = '<div class="sh-rank-empty">Chưa có ngày bán nào.</div>'; return; }
+    sum.innerHTML = this.rankTile('📅', recs.length, 'Ngày đã bán') + this.rankTile('🧺', recs.reduce((s, r) => s + (r.served || 0), 0), 'Khách đã phục vụ') + this.rankTile('🪙', fmt(recs.reduce((s, r) => s + Number(r.earnings), 0)) + ' ¥', 'Tổng doanh thu') + this.rankTile('⭐', recs.reduce((s, r) => s + (r.stars || 0), 0), 'Tổng sao');
+    if (!recs.length) { list.innerHTML = '<div class="sh-rank-empty">🏪 Chưa có ngày bán nào.<br>Hoàn thành ngày đầu tiên để ghi kỷ lục!</div>'; return; }
     const medals = ['🥇', '🥈', '🥉'];
-    list.innerHTML = recs.slice(0, 15).map((r, i) => this.rankRow({ ...r, name: r.date || `Ngày ${r.day}` }, i, medals)).join('');
+    list.innerHTML = recs.slice(0, 15).map((r, i) => this.rankRow({ ...r, rank: i + 1 }, medals, true)).join('');
   }
 }
 

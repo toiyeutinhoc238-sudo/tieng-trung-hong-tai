@@ -313,3 +313,51 @@ button { font-family: inherit; cursor: pointer; }
 @media (max-width: 520px) { .sh-sum-grid { grid-template-columns: repeat(2, 1fr); } }
 
 .sh-taken.warn { color: #b91c1c; }
+
+/* ---------- Hướng dẫn · Xếp hạng: cùng cấu trúc với Tiệm Tạp Hóa / Trà Sữa (thanh tiêu đề + ✕, bước đánh số, hàng xếp hạng) ---------- */
+.sh-card.gcard { padding: 0; gap: 0; overflow: hidden; border-width: 4px; border-color: var(--a); border-radius: 22px; background: #fffdf7; width: min(96vw, 780px); max-height: min(92dvh, 680px); animation: shCardIn .35s cubic-bezier(.2, .9, .3, 1.2); }
+@keyframes shCardIn { from { transform: translateY(-24px) scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
+.sh-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 18px; background: linear-gradient(180deg, var(--soft), color-mix(in srgb, var(--a) 22%, #fff)); border-bottom: 2px solid color-mix(in srgb, var(--a) 30%, #fff); flex: none; }
+.sh-card-head h3 { font-size: 1.12rem; font-weight: 900; color: var(--b); margin: 0; }
+.sh-close { width: 34px; height: 34px; border-radius: 50%; background: #fff; border: 2px solid color-mix(in srgb, var(--a) 45%, #fff); color: var(--a); flex: none; }
+.sh-gsteps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 12px; padding: 18px 20px 18px; overflow-y: auto; }
+.sh-gstep { position: relative; display: flex; gap: 10px; align-items: flex-start; padding: 12px; border-radius: 14px; background: #fff; border: 2px solid color-mix(in srgb, var(--a) 18%, #fff); }
+.sh-gstep i { position: absolute; top: -9px; left: -9px; width: 24px; height: 24px; border-radius: 50%; background: var(--a); color: #fff; font-style: normal; font-weight: 900; font-size: .8rem; display: flex; align-items: center; justify-content: center; }
+.sh-gstep > span { font-size: 1.8rem; }
+.sh-gstep .gt { display: block; font-size: .92rem; margin-bottom: 2px; }
+.sh-gstep p { margin: 0; font-size: .8rem; color: #5b4636; line-height: 1.45; }
+.sh-gtip { grid-column: 1 / -1; padding: 8px 12px; border-radius: 12px; background: #eefaf2; border: 2px dashed #7fcf9f; font-size: .85rem; font-weight: 600; color: #1f6b44; }
+.sh-ranktabs { display: flex; gap: 8px; padding: 12px 18px 0; }
+.sh-ranktab { flex: 1; min-height: 38px; border-radius: 12px; background: var(--soft); border: 2px solid color-mix(in srgb, var(--a) 25%, #fff); font-weight: 800; font-size: .88rem; color: var(--b); }
+.sh-ranktab.active { background: linear-gradient(180deg, color-mix(in srgb, var(--a) 70%, #fff), var(--a)); color: #fff; border-color: var(--b); box-shadow: 0 3px 0 var(--b); }
+.sh-rank-sum { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 12px 18px 4px; }
+.sh-rs { display: flex; flex-direction: column; align-items: center; padding: 8px; border-radius: 14px; background: linear-gradient(180deg, #fffbeb, #fef1cf); border: 2px solid #fde3a0; text-align: center; }
+.sh-rs span { font-size: 1.3rem; } .sh-rs strong { font-size: 1.05rem; font-weight: 900; } .sh-rs small { font-size: .7rem; font-weight: 700; color: #a16a3a; }
+.sh-rank-list { min-height: 160px; max-height: 360px; overflow-y: auto; padding: 8px 18px; display: flex; flex-direction: column; gap: 6px; }
+.sh-rrow { display: grid; grid-template-columns: 44px minmax(0, 1.8fr) 1fr 1fr 60px 76px; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 12px; background: #fff; border: 2px solid #f3ead9; font-weight: 800; font-size: .86rem; }
+.sh-rrow.top { background: linear-gradient(90deg, #fff8e1, #fff); border-color: #fde3a0; }
+.sh-rrow.me { border-color: var(--a); background: linear-gradient(90deg, var(--soft), #fff); }
+.sh-rrow .rr-pos { font-size: 1.3rem; text-align: center; color: #a08670; }
+.sh-rrow .rr-player { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.sh-rr-av { width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%; object-fit: cover; background: #ffe2a0; display: flex; align-items: center; justify-content: center; color: var(--b); }
+.sh-rrow .rr-name { display: flex; flex-direction: column; min-width: 0; }
+.sh-rrow .rr-name b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sh-rrow .rr-name small { font-size: .7rem; color: #a08670; font-weight: 700; }
+.sh-rrow .rr-me { font-size: .64rem; background: var(--a); color: #fff; border-radius: 6px; padding: 1px 6px; margin-left: 4px; }
+.sh-rrow .rr-earn { color: #2f9a62; font-weight: 900; font-size: 1rem; }
+.sh-rrow .rr-avg { color: var(--a); }
+.sh-rrow .rr-stars { font-size: .8rem; letter-spacing: 1px; }
+.sh-rank-gap { text-align: center; color: #d6c4ad; font-weight: 900; line-height: .6; }
+.sh-rank-empty { text-align: center; padding: 28px 10px; color: #a16a3a; font-weight: 700; line-height: 1.6; }
+.sh-rank-cta { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border-radius: 12px; background: #fff3e4; border: 2px dashed #f7b98a; font-size: .84rem; font-weight: 700; color: var(--b); text-align: left; }
+.sh-rank-cta a { flex: none; padding: 6px 14px; border-radius: 99px; background: var(--a); color: #fff; text-decoration: none; font-weight: 800; }
+.sh-rank-note { padding: 6px 18px 14px; text-align: center; font-size: .74rem; font-weight: 600; color: #a89580; }
+@media (max-width: 700px) {
+  .sh-gsteps { grid-template-columns: 1fr; padding: 16px 14px; }
+  .sh-rank-sum { grid-template-columns: repeat(2, 1fr); padding: 12px 12px 4px; }
+  .sh-ranktabs { padding: 10px 12px 0; } .sh-ranktab { font-size: .78rem; }
+  .sh-rank-list { padding: 8px 12px; max-height: 40dvh; }
+  .sh-rrow { grid-template-columns: 34px minmax(0, 1fr) auto auto; gap: 6px; padding: 6px 8px; }
+  .sh-rrow .rr-sv, .sh-rrow .rr-avg { display: none; }
+  .sh-rank-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}

@@ -1,6 +1,6 @@
 import './shop_engine.css';
 import D from './shop_data/clothes.js';
-import { mountShop } from './shop_engine.js';
+import { mountShop, buildGuide } from './shop_engine.js';
 import { clothesMode } from './shop_modes.js';
 
 const mode = clothesMode(D);
@@ -10,12 +10,5 @@ mountShop({
   goal: (day) => 150 + 40 * (day - 1),
   chat: D.dialogue.filter((d) => d.stage !== 'Đổi trả').map((d) => ({ zh: d.zh, pin: d.pin, vi: d.vi })),
   reviews: D.reviews,
-  guideHtml: `<ul>
-    <li>🛎️ <b>Đón khách:</b> nghe (hoặc đọc) lời khách gọi — khách nói tên món, <b>màu</b> và <b>size</b>.</li>
-    <li>🛍️ <b>Chọn đồ:</b> chọn đúng sản phẩm, đúng size, đúng màu rồi bấm “Thêm vào túi”. Mỗi mẫu chỉ có một số size / màu nhất định. Chọn sai sẽ bị trừ điểm.</li>
-    <li>💬 <b>Thanh toán:</b> đóng vai chủ tiệm, chọn câu tiếng Trung đúng để báo tiền và nhận thanh toán.</li>
-    <li>📦 <b>Nhập hàng trước, bán sau:</b> đầu mỗi ngày xem <b>dự báo thời tiết</b> (trời đẹp khách đông, mưa bão khách thưa), bấm “Nhập hàng” để bổ sung kho rồi mới “Mở cửa”. Hết hàng thì khách ra về tay không.</li>
-    <li>🔧 <b>Nâng cấp &amp; mở rộng:</b> ở chợ nhập hàng, dùng tiền mở khu Quần, Váy, Giày dép và các mẫu mới và nâng cấp biển hiệu, ghế chờ, giờ mở cửa.</li>
-    <li>💬 <b>Feedback:</b> mỗi khách để lại một lời đánh giá bằng tiếng Trung; cuối ngày xem lại cả lãi / lỗ.</li>
-    <li>🏆 Mỗi ngày bán được ghi lên bảng xếp hạng (đăng nhập để lưu).</li></ul>`
+  guideSteps: buildGuide({ icon: '🛍️', title: 'Chọn đồ · 选衣', text: 'Hàng chia 4 khu: <b>上衣 áo</b>, <b>裤子 quần</b>, <b>裙子 váy</b>, <b>鞋子 giày dép</b>. Chọn đúng sản phẩm, đúng <b>size</b> (S M L XL XXL hoặc cỡ giày 35–42) và đúng <b>màu</b> khách nói rồi bấm “Thêm vào túi”. Mỗi mẫu chỉ có một số size và màu nhất định. Chọn sai sẽ bị trừ điểm.' }, 'khu Quần, Váy, Giày dép và các mẫu mới')
 }, mode);
