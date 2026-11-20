@@ -1,0 +1,755 @@
+// SINH TỰ ĐỘNG bởi scripts/gen_stationery_data.cjs — đừng sửa tay.
+export default {
+ "groups": [
+  {
+   "id": "BEN",
+   "chn": "本子",
+   "vi": "Vở và giấy",
+   "icon": "📓",
+   "unlock": 0,
+   "pin": "běn zi"
+  },
+  {
+   "id": "BUT",
+   "chn": "笔",
+   "vi": "Các loại bút",
+   "icon": "🖊️",
+   "unlock": 0,
+   "pin": "bǐ"
+  },
+  {
+   "id": "DUNGCU",
+   "chn": "工具",
+   "vi": "Dụng cụ học tập",
+   "icon": "📏",
+   "unlock": 100,
+   "pin": "gōng jù"
+  },
+  {
+   "id": "CAP",
+   "chn": "书包和文具盒",
+   "vi": "Cặp sách & hộp bút",
+   "icon": "🎒",
+   "unlock": 220,
+   "pin": "shū bāo hé wén jù hé"
+  },
+  {
+   "id": "MYTHUAT",
+   "chn": "美术用品",
+   "vi": "Dụng cụ mỹ thuật",
+   "icon": "🎨",
+   "unlock": 160,
+   "pin": "měi shù yòng pǐn"
+  },
+  {
+   "id": "KHAC",
+   "chn": "其他用品",
+   "vi": "Sản phẩm khác",
+   "icon": "🧮",
+   "unlock": 120,
+   "pin": "qí tā yòng pǐn"
+  }
+ ],
+ "items": [
+  {
+   "id": "BEN01",
+   "group": "BEN",
+   "chn": "笔记本",
+   "pin": "bǐ jì běn",
+   "vi": "Vở ghi chép",
+   "measure": "本",
+   "measureVi": "quyển",
+   "price": 6,
+   "cost": 3.5,
+   "colors": null,
+   "icon": "📓",
+   "tier": 0
+  },
+  {
+   "id": "BEN02",
+   "group": "BEN",
+   "chn": "练习本",
+   "pin": "liàn xí běn",
+   "vi": "Vở bài tập",
+   "measure": "本",
+   "measureVi": "quyển",
+   "price": 4.5,
+   "cost": 2.5,
+   "colors": null,
+   "icon": "📘",
+   "tier": 0
+  },
+  {
+   "id": "BEN03",
+   "group": "BEN",
+   "chn": "作业本",
+   "pin": "zuò yè běn",
+   "vi": "Vở bài tập về nhà",
+   "measure": "本",
+   "measureVi": "quyển",
+   "price": 3,
+   "cost": 1.6,
+   "colors": null,
+   "icon": "📒",
+   "tier": 0
+  },
+  {
+   "id": "BEN04",
+   "group": "BEN",
+   "chn": "日记本",
+   "pin": "rì jì běn",
+   "vi": "Sổ nhật ký",
+   "measure": "本",
+   "measureVi": "quyển",
+   "price": 12,
+   "cost": 7,
+   "colors": [
+    "粉色",
+    "蓝色",
+    "紫色",
+    "黄色"
+   ],
+   "icon": "📔",
+   "tier": 0
+  },
+  {
+   "id": "BEN05",
+   "group": "BEN",
+   "chn": "便签纸",
+   "pin": "biàn qiān zhǐ",
+   "vi": "Giấy ghi chú",
+   "measure": "本",
+   "measureVi": "tập",
+   "price": 5,
+   "cost": 2.8,
+   "colors": [
+    "黄色",
+    "粉色",
+    "绿色",
+    "蓝色",
+    "橙色"
+   ],
+   "icon": "🗒️",
+   "tier": 1
+  },
+  {
+   "id": "BEN06",
+   "group": "BEN",
+   "chn": "彩纸",
+   "pin": "cǎi zhǐ",
+   "vi": "Giấy màu",
+   "measure": "包",
+   "measureVi": "gói",
+   "price": 4,
+   "cost": 2.2,
+   "colors": [
+    "黄色",
+    "粉色",
+    "绿色",
+    "蓝色",
+    "橙色"
+   ],
+   "icon": "📄",
+   "tier": 1
+  },
+  {
+   "id": "BEN07",
+   "group": "BEN",
+   "chn": "画纸",
+   "pin": "huà zhǐ",
+   "vi": "Giấy vẽ",
+   "measure": "本",
+   "measureVi": "tập",
+   "price": 5,
+   "cost": 2.8,
+   "colors": null,
+   "icon": "🖼️",
+   "tier": 2
+  },
+  {
+   "id": "BEN08",
+   "group": "BEN",
+   "chn": "文件夹",
+   "pin": "wén jiàn jiá",
+   "vi": "Bìa tài liệu",
+   "measure": "个",
+   "measureVi": "cái",
+   "price": 8,
+   "cost": 4.5,
+   "colors": [
+    "蓝色",
+    "粉色",
+    "绿色",
+    "黄色"
+   ],
+   "icon": "📁",
+   "tier": 2
+  },
+  {
+   "id": "BUT01",
+   "group": "BUT",
+   "chn": "圆珠笔",
+   "pin": "yuán zhū bǐ",
+   "vi": "Bút bi",
+   "measure": "支",
+   "measureVi": "cây",
+   "price": 2.5,
+   "cost": 1.5,
+   "colors": [
+    "蓝色",
+    "红色",
+    "黑色"
+   ],
+   "icon": "🖊️",
+   "tier": 0
+  },
+  {
+   "id": "BUT02",
+   "group": "BUT",
+   "chn": "铅笔",
+   "pin": "qiān bǐ",
+   "vi": "Bút chì",
+   "measure": "支",
+   "measureVi": "cây",
+   "price": 1.5,
+   "cost": 0.8,
+   "colors": null,
+   "icon": "✏️",
+   "tier": 0
+  },
+  {
+   "id": "BUT03",
+   "group": "BUT",
+   "chn": "自动铅笔",
+   "pin": "zì dòng qiān bǐ",
+   "vi": "Bút chì bấm",
+   "measure": "支",
+   "measureVi": "cây",
+   "price": 4,
+   "cost": 2.2,
+   "colors": null,
+   "icon": "✏️",
+   "tier": 0
+  },
+  {
+   "id": "BUT04",
+   "group": "BUT",
+   "chn": "彩色笔",
+   "pin": "cǎi sè bǐ",
+   "vi": "Bút màu",
+   "measure": "盒",
+   "measureVi": "hộp",
+   "price": 12,
+   "cost": 7,
+   "colors": null,
+   "icon": "🖍️",
+   "tier": 0
+  },
+  {
+   "id": "BUT05",
+   "group": "BUT",
+   "chn": "荧光笔",
+   "pin": "yíng guāng bǐ",
+   "vi": "Bút dạ quang",
+   "measure": "支",
+   "measureVi": "cây",
+   "price": 3.5,
+   "cost": 2,
+   "colors": [
+    "黄色",
+    "粉色",
+    "绿色",
+    "蓝色",
+    "橙色"
+   ],
+   "icon": "🖍️",
+   "tier": 1
+  },
+  {
+   "id": "BUT06",
+   "group": "BUT",
+   "chn": "水彩笔",
+   "pin": "shuǐ cǎi bǐ",
+   "vi": "Bút màu nước",
+   "measure": "盒",
+   "measureVi": "hộp",
+   "price": 15,
+   "cost": 9,
+   "colors": null,
+   "icon": "🖌️",
+   "tier": 1
+  },
+  {
+   "id": "BUT07",
+   "group": "BUT",
+   "chn": "钢笔",
+   "pin": "gāng bǐ",
+   "vi": "Bút máy",
+   "measure": "支",
+   "measureVi": "cây",
+   "price": 18,
+   "cost": 10,
+   "colors": [
+    "蓝色",
+    "黑色",
+    "红色"
+   ],
+   "icon": "🖋️",
+   "tier": 2
+  },
+  {
+   "id": "BUT08",
+   "group": "BUT",
+   "chn": "白板笔",
+   "pin": "bái bǎn bǐ",
+   "vi": "Bút lông bảng",
+   "measure": "支",
+   "measureVi": "cây",
+   "price": 4,
+   "cost": 2.3,
+   "colors": [
+    "黑色",
+    "蓝色",
+    "红色"
+   ],
+   "icon": "🖊️",
+   "tier": 2
+  },
+  {
+   "id": "DUNGCU01",
+   "group": "DUNGCU",
+   "chn": "尺子",
+   "pin": "chǐ zi",
+   "vi": "Thước kẻ",
+   "measure": "把",
+   "measureVi": "cái",
+   "price": 3,
+   "cost": 1.8,
+   "colors": null,
+   "icon": "📏",
+   "tier": 0
+  },
+  {
+   "id": "DUNGCU02",
+   "group": "DUNGCU",
+   "chn": "橡皮",
+   "pin": "xiàng pí",
+   "vi": "Cục tẩy",
+   "measure": "块",
+   "measureVi": "cục",
+   "price": 1.5,
+   "cost": 0.8,
+   "colors": null,
+   "icon": "🧽",
+   "tier": 0
+  },
+  {
+   "id": "DUNGCU03",
+   "group": "DUNGCU",
+   "chn": "卷笔刀",
+   "pin": "juǎn bǐ dāo",
+   "vi": "Gọt bút chì",
+   "measure": "个",
+   "measureVi": "cái",
+   "price": 2.5,
+   "cost": 1.4,
+   "colors": null,
+   "icon": "🔧",
+   "tier": 0
+  },
+  {
+   "id": "DUNGCU04",
+   "group": "DUNGCU",
+   "chn": "剪刀",
+   "pin": "jiǎn dāo",
+   "vi": "Kéo",
+   "measure": "把",
+   "measureVi": "cái",
+   "price": 6,
+   "cost": 3.5,
+   "colors": null,
+   "icon": "✂️",
+   "tier": 0
+  },
+  {
+   "id": "DUNGCU05",
+   "group": "DUNGCU",
+   "chn": "胶水",
+   "pin": "jiāo shuǐ",
+   "vi": "Hồ dán",
+   "measure": "瓶",
+   "measureVi": "lọ",
+   "price": 3,
+   "cost": 1.7,
+   "colors": null,
+   "icon": "🧴",
+   "tier": 1
+  },
+  {
+   "id": "DUNGCU06",
+   "group": "DUNGCU",
+   "chn": "胶带",
+   "pin": "jiāo dài",
+   "vi": "Băng keo",
+   "measure": "卷",
+   "measureVi": "cuộn",
+   "price": 4,
+   "cost": 2.2,
+   "colors": null,
+   "icon": "📼",
+   "tier": 1
+  },
+  {
+   "id": "DUNGCU07",
+   "group": "DUNGCU",
+   "chn": "订书机",
+   "pin": "dìng shū jī",
+   "vi": "Dập ghim",
+   "measure": "个",
+   "measureVi": "cái",
+   "price": 12,
+   "cost": 7,
+   "colors": null,
+   "icon": "🗜️",
+   "tier": 2
+  },
+  {
+   "id": "DUNGCU08",
+   "group": "DUNGCU",
+   "chn": "回形针",
+   "pin": "huí xíng zhēn",
+   "vi": "Kẹp giấy",
+   "measure": "盒",
+   "measureVi": "hộp",
+   "price": 2,
+   "cost": 1,
+   "colors": null,
+   "icon": "📎",
+   "tier": 2
+  },
+  {
+   "id": "CAP01",
+   "group": "CAP",
+   "chn": "文具盒",
+   "pin": "wén jù hé",
+   "vi": "Hộp bút",
+   "measure": "个",
+   "measureVi": "cái",
+   "price": 15,
+   "cost": 9,
+   "colors": [
+    "粉色",
+    "蓝色",
+    "紫色",
+    "黄色"
+   ],
+   "icon": "🧰",
+   "tier": 0
+  },
+  {
+   "id": "CAP02",
+   "group": "CAP",
+   "chn": "笔袋",
+   "pin": "bǐ dài",
+   "vi": "Túi đựng bút",
+   "measure": "个",
+   "measureVi": "cái",
+   "price": 12,
+   "cost": 7,
+   "colors": [
+    "粉色",
+    "蓝色",
+    "紫色",
+    "黄色"
+   ],
+   "icon": "👝",
+   "tier": 0
+  },
+  {
+   "id": "CAP03",
+   "group": "CAP",
+   "chn": "书包",
+   "pin": "shū bāo",
+   "vi": "Cặp sách",
+   "measure": "个",
+   "measureVi": "cái",
+   "price": 68,
+   "cost": 45,
+   "colors": [
+    "粉色",
+    "蓝色",
+    "黄色"
+   ],
+   "icon": "🎒",
+   "tier": 0
+  },
+  {
+   "id": "CAP04",
+   "group": "CAP",
+   "chn": "文件袋",
+   "pin": "wén jiàn dài",
+   "vi": "Túi tài liệu",
+   "measure": "个",
+   "measureVi": "cái",
+   "price": 6,
+   "cost": 3.4,
+   "colors": [
+    "蓝色",
+    "粉色",
+    "绿色"
+   ],
+   "icon": "💼",
+   "tier": 0
+  },
+  {
+   "id": "CAP05",
+   "group": "CAP",
+   "chn": "文件盒",
+   "pin": "wén jiàn hé",
+   "vi": "Hộp hồ sơ",
+   "measure": "个",
+   "measureVi": "cái",
+   "price": 18,
+   "cost": 10,
+   "colors": null,
+   "icon": "🗃️",
+   "tier": 1
+  },
+  {
+   "id": "CAP06",
+   "group": "CAP",
+   "chn": "画板",
+   "pin": "huà bǎn",
+   "vi": "Bảng vẽ",
+   "measure": "块",
+   "measureVi": "cái",
+   "price": 25,
+   "cost": 14,
+   "colors": null,
+   "icon": "🖼️",
+   "tier": 1
+  },
+  {
+   "id": "MYTHUAT01",
+   "group": "MYTHUAT",
+   "chn": "颜料",
+   "pin": "yán liào",
+   "vi": "Màu vẽ",
+   "measure": "盒",
+   "measureVi": "hộp",
+   "price": 10,
+   "cost": 5.5,
+   "colors": null,
+   "icon": "🎨",
+   "tier": 0
+  },
+  {
+   "id": "MYTHUAT02",
+   "group": "MYTHUAT",
+   "chn": "画笔",
+   "pin": "huà bǐ",
+   "vi": "Cọ vẽ",
+   "measure": "支",
+   "measureVi": "cây",
+   "price": 5,
+   "cost": 2.8,
+   "colors": null,
+   "icon": "🖌️",
+   "tier": 0
+  },
+  {
+   "id": "MYTHUAT03",
+   "group": "MYTHUAT",
+   "chn": "调色盘",
+   "pin": "tiáo sè pán",
+   "vi": "Bảng pha màu",
+   "measure": "个",
+   "measureVi": "cái",
+   "price": 6,
+   "cost": 3.3,
+   "colors": null,
+   "icon": "🎨",
+   "tier": 0
+  },
+  {
+   "id": "MYTHUAT04",
+   "group": "MYTHUAT",
+   "chn": "彩泥",
+   "pin": "cǎi ní",
+   "vi": "Đất nặn màu",
+   "measure": "盒",
+   "measureVi": "hộp",
+   "price": 8,
+   "cost": 4.5,
+   "colors": null,
+   "icon": "🟣",
+   "tier": 0
+  },
+  {
+   "id": "MYTHUAT05",
+   "group": "MYTHUAT",
+   "chn": "手工纸",
+   "pin": "shǒu gōng zhǐ",
+   "vi": "Giấy thủ công",
+   "measure": "包",
+   "measureVi": "gói",
+   "price": 5,
+   "cost": 2.8,
+   "colors": [
+    "黄色",
+    "粉色",
+    "绿色",
+    "蓝色",
+    "橙色"
+   ],
+   "icon": "📜",
+   "tier": 1
+  },
+  {
+   "id": "MYTHUAT06",
+   "group": "MYTHUAT",
+   "chn": "画册",
+   "pin": "huà cè",
+   "vi": "Tập tranh",
+   "measure": "本",
+   "measureVi": "quyển",
+   "price": 15,
+   "cost": 8,
+   "colors": null,
+   "icon": "📖",
+   "tier": 1
+  },
+  {
+   "id": "KHAC01",
+   "group": "KHAC",
+   "chn": "计算器",
+   "pin": "jì suàn qì",
+   "vi": "Máy tính",
+   "measure": "个",
+   "measureVi": "cái",
+   "price": 35,
+   "cost": 20,
+   "colors": null,
+   "icon": "🧮",
+   "tier": 0
+  },
+  {
+   "id": "KHAC02",
+   "group": "KHAC",
+   "chn": "地球仪",
+   "pin": "dì qiú yí",
+   "vi": "Quả địa cầu",
+   "measure": "个",
+   "measureVi": "cái",
+   "price": 30,
+   "cost": 18,
+   "colors": null,
+   "icon": "🌐",
+   "tier": 0
+  },
+  {
+   "id": "KHAC03",
+   "group": "KHAC",
+   "chn": "书签",
+   "pin": "shū qiān",
+   "vi": "Kẹp sách",
+   "measure": "张",
+   "measureVi": "cái",
+   "price": 2,
+   "cost": 1,
+   "colors": [
+    "黄色",
+    "粉色",
+    "绿色",
+    "蓝色",
+    "橙色"
+   ],
+   "icon": "🔖",
+   "tier": 0
+  },
+  {
+   "id": "KHAC04",
+   "group": "KHAC",
+   "chn": "书皮",
+   "pin": "shū pí",
+   "vi": "Bao bìa sách",
+   "measure": "张",
+   "measureVi": "tấm",
+   "price": 2.5,
+   "cost": 1.3,
+   "colors": null,
+   "icon": "📕",
+   "tier": 0
+  },
+  {
+   "id": "KHAC05",
+   "group": "KHAC",
+   "chn": "订书钉",
+   "pin": "dìng shū dīng",
+   "vi": "Ghim dập",
+   "measure": "盒",
+   "measureVi": "hộp",
+   "price": 2,
+   "cost": 1,
+   "colors": null,
+   "icon": "📌",
+   "tier": 1
+  }
+ ],
+ "colors": {
+  "蓝色": {
+   "zh": "蓝色",
+   "pin": "lán sè",
+   "vi": "Xanh dương",
+   "hex": "#1e88e5"
+  },
+  "红色": {
+   "zh": "红色",
+   "pin": "hóng sè",
+   "vi": "Đỏ",
+   "hex": "#e53935"
+  },
+  "黑色": {
+   "zh": "黑色",
+   "pin": "hēi sè",
+   "vi": "Đen",
+   "hex": "#2b2b2b"
+  },
+  "黄色": {
+   "zh": "黄色",
+   "pin": "huáng sè",
+   "vi": "Vàng",
+   "hex": "#fdd835"
+  },
+  "粉色": {
+   "zh": "粉色",
+   "pin": "fěn sè",
+   "vi": "Hồng",
+   "hex": "#f48fb1"
+  },
+  "绿色": {
+   "zh": "绿色",
+   "pin": "lǜ sè",
+   "vi": "Xanh lá",
+   "hex": "#43a047"
+  },
+  "紫色": {
+   "zh": "紫色",
+   "pin": "zǐ sè",
+   "vi": "Tím",
+   "hex": "#8e24aa"
+  },
+  "白色": {
+   "zh": "白色",
+   "pin": "bái sè",
+   "vi": "Trắng",
+   "hex": "#fafafa"
+  },
+  "橙色": {
+   "zh": "橙色",
+   "pin": "chéng sè",
+   "vi": "Cam",
+   "hex": "#fb8c00"
+  }
+ }
+};

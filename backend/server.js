@@ -180,6 +180,7 @@ const userSchema = new mongoose.Schema({
   banhmiGame: { type: Object, default: null },
   cavienGame: { type: Object, default: null },
   myphamGame: { type: Object, default: null },
+  stationeryGame: { type: Object, default: null },
   // VIP Membership Fields
   isVip: { type: Boolean, default: false },
   vipStatus: { type: String, default: 'normal' }, // 'normal', 'vip', 'expired'
@@ -469,6 +470,7 @@ async function readUserData(forceRefresh = false) {
             banhmiGame: u.banhmiGame || null,
             cavienGame: u.cavienGame || null,
             myphamGame: u.myphamGame || null,
+            stationeryGame: u.stationeryGame || null,
             isVip: !!u.isVip,
             vipStatus: u.vipStatus || (u.isVip ? 'vip' : 'normal'),
             vipActivatedAt: u.vipActivatedAt || null,
@@ -636,6 +638,7 @@ async function processMongoPersistenceQueue() {
           if (u.banhmiGame) updateDoc.banhmiGame = u.banhmiGame;
           if (u.cavienGame) updateDoc.cavienGame = u.cavienGame;
           if (u.myphamGame) updateDoc.myphamGame = u.myphamGame;
+          if (u.stationeryGame) updateDoc.stationeryGame = u.stationeryGame;
           await User.updateOne({ _id: email }, { $set: updateDoc }, { upsert: true });
           failedEmailRetries.delete(email);
         } catch (err) {
@@ -2856,6 +2859,7 @@ registerMiniGameRoutes({ key: 'clothes', field: 'clothesGame', limits: { maxGues
 registerMiniGameRoutes({ key: 'banhmi', field: 'banhmiGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 300 } });
 registerMiniGameRoutes({ key: 'cavien', field: 'cavienGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 400 } });
 registerMiniGameRoutes({ key: 'mypham', field: 'myphamGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 1100 } });
+registerMiniGameRoutes({ key: 'stationery', field: 'stationeryGame', limits: { maxGuestsPerDay: 40, maxPerGuest: 1100 } });
 
 // Admin: Reset toàn bộ dữ liệu người dùng (xóa MongoDB + RAM cache) - Cần secret header
 app.delete('/api/admin/reset-all', async (req, res) => {

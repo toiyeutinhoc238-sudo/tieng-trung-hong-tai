@@ -75,6 +75,7 @@
     .sg-cover.cv-banhmi { background: linear-gradient(135deg, #fde68a, #f59e0b 60%, #b45309); }
     .sg-cover.cv-clothes { background: linear-gradient(135deg, #fbcfe8, #ec4899 60%, #9d174d); }
     .sg-cover.cv-mypham { background: linear-gradient(135deg, #e9d5ff, #a855f7 60%, #6b21a8); }
+    .sg-cover.cv-stationery { background: linear-gradient(135deg, #fbcfe8, #f9a8d4 45%, #fde68a); }
     .sg-card.locked { cursor: not-allowed; background: #f3ece2; }
     .sg-card.locked:hover { transform: none; box-shadow: 0 8px 0 #4a2a12, 0 12px 22px rgba(0, 0, 0, 0.25); }
     .sg-card.locked .sg-cover { background: repeating-linear-gradient(45deg, #d9c8ad 0 14px, #cfbb9c 14px 28px); }
@@ -110,7 +111,7 @@
   <main class="sg-wrap">
     <section class="sg-hero">
       <h1>🎮 Game Nhập Vai</h1>
-      <span class="sg-count" id="sg-count">7 game đang mở · luyện tiếng Trung khi bán hàng</span>
+      <span class="sg-count" id="sg-count">8 game đang mở · luyện tiếng Trung khi bán hàng</span>
     </section>
 
     <section class="sg-shelf" aria-label="Kệ game nhập vai">
@@ -134,7 +135,8 @@
         { key: 'cavien', url: '/cavien-game.html', name: 'Quầy Cá Viên Chiên', chn: '我的鱼丸店', emoji: '🍢', cover: '/assets/fishball_game_bg.jpg', badge: ['new', 'MỚI'], desc: 'Nghe khách gọi xiên cá viên, bò viên, xúc xích với lượng từ đúng, thêm nước chấm và gói mang đi.' },
         { key: 'banhmi', url: '/banhmi-game.html', name: 'Tiệm Bánh Mì', chn: '我的面包店', emoji: '🥖', cover: '/assets/bakery_game_bg.jpg', badge: ['new', 'MỚI'], desc: 'Làm bánh mì, hamburger, sandwich theo yêu cầu bỏ / thêm topping của khách, kèm nước uống.' },
         { key: 'clothes', url: '/clothes-game.html', name: 'Tiệm Quần Áo', chn: '我的服装店', emoji: '👗', cover: '/assets/clothing_game_bg.jpg', badge: ['new', 'MỚI'], desc: 'Tư vấn áo, quần, váy, giày: chọn đúng sản phẩm, size và màu sắc khách yêu cầu.' },
-        { key: 'mypham', url: '/mypham-game.html', name: 'Tiệm Mỹ Phẩm', chn: '我的化妆品店', emoji: '💄', cover: '/assets/cosmetics_game_bg.jpg', badge: ['new', 'MỚI'], desc: 'Bán son, kem dưỡng, chống nắng, dầu gội… và luyện lượng từ 瓶 · 支 · 罐 · 盒 với khách.' }
+        { key: 'mypham', url: '/mypham-game.html', name: 'Tiệm Mỹ Phẩm', chn: '我的化妆品店', emoji: '💄', cover: '/assets/cosmetics_game_bg.jpg', badge: ['new', 'MỚI'], desc: 'Bán son, kem dưỡng, chống nắng, dầu gội… và luyện lượng từ 瓶 · 支 · 罐 · 盒 với khách.' },
+        { key: 'stationery', url: '/stationery-game.html', name: 'Cửa Hàng Văn Phòng Phẩm', chn: '我的文具店', emoji: '✏️', coverClass: 'cv-stationery', badge: ['new', 'MỚI'], desc: 'Bán vở, bút, thước, cặp sách: nghe khách gọi màu và số lượng, quét mã, đóng gói rồi thanh toán bằng tiếng Trung.' }
       ];
 
       // tiến trình đã lưu trên máy (theo tài khoản đang đăng nhập)

@@ -5,7 +5,8 @@ const PAGES = [
   ['clothes-game.html', 'Tiệm Quần Áo Của Tôi (我的服装店)', 'shop_clothes.js'],
   ['banhmi-game.html', 'Tiệm Bánh Mì Của Tôi (我的面包店)', 'shop_banhmi.js'],
   ['cavien-game.html', 'Quầy Cá Viên Chiên Của Tôi (我的鱼丸店)', 'shop_cavien.js'],
-  ['mypham-game.html', 'Tiệm Mỹ Phẩm Của Tôi (我的化妆品店)', 'shop_mypham.js']
+  ['mypham-game.html', 'Tiệm Mỹ Phẩm Của Tôi (我的化妆品店)', 'shop_mypham.js'],
+  ['stationery-game.html', 'Cửa Hàng Văn Phòng Phẩm Của Tôi (我的文具店)', 'shop_stationery.js']
 ];
 const page = (title, script) => `<!DOCTYPE html>
 <html lang="vi">

@@ -397,6 +397,7 @@ export class ShopGame {
       headCard('m-rank', '🏆 <span class="zh">排行榜</span> · Bảng xếp hạng',
         '<div class="sh-ranktabs"><button type="button" class="sh-ranktab active" data-rank="global">🌏 <span class="zh">全服</span> Toàn hệ thống</button><button type="button" class="sh-ranktab" data-rank="mine">📒 <span class="zh">我的</span> Ngày bán của tôi</button></div>'
         + '<div class="sh-rank-sum" id="rank-sum"></div><div class="sh-rank-list" id="rank-list"></div><div class="sh-rank-note" id="rank-note"></div>', 'rank'),
+      modalShell('m-scan', `<h3>📠 <span class="zh">扫码与打包</span> Quét mã & đóng gói</h3><div id="scan-body"></div>`, 'wide'),
       modalShell('m-fit', `<h3>🪞 <span class="zh">试衣间</span> Phòng thử đồ</h3><div class="sh-chat-box" id="fit-chat"></div><div id="fit-anim"></div><div class="sh-opts" id="fit-opts"></div><button type="button" class="sh-btn" id="btn-fit-done" style="display:none">Tiếp tục ➜</button>`, 'wide'),
       modalShell('m-vocab', `<h3>📖 <span class="zh">生词本</span> Sổ từ vựng</h3><div class="sh-vocab-sub" id="vocab-sub"></div><div class="sh-vocab" id="vocab-list"></div><button type="button" class="sh-btn" data-close="m-vocab">Đóng</button>`, 'wide'),
       modalShell('m-market', `<h3>📦 <span class="zh">进货市场</span> Chợ nhập hàng</h3><div class="sh-market-money" id="market-money"></div>
@@ -668,6 +669,11 @@ export class ShopGame {
     this.station = 'pay';
     this.renderAll();
     if (c.dlg.log[0]) setTimeout(() => this.audio.speak(c.dlg.log[0].zh), 350);
+  }
+  finishScan(c, res) {
+    if (this.current !== c) return;
+    c.wrong += res.wrong || 0;
+    this.startPayment(c);
   }
   tryOnClicked() {
     const c = this.current; if (!c || !c.takenAt || c.billed) return;
@@ -1099,14 +1105,15 @@ export class ShopGame {
     const opts = turn && turn.who === 'me'
       ? '<div class="sh-ps-optgrid col">' + turn.options.map((o, i) => '<button type="button" class="pay-opt ' + (o.tried ? 'wrong' : '') + '" data-pay-opt="' + i + '" ' + (o.tried ? 'disabled' : '') + '><span class="lt">💬</span><span class="tx"><b class="zh">' + esc(o.zh) + '</b>' + (this.showPin ? '<small class="pin">' + esc(o.pin) + '</small>' : '') + (this.showVi ? '<small class="vi">' + esc(o.vi) + '</small>' : '') + '</span></button>').join('') + '</div>'
       : '<div class="pay-done">✅ Xong! Đang giao hàng…</div>';
-    const rows = lines.map((l) => '<div class="sh-pt-row"><span class="pr"><span class="ic">' + (l.icon || '🛍️') + '</span><span class="nm"><b>' + esc(l.name || l.vi) + '</b><small class="zh">(' + esc(l.nameZh || l.zh) + ')</small></span></span><span class="sz"><i>' + esc(l.size || '—') + '</i></span><span class="qt"><i>' + l.qty + '</i></span><span class="un">¥' + fmt(l.unit != null ? l.unit : l.amount) + '</span><b class="sub">¥' + fmt(l.amount) + '</b></div>').join('');
+    const hasSize = lines.some((l) => l.size);
+    const rows = lines.map((l) => '<div class="sh-pt-row"><span class="pr"><span class="ic">' + (l.icon || '🛍️') + '</span><span class="nm"><b>' + esc(l.name || l.vi) + '</b><small class="zh">(' + esc(l.nameZh || l.zh) + ')' + (l.color && !hasSize ? ' · ' + esc(l.color) : '') + '</small></span></span>' + (hasSize ? '<span class="sz"><i>' + esc(l.size || '—') + '</i></span>' : '') + '<span class="qt"><i>' + l.qty + '</i></span><span class="un">¥' + fmt(l.unit != null ? l.unit : l.amount) + '</span><b class="sub">¥' + fmt(l.amount) + '</b></div>').join('');
     const cash = c.order.pay === 'cash';
     return '<div class="sh-payscene table">'
       + '<div class="sh-pt-left"><div class="sh-pt-custrow"><div class="sh-ps-cust"><div class="sh-ps-face"><img src="' + c.profile.img + '" alt=""></div><b class="zh">' + esc(c.profile.zh) + '</b></div>'
       + '<div class="sh-ps-bubble"><div class="sh-bubble-head"><span class="sh-ps-tag">Khách hàng</span><button type="button" class="sh-say-btn" data-say="' + esc(lastCust ? lastCust.zh : '') + '"><i class="fa-solid fa-volume-high"></i></button></div>' + (lastCust ? this.sayHtml(lastCust, 'big') : '') + '</div></div>'
       + '<div class="sh-ps-answer single"><div class="sh-opts" id="pay-opts">' + opts + '</div></div></div>'
-      + '<div class="sh-pt-right"><div class="sh-pt-card"><div class="sh-pt-ribbon">🛒 Thanh toán <span class="zh">(结账)</span></div>'
-      + '<div class="sh-pt-head"><span>Sản phẩm <span class="zh">(商品)</span></span><span>Size</span><span>SL</span><span>Đơn giá</span><span>Thành tiền</span></div>' + rows
+      + '<div class="sh-pt-right"><div class="sh-pt-card ' + (hasSize ? '' : 'nosize') + '"><div class="sh-pt-ribbon">🛒 Thanh toán <span class="zh">(结账)</span></div>'
+      + '<div class="sh-pt-head"><span>Sản phẩm <span class="zh">(商品)</span></span>' + (hasSize ? '<span>Size</span>' : '') + '<span>SL</span><span>Đơn giá</span><span>Thành tiền</span></div>' + rows
       + '<div class="sh-pt-total"><span>Tổng cộng <span class="zh">(合计)</span>:</span><strong>¥' + fmt(c.order.due) + '</strong></div></div>'
       + '<div class="sh-pt-method"><div class="sh-pt-mh">Phương thức thanh toán <span class="zh">(支付方式)</span></div><div class="sh-pt-mrow">'
       + '<div class="sh-pt-m ' + (cash ? 'on' : '') + '"><span>💵</span><b>Tiền mặt</b><small class="zh">(现金)</small>' + (cash ? '<i>✔</i>' : '') + '</div>'

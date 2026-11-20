@@ -5,7 +5,7 @@
  */
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmt = (v) => { const n = Math.round(Number(v) * 100) / 100; return Number.isInteger(n) ? String(n) : n.toFixed(2); };
-const SLOGAN = { clothes: '时尚潮流 · 热情服务', banhmi: '香脆面包 · 现做现卖', cavien: '香脆炸串 · 热情服务', mypham: '美丽护肤 · 专业推荐' };
+const SLOGAN = { clothes: '时尚潮流 · 热情服务', banhmi: '香脆面包 · 现做现卖', cavien: '香脆炸串 · 热情服务', mypham: '美丽护肤 · 专业推荐', stationery: '可爱文具 · 热情服务' };
 
 export function sceneHtml(game, say) {
   const c = game.current; const cfg = game.cfg;
