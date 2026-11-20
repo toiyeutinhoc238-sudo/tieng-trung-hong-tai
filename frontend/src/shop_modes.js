@@ -9,6 +9,7 @@
 import { esc, fmt, randInt, pickOne, shuffle, say } from './shop_engine.js';
 import { intToZh } from './shop_dialogue.js';
 import { renderStall } from './shop_stall.js';
+import { renderBakery } from './shop_bakery.js';
 import { startClothesFitting } from './shop_fitting.js';
 
 const num = (n) => (n === 2 ? '两' : intToZh(n));
@@ -204,42 +205,8 @@ export function banhmiMode(D) {
       if ((sel.drink || null) !== (order.drink || null)) bad.push('Nước uống');
       return bad;
     },
-    renderPrep(el, game) {
-      const sel = game.sel;
-      const zs = openZones(game, zones);
-      if (!sel.tab || !zs.some((z) => z.id === sel.tab)) sel.tab = zs[0].id;
-      const draw = () => {
-        const prods = game.unlockedProducts().filter((p) => p.zone === sel.tab);
-        const main = sel.main ? byId[sel.main] : null;
-        const pool = main ? POOL[main.raw.group] : [];
-        const stack = main ? sel.ings.map((i) => ING[i].icon).join('') : '';
-        const recipeInfo = main ? '<div class="sh-recipe"><div class="sh-lbl">📋 Công thức chuẩn <span class="zh">标准配方</span></div><div class="sh-recipe-chips">' + toppings(main.raw).map((i) => '<span class="sh-rchip">' + ING[i].icon + ' ' + esc(ING[i].vi) + ' <span class="zh">' + esc(ING[i].zh) + '</span></span>').join('') + '</div><small>Khách có thể bảo bỏ (不要) hoặc thêm (多加). Hãy tự bấm nguyên liệu bên dưới để làm đúng bánh.</small></div>' : '';
-        el.innerHTML = `
-          <div class="sh-catalog">${tabsHtml(zs, sel.tab)}<div class="sh-pgrid">${prods.map((p) => productCard(p, '', (p.id === sel.main || p.id === sel.drink) ? 'sel' : '')).join('')}</div></div>
-          <aside class="sh-side">
-            <div class="sh-panel"><h4>${main ? `${main.icon} ${esc(main.vi)} <span class="zh">${esc(main.chn)}</span>` : '👈 Chọn loại bánh'}</h4>
-              ${main ? `${recipeInfo}<div class="sh-lbl">🥪 Bánh của bạn</div><div class="sh-sandwich"><span>🥖</span><span class="stack">${stack || '<small>chưa có nhân</small>'}</span><span>🥖</span></div>
-              <div class="sh-lbl">🧂 Topping <span class="zh">配料</span> <small>(bấm để bỏ / thêm)</small></div>
-              <div class="sh-chips">${pool.map((i) => `<button type="button" class="sh-chip ${sel.ings.includes(i) ? 'on' : ''}" data-ing="${i}">${ING[i].icon} ${esc(ING[i].vi)} <span class="zh">${esc(ING[i].zh)}</span></button>`).join('')}</div>` : ''}
-            </div>
-            <div class="sh-panel bag"><h4>🥤 <span class="zh">饮料</span> Nước uống</h4>${sel.drink ? `<div class="sh-bagrow"><span>${byId[sel.drink].icon} ${esc(byId[sel.drink].vi)} <span class="zh">${esc(byId[sel.drink].chn)}</span></span><button type="button" class="sh-x" data-rmdrink>✕</button></div>` : '<small>Chưa chọn (chọn ở tab “Nước uống”)</small>'}</div>
-          </aside>`;
-        el.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => { sel.tab = b.dataset.tab; draw(); }));
-        el.querySelectorAll('[data-pid]').forEach((b) => b.addEventListener('click', () => {
-          const p = byId[b.dataset.pid]; game.audio.pick(); game.learn(p.chn); game.audio.speak(p.chn);
-          if (p.zone === 'drink') sel.drink = sel.drink === p.id ? null : p.id;
-          else { sel.main = p.id; sel.ings = []; }
-          draw(); game.selChanged();
-        }));
-        el.querySelectorAll('[data-ing]').forEach((b) => b.addEventListener('click', () => {
-          const id = b.dataset.ing;
-          sel.ings = sel.ings.includes(id) ? sel.ings.filter((x) => x !== id) : [...sel.ings, id];
-          game.audio.pop(); game.audio.speak(ING[id].zh); draw(); game.selChanged();
-        }));
-        const rm = el.querySelector('[data-rmdrink]'); if (rm) rm.addEventListener('click', () => { sel.drink = null; draw(); game.selChanged(); });
-      };
-      draw();
-    }
+    stall: true,
+    renderPrep(el, game) { renderBakery(el, game, { byId, ING, POOL, toppings, zones }); }
   };
 }
 

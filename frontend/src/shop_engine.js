@@ -1075,6 +1075,12 @@ export class ShopGame {
     b.disabled = !this.mode.canConfirm(this.current.order, this.sel);
   }
 
+  payHints(c) {
+    const answered = c.dlg.log.filter((m) => m.who === 'me').length;
+    if (answered === 0) return [['一共', 'yígòng', 'tổng cộng'], ['多少钱', 'duōshao qián', 'bao nhiêu tiền'], ['转账', 'zhuǎnzhàng', 'chuyển khoản'], ['现金', 'xiànjīn', 'tiền mặt']];
+    if (answered === 1) return c.order.pay === 'cash' ? [['收您', 'shōu nín', 'nhận của bạn'], ['正好', 'zhènghǎo', 'vừa đủ'], ['现金', 'xiànjīn', 'tiền mặt'], ['谢谢', 'xièxie', 'cảm ơn']] : [['二维码', 'èrwéimǎ', 'mã QR'], ['扫码', 'sǎomǎ', 'quét mã'], ['付款', 'fùkuǎn', 'thanh toán'], ['转账', 'zhuǎnzhàng', 'chuyển khoản']];
+    return [['谢谢惠顾', 'xièxie huìgù', 'cảm ơn quý khách'], ['欢迎下次再来', 'huānyíng xià cì zài lái', 'hoan nghênh lần sau lại đến'], ['再见', 'zàijiàn', 'tạm biệt']];
+  }
   renderPay() {
     const el = this.$('st-pay'); if (!el) return;
     const c = this.current;
@@ -1083,20 +1089,26 @@ export class ShopGame {
     const lastCust = [...c.dlg.log].reverse().find((m) => m.who === 'cust');
     const older = c.dlg.log.filter((m) => m !== lastCust).slice(-4);
     const tray = lines.map((l) => '<span class="sh-ps-item">' + (l.icon || '🛍️').repeat(Math.min(l.qty, 4)) + '</span>').join('');
+    const hints = this.payHints(c);
+    const turn = c.dlg.turns[c.dlg.idx];
+    const opts = turn && turn.who === 'me'
+      ? '<div class="sh-ps-topic">💬 ' + esc(turn.topic) + '</div><div class="sh-ps-optgrid">' + turn.options.map((o, i) => '<button type="button" class="pay-opt ' + (o.tried ? 'wrong' : '') + '" data-pay-opt="' + i + '" ' + (o.tried ? 'disabled' : '') + '><span class="lt">' + String.fromCharCode(65 + i) + '</span><span class="tx"><b class="zh">' + esc(o.zh) + '</b>' + (this.showPin ? '<small class="pin">' + esc(o.pin) + '</small>' : '') + (this.showVi ? '<small class="vi">' + esc(o.vi) + '</small>' : '') + '</span></button>').join('') + '</div>'
+      : '<div class="pay-done">✅ Xong! Đang giao hàng…</div>';
     el.innerHTML = '<div class="sh-payscene">'
       + '<div class="sh-ps-top">'
       + '<div class="sh-ps-cust"><div class="sh-ps-face"><img src="' + c.profile.img + '" alt=""></div><b class="zh">' + esc(c.profile.zh) + '</b><span>' + esc(c.profile.vi) + '</span></div>'
-      + '<div class="sh-ps-bubble"><div class="sh-bubble-head"><span class="sh-ps-tag zh">顾客</span><button type="button" class="sh-say-btn" data-say="' + esc(lastCust ? lastCust.zh : '') + '"><i class="fa-solid fa-volume-high"></i></button></div>'
+      + '<div class="sh-ps-bubble"><div class="sh-bubble-head"><span class="sh-ps-tag">Khách hàng</span><button type="button" class="sh-say-btn" data-say="' + esc(lastCust ? lastCust.zh : '') + '"><i class="fa-solid fa-volume-high"></i></button></div>'
       + (lastCust ? this.sayHtml(lastCust, 'big') : '')
       + (older.length ? '<div class="sh-ps-log">' + older.map((m) => '<span class="' + (m.who === 'me' ? 'me' : '') + '">' + (m.who === 'me' ? '🧑‍🍳 ' : '🙂 ') + '<span class="zh">' + esc(m.zh) + '</span></span>').join('') + '</div>' : '') + '</div>'
-      + '<div class="sh-ps-bill"><div class="sh-ps-bill-head zh">订单信息</div>'
-      + lines.map((l) => '<div class="sh-ps-row"><span class="ic">' + (l.icon || '🛍️') + '</span><span class="nm"><b class="zh">' + esc(l.zh) + '</b><small>' + esc(l.vi) + '</small></span><em>×' + l.qty + '</em><b>¥' + fmt(l.amount) + '</b></div>').join('')
-      + '<div class="sh-ps-total"><span class="zh">合计 (总价):</span><strong>¥' + fmt(c.order.due) + '</strong></div>'
+      + '<div class="sh-ps-bill"><div class="sh-ps-bill-head">Đơn hàng</div>'
+      + lines.map((l) => '<div class="sh-ps-row"><span class="ic">' + (l.icon || '🛍️') + '</span><span class="nm"><b>' + esc(l.vi) + '</b><small class="zh">' + esc(l.zh) + '</small></span><em>×' + l.qty + '</em><b>¥' + fmt(l.amount) + '</b></div>').join('')
+      + '<div class="sh-ps-total"><span>Tổng cộng:</span><strong>¥' + fmt(c.order.due) + '</strong></div>'
       + '<div class="sh-ps-method">' + (c.order.pay === 'cash' ? '💵 Khách trả tiền mặt' : '📱 Khách chuyển khoản (QR)') + '</div></div>'
+      + '<div class="sh-ps-thought"><span class="cloud">' + (tray || '🛍️') + '</span></div>'
       + '</div>'
-      + '<div class="sh-ps-counter"><div class="sh-ps-tray">' + (tray || '🛍️') + '</div></div>'
-      + '<div class="sh-ps-answer"><div class="sh-ps-clerk"><span class="face">' + (this.cfg.emoji || '🧑‍🍳') + '</span><b class="zh">你（店员）</b></div>'
-      + '<div class="sh-opts" id="pay-opts">' + renderOptionsHtml(c.dlg, { showPinyin: this.showPin, showVi: this.showVi }) + '</div></div>'
+      + '<div class="sh-ps-ribbon">Bạn sẽ trả lời thế nào?</div>'
+      + '<div class="sh-ps-answer"><div class="sh-opts" id="pay-opts">' + opts + '</div>'
+      + '<div class="sh-ps-hints"><div class="sh-ps-hint-head">💡 Từ vựng gợi ý</div>' + hints.map((h) => '<div class="sh-ps-hint"><b class="zh">' + h[0] + '</b><small>' + h[1] + '</small><span>' + h[2] + '</span></div>').join('') + '</div></div>'
       + '</div>';
   }
   // --------------------------------------------------------------------------- tài khoản · xếp hạng

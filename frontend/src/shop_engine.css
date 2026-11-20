@@ -749,3 +749,94 @@ button { font-family: inherit; cursor: pointer; }
   .sh-stall-bubble, .sh-ps-bubble { max-height: none; }
   .sh-tray-pile { font-size: 1.15rem; letter-spacing: -6px; white-space: nowrap; overflow: hidden; max-width: 100%; }
 }
+
+/* =====================================================================================================================
+   QUẦY BÁNH MÌ TOÀN CẢNH (màn "Làm bánh") — khay nhân · chai sốt · thớt · bảng Menu
+   ===================================================================================================================== */
+.sh-stall-top.bk { grid-template-columns: 90px minmax(0, 1.2fr) minmax(190px, .8fr) minmax(230px, 1fr); }
+.sh-bk-order, .sh-bk-recipe { position: relative; padding: 18px 10px 8px; border-radius: 14px; background: #fff8ea; border: 3px solid #c58a4f; box-shadow: 0 5px 12px rgba(0, 0, 0, .35); font-size: .8rem; min-width: 0; }
+.sh-bk-tag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); padding: 2px 22px; border-radius: 99px; background: linear-gradient(180deg, #b4563a, #8d3a24); color: #fff3d6; font-weight: 800; border: 2px solid #fff3d6; white-space: nowrap; }
+.sh-bk-dish { display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 10px; background: #fff; border: 2px solid #f3d9a6; font-weight: 800; }
+.sh-bk-dish .ic { font-size: 1.5rem; } .sh-bk-dish b { flex: 1; font-size: .9rem; } .sh-bk-dish em { font-style: normal; font-size: 1.05rem; }
+.sh-bk-dish.drink { margin-top: 4px; }
+.sh-bk-reqt { margin: 6px 2px 2px; font-weight: 900; color: #b91c1c; }
+.sh-bk-req { display: flex; align-items: center; gap: 6px; padding: 1px 2px; font-weight: 700; }
+.sh-bk-req i { flex: none; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: .8rem; background: #e7e5e4; color: #78716c; }
+.sh-bk-req.ok i { background: #22c55e; color: #fff; }
+.sh-bk-recipe-head { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); padding: 2px 16px; border-radius: 99px; background: #fff; border: 2px solid #c58a4f; font-weight: 900; white-space: nowrap; max-width: 96%; overflow: hidden; text-overflow: ellipsis; }
+.sh-bk-recipe-body { display: flex; align-items: center; gap: 8px; }
+.sh-bk-bread { font-size: 3rem; filter: drop-shadow(0 4px 3px rgba(0, 0, 0, .3)); }
+.sh-bk-recipe ul { list-style: none; margin: 0; padding: 0; font-weight: 700; line-height: 1.5; font-size: .76rem; }
+.sh-bk-recipe small { display: block; margin-top: 4px; opacity: .7; }
+
+.sh-stall-counter.bk { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, .85fr); }
+.sh-bk-trays { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px 8px; padding: 6px; border-radius: 12px; background: rgba(60, 28, 10, .25); }
+.sh-tray.bk { padding-bottom: 24px; }
+.sh-tray.bk .sh-tray-pile { font-size: 1.35rem; }
+.sh-tray.bk.has { background: linear-gradient(180deg, #f0fdf4, #bbf7d0); border-color: #22c55e; }
+.sh-tray.bk .sh-tray-n { background: #22c55e; }
+.sh-bk-mid { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.sh-bottles { display: flex; gap: 6px; flex-wrap: wrap; }
+.sh-bottle { position: relative; display: flex; align-items: center; gap: 4px; padding: 5px 8px; border-radius: 12px; background: linear-gradient(180deg, #fff, #e5e7eb); border: 3px solid #9aa3ab; box-shadow: 0 3px 5px rgba(0, 0, 0, .3); font-weight: 800; }
+.sh-bottle .bi { font-size: 1.3rem; } .sh-bottle .bl { display: flex; flex-direction: column; font-size: .68rem; line-height: 1.1; text-align: left; } .sh-bottle .bl .zh { color: var(--a); font-size: .78rem; }
+.sh-bottle.on { border-color: #22c55e; background: linear-gradient(180deg, #f0fdf4, #bbf7d0); }
+.sh-bottle i { position: absolute; top: -8px; right: -6px; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: #22c55e; color: #fff; font-style: normal; font-size: .75rem; }
+.sh-cutboard { flex: 1; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 14px; background: linear-gradient(180deg, #f1d19b, #dcb070); border: 4px solid #b98a4a; box-shadow: 0 6px 10px rgba(0, 0, 0, .35), inset 0 2px 3px rgba(255, 255, 255, .5); }
+.sh-cb-bread { display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
+.sh-cb-bread .top { font-size: 3.4rem; filter: drop-shadow(0 4px 3px rgba(0, 0, 0, .35)); }
+.sh-cb-bread .fill { font-size: 1.2rem; letter-spacing: 0; max-width: 220px; text-align: center; margin-top: -6px; }
+.sh-cb-bread .fill small { font-size: .72rem; opacity: .65; }
+.sh-cb-label { font-weight: 800; color: #5a3216; }
+.sh-bk-menu { padding: 0 0 8px; border-radius: 14px; background: #fff8ea; border: 3px solid #c58a4f; box-shadow: 0 5px 12px rgba(0, 0, 0, .35); overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.sh-menu-head { padding: 5px 12px; background: linear-gradient(180deg, #e7b46a, #c58a4f); color: #5a2c10; font-weight: 900; font-size: 1.1rem; }
+.sh-menu-head .mi { margin-right: 4px; }
+.sh-menu-tabs { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 8px 2px; }
+.sh-menu-tabs .sh-stab { background: #fff; color: #7d4a24; border-color: #e8c9a0; font-size: .68rem; padding: 3px 8px; } .sh-menu-tabs .sh-stab.active { background: var(--a); color: #fff; }
+.sh-menurows { display: flex; flex-direction: column; gap: 4px; padding: 4px 8px; overflow-y: auto; }
+.sh-menurow { position: relative; display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 6px; align-items: center; padding: 4px 8px; border-radius: 10px; background: #fff; border: 2px solid transparent; text-align: left; }
+.sh-menurow .ic { font-size: 1.4rem; } .sh-menurow .nm { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; } .sh-menurow .nm b { font-size: .78rem; } .sh-menurow .nm .zh { font-size: .8rem; color: var(--a); font-weight: 700; } .sh-menurow em { font-style: normal; font-weight: 800; font-size: .76rem; color: #15803d; padding-right: 22px; }
+.sh-menurow .sh-stockb { top: 50%; transform: translateY(-50%); right: 6px; }
+.sh-menurow.sel { border-color: var(--a); background: var(--soft); }
+.sh-menurow.out { opacity: .5; }
+.sh-act.serveit2 { min-width: 230px; }
+
+@media (max-width: 1000px) {
+  .sh-stall-top.bk { grid-template-columns: 84px minmax(0, 1fr); } .sh-stall-top.bk .sh-bk-order, .sh-stall-top.bk .sh-bk-recipe { grid-column: 1 / -1; margin-top: 12px; }
+  .sh-stall-counter.bk { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-height: 800px) and (min-width: 1001px) {
+  .sh-bk-recipe-body { gap: 4px; } .sh-bk-bread { font-size: 2.2rem; } .sh-bk-recipe ul { font-size: .7rem; line-height: 1.3; }
+  .sh-bk-order, .sh-bk-recipe { padding-top: 16px; } .sh-bk-dish { padding: 2px 8px; } .sh-bk-req { font-size: .74rem; }
+  .sh-tray.bk .sh-tray-pile { font-size: 1.1rem; } .sh-bk-trays { gap: 8px 6px; }
+  .sh-cutboard { min-height: 90px; } .sh-cb-bread .top { font-size: 2.6rem; }
+}
+
+/* =====================================================================================================================
+   MÀN THANH TOÁN (bản thiết kế Bánh Mì): đáp án A/B/C dạng 3 thẻ + bảng "Từ vựng gợi ý" + mây suy nghĩ chứa món
+   ===================================================================================================================== */
+.sh-ps-top { grid-template-columns: 110px minmax(0, 1fr) 270px 120px; }
+.sh-ps-thought { display: flex; align-items: center; justify-content: center; }
+.sh-ps-thought .cloud { position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; padding: 16px 18px; border-radius: 50px; background: #fffdf7; border: 3px solid #f0cf98; font-size: 2rem; box-shadow: 0 6px 14px rgba(0, 0, 0, .35); }
+.sh-ps-thought .cloud::before, .sh-ps-thought .cloud::after { content: ''; position: absolute; border-radius: 50%; background: #fffdf7; border: 3px solid #f0cf98; }
+.sh-ps-thought .cloud::before { width: 16px; height: 16px; left: -8px; bottom: -6px; } .sh-ps-thought .cloud::after { width: 9px; height: 9px; left: -20px; bottom: -16px; }
+.sh-ps-ribbon { align-self: center; padding: 4px 34px; border-radius: 99px; background: linear-gradient(180deg, #b4563a, #8d3a24); color: #fff3d6; font-weight: 800; font-size: 1.05rem; border: 3px solid #fff3d6; box-shadow: 0 4px 8px rgba(0, 0, 0, .4); }
+.sh-ps-answer { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 12px; align-items: stretch; background: linear-gradient(180deg, #fff1da, #f7d9a8); }
+.sh-ps-topic { font-weight: 800; font-size: .82rem; color: var(--b); margin-bottom: 4px; }
+.sh-ps-optgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.sh-ps-optgrid .pay-opt { display: flex; align-items: flex-start; gap: 8px; text-align: left; padding: 10px 12px; border-radius: 16px; min-height: 96px; }
+.sh-ps-optgrid .pay-opt .lt { flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: #ef4444; color: #fff; font-weight: 900; }
+.sh-ps-optgrid .pay-opt .tx { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sh-ps-optgrid .pay-opt b { font-size: 1.05rem; line-height: 1.3; }
+.sh-ps-hints { padding: 8px 10px; border-radius: 14px; background: #fffdf7; border: 2px solid #e8c9a0; }
+.sh-ps-hint-head { font-weight: 800; margin-bottom: 4px; }
+.sh-ps-hint { display: grid; grid-template-columns: auto 1fr; column-gap: 8px; align-items: baseline; padding: 3px 0; border-bottom: 1px dashed #e5d3bd; font-size: .8rem; }
+.sh-ps-hint b { font-size: 1rem; color: #1e3a8a; } .sh-ps-hint small { display: none; } .sh-ps-hint span { color: #57534e; }
+@media (max-width: 1000px) {
+  .sh-ps-top { grid-template-columns: 84px minmax(0, 1fr); } .sh-ps-bill, .sh-ps-thought { grid-column: 1 / -1; }
+  .sh-ps-answer { grid-template-columns: minmax(0, 1fr); } .sh-ps-optgrid { grid-template-columns: minmax(0, 1fr); } .sh-ps-optgrid .pay-opt { min-height: 0; }
+}
+@media (max-height: 800px) and (min-width: 1001px) {
+  .sh-ps-thought { display: none; } .sh-ps-top { grid-template-columns: 110px minmax(0, 1fr) 270px; }
+  .sh-ps-optgrid .pay-opt { min-height: 0; padding: 8px 10px; } .sh-ps-optgrid .pay-opt b { font-size: .95rem; }
+  .sh-ps-hint { padding: 1px 0; }
+}
