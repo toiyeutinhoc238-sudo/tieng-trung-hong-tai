@@ -8,7 +8,7 @@
  */
 import { esc, fmt, randInt, pickOne, shuffle, say } from './shop_engine.js';
 import { intToZh } from './shop_dialogue.js';
-import { renderCavienSide } from './shop_fry.js';
+import { renderStall } from './shop_stall.js';
 import { startClothesFitting } from './shop_fitting.js';
 
 const num = (n) => (n === 2 ? '两' : intToZh(n));
@@ -75,7 +75,7 @@ export function clothesMode(D) {
     canConfirm(order, sel) { return sel.lines.length > 0; },
     unitCount(order) { return order.lines.reduce((s, l) => s + l.qty, 0); },
     stockUse(order) { return order.lines.map((l) => ({ id: l.id, qty: l.qty })); },
-    billLines(order) { return order.lines.map((l) => ({ zh: `${D.colors[l.color].zh}${byId[l.id].chn} ${l.size}`, vi: `${byId[l.id].vi} · ${l.color}`, qty: l.qty, amount: byId[l.id].price * l.qty })); },
+    billLines(order) { return order.lines.map((l) => ({ zh: `${D.colors[l.color].zh}${byId[l.id].chn} ${l.size}`, vi: `${byId[l.id].vi} · ${l.color}`, qty: l.qty, amount: byId[l.id].price * l.qty, icon: byId[l.id].icon })); },
     diff(order, sel) {
       const bad = new Set();
       order.lines.forEach((l) => {
@@ -193,8 +193,8 @@ export function banhmiMode(D) {
     unitCount(order) { return 1 + order.mods.length * 0.5 + (order.drink ? 1 : 0); },
     stockUse(order) { return [{ id: order.main, qty: 1 }, ...(order.drink ? [{ id: order.drink, qty: 1 }] : [])]; },
     billLines(order) {
-      const m = byId[order.main]; const rows = [{ zh: m.chn, vi: m.vi, qty: 1, amount: m.price }];
-      if (order.drink) { const d = byId[order.drink]; rows.push({ zh: d.chn, vi: d.vi, qty: 1, amount: d.price }); }
+      const m = byId[order.main]; const rows = [{ zh: m.chn, vi: m.vi, qty: 1, amount: m.price, icon: m.icon }];
+      if (order.drink) { const d = byId[order.drink]; rows.push({ zh: d.chn, vi: d.vi, qty: 1, amount: d.price, icon: d.icon }); }
       return rows;
     },
     diff(order, sel) {
@@ -345,7 +345,7 @@ export function cavienMode(D) {
     canConfirm(order, sel) { return Object.values(sel.qty).some((v) => v > 0) && !!sel.serve && (order.fry === 'none' || (!!sel.fry && !sel.frying)); },
     unitCount(order) { return Math.ceil(order.items.reduce((s, x) => s + x.qty, 0) / 2) + order.sauces.length; },
     stockUse(order) { return [...order.items.map((x) => ({ id: x.id, qty: x.qty })), ...order.sauces.map((s) => ({ id: s, qty: 1 }))]; },
-    billLines(order) { return order.items.map((x) => ({ zh: byId[x.id].chn, vi: byId[x.id].vi, qty: x.qty, amount: byId[x.id].price * x.qty })); },
+    billLines(order) { return order.items.map((x) => ({ zh: byId[x.id].chn, vi: byId[x.id].vi, qty: x.qty, amount: byId[x.id].price * x.qty, icon: byId[x.id].icon })); },
     diff(order, sel) {
       const bad = qtyDiff(order, sel, { missing: 'Món hàng', qty: 'Số lượng', extra: 'Thừa món' });
       if (sel.sauces.length !== order.sauces.length || !order.sauces.every((s) => sel.sauces.includes(s))) bad.push('Nước chấm');
@@ -355,27 +355,8 @@ export function cavienMode(D) {
       else if (order.fry === 'nocharr' && !['normal', 'crisp'].includes(sel.fry)) bad.push('Độ chiên (khách không muốn cháy — đừng để vào vùng đỏ)');
       return bad;
     },
-    renderPrep(el, game) {
-      qtyGrid(el, game, {
-        zones, byId,
-        extraTabs: '<button type="button" class="sh-ptab %ACTIVE%" data-tab="__extra">🫙 Nước chấm</button>',
-        extraPanel: true,
-        bindExtra(root, draw, sel) {
-          const main = root.querySelector('#extra-main');
-          if (main) {
-            main.innerHTML = `<div class="sh-lbl">🫙 Nước chấm <span class="zh">酱料</span> <small>(chọn theo lời khách, có thể không chọn)</small></div>
-              <div class="sh-chips big">${sauces.filter((s) => game.zonesOpen.has('sauce') && game.itemsOpen.has(s.id)).map((s) => `<button type="button" class="sh-chip ${sel.sauces.includes(s.id) ? 'on' : ''}${(game.stock[s.id] || 0) <= 0 ? ' out' : ''}" data-sauce="${s.id}">${SAUCE_ICON[s.id] || '🫙'} ${esc(s.vi)} <span class="zh">${esc(s.chn)}</span></button>`).join('')}</div>`;
-            main.querySelectorAll('[data-sauce]').forEach((b) => b.addEventListener('click', () => {
-              const id = b.dataset.sauce;
-              sel.sauces = sel.sauces.includes(id) ? sel.sauces.filter((x) => x !== id) : [...sel.sauces, id];
-              game.audio.pop(); game.audio.speak(sById[id].chn); game.learn(sById[id].chn); draw(); game.selChanged();
-            }));
-          }
-          const side = root.querySelector('#extra-side');
-          if (side) renderCavienSide(side, { game, sel, draw, byId, sById, SERVE, SAUCE_ICON, order: game.current && game.current.order });
-        }
-      });
-    }
+    stall: true,
+    renderPrep(el, game) { renderStall(el, game, { byId, sauces, sById, SERVE, SAUCE_ICON, zones }); }
   };
 }
 
@@ -431,7 +412,7 @@ export function mayphamMode(D) {
     canConfirm(order, sel) { return Object.values(sel.qty).some((v) => v > 0) && (order.shade === 'none' || !!sel.shade); },
     unitCount(order) { return order.items.reduce((s, x) => s + x.qty, 0); },
     stockUse(order) { return order.items.map((x) => ({ id: x.id, qty: x.qty })); },
-    billLines(order) { return order.items.map((x) => ({ zh: byId[x.id].chn, vi: byId[x.id].vi, qty: x.qty, amount: byId[x.id].price * x.qty })); },
+    billLines(order) { return order.items.map((x) => ({ zh: byId[x.id].chn, vi: byId[x.id].vi, qty: x.qty, amount: byId[x.id].price * x.qty, icon: byId[x.id].icon })); },
     diff(order, sel) {
       const bad = qtyDiff(order, sel, { missing: 'Sản phẩm', qty: 'Số lượng', extra: 'Thừa sản phẩm' });
       if (order.shade !== 'none' && sel.shade !== order.shade) bad.push('Tông màu');

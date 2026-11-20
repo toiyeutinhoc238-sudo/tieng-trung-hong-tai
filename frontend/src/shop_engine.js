@@ -1054,6 +1054,11 @@ export class ShopGame {
     const el = this.$('st-prep'); if (!el) return;
     const c = this.current;
     if (!c || !c.takenAt) { el.innerHTML = '<div class="sh-wait">Hãy nhận đơn của khách ở bước 1 trước nhé.</div>'; return; }
+    if (this.mode.stall) {   // quầy hàng toàn cảnh (Cá Viên): màn chuẩn bị tự có khách, bong bóng, nút xác nhận
+      el.innerHTML = '<div class="sh-prep stall"><div class="sh-prep-body" id="prep-body"></div></div>';
+      this.mode.renderPrep(this.$('prep-body'), this);
+      return;
+    }
     el.innerHTML = `
       <div class="sh-prep">
         <aside class="sh-ticket"><div class="sh-ticket-head">🧾 <span class="zh">客人的话</span> Lời khách <button type="button" class="sh-say-btn" data-say="${esc(c.order.say.zh)}"><i class="fa-solid fa-volume-high"></i></button></div>
@@ -1075,19 +1080,25 @@ export class ShopGame {
     const c = this.current;
     if (!c || !c.billed) { el.innerHTML = '<div class="sh-wait">Hoàn tất đơn ở bước 2 để sang thanh toán.</div>'; return; }
     const lines = this.mode.billLines(c.order);
-    el.innerHTML = `
-      <div class="sh-pay">
-        <div class="sh-bill"><div class="sh-bill-head">🧾 <span class="zh">账单</span> Hóa đơn</div>
-          ${lines.map((l) => `<div class="sh-bill-row"><span><b class="zh">${esc(l.zh)}</b><small>${esc(l.vi)}</small></span><em>×${l.qty}</em><b>${fmt(l.amount)}</b></div>`).join('')}
-          <div class="sh-bill-total"><span class="zh">合计</span><strong>${fmt(c.order.due)} ¥</strong></div>
-          <div class="sh-bill-method">${c.order.pay === 'cash' ? '💵 Khách trả tiền mặt' : '📱 Khách chuyển khoản (QR)'}</div></div>
-        <div class="sh-talk"><div class="sh-chat-box" id="pay-chat">${renderChatHtml(c.dlg, { showPinyin: this.showPin, showVi: this.showVi })}</div>
-          <div class="sh-opts" id="pay-opts">${renderOptionsHtml(c.dlg, { showPinyin: this.showPin, showVi: this.showVi })}</div></div>
-      </div>
-      <div class="sh-footer"><div class="sh-hint">💬 Chọn câu tiếng Trung đúng để nói với khách. Chọn sai sẽ bị trừ điểm.</div></div>`;
-    const chat = this.$('pay-chat'); if (chat) chat.scrollTop = chat.scrollHeight;
+    const lastCust = [...c.dlg.log].reverse().find((m) => m.who === 'cust');
+    const older = c.dlg.log.filter((m) => m !== lastCust).slice(-4);
+    const tray = lines.map((l) => '<span class="sh-ps-item">' + (l.icon || '🛍️').repeat(Math.min(l.qty, 4)) + '</span>').join('');
+    el.innerHTML = '<div class="sh-payscene">'
+      + '<div class="sh-ps-top">'
+      + '<div class="sh-ps-cust"><div class="sh-ps-face"><img src="' + c.profile.img + '" alt=""></div><b class="zh">' + esc(c.profile.zh) + '</b><span>' + esc(c.profile.vi) + '</span></div>'
+      + '<div class="sh-ps-bubble"><div class="sh-bubble-head"><span class="sh-ps-tag zh">顾客</span><button type="button" class="sh-say-btn" data-say="' + esc(lastCust ? lastCust.zh : '') + '"><i class="fa-solid fa-volume-high"></i></button></div>'
+      + (lastCust ? this.sayHtml(lastCust, 'big') : '')
+      + (older.length ? '<div class="sh-ps-log">' + older.map((m) => '<span class="' + (m.who === 'me' ? 'me' : '') + '">' + (m.who === 'me' ? '🧑‍🍳 ' : '🙂 ') + '<span class="zh">' + esc(m.zh) + '</span></span>').join('') + '</div>' : '') + '</div>'
+      + '<div class="sh-ps-bill"><div class="sh-ps-bill-head zh">订单信息</div>'
+      + lines.map((l) => '<div class="sh-ps-row"><span class="ic">' + (l.icon || '🛍️') + '</span><span class="nm"><b class="zh">' + esc(l.zh) + '</b><small>' + esc(l.vi) + '</small></span><em>×' + l.qty + '</em><b>¥' + fmt(l.amount) + '</b></div>').join('')
+      + '<div class="sh-ps-total"><span class="zh">合计 (总价):</span><strong>¥' + fmt(c.order.due) + '</strong></div>'
+      + '<div class="sh-ps-method">' + (c.order.pay === 'cash' ? '💵 Khách trả tiền mặt' : '📱 Khách chuyển khoản (QR)') + '</div></div>'
+      + '</div>'
+      + '<div class="sh-ps-counter"><div class="sh-ps-tray">' + (tray || '🛍️') + '</div></div>'
+      + '<div class="sh-ps-answer"><div class="sh-ps-clerk"><span class="face">' + (this.cfg.emoji || '🧑‍🍳') + '</span><b class="zh">你（店员）</b></div>'
+      + '<div class="sh-opts" id="pay-opts">' + renderOptionsHtml(c.dlg, { showPinyin: this.showPin, showVi: this.showVi }) + '</div></div>'
+      + '</div>';
   }
-
   // --------------------------------------------------------------------------- tài khoản · xếp hạng
   async initCloud() {
     let data;
