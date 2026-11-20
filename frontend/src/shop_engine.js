@@ -596,7 +596,7 @@ export class ShopGame {
     if (this.current || !this.line.length) return;
     const c = this.line.shift();
     const inStock = this.unlockedProducts().filter((p) => (this.stock[p.id] || 0) > 0);
-    c.order = inStock.length ? this.mode.makeOrder({ day: this.day, products: inStock, stock: (id) => this.stock[id] || 0 }) : null;
+    c.order = inStock.length ? this.mode.makeOrder({ day: this.day, products: inStock, stock: (id) => this.stock[id] || 0, fitChance: this.cfg.fitChance }) : null;
     if (!c.order) {
       this.current = c; this.sel = null; this.station = 'greet';
       this.audio.sad();
@@ -644,6 +644,11 @@ export class ShopGame {
   confirmOrder() {
     const c = this.current;
     if (!c || !c.takenAt || c.billed) return;
+    if (this.mode.pendingFit && this.mode.pendingFit(c)) {
+      this.audio.error();
+      this.toast('🪞', 'Khách xin thử đồ — hãy bấm “Đưa đi thử đồ” trước khi thanh toán nhé!', 'warn');
+      return;
+    }
     const bad = this.mode.diff(c.order, this.sel);
     if (bad.length) {
       c.wrong += 1;
@@ -664,16 +669,23 @@ export class ShopGame {
     this.renderAll();
     if (c.dlg.log[0]) setTimeout(() => this.audio.speak(c.dlg.log[0].zh), 350);
   }
+  tryOnClicked() {
+    const c = this.current; if (!c || !c.takenAt || c.billed) return;
+    if (!c.order.tryOn || c.fitDone) { this.toast('🪞', 'Khách không xin thử đồ.'); return; }
+    const bad = this.mode.diff(c.order, this.sel);
+    if (bad.length) { c.wrong += 1; this.audio.error(); this.toast('❌', 'Chọn đúng đồ cho khách rồi mới đưa đi thử: ' + bad.join(' · '), 'warn'); return; }
+    c.fitDone = true;
+    this.mode.startFitting(this, c);
+  }
   finishFitting(c, res) {
     c.fitWrong = res.wrong || 0;
     if (this.current !== c) return;
+    this.station = 'prep';
+    this.renderAll();
     if (res.mutated) {
-      c.fitted = true;
-      this.station = 'prep';
-      this.renderAll();
-      this.toast('🪞', 'Khách thử đồ xong và đổi ý — sửa túi hàng cho đúng lời khách rồi mới tính tiền nhé!');
+      this.toast('🪞', 'Khách thử đồ xong và đổi ý — sửa giỏ hàng cho đúng lời khách rồi bấm Thanh toán nhé!');
       if (c.order.say2) setTimeout(() => this.audio.speak(c.order.say2.zh), 400);
-    } else this.startPayment(c);
+    } else this.toast('🪞', 'Khách thử xong và ưng ý — bấm “Thanh toán” nhé!');
   }
   choosePay(i) {
     const c = this.current;
@@ -1081,11 +1093,32 @@ export class ShopGame {
     if (answered === 1) return c.order.pay === 'cash' ? [['收您', 'shōu nín', 'nhận của bạn'], ['正好', 'zhènghǎo', 'vừa đủ'], ['现金', 'xiànjīn', 'tiền mặt'], ['谢谢', 'xièxie', 'cảm ơn']] : [['二维码', 'èrwéimǎ', 'mã QR'], ['扫码', 'sǎomǎ', 'quét mã'], ['付款', 'fùkuǎn', 'thanh toán'], ['转账', 'zhuǎnzhàng', 'chuyển khoản']];
     return [['谢谢惠顾', 'xièxie huìgù', 'cảm ơn quý khách'], ['欢迎下次再来', 'huānyíng xià cì zài lái', 'hoan nghênh lần sau lại đến'], ['再见', 'zàijiàn', 'tạm biệt']];
   }
+  payTableHtml(c, lines) {
+    const lastCust = [...c.dlg.log].reverse().find((m) => m.who === 'cust');
+    const turn = c.dlg.turns[c.dlg.idx];
+    const opts = turn && turn.who === 'me'
+      ? '<div class="sh-ps-optgrid col">' + turn.options.map((o, i) => '<button type="button" class="pay-opt ' + (o.tried ? 'wrong' : '') + '" data-pay-opt="' + i + '" ' + (o.tried ? 'disabled' : '') + '><span class="lt">💬</span><span class="tx"><b class="zh">' + esc(o.zh) + '</b>' + (this.showPin ? '<small class="pin">' + esc(o.pin) + '</small>' : '') + (this.showVi ? '<small class="vi">' + esc(o.vi) + '</small>' : '') + '</span></button>').join('') + '</div>'
+      : '<div class="pay-done">✅ Xong! Đang giao hàng…</div>';
+    const rows = lines.map((l) => '<div class="sh-pt-row"><span class="pr"><span class="ic">' + (l.icon || '🛍️') + '</span><span class="nm"><b>' + esc(l.name || l.vi) + '</b><small class="zh">(' + esc(l.nameZh || l.zh) + ')</small></span></span><span class="sz"><i>' + esc(l.size || '—') + '</i></span><span class="qt"><i>' + l.qty + '</i></span><span class="un">¥' + fmt(l.unit != null ? l.unit : l.amount) + '</span><b class="sub">¥' + fmt(l.amount) + '</b></div>').join('');
+    const cash = c.order.pay === 'cash';
+    return '<div class="sh-payscene table">'
+      + '<div class="sh-pt-left"><div class="sh-pt-custrow"><div class="sh-ps-cust"><div class="sh-ps-face"><img src="' + c.profile.img + '" alt=""></div><b class="zh">' + esc(c.profile.zh) + '</b></div>'
+      + '<div class="sh-ps-bubble"><div class="sh-bubble-head"><span class="sh-ps-tag">Khách hàng</span><button type="button" class="sh-say-btn" data-say="' + esc(lastCust ? lastCust.zh : '') + '"><i class="fa-solid fa-volume-high"></i></button></div>' + (lastCust ? this.sayHtml(lastCust, 'big') : '') + '</div></div>'
+      + '<div class="sh-ps-answer single"><div class="sh-opts" id="pay-opts">' + opts + '</div></div></div>'
+      + '<div class="sh-pt-right"><div class="sh-pt-card"><div class="sh-pt-ribbon">🛒 Thanh toán <span class="zh">(结账)</span></div>'
+      + '<div class="sh-pt-head"><span>Sản phẩm <span class="zh">(商品)</span></span><span>Size</span><span>SL</span><span>Đơn giá</span><span>Thành tiền</span></div>' + rows
+      + '<div class="sh-pt-total"><span>Tổng cộng <span class="zh">(合计)</span>:</span><strong>¥' + fmt(c.order.due) + '</strong></div></div>'
+      + '<div class="sh-pt-method"><div class="sh-pt-mh">Phương thức thanh toán <span class="zh">(支付方式)</span></div><div class="sh-pt-mrow">'
+      + '<div class="sh-pt-m ' + (cash ? 'on' : '') + '"><span>💵</span><b>Tiền mặt</b><small class="zh">(现金)</small>' + (cash ? '<i>✔</i>' : '') + '</div>'
+      + '<div class="sh-pt-m ' + (!cash ? 'on' : '') + '"><span>📱</span><b>Chuyển khoản</b><small class="zh">(转账 / 扫码)</small>' + (!cash ? '<i>✔</i>' : '') + '</div></div></div></div>'
+      + '</div>';
+  }
   renderPay() {
     const el = this.$('st-pay'); if (!el) return;
     const c = this.current;
     if (!c || !c.billed) { el.innerHTML = '<div class="sh-wait">Hoàn tất đơn ở bước 2 để sang thanh toán.</div>'; return; }
     const lines = this.mode.billLines(c.order);
+    if (this.mode.payTable) { el.innerHTML = this.payTableHtml(c, lines); return; }
     const lastCust = [...c.dlg.log].reverse().find((m) => m.who === 'cust');
     const older = c.dlg.log.filter((m) => m !== lastCust).slice(-4);
     const tray = lines.map((l) => '<span class="sh-ps-item">' + (l.icon || '🛍️').repeat(Math.min(l.qty, 4)) + '</span>').join('');

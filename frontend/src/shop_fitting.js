@@ -16,7 +16,7 @@ function optsHtml(turn, game) {
 
 /** Hiện hộp thoại phòng thử đồ. spec = { turns, verdict, onDone({wrong}) } */
 export function runFitting(game, spec) {
-  const st = { i: 0, log: [], wrong: 0, phase: 'talk' };
+  const st = { i: 0, log: (spec.preLog || []).map((x) => ({ ...x })), wrong: 0, phase: 'talk' };
   const chat = game.$('fit-chat'); const opts = game.$('fit-opts'); const anim = game.$('fit-anim'); const done = game.$('btn-fit-done');
   done.style.display = 'none'; anim.innerHTML = '';
   const render = () => {
@@ -56,10 +56,8 @@ export function runFitting(game, spec) {
 }
 
 /** Dựng kịch bản thử đồ cho khách c (đơn đã chọn đúng). Trả về true nếu đã mở hộp thoại. */
-export function startClothesFitting(game, c, X) {
+export function startClothesFitting(game, c, X) {   // khách đã xin thử đồ (order.tryOn): người chơi bấm "Đưa đi thử đồ"
   const { D, byId, gById, say, shuffle, pickOne, randInt, num } = X;
-  const chance = game.cfg.fitChance ?? (game.day >= 2 ? 0.35 : 0);
-  if (Math.random() >= chance) return false;
   const o = c.order;
   const li = randInt(0, o.lines.length - 1); const l = o.lines[li]; const p = byId[l.id]; const shoes = p.zone === 'giay';
   const sizes = p.raw.sizes; const si = sizes.indexOf(l.size);
@@ -86,6 +84,7 @@ export function startClothesFitting(game, c, X) {
       opt('这是您的小票。', 'Đây là hóa đơn của quý khách.', false, 'Khách chưa thanh toán nên chưa có hóa đơn.'),
       opt('欢迎下次光临！', 'Mong quý khách lần sau lại ghé!', false, 'Khách chưa mua xong, chưa phải lúc chào tạm biệt.')]) });
   }
+  const preLog = c.order.tryOn ? [turns.shift()] : [];   // khách đã hỏi xin thử ngay trong lời gọi hàng
   const sizeZh = (s) => (shoes ? D.sizes[s].zh : s + '码');
   const verdict = []; let mutate = null; let say2 = null;
   const cust = (zh, vi) => verdict.push({ who: 'cust', ...say(zh, vi) });
@@ -115,7 +114,7 @@ export function startClothesFitting(game, c, X) {
     mutate = () => { o.lines.push(extra); o.due += q.price * extra.qty; o.words = [...(o.words || []), q.chn, D.colors[extra.color].zh, D.sizes[extra.size].zh]; };
   }
   runFitting(game, {
-    turns, verdict,
+    turns, verdict, preLog,
     onDone: ({ wrong }) => {
       if (mutate) { mutate(); o.say2 = say2; game.learn(o.words || []); }
       game.finishFitting(c, { wrong, mutated: !!mutate });

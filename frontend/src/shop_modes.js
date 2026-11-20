@@ -10,6 +10,7 @@ import { esc, fmt, randInt, pickOne, shuffle, say } from './shop_engine.js';
 import { intToZh } from './shop_dialogue.js';
 import { renderStall } from './shop_stall.js';
 import { renderBakery } from './shop_bakery.js';
+import { renderBoutique } from './shop_boutique.js';
 import { startClothesFitting } from './shop_fitting.js';
 
 const num = (n) => (n === 2 ? '两' : intToZh(n));
@@ -67,16 +68,20 @@ export function clothesMode(D) {
       const chosen = shuffle(pool).slice(0, nLines);
       const lines = chosen.map((p) => ({ id: p.id, size: pickOne(p.raw.sizes), color: pickOne(p.raw.colors), qty: Math.min(ctx.stock(p.id), ctx.day >= 5 && Math.random() < 0.2 ? 2 : 1) }));
       const parts = lines.map((l, i) => lineSay(l, i === 0));
-      const zh = `${parts.map((x) => x.zh).join('。')}。`;
-      const vi = `${parts.map((x) => x.vi).join('. ')}.`;
-      return { lines, say: say(zh, vi), due: lines.reduce((s, l) => s + byId[l.id].price * l.qty, 0), words: [...lines.flatMap((l) => [byId[l.id].chn, D.colors[l.color].zh, D.sizes[l.size].zh])] };
+      const tryOn = Math.random() < (ctx.fitChance ?? (ctx.day >= 2 ? 0.3 : 0));   // một số khách xin thử đồ
+      const zh = `${parts.map((x) => x.zh).join('。')}。${tryOn ? '我可以试穿吗？' : ''}`;
+      const vi = `${parts.map((x) => x.vi).join('. ')}.${tryOn ? ' Tôi có thể mặc thử không?' : ''}`;
+      return { lines, tryOn, say: say(zh, vi), due: lines.reduce((s, l) => s + byId[l.id].price * l.qty, 0), words: [...lines.flatMap((l) => [byId[l.id].chn, D.colors[l.color].zh, D.sizes[l.size].zh])] };
     },
-    beforePay(game, c) { return startClothesFitting(game, c, { D, byId, gById, say, shuffle, pickOne, randInt, num }); },
+    stall: true,
+    payTable: true,
+    startFitting(game, c) { return startClothesFitting(game, c, { D, byId, gById, say, shuffle, pickOne, randInt, num }); },
+    pendingFit(c) { return !!(c.order.tryOn && !c.fitDone); },
     emptySel() { return { lines: [], tab: null, pick: null, size: null, color: null }; },
     canConfirm(order, sel) { return sel.lines.length > 0; },
     unitCount(order) { return order.lines.reduce((s, l) => s + l.qty, 0); },
     stockUse(order) { return order.lines.map((l) => ({ id: l.id, qty: l.qty })); },
-    billLines(order) { return order.lines.map((l) => ({ zh: `${D.colors[l.color].zh}${byId[l.id].chn} ${l.size}`, vi: `${byId[l.id].vi} · ${l.color}`, qty: l.qty, amount: byId[l.id].price * l.qty, icon: byId[l.id].icon })); },
+    billLines(order) { return order.lines.map((l) => ({ zh: `${D.colors[l.color].zh}${byId[l.id].chn} ${l.size}`, vi: `${byId[l.id].vi} · ${l.color}`, qty: l.qty, amount: byId[l.id].price * l.qty, icon: byId[l.id].icon, size: l.size, unit: byId[l.id].price, name: byId[l.id].vi, nameZh: byId[l.id].chn, color: l.color })); },
     diff(order, sel) {
       const bad = new Set();
       order.lines.forEach((l) => {
@@ -91,41 +96,7 @@ export function clothesMode(D) {
       sel.lines.forEach((x) => { if (!order.lines.some((l) => l.id === x.id)) bad.add('Thừa sản phẩm'); });
       return [...bad];
     },
-    renderPrep(el, game) {
-      const sel = game.sel;
-      const zs = openZones(game, zones);
-      if (!sel.tab || !zs.some((z) => z.id === sel.tab)) sel.tab = zs[0].id;
-      const draw = () => {
-        const prods = game.unlockedProducts().filter((p) => p.zone === sel.tab);
-        const pk = sel.pick ? byId[sel.pick] : null;
-        const sizes = pk ? pk.raw.sizes : [];
-        const colors = pk ? pk.raw.colors : [];
-        el.innerHTML = `
-          <div class="sh-catalog">${tabsHtml(zs, sel.tab)}<div class="sh-pgrid">${prods.map((p) => productCard(p, '', p.id === sel.pick ? 'sel' : '')).join('')}</div></div>
-          <aside class="sh-side">
-            <div class="sh-panel"><h4>${pk ? `${pk.icon} ${esc(pk.vi)} <span class="zh">${esc(pk.chn)}</span>` : '👈 Chọn một sản phẩm'}</h4>
-              ${pk ? `<div class="sh-lbl">📏 Size <span class="zh">尺码</span></div><div class="sh-chips">${sizes.map((s) => `<button type="button" class="sh-chip ${sel.size === s ? 'on' : ''}" data-size="${esc(s)}">${esc(sizeLabel(pk.zone, s))}</button>`).join('')}</div>
-              <div class="sh-lbl">🎨 Màu <span class="zh">颜色</span></div><div class="sh-chips">${colors.map((c) => `<button type="button" class="sh-chip sw ${sel.color === c ? 'on' : ''}" data-color="${esc(c)}"><i style="background:${COLOR_HEX[c] || '#ccc'}"></i>${esc(c)} <span class="zh">${esc(D.colors[c].zh)}</span></button>`).join('')}</div>
-              <button type="button" class="sh-btn small" id="btn-addbag" ${sel.size && sel.color ? '' : 'disabled'}>🛍️ Thêm vào túi</button>` : ''}
-            </div>
-            <div class="sh-panel bag"><h4>🛍️ <span class="zh">购物袋</span> Túi hàng</h4>
-              ${sel.lines.length ? sel.lines.map((l, i) => `<div class="sh-bagrow"><span>${byId[l.id].icon} ${esc(byId[l.id].vi)} · ${esc(l.size)} · ${esc(l.color)}${l.qty > 1 ? ' ×' + l.qty : ''}</span><button type="button" class="sh-x" data-rm="${i}">✕</button></div>`).join('') : '<small>Túi đang trống</small>'}
-            </div>
-          </aside>`;
-        el.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => { sel.tab = b.dataset.tab; draw(); }));
-        el.querySelectorAll('[data-pid]').forEach((b) => b.addEventListener('click', () => { sel.pick = b.dataset.pid; sel.size = null; sel.color = null; game.audio.pick(); game.learn(byId[sel.pick].chn); game.audio.speak(byId[sel.pick].chn); draw(); }));
-        el.querySelectorAll('[data-size]').forEach((b) => b.addEventListener('click', () => { sel.size = b.dataset.size; game.audio.pop(); game.audio.speak(D.sizes[sel.size].zh); draw(); }));
-        el.querySelectorAll('[data-color]').forEach((b) => b.addEventListener('click', () => { sel.color = b.dataset.color; game.audio.pop(); game.audio.speak(D.colors[sel.color].zh); draw(); }));
-        const add = el.querySelector('#btn-addbag');
-        if (add) add.addEventListener('click', () => {
-          const ex = sel.lines.find((l) => l.id === sel.pick && l.size === sel.size && l.color === sel.color);
-          if (ex) ex.qty += 1; else sel.lines.push({ id: sel.pick, size: sel.size, color: sel.color, qty: 1 });
-          sel.pick = null; sel.size = null; sel.color = null; game.audio.pick(); draw(); game.selChanged();
-        });
-        el.querySelectorAll('[data-rm]').forEach((b) => b.addEventListener('click', () => { sel.lines.splice(+b.dataset.rm, 1); draw(); game.selChanged(); }));
-      };
-      draw();
-    }
+    renderPrep(el, game) { renderBoutique(el, game, { byId, D, zones, COLOR_HEX }); }
   };
 }
 
