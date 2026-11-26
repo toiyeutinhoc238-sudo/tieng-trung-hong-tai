@@ -350,3 +350,27 @@ body.g-portrait .bag-btn small .zh { font-size: 0.85rem; }
 /* Hội thoại NPC: nghĩa của đáp án + dòng báo trả lời đúng */
 .talk-choice small.vi { color: #5d4037; font-weight: 600; font-size: 0.8rem; }
 .talk-right { margin-top: 6px; font-weight: 900; font-size: 0.85rem; color: #2e7d32; }
+
+/* tủ lạnh: thống kê món đã nấu */
+.fr-list { padding: 8px 16px 12px; max-height: 420px; }
+.fr-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 6px 4px; border-bottom: 1px dashed #f0d6ad; }
+.fr-ico { font-size: 1.8rem; }
+.fr-nm { display: flex; flex-direction: column; line-height: 1.15; } .fr-nm b.zh { font-size: 1.1rem; } .fr-nm small { font-size: 0.74rem; color: #6b5444; font-weight: 700; }
+.fr-n { font-style: normal; min-width: 42px; text-align: center; padding: 3px 12px; border-radius: 99px; background: #e3f2fd; color: #0d47a1; font-weight: 900; font-size: 1.1rem; }
+/* bếp: nguyên liệu có / cần */
+.rc-need span { display: inline-flex; align-items: center; gap: 4px; }
+.rc-need span.ok { background: #e6f6e7; color: #2e7d32; }
+.rc-need span b { font-variant-numeric: tabular-nums; }
+.rc-need span small.pin { font-size: 0.62rem; opacity: 0.8; }
+/* nội thất / túi trong cửa hàng */
+.mk-note { grid-column: 1 / -1; margin: 0 0 4px; }
+.mk-item .mi-btns em.bad { color: #c62828; }
+/* tình trạng vật nuôi */
+.an-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; } .an-ico { font-size: 2.6rem; }
+.an-state { margin-top: 2px; font-weight: 800; }
+.an-state.hungry, .an-state.tired { color: #e65100; } .an-state.sick, .an-state.dead { color: #c62828; } .an-state.recover { color: #1565c0; } .an-state.normal { color: #2e7d32; }
+.an-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-weight: 700; }
+.an-bar { flex: 1; max-width: 200px; height: 12px; border-radius: 99px; background: #eee; overflow: hidden; border: 2px solid #d7c3a3; } .an-bar i { display: block; height: 100%; background: linear-gradient(90deg, #ef5350, #66bb6a); }
+.an-guide { margin: 10px 0; }
+.an-treat { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.an-treat button:disabled { opacity: 0.45; }

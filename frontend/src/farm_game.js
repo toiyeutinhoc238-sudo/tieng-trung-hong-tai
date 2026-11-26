@@ -1,4 +1,5 @@
 import { NPC_ANS_VI } from './farm_npc_vi.js';
+import { PET_KINDS, MAX_PET_EACH, petTiles, spawnPet, fixPetPosition, updatePet, drawPet } from './farm_pets.js';
 // ==== DỮ LIỆU TỪ EXCEL "thông tin nông trại.xlsx" (tạo tự động; pinyin hội thoại NPC sinh bằng pinyin-pro) ====
 const XLS_VEG = [["VEG01","空心菜","kōngxīncài","Rau muống",1,1,1,1,1],["VEG02","西红柿","xīhóngshì","Cà chua",3,1,1,3,2],["VEG03","胡萝卜","húluóbo","Cà rốt",7,1,1,0,0],["VEG04","白菜","báicài","Cải thảo",10,3,2,2,0],["VEG05","黄瓜","huángguā","Dưa leo",13,4,3,3,2],["VEG06","土豆","tǔdòu","Khoai tây",16,5,1,0,0],["VEG07","卷心菜","juǎnxīncài","Bắp cải",19,4,2,2,0],["VEG08","南瓜","nánguā","Bí đỏ",22,5,2,3,0],["VEG09","落葵","luòkuí","Rau mồng tơi",25,2,3,1,1],["VEG10","芥菜","jiècài","Cải xanh",28,3,2,2,0],["VEG11","茄子","qiézi","Cà tím",31,5,3,3,2],["VEG12","辣椒","làjiāo","Ớt",34,4,3,3,2],["VEG13","洋葱","yángcōng","Hành tây",37,4,1,0,0],["VEG14","大蒜","dàsuàn","Tỏi",40,5,1,0,0],["VEG15","生菜","shēngcài","Xà lách",42,2,3,1,1],["VEG16","菠菜","bōcài","Rau chân vịt",44,3,2,2,0],["VEG17","玉米","yùmǐ","Ngô",46,5,1,0,0],["VEG18","白萝卜","báiluóbo","Củ cải trắng",47,4,1,0,0],["VEG19","西兰花","xīlánhuā","Bông cải xanh",49,4,2,2,0],["VEG20","豆角","dòujiǎo","Đậu que",50,4,3,3,2]];
 const XLS_ANI = [["ANI01","鸡","jī","Gà","Đẻ trứng; người chơi cho ăn, lấy trứng và dọn chuồng","鸡舍 - Chuồng gà",1],["ANI02","猪","zhū","Heo","Chăm sóc theo ngày; có thể bán vật nuôi/sản phẩm theo cơ chế game","猪舍 - Chuồng heo",20],["ANI03","羊","yáng","Cừu","Cho ăn, chăm sóc và thu hoạch lông cừu","羊舍 - Chuồng cừu",30],["ANI04","牛","niú","Bò","Cho ăn, chăm sóc và thu hoạch sữa","牛舍 - Chuồng bò",40],["ANI05","狗","gǒu","Chó","Thú cưng trong nhà; chạy quanh nhà, có thể đi theo nhân vật","家里 - Trong nhà",12],["ANI06","猫","māo","Mèo","Thú cưng trong nhà; chạy quanh nhà và có hoạt ảnh đuổi/bắt chuột","家里 - Trong nhà",16]];
@@ -100,6 +101,7 @@ const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp
 const randInt = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pickOne = (arr) => (Array.isArray(arr) && arr.length ? arr[randInt(0, arr.length - 1)] : null);
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+const shuffle = (arr) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const NUM_CHN = ['零', '一', '两', '三', '四', '五', '六', '七', '八', '九', '十'];
 const numChn = (n) => (n <= 10 ? NUM_CHN[n] : String(n));
 
@@ -286,13 +288,42 @@ const tool = (code, id, icon, buy, kind = 'tool') => { const [, chn, pin, vi, gr
   tool('T06', 'basket', '🧺', 60),
   tool('T10', 'gloves', '🧤', 40),
   tool('T07', 'rod', 'svg:rod', 120),
-  { ...tool('T08', 'bait', '🪱', 6, 'consumable'), q: '份' }
+  { ...tool('T08', 'bait', '🪱', 6, 'consumable'), q: '份' },
+  { id: 'syringe', chn: '注射器', pin: 'zhùshèqì', vi: 'kim tiêm chữa bệnh', icon: '💉', q: '支', kind: 'consumable', buy: 30, lvl: 1, group: 'animal' },
+  { id: 'medbox', chn: '药箱', pin: 'yàoxiāng', vi: 'hộp thuốc', icon: '💊', q: '盒', kind: 'consumable', buy: 80, lvl: 1, group: 'animal' }
 ].forEach(addItem);
 RECIPES.forEach(r => addItem({ ...r, kind: 'dish', q: '份', group: 'food' }));
 const DECOR_ICON = { DEC01: '🛋️', DEC02: '🫖', DEC03: '🟥', DEC04: '📚', DEC05: '🖼️', DEC06: '🕰️', DEC07: '🪟', DEC08: '💡', DEC09: '🪴', DEC10: '👟' };
 const DECOR = XLS_DECOR.map(([code, grp, chn, pin, vi, price, lvl, where]) => ({ id: code.toLowerCase(), code, grp, chn, pin, vi, price: price * 2, lvl, where, icon: DECOR_ICON[code] || '🎁' }));
 const itemOf = (id) => ITEMS[id];
 const BAG_CAP = 60;
+const BAG_TIERS = [
+  { chn: '基础背包', pin: 'jīchǔ bèibāo', vi: 'Túi cơ bản', cap: 60, lvl: 1, price: 0, icon: '🎒' },
+  { chn: '二级背包', pin: 'èr jí bèibāo', vi: 'Túi cấp 2', cap: 75, lvl: 10, price: 500, icon: '🛍️' },
+  { chn: '三级背包', pin: 'sān jí bèibāo', vi: 'Túi cấp 3', cap: 90, lvl: 20, price: 1000, icon: '👜' },
+  { chn: '四级背包', pin: 'sì jí bèibāo', vi: 'Túi cấp 4', cap: 105, lvl: 35, price: 2000, icon: '🧳' },
+  { chn: '五级背包', pin: 'wǔ jí bèibāo', vi: 'Túi cấp 5', cap: 120, lvl: 50, price: 3500, icon: '💼' },
+  { chn: '六级背包', pin: 'liù jí bèibāo', vi: 'Túi cấp 6', cap: 135, lvl: 70, price: 5000, icon: '🧺' },
+  { chn: '七级背包', pin: 'qī jí bèibāo', vi: 'Túi cấp 7', cap: 150, lvl: 90, price: 7000, icon: '📦' }
+];
+// Nội thất tăng năng lượng: mỗi món 1 cấp (Thường +5 / Cao cấp +10 / Đặc biệt +15), nâng cấp thì THAY chỉ số cũ; tổng cộng dồn tối đa FURN_CAP
+const FURN = [
+  { id: 'bed', chn: '床', pin: 'chuáng', vi: 'Giường ngủ', icon: '🛏️', prices: [150, 450, 1000] },
+  { id: 'table', chn: '饭桌', pin: 'fànzhuō', vi: 'Bàn ăn', icon: '🍽️', prices: [120, 380, 900] },
+  ...['dec01', 'dec03', 'dec08', 'dec09'].map(k => { const d = DECOR.find(x => x.id === k); return { id: k, chn: d.chn, pin: d.pin, vi: d.vi, icon: d.icon, prices: [d.price, d.price * 3, d.price * 6], decor: true, lvl: d.lvl }; })
+];
+// Trạng thái động vật
+const ANI_STATES = {
+  normal: { icon: '😊', chn: '正常', pin: 'zhèngcháng', vi: 'Bình thường' },
+  hungry: { icon: '🍽️', chn: '饿', pin: 'è', vi: 'Đói' },
+  tired: { icon: '😩', chn: '累', pin: 'lèi', vi: 'Mệt mỏi' },
+  sick: { icon: '🤒', chn: '生病', pin: 'shēngbìng', vi: 'Bị bệnh' },
+  recover: { icon: '💊', chn: '康复中', pin: 'kāngfù zhōng', vi: 'Đang hồi phục' },
+  dead: { icon: '🪦', chn: '死了', pin: 'sǐ le', vi: 'Đã chết' }
+};
+const SICK_AFTER = 10;                                            // gà khỏe ≥10 ngày (game) mới có thể ốm ngẫu nhiên
+const sickChance = (well) => Math.min(0.5, 0.06 + 0.012 * (well - SICK_AFTER));   // ~6%/ngày từ ngày 10, tăng dần → hầu như chắc chắn trước ngày ~30
+const DEAD_AFTER = 4;                                             // bệnh quá 4 ngày liên tiếp không chữa → chết
 const BASKET_BONUS = 30;       // 篮子: túi chứa thêm
 const WATER_CAP = 20;
 
@@ -314,7 +345,13 @@ const SELLABLE = ['crop', 'fruit', 'fish', 'product'];
 
 // Năng lượng tiêu hao
 const ENERGY = { draw: 2, hoe: 3, plant: 1, water: 1, harvest: 2, fill: 1, clean: 2, egg: 0, collect: 2, tree: 3, fishfeed: 1, fish: 4, cook: 2, clear: 1, clearHoe: 3, fert: 1 };
-const ENERGY_MAX = 100;
+// Năng lượng tối đa = 100 + 15 × (số mốc Level đã đạt trong 10/20/40/60/80) + năng lượng cộng thêm từ nội thất (tối đa +45)
+const ENERGY_BASE = 100;
+const ENERGY_MILESTONES = [10, 20, 40, 60, 80];
+const ENERGY_PER_MILESTONE = 15;
+const FURN_BONUS = [0, 5, 10, 15];                 // theo cấp nội thất: chưa có / Thường / Cao cấp / Đặc biệt
+const FURN_TIERS = ['Thường', 'Cao cấp', 'Đặc biệt'];
+const FURN_CAP = 45;
 const WELL_DRAW = 5;
 
 // Thời tiết
@@ -1034,25 +1071,31 @@ function renderScene(ctx, g, view, t) {
   const items = [];
   for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const ch = sc.base[y][x]; if (ch === 't' || ch === 'b') items.push({ y: y + 0.9, draw: () => drawTile(ctx, ch, x, y, view.ox + x * T, view.oy + y * T, T, t, sc.id) }); }
   sc.objs.forEach(o => items.push({ y: o.kind === 'poop' || o.kind === 'plot' || o.isPond || o.kind === 'decor' && o.decor === 'dec03' ? o.y - 0.5 : o.y + o.h - 0.5, draw: () => drawObj(ctx, g, sc, o, view.ox + o.x * T, view.oy + o.y * T, T, t) }));
-  if (sc.id === 'pen_chicken') g.pens.chicken.animals.forEach((an, i) => {
-    const a = t / (2500 + i * 300) + i * 2;
-    const hx = 6.5 + Math.cos(a) * 2.6 + (i % 2) * 0.4;
-    const hy = 4.6 + Math.sin(a * 1.4) * 1.3;
-    items.push({ y: hy + 0.4, draw: () => { drawIcon(ctx, '🐔', view.ox + hx * T, view.oy + hy * T - Math.abs(Math.sin(t / 200 + i)) * 3, T * 0.62); if (an.health < 40) drawIcon(ctx, '🤒', view.ox + hx * T + T * 0.3, view.oy + hy * T - T * 0.35, T * 0.26); } });
-  });
-  // thú cưng: chó đi theo nhân vật, mèo đuổi chuột trong nhà
-  if (g.pets.dog && g.dogPos && !sc.id.startsWith('pen_')) {
-    const d = g.dogPos;
-    items.push({ y: d.y + 0.9, draw: () => drawIcon(ctx, '🐕', view.ox + (d.x + 0.5) * T, view.oy + (d.y + 0.55) * T - Math.abs(Math.sin(t / 120)) * (d.moving ? 3 : 0), T * 0.62) });
+  if (sc.id === 'pen_chicken') {
+    g.chickSpots = [];
+    g.pens.chicken.animals.forEach((an, i) => {
+      const st = g.aniState('chicken', i);
+      const a = t / (2500 + i * 300) + i * 2;
+      const dead = st === 'dead';
+      const slow = st === 'sick' || st === 'recover';
+      const hx = dead ? 3.4 + i * 1.1 : 6.5 + Math.cos(a * (slow ? 0.4 : 1)) * 2.6 + (i % 2) * 0.4;
+      const hy = dead ? 6.7 : 4.6 + Math.sin(a * 1.4 * (slow ? 0.4 : 1)) * 1.3;
+      g.chickSpots[i] = { x: hx, y: hy };
+      items.push({ y: hy + 0.4, draw: () => {
+        if (dead) { drawIcon(ctx, '🪦', view.ox + hx * T, view.oy + hy * T, T * 0.6); return; }
+        drawIcon(ctx, '🐔', view.ox + hx * T, view.oy + hy * T - (slow ? 0 : Math.abs(Math.sin(t / 200 + i)) * 3), T * 0.62);
+        if (st !== 'normal') drawIcon(ctx, ANI_STATES[st].icon, view.ox + hx * T + T * 0.3, view.oy + hy * T - T * 0.35, T * 0.28);
+      } });
+    });
   }
+  // thú cưng: mỗi con tự đi / chạy / ngồi / nằm trong khu vực của mình (chó ở sân, mèo trong nhà)
+  (g.petAnim || []).forEach(p => {
+    if (PET_KINDS[p.kind].home !== sc.id) return;
+    items.push({ y: p.y + 0.9, draw: () => drawPet(ctx, drawIcon, p, view.ox + (p.x + 0.5) * T, view.oy + (p.y + 0.55) * T, T, t) });
+  });
   if (g.pets.cat && sc.id === 'house') {
     const a = t / 2600;
-    const mx = 6 + Math.cos(a) * 3.6;
-    const my = 4.6 + Math.sin(a * 2) * 1.1;
-    const cx2 = 6 + Math.cos(a - 0.5) * 3.6;
-    const cy2 = 4.6 + Math.sin((a - 0.5) * 2) * 1.1;
-    items.push({ y: my + 0.5, draw: () => drawIcon(ctx, '🐭', view.ox + mx * T, view.oy + my * T, T * 0.36) });
-    items.push({ y: cy2 + 0.6, draw: () => drawIcon(ctx, '🐈', view.ox + cx2 * T, view.oy + cy2 * T - Math.abs(Math.sin(t / 110)) * 3, T * 0.6) });
+    items.push({ y: 4.6 + Math.sin(a * 2) * 1.1 + 0.5, draw: () => drawIcon(ctx, '🐭', view.ox + (6 + Math.cos(a) * 3.6) * T, view.oy + (4.6 + Math.sin(a * 2) * 1.1) * T, T * 0.36) });
   }
   const pl = g.player;
   items.push({ y: pl.y + 0.95, draw: () => drawPlayer(ctx, view.ox + pl.x * T + T / 2, view.oy + pl.y * T + T * 0.45, T, pl.face, !!(g.walk && g.walk.moving), t) });
@@ -1149,7 +1192,7 @@ const LocalSave = {
 // ============================================================================
 // 7. GAME
 // ============================================================================
-const newAnimal = () => ({ health: 100, growth: 0, prog: 0, ready: false });
+const newAnimal = () => ({ health: 100, growth: 0, prog: 0, ready: false, hunger: 0, sick: false, sickDays: 0, rec: 0, well: 0, dead: false });
 const SPEED = 4.2;   // ô / giây
 
 class FarmGame {
@@ -1192,16 +1235,19 @@ class FarmGame {
     this.day = 1;
     this.weather = 'sunny';
     this.money = START.money;
-    this.energy = ENERGY_MAX;
+    this.energy = ENERGY_BASE;
     this.level = 1;
     this.xp = 0;
-    this.pets = { dog: false, cat: false };
+    this.pets = { dog: 0, cat: 0 };
+    this.petAnim = [];
+    this.furn = {};
+    this.bagLevel = 0;
+    this.cooked = {};
     this.decor = [];
     this.tasks = [];
     this.today = {};
     this.todaySent = [];
     this.sentSeen = new Set();
-    this.dogPos = null;
     this.bag = { ...START.bag };
     this.fridge = {};
     this.tool = null;
@@ -1231,7 +1277,7 @@ class FarmGame {
   snapshot() {
     return {
       v: SAVE_VERSION, updatedAt: Date.now(),
-      day: this.day, weather: this.weather, money: this.money, energy: this.energy, level: this.level, xp: this.xp, pets: this.pets, decor: this.decor,
+      day: this.day, weather: this.weather, money: this.money, energy: this.energy, level: this.level, xp: this.xp, pets: this.pets, decor: this.decor, furn: this.furn, bagLevel: this.bagLevel, cooked: this.cooked,
       tasks: this.tasks, today: this.today, todaySent: this.todaySent, sentSeen: [...this.sentSeen],
       bag: this.bag, fridge: this.fridge, plots: this.plots, trees: this.trees, pens: this.pens, pond: this.pond,
       sceneId: this.sceneId, player: { x: this.player.x, y: this.player.y, face: this.player.face },
@@ -1249,10 +1295,14 @@ class FarmGame {
     this.day = int(s.day, 1, 100000, 1);
     this.weather = WEATHERS[s.weather] ? s.weather : 'sunny';
     this.money = int(s.money, 0, 1e9, START.money);
-    this.energy = int(s.energy, 0, ENERGY_MAX, ENERGY_MAX);
+    this.energy = int(s.energy, 0, 9999, ENERGY_BASE);
     this.level = int(s.level, 1, LEVEL_MAX, 1);
     this.xp = int(s.xp, 0, 1e9, 0);
-    if (s.pets) this.pets = { dog: !!s.pets.dog, cat: !!s.pets.cat };
+    const petN = (v) => (v === true ? 1 : int(v, 0, MAX_PET_EACH, 0));   // save cũ: true = 1 con
+    if (s.pets) this.pets = { dog: petN(s.pets.dog), cat: petN(s.pets.cat) };
+    this.bagLevel = int(s.bagLevel, 0, BAG_TIERS.length - 1, 0);
+    if (s.furn && typeof s.furn === 'object') FURN.forEach(f => { const tr = int(s.furn[f.id], 0, 3, 0); if (tr) this.furn[f.id] = tr; });
+    if (s.cooked && typeof s.cooked === 'object') RECIPES.forEach(r => { const n = int(s.cooked[r.id], 0, 999999, 0); if (n) this.cooked[r.id] = n; });
     this.decor = Array.isArray(s.decor) ? s.decor.filter(k => DECOR.some(d => d.id === k)) : [];
     this.tasks = Array.isArray(s.tasks) ? s.tasks.filter(t => t && typeof t.key === 'string').slice(0, 6).map(t => ({ key: t.key, need: int(t.need, 1, 99, 1), zh: String(t.zh || ''), pin: String(t.pin || ''), vi: String(t.vi || ''), done: !!t.done })) : [];
     this.today = s.today && typeof s.today === 'object' ? Object.fromEntries(Object.entries(s.today).map(([k, v]) => [k, int(v, 0, 999, 0)])) : {};
@@ -1286,7 +1336,7 @@ class FarmGame {
       const bools = (arr, n) => Array.from({ length: n }, (_, i) => !!(Array.isArray(arr) && arr[i]));
       this.pens[id] = {
         owned: id === 'chicken' ? true : !!src.owned,
-        animals: (Array.isArray(src.animals) ? src.animals : []).slice(0, a.slots).map(an => ({ health: int(an && an.health, 0, 100, 100), growth: int(an && an.growth, 0, 999, 0), prog: int(an && an.prog, 0, 99, 0), ready: !!(an && an.ready) })),
+        animals: (Array.isArray(src.animals) ? src.animals : []).slice(0, a.slots).map(an => ({ health: int(an && an.health, 0, 100, 100), growth: int(an && an.growth, 0, 999, 0), prog: int(an && an.prog, 0, 99, 0), ready: !!(an && an.ready), hunger: int(an && an.hunger, 0, 99, 0), sick: !!(an && an.sick && !an.dead), sickDays: int(an && an.sickDays, 0, 99, 0), rec: int(an && an.rec, 0, 3, 0), well: int(an && an.well, 0, 9999, 0), dead: !!(an && an.dead) })),
         food: bools(src.food, a.slots), water: bools(src.water, a.slots), nests: bools(src.nests, id === 'chicken' ? 6 : 0),
         poops: (Array.isArray(src.poops) ? src.poops : []).filter(p => Array.isArray(p) && p.length === 2).slice(0, 10).map(([x, y]) => [int(x, 2, 10, 5), int(y, 2, 7, 4)])
       };
@@ -1303,7 +1353,9 @@ class FarmGame {
     this.savedAt = num(s.updatedAt, 0);
     this.refreshBeds();
     if (!this.tasks.length && !this.todaySent.length) this.startDay();
+    this.energy = Math.min(this.energy, this.energyMax());
     this.rebuild();
+    this.syncPets();
     const sc = this.scene;
     if (this.player.x >= sc.cols || this.player.y >= sc.rows || sc.block[this.player.y][this.player.x]) { this.sceneId = 'farm'; this.rebuild(); this.player = { x: 3, y: 6, face: 'down' }; }
     return true;
@@ -1372,7 +1424,11 @@ class FarmGame {
   has(id, n = 1) { return (this.bag[id] || 0) >= n; }
   bagUsed() { return Object.keys(this.bag).reduce((s, k) => s + (countsInBag(ITEMS[k]) ? this.bag[k] : 0), 0); }
   fridgeUsed() { return Object.values(this.fridge).reduce((s, n) => s + n, 0); }
-  bagCap() { return BAG_CAP + (this.has('basket') ? BASKET_BONUS : 0); }
+  bagCap() { return BAG_TIERS[this.bagLevel].cap + (this.has('basket') ? BASKET_BONUS : 0); }
+  furnTier(id) { const f = FURN.find(x => x.id === id); if (!f) return 0; if (f.decor) return this.decor.includes(id) ? Math.max(1, Math.min(3, this.furn[id] || 1)) : 0; return Math.min(3, this.furn[id] || 0); }
+  furnBonus() { return Math.min(FURN_CAP, FURN.reduce((sum, f) => sum + FURN_BONUS[this.furnTier(f.id)], 0)); }
+  levelEnergyBonus() { return ENERGY_PER_MILESTONE * ENERGY_MILESTONES.filter(m => this.level >= m).length; }
+  energyMax() { return ENERGY_BASE + this.levelEnergyBonus() + this.furnBonus(); }
   bagFree() { return this.bagCap() - this.bagUsed(); }
   canAdd(id, n) {
     const it = ITEMS[id];
@@ -1407,7 +1463,7 @@ class FarmGame {
     this.say('我累了');
     return false;
   }
-  useEnergy(n) { this.energy = clamp(this.energy - n, 0, ENERGY_MAX); this.renderHUD(); this.markDirty(); }
+  useEnergy(n) { this.energy = clamp(this.energy - n, 0, this.energyMax()); this.renderHUD(); this.markDirty(); }
   addMoney(n, sold = 0) {
     this.money += n;
     if (n > 0) { this.stats.income += n; this.dayIncome += n; this.stats.sold += sold; }
@@ -1418,9 +1474,21 @@ class FarmGame {
   animalCount(id) { return this.pens[id].owned ? this.pens[id].animals.length : 0; }
   maxAnimals(id) { return this.level >= ANIMALS[id].lvl ? MAX_PER_PEN : 0; }
   npcWho() { return this.npc ? NPC_DLG[this.npc.dlg].who : NPC_TOPIC['Chào hỏi, thăm nhà']; }
+  // trạng thái từng con (Bình thường / Đói / Mệt mỏi / Bị bệnh / Đang hồi phục / Đã chết)
+  aniState(id, i) {
+    const pen = this.pens[id];
+    const an = pen && pen.animals[i];
+    if (!an) return 'normal';
+    if (an.dead) return 'dead';
+    if (an.rec > 0) return 'recover';
+    if (an.sick) return 'sick';
+    if (pen.food[i] && pen.water[i]) return 'normal';
+    return an.hunger >= 2 ? 'tired' : an.hunger === 1 ? 'hungry' : 'normal';
+  }
   penNeedsCare(id) {
     const p = this.pens[id];
     if (!p.owned) return false;
+    if (id === 'chicken' && p.animals.some(a => a.sick && !a.dead)) return true;
     return p.animals.some((_, i) => !p.food[i] || !p.water[i]) || p.poops.length > 0 || p.nests.some(Boolean) || p.animals.some(a => a.ready) || (id === 'pig' && p.animals.some(pigGrown));
   }
 
@@ -1448,17 +1516,24 @@ class FarmGame {
     this.audio.door();
     if (id === 'forest') { this.stats.forest += 1; this.learn('后院'); this.learn('果园'); }
     this.learn(SCENES[id].chn);
-    this.dogPos = { x, y };
     this.renderHUD();
     this.markDirty();
   }
 
   // Nhấp vào bản đồ
-  onMapClick(tx, ty) {
+  onMapClick(tx, ty, fx, fy) {
     if (this.isModalOpen() || this.isTitleVisible()) return;
     const sc = this.scene;
     if (tx < 0 || ty < 0 || tx >= sc.cols || ty >= sc.rows) return;
     this.audio.init();
+    if (!this.inspect && fx != null) {
+      if (this.sceneId === 'pen_chicken' && this.chickSpots) {
+        const i = this.chickSpots.findIndex(sp => sp && Math.hypot(fx - sp.x, fy - sp.y) < 0.55);
+        if (i >= 0) return this.openAnimalInfo('chicken', i);
+      }
+      const pet = this.hitPet(fx, fy);
+      if (pet) { this.audio.pop(); const K = PET_KINDS[pet.kind]; this.showCard(K.chn, pet.kind === 'dog' ? 'Chó chơi ở sân nông trại.' : 'Mèo ở trong nhà.'); return; }
+    }
     const o = objAt(sc, tx, ty);
     if (this.inspect) { this.inspectAt(o, tx, ty); return; }
     if (o) { this.interact(o, tx, ty); return; }
@@ -1497,7 +1572,6 @@ class FarmGame {
     }
     w.k += dt * SPEED;
     if (w.k >= 1) {
-      if (this.pets.dog) this.dogTarget = [w.from[0], w.from[1]];
       this.player.x = w.to[0];
       this.player.y = w.to[1];
       w.to = null;
@@ -1532,7 +1606,7 @@ class FarmGame {
     this.lastFrame = ts;
     if (this.isTitleVisible()) return;
     if (!this.isModalOpen()) this.updateWalk(dt);
-    this.updateDog(dt);
+    this.updatePets(dt);
     const rainOn = !this.sleeping && !this.isTitleVisible() && this.weather === 'rain' && (this.sceneId === 'farm' || this.sceneId === 'forest');
     if (rainOn !== this._rainOn) { this._rainOn = rainOn; this.audio.setRain(rainOn); }
     this.layoutView();
@@ -1550,17 +1624,6 @@ class FarmGame {
       ctx.setLineDash([]);
     }
     if (ts - (this._lastSave || 0) > 8000) { this._lastSave = ts; this.saveNow(); }
-  }
-  updateDog(dt) {
-    if (!this.pets.dog) return;
-    if (!this.dogPos) this.dogPos = { x: this.player.x, y: this.player.y };
-    const tg = this.dogTarget || [this.player.x, this.player.y];
-    const dx = tg[0] - this.dogPos.x;
-    const dy = tg[1] - this.dogPos.y;
-    const d = Math.hypot(dx, dy);
-    this.dogPos.moving = d > 0.05;
-    if (d > 6) { this.dogPos.x = tg[0]; this.dogPos.y = tg[1]; return; }
-    if (d > 0.05) { const k = Math.min(1, (dt * SPEED * 1.1) / d); this.dogPos.x += dx * k; this.dogPos.y += dy * k; }
   }
   layoutView() {
     const cv = this.$('farm-canvas');
@@ -1588,6 +1651,12 @@ class FarmGame {
     const ox = mw <= cw ? (cw - mw) / 2 : clamp(cw / 2 - px, cw - mw, 0);
     const oy = mh <= ch ? (ch - mh) / 2 : clamp(ch / 2 - py, ch - mh, 0);
     this.view = { T, ox, oy, cw, ch };
+  }
+  eventPos(e) {
+    const cv = this.$('farm-canvas');
+    const r = cv.getBoundingClientRect();
+    const k = cv.clientWidth / r.width;
+    return [((e.clientX - r.left) * k - this.view.ox) / this.view.T, ((e.clientY - r.top) * k - this.view.oy) / this.view.T];
   }
   eventTile(e) {
     const cv = this.$('farm-canvas');
@@ -1652,7 +1721,7 @@ class FarmGame {
     if (k === 'npc') return this.goDo(o, () => this.openDialogue());
     if (k === 'bed') return this.goDo(o, () => this.askSleep());
     if (k === 'stove') return this.goDo(o, () => this.openKitchen());
-    if (k === 'fridge') return this.goDo(o, () => { this.audio.door(); this.learn('冰箱'); this.showToast('🧊', '冰箱 bīngxiāng · tủ lạnh: chỉ để trang trí, không cần cất đồ vào.'); });
+    if (k === 'fridge') return this.goDo(o, () => this.openFridge());
     if (k === 'table') return this.goDo(o, () => this.openEat());
     if (k === 'decor') return this.showCard(o.word);
     if (k === 'tray') return this.tapTray(o);
@@ -1906,8 +1975,75 @@ class FarmGame {
     const extra = a.id === 'pig' ? ` · lớn ${Math.min(an.growth, a.growDays)}/${a.growDays} ngày`
       : a.product ? ` · ${itemOf(a.product).chn} sau ${Math.max(0, a.cycle - an.prog)} ngày được chăm` : '';
     this.say(a.chn);
-    this.showToast(a.icon, `${a.chn} ${a.pin} · ${a.vi} số ${o.slot + 1}: ${an.health >= 70 ? '健康 khỏe' : an.health >= 40 ? 'hơi yếu' : '🤒 ốm — cho ăn, uống, dọn chuồng'} (${an.health}%) · hôm nay ${fed ? 'đã no' : '饿 còn đói/khát'}${extra}`);
+    const stt = ANI_STATES[this.aniState(a.id, o.slot)];
+    this.showToast(a.icon, `${a.chn} ${a.pin} · ${a.vi} số ${o.slot + 1} · ${stt.icon} ${stt.chn} ${stt.vi}: ${an.health >= 70 ? '健康 khỏe' : an.health >= 40 ? 'hơi yếu' : '🤒 ốm — cho ăn, uống, dọn chuồng'} (${an.health}%) · hôm nay ${fed ? 'đã no' : '饿 còn đói/khát'}${extra}`);
     return null;
+  }
+  openAnimalInfo(id, i) {
+    this.infoAnimal = { id, i };
+    this.learn(ANIMALS[id].chn);
+    this.audio.cluck();
+    this.renderAnimalInfo();
+    this.openModal('modal-animal');
+  }
+  renderAnimalInfo() {
+    const { id, i } = this.infoAnimal || {};
+    const a = ANIMALS[id];
+    const pen = a && this.pens[id];
+    const an = pen && pen.animals[i];
+    if (!an) { this.closeModal('modal-animal'); return; }
+    const st = this.aniState(id, i);
+    const S = ANI_STATES[st];
+    const fed = pen.food[i] && pen.water[i];
+    const guide = {
+      normal: fed ? 'Gà khỏe và đã được ăn & uống đủ hôm nay. Sáng mai sẽ có trứng.' : 'Hôm nay chưa cho ăn/uống: đổ 饲料 vào 食槽 và nước vào 水槽 trước khi đi ngủ. Bỏ đói gà sẽ đói → mệt → bệnh.',
+      hungry: 'Gà đang ĐÓI và không đẻ trứng. Cho ăn & uống ngay! Bỏ đói thêm 1 ngày nữa gà sẽ mệt mỏi, đến ngày thứ 3 sẽ mắc bệnh.',
+      tired: 'Gà MỆT MỎI vì bị bỏ đói 2 ngày. Cho ăn & uống ngay hôm nay, nếu không sang ngày sau gà sẽ mắc bệnh.',
+      sick: `Gà BỊ BỆNH, không đẻ trứng. Dùng 注射器 (kim tiêm) hoặc 药箱 (hộp thuốc) để chữa. Nếu không chữa, gà sẽ chết sau ${Math.max(1, DEAD_AFTER + 1 - an.sickDays)} đêm nữa.`,
+      recover: `Gà đang HỒI PHỤC, còn ${an.rec} ngày (qua ${an.rec} đêm ngủ). Chưa đẻ trứng; vẫn nhớ cho ăn & uống.`,
+      dead: 'Gà đã chết vì bệnh kéo dài không điều trị. Bấm "Chôn" để dọn chỗ cho gà mới.'
+    }[st];
+    const hp = Math.max(0, Math.min(100, an.health));
+    const syr = this.bag.syringe || 0;
+    const med = this.bag.medbox || 0;
+    const treat = st === 'sick' ? `<div class="an-treat"><button type="button" class="g-btn-primary" data-treat="syringe" ${syr ? '' : 'disabled'}>💉 注射器 Tiêm (có ${syr}) · hồi phục 2-3 ngày</button><button type="button" class="g-btn-primary" data-treat="medbox" ${med ? '' : 'disabled'}>💊 药箱 Hộp thuốc (có ${med}) · hồi phục 1 ngày</button>${syr || med ? '' : '<small class="farm-note">Hết thuốc — mua ở 商店 → 饲料.</small>'}</div>` : '';
+    const bury = st === 'dead' ? '<div class="an-treat"><button type="button" class="g-btn-ghost" data-bury="1">🪦 Chôn gà</button></div>' : '';
+    this.$('an-body').innerHTML = `
+      <div class="an-head"><span class="an-ico">${a.icon}</span><div><b class="zh">${a.chn}</b> <small>${this.showPinyin ? escapeHtml(a.pin) + ' · ' : ''}${escapeHtml(a.vi)} số ${i + 1}</small>
+        <div class="an-state ${st}">${S.icon} <b class="zh">${S.chn}</b> ${this.showPinyin ? `<small>${escapeHtml(S.pin)}</small>` : ''} · <b>${S.vi}</b></div></div></div>
+      <div class="an-row">Sức khỏe: <span class="an-bar"><i style="width:${hp}%"></i></span> <b>${hp}%</b></div>
+      <div class="an-row">Hôm nay: ${st === 'dead' ? '—' : fed ? '<b class="ok">đã ăn & uống đủ ✔</b>' : `<b class="bad">chưa đủ (${pen.food[i] ? 'có đồ ăn' : 'thiếu đồ ăn'}, ${pen.water[i] ? 'có nước' : 'thiếu nước'})</b>`}</div>
+      ${an.rec > 0 ? `<div class="an-row">Hồi phục còn: <b>${an.rec} ngày</b></div>` : ''}
+      <p class="farm-note an-guide">${guide}</p>${treat}${bury}`;
+  }
+  treatChicken(i, kind) {
+    const an = this.pens.chicken.animals[i];
+    if (!an || an.dead || !an.sick || an.rec > 0) return;
+    const item = kind === 'medbox' ? 'medbox' : 'syringe';
+    if (!this.take(item, 1)) return this.warn('💊', 'Hết thuốc — mua ở 商店.');
+    an.sick = false;
+    an.sickDays = 0;
+    an.hunger = 0;
+    an.rec = item === 'medbox' ? 1 : (Math.random() < 0.5 ? 2 : 3);
+    an.health = Math.max(an.health, 50);
+    this.learn(ITEMS[item].chn);
+    this.audio.unlock();
+    this.showToast(ITEMS[item].icon, `Đã chữa cho gà số ${i + 1}: hồi phục sau ${an.rec} ngày (chưa đẻ trứng trong lúc này).`);
+    this.renderAnimalInfo();
+    this.renderHUD();
+    this.markDirty();
+  }
+  buryChicken(i) {
+    const pen = this.pens.chicken;
+    const an = pen.animals[i];
+    if (!an || !an.dead) return;
+    pen.animals.splice(i, 1);
+    pen.nests.splice(i, 1); pen.nests.push(false);
+    pen.food.splice(i, 1); pen.food.push(false);
+    pen.water.splice(i, 1); pen.water.push(false);
+    this.closeModal('modal-animal');
+    this.showToast('🪦', 'Đã chôn gà. Chuồng có chỗ trống để mua gà mới.');
+    this.markDirty();
   }
   harvestPig(slot) {
     const here = this.penHere();
@@ -2106,18 +2242,52 @@ class FarmGame {
       if (!pen.owned || !pen.animals.length) return;
       let fedN = 0;
       let made = 0;
+      let newSick = 0;
+      let newDead = 0;
+      let hungryN = 0;
+      let recovered = 0;
+      // bệnh ngẫu nhiên (chỉ gà): sau ≥10 ngày khỏe, xác suất nhỏ mỗi ngày; tối đa 1 con/đêm và không để quá nửa đàn cùng ốm
+      let randIdx = -1;
+      if (id === 'chicken') {
+        const bad = pen.animals.filter(an => !an.dead && (an.sick || an.rec > 0)).length;
+        if (bad < Math.ceil(pen.animals.length / 2)) {
+          const cand = pen.animals.map((an, i) => ({ an, i })).filter(({ an, i }) => !an.dead && !an.sick && !an.rec && an.well >= SICK_AFTER && pen.food[i] && pen.water[i]);
+          for (const c of shuffle(cand)) { if (Math.random() < sickChance(c.an.well)) { randIdx = c.i; break; } }
+        }
+      }
       pen.animals.forEach((an, i) => {
+        if (id === 'chicken' && an.dead) return;
         const fed = pen.food[i] && pen.water[i];
+        const wasRec = an.rec > 0;
         if (fed) { fedN += 1; an.health = clamp(an.health + 10, 0, 100); an.growth += 1; if (a.cycle) an.prog += 1; } else an.health = clamp(an.health - 20, 0, 100);
         an.health = clamp(an.health - 5 * pen.poops.length, 0, 100);
-        if (a.cycle && fed && an.health >= 40 && an.prog >= a.cycle) {
+        if (id === 'chicken') {
+          if (an.rec > 0) {
+            an.rec -= 1;
+            if (an.rec <= 0) { an.rec = 0; an.sick = false; an.sickDays = 0; an.hunger = 0; an.well = 0; an.health = Math.max(an.health, 70); recovered += 1; }
+          } else if (an.sick) {
+            an.sickDays += 1;
+            an.health = clamp(Math.min(an.health, 30) - 5, 1, 100);
+            if (an.sickDays > DEAD_AFTER) { an.dead = true; an.health = 0; an.ready = false; newDead += 1; }
+          } else {
+            if (fed) { an.hunger = 0; an.well += 1; } else an.hunger += 1;
+            if (an.hunger >= 3 || i === randIdx) { an.sick = true; an.sickDays = 0; an.hunger = 0; an.well = 0; an.health = Math.min(an.health, 30); newSick += 1; }
+            else if (an.hunger > 0) hungryN += 1;
+          }
+        } else an.hunger = fed ? 0 : an.hunger + 1;
+        const canLay = id !== 'chicken' || (!an.dead && !an.sick && !wasRec);
+        if (a.cycle && fed && canLay && an.health >= 40 && an.prog >= a.cycle) {
           an.prog = 0;
           if (id === 'chicken') { if (!pen.nests[i]) { pen.nests[i] = true; made += 1; } } else if (!an.ready) { an.ready = true; made += 1; }
         }
       });
+      if (newSick) sum.push(`🤒 <span class="bad">${newSick} gà mắc bệnh</span> — bấm vào gà, dùng 注射器 hoặc 药箱 để chữa (sau ${DEAD_AFTER} ngày không chữa gà sẽ chết).`);
+      if (newDead) sum.push(`🪦 <span class="bad">${newDead} gà đã chết</span> vì bệnh không được điều trị.`);
+      if (hungryN) sum.push(`🍽️ ${hungryN} gà đói/mệt vì hôm qua chưa được cho ăn đủ.`);
+      if (recovered) sum.push(`💊 ${recovered} gà đã hồi phục.`);
       pen.food = pen.food.map(() => false);
       pen.water = pen.water.map(() => false);
-      pen.animals.forEach(() => {
+      pen.animals.filter(an => !an.dead).forEach(() => {
         if (Math.random() < 0.5 && pen.poops.length < 8) {
           const spots = [];
           for (let y = 3; y <= 6; y++) for (let x = 3; x <= 9; x++) if (!pen.poops.some(p => p[0] === x && p[1] === y) && !(id !== 'chicken' && ANIMAL_SPOTS.some(s => s[0] === x && s[1] === y))) spots.push([x, y]);
@@ -2125,7 +2295,7 @@ class FarmGame {
           if (s) pen.poops.push(s);
         }
       });
-      const sick = pen.animals.filter(an => an.health < 40).length;
+      const sick = id === 'chicken' ? 0 : pen.animals.filter(an => an.health < 40).length;
       sum.push(`${a.icon} ${a.pen.chn}: ${fedN}/${pen.animals.length} con được chăm đủ${made && a.product ? ` · có <b>${made} ${itemOf(a.product).chn}</b>` : ''}${sick ? ` · <span class="bad">${sick} con 🤒 yếu</span>` : ''}${pen.poops.length ? ` · ${pen.poops.length} chỗ phân cần dọn` : ''}.`);
     });
     if (this.pond.fish.length) {
@@ -2137,7 +2307,7 @@ class FarmGame {
     this.day += 1;
     this.dayIncome = 0;
     this.weather = rollWeather();
-    this.energy = ENERGY_MAX;
+    this.energy = this.energyMax();
     const w = WEATHERS[this.weather];
     if (this.weather === 'rain') {
       this.plots.forEach(p => { if (p.crop && !p.ripe) p.watered = true; });
@@ -2149,7 +2319,6 @@ class FarmGame {
     this.walk = null;
     this.rebuild();
     this.player = { x: 3, y: 2, face: 'left' };
-    this.dogPos = { x: 4, y: 3 };
     ['睡觉', '天', '天气', w.chn].forEach(x => this.learn(x));
     this.saveNow(true);
     this.renderHUD();
@@ -2158,7 +2327,7 @@ class FarmGame {
     if (box) box.innerHTML = `
       <div class="day-big"><span class="zh">第${this.day}天</span> · Ngày ${this.day} <small>⭐ Cấp ${this.level}</small></div>
       <div class="day-weather">${w.icon} ${this.wordLine({ zh: `今天${w.chn}`, pin: `Jīntiān ${w.pin}`, vi: `Hôm nay ${w.vi}` })}<small>${w.note}</small></div>
-      <div class="day-energy">⚡ Năng lượng hồi đầy <b>${ENERGY_MAX}/${ENERGY_MAX}</b> · 💰 ${this.money}元</div>
+      <div class="day-energy">⚡ Năng lượng hồi đầy <b>${this.energyMax()}/${this.energyMax()}</b> · 💰 ${this.money}元</div>
       <ul class="day-sum">${sum.map(s => `<li>${s}</li>`).join('') || '<li>Một đêm yên bình.</li>'}</ul>
       <h4 class="tm-title">📝 <span class="zh">今天的句子</span> · Mẫu câu hôm nay</h4>
       <div class="sent-list">${this.todaySent.map(i => `<div class="sent">${this.wordLine(S(i))}<em>${escapeHtml(S(i).topic)}</em></div>`).join('')}</div>
@@ -2235,7 +2404,7 @@ class FarmGame {
     this.say('欢迎光临！你想买什么？');
   }
   renderMarket() {
-    const TABS = [['seed', '种子', 'Hạt giống'], ['animal', '动物', 'Động vật'], ['feed', '饲料', 'Thức ăn'], ['tool', '工具', 'Dụng cụ'], ['decor', '装饰', 'Trang trí'], ['sell', '收购', 'Bán hàng']];
+    const TABS = [['seed', '种子', 'Hạt giống'], ['animal', '动物', 'Động vật'], ['feed', '饲料', 'Thức ăn'], ['tool', '工具', 'Dụng cụ'], ['decor', '装饰', 'Trang trí'], ['furn', '家具', 'Nội thất'], ['bag', '背包', 'Túi đồ'], ['sell', '收购', 'Bán hàng']];
     this.$('mk-title').innerHTML = '🏪 <span class="zh">商店</span> · Cửa hàng';
     this.$('mk-money').textContent = `${this.money}元`;
     this.$('mk-bag').textContent = `${this.bagUsed()}/${this.bagCap()}`;
@@ -2262,11 +2431,12 @@ class FarmGame {
         return card({ icon: a.icon, chn: a.chn, pin: a.pin, vi: `${a.vi} · ${n}/${MAX_PER_PEN} con`, price: `${a.price}元/${a.q}`, locked, lvl: a.lvl, btns });
       });
       Object.values(PETS).forEach(p => rows.push(card({ icon: p.icon, chn: p.chn, pin: p.pin, vi: `${p.vi} · thú cưng`, price: `${p.price}元`, locked: lock(p.lvl), lvl: p.lvl,
-        btns: this.pets[p.id] ? '<em class="ok">✔ Đã nuôi</em>' : `<button type="button" class="g-btn-chip" data-buypet="${p.id}" ${this.money >= p.price ? '' : 'disabled'}>买</button>` })));
+        btns: (this.pets[p.id] || 0) >= MAX_PET_EACH ? `<em class="ok">✔ Đủ ${MAX_PET_EACH} con</em>` : `<button type="button" class="g-btn-chip" data-buypet="${p.id}" ${this.money >= p.price ? '' : 'disabled'}>买${this.pets[p.id] ? ` thêm (đang có ${this.pets[p.id]})` : ''}</button>` })));
       ANIMAL_IDS.forEach(id => {
         const a = ANIMALS[id];
         if (id === 'pig') return;   // heo: thu hoạch thịt trong chuồng, không bán cả con
         this.pens[id].animals.forEach((an, i) => {
+          if (an.dead) return;
           const price = a.id === 'pig' && an.growth >= a.growDays ? a.sellGrown : a.sell;
           rows.push(card({ icon: a.icon, chn: `卖 ${a.chn} #${i + 1}`, pin: a.pin, vi: `bán ${a.vi.toLowerCase()}${a.id === 'pig' ? (an.growth >= a.growDays ? ' · 长大了' : ` · lớn ${an.growth}/${a.growDays}`) : ''}`, price: `${price}元`, btns: `<button type="button" class="g-btn-chip" data-sellanimal="${id}:${i}">卖</button>` }));
         });
@@ -2279,6 +2449,28 @@ class FarmGame {
         btns: this.decor.includes(d.id) ? '<em class="ok">✔ Đã đặt trong nhà</em>' : `<button type="button" class="g-btn-chip" data-buydecor="${d.id}" ${this.money >= d.price ? '' : 'disabled'}>买</button>` })).join('');
       return;
     }
+    if (t === 'furn') {
+      grid.innerHTML = `<p class="farm-note mk-note">⚡ Nội thất cộng <b>+${this.furnBonus()}/${FURN_CAP}</b> năng lượng tối đa (hiện ${this.energyMax()}). Mỗi món chỉ tính 1 lần; nâng cấp sẽ THAY chỉ số cũ, không cộng dồn.</p>` + FURN.map(f => {
+        const tier = this.furnTier(f.id);
+        const locked = f.decor && tier === 0 && lock(f.lvl);
+        const btns = tier >= 3 ? '<em class="ok">✔ Đặc biệt (tối đa)</em>' : `<button type="button" class="g-btn-chip" data-upfurn="${f.id}" ${this.money >= f.prices[tier] ? '' : 'disabled'}>${tier ? '升级 Nâng cấp' : '买 Mua'} → ${FURN_TIERS[tier]} +${FURN_BONUS[tier + 1]}⚡</button>`;
+        return card({ icon: f.icon, chn: f.chn, pin: f.pin, vi: `${f.vi} · ${tier ? `${FURN_TIERS[tier - 1]} (+${FURN_BONUS[tier]}⚡)` : 'chưa có'}`, price: tier >= 3 ? '—' : `${f.prices[tier]}元`, locked, lvl: f.lvl, btns });
+      }).join('');
+      return;
+    }
+    if (t === 'bag') {
+      grid.innerHTML = `<p class="farm-note mk-note">🎒 Túi mới THAY túi cũ (mỗi cấp +15 ô), vật phẩm trong túi giữ nguyên. Cần đủ Level và tiền, mua lần lượt từng cấp. Hiện: <b>${BAG_TIERS[this.bagLevel].vi}</b> (${this.bagCap()} ô).</p>` + BAG_TIERS.map((b, i) => {
+        let btns;
+        if (i === this.bagLevel) btns = '<em class="ok">✔ Đang sử dụng</em>';
+        else if (i < this.bagLevel) btns = '<em>Đã thay thế</em>';
+        else if (i > this.bagLevel + 1) btns = `<em>Mua túi cấp ${i} trước</em>`;
+        else if (this.level < b.lvl) btns = `<em class="bad">🔒 Chưa đủ Level (cần ${b.lvl})</em>`;
+        else if (this.money < b.price) btns = '<em class="bad">Chưa đủ tiền</em>';
+        else btns = `<button type="button" class="g-btn-chip" data-buybag="${i}">买 Mua</button>`;
+        return card({ icon: b.icon, chn: b.chn, pin: b.pin, vi: `${b.vi} · ${b.cap} ô · Level ${b.lvl}`, price: b.price ? `${b.price}元` : 'Miễn phí', btns });
+      }).join('');
+      return;
+    }
     if (t === 'sell') {
       const list = Object.keys(this.bag).filter(k => SELLABLE.includes(ITEMS[k].kind));
       grid.innerHTML = list.map(k => { const it = ITEMS[k]; return card({ icon: it.icon, chn: it.chn, pin: it.pin, vi: `${it.vi} · có ${this.bag[k]}`, price: `${it.sell}元/${it.q}`, btns: `<button type="button" class="g-btn-chip" data-sell="${k}:1">卖 1</button><button type="button" class="g-btn-chip" data-sell="${k}:all">卖全部</button>` }); }).join('')
@@ -2287,12 +2479,12 @@ class FarmGame {
     }
     let items = [];
     if (t === 'seed') items = Object.values(ITEMS).filter(i => ['seed', 'sapling', 'fry'].includes(i.kind)).sort((a, b) => a.lvl - b.lvl);
-    if (t === 'feed') items = ['feed', 'fishfood', 'rice', 'oil'].map(k => ITEMS[k]);
+    if (t === 'feed') items = ['feed', 'fishfood', 'rice', 'oil', 'syringe', 'medbox'].map(k => ITEMS[k]);
     if (t === 'tool') items = ['hoe', 'can', 'fert', 'rod', 'bait'].map(k => ITEMS[k]);
     grid.innerHTML = items.map(it => {
       const isTool = it.kind === 'tool';
       const owned = isTool && this.has(it.id);
-      const extra = it.kind === 'seed' ? ` · ${itemOf(it.seedOf).waits[0]} ngày, ${itemOf(it.seedOf).harvests} lứa` : it.id === 'basket' ? ` · túi +${BASKET_BONUS} chỗ` : it.id === 'fert' ? ' · cây lớn nhanh 1 ngày' : it.id === 'gloves' ? ' · dọn luống héo nhẹ hơn' : '';
+      const extra = it.kind === 'seed' ? ` · ${itemOf(it.seedOf).waits[0]} ngày, ${itemOf(it.seedOf).harvests} lứa` : it.id === 'basket' ? ` · túi +${BASKET_BONUS} chỗ` : it.id === 'fert' ? ' · cây lớn nhanh 1 ngày' : it.id === 'gloves' ? ' · dọn luống héo nhẹ hơn' : it.id === 'syringe' ? ' · chữa gà bệnh, hồi phục 2-3 ngày' : it.id === 'medbox' ? ' · chữa gà bệnh, hồi phục sau 1 ngày' : '';
       return card({ icon: it.kind === 'seed' ? itemOf(it.seedOf).icon : it.icon, chn: it.chn, pin: it.pin, vi: `${it.vi}${extra}${this.bag[it.id] && !isTool ? ` · có ${this.bag[it.id]}` : ''}`, price: `${it.buy}元/${it.q}`, locked: lock(it.lvl || 1), lvl: it.lvl,
         btns: owned ? '<em class="ok">✔ Đã có</em>' : isTool ? `<button type="button" class="g-btn-chip" data-buy="${it.id}:1" ${this.money >= it.buy ? '' : 'disabled'}>买</button>`
           : `<button type="button" class="g-btn-chip" data-buy="${it.id}:1" ${this.money >= it.buy ? '' : 'disabled'}>买 1</button><button type="button" class="g-btn-chip" data-buy="${it.id}:5" ${this.money >= it.buy * 5 ? '' : 'disabled'}>买 5</button>` });
@@ -2303,7 +2495,7 @@ class FarmGame {
     if ((it.lvl || 1) > this.level) return;
     const cost = it.buy * n;
     if (this.money < cost) return this.warn('💰', `Không đủ tiền (cần ${cost}元).`);
-    if (!this.canAdd(id, n)) return this.warn('🎒', it.kind === 'tool' ? 'Bạn đã có dụng cụ này rồi.' : `Túi không đủ chỗ (${this.bagUsed()}/${this.bagCap()}). Cất đồ vào 冰箱 trong nhà.`);
+    if (!this.canAdd(id, n)) return this.warn('🎒', it.kind === 'tool' ? 'Bạn đã có dụng cụ này rồi.' : `Túi không đủ chỗ (${this.bagUsed()}/${this.bagCap()}). Bán bớt đồ hoặc mua túi lớn hơn ở 商店 → 背包.`);
     this.money -= cost;
     this.give(id, n);
     this.learn(it.chn);
@@ -2335,25 +2527,54 @@ class FarmGame {
   }
   buyPet(id) {
     const p = PETS[id];
-    if (this.pets[id] || this.level < p.lvl || this.money < p.price) return;
+    if ((this.pets[id] || 0) >= MAX_PET_EACH || this.level < p.lvl || this.money < p.price) return;
     this.money -= p.price;
-    this.pets[id] = true;
-    if (id === 'dog') this.dogPos = { x: this.player.x, y: this.player.y };
+    this.pets[id] = (this.pets[id] || 0) + 1;
+    this.syncPets();
     this.learn(p.chn);
     if (id === 'cat') this.learn('老鼠');
     this.audio.unlock();
     this.boothTalk = { zh: `这只${p.chn}很可爱，${p.price}元。`, pin: `Zhè zhī ${p.pin} hěn kě'ài, ${p.price} yuán.`, vi: `Con ${p.vi.toLowerCase()} này đáng yêu lắm, ${p.price} tệ.` };
     this.say(this.boothTalk.zh);
-    this.showToast(p.icon, id === 'dog' ? 'Đã có 狗 chó! Chó sẽ chạy theo bạn khắp nông trại.' : 'Đã có 猫 mèo! Mèo chạy quanh nhà và đuổi bắt 老鼠 chuột.');
+    this.showToast(p.icon, id === 'dog' ? `Đã có 狗 chó thứ ${this.pets.dog}! Chó chạy chơi ở sân nông trại (bên trái vườn rau).` : `Đã có 猫 mèo thứ ${this.pets.cat}! Mèo ở trong nhà — vào nhà xem nhé.`);
     this.renderHUD();
     this.renderMarket();
     this.markDirty();
+  }
+  // Thú cưng: danh sách thực thể khớp đúng số lượng đã mua (không bao giờ nhân bản)
+  syncPets() {
+    const list = this.petAnim || (this.petAnim = []);
+    ['dog', 'cat'].forEach(kind => {
+      const want = this.pets[kind] || 0;
+      const mine = list.filter(p => p.kind === kind);
+      while (mine.length > want) { const p = mine.pop(); list.splice(list.indexOf(p), 1); }
+      while (mine.length < want) {
+        const home = PET_KINDS[kind].home;
+        const sc = home === this.sceneId && this.scene ? this.scene : buildScene(this, home);
+        const p = spawnPet(kind, petTiles(sc, kind), list.filter(x => PET_KINDS[x.kind].home === home), `${kind}${mine.length + 1}`);
+        list.push(p); mine.push(p);
+      }
+    });
+  }
+  updatePets(dt) {
+    if (!this.petAnim || !this.petAnim.length || !this.scene) return;
+    if (!this._ptc || this._ptc.scene !== this.scene) {
+      this._ptc = { scene: this.scene, dog: petTiles(this.scene, 'dog'), cat: petTiles(this.scene, 'cat') };
+      this.petAnim.forEach(p => { if (PET_KINDS[p.kind].home === this.sceneId) fixPetPosition(p, this._ptc[p.kind], this.petAnim.filter(x => PET_KINDS[x.kind].home === this.sceneId)); });
+    }
+    const here = this.petAnim.filter(p => PET_KINDS[p.kind].home === this.sceneId);
+    here.forEach(p => updatePet(p, dt, this._ptc[p.kind], here));
+  }
+  hitPet(fx, fy) {
+    const here = (this.petAnim || []).filter(p => PET_KINDS[p.kind].home === this.sceneId);
+    return here.find(p => Math.hypot(fx - (p.x + 0.5), fy - (p.y + 0.5)) < 0.6) || null;
   }
   buyDecor(id) {
     const d = DECOR.find(x => x.id === id);
     if (!d || this.decor.includes(id) || this.level < d.lvl || this.money < d.price) return;
     this.money -= d.price;
     this.decor.push(id);
+    if (FURN.some(f => f.id === id)) this.furn[id] = 1;
     this.learn(d.chn);
     this.learn('装饰');
     this.audio.unlock();
@@ -2365,11 +2586,42 @@ class FarmGame {
     this.renderMarket();
     this.markDirty();
   }
+  upgradeFurn(id) {
+    const f = FURN.find(x => x.id === id);
+    if (!f) return;
+    const tier = this.furnTier(id);
+    if (tier >= 3) return;
+    if (f.decor && tier === 0) { this.buyDecor(id); return; }
+    const price = f.prices[tier];
+    if (this.money < price) return this.warn('💰', `Không đủ tiền (cần ${price}元).`);
+    this.money -= price;
+    this.furn[id] = tier + 1;
+    this.learn(f.chn);
+    this.audio.unlock();
+    this.showToast(f.icon, `${f.chn} ${f.vi}: ${FURN_TIERS[tier]} (+${FURN_BONUS[tier + 1]}⚡, thay cho +${FURN_BONUS[tier]}). Năng lượng tối đa nay là ${this.energyMax()}.`);
+    this.boothTalk = { zh: `好的，${f.chn}升级了，${price}元。`, pin: `Hǎo de, ${f.pin} shēngjí le, ${price} yuán.`, vi: `Được, ${f.vi.toLowerCase()} đã nâng cấp, ${price} tệ.` };
+    this.say(this.boothTalk.zh);
+    this.renderHUD(); this.renderMarket(); this.markDirty();
+  }
+  buyBag(i) {
+    const b = BAG_TIERS[i];
+    if (!b || i !== this.bagLevel + 1) return;
+    if (this.level < b.lvl) return this.warn('🔒', `Cần đạt Level ${b.lvl} để mua ${b.vi.toLowerCase()}.`);
+    if (this.money < b.price) return this.warn('💰', `Không đủ tiền (cần ${b.price}元).`);
+    this.money -= b.price;
+    this.bagLevel = i;
+    this.learn('背包'); this.learn('买');
+    this.audio.unlock();
+    this.boothTalk = { zh: `好的，${b.chn}，${b.price}元。`, pin: `Hǎo de, ${b.pin}, ${b.price} yuán.`, vi: `Được, ${b.vi.toLowerCase()}, ${b.price} tệ.` };
+    this.say(this.boothTalk.zh);
+    this.showToast(b.icon, `Đã mua ${b.vi.toLowerCase()}: sức chứa ${b.cap} ô (đồ trong túi giữ nguyên).`);
+    this.renderHUD(); this.renderMarket(); this.markDirty();
+  }
   sellAnimal(id, i) {
     const a = ANIMALS[id];
     const pen = this.pens[id];
     const an = pen.animals[i];
-    if (!an || id === 'pig') return;
+    if (!an || id === 'pig' || an.dead) return;
     const price = a.id === 'pig' && an.growth >= a.growDays ? a.sellGrown : a.sell;
     this.confirm(`${a.icon} Bán ${a.vi.toLowerCase()}`, `<p>Bán ${a.vi.toLowerCase()} số ${i + 1} (con vật sống) giá <b>${price}元</b>?</p>`, '卖 Bán', () => {
       pen.animals.splice(i, 1);
@@ -2418,39 +2670,11 @@ class FarmGame {
       <p class="farm-note">Chạm vào món đồ để xem thẻ từ vựng và nghe phát âm.</p>`;
   }
   openFridge() { this.audio.door(); this.learn('冰箱'); this.renderFridge(); this.openModal('modal-fridge'); }
+  // Tủ lạnh: chỉ THỐNG KÊ số phần ăn đã nấu thành công (mỗi món 1 bộ đếm, không lịch sử)
   renderFridge() {
-    this.$('fr-cap').textContent = `Túi ${this.bagUsed()}/${this.bagCap()} · Tủ ${this.fridgeUsed()}/${FRIDGE_CAP}`;
-    const row = (k, n, dir) => { const it = ITEMS[k]; return `<div class="fr-item">${iconHtml(it.icon)}<span><b class="zh">${escapeHtml(it.chn)}</b> <small>${escapeHtml(it.vi)}</small></span><em>${n}</em><button type="button" class="g-btn-chip" data-fr="${dir}:${k}:1">${dir === 'in' ? 'Cất 1 ➜' : '⬅ Lấy 1'}</button><button type="button" class="g-btn-chip" data-fr="${dir}:${k}:all">${dir === 'in' ? 'Cất hết' : 'Lấy hết'}</button></div>`; };
-    const bagKeys = Object.keys(this.bag).filter(k => countsInBag(ITEMS[k]));
-    this.$('fr-bag').innerHTML = bagKeys.map(k => row(k, this.bag[k], 'in')).join('') || '<p class="farm-note">Túi trống.</p>';
-    this.$('fr-fridge').innerHTML = Object.keys(this.fridge).map(k => row(k, this.fridge[k], 'out')).join('') || '<p class="farm-note">Tủ lạnh trống.</p>';
-  }
-  moveFridge(dir, id, mode) {
-    if (dir === 'in') {
-      const n = mode === 'all' ? (this.bag[id] || 0) : 1;
-      const m = Math.min(n, FRIDGE_CAP - this.fridgeUsed());
-      if (m <= 0) return this.warn('🧊', 'Tủ lạnh đã đầy.');
-      this.take(id, m);
-      this.fridge[id] = (this.fridge[id] || 0) + m;
-    } else {
-      const n = mode === 'all' ? (this.fridge[id] || 0) : 1;
-      const m = Math.min(n, this.bagFree());
-      if (m <= 0) return this.warn('🎒', 'Túi đầy.');
-      this.fridge[id] -= m;
-      if (!this.fridge[id]) delete this.fridge[id];
-      this.give(id, m);
-    }
-    this.audio.pop();
-    this.markDirty();
-    this.renderFridge();
-  }
-  storeAll() {
-    Object.keys(this.bag).filter(k => countsInBag(ITEMS[k]) && !['seed', 'sapling', 'fry', 'feed'].includes(ITEMS[k].kind)).forEach(k => {
-      const m = Math.min(this.bag[k], FRIDGE_CAP - this.fridgeUsed());
-      if (m > 0) { this.take(k, m); this.fridge[k] = (this.fridge[k] || 0) + m; }
-    });
-    this.audio.pop();
-    this.renderFridge();
+    const total = RECIPES.reduce((sum, r) => sum + (this.cooked[r.id] || 0), 0);
+    this.$('fr-cap').textContent = `Tổng đã nấu: ${total} phần`;
+    this.$('fr-list').innerHTML = RECIPES.map(r => `<div class="fr-row" data-dish="${r.id}"><span class="fr-ico">${r.icon}</span><span class="fr-nm"><b class="zh">${r.chn}</b>${this.showPinyin ? ` <small class="pin">${escapeHtml(r.pin)}</small>` : ''}<small>${escapeHtml(r.vi)}</small></span><em class="fr-n">${this.cooked[r.id] || 0}</em></div>`).join('');
   }
 
   // --------------------------------------------------------------------------
@@ -2459,15 +2683,15 @@ class FarmGame {
   needOk(id, n) { return id === 'veg' ? VEG_ANY.some(v => this.stockAll(v) >= n) : this.stockAll(id) >= n; }
   openKitchen() { this.audio.pop(); this.learn('厨房'); this.learn('做饭'); this.renderKitchen(); this.openModal('modal-kitchen'); }
   renderKitchen() {
-    this.$('kc-energy').textContent = `⚡ ${this.energy}/${ENERGY_MAX}`;
+    this.$('kc-energy').textContent = `⚡ ${this.energy}/${this.energyMax()}`;
     this.$('kc-list').innerHTML = RECIPES.map(r => {
       const ok = Object.entries(r.need).every(([k, n]) => this.needOk(k, n));
       const need = Object.entries(r.need).map(([k, n]) => {
-        const it = k === 'veg' ? { icon: '🥬', chn: '白菜/空心菜' } : ITEMS[k];
-        const have = k === 'veg' ? VEG_ANY.reduce((s, v) => s + this.stockAll(v), 0) : this.stockAll(k);
-        return `<span class="${have >= n ? 'ok' : 'miss'}">${iconHtml(it.icon)}<span class="zh">${it.chn}</span> ${Math.min(have, n)}/${n}</span>`;
+        const it = k === 'veg' ? { icon: '🥬', chn: '白菜/空心菜', pin: 'báicài / kōngxīncài' } : ITEMS[k];
+        const have = k === 'veg' ? VEG_ANY.reduce((sum, v) => sum + this.stockAll(v), 0) : this.stockAll(k);
+        return `<span class="${have >= n ? 'ok' : 'miss'}" data-need="${k}">${iconHtml(it.icon)}<span class="zh">${it.chn}</span>${this.showPinyin ? `<small class="pin">${escapeHtml(it.pin)}</small>` : ''}<b>${have}/${n}</b></span>`;
       }).join('');
-      return `<div class="rc-card"><span class="rc-ico">${r.icon}</span><div class="rc-info"><b class="zh">${r.chn}</b>${this.showPinyin ? ` <small class="pin">${escapeHtml(r.pin)}</small>` : ''} <small>${escapeHtml(r.vi)}</small><div class="rc-need">${need}</div><small>Ăn hồi ⚡ +${r.energy} · nấu tốn ⚡${ENERGY.cook}</small></div>
+      return `<div class="rc-card"><span class="rc-ico">${r.icon}</span><div class="rc-info"><b class="zh">${r.chn}</b>${this.showPinyin ? ` <small class="pin">${escapeHtml(r.pin)}</small>` : ''} <small>${escapeHtml(r.vi)}</small><div class="rc-need">${need}</div><small>Ăn hồi ⚡ +${r.energy} · nấu tốn ⚡${ENERGY.cook} · đã nấu ${this.cooked[r.id] || 0} phần</small></div>
         <button type="button" class="g-btn-primary" data-cook="${r.id}" ${ok ? '' : 'disabled'}>做 Nấu</button></div>`;
     }).join('');
   }
@@ -2478,6 +2702,7 @@ class FarmGame {
     Object.entries(r.need).forEach(([k, n]) => { if (k === 'veg') this.takeAny(VEG_ANY.find(v => this.stockAll(v) >= n), n); else this.takeAny(k, n); });
     this.useEnergy(ENERGY.cook);
     this.give(r.id, 1);
+    this.cooked[r.id] = (this.cooked[r.id] || 0) + 1;
     this.audio.harvest();
     this.learn(r.chn);
     this.learn('做饭');
@@ -2490,16 +2715,16 @@ class FarmGame {
   }
   openEat() { this.audio.pop(); this.learn('饭桌'); this.learn('吃饭'); this.renderEat(); this.openModal('modal-eat'); }
   renderEat() {
-    this.$('eat-energy').textContent = `⚡ ${this.energy}/${ENERGY_MAX}`;
+    this.$('eat-energy').textContent = `⚡ ${this.energy}/${this.energyMax()}`;
     const dishes = RECIPES.filter(r => this.stockAll(r.id) > 0);
-    this.$('eat-list').innerHTML = dishes.map(r => `<div class="rc-card"><span class="rc-ico">${r.icon}</span><div class="rc-info"><b class="zh">${r.chn}</b> <small>${escapeHtml(r.vi)}</small><small>Có ${this.stockAll(r.id)} phần · ⚡ +${r.energy}</small></div><button type="button" class="g-btn-primary" data-eat="${r.id}" ${this.energy >= ENERGY_MAX ? 'disabled' : ''}>吃 Ăn</button></div>`).join('')
+    this.$('eat-list').innerHTML = dishes.map(r => `<div class="rc-card"><span class="rc-ico">${r.icon}</span><div class="rc-info"><b class="zh">${r.chn}</b> <small>${escapeHtml(r.vi)}</small><small>Có ${this.stockAll(r.id)} phần · ⚡ +${r.energy}</small></div><button type="button" class="g-btn-primary" data-eat="${r.id}" ${this.energy >= this.energyMax() ? 'disabled' : ''}>吃 Ăn</button></div>`).join('')
       || '<p class="farm-note">Chưa có món ăn nào. Vào 厨房 (bếp) nấu 米饭, 炒鸡蛋, 青菜汤… trước nhé.</p>';
   }
   eat(id) {
     const r = RECIPES.find(x => x.id === id);
-    if (this.energy >= ENERGY_MAX) return this.showToast('😋', 'Năng lượng đang đầy rồi.');
+    if (this.energy >= this.energyMax()) return this.showToast('😋', 'Năng lượng đang đầy rồi.');
     if (!this.takeAny(id, 1)) return;
-    this.energy = clamp(this.energy + r.energy, 0, ENERGY_MAX);
+    this.energy = clamp(this.energy + r.energy, 0, this.energyMax());
     this.audio.harvest();
     this.learn('吃饭');
     this.learn(r.chn);
@@ -2810,9 +3035,9 @@ class FarmGame {
     const wc = this.$('hud-weather');
     if (wc) wc.innerHTML = `${w.icon} <span class="zh">${w.chn}</span> <small>${w.vi}</small>`;
     this.setText('hud-money', `${this.money}元`);
-    this.setText('hud-energy-val', `${this.energy}/${ENERGY_MAX}`);
+    this.setText('hud-energy-val', `${this.energy}/${this.energyMax()}`);
     const f = this.$('hud-energy-fill');
-    if (f) { f.style.width = `${(this.energy / ENERGY_MAX) * 100}%`; f.classList.toggle('low', this.energy < 20); }
+    if (f) { f.style.width = `${(this.energy / this.energyMax()) * 100}%`; f.classList.toggle('low', this.energy < 20); }
     this.setText('hud-vocab-val', `${this.learnedCount()}/${VOCAB_TOTAL}`);
     this.setText('hud-bag-val', `${this.bagUsed()}/${this.bagCap()}`);
     this.setText('hud-level', String(this.level));
@@ -2889,11 +3114,11 @@ class FarmGame {
     on('btn-level', 'click', () => this.openMap());
     on('btn-inspect', 'click', () => { this.inspect = !this.inspect; this.audio.pop(); this.renderHUD(); this.showToast('🔍', this.inspect ? 'Chế độ 识字: nhấp vào bất cứ thứ gì để xem thẻ từ vựng (không làm việc).' : 'Tắt chế độ thẻ từ — nhấp để làm việc như bình thường.'); });
     on('hud-weather', 'click', () => { const w = WEATHERS[this.weather]; this.showCard(w.chn, escapeHtml(w.note)); });
-    on('btn-energy', 'click', () => this.showToast('⚡', `体力 tǐlì · năng lượng ${this.energy}/${ENERGY_MAX}. Ăn món ăn ở 饭桌 (bàn ăn trong nhà) hoặc ngủ để hồi.`));
+    on('btn-energy', 'click', () => this.showToast('⚡', `体力 tǐlì · năng lượng ${this.energy}/${this.energyMax()} (gốc ${ENERGY_BASE} + cấp độ ${this.levelEnergyBonus()} + nội thất ${this.furnBonus()}). Ăn món ăn ở 饭桌 (bàn ăn trong nhà) hoặc ngủ để hồi.`));
 
     const cv = this.$('farm-canvas');
     if (cv) {
-      cv.addEventListener('click', (e) => { const [x, y] = this.eventTile(e); this.onMapClick(x, y); });
+      cv.addEventListener('click', (e) => { const [x, y] = this.eventTile(e); const [fx, fy] = this.eventPos(e); this.onMapClick(x, y, fx, fy); });
       cv.addEventListener('mousemove', (e) => {
         const [x, y] = this.eventTile(e);
         const sc = this.scene;
@@ -2920,11 +3145,17 @@ class FarmGame {
       const bp = e.target.closest('[data-buypet]');
       if (bp && !bp.disabled) { this.buyPet(bp.dataset.buypet); return; }
       const bd = e.target.closest('[data-buydecor]');
-      if (bd && !bd.disabled) this.buyDecor(bd.dataset.buydecor);
+      if (bd && !bd.disabled) { this.buyDecor(bd.dataset.buydecor); return; }
+      const uf = e.target.closest('[data-upfurn]');
+      if (uf && !uf.disabled) { this.upgradeFurn(uf.dataset.upfurn); return; }
+      const bb = e.target.closest('[data-buybag]');
+      if (bb) this.buyBag(+bb.dataset.buybag);
     });
     on('modal-bag', 'click', (e) => { const c = e.target.closest('[data-card]'); if (c) this.showCard(c.dataset.card); });
-    on('modal-fridge', 'click', (e) => { const b = e.target.closest('[data-fr]'); if (b) { const [d, id, m] = b.dataset.fr.split(':'); this.moveFridge(d, id, m); } });
-    on('btn-store-all', 'click', () => this.storeAll());
+    on('modal-animal', 'click', (e) => {
+      const t = e.target.closest('[data-treat]'); if (t && !t.disabled) { this.treatChicken(this.infoAnimal.i, t.dataset.treat); return; }
+      if (e.target.closest('[data-bury]')) this.buryChicken(this.infoAnimal.i);
+    });
     on('modal-kitchen', 'click', (e) => { const b = e.target.closest('[data-cook]'); if (b && !b.disabled) this.cook(b.dataset.cook); });
     on('modal-eat', 'click', (e) => { const b = e.target.closest('[data-eat]'); if (b && !b.disabled) this.eat(b.dataset.eat); });
     on('modal-pond', 'click', (e) => {

@@ -15,9 +15,9 @@
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css">
   <!-- Dùng chung khung với Tiệm Tạp Hóa & Trà Sữa (modal, nút, thối tiền, từ vựng, xếp hạng), thêm phần riêng nông trại -->
-  <script type="module" crossorigin src="/assets/farmGame-BUXnIne-.js"></script>
+  <script type="module" crossorigin src="/assets/farmGame-CqJUPbEe.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="stylesheet" crossorigin href="/assets/farmGame-BB07E6_Y.css">
+  <link rel="stylesheet" crossorigin href="/assets/farmGame-WAtCTJ9U.css">
   <link rel="stylesheet" crossorigin href="/assets/grocery_game-DZbV3Du5.css">
 </head>
 
@@ -261,21 +261,23 @@
     <div class="g-modal" id="modal-fridge" style="display:none;">
       <div class="g-card farm-card wide">
         <div class="g-card-head">
-          <h3>🧊 <span class="zh">冰箱</span> · Tủ lạnh / kho <small id="fr-cap"></small></h3><button type="button"
+          <h3>🧊 <span class="zh">冰箱</span> · Tủ lạnh <small id="fr-cap"></small></h3><button type="button"
             class="g-close" data-close="modal-fridge"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="fr-cols">
-          <section>
-            <h4>🎒 Trong túi</h4>
-            <div class="farm-scroll" id="fr-bag"></div>
-          </section>
-          <section>
-            <h4>🧊 Trong tủ lạnh</h4>
-            <div class="farm-scroll" id="fr-fridge"></div>
-          </section>
+        <p class="farm-note">Tủ lạnh thống kê số phần ăn bạn đã nấu thành công (mỗi lần nấu +1).</p>
+        <div class="farm-scroll fr-list" id="fr-list"></div>
+        <div class="mk-foot"><button type="button" class="g-btn-primary" data-close="modal-fridge">Xong</button></div>
+      </div>
+    </div>
+
+    <!-- THÔNG TIN VẬT NUÔI -->
+    <div class="g-modal" id="modal-animal" style="display:none;">
+      <div class="g-card farm-card">
+        <div class="g-card-head">
+          <h3>🐔 <span class="zh">动物状态</span> · Tình trạng vật nuôi</h3><button type="button"
+            class="g-close" data-close="modal-animal"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="mk-foot"><button type="button" class="g-btn-ghost" id="btn-store-all">Cất hết nông sản & món ăn
-            ➜</button><button type="button" class="g-btn-primary" data-close="modal-fridge">Xong</button></div>
+        <div class="farm-scroll" id="an-body"></div>
       </div>
     </div>
 
@@ -286,7 +288,7 @@
           <h3>🍳 <span class="zh">厨房</span> · Nhà bếp <small id="kc-energy"></small></h3><button type="button"
             class="g-close" data-close="modal-kitchen"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <p class="farm-note">Nguyên liệu lấy từ 冰箱 trước, rồi tới túi đồ. Nấu xong mang ra 饭桌 (bàn ăn) để ăn.</p>
+        <p class="farm-note">Nguyên liệu lấy từ túi đồ (hiện “đang có / cần dùng”: xanh = đủ, đỏ = thiếu). Nấu xong mang ra 饭桌 (bàn ăn) để ăn.</p>
         <div class="farm-scroll" id="kc-list"></div>
       </div>
     </div>
